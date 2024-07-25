@@ -8,7 +8,7 @@
             categorie
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
-            Créer un categorie
+            Gerer les categories
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
 
@@ -26,7 +26,7 @@
                     <form class="row g-3 needs-validation" method="post" action="<?php echo e(route('categorie.store')); ?>" novalidate>
                         <?php echo csrf_field(); ?>
                         <div class="col-md-12">
-                            <label for="validationCustom01" class="form-label">Ajouter une categorie principal </label>
+                            <label for="validationCustom01" class="form-label">Ajouter une categorie principale </label>
                             <input type="text" name="name" class="form-control" id="validationCustom01"
                                 placeholder="categorie1" required>
                             <div class="valid-feedback">

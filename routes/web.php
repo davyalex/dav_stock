@@ -63,7 +63,7 @@ Route::controller(AuthAdminController::class)->prefix('admin')->group(function (
 
 
 
-Route::middleware(['admin'])->group(function () {
+Route::middleware(['admin', 'check.session'])->group(function () {
 
     //Dashboard
     Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {
@@ -278,32 +278,32 @@ Route::middleware(['admin'])->group(function () {
             return response()->json(['message' => 'mode maintenance activé', 'status' => 200], 200);
         }
     )->name('setting.maintenance-down');
+
+
+
+    #############  BASIC PAGE  #####################
+
+
+
+
+
+   
+
 });
 
 
-#############  BASIC PAGE  #####################
 
-
-
-
-
-    #############  CATEGORIE  #####################
-    Route::prefix('categorie')->controller(CategorieController::class)->group(function () {
-        // route::get('', 'index')->name('menu.index');
-        route::get('create', 'create')->name('categorie.create');
-        route::post('store', 'store')->name('categorie.store');
-        route::get('add-subCat/{id}', 'addSubCat')->name('categorie.add-subCat'); // add subCategorie
-        route::post('add-subCat-store', 'addSubCatStore')->name('categorie.add-subCat-store'); // add subCategorie
-        route::get('edit/{id}', 'edit')->name('categorie.edit');
-        route::post('update/{id}', 'update')->name('categorie.update');
-        route::get('delete/{id}', 'delete')->name('categorie.delete');
-    });
-
-
-
-
-
-
+ #############  CATEGORIE  #####################
+ Route::prefix('categorie')->controller(CategorieController::class)->group(function () {
+    // route::get('', 'index')->name('menu.index');
+    route::get('create', 'create')->name('categorie.create');
+    route::post('store', 'store')->name('categorie.store');
+    route::get('add-subCat/{id}', 'addSubCat')->name('categorie.add-subCat'); // add subCategorie
+    route::post('add-subCat-store', 'addSubCatStore')->name('categorie.add-subCat-store'); // add subCategorie
+    route::get('edit/{id}', 'edit')->name('categorie.edit');
+    route::post('update/{id}', 'update')->name('categorie.update');
+    route::get('delete/{id}', 'delete')->name('categorie.delete');
+});
 
 
 ######################      END BACKEND ROUTE         ###########################################################

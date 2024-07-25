@@ -2,7 +2,7 @@
       <div class="card">
           <div class="card-body">
               <div class="d-flex justify-content-between">
-                  <h5>Liste de categorie</h5>
+                  <h5>Liste des categories</h5>
                   <a href="{{ route('categorie.create') }}" class="btn btn-primary">
                       <i class="ri ri-add-fill"></i>
                       Ajouter</a>
@@ -43,10 +43,10 @@
                   </div> --}}
                   <div>
                       <hr>
-                      <li>
+                      <li class="" style="list-style: none">
                           <a class="fs-5 fw-medium" href="{{ $categorie->url }}">{{ $categorie->name }}</a>
                           <a href="{{ route('categorie.edit', $categorie['id']) }}" class="fs-5"
-                              style="margin-left:30px"> <i class=" ri ri-edit-2-fill ml-4"></i></a>
+                              style="margin-left:30px"> <i class=" ri ri-edit-2-fill ml-4 text-success"></i></a>
 
                           <a href="{{ route('categorie.add-subCat', $categorie['id']) }}" class="fs-5"> <i
                                   class=" ri ri-add-circle-fill ml-4"></i>

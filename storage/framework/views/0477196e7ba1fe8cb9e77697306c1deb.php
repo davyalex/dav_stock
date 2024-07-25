@@ -2,7 +2,7 @@
       <div class="card">
           <div class="card-body">
               <div class="d-flex justify-content-between">
-                  <h5>Liste de categorie</h5>
+                  <h5>Liste des categories</h5>
                   <a href="<?php echo e(route('categorie.create')); ?>" class="btn btn-primary">
                       <i class="ri ri-add-fill"></i>
                       Ajouter</a>
@@ -12,10 +12,10 @@
                   
                   <div>
                       <hr>
-                      <li>
+                      <li class="" style="list-style: none">
                           <a class="fs-5 fw-medium" href="<?php echo e($categorie->url); ?>"><?php echo e($categorie->name); ?></a>
                           <a href="<?php echo e(route('categorie.edit', $categorie['id'])); ?>" class="fs-5"
-                              style="margin-left:30px"> <i class=" ri ri-edit-2-fill ml-4"></i></a>
+                              style="margin-left:30px"> <i class=" ri ri-edit-2-fill ml-4 text-success"></i></a>
 
                           <a href="<?php echo e(route('categorie.add-subCat', $categorie['id'])); ?>" class="fs-5"> <i
                                   class=" ri ri-add-circle-fill ml-4"></i>

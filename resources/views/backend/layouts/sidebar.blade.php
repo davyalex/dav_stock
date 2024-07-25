@@ -16,14 +16,13 @@
                 </span>
             </a> --}}
             <!-- Light Logo-->
-            <a href="index" class="logo logo-light">
+            <a href="{{ route('dashboard.index') }}" class="logo logo-light">
                 <span class="logo-sm">
-                    <img src="{{ URL::asset($setting->getFirstMediaUrl('logo_header')) }}" alt=""
-                        height="22">
+                    <img src="{{ URL::asset($setting->getFirstMediaUrl('logo_header')) }}" alt="" height="22">
                 </span>
                 <span class="logo-lg">
-                    <img src="{{ URL::asset($setting->getFirstMediaUrl('logo_header')) }}" alt=""
-                        width="50" class="rounded-circle">
+                    <img src="{{ URL::asset($setting->getFirstMediaUrl('logo_header')) }}" alt="" width="50"
+                        class="rounded-circle">
                 </span>
             </a>
         @endif

@@ -3,6 +3,26 @@
     <?php echo app('translator')->get('translation.signin'); ?>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
+    <?php if($data_setting != null): ?>
+        <style>
+            .auth-one-bg {
+                background-image: url('<?php echo e($data_setting->getFirstMediaUrl('cover')); ?>');
+                background-position: center;
+                background-size: cover;
+            }
+        </style>
+    <?php else: ?>
+        <style>
+            .auth-one-bg {
+                background-image: url(/build/icons/auth-one-bg.jpg);
+                background-position: center;
+                background-size: cover;
+            }
+        </style>
+    <?php endif; ?>
+
+
+
     <div class="auth-page-wrapper pt-5">
         <!-- auth page bg -->
         <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
@@ -25,18 +45,15 @@
                             <div>
 
                                 <?php if($data_setting != null): ?>
+                                    <a href="index" class="d-inline-block auth-logo">
+                                        <img src="<?php echo e(URL::asset($data_setting->getFirstMediaUrl('logo_header'))); ?>"
+                                            alt=""  width="50" class="rounded-circle">
+                                    </a>
+                                    <p class="mt-3 fs-15 fw-medium"> <?php echo e($data_setting['projet_title'] ?? ''); ?> </p>
+                                <?php else: ?>
+                                    <h3>PROJET NAME</h3>
+                                <?php endif; ?>
 
-                                <a href="index" class="d-inline-block auth-logo">
-                                    <img src="<?php echo e(URL::asset($data_setting->getFirstMediaUrl('logo_header'))); ?>" alt=""
-                                        height="20">
-                                </a>
-                                <p class="mt-3 fs-15 fw-medium"> <?php echo e($data_setting['projet_title'] ?? ''); ?> </p>
-
-                                
-                            <?php else: ?>
-                                <h3>PROJET NAME</h3>
-                            <?php endif; ?>
-                               
                             </div>
                             <p class="mt-3 fs-15 fw-medium"> <?php echo e($data_setting['projet_description'] ?? ''); ?> </p>
                         </div>
@@ -47,7 +64,7 @@
                 <div class="row justify-content-center">
                     <div class="col-md-8 col-lg-6 col-xl-5">
                         <div class="card mt-4">
-                           <?php echo $__env->make('backend.components.alertMessage', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                            <?php echo $__env->make('backend.components.alertMessage', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                             <div class="card-body p-4">
                                 <div class="text-center mt-2">
                                     <h5 class="text-primary">Bienvenue !</h5>
@@ -65,7 +82,7 @@
 
                                         <div class="mb-3">
                                             
-                                            <label class="form-label" for="password-input">Password</label>
+                                            <label class="form-label" for="password-input">Mot de passe</label>
                                             <div class="position-relative auth-pass-inputgroup mb-3">
                                                 <input type="password" name="password"
                                                     class="form-control pe-5 password-input" placeholder="Enter password"
@@ -80,7 +97,7 @@
                                         
 
                                         <div class="mt-4">
-                                            <button class="btn btn-success w-100" type="submit">Sign In</button>
+                                            <button class="btn btn-success w-100" type="submit">Connexion</button>
                                         </div>
 
                                         
@@ -109,7 +126,8 @@
                         <div class="text-center">
                             <script>
                                 document.write(new Date().getFullYear())
-                            </script> <?php echo e(config('app.name')); ?>. Conçu avec <i class="mdi mdi-heart text-danger"></i> par
+                            </script> <?php echo e(config('app.name')); ?>. Conçu avec <i
+                                class="mdi mdi-heart text-danger"></i> par
                             Ticafrique</p>
                         </div>
                     </div>

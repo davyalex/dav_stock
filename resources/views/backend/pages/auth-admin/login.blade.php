@@ -3,6 +3,26 @@
     @lang('translation.signin')
 @endsection
 @section('content')
+    @if ($data_setting != null)
+        <style>
+            .auth-one-bg {
+                background-image: url('{{ $data_setting->getFirstMediaUrl('cover') }}');
+                background-position: center;
+                background-size: cover;
+            }
+        </style>
+    @else
+        <style>
+            .auth-one-bg {
+                background-image: url(/build/icons/auth-one-bg.jpg);
+                background-position: center;
+                background-size: cover;
+            }
+        </style>
+    @endif
+
+
+
     <div class="auth-page-wrapper pt-5">
         <!-- auth page bg -->
         <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
@@ -25,20 +45,17 @@
                             <div>
 
                                 @if ($data_setting != null)
+                                    <a href="index" class="d-inline-block auth-logo">
+                                        <img src="{{ URL::asset($data_setting->getFirstMediaUrl('logo_header')) }}"
+                                            alt=""  width="50" class="rounded-circle">
+                                    </a>
+                                    <p class="mt-3 fs-15 fw-medium"> {{ $data_setting['projet_title'] ?? '' }} </p>
+                                @else
+                                    <h3>PROJET NAME</h3>
+                                @endif
 
-                                <a href="index" class="d-inline-block auth-logo">
-                                    <img src="{{ URL::asset($data_setting->getFirstMediaUrl('logo_header')) }}" alt=""
-                                        height="20">
-                                </a>
-                                <p class="mt-3 fs-15 fw-medium"> {{$data_setting['projet_title'] ?? ''}} </p>
-
-                                
-                            @else
-                                <h3>PROJET NAME</h3>
-                            @endif
-                               
                             </div>
-                            <p class="mt-3 fs-15 fw-medium"> {{$data_setting['projet_description'] ?? ''}} </p>
+                            <p class="mt-3 fs-15 fw-medium"> {{ $data_setting['projet_description'] ?? '' }} </p>
                         </div>
                     </div>
                 </div>
@@ -47,7 +64,7 @@
                 <div class="row justify-content-center">
                     <div class="col-md-8 col-lg-6 col-xl-5">
                         <div class="card mt-4">
-                           @include('backend.components.alertMessage')
+                            @include('backend.components.alertMessage')
                             <div class="card-body p-4">
                                 <div class="text-center mt-2">
                                     <h5 class="text-primary">Bienvenue !</h5>
@@ -68,7 +85,7 @@
                                                 <a href="auth-pass-reset-basic" class="text-muted">Forgot
                                                     password?</a>
                                             </div> --}}
-                                            <label class="form-label" for="password-input">Password</label>
+                                            <label class="form-label" for="password-input">Mot de passe</label>
                                             <div class="position-relative auth-pass-inputgroup mb-3">
                                                 <input type="password" name="password"
                                                     class="form-control pe-5 password-input" placeholder="Enter password"
@@ -87,7 +104,7 @@
                                         </div> --}}
 
                                         <div class="mt-4">
-                                            <button class="btn btn-success w-100" type="submit">Sign In</button>
+                                            <button class="btn btn-success w-100" type="submit">Connexion</button>
                                         </div>
 
                                         {{-- <div class="mt-4 text-center">
@@ -137,7 +154,8 @@
                         <div class="text-center">
                             <script>
                                 document.write(new Date().getFullYear())
-                            </script> {{config('app.name')}}. Conçu avec <i class="mdi mdi-heart text-danger"></i> par
+                            </script> {{ config('app.name') }}. Conçu avec <i
+                                class="mdi mdi-heart text-danger"></i> par
                             Ticafrique</p>
                         </div>
                     </div>
