@@ -2,37 +2,30 @@
 
 namespace App\Models;
 
-use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Fournisseur extends Model implements HasMedia
+class Format extends Model
 {
-    use HasFactory, SoftDeletes,  InteractsWithMedia;
+    use HasFactory,  SoftDeletes;
 
     public $incrementing = false;
 
     protected $fillable = [
-        'nom',
-        'adresse',
-        'telephone',
-        'email',
+        'libelle',
+        'abreviation',
         'created_at',
         'updated_at'
     ];
-
 
     public static function boot()
     {
         parent::boot();
         self::creating(function ($model) {
-            $model->id = IdGenerator::generate(['table' => 'fournisseurs', 'length' => 10, 'prefix' =>
+            $model->id = IdGenerator::generate(['table' => 'formats', 'length' => 10, 'prefix' =>
             mt_rand()]);
         });
     }
-
-    
 }

@@ -193,9 +193,9 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="sidebarAuth">
-                        <i class=" ri-settings-2-fill"></i> <span>CONFIGURATIONS</span>
+                        <i class=" ri-settings-2-fill"></i> <span>PARAMETRE</span>
                     </a>
-                    <div class="collapse menu-dropdown {{ Route::is('setting.*') || Route::is('module.*') || Route::is('role.*') || Route::is('permission.*') ? 'show' : '' }}""
+                    <div class="collapse menu-dropdown {{ Route::is('setting.*') || Route::is('module.*') || Route::is('role.*') || Route::is('permission.*') ? 'show' : '' }}"
                         id="sidebarAuth">
                         <ul class="nav nav-sm flex-column">
 
@@ -221,9 +221,40 @@
 
 
                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarConfiguration" data-bs-toggle="collapse" role="button"
+                        aria-expanded="true" aria-controls="sidebarConfiguration">
+                        <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
+                    </a>
+                    <div class="collapse menu-dropdown {{ Route::is('unite.*') || Route::is('format.*') ? 'show' : '' }}" id="sidebarConfiguration">
+                        <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item active">
+                                <a href="{{ route('unite.index') }}"
+                                    class="nav-link {{ Route::is('unite.*') ? 'active' : '' }}">Unité de mesure</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="{{ route('format.index') }}"
+                                    class="nav-link {{ Route::is('format.*') ? 'active' : '' }}">Format / Emballage</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+
+
+
+                <li class="nav-item">
                     <a href="{{ route('categorie.create') }}"
                         class=" menu-link nav-link {{ Route::is('categorie.*') ? 'active' : '' }}">
                         <i class="ri ri-database-2-fill"></i> <span>CATEGORIE</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('fournisseur.index') }}"
+                        class=" menu-link nav-link {{ Route::is('fournisseur.*') ? 'active' : '' }}">
+                        <i class="ri ri-contacts-line"></i> <span>FOURNISSEUR</span>
                     </a>
                 </li>
 

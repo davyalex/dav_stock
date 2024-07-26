@@ -21,11 +21,14 @@ use App\Http\Controllers\backend\basic_site\EquipeController;
 use App\Http\Controllers\backend\blog\BlogCategoryController;
 use App\Http\Controllers\backend\basic_site\ServiceController;
 use App\Http\Controllers\backend\media\MediaContentController;
+use App\Http\Controllers\backend\categorie\CategorieController;
 use App\Http\Controllers\backend\media\MediaCategoryController;
 use App\Http\Controllers\backend\basic_site\ReferenceController;
+use App\Http\Controllers\backend\configuration\FormatController;
 use App\Http\Controllers\backend\basic_site\TemoignageController;
-use App\Http\Controllers\backend\categorie\CategorieController;
 use App\Http\Controllers\backend\permission\PermissionController;
+use App\Http\Controllers\backend\fournisseur\FournisseurController;
+use App\Http\Controllers\backend\configuration\UniteMesureController;
 
 /*
 |--------------------------------------------------------------------------
@@ -287,14 +290,13 @@ Route::middleware(['admin', 'check.session'])->group(function () {
 
 
 
-   
+
 
 });
 
 
-
- #############  CATEGORIE  #####################
- Route::prefix('categorie')->controller(CategorieController::class)->group(function () {
+//categorie
+Route::prefix('categorie')->controller(CategorieController::class)->group(function () {
     // route::get('', 'index')->name('menu.index');
     route::get('create', 'create')->name('categorie.create');
     route::post('store', 'store')->name('categorie.store');
@@ -306,4 +308,27 @@ Route::middleware(['admin', 'check.session'])->group(function () {
 });
 
 
+//fournisseur
+Route::prefix('fournisseur')->controller(FournisseurController::class)->group(function () {
+    route::get('', 'index')->name('fournisseur.index');
+    route::post('store', 'store')->name('fournisseur.store');
+    route::post('update/{id}', 'update')->name('fournisseur.update');
+    route::get('delete/{id}', 'delete')->name('fournisseur.delete');
+});
+
+// unite de mesure
+Route::prefix('unite')->controller(UniteMesureController::class)->group(function () {
+    route::get('', 'index')->name('unite.index');
+    route::post('store', 'store')->name('unite.store');
+    route::post('update/{id}', 'update')->name('unite.update');
+    route::get('delete/{id}', 'delete')->name('unite.delete');
+});
+
+// format
+Route::prefix('format')->controller(FormatController::class)->group(function () {
+    route::get('', 'index')->name('format.index');
+    route::post('store', 'store')->name('format.store');
+    route::post('update/{id}', 'update')->name('format.update');
+    route::get('delete/{id}', 'delete')->name('format.delete');
+});
 ######################      END BACKEND ROUTE         ###########################################################
