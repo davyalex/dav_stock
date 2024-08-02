@@ -25,7 +25,13 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
+                $table->foreignId('type_produit_id')
+                ->nullable()
+                ->constrained('type_produits')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

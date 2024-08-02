@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('formats', function (Blueprint $table) {
+        Schema::create('entrees', function (Blueprint $table) {
             $table->id();
-            $table->string('libelle')->nullable();
-            $table->string('abreviation')->nullable();
-            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -25,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('formats');
+        Schema::dropIfExists('entrees');
     }
 };

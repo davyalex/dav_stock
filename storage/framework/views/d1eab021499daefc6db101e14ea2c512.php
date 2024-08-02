@@ -175,9 +175,9 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="<?php echo e(route('menu.create')); ?>"
-                        class=" menu-link nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">
-                        <i class="ri ri-shopping-bag-line"></i> <span>PRODUIT</span>
+                    <a href="<?php echo e(route('produit.create')); ?>"
+                        class=" menu-link nav-link <?php echo e(Route::is('produit.*') ? 'active' : ''); ?>">
+                        <i class="ri ri-shopping-bag-line"></i> <span>APPROVISIONNEMENT</span>
                     </a>
                 </li>
 

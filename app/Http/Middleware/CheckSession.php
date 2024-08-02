@@ -20,7 +20,7 @@ class CheckSession
         // Check if the user is authenticated and the session has a 'last_activity_time'
         if (Auth::check()) {
             $lastActivity = $request->session()->get('last_activity_time', time());
-            $sessionLifetime = config('session.lifetime') *60;
+            $sessionLifetime = 1 * 60;
 
             // Check if the session has expired
             if (time() - $lastActivity > $sessionLifetime) {

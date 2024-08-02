@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('unites', function (Blueprint $table) {
             $table->id();
-            $table->string('libelle');
-            $table->string('abreviation');
+            $table->string('libelle')->nullable();
+            $table->string('abreviation')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

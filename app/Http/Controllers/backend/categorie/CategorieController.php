@@ -5,6 +5,7 @@ namespace App\Http\Controllers\backend\categorie;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\TypeProduit;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class CategorieController extends Controller
@@ -18,8 +19,10 @@ class CategorieController extends Controller
         //create Categorie principal
         $data_categorie = Categorie::whereNull('parent_id')->with('children', fn ($q) => $q->OrderBy('position', 'ASC'))->withCount('children')->OrderBy('position', 'ASC')->get();
 
+        //type produit
+        $data_type_produit = TypeProduit::all();
         // dd($data_categorie->toArray());
-        return view('backend.pages.Categorie.create', compact('data_categorie'));
+        return view('backend.pages.Categorie.create', compact('data_categorie' , 'data_type_produit'));
     }
 
 
@@ -84,14 +87,14 @@ class CategorieController extends Controller
     {
         //List Categorie
         $data_categorie = Categorie::whereNull('parent_id')->with('children', fn ($q) => $q->OrderBy('position', 'ASC'))->withCount('children')->OrderBy('position', 'ASC')->get();
-
+        $data_type_produit = TypeProduit::all();
 
         $data_categorie_edit = Categorie::find($id);
 
         $data_count = Categorie::where('parent_id', $data_categorie_edit['parent_id'])->count();
         // dd($data_count);
 
-        return view('backend.pages.categorie.categorie-edit',  compact('data_categorie', 'data_categorie_edit', 'data_count'));
+        return view('backend.pages.categorie.categorie-edit',  compact('data_categorie', 'data_categorie_edit','data_type_produit', 'data_count'));
     }
 
 

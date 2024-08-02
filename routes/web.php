@@ -15,6 +15,7 @@ use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\menu\MenuController;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use App\Http\Controllers\backend\module\ModuleController;
+use App\Http\Controllers\backend\produit\ProduitController;
 use App\Http\Controllers\backend\basic_site\SlideController;
 use App\Http\Controllers\backend\blog\BlogContentController;
 use App\Http\Controllers\backend\basic_site\EquipeController;
@@ -66,7 +67,7 @@ Route::controller(AuthAdminController::class)->prefix('admin')->group(function (
 
 
 
-Route::middleware(['admin', 'check.session'])->group(function () {
+Route::middleware(['admin'])->group(function () {
 
     //Dashboard
     Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {
@@ -288,47 +289,57 @@ Route::middleware(['admin', 'check.session'])->group(function () {
 
 
 
+    //categorie
+    Route::prefix('categorie')->controller(CategorieController::class)->group(function () {
+        // route::get('', 'index')->name('menu.index');
+        route::get('create', 'create')->name('categorie.create');
+        route::post('store', 'store')->name('categorie.store');
+        route::get('add-subCat/{id}', 'addSubCat')->name('categorie.add-subCat'); // add subCategorie
+        route::post('add-subCat-store', 'addSubCatStore')->name('categorie.add-subCat-store'); // add subCategorie
+        route::get('edit/{id}', 'edit')->name('categorie.edit');
+        route::post('update/{id}', 'update')->name('categorie.update');
+        route::get('delete/{id}', 'delete')->name('categorie.delete');
+    });
 
 
+    //fournisseur
+    Route::prefix('fournisseur')->controller(FournisseurController::class)->group(function () {
+        route::get('', 'index')->name('fournisseur.index');
+        route::post('store', 'store')->name('fournisseur.store');
+        route::post('update/{id}', 'update')->name('fournisseur.update');
+        route::get('delete/{id}', 'delete')->name('fournisseur.delete');
+    });
 
+    // unite de mesure
+    Route::prefix('unite')->controller(UniteMesureController::class)->group(function () {
+        route::get('', 'index')->name('unite.index');
+        route::post('store', 'store')->name('unite.store');
+        route::post('update/{id}', 'update')->name('unite.update');
+        route::get('delete/{id}', 'delete')->name('unite.delete');
+    });
 
+    // format
+    Route::prefix('format')->controller(FormatController::class)->group(function () {
+        route::get('', 'index')->name('format.index');
+        route::post('store', 'store')->name('format.store');
+        route::post('update/{id}', 'update')->name('format.update');
+        route::get('delete/{id}', 'delete')->name('format.delete');
+    });
+
+    // produit
+    Route::prefix('produit')->controller(ProduitController::class)->group(function () {
+        route::get('', 'index')->name('produit.index');
+        route::get('create', 'create')->name('produit.create');
+        route::get('create-new-product', 'createNewProduct')->name('produit.createNewProduct'); // creer un nouveau de produit-formulaire
+        route::post('store-new-product', 'StoreNewProduct')->name('produit.StoreNewProduct'); // creer un nouveau de produit-store
+
+        route::post('store', 'store')->name('produit.store');
+        // route::post('update/{id}', 'update')->name('produit.update');
+        // route::get('delete/{id}', 'delete')->name('produit.delete');
+    });
 });
 
 
-//categorie
-Route::prefix('categorie')->controller(CategorieController::class)->group(function () {
-    // route::get('', 'index')->name('menu.index');
-    route::get('create', 'create')->name('categorie.create');
-    route::post('store', 'store')->name('categorie.store');
-    route::get('add-subCat/{id}', 'addSubCat')->name('categorie.add-subCat'); // add subCategorie
-    route::post('add-subCat-store', 'addSubCatStore')->name('categorie.add-subCat-store'); // add subCategorie
-    route::get('edit/{id}', 'edit')->name('categorie.edit');
-    route::post('update/{id}', 'update')->name('categorie.update');
-    route::get('delete/{id}', 'delete')->name('categorie.delete');
-});
 
 
-//fournisseur
-Route::prefix('fournisseur')->controller(FournisseurController::class)->group(function () {
-    route::get('', 'index')->name('fournisseur.index');
-    route::post('store', 'store')->name('fournisseur.store');
-    route::post('update/{id}', 'update')->name('fournisseur.update');
-    route::get('delete/{id}', 'delete')->name('fournisseur.delete');
-});
-
-// unite de mesure
-Route::prefix('unite')->controller(UniteMesureController::class)->group(function () {
-    route::get('', 'index')->name('unite.index');
-    route::post('store', 'store')->name('unite.store');
-    route::post('update/{id}', 'update')->name('unite.update');
-    route::get('delete/{id}', 'delete')->name('unite.delete');
-});
-
-// format
-Route::prefix('format')->controller(FormatController::class)->group(function () {
-    route::get('', 'index')->name('format.index');
-    route::post('store', 'store')->name('format.store');
-    route::post('update/{id}', 'update')->name('format.update');
-    route::get('delete/{id}', 'delete')->name('format.delete');
-});
 ######################      END BACKEND ROUTE         ###########################################################

@@ -23,7 +23,20 @@
                     <form class="row g-3 needs-validation" method="post"
                         action="{{ route('categorie.update', $data_categorie_edit['id']) }}" novalidate>
                         @csrf
-                        <div class="col-md-8">
+                        <div class="col-md-4">
+                            <label for="validationCustom01" class="form-label">Type</label>
+                            <select name="type_produit" class="form-control" required>
+                                <option disabled selected value>Selectionner</option>
+                               @foreach ($data_type_produit as $type)
+                               <option value="{{ $type->id }}">{{ $type->libelle }}</option>
+                               @endforeach
+
+                            </select>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                        <div class="col-md-6">
                             <label for="validationCustom01" class="form-label">Modifier une categorie </label>
                             <input type="text" name="name" value="{{ $data_categorie_edit['name'] }}" class="form-control"
                                 id="validationCustom01" placeholder="categorie1" required>
@@ -32,7 +45,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <label for="validationCustom01" class="form-label">Position </label>
                             <select name="position" class="form-control">
                                 @for ($i = 1; $i <= $data_count; $i++)
