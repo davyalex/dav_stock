@@ -8,7 +8,7 @@
             Nouveau produit
         @endslot
         @slot('title')
-            Créer un nouveau  produit
+            Créer un nouveau produit
         @endslot
     @endcomponent
 
@@ -28,13 +28,11 @@
                                     <div class="card-body">
                                         <div class="mb-3 row">
                                             <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="meta-title-input">Libellé <span
-                                                            class="text-danger">*</span>
-                                                    </label>
-                                                    <input type="text" name="nom" class="form-control"
-                                                        id="meta-title-input" required>
-                                                </div>
+                                                <label class="form-label" for="meta-title-input">Libellé <span
+                                                        class="text-danger">*</span>
+                                                </label>
+                                                <input type="text" name="nom" class="form-control"
+                                                    id="nomProduit" required>
                                             </div>
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="product-title-input">Sélectionner une
@@ -224,6 +222,18 @@
                             var url = "{{ route('produit.create') }}" // redirect route 
 
                             window.location.replace(url);
+                        } else if (response == 'The nom has already been taken.') {
+                            Swal.fire({
+                                title: 'Ce produit existe déjà ?',
+                                text: $('#nomProduit').val(),
+                                icon: 'warning',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                                    cancelButton: 'btn btn-danger w-xs mt-2',
+                                },
+                                buttonsStyling: false,
+                                showCloseButton: true
+                            })
                         }
                     },
 

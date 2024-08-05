@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('produits', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->nullable();
-            $table->string('nom')->nullable(); // libelle
+            $table->string('code')->unique()->nullable();
+            $table->string('nom')->unique()->nullable(); // libelle
             $table->string('slug')->nullable();
             $table->double('prix')->nullable();
             $table->integer('stock')->default(0); //quantité en stock
@@ -27,6 +27,12 @@ return new class extends Migration
             ->constrained('categories')
             ->onUpdate('cascade')
             ->onDelete('cascade ');
+
+            $table->foreignId('type_id') // type de produit
+            ->nullable()
+            ->constrained('categories')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
 
             $table->softDeletes();
        

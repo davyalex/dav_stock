@@ -23,20 +23,7 @@
                     <form class="row g-3 needs-validation" method="post"
                         action="<?php echo e(route('categorie.update', $data_categorie_edit['id'])); ?>" novalidate>
                         <?php echo csrf_field(); ?>
-                        <div class="col-md-4">
-                            <label for="validationCustom01" class="form-label">Type</label>
-                            <select name="type_produit" class="form-control" required>
-                                <option disabled selected value>Selectionner</option>
-                               <?php $__currentLoopData = $data_type_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                               <option value="<?php echo e($type->id); ?>"><?php echo e($type->libelle); ?></option>
-                               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                            </select>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                        </div>
-                        <div class="col-md-6">
+                        <div class="col-md-10">
                             <label for="validationCustom01" class="form-label">Modifier une categorie </label>
                             <input type="text" name="name" value="<?php echo e($data_categorie_edit['name']); ?>" class="form-control"
                                 id="validationCustom01" placeholder="categorie1" required>

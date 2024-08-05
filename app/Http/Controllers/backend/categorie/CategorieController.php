@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\backend\categorie;
 
 use App\Models\Categorie;
+use App\Models\TypeProduit;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\TypeProduit;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class CategorieController extends Controller
@@ -37,9 +38,12 @@ class CategorieController extends Controller
         // dd($data_count);
 
         $data_categorie = Categorie::firstOrCreate([
-            'name' => $request['name'],
+            'name' => Str::lower($request['name']),
             'status' => $request['status'],
             'url' => $request['url'],
+            'type_produit_id' => $request['type_produit'],
+            'parent_id' => $request['type_produit'],
+
             'position' => $data_count + 1,
         ]);
 
@@ -71,7 +75,7 @@ class CategorieController extends Controller
 
         $data_categorie = Categorie::firstOrCreate([
             'parent_id' => $categorie_parent['id'],
-            'name' => $request['name'],
+            'name' => Str::lower($request['name']),
             'status' => $request['status'],
             'url' => $request['url'],
             'position' => $data_count + 1,
@@ -104,7 +108,7 @@ class CategorieController extends Controller
         //request validation ......
 
         $data_categorie = Categorie::find($id)->update([
-            'name' => $request['name'],
+            'name' => Str::lower($request['name']),
             'status' => $request['status'],
             'url' => $request['url'],
             'position' => $request['position'],

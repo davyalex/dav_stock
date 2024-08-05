@@ -26,8 +26,8 @@
                     <form class="row g-3 needs-validation" method="post" action="{{ route('categorie.store') }}" novalidate>
                         @csrf
 
-                        <div class="col-md-4">
-                            <label for="validationCustom01" class="form-label">Type</label>
+                        {{-- <div class="col-md-4">
+                            <label for="validationCustom01" class="form-label">Type de produit</label>
                             <select name="type_produit" class="form-control" required>
                                 <option disabled selected value>Selectionner</option>
                                @foreach ($data_type_produit as $type)
@@ -38,8 +38,8 @@
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
-                        </div>
-                        <div class="col-md-8">
+                        </div> --}}
+                        <div class="col-md-12">
                             <label for="validationCustom01" class="form-label">Ajouter une categorie principale </label>
                             <input type="text" name="name" class="form-control" id="validationCustom01"
                                 placeholder="categorie1" required>

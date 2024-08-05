@@ -23,6 +23,19 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row mb-3">
+
+                                            <div class="col-md-2">
+                                                <label class="form-label" for="product-title-input">Type
+                                                </label>
+                                                <select id="choices-single-default" class="form-control typeSelected"
+                                                    name="type_produit" data-choices data-choices-sorting-false required>
+                                                    <option value="" disabled selected></option>
+                                                    @foreach ($type_produit as $type)
+                                                        <option value="{{ $type->id }}">
+                                                            {{ $type->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                             <div class="col-md-8">
                                                 <label class="form-label" for="product-title-input">Sélectionner un produit
                                                 </label>
@@ -31,18 +44,18 @@
                                                     <i class="ri ri-add-fill"></i>
                                                     Ajouter un nouveau produit
                                                 </a>
-                                                <select id="choices-single-default" class="form-control" name="categorie"
-                                                    data-choices data-choices-sorting-false required>
-                                                    <option value="" disabled selected>Selectionner</option>
-                                                    @foreach ($data_produit as $produit)
-                                                        <option value="{{ $produit->id }}">{{ $produit->nom }}</option>
-                                                    @endforeach
+                                                <select class="form-control productSelected  js-example-basic-single "
+                                                    name="categorie"  required>
+                                                    {{-- <option value="" disabled selected>Selectionner</option> --}}
+                                                    {{-- @foreach ($data_produit as $produit)
+                                                        <option value="{{ $produit->id }}">#{{ $produit->code }} -
+                                                            {{ $produit->nom }}</option>
+                                                    @endforeach --}}
                                                 </select>
-                                                <div class="invalid-feedback">Please Enter a product title.</div>
                                             </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label" for="stocks-input">Stocks En cour</label>
-                                                <input type="text" class="form-control" id="stocks-input" disabled>
+                                            <div class="col-md-2">
+                                                <label class="form-label" for="stocks-input">Stocks actuelle</label>
+                                                <input type="text" class="form-control" id="stock" disabled>
                                             </div>
 
                                             <div class="col-md-4">
@@ -52,7 +65,8 @@
                                                     data-choices data-choices-sorting-false>
                                                     <option value="" disabled selected>Selectionner</option>
                                                     @foreach ($data_fournisseur as $fournisseur)
-                                                        <option value="{{ $fournisseur->id }}">{{ $fournisseur->nom }}</option>
+                                                        <option value="{{ $fournisseur->id }}">{{ $fournisseur->nom }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -64,7 +78,9 @@
                                                     data-choices data-choices-sorting-false>
                                                     <option value="" disabled selected>Selectionner</option>
                                                     @foreach ($data_format as $format)
-                                                        <option value="{{ $format->id }}">{{ $format->libelle }} ({{ $format->abreviation }})</option>
+                                                        <option value="{{ $format->id }}">{{ $format->libelle }}
+                                                            ({{ $format->abreviation }})
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -73,9 +89,6 @@
                                                 <input type="text" class="form-control" id="stocks-input" disabled>
                                             </div>
                                         </div>
-
-
-
                                     </div>
                                 </div>
                                 <!-- end card -->
@@ -169,10 +182,47 @@
         <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
         <script>
-            //script for to send data 
+            //get info product from controller
+            var dataProduct = {{ Js::from($data_produit) }}
 
 
-            // product image
+            //get list product of type product
+            $('.typeSelected').change(function(e) {
+                e.preventDefault();
+                var typeSelected = $('.typeSelected option:selected').val();
+                var productList = dataProduct.filter(function(item) {
+                    return item.type_id == typeSelected;
+                });
+                console.log(productList);
+                
+
+                $('.productSelected').empty();
+                $('.productSelected').append('<option value="">Selectionner un produit</option>');
+                $.each(productList, function(key, value) {
+                    $('.productSelected').append('<option value="' + value.id + '">' + value.nom +
+                        '</option>');
+                });
+
+
+            });
+
+            //get product select
+            $('.productSelected').change(function(e) {
+                e.preventDefault();
+                var productSelected = $('.productSelected option:selected').val();
+
+                var filteredProduct = dataProduct.filter(function(item) {
+                    return item.id == productSelected;
+                });
+
+                //update stock of product selected
+                $('#stock').val(filteredProduct[0].stock)
+
+            });
+
+
+
+            // product image principal
             document.querySelector("#product-image-input").addEventListener("change", function() {
                 var preview = document.querySelector("#product-img");
                 var file = document.querySelector("#product-image-input").files[0];

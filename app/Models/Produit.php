@@ -24,6 +24,7 @@ class Produit extends Model implements HasMedia
         // 'prix',
         'stock', //quantité
         'categorie_id',
+        'type_id', // type produit
         'visible', // oui , non
     ];
 
@@ -57,7 +58,7 @@ class Produit extends Model implements HasMedia
 
     public function typeProduit()
     {
-        return $this->belongsTo(TypeProduit::class, 'type_produit_id');
+        return $this->belongsTo(Categorie::class, 'type_id');
     }
 
 }

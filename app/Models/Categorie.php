@@ -20,7 +20,9 @@ class categorie extends Model
         'status',
         'url',
         'position',
-        'parent_id'
+        'parent_id',
+        'type_produit_id',
+
     ];
 
     public static function boot()
@@ -68,12 +70,18 @@ class categorie extends Model
     }
 
 
-    public function typeProduit()
+    public function getPrincipalCategory() // recuperer la categorie principale 
     {
-        return $this->belongsTo(TypeProduit::class, 'type_produit_id');
+        if ($this->parent) {
+            return $this->parent->getPrincipalCategory();
+        }
+
+        return $this;
     }
 
 
-
-
+    public function typeProduit() // BAR ? RESTAURANT
+    {
+        return $this->belongsTo(TypeProduit::class, 'type_produit_id');
+    }
 }

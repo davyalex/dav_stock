@@ -23,6 +23,19 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row mb-3">
+
+                                            <div class="col-md-2">
+                                                <label class="form-label" for="product-title-input">Type
+                                                </label>
+                                                <select id="choices-single-default" class="form-control typeSelected"
+                                                    name="type_produit" data-choices data-choices-sorting-false required>
+                                                    <option value="" disabled selected></option>
+                                                    <?php $__currentLoopData = $type_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <option value="<?php echo e($type->id); ?>">
+                                                            <?php echo e($type->name); ?></option>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                </select>
+                                            </div>
                                             <div class="col-md-8">
                                                 <label class="form-label" for="product-title-input">Sélectionner un produit
                                                 </label>
@@ -31,18 +44,15 @@
                                                     <i class="ri ri-add-fill"></i>
                                                     Ajouter un nouveau produit
                                                 </a>
-                                                <select id="choices-single-default" class="form-control" name="categorie"
-                                                    data-choices data-choices-sorting-false required>
-                                                    <option value="" disabled selected>Selectionner</option>
-                                                    <?php $__currentLoopData = $data_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                        <option value="<?php echo e($produit->id); ?>"><?php echo e($produit->nom); ?></option>
-                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                <select class="form-control productSelected  js-example-basic-single "
+                                                    name="categorie"  required>
+                                                    
+                                                    
                                                 </select>
-                                                <div class="invalid-feedback">Please Enter a product title.</div>
                                             </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label" for="stocks-input">Stocks En cour</label>
-                                                <input type="text" class="form-control" id="stocks-input" disabled>
+                                            <div class="col-md-2">
+                                                <label class="form-label" for="stocks-input">Stocks actuelle</label>
+                                                <input type="text" class="form-control" id="stock" disabled>
                                             </div>
 
                                             <div class="col-md-4">
@@ -52,7 +62,9 @@
                                                     data-choices data-choices-sorting-false>
                                                     <option value="" disabled selected>Selectionner</option>
                                                     <?php $__currentLoopData = $data_fournisseur; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fournisseur): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                        <option value="<?php echo e($fournisseur->id); ?>"><?php echo e($fournisseur->nom); ?></option>
+                                                        <option value="<?php echo e($fournisseur->id); ?>"><?php echo e($fournisseur->nom); ?>
+
+                                                        </option>
                                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </select>
                                             </div>
@@ -64,7 +76,10 @@
                                                     data-choices data-choices-sorting-false>
                                                     <option value="" disabled selected>Selectionner</option>
                                                     <?php $__currentLoopData = $data_format; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $format): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                        <option value="<?php echo e($format->id); ?>"><?php echo e($format->libelle); ?> (<?php echo e($format->abreviation); ?>)</option>
+                                                        <option value="<?php echo e($format->id); ?>"><?php echo e($format->libelle); ?>
+
+                                                            (<?php echo e($format->abreviation); ?>)
+                                                        </option>
                                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </select>
                                             </div>
@@ -73,9 +88,6 @@
                                                 <input type="text" class="form-control" id="stocks-input" disabled>
                                             </div>
                                         </div>
-
-
-
                                     </div>
                                 </div>
                                 <!-- end card -->
@@ -169,10 +181,48 @@
         <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
         <script>
-            //script for to send data 
+            //get info product from controller
+            var dataProduct = <?php echo e(Js::from($data_produit)); ?>
 
 
-            // product image
+
+            //get list product of type product
+            $('.typeSelected').change(function(e) {
+                e.preventDefault();
+                var typeSelected = $('.typeSelected option:selected').val();
+                var productList = dataProduct.filter(function(item) {
+                    return item.type_id == typeSelected;
+                });
+                console.log(productList);
+                
+
+                $('.productSelected').empty();
+                $('.productSelected').append('<option value="">Selectionner un produit</option>');
+                $.each(productList, function(key, value) {
+                    $('.productSelected').append('<option value="' + value.id + '">' + value.nom +
+                        '</option>');
+                });
+
+
+            });
+
+            //get product select
+            $('.productSelected').change(function(e) {
+                e.preventDefault();
+                var productSelected = $('.productSelected option:selected').val();
+
+                var filteredProduct = dataProduct.filter(function(item) {
+                    return item.id == productSelected;
+                });
+
+                //update stock of product selected
+                $('#stock').val(filteredProduct[0].stock)
+
+            });
+
+
+
+            // product image principal
             document.querySelector("#product-image-input").addEventListener("change", function() {
                 var preview = document.querySelector("#product-img");
                 var file = document.querySelector("#product-image-input").files[0];
