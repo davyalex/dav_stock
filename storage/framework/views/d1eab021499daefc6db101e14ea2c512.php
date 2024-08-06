@@ -177,7 +177,7 @@
                 <li class="nav-item">
                     <a href="<?php echo e(route('produit.create')); ?>"
                         class=" menu-link nav-link <?php echo e(Route::is('produit.*') ? 'active' : ''); ?>">
-                        <i class="ri ri-shopping-bag-line"></i> <span>APPROVISIONNEMENT</span>
+                        <i class=" ri ri-box-1-fill"></i> <span>STOCK</span>
                     </a>
                 </li>
 

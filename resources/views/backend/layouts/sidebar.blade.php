@@ -261,7 +261,7 @@
                 <li class="nav-item">
                     <a href="{{ route('produit.create') }}"
                         class=" menu-link nav-link {{ Route::is('produit.*') ? 'active' : '' }}">
-                        <i class="ri ri-shopping-bag-line"></i> <span>APPROVISIONNEMENT</span>
+                        <i class=" ri ri-box-1-fill"></i> <span>STOCK</span>
                     </a>
                 </li>
 

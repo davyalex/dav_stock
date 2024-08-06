@@ -31,15 +31,15 @@
                                                 <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" name="nom" class="form-control"
-                                                    id="nomProduit" required>
+                                                <input type="text" name="nom" class="form-control" id="nomProduit"
+                                                    required>
                                             </div>
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="product-title-input">Sélectionner une
                                                     categorie <span class="text-danger">*</span>
                                                 </label>
-                                                <select id="choices-single-default" class="form-control" name="categorie"
-                                                    data-choices data-choices-sorting-false required>
+                                                <select class="form-control js-example-basic-single" name="categorie"
+                                                    required>
                                                     <option value="" disabled selected>Selectionner</option>
 
                                                     @foreach ($data_categorie as $categorie)

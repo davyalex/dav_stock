@@ -23,7 +23,7 @@ class ProduitController extends Controller
 
         try {
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn ($q) => $q->OrderBy('position', 'ASC'))->withCount('children')->OrderBy('position', 'ASC')->get();
-            $data_produit = Produit::with('categorie.ancestors')->get();
+            $data_produit = Produit::with(['categorie.ancestors' , 'media'])->get();
             $type_produit= Categorie::whereNull('parent_id')->whereIn('name', ['bar', 'restaurant'])->get();
 
             $data_format = Format::all();
