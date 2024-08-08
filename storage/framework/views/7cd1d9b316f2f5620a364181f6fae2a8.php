@@ -1,0 +1,1 @@
+<?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/stock/entree/partials/barProduct.blade.php ENDPATH**/ ?>

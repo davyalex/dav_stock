@@ -137,11 +137,12 @@
 
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarConfiguration" data-bs-toggle="collapse" role="button"
-                        aria-expanded="true" aria-controls="sidebarConfiguration">
+                    <a class="nav-link menu-link" href="#sidebarConfiguration" data-bs-toggle="collapse"
+                        role="button" aria-expanded="true" aria-controls="sidebarConfiguration">
                         <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
                     </a>
-                    <div class="collapse menu-dropdown <?php echo e(Route::is('unite.*') || Route::is('format.*') ? 'show' : ''); ?>" id="sidebarConfiguration">
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('unite.*') || Route::is('format.*') ? 'show' : ''); ?>"
+                        id="sidebarConfiguration">
                         <ul class="nav nav-sm flex-column">
 
                             <li class="nav-item active">
@@ -151,7 +152,8 @@
 
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('format.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('format.*') ? 'active' : ''); ?>">Format / Emballage</a>
+                                    class="nav-link <?php echo e(Route::is('format.*') ? 'active' : ''); ?>">Format /
+                                    Emballage</a>
                             </li>
 
                         </ul>
@@ -159,6 +161,7 @@
                 </li>
 
 
+              
 
                 <li class="nav-item">
                     <a href="<?php echo e(route('categorie.create')); ?>"
@@ -175,10 +178,31 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="<?php echo e(route('produit.create')); ?>"
-                        class=" menu-link nav-link <?php echo e(Route::is('produit.*') ? 'active' : ''); ?>">
-                        <i class=" ri ri-box-1-fill"></i> <span>STOCK</span>
+                    <a class="nav-link menu-link" href="#sidebarStock" data-bs-toggle="collapse" role="button"
+                        aria-expanded="true" aria-controls="sidebarStock">
+                        <i class="ri ri-box-1-fill"></i> <span>STOCK</span>
                     </a>
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('stock.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : ''); ?>"
+                        id="sidebarStock">
+                        <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('fournisseur.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('fournisseur.*') ? 'active' : ''); ?>">Fournisseurs</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('produit.create')); ?>"
+                                    class="nav-link <?php echo e(Route::is('produit.*') ? 'active' : ''); ?>">Produits</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('stock.create')); ?>"
+                                    class="nav-link <?php echo e(Route::is('stock.*') ? 'active' : ''); ?>">Entrées</a>
+                            </li>
+
+                        </ul>
+                    </div>
                 </li>
 
         </div>

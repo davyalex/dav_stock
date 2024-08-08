@@ -74,4 +74,4 @@
         Looks good!
     </div>
 </div>
-<?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/produit/entree/restaurantProduct.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/stock/entree/partials/restaurantProduct.blade.php ENDPATH**/ ?>

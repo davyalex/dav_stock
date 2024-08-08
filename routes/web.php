@@ -14,6 +14,8 @@ use App\Http\Controllers\backend\AuthAdminController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\menu\MenuController;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Http\Controllers\backend\stock\StockController;
+use App\Http\Controllers\backend\stock\EntreeController;
 use App\Http\Controllers\backend\module\ModuleController;
 use App\Http\Controllers\backend\produit\ProduitController;
 use App\Http\Controllers\backend\basic_site\SlideController;
@@ -330,10 +332,17 @@ Route::middleware(['admin'])->group(function () {
     Route::prefix('produit')->controller(ProduitController::class)->group(function () {
         route::get('', 'index')->name('produit.index');
         route::get('create', 'create')->name('produit.create');
-        route::get('create-new-product', 'createNewProduct')->name('produit.createNewProduct'); // creer un nouveau de produit-formulaire
-        route::post('store-new-product', 'StoreNewProduct')->name('produit.StoreNewProduct'); // creer un nouveau de produit-store
-
         route::post('store', 'store')->name('produit.store');
+        // route::post('update/{id}', 'update')->name('produit.update');
+        // route::get('delete/{id}', 'delete')->name('produit.delete');
+    });
+
+
+    // stock -entree
+    Route::prefix('stock')->controller(StockController::class)->group(function () {
+        route::get('', 'index')->name('stock.index');
+        route::get('create', 'create')->name('stock.create');
+        route::post('store', 'store')->name('stock.store');
         // route::post('update/{id}', 'update')->name('produit.update');
         // route::get('delete/{id}', 'delete')->name('produit.delete');
     });

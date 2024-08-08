@@ -14,56 +14,26 @@ use App\Http\Controllers\Controller;
 class ProduitController extends Controller
 {
     //
-    public function index()
-    {
-    }
+    public function index() {}
 
     public function create(Request $request)
     {
-
-        try {
-            $data_categorie = Categorie::whereNull('parent_id')->with('children', fn ($q) => $q->OrderBy('position', 'ASC'))->withCount('children')->OrderBy('position', 'ASC')->get();
-            $data_produit = Produit::with(['categorie.ancestors' , 'media'])->get();
-            $type_produit= Categorie::whereNull('parent_id')->whereIn('name', ['bar', 'restaurant'])->get();
-
-            $data_format = Format::all();
-            $data_unite = Unite::all();
-            $data_fournisseur = Fournisseur::all();
-
-            // dd($data_produit->toArray());
-            return view('backend.pages.produit.create', compact('type_produit' , 'data_categorie', 'data_produit', 'data_format', 'data_unite', 'data_fournisseur'));
-        } catch (\Throwable $e) {
-            return  $e->getMessage();
-        }
-
-        // dd($data_categorie->toArray());
-
-    }
-
-    /**Formulaire pour creer un nouveau produit */
-    public function createNewProduct(Request $request)
-    {
         try {
 
-            $data_categorie = Categorie::whereNull('parent_id')->with('children', fn ($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
+            $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
                 ->whereIn('name', ['bar', 'restaurant'])
                 ->OrderBy('position', 'ASC')->get();
 
             // dd($data_produit->toArray());
 
-            return view('backend.pages.produit.partials.createProduct', compact('data_categorie'));
+            return view('backend.pages.produit.create', compact('data_categorie'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
-
-        // dd($data_categorie->toArray());
-
-
     }
 
 
-    /**Ajouter un nouveau produit */
-    public function StoreNewProduct(Request $request)
+    public function store(Request $request)
     {
         try {
             //request validation
