@@ -276,7 +276,7 @@
                             </li>
 
                             <li class="nav-item active">
-                                <a href="{{ route('produit.create') }}"
+                                <a href="{{ route('produit.index') }}"
                                     class="nav-link {{ Route::is('produit.*') ? 'active' : '' }}">Produits</a>
                             </li>
 

@@ -1,7 +1,7 @@
 <div class="col-md-5">
     <label class="form-label" for="product-title-input">Fournisseur
     </label>
-    <select class="form-control js-example-basic-single" name="categorie">
+    <select class="form-control js-example-basic-single" name="fournisseur">
         <option value="" disabled selected>Choisir</option>
         @foreach ($data_fournisseur as $fournisseur)
             <option value="{{ $fournisseur->id }}">{{ $fournisseur->nom }}
@@ -26,7 +26,7 @@
 <div class="col-md-3 mb-3">
     <label class="form-label" for="stocks-input">Qté <span class="text-lowercase libFormat" id="libFormat"> de
             format</span></label>
-    <input type="number" id="qteFormat" class="form-control" required>
+    <input type="number" id="qteFormat" name="quantite_format" class="form-control" required>
 </div>
 
 <div class="col-md-4">
@@ -44,12 +44,12 @@
 
 <div class="col-md-2 mb-3">
     <label class="form-label" for="stocks-input">Unité unitaire </label>
-    <input type="number" class="form-control" id="qteUniteUnitaire" name="qte_unite_unitaire" required>
+    <input type="number" class="form-control" id="qteUniteUnitaire" name="quantite_unite_unitaire" required>
 </div>
 
 <div class="col-md-2 mb-3">
-    <label class="form-label" for="stocks-input">Unité globale </label>
-    <input type="number" class="form-control" id="qteUniteGlobale" name="qte_unite_globale" readonly>
+    <label class="form-label" for="stocks-input">Quantité stockable</label>
+    <input type="number" class="form-control" id="qteUniteGlobale" name="quantite_unite_globale" readonly>
 </div>
 
 <div class="col-md-2 mb-3">
@@ -58,7 +58,7 @@
 </div>
 <div class="col-md-2 mb-3">
     <label class="form-label" for="stocks-input">Prix d'achat total </label>
-    <input type="number" id="prixAchatTotal" class="form-control" name="prix_achat_total" readonly>
+    <input type="number" id="prixAchatTotal" class="form-control" name="prix_achat_total">
 </div>
 
 <div class="col-md-3">

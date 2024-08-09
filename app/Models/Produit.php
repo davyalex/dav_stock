@@ -23,6 +23,7 @@ class Produit extends Model implements HasMedia
         'description',
         // 'prix',
         'stock', //quantité
+        'stock_alerte', // stock de securite
         'categorie_id',
         'type_id', // type produit
         'visible', // oui , non

@@ -39,5 +39,29 @@ class StockController extends Controller
     }
 
 
-    public function store() {}
+    public function store(Request $request)
+    {
+        try {
+            $type_produit = Categorie::where('type_id', $request['type_produit'])->first();
+            //if request == restaurant
+            if ($type_produit['name'] == 'restaurant') {
+                $request->validate([
+                    'produit' => 'required',
+                    'quantite_format' => 'required',
+                    'format' => 'required',
+                    'unite' => 'required',
+                    'valeur_unite' => 'required', // valeur par unite
+                    'quantite_stockable' => 'required', // --qte stockable
+                    'fournisseur' => 'required',
+                    'prix_achat_unitaire' => 'required',
+                    'prix_achat_total' => 'required',
+                    'statut' => '',
+
+
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
 }

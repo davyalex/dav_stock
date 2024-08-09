@@ -333,6 +333,7 @@ Route::middleware(['admin'])->group(function () {
         route::get('', 'index')->name('produit.index');
         route::get('create', 'create')->name('produit.create');
         route::post('store', 'store')->name('produit.store');
+        route::get('edit/{id}', 'edit')->name('produit.edit');
         // route::post('update/{id}', 'update')->name('produit.update');
         // route::get('delete/{id}', 'delete')->name('produit.delete');
     });

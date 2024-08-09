@@ -27,14 +27,14 @@
                                     </a>
                                     <div class="card-body">
                                         <div class="mb-3 row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-5">
                                                 <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
                                                 <input type="text" name="nom" class="form-control" id="nomProduit"
                                                     required>
                                             </div>
-                                            <div class="mb-3 col-md-6">
+                                            <div class="mb-3 col-md-5">
                                                 <label class="form-label" for="product-title-input">Sélectionner une
                                                     categorie <span class="text-danger">*</span>
                                                 </label>
@@ -51,6 +51,14 @@
                                                 </select>
                                             </div>
 
+                                            <div class="col-md-2 mb-3">
+                                                <label class="form-label" for="meta-title-input">Stock alerte <span
+                                                        class="text-danger">*</span>
+                                                </label>
+                                                <input type="number" name="stock_alerte" class="form-control"
+                                                    id="stockAlerte" required>
+                                            </div>
+
 
                                         </div>
                                         <div>
@@ -65,11 +73,10 @@
 
                             <div class="col-lg-4">
                                 <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title mb-0">Gallerie Images</h5>
-                                    </div>
+
 
                                     <div class="card-body">
+
                                         <div class="mb-4">
                                             <h5 class="fs-14 mb-1">Image principale <span class="text-danger">*</span></h5>
                                             <div class="text-center">

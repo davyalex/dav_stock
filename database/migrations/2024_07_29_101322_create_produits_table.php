@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('slug')->nullable();
             $table->double('prix')->nullable();
             $table->integer('stock')->default(0); //quantité en stock
+            $table->integer('stock_alerte')->default(0); //
             $table->longText('description')->nullable();
             $table->enum('visible', ['oui', 'non'])->default('oui');
         

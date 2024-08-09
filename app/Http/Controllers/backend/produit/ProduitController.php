@@ -14,7 +14,12 @@ use App\Http\Controllers\Controller;
 class ProduitController extends Controller
 {
     //
-    public function index() {}
+    public function index()
+    {
+        $data_produit = Produit::all();
+        // dd(  $data_produit->toArray());
+        return view('backend.pages.produit.index', compact('data_produit'));
+    }
 
     public function create(Request $request)
     {
@@ -42,6 +47,7 @@ class ProduitController extends Controller
                 'description' => '',
                 'categorie' => 'required',
                 'stock' => '',
+                'stock_alerte' => '',
                 'visible' => '',
             ]);
 
@@ -55,7 +61,8 @@ class ProduitController extends Controller
                 'code' =>  $sku,
                 'description' => $request['description'],
                 'categorie_id' => $request['categorie'],
-                'type_id' =>   $principaCat['id'],
+                'stock_alerte' => $request['stock_alerte'],
+                'type_id' =>   $principaCat['id'], // type produit
             ]);
 
             if (request()->hasFile('imagePrincipale')) {
@@ -90,4 +97,7 @@ class ProduitController extends Controller
             return $e->getMessage();
         }
     }
+
+
+    public function edit(Request $request) {}
 }

@@ -192,7 +192,7 @@
                             </li>
 
                             <li class="nav-item active">
-                                <a href="<?php echo e(route('produit.create')); ?>"
+                                <a href="<?php echo e(route('produit.index')); ?>"
                                     class="nav-link <?php echo e(Route::is('produit.*') ? 'active' : ''); ?>">Produits</a>
                             </li>
 

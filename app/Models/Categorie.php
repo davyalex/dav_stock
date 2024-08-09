@@ -82,6 +82,6 @@ class categorie extends Model
 
     public function typeProduit() // BAR ? RESTAURANT
     {
-        return $this->belongsTo(TypeProduit::class, 'type_produit_id');
+        return $this->belongsTo(TypeProduit::class, 'type_id');
     }
 }

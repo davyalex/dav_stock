@@ -28,7 +28,6 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row mb-3">
-
                                             <div class="col-md-4 mb-3">
                                                 <label class="form-label" for="product-title-input">Type de produit
                                                 </label>
@@ -49,8 +48,8 @@
                                                     <i class="ri ri-add-fill"></i>
                                                     Ajouter un nouveau produit
                                                 </a>
-                                                <select class="form-control productSelected  js-example-basic-single "
-                                                    name="categorie" required>
+                                                <select class="form-control productSelected  js-example-basic-single"
+                                                    name="produit" required>
                                                 </select>
                                             </div>
 
@@ -75,7 +74,9 @@
                                         <div class="mb-4">
                                             <p>Sku : <span class="fw-bold" id="sku">0</span></p>
                                             <p>Stock actuel : <span class="fw-bold" id="stock">0</span></p>
-                                            <p>Categorie : <span class="fw-bold" id="categorie">0</span></p>
+                                            <p>Stock alerte : <span class="fw-bold text-danger" id="stockAlerte">0</span>
+                                            </p>
+                                            <p>Categorie : <span class="fw-bold" id="categorie">??</span></p>
 
                                             <div class="text-center">
                                                 <div class="position-relative d-inline-block">
@@ -170,22 +171,50 @@
 
                     // })
 
-                    // calculate qte unite global ,  price total 
-                    function calculate() {
+                    // calculate qte unite global
+                    function calculateQteGlobale() {
                         var qte_format = $("#qteFormat").val() || 0;
                         var unite_unitaire = $("#qteUniteUnitaire").val() || 0;
                         var prix_achat_unitaire = $("#prixAchatUnitaire").val() || 0;
 
                         var qteUniteGlobale = qte_format * unite_unitaire
-                        var prixAchatTotal = qte_format * prix_achat_unitaire
 
-
-                        $('#qteUniteGlobale').val(qteUniteGlobale)
-                        $('#prixAchatTotal').val(prixAchatTotal)
-
+                        $('#qteUniteGlobale').val(qteUniteGlobale) //update
 
                     }
-                    $('#qteFormat ,#qteUniteUnitaire , #prixAchatUnitaire').on('input', calculate)
+                    $('#qteFormat ,#qteUniteUnitaire').on('input', calculateQteGlobale)
+
+
+                    //calculate prix achat 
+                    function calculatePrixAchat() {
+                        var qte_format = $("#qteFormat").val() || 0;
+                        var prix_achat_total = $("#prixAchatTotal").val() || 0;
+
+                        var prixAchatUnitaire = prix_achat_total / qte_format
+                        var prixAchatTotal = qte_format * prixAchatUnitaire
+
+                        $('#prixAchatUnitaire').val(prixAchatUnitaire)
+
+                    }
+
+                    $('#qteFormat ,#prixAchatTotal').on('input', calculatePrixAchat)
+
+
+                    // //calculate prix achat total
+                    function calculatePrixAchatTotal() {
+                        var qte_format = $("#qteFormat").val() || 0;
+                        var prix_achat_unitaire = $("#prixAchatUnitaire").val() || 0;
+
+                        var prixAchatTotal = qte_format * prix_achat_unitaire
+
+                        $('#prixAchatTotal').val(prixAchatTotal)
+
+                    }
+
+                    $('#qteFormat , #prixAchatUnitaire').on('input', calculatePrixAchatTotal)
+
+
+
 
 
 
@@ -226,6 +255,8 @@
 
                 //update stock , sku ,  category of product selected
                 $('#stock').html(filteredProduct[0].stock)
+                $('#stockAlerte').html(filteredProduct[0].stock_alerte)
+
                 $('#sku').html(filteredProduct[0].code)
                 $('#categorie').html(filteredProduct[0].categorie.name)
 
@@ -235,11 +266,6 @@
 
 
             });
-
-
-
-
-
 
 
 
