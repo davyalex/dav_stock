@@ -3,10 +3,11 @@
     </label>
     <select class="form-control js-example-basic-single" name="fournisseur">
         <option value="" disabled selected>Choisir</option>
-        @foreach ($data_fournisseur as $fournisseur)
-            <option value="{{ $fournisseur->id }}">{{ $fournisseur->nom }}
+        <?php $__currentLoopData = $data_fournisseur; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fournisseur): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <option value="<?php echo e($fournisseur->id); ?>"><?php echo e($fournisseur->nom); ?>
+
             </option>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </select>
 </div>
 
@@ -15,11 +16,12 @@
     </label>
     <select class="form-control js-example-basic-single format" name="format" required>
         <option value="" disabled selected>Choisir</option>
-        @foreach ($data_format as $format)
-            <option data-value={{ $format->libelle }} value="{{ $format->id }}">{{ $format->libelle }}
-                ({{ $format->abreviation }})
+        <?php $__currentLoopData = $data_format; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $format): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <option data-value=<?php echo e($format->libelle); ?> value="<?php echo e($format->id); ?>"><?php echo e($format->libelle); ?>
+
+                (<?php echo e($format->abreviation); ?>)
             </option>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </select>
 </div>
 
@@ -34,11 +36,12 @@
     </label>
     <select id="unite" class="form-control js-example-basic-single" name="unite" required>
         <option value="" disabled selected>Choisir</option>
-        @foreach ($data_unite as $unite)
-            <option data-value="{{ $unite->libelle }}" value="{{ $unite->id }}">{{ $unite->libelle }}
-                ({{ $unite->abreviation }})
+        <?php $__currentLoopData = $data_unite; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $unite): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <option data-value="<?php echo e($unite->libelle); ?>" value="<?php echo e($unite->id); ?>"><?php echo e($unite->libelle); ?>
+
+                (<?php echo e($unite->abreviation); ?>)
             </option>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </select>
 </div>
 
@@ -49,7 +52,7 @@
 
 <div class="col-md-2 mb-3">
     <label class="form-label" for="stocks-input">Quantité stockable</label>
-    <input type="number" class="form-control" id="qteUniteGlobale" name="quantite_unite_total" readonly>
+    <input type="number" class="form-control" id="qteUniteGlobale" name="quantite_unite_globale" readonly>
 </div>
 
 <div class="col-md-2 mb-3">
@@ -65,9 +68,10 @@
     <label class="form-check-label" for="customAff">Activer le stock</label>
 
     <div class="form-check form-switch form-switch-lg col-md-2" dir="ltr">
-        <input type="checkbox" name="statut" class="form-check-input" id="customAff">
+        <input type="checkbox" name="active" class="form-check-input" id="customAff">
     </div>
     <div class="valid-feedback">
         Looks good!
     </div>
 </div>
+<?php /**PATH C:\laragon\www\Restaurant-NEUILLY-\resources\views/backend/pages/stock/entree/partials/restaurantProduct.blade.php ENDPATH**/ ?>

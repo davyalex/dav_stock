@@ -35,6 +35,12 @@ return new class extends Migration
             ->onUpdate('cascade')
             ->onDelete('cascade');
 
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
             $table->softDeletes();
        
             $table->timestamps();

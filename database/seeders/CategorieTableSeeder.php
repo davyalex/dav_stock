@@ -3,21 +3,20 @@
 namespace Database\Seeders;
 
 use Carbon\Carbon;
-use App\Models\TypeProduit;
+use App\Models\Categorie;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class TypeProduitTableSeeder extends Seeder
+class CategorieTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-       
         $data = [
             [
-                'libelle' => 'Bar',
+                'name' => 'bar',
                 'slug' => 'bar',
                 'url' => 'bar',
                 'status' => 'active',
@@ -26,7 +25,7 @@ class TypeProduitTableSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'libelle' => 'Restaurant',
+                'name' => 'restaurant',
                 'slug' => 'restaurant',
                 'url' => 'restaurant',
                 'status' => 'active',
@@ -39,7 +38,7 @@ class TypeProduitTableSeeder extends Seeder
         ];
 
         foreach ($data as  $value) {
-            TypeProduit::firstOrCreate($value);
+            Categorie::firstOrCreate($value);
         }
     }
 }

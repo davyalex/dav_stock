@@ -21,7 +21,7 @@ class categorie extends Model
         'url',
         'position',
         'parent_id',
-        'type_produit_id',
+        // 'type_produit_id',
 
     ];
 
@@ -80,8 +80,14 @@ class categorie extends Model
     }
 
 
-    public function typeProduit() // BAR ? RESTAURANT
+    // public function typeProduit() // BAR ? RESTAURANT
+    // {
+    //     return $this->belongsTo(TypeProduit::class, 'type_id');
+    // }
+
+
+    public function entrees() // BAR ? RESTAURANT
     {
-        return $this->belongsTo(TypeProduit::class, 'type_id');
+        return $this->hasMany(Entree::class);
     }
 }

@@ -28,4 +28,9 @@ class Format extends Model
             mt_rand()]);
         });
     }
+
+    public function entrees() // BAR ? RESTAURANT
+    {
+        return $this->hasMany(Entree::class);
+    }
 }

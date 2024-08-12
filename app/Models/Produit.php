@@ -27,6 +27,7 @@ class Produit extends Model implements HasMedia
         'categorie_id',
         'type_id', // type produit
         'visible', // oui , non
+        'user_id',
     ];
 
 
@@ -60,6 +61,11 @@ class Produit extends Model implements HasMedia
     public function typeProduit()
     {
         return $this->belongsTo(Categorie::class, 'type_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
 }

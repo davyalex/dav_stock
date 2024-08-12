@@ -3,17 +3,18 @@
 namespace App\Models;
 
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
+use Spatie\Permission\Traits\HasPermissions;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasPermissions;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable , HasPermissions , HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasPermissions, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -43,6 +44,21 @@ class User extends Authenticatable
             mt_rand()]);
         });
     }
+
+
+
+    public function produits(): HasMany
+    {
+        return $this->hasMany(Produit::class);
+    }
+
+
+    public function entrees(): HasMany
+    {
+        return $this->hasMany(Entree::class);
+    }
+
+
 
     /**
      * The attributes that should be hidden for serialization.
