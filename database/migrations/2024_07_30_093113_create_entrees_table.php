@@ -50,7 +50,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->integer('quantite_unité_unitaire')->nullable(); //quantité unitaire par unité
+            $table->integer('quantite_unite_unitaire')->nullable(); //quantité unitaire par unité
             $table->integer('quantite_unite_total')->nullable(); //quantité total par unité --qté stockable
             $table->double('prix_achat_unitaire')->nullable(); //prix d'achat unitaire
             $table->double('prix_achat_total')->nullable(); //prix d'achat total

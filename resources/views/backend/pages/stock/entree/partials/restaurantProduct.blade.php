@@ -1,7 +1,7 @@
 <div class="col-md-5">
     <label class="form-label" for="product-title-input">Fournisseur
     </label>
-    <select class="form-control js-example-basic-single" name="fournisseur">
+    <select class="form-control js-example-basic-single" name="fournisseur_id">
         <option value="" disabled selected>Choisir</option>
         @foreach ($data_fournisseur as $fournisseur)
             <option value="{{ $fournisseur->id }}">{{ $fournisseur->nom }}
@@ -13,7 +13,7 @@
 <div class="col-md-4 mb-3">
     <label class="form-label" for="product-title-input">Format
     </label>
-    <select class="form-control js-example-basic-single format" name="format" required>
+    <select class="form-control js-example-basic-single format" name="format_id" required>
         <option value="" disabled selected>Choisir</option>
         @foreach ($data_format as $format)
             <option data-value={{ $format->libelle }} value="{{ $format->id }}">{{ $format->libelle }}
@@ -32,7 +32,7 @@
 <div class="col-md-4">
     <label class="form-label" for="product-title-input">Unité de mesure
     </label>
-    <select id="unite" class="form-control js-example-basic-single" name="unite" required>
+    <select id="unite" class="form-control js-example-basic-single" name="unite_id" required>
         <option value="" disabled selected>Choisir</option>
         @foreach ($data_unite as $unite)
             <option data-value="{{ $unite->libelle }}" value="{{ $unite->id }}">{{ $unite->libelle }}

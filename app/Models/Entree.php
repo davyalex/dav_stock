@@ -22,7 +22,7 @@ class Entree extends Model
         'format_id',
         'quantite_format',
         'unite_id',
-        'quantite_unité_unitaire',
+        'quantite_unite_unitaire',
         'quantite_unite_total',
         'prix_achat_unitaire',
         'prix_achat_total',

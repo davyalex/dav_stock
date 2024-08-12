@@ -21,7 +21,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form id="formSend" autocomplete="off" class="needs-validation" novalidate enctype="multipart/form-data">
+                    <form method="POST" action="{{route('stock.store')}}" autocomplete="off" class="needs-validation" novalidate enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-lg-9">
@@ -32,7 +32,7 @@
                                                 <label class="form-label" for="product-title-input">Type de produit
                                                 </label>
                                                 <select class="form-control typeSelected js-example-basic-single"
-                                                    name="type_produit" required>
+                                                    name="type_entree" required>
                                                     <option value="" disabled selected></option>
                                                     @foreach ($type_produit as $type)
                                                         <option value="{{ $type->id }}">
@@ -49,7 +49,7 @@
                                                     Ajouter un nouveau produit
                                                 </a>
                                                 <select class="form-control productSelected  js-example-basic-single"
-                                                    name="produit" required>
+                                                    name="produit_id" required>
                                                 </select>
                                             </div>
 

@@ -21,7 +21,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form id="formSend" autocomplete="off" class="needs-validation" novalidate enctype="multipart/form-data">
+                    <form method="POST" action="<?php echo e(route('stock.store')); ?>" autocomplete="off" class="needs-validation" novalidate enctype="multipart/form-data">
                         <?php echo csrf_field(); ?>
                         <div class="row">
                             <div class="col-lg-9">
@@ -32,7 +32,7 @@
                                                 <label class="form-label" for="product-title-input">Type de produit
                                                 </label>
                                                 <select class="form-control typeSelected js-example-basic-single"
-                                                    name="type_produit" required>
+                                                    name="type_entree" required>
                                                     <option value="" disabled selected></option>
                                                     <?php $__currentLoopData = $type_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                         <option value="<?php echo e($type->id); ?>">
@@ -49,7 +49,7 @@
                                                     Ajouter un nouveau produit
                                                 </a>
                                                 <select class="form-control productSelected  js-example-basic-single"
-                                                    name="produit" required>
+                                                    name="produit_id" required>
                                                 </select>
                                             </div>
 
@@ -176,6 +176,7 @@
                         var qte_format = $("#qteFormat").val() || 0;
                         var unite_unitaire = $("#qteUniteUnitaire").val() || 0;
                         var prix_achat_unitaire = $("#prixAchatUnitaire").val() || 0;
+                        
 
                         var qteUniteGlobale = qte_format * unite_unitaire
 
@@ -188,7 +189,7 @@
                     //calculate prix achat 
                     function calculatePrixAchat() {
                         var qte_format = $("#qteFormat").val() || 0;
-                        var prix_achat_total = $("#prixAchatTotal").val() || 0;
+                        var prix_achat_total = $("#prixAchatTotal").val() || 0; 
 
                         var prixAchatUnitaire = prix_achat_total / qte_format
                         var prixAchatTotal = qte_format * prixAchatUnitaire

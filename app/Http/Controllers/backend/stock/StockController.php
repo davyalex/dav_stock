@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\backend\stock;
 
 use App\Models\Unite;
+use App\Models\Entree;
 use App\Models\Format;
 use App\Models\Produit;
 use App\Models\Categorie;
 use App\Models\Fournisseur;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class StockController extends Controller
 {
@@ -38,30 +42,71 @@ class StockController extends Controller
 
     }
 
-
     public function store(Request $request)
     {
         try {
-            $type_produit = Categorie::where('type_id', $request['type_produit'])->first();
-            //if request == restaurant
-            if ($type_produit['name'] == 'restaurant') {
+            // $data = $request->all();
+            // dd($data);
+
+            //statut stock libelle active ? desactive
+            $statut = '';
+            if ($request['statut'] == 'on') {
+                $statut = 'active';
+            } else {
+                $statut = 'desactive';
+            }
+
+            //recuperer le type entree : bar ?restaurant            
+            $type_entree = $request['type_entree'];
+            $type_entree = Categorie::whereId($type_entree)->first();
+            if ($type_entree->name == 'restaurant') {
                 $request->validate([
-                    'produit' => 'required',
+                    'produit_id' => 'required',
                     'quantite_format' => 'required',
-                    'format' => 'required',
-                    'unite' => 'required',
-                    'valeur_unite' => 'required', // valeur par unite
-                    'quantite_stockable' => 'required', // --qte stockable
-                    'fournisseur' => 'required',
+                    'format_id' => 'required',
+                    'unite_id' => 'required',
+                    'quantite_unite_unitaire' => 'required', // valeur par unite
+                    'quantite_unite_total' => 'required', // --qte stockable
+                    'fournisseur_id' => 'required',
                     'prix_achat_unitaire' => 'required',
                     'prix_achat_total' => 'required',
-                    'statut' => '',
+                    'statut' => ''
+                ]);
 
+
+                $stock_entree = Entree::create([
+                    'code' => 'SE-' . strtoupper(Str::random(8)),
+                    'type_entree_id' => $type_entree->id,
+                    'produit_id' => $request['produit_id'],
+                    'format_id' => $request['format_id'],
+                    'unite_id' => $request['unite_id'],
+                    'fournisseur_id' => $request['fournisseur_id'],
+                    'quantite_format' => $request['quantite_format'],
+                    'quantite_unite_unitaire' => $request['quantite_unite_unitaire'],
+                    'quantite_unite_total' => $request['quantite_unite_total'],
+                    'prix_achat_unitaire' => $request['prix_achat_unitaire'],
+                    'prix_achat_total' => $request['prix_achat_total'],
+                    'statut' => $statut,
+                    'user_id' => Auth::id(),
 
                 ]);
+
+
+                //mise a jour du stock dans la table produit si le statut est active
+                if ($statut == 'active') {
+                    $produit = Produit::find($request['produit_id']);
+                    $produit->stock += $request['quantite_unite_total'];
+                    $produit->save();
+                }
+
+
+
+
+                Alert::success('Opération réussi', 'Success Message');
+                return back();
             }
-        } catch (\Throwable $th) {
-            return $th->getMessage();
+        } catch (\Throwable $e) {
+            return $e->getMessage();
         }
     }
 }
