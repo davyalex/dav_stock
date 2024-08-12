@@ -50,10 +50,20 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->integer('quantite_unite_unitaire')->nullable(); //quantité unitaire par unité
-            $table->integer('quantite_unite_total')->nullable(); //quantité total par unité --qté stockable
+            // $table->integer('quantite_unite_unitaire')->nullable(); //quantité unitaire par unité
+            // $table->integer('quantite_unite_total')->nullable(); //quantité total par unité --qté stockable
+            $table->integer('quantite_stockable')->nullable(); //
             $table->double('prix_achat_unitaire')->nullable(); //prix d'achat unitaire
             $table->double('prix_achat_total')->nullable(); //prix d'achat total
+
+
+            //autre chams de type bar
+            // $table->string('ugs_poids')->nullable(); // unite de mesure
+            // $table->string('ugs_valeur')->nullable(); // valeur
+            // $table->string('ugs_ballon')->nullable(); // nombre de par rapport à la mesure
+            // $table->string('ugs_tournee')->nullable(); // 
+            $table->double('prix_vente_unitaire')->nullable(); //prix de vente par unite
+            $table->double('prix_vente_total')->nullable(); //prix de vente total
 
             $table->foreignId('user_id')
                 ->nullable()

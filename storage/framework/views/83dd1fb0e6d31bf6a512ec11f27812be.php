@@ -55,8 +55,8 @@
                                                 <label class="form-label" for="meta-title-input">Stock alerte <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="number" name="stock_alerte" class="form-control" id="stockAlerte"
-                                                    required>
+                                                <input type="number" name="stock_alerte" class="form-control"
+                                                    id="stockAlerte" required>
                                             </div>
 
 
@@ -76,7 +76,7 @@
 
 
                                     <div class="card-body">
-                                        
+
                                         <div class="mb-4">
                                             <h5 class="fs-14 mb-1">Image principale <span class="text-danger">*</span></h5>
                                             <div class="text-center">

@@ -16,16 +16,20 @@ class Entree extends Model
     protected $fillable = [
         'code',
         'statut',
-        'type_entree_id',
+        'type_entree_id', // bar ? restaurant
         'produit_id',
         'fournisseur_id',
         'format_id',
         'quantite_format',
         'unite_id',
-        'quantite_unite_unitaire',
-        'quantite_unite_total',
+        // 'quantite_unite_unitaire',
+        // 'quantite_unite_total',
+        // 'indice_mesure', // poids ? unite
+        'quantite_stockable',
         'prix_achat_unitaire',
         'prix_achat_total',
+        'prix_vente_unitaire', // -->bar
+        'prix_vente_total',  // -->bar
         'user_id'
     ];
 

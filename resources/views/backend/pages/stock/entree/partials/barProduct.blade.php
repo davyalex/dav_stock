@@ -42,7 +42,7 @@
     </select>
 </div>
 
-<div class="col-md-2 mb-3">
+{{-- <div class="col-md-2 mb-3">
     <label class="form-label" for="stocks-input">Unité unitaire </label>
     <input type="number" class="form-control" id="qteUniteUnitaire" name="quantite_unite_unitaire" required>
 </div>
@@ -50,6 +50,11 @@
 <div class="col-md-2 mb-3">
     <label class="form-label" for="stocks-input">Quantité stockable</label>
     <input type="number" class="form-control" id="qteUniteGlobale" name="quantite_unite_total" readonly>
+</div> --}}
+
+<div class="col-md-2 mb-3">
+    <label class="form-label" for="stocks-input">Quantité stockable <span class="text-danger" id="labelUnite"></span> </label>
+    <input type="number" class="form-control" id="qteUniteUnitaire" name="quantite_stockable" required>
 </div>
 
 <div class="col-md-2 mb-3">
@@ -60,6 +65,15 @@
     <label class="form-label" for="stocks-input">Prix d'achat total </label>
     <input type="number" id="prixAchatTotal" class="form-control" name="prix_achat_total">
 </div>
+
+<div class="col-md-2 mb-3">
+    <label class="form-label" for="stocks-input">Prix de vente </label>
+    <input type="number" id="prixAchatTotal" class="form-control" name="prix_vente_unitaire" required>
+</div>
+
+
+
+
 
 <div class="col-md-3">
     <label class="form-check-label" for="customAff">Activer le stock</label>
