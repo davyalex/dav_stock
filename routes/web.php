@@ -334,8 +334,8 @@ Route::middleware(['admin'])->group(function () {
         route::get('create', 'create')->name('produit.create');
         route::post('store', 'store')->name('produit.store');
         route::get('edit/{id}', 'edit')->name('produit.edit');
-        // route::post('update/{id}', 'update')->name('produit.update');
-        // route::get('delete/{id}', 'delete')->name('produit.delete');
+        route::post('update/{id}', 'update')->name('produit.update');
+        route::get('delete/{id}', 'delete')->name('produit.delete');
     });
 
 
@@ -344,8 +344,8 @@ Route::middleware(['admin'])->group(function () {
         route::get('', 'index')->name('stock.index');
         route::get('create', 'create')->name('stock.create');
         route::post('store', 'store')->name('stock.store');
-        // route::post('update/{id}', 'update')->name('produit.update');
-        // route::get('delete/{id}', 'delete')->name('produit.delete');
+        route::post('update/{id}', 'update')->name('stock.update');
+        route::get('delete/{id}', 'delete')->name('stock.delete');
     });
 });
 

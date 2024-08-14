@@ -5,10 +5,10 @@
         <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 
         @slot('li_1')
-          Produit
+            Produit
         @endslot
         @slot('title')
-            Créer un nouveau produit
+            Modifier un nouveau produit
         @endslot
     @endcomponent
 
@@ -31,8 +31,8 @@
                                                 <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" name="nom"  class="form-control" id="nomProduit"
-                                                    required>
+                                                <input type="text" name="nom" value="{{ $data_produit['nom'] }}"
+                                                    class="form-control" id="nomProduit" required>
                                             </div>
                                             <div class="mb-3 col-md-5">
                                                 <label class="form-label" for="product-title-input">Sélectionner une
@@ -44,7 +44,7 @@
 
                                                     @foreach ($data_categorie as $categorie)
                                                         @include(
-                                                            'backend.pages.produit.partials.subCategorieOption',
+                                                            'backend.pages.produit.partials.subCategorieOptionEdit',
                                                             ['category' => $categorie]
                                                         )
                                                     @endforeach
@@ -55,8 +55,8 @@
                                                 <label class="form-label" for="meta-title-input">Stock alerte <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="number" name="stock_alerte" class="form-control"
-                                                    id="stockAlerte" required>
+                                                <input type="number" value="{{ $data_produit->stock_alerte }}"
+                                                    name="stock_alerte" class="form-control" id="stockAlerte" required>
                                             </div>
 
 
@@ -73,7 +73,10 @@
 
                             <div class="col-lg-4">
                                 <div class="card">
+
+
                                     <div class="card-body">
+
                                         <div class="mb-4">
                                             <h5 class="fs-14 mb-1">Image principale <span class="text-danger">*</span></h5>
                                             <div class="text-center">
@@ -90,12 +93,13 @@
                                                             </div>
                                                         </label>
                                                         <input class="form-control d-none" id="product-image-input"
-                                                            type="file" name="imagePrincipale" accept="image/*" required>
+                                                            type="file" name="imagePrincipale" accept="image/*">
                                                         <div class="invalid-feedback">Ajouter une image</div>
                                                     </div>
                                                     <div class="avatar-lg">
                                                         <div class="avatar-title bg-light rounded">
-                                                            <img src="" id="product-img" class="avatar-md h-auto" />
+                                                            <img src="{{ $data_produit->getFirstMediaUrl('ProduitImage') }}"
+                                                                id="product-img" class="avatar-md h-auto" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -171,6 +175,20 @@
             });
 
 
+            //get gallery Image from controller for edit
+            var getGalleryProduct = {{ Js::from($galleryProduit) }}
+
+            for (let i = 0; i < getGalleryProduct.length; i++) {
+                const element = getGalleryProduct[i];
+                var image = ` <div class="col-12 d-flex justify-content-between border border-secondary rounded"><img src="data:image/jpeg;base64,${element}" class="img-thumbnail rounded float-start" width="50" height="100">
+                                   <button type="button" class="btn btn-danger my-2 remove-image">Delete</button>
+                                    </div>  `;
+                console.log('edit:', image);
+                $('#imageTableBody').append(image);
+            }
+
+
+
             $('#imageInput').on('change', function(e) {
                 var files = e.target.files;
                 for (var i = 0; i < files.length; i++) {
@@ -194,6 +212,7 @@
             $('#formSend').on('submit', function(e) {
 
                 e.preventDefault();
+                var productId = {{ Js::from($id) }} // product Id
                 var formData = new FormData(this);
 
                 $('#imageTableBody div').each(function() {
@@ -202,7 +221,7 @@
                 });
 
                 $.ajax({
-                    url: "{{ route('produit.store') }}", // Adjust the route as needed
+                    url: "/produit/update/" + productId, // Adjust the route as needed
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -223,7 +242,7 @@
                                 buttonsStyling: false,
                                 showCloseButton: true
                             })
-                            var url = "{{ route('stock.create') }}" // redirect route stock
+                            var url = "{{ route('produit.index') }}" // redirect route product list
 
                             window.location.replace(url);
                         } else if (response == 'The nom has already been taken.') {

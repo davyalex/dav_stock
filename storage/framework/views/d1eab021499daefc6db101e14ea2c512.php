@@ -161,7 +161,7 @@
                 </li>
 
 
-              
+
 
                 <li class="nav-item">
                     <a href="<?php echo e(route('categorie.create')); ?>"
@@ -198,7 +198,7 @@
 
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('stock.create')); ?>"
-                                    class="nav-link <?php echo e(Route::is('stock.*') ? 'active' : ''); ?>">Entrées</a>
+                                    class="nav-link <?php echo e(Route::is('stock.*') ? 'active' : ''); ?>">Achats</a>
                             </li>
 
                         </ul>

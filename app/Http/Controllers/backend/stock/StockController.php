@@ -18,7 +18,9 @@ class StockController extends Controller
 {
     //
 
-    public function index() {}
+    public function index() {
+        $data_stock = Entree::get();
+    }
 
     public function create(Request $request)
     {

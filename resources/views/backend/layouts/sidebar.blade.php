@@ -245,7 +245,7 @@
                 </li>
 
 
-              
+
 
                 <li class="nav-item">
                     <a href="{{ route('categorie.create') }}"
@@ -282,7 +282,7 @@
 
                             <li class="nav-item active">
                                 <a href="{{ route('stock.create') }}"
-                                    class="nav-link {{ Route::is('stock.*') ? 'active' : '' }}">Entrées</a>
+                                    class="nav-link {{ Route::is('stock.*') ? 'active' : '' }}">Achats</a>
                             </li>
 
                         </ul>

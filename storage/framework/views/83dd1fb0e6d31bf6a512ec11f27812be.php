@@ -5,7 +5,7 @@
         <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
 
         <?php $__env->slot('li_1'); ?>
-            Nouveau produit
+          Produit
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
             Créer un nouveau produit
@@ -31,7 +31,7 @@
                                                 <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" name="nom" class="form-control" id="nomProduit"
+                                                <input type="text" name="nom"  class="form-control" id="nomProduit"
                                                     required>
                                             </div>
                                             <div class="mb-3 col-md-5">
@@ -73,10 +73,7 @@
 
                             <div class="col-lg-4">
                                 <div class="card">
-
-
                                     <div class="card-body">
-
                                         <div class="mb-4">
                                             <h5 class="fs-14 mb-1">Image principale <span class="text-danger">*</span></h5>
                                             <div class="text-center">
