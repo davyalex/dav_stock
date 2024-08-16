@@ -346,6 +346,11 @@ Route::middleware(['admin'])->group(function () {
         route::post('store', 'store')->name('stock.store');
         route::post('update/{id}', 'update')->name('stock.update');
         route::get('delete/{id}', 'delete')->name('stock.delete');
+
+        //Ajustement
+        route::get('ajustement/index', 'ajustement_index')->name('ajustement.index');
+        route::get('ajustement/create/{id}', 'ajustement_create')->name('ajustement.create');
+        route::post('ajustement/store', 'ajustement_store')->name('ajustement.store');
     });
 });
 

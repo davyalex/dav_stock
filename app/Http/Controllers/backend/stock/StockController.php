@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\backend\stock;
 
+use App\Models\Stock;
 use App\Models\Unite;
 use App\Models\Entree;
 use App\Models\Format;
@@ -18,10 +19,15 @@ class StockController extends Controller
 {
     //
 
-    public function index() {
-        $data_stock = Entree::get();
-        // dd($data_stock->toArray());
-        return view('backend.pages.stock.entree.index' , compact('data_stock'));
+    public function index()
+    {
+        try {
+            $data_stock = Stock::get();
+            // dd($data_stock->toArray());
+            return view('backend.pages.stock.entree.index', compact('data_stock'));
+        } catch (\Throwable $e) {
+            return  $e->getMessage();
+        }
     }
 
     public function create(Request $request)
@@ -63,6 +69,7 @@ class StockController extends Controller
             $type_entree = Categorie::whereId($type_entree)->first();
             if ($type_entree->name == 'restaurant') {
                 $request->validate([
+                    'mouvement' => '',
                     'produit_id' => 'required',
                     'quantite_format' => 'required',
                     'format_id' => 'required',
@@ -79,6 +86,7 @@ class StockController extends Controller
             } elseif ($type_entree->name == 'bar') {
 
                 $request->validate([
+                    'mouvement' => '',
                     'produit_id' => 'required',
                     'quantite_format' => 'required',
                     'format_id' => 'required',
@@ -98,10 +106,10 @@ class StockController extends Controller
                 ]);
             }
 
-            
 
-            Entree::create([
+            Stock::create([
                 'code' => 'SE-' . strtoupper(Str::random(8)),
+                'mouvement' => 'entree',
                 'type_entree_id' => $type_entree->id,
                 'produit_id' => $request['produit_id'],
                 'format_id' => $request['format_id'],
@@ -114,7 +122,7 @@ class StockController extends Controller
                 'prix_achat_unitaire' => $request['prix_achat_unitaire'],
                 'prix_achat_total' => $request['prix_achat_total'],
                 'prix_vente_unitaire' => $request['prix_vente_unitaire'],
-                'prix_vente_total' => $request['prix_vente_unitaire'] * $request['quantite_stockable'] ,
+                'prix_vente_total' => $request['prix_vente_unitaire'] * $request['quantite_stockable'],
                 'statut' => $statut,
                 'user_id' => Auth::id(),
             ]);
@@ -128,12 +136,80 @@ class StockController extends Controller
             }
 
 
-
-
             Alert::success('Opération réussi', 'Success Message');
             return back();
         } catch (\Throwable $e) {
             return $e->getMessage();
+        }
+    }
+
+
+
+
+
+
+    //Ajustement
+    public function ajustement_create($id)
+    {
+        try {
+            $data_ajustement = Stock::find($id);
+            return view('backend.pages.stock.ajustement.create', compact('data_ajustement'));
+        } catch (\Throwable $e) {
+            return  $e->getMessage();
+        }
+    }
+
+
+    public function ajustement_store(Request $request)
+    {
+
+        try {
+
+            //request  validate
+            $request->validate([
+                'quantite_ajustement' => 'required|numeric',
+                'mouvement' => 'required',
+            ]);
+            $data_ajustement = Stock::find($request['stock_id']);
+            // dd($data_ajustement->toArray());
+            //statut stock libelle active ? desactive
+            $statut = '';
+            if ($request['statut'] == 'on') {
+                $statut = 'active';
+            } else {
+                $statut = 'desactive';
+            }
+
+
+            $mouvement_quantite = 0;
+            if ($request['mouvement'] == 'sortie') {
+                $mouvement_quantite = $data_ajustement['quantite_stockable'] - $request['quantite_ajustement']; // calculer la quantite de sortie
+                //replicate 
+                $newAjustement =   $data_ajustement->replicate()->fill([
+                    'code' => 'SE-' . strtoupper(Str::random(8)),
+                    'mouvement' => $request['mouvement'],
+                    'quantite_sortie' =>   $mouvement_quantite,
+                    'statut' => $statut,
+                    'user_id' => Auth::id(),
+                ]);
+                $newAjustement->save();
+            } elseif ($request['mouvement'] == 'entree') {
+                $mouvement_quantite = $request['quantite_ajustement'] - $data_ajustement['quantite_stockable']; // calculer la quantite de sortie
+                //replicate 
+                $newAjustement =   $data_ajustement->replicate()->fill([
+                    'code' => 'SE-' . strtoupper(Str::random(8)),
+                    'mouvement' => $request['mouvement'],
+                    'quantite_stockable' =>   $mouvement_quantite,
+                    'statut' => $statut,
+                    'user_id' => Auth::id(),
+                ]);
+                $newAjustement->save();
+            }
+
+            Alert::success('Opération réussi', 'Success Message');
+            return redirect()->route('ajustement.create', ['id' => $request['stock_id']]);
+        } catch (\Throwable $e) {
+            return  $e->getMessage();
         }
     }
 }

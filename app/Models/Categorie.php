@@ -86,8 +86,8 @@ class categorie extends Model
     // }
 
 
-    public function entrees() // BAR ? RESTAURANT
+    public function stocks() // BAR ? RESTAURANT
     {
-        return $this->hasMany(Entree::class);
+        return $this->hasMany(Stock::class);
     }
 }

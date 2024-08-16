@@ -1,6 +1,8 @@
 
 
 <?php $__env->startSection('content'); ?>
+
+
     <?php $__env->startComponent('backend.components.breadcrumb'); ?>
         <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
 
@@ -21,7 +23,8 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="<?php echo e(route('stock.store')); ?>" autocomplete="off" class="needs-validation" novalidate enctype="multipart/form-data">
+                    <form method="POST" action="<?php echo e(route('stock.store')); ?>" autocomplete="off" class="needs-validation"
+                        novalidate enctype="multipart/form-data">
                         <?php echo csrf_field(); ?>
                         <div class="row">
                             <div class="col-lg-9">
@@ -125,8 +128,31 @@
         <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
         <script>
-            //script for field form
-            // get name selected format
+            // script for quantity stock increase and dicrease
+            function increaseValue() {
+                var input = document.getElementById("quantiteStockable");
+                var value = parseInt(input.value, 10);
+                value = isNaN(value) ? 0 : value;
+                value++;
+                input.value = value;
+            }
+
+            function decreaseValue() {
+                var input = document.getElementById("quantiteStockable");
+                var value = parseInt(input.value, 10);
+                value = isNaN(value) ? 0 : value;
+                value < 1 ? value = 1 : '';
+                if (value > 1) {
+                    value--;
+                }
+                input.value = value;
+
+
+            }
+
+
+
+
 
 
             //get list product of type product
@@ -173,22 +199,22 @@
                     // calculate qte unite global
                     // function calculateQteGlobale() {
                     //     var qte_format = $("#qteFormat").val() || 0;
-                    //     var unite_unitaire = $("#qteUniteUnitaire").val() || 0;
+                    //     var unite_unitaire = $("#quantiteStockable").val() || 0;
                     //     var prix_achat_unitaire = $("#prixAchatUnitaire").val() || 0;
-                        
+
 
                     //     var qteUniteGlobale = qte_format * unite_unitaire
 
                     //     $('#qteUniteGlobale').val(qteUniteGlobale) //update
 
                     // }
-                    // $('#qteFormat ,#qteUniteUnitaire').on('input', calculateQteGlobale)
+                    // $('#qteFormat ,#quantiteStockable').on('input', calculateQteGlobale)
 
 
                     //calculate prix achat 
                     function calculatePrixAchat() {
                         var qte_format = $("#qteFormat").val() || 0;
-                        var prix_achat_total = $("#prixAchatTotal").val() || 0; 
+                        var prix_achat_total = $("#prixAchatTotal").val() || 0;
 
                         var prixAchatUnitaire = prix_achat_total / qte_format
                         var prixAchatTotal = qte_format * prixAchatUnitaire

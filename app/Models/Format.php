@@ -31,6 +31,6 @@ class Format extends Model
 
     public function entrees() // BAR ? RESTAURANT
     {
-        return $this->hasMany(Entree::class);
+        return $this->hasMany(Stock::class);
     }
 }

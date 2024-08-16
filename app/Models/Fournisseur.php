@@ -36,7 +36,7 @@ class Fournisseur extends Model implements HasMedia
 
     public function entrees() // BAR ? RESTAURANT
     {
-        return $this->hasMany(Entree::class);
+        return $this->hasMany(Stock::class);
     }
 
     

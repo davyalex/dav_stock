@@ -9,42 +9,11 @@
               </div>
               <!-- Accordions with Plus Icon -->
               @foreach ($data_categorie as $key => $categorie)
-                  {{-- <div class="accordion custom-accordionwithicon-plus" id="accordionWithplusicon{{ $categorie['id'] }}">
-
-                      <div class="accordion-item">
-                          <h2 class="accordion-header d-flex justify-content-around"
-                              id="accordionwithplusExample{{ $categorie['id'] }}">
-                              <button class="accordion-button fw-semibold w-8" type="button" data-bs-toggle="collapse"
-                                  data-bs-target="#accor_plusExamplecollapse{{ $categorie['id'] }}" aria-expanded="true"
-                                  aria-controls="accor_plusExamplecollapse{{ $categorie['id'] }}">
-                                  {{ $categorie['name'] }}
-                              </button>
-                              <div>
-                                  <a href="{{ route('categorie.add-item', $categorie['id']) }}" class="fs-5"> <i
-                                          class="ri ri-edit-2-fill"></i> </a>
-                                  <a href="" class="fs-5"> <i class=" ri ri-delete-bin-2-line text-danger"></i>
-                                  </a>
-                              </div>
-                          </h2>
-
-
-
-
-                          <div id="accor_plusExamplecollapse{{ $categorie['id'] }}"
-                              class="accordion-collapse collapse show"
-                              aria-labelledby="accordionwithplusExample{{ $categorie['id'] }}"
-                              data-bs-parent="#accordionWithplusicon{{ $categorie['id'] }}">
-                              <div class="accordion-body">
-                                 
-                              </div>
-                          </div>
-                      </div>
-
-                  </div> --}}
+                 
                   <div>
                       <hr>
                       <li class="" style="list-style: none">
-                          <a class="fs-5 fw-medium" href="{{ $categorie->url }}">{{ $categorie->name }}</a>
+                        <i class="ri-drag-move-fill align-bottom handle"></i> <a class="fs-5 fw-medium" href="{{ $categorie->url }}">{{ $categorie->name }}</a>
                           <a href="{{ route('categorie.edit', $categorie['id']) }}" class="fs-5"
                               style="margin-left:30px"> <i class=" ri ri-edit-2-fill ml-4 text-success"></i></a>
 

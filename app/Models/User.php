@@ -55,7 +55,7 @@ class User extends Authenticatable
 
     public function entrees(): HasMany
     {
-        return $this->hasMany(Entree::class);
+        return $this->hasMany(Stock::class);
     }
 
 

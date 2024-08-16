@@ -7,7 +7,7 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Entree extends Model
+class Stock extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -16,6 +16,7 @@ class Entree extends Model
     protected $fillable = [
         'code',
         'statut',
+        'mouvement', // type de stock entree ? sortie
         'type_entree_id', // bar ? restaurant
         'produit_id',
         'fournisseur_id',
@@ -26,6 +27,7 @@ class Entree extends Model
         // 'quantite_unite_total',
         // 'indice_mesure', // poids ? unite
         'quantite_stockable',
+        'quantite_sortie',
         'prix_achat_unitaire',
         'prix_achat_total',
         'prix_vente_unitaire', // -->bar

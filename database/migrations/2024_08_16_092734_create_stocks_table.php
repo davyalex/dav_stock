@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('entrees', function (Blueprint $table) {
+        Schema::create('stocks', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique()->nullable();
             $table->string('statut')->nullable(); //active ? desactive
-
-
+            $table->enum('mouvement', ['entree', 'sortie'])->nullable(); // type de stock  ---entree ? sortie
+           
             $table->foreignId('type_entree_id')  //type produit  = bar ? restaurant
                 ->nullable()
                 ->constrained('categories')
@@ -53,6 +53,7 @@ return new class extends Migration
             // $table->integer('quantite_unite_unitaire')->nullable(); //quantité unitaire par unité
             // $table->integer('quantite_unite_total')->nullable(); //quantité total par unité --qté stockable
             $table->integer('quantite_stockable')->nullable(); //
+            $table->integer('quantite_sortie')->nullable(); //qté stockable total
             $table->double('prix_achat_unitaire')->nullable(); //prix d'achat unitaire
             $table->double('prix_achat_total')->nullable(); //prix d'achat total
 
@@ -80,6 +81,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('entrees');
+        Schema::dropIfExists('stocks');
     }
 };

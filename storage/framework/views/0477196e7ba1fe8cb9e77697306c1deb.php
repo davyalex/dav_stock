@@ -9,11 +9,11 @@
               </div>
               <!-- Accordions with Plus Icon -->
               <?php $__currentLoopData = $data_categorie; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                  
+                 
                   <div>
                       <hr>
                       <li class="" style="list-style: none">
-                          <a class="fs-5 fw-medium" href="<?php echo e($categorie->url); ?>"><?php echo e($categorie->name); ?></a>
+                        <i class="ri-drag-move-fill align-bottom handle"></i> <a class="fs-5 fw-medium" href="<?php echo e($categorie->url); ?>"><?php echo e($categorie->name); ?></a>
                           <a href="<?php echo e(route('categorie.edit', $categorie['id'])); ?>" class="fs-5"
                               style="margin-left:30px"> <i class=" ri ri-edit-2-fill ml-4 text-success"></i></a>
 
