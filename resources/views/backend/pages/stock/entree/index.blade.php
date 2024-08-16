@@ -13,22 +13,20 @@
 @section('content')
     @component('backend.components.breadcrumb')
         @slot('li_1')
-            Liste des produits
+            Liste des achats
         @endslot
         @slot('title')
-            produit
+            Achat
         @endslot
     @endcomponent
-
-
 
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Liste des produits</h5>
-                    <a href="{{ route('produit.create') }}" type="button" class="btn btn-primary ">Créer
-                        un produit</a>
+                    <a href="{{ route('stock.create') }}" type="button" class="btn btn-primary ">Faire
+                        un achat</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -36,30 +34,44 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Image</th>
-                                    <th>Nom</th>
-                                    <th>Categorie</th>
+                                    <th>Statut</th>
+                                    <th>code</th>
                                     <th>Type de produit</th>
-                                    <th>Stock</th>
-                                    <th>Stock alerte</th>
+                                    <th>Produit</th>
+                                    <th>fournisseur</th>
+                                    <th>Format</th>
+                                    <th>Quantite par format</th>
+                                    <th>Unite de vente</th>
+                                    <th>Quantité stockée</th>
+                                    <th>Prix achat</th>
+                                    <th>Crée par</th>
                                     <th>Date creation</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data_produit as $key => $item)
+                                @foreach ($data_stock as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
-                                        <td>
+                                        <td>{{ $item['statut'] }}</td>
+
+                                        {{-- <td>
                                             <img class="rounded-circle" src="{{ $item->getFirstMediaUrl('ProduitImage') }}"
                                                 width="50px" alt="">
-                                        </td>
-                                        <td>{{ $item['nom'] }}</td>
-                                        <td>{{ $item['categorie']['name'] }}</td>
-                                        <td>{{ $item['typeProduit']['name'] }}</td>
-                                        <td>{{ $item['stock'] }}</td>
-                                        <td>{{ $item['stock_alerte'] }}</td>
+                                        </td> --}}
+                                        <td>{{ $item['code'] }}</td>
+                                        <td>{{ $item['type_entree']['name'] }}</td>
+                                        <td>{{ $item['produit']['nom'] }}</td>
+                                        <td>{{ $item['fournisseur']['nom'] }}</td>
+                                        <td>{{ $item['format']['libelle'] }}</td>
+                                        <td> {{ $item['quantite_format'] }} </td>
+                                        <td> {{ $item['unite']['libelle'] }} </td>
+                                        <td> {{ $item['quantite_stockable'] }} </td>
+                                        <td> {{ $item['prix_achat_unitaire'] }} </td>
+                                        {{-- <td> {{ $item['prix_achat_total'] }} </td> --}}
+                                        <td> {{ $item['user']['first_name'] }} </td>
                                         <td> {{ $item['created_at'] }} </td>
+
                                         <td>
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"

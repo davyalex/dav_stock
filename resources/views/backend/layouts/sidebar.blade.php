@@ -281,7 +281,7 @@
                             </li>
 
                             <li class="nav-item active">
-                                <a href="{{ route('stock.create') }}"
+                                <a href="{{ route('stock.index') }}"
                                     class="nav-link {{ Route::is('stock.*') ? 'active' : '' }}">Achats</a>
                             </li>
 

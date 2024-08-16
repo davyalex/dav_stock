@@ -162,28 +162,27 @@
                     })
 
 
-                    //unite field
-                    // $('#unite').change(function(e) {
-                    //     e.preventDefault();
-                    //     var uniteSelected = $('#unite option:selected').attr('data-value');
-                    //     $('.libUnite').html(' de ' + uniteSelected)
-                    //     $('.libUnite').html(' par ' + uniteSelected)
+                    // unite field
+                    $('#unite').change(function(e) {
+                        e.preventDefault();
+                        var uniteSelected = $('#unite option:selected').attr('data-value');
+                        $('#labelUnite').html(' ( ' + uniteSelected + ' )')
 
-                    // })
+                    })
 
                     // calculate qte unite global
-                    function calculateQteGlobale() {
-                        var qte_format = $("#qteFormat").val() || 0;
-                        var unite_unitaire = $("#qteUniteUnitaire").val() || 0;
-                        var prix_achat_unitaire = $("#prixAchatUnitaire").val() || 0;
+                    // function calculateQteGlobale() {
+                    //     var qte_format = $("#qteFormat").val() || 0;
+                    //     var unite_unitaire = $("#qteUniteUnitaire").val() || 0;
+                    //     var prix_achat_unitaire = $("#prixAchatUnitaire").val() || 0;
                         
 
-                        var qteUniteGlobale = qte_format * unite_unitaire
+                    //     var qteUniteGlobale = qte_format * unite_unitaire
 
-                        $('#qteUniteGlobale').val(qteUniteGlobale) //update
+                    //     $('#qteUniteGlobale').val(qteUniteGlobale) //update
 
-                    }
-                    $('#qteFormat ,#qteUniteUnitaire').on('input', calculateQteGlobale)
+                    // }
+                    // $('#qteFormat ,#qteUniteUnitaire').on('input', calculateQteGlobale)
 
 
                     //calculate prix achat 
@@ -213,7 +212,6 @@
                     }
 
                     $('#qteFormat , #prixAchatUnitaire').on('input', calculatePrixAchatTotal)
-
 
                 }
 

@@ -20,6 +20,8 @@ class StockController extends Controller
 
     public function index() {
         $data_stock = Entree::get();
+        // dd($data_stock->toArray());
+        return view('backend.pages.stock.entree.index' , compact('data_stock'));
     }
 
     public function create(Request $request)

@@ -13,10 +13,10 @@
 <?php $__env->startSection('content'); ?>
     <?php $__env->startComponent('backend.components.breadcrumb'); ?>
         <?php $__env->slot('li_1'); ?>
-            Liste des produits
+            Liste des fournisseur
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
-            produit
+            fournisseur
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
 
@@ -26,9 +26,9 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des produits</h5>
-                    <a href="<?php echo e(route('produit.create')); ?>" type="button" class="btn btn-primary ">Créer
-                        un produit</a>
+                    <h5 class="card-title mb-0">Liste des fournisseur</h5>
+                    <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#myModal">Créer
+                        un fournisseur</button>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -38,27 +38,26 @@
                                     <th>#</th>
                                     <th>Image</th>
                                     <th>Nom</th>
-                                    <th>Categorie</th>
-                                    <th>Type de produit</th>
-                                    <th>Stock</th>
-                                    <th>Stock alerte</th>
+                                    <th>Telephone</th>
+                                    <th>Adresse</th>
+                                    <th>Email</th>
                                     <th>Date creation</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $__currentLoopData = $data_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__currentLoopData = $data_fournisseur; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr id="row_<?php echo e($item['id']); ?>">
                                         <td> <?php echo e(++$key); ?> </td>
                                         <td>
-                                            <img class="rounded-circle" src="<?php echo e($item->getFirstMediaUrl('ProduitImage')); ?>"
-                                                width="50px" alt="">
+                                            <img class="rounded-circle"
+                                                src="<?php echo e($item->getFirstMediaUrl('fournisseurImage')); ?>" width="50px"
+                                                alt="">
                                         </td>
                                         <td><?php echo e($item['nom']); ?></td>
-                                        <td><?php echo e($item['categorie']['name']); ?></td>
-                                        <td><?php echo e($item['typeProduit']['name']); ?></td>
-                                        <td><?php echo e($item['stock']); ?></td>
-                                        <td><?php echo e($item['stock_alerte']); ?></td>
+                                        <td><?php echo e($item['telephone']); ?></td>
+                                        <td><?php echo e($item['adresse']); ?></td>
+                                        <td><?php echo e($item['email']); ?></td>
                                         <td> <?php echo e($item['created_at']); ?> </td>
                                         <td>
                                             <div class="dropdown d-inline-block">
@@ -71,7 +70,9 @@
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                             View</a>
                                                     </li>
-                                                    <li><a href="<?php echo e(route('produit.edit' ,  $item['id'])); ?>" type="button" class="dropdown-item edit-item-btn"><i
+                                                    <li><a type="button" class="dropdown-item edit-item-btn"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#myModalEdit<?php echo e($item['id']); ?>"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             Edit</a></li>
                                                     <li>
@@ -85,7 +86,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    
+                                    <?php echo $__env->make('backend.pages.fournisseur.edit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
@@ -96,7 +97,7 @@
     </div>
     <!--end row-->
 
-    
+    <?php echo $__env->make('backend.pages.fournisseur.create', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -138,14 +139,14 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             type: "GET",
-                            url: "/produit/delete/" + Id,
+                            url: "/fournisseur/delete/" + Id,
                             dataType: "json",
 
                             success: function(response) {
                                 if (response.status == 200) {
                                     Swal.fire({
-                                        title: 'Supprimé!',
-                                        text: 'Votre fichier a été supprimé.',
+                                        title: 'Deleted!',
+                                        text: 'Your file has been deleted.',
                                         icon: 'success',
                                         customClass: {
                                             confirmButton: 'btn btn-primary w-xs mt-2',
@@ -164,4 +165,4 @@
     </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\Restaurant-NEUILLY-\resources\views/backend/pages/produit/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\Restaurant-NEUILLY-\resources\views/backend/pages/fournisseur/index.blade.php ENDPATH**/ ?>

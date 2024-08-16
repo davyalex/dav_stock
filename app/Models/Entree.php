@@ -44,7 +44,7 @@ class Entree extends Model
 
 
 
-    public function typeEntree() // BAR ? RESTAURANT
+    public function type_entree() // BAR ? RESTAURANT
     {
         return $this->belongsTo(Categorie::class, 'type_entree_id');
     }
