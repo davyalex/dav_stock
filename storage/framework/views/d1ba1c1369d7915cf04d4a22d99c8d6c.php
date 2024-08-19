@@ -21,9 +21,9 @@
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="card">
-                                    <a href="<?php echo e(route('stock.create')); ?>" class="float-end text-decoration-underline">
+                                    <a href="<?php echo e(route('achat.create')); ?>" class="float-end text-decoration-underline">
                                         <i class="ri ri-arrow-left-line"></i>
-                                        Retour au stock
+                                        Faire un achat
                                     </a>
                                     <div class="card-body">
                                         <div class="mb-3 row">
@@ -223,7 +223,7 @@
                                 buttonsStyling: false,
                                 showCloseButton: true
                             })
-                            var url = "<?php echo e(route('stock.create')); ?>" // redirect route stock
+                            var url = "<?php echo e(route('achat.create')); ?>" // redirect route stock
 
                             window.location.replace(url);
                         } else if (response == 'The nom has already been taken.') {

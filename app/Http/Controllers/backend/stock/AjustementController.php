@@ -4,6 +4,7 @@ namespace App\Http\Controllers\backend\stock;
 
 use App\Models\Achat;
 use App\Models\Produit;
+use App\Models\Ajustement;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -43,7 +44,7 @@ class AjustementController extends Controller
                     'achat_id' => $request['achat_id'],
                     'mouvement' => $request['mouvement'],
                     'stock_actuel' =>  $data_ajustement['quantite_stockable'],
-                    'stock_ajustement' =>  $data_ajustement['stock_ajustement'],
+                    'stock_ajustement' =>  $request['stock_ajustement'],
                     'user_id' => Auth::id(),
                 ]);
 

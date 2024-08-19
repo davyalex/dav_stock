@@ -20,7 +20,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->string('mouvement')->unique()->nullable(); //entree ? sortie
+            $table->string('mouvement')->nullable(); //entree ? sortie
             $table->string('stock_actuel')->nullable(); //
             $table->string('stock_ajustement')->nullable(); //
 
