@@ -21,7 +21,7 @@ class categorie extends Model
         'url',
         'position',
         'parent_id',
-        // 'type_produit_id',
+        'type' // categorie-stock ? categorie-simple
 
     ];
 
@@ -86,8 +86,8 @@ class categorie extends Model
     // }
 
 
-    public function stocks() // BAR ? RESTAURANT
+    public function achats() // BAR ? RESTAURANT
     {
-        return $this->hasMany(Stock::class);
+        return $this->hasMany(Achat::class);
     }
 }

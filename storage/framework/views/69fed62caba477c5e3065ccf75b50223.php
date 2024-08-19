@@ -1,18 +1,18 @@
-@extends('backend.layouts.master')
-
-@section('content')
 
 
-    @component('backend.components.breadcrumb')
-        <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
+<?php $__env->startSection('content'); ?>
 
-        @slot('li_1')
+
+    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
+        <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
+
+        <?php $__env->slot('li_1'); ?>
             Nouveau Ajustement
-        @endslot
-        @slot('title')
+        <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?>
             Créer un ajustement
-        @endslot
-    @endcomponent
+        <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
     <style>
         form label {
             font-size: 11px
@@ -33,9 +33,9 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('ajustement.store') }}" autocomplete="off"
+                    <form method="POST" action="<?php echo e(route('ajustement.store')); ?>" autocomplete="off"
                         class="needs-validation" novalidate enctype="multipart/form-data">
-                        @csrf
+                        <?php echo csrf_field(); ?>
                         <div class="row">
                             <div class="col-lg-9">
                                 <div class="card">
@@ -46,37 +46,33 @@
                                                 <label class="form-label" for="product-title-input">Type de produit
                                                 </label>
                                                 <input type="text" class="form-control"
-                                                    value="{{ $data_ajustement['type_produit']['name'] }}" readonly>
+                                                    value="<?php echo e($data_ajustement['type_produit']['name']); ?>" readonly>
 
 
                                             </div>
-                                            {{-- <div class="col-md-4 mb-3">
-                                                <label class="form-label" for="product-title-input">Produit
-                                                </label>
-                                                <input type="text" class="form-control"
-                                                    value="{{ $data_ajustement['produit']['nom'] }}" readonly>
-                                            </div> --}}
+                                            
 
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="product-title-input">Format
                                                 </label>
                                                 <input type="text" class="form-control"
-                                                    value="{{ $data_ajustement['format']['libelle'] ?? '' }}" readonly>
+                                                    value="<?php echo e($data_ajustement['format']['libelle'] ?? ''); ?>" readonly>
                                             </div>
 
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="product-title-input">Nombre de
-                                                    {{ $data_ajustement['format']['libelle'] }}
+                                                    <?php echo e($data_ajustement['format']['libelle']); ?>
+
                                                 </label>
                                                 <input type="text" class="form-control"
-                                                    value="{{ $data_ajustement['quantite_format'] }}" readonly>
+                                                    value="<?php echo e($data_ajustement['quantite_format']); ?>" readonly>
                                             </div>
 
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="product-title-input">Fournisseur
                                                 </label>
                                                 <input type="text" class="form-control"
-                                                    value="{{ $data_ajustement['fournisseur']['nom'] ?? '' }}" readonly>
+                                                    value="<?php echo e($data_ajustement['fournisseur']['nom'] ?? ''); ?>" readonly>
                                             </div>
 
 
@@ -84,26 +80,26 @@
                                                 <label class="form-label" for="product-title-input">Unite de vente
                                                 </label>
                                                 <input type="text" class="form-control"
-                                                    value="{{ $data_ajustement['unite']['libelle'] }}" readonly>
+                                                    value="<?php echo e($data_ajustement['unite']['libelle']); ?>" readonly>
                                             </div>
 
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="product-title-input">Quantité stocké
                                                 </label>
                                                 <input type="text" id="quantiteStocke" class="form-control"
-                                                    value="{{ $data_ajustement['quantite_stockable'] }}" readonly>
+                                                    value="<?php echo e($data_ajustement['quantite_stockable']); ?>" readonly>
                                             </div>
 
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="stocks-input">Prix d'achat unitaire </label>
                                                 <input type="number" id="prixAchatUnitaire"
-                                                    value="{{ $data_ajustement['prix_achat_unitaire'] }}"
+                                                    value="<?php echo e($data_ajustement['prix_achat_unitaire']); ?>"
                                                     class="form-control" name="prix_achat_unitaire" readonly>
                                             </div>
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="stocks-input">Prix d'achat total </label>
                                                 <input type="number" id="prixAchatTotal"
-                                                    value="{{ $data_ajustement['prix_achat_total'] }}" class="form-control"
+                                                    value="<?php echo e($data_ajustement['prix_achat_total']); ?>" class="form-control"
                                                     name="prix_achat_total" readonly>
                                             </div>
 
@@ -139,19 +135,9 @@
                                                 </div>
                                             </div>
 
-                                            {{-- <div class="col-md-4">
-                                                <label class="form-check-label" for="customAff">Activer le stock</label>
+                                            
 
-                                                <div class="form-check form-switch form-switch-lg col-md-2"
-                                                    dir="ltr">
-                                                    <input type="checkbox" name="statut" class="form-check-input"
-                                                        id="customAff"
-                                                        {{ $data_ajustement['statut'] == 'active' ? 'checked' : '' }}>
-                                                </div>
-
-                                            </div> --}}
-
-                                            <input type="text" name="achat_id" value="{{ $data_ajustement['id'] }}"
+                                            <input type="text" name="achat_id" value="<?php echo e($data_ajustement['id']); ?>"
                                                 hidden>
 
                                         </div>
@@ -167,23 +153,23 @@
                                         <div class="mb-4">
 
                                             <p>Sku : <span class="fw-bold"
-                                                    id="sku">{{ $data_ajustement['produit']['code'] }} </span></p>
+                                                    id="sku"><?php echo e($data_ajustement['produit']['code']); ?> </span></p>
                                             <p>Nom : <span class="fw-bold"
-                                                    id="sku">{{ $data_ajustement['produit']['nom'] }} </span></p>
+                                                    id="sku"><?php echo e($data_ajustement['produit']['nom']); ?> </span></p>
                                             <p>Stock actuel : <span class="fw-bold"
-                                                    id="stock">{{ $data_ajustement['produit']['stock'] }}</span></p>
+                                                    id="stock"><?php echo e($data_ajustement['produit']['stock']); ?></span></p>
                                             <p>Stock alerte : <span class="fw-bold text-danger"
-                                                    id="stockAlerte">{{ $data_ajustement['produit']['stock_alerte'] }}</span>
+                                                    id="stockAlerte"><?php echo e($data_ajustement['produit']['stock_alerte']); ?></span>
                                             </p>
                                             <p>Categorie : <span class="fw-bold"
-                                                    id="categorie">{{ $data_ajustement['produit']['categorie']['name'] }}</span>
+                                                    id="categorie"><?php echo e($data_ajustement['produit']['categorie']['name']); ?></span>
                                             </p>
 
                                             <div class="text-center">
                                                 <div class="position-relative d-inline-block">
                                                     <div class="avatar-lg">
                                                         <div class="avatar-title bg-light rounded" id="product-img">
-                                                            <img src="{{ asset($data_ajustement->produit->getFirstMediaUrl('ProduitImage')) }}"
+                                                            <img src="<?php echo e(asset($data_ajustement->produit->getFirstMediaUrl('ProduitImage'))); ?>"
                                                                 id="product-img" class="avatar-md h-auto" />
                                                         </div>
                                                     </div>
@@ -192,23 +178,7 @@
                                         </div>
 
 
-                                        {{-- <div class="col-md-12 mt-3">
-                                            <label for="imageInput" class="form-label col-12">
-                                                <div class="col-md-12 border border-dark rounded border-dashed text-center px-5 mt-4"
-                                                    style=" cursor: pointer;">
-                                                    <i class="ri ri-image-add-fill fs-1 "></i>
-                                                    <h5>Ajouter des images</h5>
-                                                </div>
-                                            </label>
-                                            <input type="file" id="imageInput" accept="image/*"
-                                                class="form-control d-none" multiple>
-
-                                            <div class="row" id="imageTableBody"></div>
-
-                                            <div class="valid-feedback">
-                                                Success!
-                                            </div>
-                                        </div> --}}
+                                        
 
                                     </div>
                                 </div>
@@ -230,17 +200,17 @@
 
         <!--end row-->
 
-    @section('script')
-        <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
+    <?php $__env->startSection('script'); ?>
+        <script src="<?php echo e(URL::asset('build/libs/prismjs/prism.js')); ?>"></script>
         <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
-        <script src="{{ URL::asset('build/js/pages/modal.init.js') }}"></script>
-        {{-- <script src="{{ URL::asset('build/js/pages/form-editor.init.js') }}"></script> --}}
-        <script src="{{ URL::asset('build/tinymce/tinymce.min.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
+        <script src="<?php echo e(URL::asset('build/js/pages/modal.init.js')); ?>"></script>
+        
+        <script src="<?php echo e(URL::asset('build/tinymce/tinymce.min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js')); ?>"></script>
 
-        <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/ecommerce-product-create.init.js') }}"></script>
-        <script src="{{ URL::asset('build/js/app.js') }}"></script>
+        <script src="<?php echo e(URL::asset('build/libs/dropzone/dropzone-min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/js/pages/ecommerce-product-create.init.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
         <script>
             // script for quantity stock increase and dicrease
             $(document).ready(function() {
@@ -314,5 +284,7 @@
 
             });
         </script>
-    @endsection
-@endsection
+    <?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\Restaurant-NEUILLY-\resources\views/backend/pages/stock/ajustement/create.blade.php ENDPATH**/ ?>

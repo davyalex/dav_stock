@@ -14,12 +14,12 @@ use App\Http\Controllers\backend\AuthAdminController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\menu\MenuController;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use App\Http\Controllers\backend\stock\StockController;
-use App\Http\Controllers\backend\stock\EntreeController;
+use App\Http\Controllers\backend\stock\AchatController;
 use App\Http\Controllers\backend\module\ModuleController;
 use App\Http\Controllers\backend\produit\ProduitController;
 use App\Http\Controllers\backend\basic_site\SlideController;
 use App\Http\Controllers\backend\blog\BlogContentController;
+use App\Http\Controllers\backend\stock\AjustementController;
 use App\Http\Controllers\backend\basic_site\EquipeController;
 use App\Http\Controllers\backend\blog\BlogCategoryController;
 use App\Http\Controllers\backend\basic_site\ServiceController;
@@ -339,18 +339,20 @@ Route::middleware(['admin'])->group(function () {
     });
 
 
-    // stock -entree
-    Route::prefix('stock')->controller(StockController::class)->group(function () {
-        route::get('', 'index')->name('stock.index');
-        route::get('create', 'create')->name('stock.create');
-        route::post('store', 'store')->name('stock.store');
-        route::post('update/{id}', 'update')->name('stock.update');
-        route::get('delete/{id}', 'delete')->name('stock.delete');
+    // stock -achat
+    Route::prefix('achat')->controller(AchatController::class)->group(function () {
+        route::get('', 'index')->name('achat.index');
+        route::get('create', 'create')->name('achat.create');
+        route::post('store', 'store')->name('achat.store');
+        route::post('update/{id}', 'update')->name('achat.update');
+        route::get('delete/{id}', 'delete')->name('achat.delete');
+    });
 
-        //Ajustement
-        route::get('ajustement/index', 'ajustement_index')->name('ajustement.index');
-        route::get('ajustement/create/{id}', 'ajustement_create')->name('ajustement.create');
-        route::post('ajustement/store', 'ajustement_store')->name('ajustement.store');
+    // stock -ajustement
+    Route::prefix('ajustement')->controller(AjustementController::class)->group(function () {
+        route::get('index', 'index')->name('ajustement.index');
+        route::get('create/{id}', 'create')->name('ajustement.create');
+        route::post('store', 'store')->name('ajustement.store');
     });
 });
 

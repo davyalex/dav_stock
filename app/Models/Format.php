@@ -29,8 +29,8 @@ class Format extends Model
         });
     }
 
-    public function entrees() // BAR ? RESTAURANT
+    public function achats() // BAR ? RESTAURANT
     {
-        return $this->hasMany(Stock::class);
+        return $this->hasMany(Achat::class);
     }
 }

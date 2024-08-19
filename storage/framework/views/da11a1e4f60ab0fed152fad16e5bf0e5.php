@@ -1,18 +1,18 @@
-@extends('backend.layouts.master')
-
-@section('content')
 
 
-    @component('backend.components.breadcrumb')
-        <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
+<?php $__env->startSection('content'); ?>
 
-        @slot('li_1')
+
+    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
+        <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
+
+        <?php $__env->slot('li_1'); ?>
             Nouveau stock
-        @endslot
-        @slot('title')
+        <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?>
             Créer un nouveau stock
-        @endslot
-    @endcomponent
+        <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
     <style>
         form label {
             font-size: 11px
@@ -23,9 +23,9 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('stock.store') }}" autocomplete="off" class="needs-validation"
+                    <form method="POST" action="<?php echo e(route('achat.store')); ?>" autocomplete="off" class="needs-validation"
                         novalidate enctype="multipart/form-data">
-                        @csrf
+                        <?php echo csrf_field(); ?>
                         <div class="row">
                             <div class="col-lg-9">
                                 <div class="card">
@@ -35,18 +35,18 @@
                                                 <label class="form-label" for="product-title-input">Type de produit
                                                 </label>
                                                 <select class="form-control typeSelected js-example-basic-single"
-                                                    name="type_entree" required>
+                                                    name="type_produit" required>
                                                     <option value="" disabled selected></option>
-                                                    @foreach ($type_produit as $type)
-                                                        <option value="{{ $type->id }}">
-                                                            {{ $type->name }}</option>
-                                                    @endforeach
+                                                    <?php $__currentLoopData = $type_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <option value="<?php echo e($type->id); ?>">
+                                                            <?php echo e($type->name); ?></option>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </select>
                                             </div>
                                             <div class="col-md-8 mb-3">
                                                 <label class="form-label" for="product-title-input">Sélectionner un produit
                                                 </label>
-                                                <a href="{{ route('produit.create') }}"
+                                                <a href="<?php echo e(route('produit.create')); ?>"
                                                     class="float-end text-decoration-underline">
                                                     <i class="ri ri-add-fill"></i>
                                                     Ajouter un nouveau produit
@@ -71,9 +71,7 @@
 
                             <div class="col-lg-3">
                                 <div class="card">
-                                    {{-- <div class="card-header">
-                                        <h5 class="card-title mb-0">Gallerie Images</h5>
-                                    </div> --}}
+                                    
 
                                     <div class="card-body border border-primary border-dashed">
                                         <div class="mb-4">
@@ -87,7 +85,7 @@
                                                 <div class="position-relative d-inline-block">
                                                     <div class="avatar-lg">
                                                         <div class="avatar-title bg-light rounded" id="product-img">
-                                                            {{-- <img src="" id="product-img" class="avatar-md h-auto" /> --}}
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -95,23 +93,7 @@
                                         </div>
 
 
-                                        {{-- <div class="col-md-12 mt-3">
-                                            <label for="imageInput" class="form-label col-12">
-                                                <div class="col-md-12 border border-dark rounded border-dashed text-center px-5 mt-4"
-                                                    style=" cursor: pointer;">
-                                                    <i class="ri ri-image-add-fill fs-1 "></i>
-                                                    <h5>Ajouter des images</h5>
-                                                </div>
-                                            </label>
-                                            <input type="file" id="imageInput" accept="image/*"
-                                                class="form-control d-none" multiple>
-
-                                            <div class="row" id="imageTableBody"></div>
-
-                                            <div class="valid-feedback">
-                                                Success!
-                                            </div>
-                                        </div> --}}
+                                        
 
                                     </div>
                                 </div>
@@ -133,17 +115,17 @@
 
         <!--end row-->
 
-    @section('script')
-        <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
+    <?php $__env->startSection('script'); ?>
+        <script src="<?php echo e(URL::asset('build/libs/prismjs/prism.js')); ?>"></script>
         <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
-        <script src="{{ URL::asset('build/js/pages/modal.init.js') }}"></script>
-        {{-- <script src="{{ URL::asset('build/js/pages/form-editor.init.js') }}"></script> --}}
-        <script src="{{ URL::asset('build/tinymce/tinymce.min.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
+        <script src="<?php echo e(URL::asset('build/js/pages/modal.init.js')); ?>"></script>
+        
+        <script src="<?php echo e(URL::asset('build/tinymce/tinymce.min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js')); ?>"></script>
 
-        <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/ecommerce-product-create.init.js') }}"></script>
-        <script src="{{ URL::asset('build/js/app.js') }}"></script>
+        <script src="<?php echo e(URL::asset('build/libs/dropzone/dropzone-min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/js/pages/ecommerce-product-create.init.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
         <script>
             // script for quantity stock increase and dicrease
@@ -177,7 +159,7 @@
             $('.typeSelected').change(function(e) {
                 e.preventDefault();
                 var typeSelected = $('.typeSelected option:selected').val();
-                var typeProduct = {{ Js::from($type_produit) }} // from contrioller
+                var typeProduct = <?php echo e(Js::from($type_produit)); ?> // from contrioller
                 var filterType = typeProduct.filter(function(item) {
                     return item.id == typeSelected
                 })
@@ -186,10 +168,10 @@
 
                 //show include entree form
                 if (filterType[0].name == 'bar') {
-                    var barForm = ` @include('backend.pages.stock.entree.partials.barProduct')`
+                    var barForm = ` <?php echo $__env->make('backend.pages.stock.achat.partials.barProduct', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>`
                     $('#entree').html(barForm)
                 } else if (filterType[0].name == 'restaurant') {
-                    var restaurantForm = ` @include('backend.pages.stock.entree.partials.restaurantProduct')`
+                    var restaurantForm = ` <?php echo $__env->make('backend.pages.stock.achat.partials.restaurantProduct', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>`
                     $('#entree').html(restaurantForm)
                 } else {
                     $('#entree').html('')
@@ -262,7 +244,7 @@
 
 
                 //filter product of typeSelected
-                var dataProduct = {{ Js::from($data_produit) }} // from controller
+                var dataProduct = <?php echo e(Js::from($data_produit)); ?> // from controller
                 var productList = dataProduct.filter(function(item) {
                     return item.type_id == typeSelected;
                 });
@@ -279,7 +261,7 @@
 
             //get product select and show detail of product selected
             $('.productSelected').change(function(e) {
-                var dataProduct = {{ Js::from($data_produit) }} // from controller
+                var dataProduct = <?php echo e(Js::from($data_produit)); ?> // from controller
 
                 e.preventDefault();
                 var productSelected = $('.productSelected option:selected').val();
@@ -353,7 +335,7 @@
                 });
 
                 $.ajax({
-                    url: "{{ route('produit.create') }}", // Adjust the route as needed
+                    url: "<?php echo e(route('produit.create')); ?>", // Adjust the route as needed
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -374,7 +356,7 @@
                                 buttonsStyling: false,
                                 showCloseButton: true
                             })
-                            var url = "{{ route('stock.create') }}" // redirect route 
+                            var url = "<?php echo e(route('achat.create')); ?>" // redirect route 
 
                             window.location.replace(url);
                         }
@@ -383,5 +365,7 @@
                 });
             });
         </script>
-    @endsection
-@endsection
+    <?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\Restaurant-NEUILLY-\resources\views/backend/pages/stock/achat/create.blade.php ENDPATH**/ ?>

@@ -45,10 +45,16 @@
     </select>
 </div>
 
-<div class="col-md-4 mb-3">
+<div class="col-md-4 mb-3 ">
     <label class="form-label" for="stocks-input">Quantité stockable <span class="text-danger" id="labelUnite"></span></label>
-    <input type="number" class="form-control" id="qteUniteUnitaire" name="quantite_stockable" required>
+    <br><div class="input-step w-100">
+        <button type="button" class="minus w-50 btn btn-primary"  onclick="decreaseValue()" >-</button>
+        <input type="number" class="form-control" id="quantiteStockable"  value="1" name="quantite_stockable" required>
+        <button type="button" class="plus w-50 btn btn-primary"  onclick="increaseValue()">+</button>
+    </div>
 </div>
+
+
 
 
 
@@ -71,4 +77,6 @@
         Looks good!
     </div>
 </div>
+
+
 <?php /**PATH C:\laragon\www\Restaurant-NEUILLY-\resources\views/backend/pages/stock/entree/partials/restaurantProduct.blade.php ENDPATH**/ ?>

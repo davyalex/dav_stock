@@ -266,7 +266,7 @@
                         aria-expanded="true" aria-controls="sidebarStock">
                         <i class="ri ri-box-1-fill"></i> <span>STOCK</span>
                     </a>
-                    <div class="collapse menu-dropdown {{ Route::is('stock.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : '' }}"
+                    <div class="collapse menu-dropdown {{ Route::is('achat.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : '' }}"
                         id="sidebarStock">
                         <ul class="nav nav-sm flex-column">
 
@@ -281,8 +281,8 @@
                             </li>
 
                             <li class="nav-item active">
-                                <a href="{{ route('stock.index') }}"
-                                    class="nav-link {{ Route::is('stock.*') ? 'active' : '' }}">Achats</a>
+                                <a href="{{ route('achat.index') }}"
+                                    class="nav-link {{ Route::is('achat.*') ? 'active' : '' }}">Achats</a>
                             </li>
 
                         </ul>

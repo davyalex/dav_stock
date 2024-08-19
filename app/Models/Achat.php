@@ -7,7 +7,7 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Stock extends Model
+class Achat extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -16,8 +16,7 @@ class Stock extends Model
     protected $fillable = [
         'code',
         'statut',
-        'mouvement', // type de stock entree ? sortie
-        'type_entree_id', // bar ? restaurant
+        'type_produit_id', // bar ? restaurant
         'produit_id',
         'fournisseur_id',
         'format_id',
@@ -27,7 +26,6 @@ class Stock extends Model
         // 'quantite_unite_total',
         // 'indice_mesure', // poids ? unite
         'quantite_stockable',
-        'quantite_sortie',
         'prix_achat_unitaire',
         'prix_achat_total',
         'prix_vente_unitaire', // -->bar
@@ -39,16 +37,16 @@ class Stock extends Model
     {
         parent::boot();
         self::creating(function ($model) {
-            $model->id = IdGenerator::generate(['table' => 'entrees', 'length' => 10, 'prefix' =>
+            $model->id = IdGenerator::generate(['table' => 'achats', 'length' => 10, 'prefix' =>
             mt_rand()]);
         });
     }
 
 
 
-    public function type_entree() // BAR ? RESTAURANT
+    public function type_produit() // BAR ? RESTAURANT
     {
-        return $this->belongsTo(Categorie::class, 'type_entree_id');
+        return $this->belongsTo(Categorie::class, 'type_produit_id');
     }
     public function produit() // BAR ? RESTAURANT
     {
@@ -71,5 +69,10 @@ class Stock extends Model
     public function user() // BAR ? RESTAURANT
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function ajustements() // BAR ? RESTAURANT
+    {
+        return $this->hasMany(Ajustement::class);
     }
 }

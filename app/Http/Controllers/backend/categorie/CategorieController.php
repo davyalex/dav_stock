@@ -21,9 +21,9 @@ class CategorieController extends Controller
         $data_categorie = Categorie::whereNull('parent_id')->with('children', fn ($q) => $q->OrderBy('position', 'ASC'))->withCount('children')->OrderBy('position', 'ASC')->get();
 
         //type produit
-        $data_type_produit = TypeProduit::all();
+        // $data_type_produit = TypeProduit::all();
         // dd($data_categorie->toArray());
-        return view('backend.pages.Categorie.create', compact('data_categorie' , 'data_type_produit'));
+        return view('backend.pages.Categorie.create', compact('data_categorie'));
     }
 
 
@@ -91,7 +91,6 @@ class CategorieController extends Controller
     {
         //List Categorie
         $data_categorie = Categorie::whereNull('parent_id')->with('children', fn ($q) => $q->OrderBy('position', 'ASC'))->withCount('children')->OrderBy('position', 'ASC')->get();
-        $data_type_produit = TypeProduit::all();
 
         $data_categorie_edit = Categorie::find($id);
 

@@ -53,9 +53,14 @@ class User extends Authenticatable
     }
 
 
-    public function entrees(): HasMany
+    public function achats() // BAR ? RESTAURANT
     {
-        return $this->hasMany(Stock::class);
+        return $this->hasMany(Achat::class);
+    }
+
+    public function ajustements() 
+    {
+        return $this->hasMany(Ajustement::class);
     }
 
 

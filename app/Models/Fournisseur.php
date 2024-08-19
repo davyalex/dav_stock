@@ -34,9 +34,9 @@ class Fournisseur extends Model implements HasMedia
         });
     }
 
-    public function entrees() // BAR ? RESTAURANT
+    public function achats() // BAR ? RESTAURANT
     {
-        return $this->hasMany(Stock::class);
+        return $this->hasMany(Achat::class);
     }
 
     

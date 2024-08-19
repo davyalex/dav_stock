@@ -68,4 +68,9 @@ class Produit extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
+    public function achats() // 
+    {
+        return $this->hasMany(Achat::class);
+    }
+
 }
