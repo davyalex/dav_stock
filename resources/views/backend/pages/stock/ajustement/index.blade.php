@@ -1,34 +1,32 @@
-
-<?php $__env->startSection('title'); ?>
-    <?php echo app('translator')->get('translation.datatables'); ?>
-<?php $__env->stopSection(); ?>
-<?php $__env->startSection('css'); ?>
+@extends('backend.layouts.master')
+@section('title')
+    @lang('translation.datatables')
+@endsection
+@section('css')
     <!--datatable css-->
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
     <!--datatable responsive css-->
     <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet"
         type="text/css" />
     <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
-<?php $__env->stopSection(); ?>
-<?php $__env->startSection('content'); ?>
-    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
-        <?php $__env->slot('li_1'); ?>
-            Liste des produits
-        <?php $__env->endSlot(); ?>
-        <?php $__env->slot('title'); ?>
-            produit
-        <?php $__env->endSlot(); ?>
-    <?php echo $__env->renderComponent(); ?>
-
-
+@endsection
+@section('content')
+    @component('backend.components.breadcrumb')
+        @slot('li_1')
+            Liste des achats
+        @endslot
+        @slot('title')
+            Achat
+        @endslot
+    @endcomponent
 
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des produits</h5>
-                    <a href="<?php echo e(route('produit.create')); ?>" type="button" class="btn btn-primary ">Créer
-                        un produit</a>
+                    <h5 class="card-title mb-0">Liste des ajustements</h5>
+                    <a href="{{ route('achat.create') }}" type="button" class="btn btn-primary ">Faire
+                        un achat</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -36,57 +34,64 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Image</th>
-                                    <th>Nom</th>
-                                    <th>Categorie</th>
+                                    <th>code</th>
+                                    <th>reference achat</th>
                                     <th>Type de produit</th>
-                                    <th>Stock</th>
-                                    <th>Stock alerte</th>
+                                    <th>Produit</th>
+                                    <th>Stock actuel</th>
+                                    <th>stock ajusté</th>
+                                    <th>Mouvement</th>
+                                    <th>Crée par</th>
                                     <th>Date creation</th>
-                                    <th>Actions</th>
+                                    {{-- <th>Actions</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $__currentLoopData = $data_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <tr id="row_<?php echo e($item['id']); ?>">
-                                        <td> <?php echo e(++$key); ?> </td>
-                                        <td>
-                                            <img class="rounded-circle" src="<?php echo e($item->getFirstMediaUrl('ProduitImage')); ?>"
-                                                width="50px" alt="">
-                                        </td>
-                                        <td><?php echo e($item['nom']); ?></td>
-                                        <td><?php echo e($item['categorie']['name']); ?></td>
-                                        <td><?php echo e($item['typeProduit']['name']); ?></td>
-                                        <td><?php echo e($item['stock']); ?></td>
-                                        <td><?php echo e($item['stock_alerte']); ?></td>
-                                        <td> <?php echo e($item['created_at']); ?> </td>
-                                        <td>
+                                @foreach ($data_ajustement as $key => $item)
+                                    <tr id="row_{{ $item['id'] }}">
+                                        <td> {{ ++$key }} </td>
+                                        <td>{{ $item['code'] }}</td>
+                                        <td>{{ $item['achat']['code'] }}</td>
+                                        <td>{{ $item['achat']['type_produit']['name'] }}</td>
+                                        <td>{{ $item['achat']['produit']['nom'] }}</td>
+                                        <td>{{ $item['stock_actuel'] }}</td>
+                                        <td> {{ $item['stock_ajustement'] }} </td>
+                                        <td> {{ $item['mouvement'] }} </td> 
+                                        <td> {{ $item['user']['first_name'] }} </td>
+                                        <td> {{ $item['created_at'] }} </td>
+
+                                        {{-- <td>
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
                                                     data-bs-toggle="dropdown" aria-expanded="false">
                                                     <i class="ri-more-fill align-middle"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a href="<?php echo e(route('produit.show' , $item['id'])); ?>" class="dropdown-item"><i
+                                                    <li><a href="{{route("ajustement.create" , $item['id'])}}" class="dropdown-item"><i
+                                                                class=" ri-exchange-fill align-bottom me-2 text-muted"></i>
+                                                            Ajustement</a>
+                                                    </li>
+                                                    <li><a href="#!" class="dropdown-item"><i
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                             View</a>
                                                     </li>
-                                                    <li><a href="<?php echo e(route('produit.edit' ,  $item['id'])); ?>" type="button" class="dropdown-item edit-item-btn"><i
+                                                    <li><a href="{{ route('produit.edit', $item['id']) }}" type="button"
+                                                            class="dropdown-item edit-item-btn"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             Edit</a></li>
                                                     <li>
                                                         <a href="#" class="dropdown-item remove-item-btn delete"
-                                                            data-id=<?php echo e($item['id']); ?>>
+                                                            data-id={{ $item['id'] }}>
                                                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
                                                             Delete
                                                         </a>
                                                     </li>
                                                 </ul>
                                             </div>
-                                        </td>
+                                        </td> --}}
                                     </tr>
-                                    
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    {{-- @include('backend.pages.produit.edit') --}}
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -96,9 +101,9 @@
     </div>
     <!--end row-->
 
-    
-<?php $__env->stopSection(); ?>
-<?php $__env->startSection('script'); ?>
+    {{-- @include('backend.pages.produit.create') --}}
+@endsection
+@section('script')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
@@ -112,9 +117,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
-    <script src="<?php echo e(URL::asset('build/js/pages/datatables.init.js')); ?>"></script>
+    <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
 
-    <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+    <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
     <script>
         $(document).ready(function() {
@@ -138,7 +143,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             type: "GET",
-                            url: "/produit/delete/" + Id,
+                            url: "/achat/delete/" + Id,
                             dataType: "json",
 
                             success: function(response) {
@@ -162,6 +167,4 @@
             });
         });
     </script>
-<?php $__env->stopSection(); ?>
-
-<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/produit/index.blade.php ENDPATH**/ ?>
+@endsection

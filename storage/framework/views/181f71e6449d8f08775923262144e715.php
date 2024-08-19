@@ -21,10 +21,7 @@
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="card">
-                                    <a href="<?php echo e(route('stock.create')); ?>" class="float-end text-decoration-underline">
-                                        <i class="ri ri-arrow-left-line"></i>
-                                        Retour au stock
-                                    </a>
+                                    
                                     <div class="card-body">
                                         <div class="mb-3 row">
                                             <div class="col-md-5">
@@ -93,7 +90,7 @@
                                                             </div>
                                                         </label>
                                                         <input class="form-control d-none" id="product-image-input"
-                                                            type="file" name="imagePrincipale" accept="image/*" >
+                                                            type="file" name="imagePrincipale" accept="image/*">
                                                         <div class="invalid-feedback">Ajouter une image</div>
                                                     </div>
                                                     <div class="avatar-lg">
@@ -222,7 +219,7 @@
                 });
 
                 $.ajax({
-                    url: "/produit/update/" + productId , // Adjust the route as needed
+                    url: "/produit/update/" + productId, // Adjust the route as needed
                     type: 'POST',
                     data: formData,
                     contentType: false,

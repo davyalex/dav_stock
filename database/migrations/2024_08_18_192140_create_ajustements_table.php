@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('ajustements', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique()->nullable();
-            $table->foreignId('achat_id') 
-            ->nullable()
+            $table->foreignId('achat_id')
+                ->nullable()
                 ->constrained('achats')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
@@ -25,10 +25,11 @@ return new class extends Migration
             $table->string('stock_ajustement')->nullable(); //
 
             $table->foreignId('user_id')
-            ->nullable()
+                ->nullable()
                 ->constrained('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

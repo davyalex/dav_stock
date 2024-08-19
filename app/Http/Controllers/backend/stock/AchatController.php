@@ -139,4 +139,59 @@ class AchatController extends Controller
             return $e->getMessage();
         }
     }
+
+    public function edit($id)
+    {
+        try {
+            $data_achat = Achat::find($id);
+
+            $data_format = Format::all();
+            $data_unite = Unite::all();
+            $data_fournisseur = Fournisseur::all();
+            return view('backend.pages.stock.achat.edit', compact('data_achat', 'data_format', 'data_unite', 'data_fournisseur'));
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $data_achat = Achat::find($id);
+
+            //statut stock libelle active ? desactive
+            $statut = '';
+            if ($request['statut'] == 'on') {
+                $statut = 'active';
+            } else {
+                $statut = 'desactive';
+            }
+
+            $data_achat->update([
+                'fournisseur_id' => $request['fournisseur_id'],
+                'format_id' => $request['format_id'],
+                'unite_id' => $request['unite_id'],
+                'statut' => $statut,
+            ]);
+
+            //mise a jour du stock dans la table produit si le statut est active
+            if ($statut == 'active') {
+                $produit = Produit::find($data_achat['produit_id']);
+                $produit->stock += $data_achat['quantite_stockable'];
+                $produit->save();
+            }
+            //mise a jour du stock dans la table produit si le statut est desactive
+            elseif ($statut == 'desactive') {
+                $produit = Produit::find($data_achat['produit_id']);
+                $produit->stock -= $data_achat['quantite_stockable'];
+                $produit->save();
+            }
+
+
+            Alert::success('Opération réussi', 'Success Message');
+            return back();
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
+    }
 }

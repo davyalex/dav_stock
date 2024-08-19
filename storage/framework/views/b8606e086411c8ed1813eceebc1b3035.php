@@ -2,7 +2,11 @@
 <div class="row">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
-            <h4 class="mb-sm-0 font-size-18"><?php echo e($title); ?></h4>
+            <h4 class="mb-sm-0 font-size-18">
+                <button class="btn btn-primary" id="goBack"> <i class="ri ri-arrow-left-fill"></i> Retour</button>
+                <?php echo e($title); ?>
+
+            </h4>
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
@@ -16,5 +20,14 @@
         </div>
     </div>
 </div>
+<script>
+    // go to back
+    document.getElementById('goBack').addEventListener('click', function() {
+        window.history.back();
+        setTimeout(function() {
+            location.reload();
+        }, 500);
+    });
+</script>
 <!-- end page title -->
 <?php /**PATH C:\laragon\www\restaurant\resources\views/backend/components/breadcrumb.blade.php ENDPATH**/ ?>

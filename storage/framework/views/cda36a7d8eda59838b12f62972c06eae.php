@@ -41,39 +41,25 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row mb-3">
-                                            <div class="col-md-4 mb-3">
+
+                                            <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="product-title-input">Type de produit
                                                 </label>
                                                 <input type="text" class="form-control"
-                                                    value="<?php echo e($data_ajustement['type_entree']['name']); ?>" readonly>
+                                                    value="<?php echo e($data_ajustement['type_produit']['name']); ?>" readonly>
 
 
                                             </div>
-                                            <div class="col-md-4 mb-3">
-                                                <label class="form-label" for="product-title-input">Produit
-                                                </label>
-                                                <input type="text" class="form-control"
-                                                    value="<?php echo e($data_ajustement['produit']['nom']); ?>" readonly>
-                                            </div>
+                                            
 
-                                            <div class="col-md-4 mb-3">
-                                                <label class="form-label" for="product-title-input">Fournisseur
-                                                </label>
-                                                <input type="text" class="form-control"
-                                                    value="<?php echo e($data_ajustement['fournisseur']['nom'] ?? ''); ?>" readonly>
-                                            </div>
-
-
-
-
-                                            <div class="col-md-4 mb-3">
+                                            <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="product-title-input">Format
                                                 </label>
                                                 <input type="text" class="form-control"
                                                     value="<?php echo e($data_ajustement['format']['libelle'] ?? ''); ?>" readonly>
                                             </div>
 
-                                            <div class="col-md-4 mb-3">
+                                            <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="product-title-input">Nombre de
                                                     <?php echo e($data_ajustement['format']['libelle']); ?>
 
@@ -82,65 +68,76 @@
                                                     value="<?php echo e($data_ajustement['quantite_format']); ?>" readonly>
                                             </div>
 
-                                            <div class="col-md-4 mb-3">
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label" for="product-title-input">Fournisseur
+                                                </label>
+                                                <input type="text" class="form-control"
+                                                    value="<?php echo e($data_ajustement['fournisseur']['nom'] ?? ''); ?>" readonly>
+                                            </div>
+
+
+                                            <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="product-title-input">Unite de vente
                                                 </label>
                                                 <input type="text" class="form-control"
                                                     value="<?php echo e($data_ajustement['unite']['libelle']); ?>" readonly>
                                             </div>
 
-                                            <div class="col-md-4">
-                                                <label class="form-label" for="product-title-input">Mouvement du stock
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label" for="product-title-input">Quantité stocké
                                                 </label>
-                                                <select id="mouvementStock" class="form-control js-example-basic-single"
-                                                    name="mouvement" required>
-                                                    <option value="" disabled selected>Choisir</option>
-                                                    <option value="entree">Ajouter</option>
-                                                    <option value="sortie">Soustraire</option>
-                                                </select>
+                                                <input type="text" id="quantiteStocke" class="form-control"
+                                                    value="<?php echo e($data_ajustement['quantite_stockable']); ?>" readonly>
                                             </div>
 
-                                            <div class="col-md-4 mb-3 ">
-                                                <label class="form-label" for="stocks-input">Quantité stockable <span
-                                                        class="text-danger" id="labelUnite"></span></label>
-                                                <br>
-                                                <div class="input-step w-100">
-                                                    <button type="button" class="minus w-50 btn btn-primary decreaseValue"
-                                                        disabled>-</button>
-                                                    <input type="number" class="form-control" id="quantiteStockable"
-                                                        value="<?php echo e($data_ajustement['produit']['stock']); ?>"
-                                                        name="quantite_ajustement" readonly>
-                                                    <button type="button" class="plus w-50 btn btn-primary increaseValue"
-                                                        disabled>+</button>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-2 mb-3">
+                                            <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="stocks-input">Prix d'achat unitaire </label>
                                                 <input type="number" id="prixAchatUnitaire"
                                                     value="<?php echo e($data_ajustement['prix_achat_unitaire']); ?>"
                                                     class="form-control" name="prix_achat_unitaire" readonly>
                                             </div>
-                                            <div class="col-md-2 mb-3">
+                                            <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="stocks-input">Prix d'achat total </label>
                                                 <input type="number" id="prixAchatTotal"
                                                     value="<?php echo e($data_ajustement['prix_achat_total']); ?>" class="form-control"
                                                     name="prix_achat_total" readonly>
                                             </div>
 
-                                            <div class="col-md-3">
-                                                <label class="form-check-label" for="customAff">Activer le stock</label>
 
-                                                <div class="form-check form-switch form-switch-lg col-md-2"
-                                                    dir="ltr">
-                                                    <input type="checkbox" name="statut" class="form-check-input"
-                                                        id="customAff"
-                                                        <?php echo e($data_ajustement['statut'] == 'active' ? 'checked' : ''); ?>>
-                                                </div>
-
+                                            <div class="d-flex justify-content-between">
+                                                <hr class="w-50" size="5">
+                                                <h5>Ajustement</h5>
+                                                <hr class="w-50 text-primary" size="5">
+                                            </div>
+                                            <p id="MsgError" class="text-danger fw-bold"></p>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="product-title-input">Mouvement du stock
+                                                </label>
+                                                <select id="mouvementStock" class="form-control js-example-basic-single"
+                                                    name="mouvement" required>
+                                                    <option value="" disabled selected>Choisir</option>
+                                                    <option value="ajouter">Ajouter</option>
+                                                    <option value="retirer">Retirer</option>
+                                                </select>
                                             </div>
 
-                                            <input type="text" name="stock_id" value="<?php echo e($data_ajustement['id']); ?>"
+                                            <div class="col-md-6 mb-3 ">
+                                                <label class="form-label" for="stocks-input">Quantité <span></span> <span
+                                                        class="text-danger" id="labelUnite"></span></label>
+                                                <br>
+                                                <div class="input-step w-100">
+                                                    <button type="button" class="minus w-50 btn btn-primary decreaseValue"
+                                                        disabled>-</button>
+                                                    <input type="number" class="form-control" id="quantiteStockable"
+                                                        value="0" name="stock_ajustement" readonly>
+                                                    <button type="button" class="plus w-50 btn btn-primary increaseValue"
+                                                        disabled>+</button>
+                                                </div>
+                                            </div>
+
+                                            
+
+                                            <input type="text" name="achat_id" value="<?php echo e($data_ajustement['id']); ?>"
                                                 hidden>
 
                                         </div>
@@ -152,10 +149,9 @@
 
                             <div class="col-lg-3">
                                 <div class="card">
-                                    
-
                                     <div class="card-body border border-primary border-dashed">
                                         <div class="mb-4">
+
                                             <p>Sku : <span class="fw-bold"
                                                     id="sku"><?php echo e($data_ajustement['produit']['code']); ?> </span></p>
                                             <p>Nom : <span class="fw-bold"
@@ -222,24 +218,26 @@
                 //recuperer le type du mouvement selectionné
                 $('#mouvementStock').change(function() {
                     var mouvementStock = $('#mouvementStock option:selected').val();
-                    if (mouvementStock == 'entree') {
+                    $('#quantiteStockable').prop('readonly', false)
+                    $('#quantiteStockable').val(0) // nouvelle quantité a stocké
+                    if (mouvementStock == 'ajouter') {
                         $('.increaseValue').prop('disabled', false)
                         $('.decreaseValue').prop('disabled', true)
 
-                    } else if (mouvementStock == 'sortie') {
+                    } else if (mouvementStock == 'retirer') {
                         $('.decreaseValue').prop('disabled', false)
                         $('.increaseValue').prop('disabled', true)
+                        verifiyQty()
+
                     } else {
                         $('.increaseValue').prop('disabled', true)
                         $('.decreaseValue').prop('disabled', true)
-
-
                     }
 
                 });
 
 
-
+                //increase and decrease Qty stock
                 $('.increaseValue').click(function(e) {
                     e.preventDefault();
                     var input = document.getElementById("quantiteStockable");
@@ -247,41 +245,43 @@
                     value = isNaN(value) ? 0 : value;
                     value++;
                     input.value = value;
-
                 });
 
 
                 $('.decreaseValue').click(function(e) {
                     e.preventDefault();
+                    var qteStock = $('#quantiteStocke').val() // qté stocké du stock
                     var input = document.getElementById("quantiteStockable");
                     var value = parseInt(input.value, 10);
                     value = isNaN(value) ? 0 : value;
-                    value < 1 ? value = 1 : '';
-                    if (value > 1) {
-                        value--;
+                    // value < 1 ? value = 1 : '';
+                    // if (value > 1) {
+                    //     value--;
+                    // }
+                    // value--;
+                    if (value < qteStock - 1) {
+                        value++;
                     }
+
                     input.value = value;
+                    // verifiyQty()
                 });
 
 
-                // function increaseValue() {
-                //     var input = document.getElementById("quantiteStockable");
-                //     var value = parseInt(input.value, 10);
-                //     value = isNaN(value) ? 0 : value;
-                //     value++;
-                //     input.value = value;
-                // }
+                // verifier le nombre entrer en reel de quantité
+                function verifiyQty() {
+                    $('#quantiteStockable').on('input', function() {
+                        var qteStock = $('#quantiteStocke').val() // qté stocké du stock
+                        let currentValue = parseInt($(this).val());
+                        if (currentValue > qteStock-1) {
+                            // $(this).val(qteStock - 1);
+                            $('#MsgError').html('La quantité entrée est supérieur ou égale à la quantité stockée ')
+                        }else{
+                            $('#MsgError').html('')
+                        }
+                    });
+                }
 
-                // function decreaseValue() {
-                //     var input = document.getElementById("quantiteStockable");
-                //     var value = parseInt(input.value, 10);
-                //     value = isNaN(value) ? 0 : value;
-                //     value < 1 ? value = 1 : '';
-                //     if (value > 1) {
-                //         value--;
-                //     }
-                //     input.value = value;
-                // }
             });
         </script>
     <?php $__env->stopSection(); ?>

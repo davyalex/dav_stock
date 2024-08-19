@@ -182,7 +182,7 @@
                         aria-expanded="true" aria-controls="sidebarStock">
                         <i class="ri ri-box-1-fill"></i> <span>STOCK</span>
                     </a>
-                    <div class="collapse menu-dropdown <?php echo e(Route::is('stock.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : ''); ?>"
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('ajustement.*') || Route::is('achat.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : ''); ?>"
                         id="sidebarStock">
                         <ul class="nav nav-sm flex-column">
 
@@ -197,8 +197,13 @@
                             </li>
 
                             <li class="nav-item active">
-                                <a href="<?php echo e(route('stock.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('stock.*') ? 'active' : ''); ?>">Achats</a>
+                                <a href="<?php echo e(route('achat.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('achat.*') ? 'active' : ''); ?>">Achats</a>
+                            </li>
+
+                               <li class="nav-item active">
+                                <a href="<?php echo e(route('ajustement.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('ajustement.*') ? 'active' : ''); ?>">Ajustements</a>
                             </li>
 
                         </ul>

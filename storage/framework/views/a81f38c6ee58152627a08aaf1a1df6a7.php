@@ -13,22 +13,52 @@
 <?php $__env->startSection('content'); ?>
     <?php $__env->startComponent('backend.components.breadcrumb'); ?>
         <?php $__env->slot('li_1'); ?>
-            Liste des produits
+            Detail produit
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
-            produit
+            Produit
         <?php $__env->endSlot(); ?>
+        
     <?php echo $__env->renderComponent(); ?>
-
-
 
     <div class="row">
         <div class="col-lg-12">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body border border-primary border-dashed">
+                        <div class="mb-4 d-flex justify-content-around">
+
+                            <p>Sku : <span class="fw-bold" id="sku"><?php echo e($data_produit['code']); ?> </span></p>
+                            <p>Nom : <span class="fw-bold" id="sku"><?php echo e($data_produit['nom']); ?> </span></p>
+                            <p>Stock actuel : <span class="fw-bold" id="stock"><?php echo e($data_produit['stock']); ?></span></p>
+                            <p>Stock alerte : <span class="fw-bold text-danger"
+                                    id="stockAlerte"><?php echo e($data_produit['stock_alerte']); ?></span>
+                            </p>
+                            <p>Categorie : <span class="fw-bold"
+                                    id="categorie"><?php echo e($data_produit['categorie']['name']); ?></span>
+                            </p>
+
+                            <div class="text-center">
+                                <div class="position-relative d-inline-block">
+                                    <div class="avatar-lg">
+                                        <div class="avatar-title bg-light rounded" id="product-img">
+                                            <img src="<?php echo e(asset($data_produit->getFirstMediaUrl('ProduitImage'))); ?>"
+                                                id="product-img" class="avatar-md h-auto" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end card -->
+
+
+            </div>
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des produits</h5>
-                    <a href="<?php echo e(route('produit.create')); ?>" type="button" class="btn btn-primary ">Créer
-                        un produit</a>
+                    <h5 class="card-title mb-0">Liste des achats</h5>
+                    
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -36,30 +66,41 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Image</th>
-                                    <th>Nom</th>
-                                    <th>Categorie</th>
+                                    <th>Statut</th>
+                                    <th>code</th>
                                     <th>Type de produit</th>
-                                    <th>Stock</th>
-                                    <th>Stock alerte</th>
+                                    <th>Produit</th>
+                                    <th>fournisseur</th>
+                                    <th>Format</th>
+                                    <th>Quantite par format</th>
+                                    <th>Unite de vente</th>
+                                    <th>Quantité stockée</th>
+                                    <th>Prix achat</th>
+                                    <th>Crée par</th>
                                     <th>Date creation</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $__currentLoopData = $data_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__currentLoopData = $data_produit['achats']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr id="row_<?php echo e($item['id']); ?>">
                                         <td> <?php echo e(++$key); ?> </td>
-                                        <td>
-                                            <img class="rounded-circle" src="<?php echo e($item->getFirstMediaUrl('ProduitImage')); ?>"
-                                                width="50px" alt="">
-                                        </td>
-                                        <td><?php echo e($item['nom']); ?></td>
-                                        <td><?php echo e($item['categorie']['name']); ?></td>
-                                        <td><?php echo e($item['typeProduit']['name']); ?></td>
-                                        <td><?php echo e($item['stock']); ?></td>
-                                        <td><?php echo e($item['stock_alerte']); ?></td>
+                                        <td><?php echo e($item['statut']); ?></td>
+
+                                        
+                                        <td><?php echo e($item['code']); ?></td>
+                                        <td><?php echo e($item['type_produit']['name']); ?></td>
+                                        <td><?php echo e($item['produit']['nom']); ?></td>
+                                        <td><?php echo e($item['fournisseur']['nom'] ?? 'N/A'); ?></td>
+                                        <td><?php echo e($item['format']['libelle']); ?></td>
+                                        <td> <?php echo e($item['quantite_format']); ?> </td>
+                                        <td> <?php echo e($item['unite']['libelle']); ?> </td>
+                                        <td> <?php echo e($item['quantite_stockable']); ?> </td>
+                                        <td> <?php echo e($item['prix_achat_unitaire']); ?> </td>
+                                        
+                                        <td> <?php echo e($item['user']['first_name']); ?> </td>
                                         <td> <?php echo e($item['created_at']); ?> </td>
+
                                         <td>
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
@@ -67,11 +108,17 @@
                                                     <i class="ri-more-fill align-middle"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a href="<?php echo e(route('produit.show' , $item['id'])); ?>" class="dropdown-item"><i
+                                                    <li><a href="<?php echo e(route('ajustement.create', $item['id'])); ?>"
+                                                            class="dropdown-item"><i
+                                                                class=" ri-exchange-fill align-bottom me-2 text-muted"></i>
+                                                            Ajustement</a>
+                                                    </li>
+                                                    <li><a href="#!" class="dropdown-item"><i
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                             View</a>
                                                     </li>
-                                                    <li><a href="<?php echo e(route('produit.edit' ,  $item['id'])); ?>" type="button" class="dropdown-item edit-item-btn"><i
+                                                    <li><a href="<?php echo e(route('produit.edit', $item['id'])); ?>" type="button"
+                                                            class="dropdown-item edit-item-btn"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             Edit</a></li>
                                                     <li>
@@ -138,7 +185,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             type: "GET",
-                            url: "/produit/delete/" + Id,
+                            url: "/achat/delete/" + Id,
                             dataType: "json",
 
                             success: function(response) {
@@ -164,4 +211,4 @@
     </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/produit/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/produit/show.blade.php ENDPATH**/ ?>

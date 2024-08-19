@@ -99,6 +99,18 @@ class ProduitController extends Controller
     }
 
 
+    public function show($id){
+        try {
+            $data_produit = Produit::find($id);
+            return view('backend.pages.produit.show' , compact('data_produit'));
+           
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+
     public function edit($id)
     {
         try {

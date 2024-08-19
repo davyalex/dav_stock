@@ -13,22 +13,20 @@
 <?php $__env->startSection('content'); ?>
     <?php $__env->startComponent('backend.components.breadcrumb'); ?>
         <?php $__env->slot('li_1'); ?>
-            Liste des produits
+            Liste des achats
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
-            produit
+            Achat
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
-
-
 
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des produits</h5>
-                    <a href="<?php echo e(route('produit.create')); ?>" type="button" class="btn btn-primary ">Créer
-                        un produit</a>
+                    <h5 class="card-title mb-0">Liste des ajustements</h5>
+                    <a href="<?php echo e(route('achat.create')); ?>" type="button" class="btn btn-primary ">Faire
+                        un achat</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -36,54 +34,33 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Image</th>
-                                    <th>Nom</th>
-                                    <th>Categorie</th>
+                                    <th>code</th>
+                                    <th>reference achat</th>
                                     <th>Type de produit</th>
-                                    <th>Stock</th>
-                                    <th>Stock alerte</th>
+                                    <th>Produit</th>
+                                    <th>Stock actuel</th>
+                                    <th>stock ajusté</th>
+                                    <th>Mouvement</th>
+                                    <th>Crée par</th>
                                     <th>Date creation</th>
-                                    <th>Actions</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $__currentLoopData = $data_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__currentLoopData = $data_ajustement; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr id="row_<?php echo e($item['id']); ?>">
                                         <td> <?php echo e(++$key); ?> </td>
-                                        <td>
-                                            <img class="rounded-circle" src="<?php echo e($item->getFirstMediaUrl('ProduitImage')); ?>"
-                                                width="50px" alt="">
-                                        </td>
-                                        <td><?php echo e($item['nom']); ?></td>
-                                        <td><?php echo e($item['categorie']['name']); ?></td>
-                                        <td><?php echo e($item['typeProduit']['name']); ?></td>
-                                        <td><?php echo e($item['stock']); ?></td>
-                                        <td><?php echo e($item['stock_alerte']); ?></td>
+                                        <td><?php echo e($item['code']); ?></td>
+                                        <td><?php echo e($item['achat']['code']); ?></td>
+                                        <td><?php echo e($item['achat']['type_produit']['name']); ?></td>
+                                        <td><?php echo e($item['achat']['produit']['nom']); ?></td>
+                                        <td><?php echo e($item['stock_actuel']); ?></td>
+                                        <td> <?php echo e($item['stock_ajustement']); ?> </td>
+                                        <td> <?php echo e($item['mouvement']); ?> </td> 
+                                        <td> <?php echo e($item['user']['first_name']); ?> </td>
                                         <td> <?php echo e($item['created_at']); ?> </td>
-                                        <td>
-                                            <div class="dropdown d-inline-block">
-                                                <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
-                                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="ri-more-fill align-middle"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a href="<?php echo e(route('produit.show' , $item['id'])); ?>" class="dropdown-item"><i
-                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            View</a>
-                                                    </li>
-                                                    <li><a href="<?php echo e(route('produit.edit' ,  $item['id'])); ?>" type="button" class="dropdown-item edit-item-btn"><i
-                                                                class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Edit</a></li>
-                                                    <li>
-                                                        <a href="#" class="dropdown-item remove-item-btn delete"
-                                                            data-id=<?php echo e($item['id']); ?>>
-                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Delete
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
+
+                                        
                                     </tr>
                                     
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -138,7 +115,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             type: "GET",
-                            url: "/produit/delete/" + Id,
+                            url: "/achat/delete/" + Id,
                             dataType: "json",
 
                             success: function(response) {
@@ -164,4 +141,4 @@
     </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/produit/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/stock/ajustement/index.blade.php ENDPATH**/ ?>
