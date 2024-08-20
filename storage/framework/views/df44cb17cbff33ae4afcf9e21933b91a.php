@@ -15,6 +15,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="<?php echo e(URL::asset('build/js/pages/select2.init.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('myJs/js/delete_row.js')); ?>"></script>
 
 <?php echo $__env->yieldContent('script'); ?>
 <?php echo $__env->yieldContent('script-bottom'); ?>

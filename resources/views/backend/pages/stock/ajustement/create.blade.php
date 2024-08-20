@@ -29,8 +29,9 @@
                     <li>Ajouter la quantité</li>
                     <li>Vous pouvez desactiver ou activer le stock en cliquant sur le bouton statut en bas</li>
                 </ol>
-                <button type="button" class="btn-close" data-bs-dismiss=" alert" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+
             <div class="card">
                 <div class="card-body">
                     <form method="POST" action="{{ route('ajustement.store') }}" autocomplete="off"
@@ -130,7 +131,8 @@
                                                         class="text-danger" id="labelUnite"></span></label>
                                                 <br>
                                                 <div class="input-step w-100">
-                                                    <button type="button" class="minus w-50 btn btn-primary decreaseValue"
+                                                    <button type="button"
+                                                        class="minus w-50 btn btn-primary decreaseValue"
                                                         disabled>-</button>
                                                     <input type="number" class="form-control" id="quantiteStockable"
                                                         value="0" name="stock_ajustement" readonly>
@@ -303,10 +305,11 @@
                     $('#quantiteStockable').on('input', function() {
                         var qteStock = $('#quantiteStocke').val() // qté stocké du stock
                         let currentValue = parseInt($(this).val());
-                        if (currentValue > qteStock-1) {
+                        if (currentValue > qteStock - 1) {
                             // $(this).val(qteStock - 1);
-                            $('#MsgError').html('La quantité entrée est supérieur ou égale à la quantité stockée ')
-                        }else{
+                            $('#MsgError').html(
+                                'La quantité entrée est supérieur ou égale à la quantité stockée ')
+                        } else {
                             $('#MsgError').html('')
                         }
                     });

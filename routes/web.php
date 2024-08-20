@@ -3,6 +3,7 @@
 use App\Models\Equipe;
 use App\Models\Optimize;
 use App\Models\Maintenance;
+use App\Models\CategorieDepense;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
@@ -16,6 +17,7 @@ use App\Http\Controllers\backend\menu\MenuController;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use App\Http\Controllers\backend\stock\AchatController;
 use App\Http\Controllers\backend\module\ModuleController;
+use App\Http\Controllers\backend\depense\DepenseController;
 use App\Http\Controllers\backend\produit\ProduitController;
 use App\Http\Controllers\backend\basic_site\SlideController;
 use App\Http\Controllers\backend\blog\BlogContentController;
@@ -31,6 +33,7 @@ use App\Http\Controllers\backend\configuration\FormatController;
 use App\Http\Controllers\backend\basic_site\TemoignageController;
 use App\Http\Controllers\backend\permission\PermissionController;
 use App\Http\Controllers\backend\fournisseur\FournisseurController;
+use App\Http\Controllers\backend\depense\CategorieDepenseController;
 use App\Http\Controllers\backend\configuration\UniteMesureController;
 
 /*
@@ -352,9 +355,30 @@ Route::middleware(['admin'])->group(function () {
 
     // stock -ajustement
     Route::prefix('ajustement')->controller(AjustementController::class)->group(function () {
-        route::get('index', 'index')->name('ajustement.index');
+        route::get('', 'index')->name('ajustement.index');
         route::get('create/{id}', 'create')->name('ajustement.create');
         route::post('store', 'store')->name('ajustement.store');
+    });
+
+    Route::prefix('categorie-depense')->controller(CategorieDepenseController::class)->group(function () {
+        route::get('', 'index')->name('categorie-depense.index');
+        route::get('create', 'create')->name('categorie-depense.create');
+        route::post('store', 'store')->name('categorie-depense.store');
+        route::get('edit/{id}', 'edit')->name('categorie-depense.edit');
+        route::post('update/{id}', 'update')->name('categorie-depense.update');
+        route::get('delete/{id}', 'delete')->name('categorie-depense.delete');
+        route::post('position/{id}', 'position')->name('categorie-depense.position');
+
+    });
+
+    Route::prefix('depense')->controller(DepenseController::class)->group(function () {
+        route::get('', 'index')->name('depense.index');
+        route::get('create', 'create')->name('depense.create');
+        route::post('store', 'store')->name('depense.store');
+        route::get('edit/{id}', 'edit')->name('depense.edit');
+        route::post('update/{id}', 'update')->name('depense.update');
+        route::get('delete/{id}', 'delete')->name('depense.delete');
+
     });
 });
 

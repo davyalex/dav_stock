@@ -210,6 +210,29 @@
                     </div>
                 </li>
 
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarDepense" data-bs-toggle="collapse" role="button"
+                        aria-expanded="true" aria-controls="sidebarDepense">
+                        <i class="ri ri-money-dollar-box-fill"></i> <span>DEPENSES</span>
+                    </a>
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('categorie-depense.*') || Route::is('depense.*') ? 'show' : ''); ?>"
+                        id="sidebarDepense">
+                        <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('categorie-depense.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('categorie-depense.*') ? 'active' : ''); ?>">Categorie depense</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('depense.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('depense.*') ? 'active' : ''); ?>">Depense</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
         </div>
         </li>
 

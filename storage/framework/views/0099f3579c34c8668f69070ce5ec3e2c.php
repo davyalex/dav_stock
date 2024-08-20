@@ -80,10 +80,7 @@
                                                                 class=" ri-exchange-fill align-bottom me-2 text-muted"></i>
                                                             Ajustement</a>
                                                     </li>
-                                                    <li><a href="#!" class="dropdown-item"><i
-                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            View</a>
-                                                    </li>
+                                                    
                                                     <li><a href="<?php echo e(route('achat.edit', $item['id'])); ?>" type="button"
                                                             class="dropdown-item edit-item-btn"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>

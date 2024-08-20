@@ -1,6 +1,7 @@
 @extends('backend.layouts.master')
 @section('title')
-    @lang('translation.datatables')
+    {{-- @lang('translation.datatables') --}}
+    Depense
 @endsection
 @section('css')
     <!--datatable css-->
@@ -13,10 +14,10 @@
 @section('content')
     @component('backend.components.breadcrumb')
         @slot('li_1')
-            Liste des produits
+            Categorie
         @endslot
         @slot('title')
-            produit
+            Depense
         @endslot
     @endcomponent
 
@@ -26,9 +27,9 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des produits</h5>
-                    <a href="{{ route('produit.create') }}" type="button" class="btn btn-primary ">Créer
-                        un produit</a>
+                    <h5 class="card-title mb-0">Liste des categorie</h5>
+                    <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#myModal">Créer
+                        une categorie</button>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -36,30 +37,22 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Image</th>
-                                    <th>Nom</th>
-                                    <th>Categorie</th>
-                                    <th>Type de produit</th>
-                                    <th>Stock</th>
-                                    <th>Stock alerte</th>
+                                    <th>statut</th>
+                                    <th>Libelle</th>
+                                    <th>Position</th>
                                     <th>Date creation</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data_produit as $key => $item)
+                                @foreach ($data_categorie_depense as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
-                                        <td>
-                                            <img class="rounded-circle" src="{{ $item->getFirstMediaUrl('ProduitImage') }}"
-                                                width="50px" alt="">
-                                        </td>
-                                        <td>{{ $item['nom'] }}</td>
-                                        <td>{{ $item['categorie']['name'] }}</td>
-                                        <td>{{ $item['typeProduit']['name'] }}</td>
-                                        <td>{{ $item['stock'] }}</td>
-                                        <td>{{ $item['stock_alerte'] }}</td>
+                                        <td>{{ $item['statut'] }}</td>
+                                        <td> {{ $item['libelle'] }}</td>
+                                        <td> {{ $item['position'] }} </td>
                                         <td> {{ $item['created_at'] }} </td>
+
                                         <td>
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
@@ -67,11 +60,15 @@
                                                     <i class="ri-more-fill align-middle"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a href="{{route('produit.show' , $item['id'])}}" class="dropdown-item"><i
-                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            View</a>
+
+                                                    <li><a type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                            data-bs-target="#myModalPosition{{ $item['id'] }}"><i
+                                                                class="ri-list-ordered  align-bottom me-2 text-muted"></i>
+                                                            Position</a>
                                                     </li>
-                                                    <li><a href="{{route('produit.edit' ,  $item['id'])}}" type="button" class="dropdown-item edit-item-btn"><i
+                                                    <li><a type="button" class="dropdown-item edit-item-btn"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#myModalEdit{{ $item['id'] }}"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             Edit</a></li>
                                                     <li>
@@ -85,18 +82,20 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    {{-- @include('backend.pages.produit.edit') --}}
+                                    @include('backend.pages.depense.categorie-depense.edit')
+                                    @include('backend.pages.depense.categorie-depense.position')
                                 @endforeach
-                            </tbody>
+
+
                         </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!--end row-->
+    @include('backend.pages.depense.categorie-depense.create')
 
-    {{-- @include('backend.pages.produit.create') --}}
+    <!--end row-->
 @endsection
 @section('script')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -111,62 +110,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-
     <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
 
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
-    {{-- <script src="{{URL::asset('myJs/js/delete_row.js')}}"></script> --}}
 
     <script>
        $(document).ready(function(){
-        var route = "produit"
+        var route = "categorie-depense"
         delete_row(route);
        })
     </script>
-    {{-- <script>
-        $(document).ready(function() {
-            $('.delete').on("click", function(e) {
-                e.preventDefault();
-                var Id = $(this).attr('data-id');
-                Swal.fire({
-                    title: 'Etes-vous sûr(e) de vouloir supprimer ?',
-                    text: "Cette action est irréversible!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Supprimer!',
-                    cancelButtonText: 'Annuler',
-                    customClass: {
-                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
-                        cancelButton: 'btn btn-danger w-xs mt-2',
-                    },
-                    buttonsStyling: false,
-                    showCloseButton: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            type: "GET",
-                            url: "/produit/delete/" + Id,
-                            dataType: "json",
-
-                            success: function(response) {
-                                if (response.status == 200) {
-                                    Swal.fire({
-                                        title: 'Supprimé!',
-                                        text: 'Votre fichier a été supprimé.',
-                                        icon: 'success',
-                                        customClass: {
-                                            confirmButton: 'btn btn-primary w-xs mt-2',
-                                        },
-                                        buttonsStyling: false
-                                    })
-
-                                    $('#row_' + Id).remove();
-                                }
-                            }
-                        });
-                    }
-                });
-            });
-        });
-    </script> --}}
 @endsection
