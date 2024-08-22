@@ -1,38 +1,35 @@
+@extends('backend.layouts.master')
 
+@section('content')
+    @component('backend.components.breadcrumb')
+        <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 
-<?php $__env->startSection('content'); ?>
-    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
-        <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
-
-        <?php $__env->slot('li_1'); ?>
-          Produit
-        <?php $__env->endSlot(); ?>
-        <?php $__env->slot('title'); ?>
-            Créer un nouveau produit
-        <?php $__env->endSlot(); ?>
-    <?php echo $__env->renderComponent(); ?>
+        @slot('li_1')
+            Produit
+        @endslot
+        @slot('title')
+            Modifier un nouveau produit
+        @endslot
+    @endcomponent
 
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
                     <form id="formSend" autocomplete="off" class="needs-validation" novalidate enctype="multipart/form-data">
-                        <?php echo csrf_field(); ?>
+                        @csrf
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="card">
-                                    <a href="<?php echo e(route('achat.create')); ?>" class="float-end text-decoration-underline">
-                                        <i class="ri ri-arrow-left-line"></i>
-                                        Faire un achat
-                                    </a>
+                                    
                                     <div class="card-body">
                                         <div class="mb-3 row">
                                             <div class="col-md-5">
                                                 <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" name="nom"  class="form-control" id="nomProduit"
-                                                    required>
+                                                <input type="text" name="nom" value="{{ $data_produit['nom'] }}"
+                                                    class="form-control" id="nomProduit" required>
                                             </div>
                                             <div class="mb-3 col-md-5">
                                                 <label class="form-label" for="product-title-input">Sélectionner une
@@ -42,12 +39,12 @@
                                                     required>
                                                     <option value="" disabled selected>Selectionner</option>
 
-                                                    <?php $__currentLoopData = $data_categorie; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                        <?php echo $__env->make(
-                                                            'backend.pages.produit.partials.subCategorieOption',
+                                                    @foreach ($data_categorie as $categorie)
+                                                        @include(
+                                                            'backend.pages.menu.produit.partials.subCategorieOptionEdit',
                                                             ['category' => $categorie]
-                                                        , \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        )
+                                                    @endforeach
                                                 </select>
                                             </div>
 
@@ -55,8 +52,8 @@
                                                 <label class="form-label" for="meta-title-input">Stock alerte <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="number" name="stock_alerte" class="form-control"
-                                                    id="stockAlerte" required>
+                                                <input type="number" value="{{ $data_produit->stock_alerte }}"
+                                                    name="stock_alerte" class="form-control" id="stockAlerte" required>
                                             </div>
 
 
@@ -73,7 +70,10 @@
 
                             <div class="col-lg-4">
                                 <div class="card">
+
+
                                     <div class="card-body">
+
                                         <div class="mb-4">
                                             <h5 class="fs-14 mb-1">Image principale <span class="text-danger">*</span></h5>
                                             <div class="text-center">
@@ -90,12 +90,13 @@
                                                             </div>
                                                         </label>
                                                         <input class="form-control d-none" id="product-image-input"
-                                                            type="file" name="imagePrincipale" accept="image/*" required>
+                                                            type="file" name="imagePrincipale" accept="image/*">
                                                         <div class="invalid-feedback">Ajouter une image</div>
                                                     </div>
                                                     <div class="avatar-lg">
                                                         <div class="avatar-title bg-light rounded">
-                                                            <img src="" id="product-img" class="avatar-md h-auto" />
+                                                            <img src="{{ $data_produit->getFirstMediaUrl('ProduitImage') }}"
+                                                                id="product-img" class="avatar-md h-auto" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -141,17 +142,17 @@
 
         <!--end row-->
 
-    <?php $__env->startSection('script'); ?>
-        <script src="<?php echo e(URL::asset('build/libs/prismjs/prism.js')); ?>"></script>
+    @section('script')
+        <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
         <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
-        <script src="<?php echo e(URL::asset('build/js/pages/modal.init.js')); ?>"></script>
-        
-        <script src="<?php echo e(URL::asset('build/tinymce/tinymce.min.js')); ?>"></script>
-        <script src="<?php echo e(URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js')); ?>"></script>
+        <script src="{{ URL::asset('build/js/pages/modal.init.js') }}"></script>
+        {{-- <script src="{{ URL::asset('build/js/pages/form-editor.init.js') }}"></script> --}}
+        <script src="{{ URL::asset('build/tinymce/tinymce.min.js') }}"></script>
+        <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
 
-        <script src="<?php echo e(URL::asset('build/libs/dropzone/dropzone-min.js')); ?>"></script>
-        <script src="<?php echo e(URL::asset('build/js/pages/ecommerce-product-create.init.js')); ?>"></script>
-        <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+        <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
+        <script src="{{ URL::asset('build/js/pages/ecommerce-product-create.init.js') }}"></script>
+        <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
         <script>
             //script for to send data 
@@ -169,6 +170,20 @@
                     reader.readAsDataURL(file);
                 }
             });
+
+
+            //get gallery Image from controller for edit
+            var getGalleryProduct = {{ Js::from($galleryProduit) }}
+
+            for (let i = 0; i < getGalleryProduct.length; i++) {
+                const element = getGalleryProduct[i];
+                var image = ` <div class="col-12 d-flex justify-content-between border border-secondary rounded"><img src="data:image/jpeg;base64,${element}" class="img-thumbnail rounded float-start" width="50" height="100">
+                                   <button type="button" class="btn btn-danger my-2 remove-image">Delete</button>
+                                    </div>  `;
+                console.log('edit:', image);
+                $('#imageTableBody').append(image);
+            }
+
 
 
             $('#imageInput').on('change', function(e) {
@@ -194,6 +209,7 @@
             $('#formSend').on('submit', function(e) {
 
                 e.preventDefault();
+                var productId = {{ Js::from($id) }} // product Id
                 var formData = new FormData(this);
 
                 $('#imageTableBody div').each(function() {
@@ -202,7 +218,7 @@
                 });
 
                 $.ajax({
-                    url: "<?php echo e(route('produit.store')); ?>", // Adjust the route as needed
+                    url: "/produit/update/" + productId, // Adjust the route as needed
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -223,7 +239,7 @@
                                 buttonsStyling: false,
                                 showCloseButton: true
                             })
-                            var url = "<?php echo e(route('achat.create')); ?>" // redirect route stock
+                            var url = "{{ route('produit.index') }}" // redirect route product list
 
                             window.location.replace(url);
                         } else if (response == 'The nom has already been taken.') {
@@ -244,7 +260,5 @@
                 });
             });
         </script>
-    <?php $__env->stopSection(); ?>
-<?php $__env->stopSection(); ?>
-
-<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/produit/create.blade.php ENDPATH**/ ?>
+    @endsection
+@endsection

@@ -5,7 +5,7 @@
         <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
 
         <?php $__env->slot('li_1'); ?>
-          Produit
+            Produit menu
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
             Créer un nouveau produit
@@ -21,17 +21,13 @@
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="card">
-                                    <a href="<?php echo e(route('achat.create')); ?>" class="float-end text-decoration-underline">
-                                        <i class="ri ri-arrow-left-line"></i>
-                                        Faire un achat
-                                    </a>
                                     <div class="card-body">
                                         <div class="mb-3 row">
                                             <div class="col-md-5">
                                                 <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" name="nom"  class="form-control" id="nomProduit"
+                                                <input type="text" name="nom" class="form-control" id="SALADE NICOISE"
                                                     required>
                                             </div>
                                             <div class="mb-3 col-md-5">
@@ -44,7 +40,7 @@
 
                                                     <?php $__currentLoopData = $data_categorie; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                         <?php echo $__env->make(
-                                                            'backend.pages.produit.partials.subCategorieOption',
+                                                            'backend.pages.menu.produit.partials.subCategorieOption',
                                                             ['category' => $categorie]
                                                         , \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -52,11 +48,11 @@
                                             </div>
 
                                             <div class="col-md-2 mb-3">
-                                                <label class="form-label" for="meta-title-input">Stock alerte <span
+                                                <label class="form-label" for="meta-title-input">prix <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="number" name="stock_alerte" class="form-control"
-                                                    id="stockAlerte" required>
+                                                <input type="number" name="prix" class="form-control" id="prix"
+                                                    required>
                                             </div>
 
 
@@ -64,6 +60,16 @@
                                         <div>
                                             <label>Description</label>
                                             <textarea name="description" id="ckeditor-classic"></textarea>
+                                        </div>
+                                        <div class="col-md-12 mt-3">
+                                            <label class="form-check-label" for="customAff">Visible  <span>(activé par defaut )</span> </label>
+                                        
+                                            <div class="form-check form-switch form-switch-lg col-md-2" dir="ltr">
+                                                <input type="checkbox" name="statut" class="form-check-input" id="customAff" checked>
+                                            </div>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -202,7 +208,7 @@
                 });
 
                 $.ajax({
-                    url: "<?php echo e(route('produit.store')); ?>", // Adjust the route as needed
+                    url: "<?php echo e(route('produit-menu.store')); ?>", // Adjust the route as needed
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -223,7 +229,7 @@
                                 buttonsStyling: false,
                                 showCloseButton: true
                             })
-                            var url = "<?php echo e(route('achat.create')); ?>" // redirect route stock
+                            var url = "<?php echo e(route('produit-menu.index')); ?>" // redirect route stock
 
                             window.location.replace(url);
                         } else if (response == 'The nom has already been taken.') {
@@ -247,4 +253,4 @@
     <?php $__env->stopSection(); ?>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/produit/create.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/menu/produit/create.blade.php ENDPATH**/ ?>

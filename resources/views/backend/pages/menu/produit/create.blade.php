@@ -1,37 +1,33 @@
+@extends('backend.layouts.master')
 
+@section('content')
+    @component('backend.components.breadcrumb')
+        <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 
-<?php $__env->startSection('content'); ?>
-    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
-        <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
-
-        <?php $__env->slot('li_1'); ?>
-          Produit
-        <?php $__env->endSlot(); ?>
-        <?php $__env->slot('title'); ?>
+        @slot('li_1')
+            Produit menu
+        @endslot
+        @slot('title')
             Créer un nouveau produit
-        <?php $__env->endSlot(); ?>
-    <?php echo $__env->renderComponent(); ?>
+        @endslot
+    @endcomponent
 
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
                     <form id="formSend" autocomplete="off" class="needs-validation" novalidate enctype="multipart/form-data">
-                        <?php echo csrf_field(); ?>
+                        @csrf
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="card">
-                                    <a href="<?php echo e(route('achat.create')); ?>" class="float-end text-decoration-underline">
-                                        <i class="ri ri-arrow-left-line"></i>
-                                        Faire un achat
-                                    </a>
                                     <div class="card-body">
                                         <div class="mb-3 row">
                                             <div class="col-md-5">
                                                 <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" name="nom"  class="form-control" id="nomProduit"
+                                                <input type="text" name="nom" class="form-control" id="SALADE NICOISE"
                                                     required>
                                             </div>
                                             <div class="mb-3 col-md-5">
@@ -42,21 +38,21 @@
                                                     required>
                                                     <option value="" disabled selected>Selectionner</option>
 
-                                                    <?php $__currentLoopData = $data_categorie; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                        <?php echo $__env->make(
-                                                            'backend.pages.produit.partials.subCategorieOption',
+                                                    @foreach ($data_categorie as $categorie)
+                                                        @include(
+                                                            'backend.pages.menu.produit.partials.subCategorieOption',
                                                             ['category' => $categorie]
-                                                        , \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        )
+                                                    @endforeach
                                                 </select>
                                             </div>
 
                                             <div class="col-md-2 mb-3">
-                                                <label class="form-label" for="meta-title-input">Stock alerte <span
+                                                <label class="form-label" for="meta-title-input">prix <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="number" name="stock_alerte" class="form-control"
-                                                    id="stockAlerte" required>
+                                                <input type="number" name="prix" class="form-control" id="prix"
+                                                    required>
                                             </div>
 
 
@@ -64,6 +60,16 @@
                                         <div>
                                             <label>Description</label>
                                             <textarea name="description" id="ckeditor-classic"></textarea>
+                                        </div>
+                                        <div class="col-md-12 mt-3">
+                                            <label class="form-check-label" for="customAff">Visible  <span>(activé par defaut )</span> </label>
+                                        
+                                            <div class="form-check form-switch form-switch-lg col-md-2" dir="ltr">
+                                                <input type="checkbox" name="statut" class="form-check-input" id="customAff" checked>
+                                            </div>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -141,17 +147,17 @@
 
         <!--end row-->
 
-    <?php $__env->startSection('script'); ?>
-        <script src="<?php echo e(URL::asset('build/libs/prismjs/prism.js')); ?>"></script>
+    @section('script')
+        <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
         <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
-        <script src="<?php echo e(URL::asset('build/js/pages/modal.init.js')); ?>"></script>
-        
-        <script src="<?php echo e(URL::asset('build/tinymce/tinymce.min.js')); ?>"></script>
-        <script src="<?php echo e(URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js')); ?>"></script>
+        <script src="{{ URL::asset('build/js/pages/modal.init.js') }}"></script>
+        {{-- <script src="{{ URL::asset('build/js/pages/form-editor.init.js') }}"></script> --}}
+        <script src="{{ URL::asset('build/tinymce/tinymce.min.js') }}"></script>
+        <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
 
-        <script src="<?php echo e(URL::asset('build/libs/dropzone/dropzone-min.js')); ?>"></script>
-        <script src="<?php echo e(URL::asset('build/js/pages/ecommerce-product-create.init.js')); ?>"></script>
-        <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+        <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
+        <script src="{{ URL::asset('build/js/pages/ecommerce-product-create.init.js') }}"></script>
+        <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
         <script>
             //script for to send data 
@@ -202,7 +208,7 @@
                 });
 
                 $.ajax({
-                    url: "<?php echo e(route('produit.store')); ?>", // Adjust the route as needed
+                    url: "{{ route('produit-menu.store') }}", // Adjust the route as needed
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -223,7 +229,7 @@
                                 buttonsStyling: false,
                                 showCloseButton: true
                             })
-                            var url = "<?php echo e(route('achat.create')); ?>" // redirect route stock
+                            var url = "{{ route('produit-menu.index') }}" // redirect route stock
 
                             window.location.replace(url);
                         } else if (response == 'The nom has already been taken.') {
@@ -244,7 +250,5 @@
                 });
             });
         </script>
-    <?php $__env->stopSection(); ?>
-<?php $__env->stopSection(); ?>
-
-<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/produit/create.blade.php ENDPATH**/ ?>
+    @endsection
+@endsection

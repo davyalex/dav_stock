@@ -37,6 +37,18 @@ class CategorieTableSeeder extends Seeder
 
             ],
 
+            [
+                'name' => 'menu',
+                'slug' => 'menu',
+                'url' => 'menu',
+                'type' => 'menu',
+                'status' => 'active',
+                'position' => 3,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+
+            ],
+
         ];
 
         foreach ($data as  $value) {

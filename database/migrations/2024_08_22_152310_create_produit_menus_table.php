@@ -11,24 +11,32 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('depenses', function (Blueprint $table) {
+        Schema::create('produit_menus', function (Blueprint $table) {
             $table->id();
-            $table->string('libelle')->nullable();
-            $table->double('montant')->nullable();
+            $table->string('code')->unique()->nullable();
+            $table->string('nom')->unique()->nullable(); // libelle
+            $table->string('slug')->nullable();
+            $table->double('prix')->nullable();
             $table->longText('description')->nullable();
-            $table->foreignId('categorie_depense_id')
+            $table->enum('statut', ['active', 'desactive'])->default('active');
+            $table->enum('type', ['plat', 'boisson'])->nullable();
+
+
+            //foreign table
+            $table->foreignId('categorie_id')
                 ->nullable()
-                ->constrained('categorie_depenses')
+                ->constrained('categories')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('cascade ');
 
             $table->foreignId('user_id')
                 ->nullable()
                 ->constrained('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+
             $table->softDeletes();
-            
+
             $table->timestamps();
         });
     }
@@ -38,6 +46,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('depenses');
+        Schema::dropIfExists('produit_menus');
     }
 };

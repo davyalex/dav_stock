@@ -25,12 +25,13 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->enum('type', ['categorie-stock', 'categorie-simple'])->nullable();
+            $table->enum('type', ['categorie-stock', 'categorie-simple', 'menu'])->nullable();
 
             $table->softDeletes();
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

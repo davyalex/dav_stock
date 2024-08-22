@@ -14,7 +14,7 @@
 <?php $__env->startSection('content'); ?>
     <?php $__env->startComponent('backend.components.breadcrumb'); ?>
         <?php $__env->slot('li_1'); ?>
-            Categorie
+            depenses
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
             Depense
@@ -27,9 +27,9 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des categorie</h5>
+                    <h5 class="card-title mb-0">Liste des depenses</h5>
                     <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#myModal">Créer
-                        une categorie</button>
+                        une depense</button>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -37,20 +37,22 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>statut</th>
+                                    <th>Categorie</th>
                                     <th>Libelle</th>
-                                    <th>Position</th>
+                                    <th>Montant</th>
+                                    <th>Créer par</th>
                                     <th>Date creation</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $__currentLoopData = $data_categorie_depense; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__currentLoopData = $data_depense; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr id="row_<?php echo e($item['id']); ?>">
                                         <td> <?php echo e(++$key); ?> </td>
-                                        <td><?php echo e($item['statut']); ?></td>
+                                        <td><?php echo e($item['categorie_depense']['libelle'] ?? ''); ?></td>
                                         <td> <?php echo e($item['libelle']); ?></td>
-                                        <td> <?php echo e($item['position']); ?> </td>
+                                        <td> <?php echo e($item['montant']); ?> </td>
+                                        <td> <?php echo e($item['user']['first_name']); ?></td>
                                         <td> <?php echo e($item['created_at']); ?> </td>
 
                                         <td>
@@ -60,12 +62,6 @@
                                                     <i class="ri-more-fill align-middle"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-
-                                                    <li><a type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                            data-bs-target="#myModalPosition<?php echo e($item['id']); ?>"><i
-                                                                class="ri-list-ordered  align-bottom me-2 text-muted"></i>
-                                                            Position</a>
-                                                    </li>
                                                     <li><a type="button" class="dropdown-item edit-item-btn"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#myModalEdit<?php echo e($item['id']); ?>"><i
@@ -82,8 +78,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <?php echo $__env->make('backend.pages.depense.categorie-depense.edit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-                                    <?php echo $__env->make('backend.pages.depense.categorie-depense.position', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                    <?php echo $__env->make('backend.pages.depense.edit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 
@@ -93,7 +88,7 @@
             </div>
         </div>
     </div>
-    <?php echo $__env->make('backend.pages.depense.categorie-depense.create', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('backend.pages.depense.create', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
     <!--end row-->
 <?php $__env->stopSection(); ?>
@@ -116,10 +111,10 @@
 
     <script>
        $(document).ready(function(){
-        var route = "categorie-depense"
+        var route = "depense"
         delete_row(route);
        })
     </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/depense/categorie-depense/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/depense/index.blade.php ENDPATH**/ ?>

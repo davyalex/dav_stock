@@ -16,7 +16,6 @@
                     <?php endif; ?>
                 </ol>
             </div>
-
         </div>
     </div>
 </div>

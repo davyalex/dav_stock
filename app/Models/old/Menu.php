@@ -1,31 +1,32 @@
 <?php
 
 namespace App\Models;
+
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CategorieDepense extends Model
+class Menu extends Model
 {
-    use HasFactory, sluggable, SoftDeletes;
+    use HasFactory, sluggable;
 
     public $incrementing = false;
 
     protected $fillable = [
-        'libelle',
+        'name',
         'slug',
-        'statut',
+        'status',
+        'url',
         'position',
- 
+        'parent_id'
     ];
 
     public static function boot()
     {
         parent::boot();
         self::creating(function ($model) {
-            $model->id = IdGenerator::generate(['table' => 'categorie_depenses', 'length' => 10, 'prefix' =>
+            $model->id = IdGenerator::generate(['table' => 'menus', 'length' => 10, 'prefix' =>
             mt_rand()]);
         });
     }
@@ -34,15 +35,18 @@ class CategorieDepense extends Model
     {
         return [
             'slug' => [
-                'source' => 'libelle'
+                'source' => 'name'
             ]
         ];
     }
 
-    public function depenses()
+    public function children()
     {
-        return $this->hasMany(Depense::class);
+        return $this->hasMany(Menu::class, 'parent_id');
     }
 
+    public function parent()
+    {
+        return $this->belongsTo(Menu::class, 'parent_id');
+    }
 }
-

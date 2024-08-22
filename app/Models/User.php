@@ -63,6 +63,16 @@ class User extends Authenticatable
         return $this->hasMany(Ajustement::class);
     }
 
+    public function depenses() 
+    {
+        return $this->hasMany(Depense::class);
+    }
+
+
+    public function produit_menus() 
+    {
+        return $this->hasMany(ProduitMenu::class);
+    }
 
 
     /**

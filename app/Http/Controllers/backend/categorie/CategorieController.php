@@ -97,7 +97,7 @@ class CategorieController extends Controller
         $data_count = Categorie::where('parent_id', $data_categorie_edit['parent_id'])->count();
         // dd($data_count);
 
-        return view('backend.pages.categorie.categorie-edit',  compact('data_categorie', 'data_categorie_edit','data_type_produit', 'data_count'));
+        return view('backend.pages.categorie.categorie-edit',  compact('data_categorie', 'data_categorie_edit', 'data_count'));
     }
 
 

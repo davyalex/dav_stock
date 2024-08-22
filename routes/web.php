@@ -21,6 +21,7 @@ use App\Http\Controllers\backend\depense\DepenseController;
 use App\Http\Controllers\backend\produit\ProduitController;
 use App\Http\Controllers\backend\basic_site\SlideController;
 use App\Http\Controllers\backend\blog\BlogContentController;
+use App\Http\Controllers\backend\menu\ProduitMenuController;
 use App\Http\Controllers\backend\stock\AjustementController;
 use App\Http\Controllers\backend\basic_site\EquipeController;
 use App\Http\Controllers\backend\blog\BlogCategoryController;
@@ -380,6 +381,18 @@ Route::middleware(['admin'])->group(function () {
         route::get('delete/{id}', 'delete')->name('depense.delete');
 
     });
+
+
+        // produit menu
+        Route::prefix('produit-menu')->controller(ProduitMenuController::class)->group(function () {
+            route::get('', 'index')->name('produit-menu.index');
+            route::get('create', 'create')->name('produit-menu.create');
+            route::post('store', 'store')->name('produit-menu.store');
+            route::get('show/{id}', 'show')->name('produit-menu.show');
+            route::get('edit/{id}', 'edit')->name('produit-menu.edit');
+            route::post('update/{id}', 'update')->name('produit-menu.update');
+            route::get('delete/{id}', 'delete')->name('produit-menu.delete');
+        });
 });
 
 
