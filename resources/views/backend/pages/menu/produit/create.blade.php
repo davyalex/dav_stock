@@ -23,14 +23,8 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="mb-3 row">
-                                            <div class="col-md-5">
-                                                <label class="form-label" for="meta-title-input">Libellé <span
-                                                        class="text-danger">*</span>
-                                                </label>
-                                                <input type="text" name="nom" class="form-control" id="SALADE NICOISE"
-                                                    required>
-                                            </div>
-                                            <div class="mb-3 col-md-5">
+
+                                            <div class="mb-3 col-md-12">
                                                 <label class="form-label" for="product-title-input">Sélectionner une
                                                     categorie <span class="text-danger">*</span>
                                                 </label>
@@ -47,7 +41,15 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-md-2 mb-3">
+                                            <div class="col-md-8">
+                                                <label class="form-label" for="meta-title-input">Libellé <span
+                                                        class="text-danger">*</span>
+                                                </label>
+                                                <input type="text" name="nom" class="form-control" id="SALADE NICOISE"
+                                                    required>
+                                            </div>
+                                           
+                                            <div class="col-md-4 mb-3">
                                                 <label class="form-label" for="meta-title-input">prix <span
                                                         class="text-danger">*</span>
                                                 </label>

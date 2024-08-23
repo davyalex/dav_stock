@@ -125,8 +125,9 @@ class ProduitMenuController extends Controller
     public function edit($id)
     {
         try {
+           
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
-                ->whereIn('name', ['bar', 'restaurant'])
+                ->whereIn('name', ['menu'])
                 ->OrderBy('position', 'ASC')->get();
 
             $data_produit_menu = ProduitMenu::find($id);

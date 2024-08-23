@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
+            $table->string('libelle');
+         
+                 //foreign table
+            $table->foreignId('user_id')
+            ->nullable()
+            ->constrained('users')
+            ->onUpdate('cascade')
+            ->onDelete('cascade ');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

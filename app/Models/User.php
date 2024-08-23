@@ -75,6 +75,12 @@ class User extends Authenticatable
     }
 
 
+    public function menus() 
+    {
+        return $this->hasMany(Menu::class);
+    }
+
+
     /**
      * The attributes that should be hidden for serialization.
      *

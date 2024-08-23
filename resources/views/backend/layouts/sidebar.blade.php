@@ -322,13 +322,18 @@
                         aria-expanded="true" aria-controls="sidebarMenu">
                         <i class="ri ri-file-list-line"></i> <span>MENU</span>
                     </a>
-                    <div class="collapse menu-dropdown {{ Route::is('produit-menu.*') ? 'show' : '' }}"
+                    <div class="collapse menu-dropdown {{ Route::is('menu.*')|| Route::is('produit-menu.*') ? 'show' : '' }}"
                         id="sidebarMenu">
                         <ul class="nav nav-sm flex-column">
 
                             <li class="nav-item active">
                                 <a href="{{ route('produit-menu.index') }}"
                                     class="nav-link {{ Route::is('produit-menu.*') ? 'active' : '' }}">Produit du menu</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="{{ route('menu.create') }}"
+                                    class="nav-link {{ Route::is('menu.*') ? 'active' : '' }}">Menu</a>
                             </li>
                         </ul>
                     </div>

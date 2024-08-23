@@ -5,10 +5,10 @@
         <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 
         @slot('li_1')
-            Produit
+           Menu
         @endslot
         @slot('title')
-            Modifier un nouveau produit
+            Créer un nouveau menu
         @endslot
     @endcomponent
 
@@ -21,7 +21,6 @@
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="card">
-
                                     <div class="card-body">
                                         <div class="mb-3 row">
 
@@ -35,7 +34,7 @@
 
                                                     @foreach ($data_categorie as $categorie)
                                                         @include(
-                                                            'backend.pages.menu.produit.partials.subCategorieOptionEdit',
+                                                            'backend.pages.menu.produit.partials.subCategorieOption',
                                                             ['category' => $categorie]
                                                         )
                                                     @endforeach
@@ -46,104 +45,18 @@
                                                 <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" name="nom" value="{{ $data_produit_menu['nom'] }}"
-                                                    class="form-control" id="nomProduit" required>
+                                                <input type="text" name="nom" class="form-control" id="SALADE NICOISE"
+                                                    required>
                                             </div>
-                                          
-                                            <div class="col-md-4 mb-3">
-                                                <label class="form-label" for="meta-title-input">Prix <span
-                                                        class="text-danger">*</span>
-                                                </label>
-                                                <input type="number" value="{{ $data_produit_menu->prix }}"
-                                                    name="prix" class="form-control" id="prix" required>
-                                            </div>
-
 
                                         </div>
-                                        <div>
-                                            <label>Description</label>
-                                            <textarea name="description" id="ckeditor-classic">
-                                                {{ $data_produit_menu['description'] }}
-                                            </textarea>
-                                        </div>
-
-                                        <div class="col-md-12 mt-3">
-                                            <label class="form-check-label" for="customAff">Visibilité </label>
-
-                                            <div class="form-check form-switch form-switch-lg col-md-2" dir="ltr">
-                                                <input type="checkbox" name="statut" class="form-check-input"
-                                                    id="customAff" {{$data_produit_menu['statut'] =='active' ? 'checked' : ''}}>
-                                            </div>
-                                            <div class="valid-feedback">
-                                                Looks good!
-                                            </div>
-                                        </div>
+                                       
                                     </div>
                                 </div>
                                 <!-- end card -->
                             </div>
                             <!-- end col -->
 
-                            <div class="col-lg-4">
-                                <div class="card">
-
-
-                                    <div class="card-body">
-
-                                        <div class="mb-4">
-                                            <h5 class="fs-14 mb-1">Image principale <span class="text-danger">*</span></h5>
-                                            <div class="text-center">
-                                                <div class="position-relative d-inline-block">
-                                                    <div class="position-absolute top-100 start-100 translate-middle">
-                                                        <label for="product-image-input" class="mb-0"
-                                                            data-bs-toggle="tooltip" data-bs-placement="right"
-                                                            title="Select Image">
-                                                            <div class="avatar-xs">
-                                                                <div
-                                                                    class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
-                                                                    <i class="ri-image-fill"></i>
-                                                                </div>
-                                                            </div>
-                                                        </label>
-                                                        <input class="form-control d-none" id="product-image-input"
-                                                            type="file" name="imagePrincipale" accept="image/*">
-                                                        <div class="invalid-feedback">Ajouter une image</div>
-                                                    </div>
-                                                    <div class="avatar-lg">
-                                                        <div class="avatar-title bg-light rounded">
-                                                            <img src="{{ $data_produit_menu->getFirstMediaUrl('ProduitImage') }}"
-                                                                id="product-img" class="avatar-md h-auto" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="col-md-12 mt-3">
-                                            <label for="imageInput" class="form-label col-12">
-                                                <div class="col-md-12 border border-dark rounded border-dashed text-center px-5 mt-4"
-                                                    style=" cursor: pointer;">
-                                                    <i class="ri ri-image-add-fill fs-1 "></i>
-                                                    <h5>Ajouter des images</h5>
-                                                </div>
-                                            </label>
-                                            <input type="file" id="imageInput" accept="image/*"
-                                                class="form-control d-none" multiple>
-
-                                            <div class="row" id="imageTableBody"></div>
-
-                                            <div class="valid-feedback">
-                                                Success!
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- end card -->
-
-
-                            </div>
                         </div>
                         <!-- end row -->
                         <!-- end card -->
@@ -188,20 +101,6 @@
             });
 
 
-            //get gallery Image from controller for edit
-            var getGalleryProduct = {{ Js::from($galleryProduit) }}
-
-            for (let i = 0; i < getGalleryProduct.length; i++) {
-                const element = getGalleryProduct[i];
-                var image = ` <div class="col-12 d-flex justify-content-between border border-secondary rounded"><img src="data:image/jpeg;base64,${element}" class="img-thumbnail rounded float-start" width="50" height="100">
-                                   <button type="button" class="btn btn-danger my-2 remove-image">Delete</button>
-                                    </div>  `;
-                console.log('edit:', image);
-                $('#imageTableBody').append(image);
-            }
-
-
-
             $('#imageInput').on('change', function(e) {
                 var files = e.target.files;
                 for (var i = 0; i < files.length; i++) {
@@ -225,7 +124,6 @@
             $('#formSend').on('submit', function(e) {
 
                 e.preventDefault();
-                var productId = {{ Js::from($id) }} // product Id
                 var formData = new FormData(this);
 
                 $('#imageTableBody div').each(function() {
@@ -234,7 +132,7 @@
                 });
 
                 $.ajax({
-                    url: "/produit-menu/update/" + productId, // Adjust the route as needed
+                    url: "{{ route('produit-menu.store') }}", // Adjust the route as needed
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -255,7 +153,7 @@
                                 buttonsStyling: false,
                                 showCloseButton: true
                             })
-                            var url = "{{ route('produit-menu.index') }}" // redirect route product list
+                            var url = "{{ route('produit-menu.index') }}" // redirect route stock
 
                             window.location.replace(url);
                         } else if (response == 'The nom has already been taken.') {

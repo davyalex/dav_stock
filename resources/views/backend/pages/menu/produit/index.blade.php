@@ -71,7 +71,7 @@
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                             View</a>
                                                     </li>
-                                                    <li><a href="{{route('produit.edit' ,  $item['id'])}}" type="button" class="dropdown-item edit-item-btn"><i
+                                                    <li><a href="{{route('produit-menu.edit' ,  $item['id'])}}" type="button" class="dropdown-item edit-item-btn"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             Edit</a></li>
                                                     <li>

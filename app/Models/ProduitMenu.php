@@ -62,5 +62,10 @@ class ProduitMenu extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
+    public function menu()
+    {
+        return $this->belongsToMany(Menu::class, 'menu_produit_menu');
+    }
+
 
 }

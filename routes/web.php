@@ -157,20 +157,6 @@ Route::middleware(['admin'])->group(function () {
     });
 
 
-    #############  MENU  #####################
-    Route::prefix('menu')->controller(MenuController::class)->group(function () {
-        // route::get('', 'index')->name('menu.index');
-        route::get('create', 'create')->name('menu.create');
-        route::post('store', 'store')->name('menu.store');
-        route::get('add-item/{id}', 'addMenuItem')->name('menu.add-item'); // add subMenu
-        route::post('add-item-store', 'addMenuItemStore')->name('menu.add-item-store'); // add subMenu
-
-        route::get('edit/{id}', 'edit')->name('menu.edit');
-        route::post('update/{id}', 'update')->name('menu.update');
-        route::get('delete/{id}', 'delete')->name('menu.delete');
-    });
-
-
     #############  SERVICE  #####################
 
     //service of basic site
@@ -392,6 +378,18 @@ Route::middleware(['admin'])->group(function () {
             route::get('edit/{id}', 'edit')->name('produit-menu.edit');
             route::post('update/{id}', 'update')->name('produit-menu.update');
             route::get('delete/{id}', 'delete')->name('produit-menu.delete');
+        });
+
+
+          //  menu
+          Route::prefix('menu')->controller(MenuController::class)->group(function () {
+            route::get('', 'index')->name('menu.index');
+            route::get('create', 'create')->name('menu.create');
+            route::post('store', 'store')->name('menu.store');
+            route::get('show/{id}', 'show')->name('menu.show');
+            route::get('edit/{id}', 'edit')->name('menu.edit');
+            route::post('update/{id}', 'update')->name('menu.update');
+            route::get('delete/{id}', 'delete')->name('menu.delete');
         });
 });
 

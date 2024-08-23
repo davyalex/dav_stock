@@ -238,13 +238,18 @@
                         aria-expanded="true" aria-controls="sidebarMenu">
                         <i class="ri ri-file-list-line"></i> <span>MENU</span>
                     </a>
-                    <div class="collapse menu-dropdown <?php echo e(Route::is('produit-menu.*') ? 'show' : ''); ?>"
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('menu.*')|| Route::is('produit-menu.*') ? 'show' : ''); ?>"
                         id="sidebarMenu">
                         <ul class="nav nav-sm flex-column">
 
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('produit-menu.index')); ?>"
                                     class="nav-link <?php echo e(Route::is('produit-menu.*') ? 'active' : ''); ?>">Produit du menu</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('menu.create')); ?>"
+                                    class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Menu</a>
                             </li>
                         </ul>
                     </div>

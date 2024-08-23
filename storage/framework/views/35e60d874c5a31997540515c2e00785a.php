@@ -1,23 +1,23 @@
-@extends('backend.layouts.master')
 
-@section('content')
-    @component('backend.components.breadcrumb')
-        <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 
-        @slot('li_1')
+<?php $__env->startSection('content'); ?>
+    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
+        <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
+
+        <?php $__env->slot('li_1'); ?>
             Produit
-        @endslot
-        @slot('title')
+        <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?>
             Modifier un nouveau produit
-        @endslot
-    @endcomponent
+        <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
 
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
                     <form id="formSend" autocomplete="off" class="needs-validation" novalidate enctype="multipart/form-data">
-                        @csrf
+                        <?php echo csrf_field(); ?>
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="card">
@@ -33,12 +33,12 @@
                                                     required>
                                                     <option value="" disabled selected>Selectionner</option>
 
-                                                    @foreach ($data_categorie as $categorie)
-                                                        @include(
+                                                    <?php $__currentLoopData = $data_categorie; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <?php echo $__env->make(
                                                             'backend.pages.menu.produit.partials.subCategorieOptionEdit',
                                                             ['category' => $categorie]
-                                                        )
-                                                    @endforeach
+                                                        , \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </select>
                                             </div>
 
@@ -46,7 +46,7 @@
                                                 <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" name="nom" value="{{ $data_produit_menu['nom'] }}"
+                                                <input type="text" name="nom" value="<?php echo e($data_produit_menu['nom']); ?>"
                                                     class="form-control" id="nomProduit" required>
                                             </div>
                                           
@@ -54,7 +54,7 @@
                                                 <label class="form-label" for="meta-title-input">Prix <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="number" value="{{ $data_produit_menu->prix }}"
+                                                <input type="number" value="<?php echo e($data_produit_menu->prix); ?>"
                                                     name="prix" class="form-control" id="prix" required>
                                             </div>
 
@@ -63,7 +63,8 @@
                                         <div>
                                             <label>Description</label>
                                             <textarea name="description" id="ckeditor-classic">
-                                                {{ $data_produit_menu['description'] }}
+                                                <?php echo e($data_produit_menu['description']); ?>
+
                                             </textarea>
                                         </div>
 
@@ -72,7 +73,7 @@
 
                                             <div class="form-check form-switch form-switch-lg col-md-2" dir="ltr">
                                                 <input type="checkbox" name="statut" class="form-check-input"
-                                                    id="customAff" {{$data_produit_menu['statut'] =='active' ? 'checked' : ''}}>
+                                                    id="customAff" <?php echo e($data_produit_menu['statut'] =='active' ? 'checked' : ''); ?>>
                                             </div>
                                             <div class="valid-feedback">
                                                 Looks good!
@@ -111,7 +112,7 @@
                                                     </div>
                                                     <div class="avatar-lg">
                                                         <div class="avatar-title bg-light rounded">
-                                                            <img src="{{ $data_produit_menu->getFirstMediaUrl('ProduitImage') }}"
+                                                            <img src="<?php echo e($data_produit_menu->getFirstMediaUrl('ProduitImage')); ?>"
                                                                 id="product-img" class="avatar-md h-auto" />
                                                         </div>
                                                     </div>
@@ -158,17 +159,17 @@
 
         <!--end row-->
 
-    @section('script')
-        <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
+    <?php $__env->startSection('script'); ?>
+        <script src="<?php echo e(URL::asset('build/libs/prismjs/prism.js')); ?>"></script>
         <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
-        <script src="{{ URL::asset('build/js/pages/modal.init.js') }}"></script>
-        {{-- <script src="{{ URL::asset('build/js/pages/form-editor.init.js') }}"></script> --}}
-        <script src="{{ URL::asset('build/tinymce/tinymce.min.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
+        <script src="<?php echo e(URL::asset('build/js/pages/modal.init.js')); ?>"></script>
+        
+        <script src="<?php echo e(URL::asset('build/tinymce/tinymce.min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js')); ?>"></script>
 
-        <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/ecommerce-product-create.init.js') }}"></script>
-        <script src="{{ URL::asset('build/js/app.js') }}"></script>
+        <script src="<?php echo e(URL::asset('build/libs/dropzone/dropzone-min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/js/pages/ecommerce-product-create.init.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
         <script>
             //script for to send data 
@@ -189,7 +190,8 @@
 
 
             //get gallery Image from controller for edit
-            var getGalleryProduct = {{ Js::from($galleryProduit) }}
+            var getGalleryProduct = <?php echo e(Js::from($galleryProduit)); ?>
+
 
             for (let i = 0; i < getGalleryProduct.length; i++) {
                 const element = getGalleryProduct[i];
@@ -225,7 +227,7 @@
             $('#formSend').on('submit', function(e) {
 
                 e.preventDefault();
-                var productId = {{ Js::from($id) }} // product Id
+                var productId = <?php echo e(Js::from($id)); ?> // product Id
                 var formData = new FormData(this);
 
                 $('#imageTableBody div').each(function() {
@@ -255,7 +257,7 @@
                                 buttonsStyling: false,
                                 showCloseButton: true
                             })
-                            var url = "{{ route('produit-menu.index') }}" // redirect route product list
+                            var url = "<?php echo e(route('produit-menu.index')); ?>" // redirect route product list
 
                             window.location.replace(url);
                         } else if (response == 'The nom has already been taken.') {
@@ -276,5 +278,7 @@
                 });
             });
         </script>
-    @endsection
-@endsection
+    <?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/menu/produit/edit.blade.php ENDPATH**/ ?>
