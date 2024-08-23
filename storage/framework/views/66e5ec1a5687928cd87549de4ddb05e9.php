@@ -5,7 +5,7 @@
         <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
 
         <?php $__env->slot('li_1'); ?>
-           Menu
+            Menu
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
             Créer un nouveau menu
@@ -19,38 +19,48 @@
                     <form id="formSend" autocomplete="off" class="needs-validation" novalidate enctype="multipart/form-data">
                         <?php echo csrf_field(); ?>
                         <div class="row">
-                            <div class="col-lg-8">
+                            <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="mb-3 row">
 
-                                            <div class="mb-3 col-md-12">
-                                                <label class="form-label" for="product-title-input">Sélectionner une
-                                                    categorie <span class="text-danger">*</span>
-                                                </label>
-                                                <select class="form-control js-example-basic-single" name="categorie"
-                                                    required>
-                                                    <option value="" disabled selected>Selectionner</option>
+                                            
 
-                                                    <?php $__currentLoopData = $data_categorie; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                        <?php echo $__env->make(
-                                                            'backend.pages.menu.produit.partials.subCategorieOption',
-                                                            ['category' => $categorie]
-                                                        , \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                </select>
-                                            </div>
+                                            
 
-                                            <div class="col-md-8">
-                                                <label class="form-label" for="meta-title-input">Libellé <span
-                                                        class="text-danger">*</span>
-                                                </label>
-                                                <input type="text" name="nom" class="form-control" id="SALADE NICOISE"
-                                                    required>
-                                            </div>
+                                            <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show material-shadow"
+                                            role="alert">
+                                            <i class="ri-airplay-line label-icon"></i><strong>Pour ajuster le stock : </strong>
+                                            <ol>
+                                                <li>Choisir le mouvement (Ajouter ou soustraire)</li>
+                                                <li>Ajouter la quantité</li>
+                                                <li>Vous pouvez desactiver ou activer le stock en cliquant sur le bouton statut en bas</li>
+                                            </ol>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+
+                                            <div class="row mt-4">
+                                                <?php $__currentLoopData = $data_categorie_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <div class="col-md-12">
+                                                        <h4 class="my-3"> <?php echo e($categorie['name']); ?> </h4>
+                                                        <div>
+                                                           <?php $__currentLoopData = $categorie->produit_menus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                           <div class="form-check form-check-dark">
+                                                            <input class="form-check-input" type="checkbox" id="formCheck<?php echo e($produit->id); ?>">
+                                                            <label class="form-check-label" for="formCheck<?php echo e($produit->id); ?>">
+                                                               <?php echo e($produit->nom); ?>  <i class="text-danger"> <?php echo e($produit->prix); ?> FCFA</i>
+                                                            </label>
+                                                        </div>
+                                                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </div>
+                                                   
+                                                </div><!--end col-->
+                    
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            </div><!--end row-->
 
                                         </div>
-                                       
+
                                     </div>
                                 </div>
                                 <!-- end card -->

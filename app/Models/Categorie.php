@@ -90,4 +90,9 @@ class categorie extends Model
     {
         return $this->hasMany(Achat::class);
     }
+
+    public function produit_menus() 
+    {
+        return $this->hasMany(ProduitMenu::class);
+    }
 }

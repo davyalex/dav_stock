@@ -5,7 +5,7 @@
         <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 
         @slot('li_1')
-           Menu
+            Menu
         @endslot
         @slot('title')
             Créer un nouveau menu
@@ -19,12 +19,12 @@
                     <form id="formSend" autocomplete="off" class="needs-validation" novalidate enctype="multipart/form-data">
                         @csrf
                         <div class="row">
-                            <div class="col-lg-8">
+                            <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="mb-3 row">
 
-                                            <div class="mb-3 col-md-12">
+                                            {{-- <div class="mb-3 col-md-12">
                                                 <label class="form-label" for="product-title-input">Sélectionner une
                                                     categorie <span class="text-danger">*</span>
                                                 </label>
@@ -39,18 +39,55 @@
                                                         )
                                                     @endforeach
                                                 </select>
+                                            </div> --}}
+
+                                            {{-- <div class="col-md-8">
+                                                <label class="form-label" for="meta-title-input">Libellé 
+                                                </label>
+                                                <input type="text" name="nom" class="form-control"
+                                                    id="SALADE NICOISE">
                                             </div>
 
                                             <div class="col-md-8">
-                                                <label class="form-label" for="meta-title-input">Libellé <span
-                                                        class="text-danger">*</span>
+                                                <label class="form-label" for="meta-title-input">Date 
                                                 </label>
-                                                <input type="text" name="nom" class="form-control" id="SALADE NICOISE"
-                                                    required>
-                                            </div>
+                                                <input type="date" name="nom" class="form-control"
+                                                    id="SALADE NICOISE" required>
+                                            </div> --}}
+
+                                            <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show material-shadow"
+                                            role="alert">
+                                            <i class="ri-airplay-line label-icon"></i><strong>Pour ajuster le stock : </strong>
+                                            <ol>
+                                                <li>Choisir le mouvement (Ajouter ou soustraire)</li>
+                                                <li>Ajouter la quantité</li>
+                                                <li>Vous pouvez desactiver ou activer le stock en cliquant sur le bouton statut en bas</li>
+                                            </ol>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+
+                                            <div class="row mt-4">
+                                                @foreach ($data_categorie_produit as $categorie)
+                                                <div class="col-md-12">
+                                                        <h4 class="my-3"> {{$categorie['name']}} </h4>
+                                                        <div>
+                                                           @foreach ($categorie->produit_menus as $produit)
+                                                           <div class="form-check form-check-dark">
+                                                            <input class="form-check-input" type="checkbox" id="formCheck{{$produit->id}}">
+                                                            <label class="form-check-label" for="formCheck{{$produit->id}}">
+                                                               {{$produit->nom}}  <i class="text-danger"> {{$produit->prix}} FCFA</i>
+                                                            </label>
+                                                        </div>
+                                                           @endforeach
+                                                        </div>
+                                                   
+                                                </div><!--end col-->
+                    
+                                                @endforeach
+                                            </div><!--end row-->
 
                                         </div>
-                                       
+
                                     </div>
                                 </div>
                                 <!-- end card -->
