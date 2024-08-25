@@ -210,6 +210,51 @@
                     </div>
                 </li>
 
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarDepense" data-bs-toggle="collapse" role="button"
+                        aria-expanded="true" aria-controls="sidebarDepense">
+                        <i class="ri ri-wallet-fill"></i> <span>DEPENSES</span>
+                    </a>
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('categorie-depense.*') || Route::is('depense.*') ? 'show' : ''); ?>"
+                        id="sidebarDepense">
+                        <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('categorie-depense.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('categorie-depense.*') ? 'active' : ''); ?>">Categorie depense</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('depense.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('depense.*') ? 'active' : ''); ?>">Depense</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarMenu" data-bs-toggle="collapse" role="button"
+                        aria-expanded="true" aria-controls="sidebarMenu">
+                        <i class="ri ri-file-list-line"></i> <span>MENU</span>
+                    </a>
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('menu.*')|| Route::is('produit-menu.*') ? 'show' : ''); ?>"
+                        id="sidebarMenu">
+                        <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('produit-menu.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('produit-menu.*') ? 'active' : ''); ?>">Produit du menu</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('menu.create')); ?>"
+                                    class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Menu</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
         </div>
         </li>
 

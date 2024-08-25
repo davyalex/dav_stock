@@ -21,7 +21,7 @@ class categorie extends Model
         'url',
         'position',
         'parent_id',
-        'type' // categorie-stock ? categorie-simple
+        'type' // categorie-stock ? categorie-simple menu
 
     ];
 

@@ -1,23 +1,23 @@
-@extends('backend.layouts.master')
 
-@section('content')
-    @component('backend.components.breadcrumb')
-        <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 
-        @slot('li_1')
+<?php $__env->startSection('content'); ?>
+    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
+        <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
+
+        <?php $__env->slot('li_1'); ?>
             Produit menu
-        @endslot
-        @slot('title')
+        <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?>
             Créer un nouveau produit
-        @endslot
-    @endcomponent
+        <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
 
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
                     <form id="formSend" autocomplete="off" class="needs-validation" novalidate enctype="multipart/form-data">
-                        @csrf
+                        <?php echo csrf_field(); ?>
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="card">
@@ -32,12 +32,12 @@
                                                     required>
                                                     <option value="" disabled selected>Selectionner</option>
 
-                                                    @foreach ($data_categorie as $categorie)
-                                                        @include(
+                                                    <?php $__currentLoopData = $data_categorie; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <?php echo $__env->make(
                                                             'backend.pages.menu.produit.partials.subCategorieOption',
                                                             ['category' => $categorie]
-                                                        )
-                                                    @endforeach
+                                                        , \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </select>
                                             </div>
 
@@ -45,10 +45,10 @@
                                                 <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" name="nom" class="form-control"
-                                                    id="SALADE NICOISE" required>
+                                                <input type="text" name="nom" class="form-control" id="SALADE NICOISE"
+                                                    required>
                                             </div>
-
+                                           
                                             <div class="col-md-4 mb-3">
                                                 <label class="form-label" for="meta-title-input">prix <span
                                                         class="text-danger">*</span>
@@ -64,12 +64,10 @@
                                             <textarea name="description" id="ckeditor-classic"></textarea>
                                         </div>
                                         <div class="col-md-12 mt-3">
-                                            <label class="form-check-label" for="customAff">Visible <span>(activé par defaut
-                                                    )</span> </label>
-
+                                            <label class="form-check-label" for="customAff">Visible  <span>(activé par defaut )</span> </label>
+                                        
                                             <div class="form-check form-switch form-switch-lg col-md-2" dir="ltr">
-                                                <input type="checkbox" name="statut" class="form-check-input"
-                                                    id="customAff" checked>
+                                                <input type="checkbox" name="statut" class="form-check-input" id="customAff" checked>
                                             </div>
                                             <div class="valid-feedback">
                                                 Looks good!
@@ -151,17 +149,17 @@
 
         <!--end row-->
 
-    @section('script')
-        <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
+    <?php $__env->startSection('script'); ?>
+        <script src="<?php echo e(URL::asset('build/libs/prismjs/prism.js')); ?>"></script>
         <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
-        <script src="{{ URL::asset('build/js/pages/modal.init.js') }}"></script>
-        {{-- <script src="{{ URL::asset('build/js/pages/form-editor.init.js') }}"></script> --}}
-        <script src="{{ URL::asset('build/tinymce/tinymce.min.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
+        <script src="<?php echo e(URL::asset('build/js/pages/modal.init.js')); ?>"></script>
+        
+        <script src="<?php echo e(URL::asset('build/tinymce/tinymce.min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js')); ?>"></script>
 
-        <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/ecommerce-product-create.init.js') }}"></script>
-        <script src="{{ URL::asset('build/js/app.js') }}"></script>
+        <script src="<?php echo e(URL::asset('build/libs/dropzone/dropzone-min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/js/pages/ecommerce-product-create.init.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
         <script>
             //script for to send data 
@@ -212,7 +210,7 @@
                 });
 
                 $.ajax({
-                    url: "{{ route('produit-menu.store') }}", // Adjust the route as needed
+                    url: "<?php echo e(route('produit-menu.store')); ?>", // Adjust the route as needed
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -233,7 +231,7 @@
                                 buttonsStyling: false,
                                 showCloseButton: true
                             })
-                            var url = "{{ route('produit-menu.index') }}" // redirect route stock
+                            var url = "<?php echo e(route('produit-menu.index')); ?>" // redirect route stock
 
                             window.location.replace(url);
                         } else if (response == 'The nom has already been taken.') {
@@ -254,5 +252,7 @@
                 });
             });
         </script>
-    @endsection
-@endsection
+    <?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\Restaurant-NEUILLY-\resources\views/backend/pages/menu/produit/create.blade.php ENDPATH**/ ?>

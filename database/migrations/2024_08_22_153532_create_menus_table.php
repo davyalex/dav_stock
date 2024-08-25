@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
             $table->string('libelle');
+            $table->date('date_menu')->nullable();
          
                  //foreign table
             $table->foreignId('user_id')

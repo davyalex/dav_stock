@@ -41,9 +41,7 @@ class CategorieController extends Controller
             'name' => Str::lower($request['name']),
             'status' => $request['status'],
             'url' => $request['url'],
-            'type_produit_id' => $request['type_produit'],
             'parent_id' => $request['type_produit'],
-
             'position' => $data_count + 1,
         ]);
 

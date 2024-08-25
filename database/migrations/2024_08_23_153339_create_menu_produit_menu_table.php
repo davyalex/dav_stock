@@ -30,7 +30,7 @@ return new class extends Migration
             //foreign table
             $table->foreignId('produit_menus_id')
                 ->nullable()
-                ->constrained('produit_menu')
+                ->constrained('produit_menus')
                 ->onUpdate('cascade')
                 ->onDelete('cascade ');
 

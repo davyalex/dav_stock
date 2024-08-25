@@ -35,4 +35,15 @@ class MenuController extends Controller
             return $e->getMessage();
         }
     }
+
+
+    public function store(Request $request){
+        try {
+           dd($request->all());
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
+    }
+
+    
 }

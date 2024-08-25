@@ -9,20 +9,23 @@
               </div>
               <!-- Accordions with Plus Icon -->
               @foreach ($data_categorie as $key => $categorie)
-                 
                   <div>
+
                       <hr>
                       <li class="" style="list-style: none">
-                        <i class="ri-drag-move-fill align-bottom handle"></i> <a class="fs-5 fw-medium" href="{{ $categorie->url }}">{{ $categorie->name }}</a>
-                          <a href="{{ route('categorie.edit', $categorie['id']) }}" class="fs-5"
+                          <i class="ri-drag-move-fill align-bottom handle"></i> <a class="fs-5 fw-medium"
+                              href="{{ $categorie->url }}">{{ $categorie->name }}</a>
+                          <a href="{{ route('categorie.edit', $categorie['id']) }}"
+                              class="fs-5 {{ in_array($categorie->type, ['menu', 'categorie-stock']) ? 'd-none' : '' }}"
                               style="margin-left:30px"> <i class=" ri ri-edit-2-fill ml-4 text-success"></i></a>
 
                           <a href="{{ route('categorie.add-subCat', $categorie['id']) }}" class="fs-5"> <i
                                   class=" ri ri-add-circle-fill ml-4"></i>
                           </a>
                           @if ($categorie['children_count'] == 0)
-                              <a href="#" data-id="{{ $categorie['id'] }}" class="fs-5 delete"> <i
-                                      class="ri ri-delete-bin-2-line text-danger "></i>
+                              <a href="#" data-id="{{ $categorie['id'] }}"
+                                  class="fs-5 delete  {{ in_array($categorie->type, ['menu', 'categorie-stock']) ? 'd-none' : '' }}">
+                                  <i class="ri ri-delete-bin-2-line text-danger "></i>
                               </a>
                           @endif
 

@@ -13,6 +13,7 @@ class Menu extends Model
     protected $fillable = [
         'libelle',
         'user_id',
+        'date_menu',
     ];
 
  

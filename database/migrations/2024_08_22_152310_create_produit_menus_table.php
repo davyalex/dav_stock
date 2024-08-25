@@ -19,7 +19,7 @@ return new class extends Migration
             $table->double('prix')->nullable();
             $table->longText('description')->nullable();
             $table->enum('statut', ['active', 'desactive'])->default('active');
-            $table->enum('type', ['plat', 'boisson'])->nullable();
+            $table->string('type')->nullable();
 
 
             //foreign table
