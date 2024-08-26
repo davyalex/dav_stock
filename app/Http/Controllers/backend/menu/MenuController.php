@@ -28,7 +28,8 @@ class MenuController extends Controller
     {
         try {
 
-            $data_categorie_produit = Categorie::withWhereHas('produit_menus')->get();
+            $data_categorie_produit = Categorie::withWhereHas('children.produit_menus')->whereType('menu')->get();
+            // dd( $data_categorie_produit->toArray());
 
             return view('backend.pages.menu.create', compact('data_categorie_produit'));
         } catch (\Throwable $e) {
@@ -73,19 +74,45 @@ class MenuController extends Controller
     public function edit($id)
     {
         try {
-            // $data_menu = Menu::with('produit_menu')->find($id);
-            $data_categorie_produit = Categorie::withWhereHas('produit_menus')->get();
+            $data_categorie_produit = Categorie::withWhereHas('children.produit_menus')->whereType('menu')->get();
+
             $data_menu = Menu::find($id);
 
-        //    dd($data_produit->produit_menu->toArray());
+            //    dd($data_produit->produit_menu->toArray());
 
-            return view('backend.pages.menu.edit', compact('data_categorie_produit' , 'data_menu'));
+            return view('backend.pages.menu.edit', compact('data_categorie_produit', 'data_menu'));
         } catch (\Throwable $e) {
             Alert::error($e->getMessage(),  'Une erreur s\'est produite');
             return back();
         }
     }
 
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'date_menu' => 'required',
+                // required produit min:1
+                'produits' => 'required|array|min:1',
+            ]);
+
+            $libelle = $request['libelle'] ? $request['libelle'] : 'Menu du ' . $request->date_menu;
+            $data_menu = Menu::find($id);
+            $data_menu->update([
+                'date_menu' => $request->date_menu,
+                'libelle' => $libelle,
+                'user_id' => Auth::id(),
+            ]);
+            //method attach product with menu
+            $data_menu->produit_menu()->sync($request['produits']);
+            Alert::success('Operation réussi', 'Success Message');
+            return back();
+        } catch (\Throwable $e) {
+            Alert::error($e->getMessage(),  'Une erreur s\'est produite');
+            return back();
+        }
+    }
 
 
 

@@ -45,10 +45,10 @@
                                                 <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" name="nom" class="form-control" id="SALADE NICOISE"
-                                                    required>
+                                                <input type="text" name="nom" class="form-control"
+                                                    id="SALADE NICOISE" required>
                                             </div>
-                                           
+
                                             <div class="col-md-4 mb-3">
                                                 <label class="form-label" for="meta-title-input">prix <span
                                                         class="text-danger">*</span>
@@ -64,10 +64,12 @@
                                             <textarea name="description" id="ckeditor-classic"></textarea>
                                         </div>
                                         <div class="col-md-12 mt-3">
-                                            <label class="form-check-label" for="customAff">Visible  <span>(activé par defaut )</span> </label>
-                                        
+                                            <label class="form-check-label" for="customAff">Visible <span>(activé par defaut
+                                                    )</span> </label>
+
                                             <div class="form-check form-switch form-switch-lg col-md-2" dir="ltr">
-                                                <input type="checkbox" name="statut" class="form-check-input" id="customAff" checked>
+                                                <input type="checkbox" name="statut" class="form-check-input"
+                                                    id="customAff" checked>
                                             </div>
                                             <div class="valid-feedback">
                                                 Looks good!

@@ -1,24 +1,24 @@
-@extends('backend.layouts.master')
-@section('title')
-    @lang('translation.datatables')
-@endsection
-@section('css')
+
+<?php $__env->startSection('title'); ?>
+    <?php echo app('translator')->get('translation.datatables'); ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('css'); ?>
     <!--datatable css-->
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
     <!--datatable responsive css-->
     <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet"
         type="text/css" />
     <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
-@endsection
-@section('content')
-    @component('backend.components.breadcrumb')
-        @slot('li_1')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
+        <?php $__env->slot('li_1'); ?>
             Liste des Menus
-        @endslot
-        @slot('title')
+        <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?>
             Menu
-        @endslot
-    @endcomponent
+        <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
 
 
 
@@ -27,7 +27,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Liste des produits</h5>
-                    <a href="{{ route('menu.create') }}" type="button" class="btn btn-primary ">Créer
+                    <a href="<?php echo e(route('menu.create')); ?>" type="button" class="btn btn-primary ">Créer
                         un menu</a>
                 </div>
                 <div class="card-body">
@@ -44,13 +44,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data_menu as $key => $item)
-                                    <tr id="row_{{ $item['id'] }}">
-                                        <td> {{ ++$key }} </td>                                       
-                                        <td>{{ $item['libelle'] }}</td>
-                                        <td>{{ $item['date_menu'] }}</td>
-                                        <td>{{ $item['user']['first_name'] }}</td>
-                                        <td> {{ $item['created_at'] }} </td>
+                                <?php $__currentLoopData = $data_menu; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <tr id="row_<?php echo e($item['id']); ?>">
+                                        <td> <?php echo e(++$key); ?> </td>                                       
+                                        <td><?php echo e($item['libelle']); ?></td>
+                                        <td><?php echo e($item['date_menu']); ?></td>
+                                        <td><?php echo e($item['user']['first_name']); ?></td>
+                                        <td> <?php echo e($item['created_at']); ?> </td>
                                         <td>
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
@@ -58,16 +58,13 @@
                                                     <i class="ri-more-fill align-middle"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    {{-- <li><a href="{{route('produit.show' , $item['id'])}}" class="dropdown-item"><i
-                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            View</a>
-                                                    </li> --}}
-                                                    <li><a href="{{route('menu.edit' ,  $item['id'])}}" type="button" class="dropdown-item edit-item-btn"><i
+                                                    
+                                                    <li><a href="<?php echo e(route('menu.edit' ,  $item['id'])); ?>" type="button" class="dropdown-item edit-item-btn"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             detail</a></li>
                                                     <li>
                                                         <a href="#" class="dropdown-item remove-item-btn delete"
-                                                            data-id={{ $item['id'] }}>
+                                                            data-id=<?php echo e($item['id']); ?>>
                                                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
                                                             Delete
                                                         </a>
@@ -76,8 +73,8 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    {{-- @include('backend.pages.produit.edit') --}}
-                                @endforeach
+                                    
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
                     </div>
@@ -87,9 +84,9 @@
     </div>
     <!--end row-->
 
-    {{-- @include('backend.pages.produit.create') --}}
-@endsection
-@section('script')
+    
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
@@ -103,10 +100,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
-    <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
+    <script src="<?php echo e(URL::asset('build/js/pages/datatables.init.js')); ?>"></script>
 
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-    {{-- <script src="{{URL::asset('myJs/js/delete_row.js')}}"></script> --}}
+    <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+    
 
     <script>
        $(document).ready(function(){
@@ -115,4 +112,6 @@
        })
     </script>
    
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/menu/index.blade.php ENDPATH**/ ?>

@@ -1,24 +1,24 @@
-@extends('backend.layouts.master')
 
-@section('content')
-    @component('backend.components.breadcrumb')
-        <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 
-        @slot('li_1')
+<?php $__env->startSection('content'); ?>
+    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
+        <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
+
+        <?php $__env->slot('li_1'); ?>
             Menu
-        @endslot
-        @slot('title')
+        <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?>
             Modifier un menu
-        @endslot
-    @endcomponent
+        <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
 
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('menu.update' , $data_menu['id']) }}" autocomplete="off" class="needs-validation"
+                    <form method="POST" action="<?php echo e(route('menu.update' , $data_menu['id'])); ?>" autocomplete="off" class="needs-validation"
                         novalidate enctype="multipart/form-data">
-                        @csrf
+                        <?php echo csrf_field(); ?>
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
@@ -36,7 +36,7 @@
                                             <div class="col-md-8">
                                                 <label class="form-label" for="meta-title-input">Libellé
                                                 </label>
-                                                <input type="text" name="libelle" value="{{ $data_menu['libelle'] }}"
+                                                <input type="text" name="libelle" value="<?php echo e($data_menu['libelle']); ?>"
                                                     class="form-control">
                                             </div>
 
@@ -44,12 +44,12 @@
                                                 <label class="form-label" for="meta-title-input">Date <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="date" id="currentDate" value="{{ $data_menu['date_menu'] }}"
+                                                <input type="date" id="currentDate" value="<?php echo e($data_menu['date_menu']); ?>"
                                                     name="date_menu" class="form-control" required>
                                             </div>
 
                                             <!-- ========== Start product menu for checked ========== -->
-                                            @include('backend.pages.menu.produit.partials.categorieProductEdit')
+                                            <?php echo $__env->make('backend.pages.menu.produit.partials.categorieProductEdit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                                             <!-- ========== End product menu for checked ========== -->
 
                                         </div>
@@ -72,30 +72,8 @@
         </div><!-- end col -->
 
         <!--end row-->
-    {{-- @section('script')
-        <script>
-            $(function() {
-                // Vérifier lors du clic
-                var checkedItems = []
-                $('.produit').change(function() {
-                    if ($(this).is(':checked')) {
-                        checkedItems.push($(this).val());
-                    } else {
-                        var index = checkedItems.indexOf($(this).val());
-                        if (index !== -1) {
-                            checkedItems.splice(index, 1);
-                        }
-                    }
+    
 
-                    //disabled and enable button 
-                    if (checkedItems.length > 0) {
-                        $('#btnSubmit').prop('disabled', false);
-                    } else {
-                        $('#btnSubmit').prop('disabled', true);
-                    }
-                });
-            });
-        </script>
-    @endsection --}}
+<?php $__env->stopSection(); ?>
 
-@endsection
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/menu/edit.blade.php ENDPATH**/ ?>
