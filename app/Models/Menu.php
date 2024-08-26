@@ -19,7 +19,7 @@ class Menu extends Model
  
     public function produit_menu()
     {
-        return $this->belongsToMany(ProduitMenu::class, 'menu_produit_menu');
+        return $this->belongsToMany(ProduitMenu::class, 'menu_produit_menu')->withTimestamps();
     }
 
     public function user()

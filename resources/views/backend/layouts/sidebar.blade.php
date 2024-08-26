@@ -332,7 +332,7 @@
                             </li>
 
                             <li class="nav-item active">
-                                <a href="{{ route('menu.create') }}"
+                                <a href="{{ route('menu.index') }}"
                                     class="nav-link {{ Route::is('menu.*') ? 'active' : '' }}">Menu</a>
                             </li>
                         </ul>

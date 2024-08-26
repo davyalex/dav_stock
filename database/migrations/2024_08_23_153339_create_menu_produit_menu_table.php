@@ -28,11 +28,13 @@ return new class extends Migration
                 ->onDelete('cascade ');
 
             //foreign table
-            $table->foreignId('produit_menus_id')
+            $table->foreignId('produit_menu_id')
                 ->nullable()
                 ->constrained('produit_menus')
                 ->onUpdate('cascade')
                 ->onDelete('cascade ');
+
+                $table->softDeletes();
 
             $table->timestamps();
         });

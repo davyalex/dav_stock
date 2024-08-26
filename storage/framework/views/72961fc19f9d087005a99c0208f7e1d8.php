@@ -44,7 +44,7 @@
                                                         class="text-danger">*</span>
                                                 </label>
                                                 <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>"
-                                                    name="date" class="form-control" required>
+                                                    name="date_menu" class="form-control" required>
                                             </div>
 
                                             <div class="col-lg-6">

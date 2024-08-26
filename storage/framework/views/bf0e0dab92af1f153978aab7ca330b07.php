@@ -248,7 +248,7 @@
                             </li>
 
                             <li class="nav-item active">
-                                <a href="<?php echo e(route('menu.create')); ?>"
+                                <a href="<?php echo e(route('menu.index')); ?>"
                                     class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Menu</a>
                             </li>
                         </ul>

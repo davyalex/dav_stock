@@ -1,24 +1,24 @@
-@extends('backend.layouts.master')
 
-@section('content')
-    @component('backend.components.breadcrumb')
-        <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 
-        @slot('li_1')
+<?php $__env->startSection('content'); ?>
+    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
+        <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
+
+        <?php $__env->slot('li_1'); ?>
             Menu
-        @endslot
-        @slot('title')
-            Créer un nouveau menu
-        @endslot
-    @endcomponent
+        <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?>
+            Modifier un menu
+        <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
 
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('menu.store') }}" autocomplete="off" class="needs-validation"
+                    <form method="POST" action="<?php echo e(route('menu.store')); ?>" autocomplete="off" class="needs-validation"
                         novalidate enctype="multipart/form-data">
-                        @csrf
+                        <?php echo csrf_field(); ?>
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
@@ -36,14 +36,14 @@
                                             <div class="col-md-8">
                                                 <label class="form-label" for="meta-title-input">Libellé
                                                 </label>
-                                                <input type="text" name="libelle" class="form-control">
+                                                <input type="text" name="libelle" value="<?php echo e($data_menu['libelle']); ?>" class="form-control">
                                             </div>
 
                                             <div class="col-md-4 mb-3">
                                                 <label class="form-label" for="meta-title-input">Date <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>"
+                                                <input type="date" id="currentDate" value="<?php echo e($data_menu['date_menu']); ?>"
                                                     name="date_menu" class="form-control" required>
                                             </div>
 
@@ -52,26 +52,39 @@
                                             </div>
 
                                             <div class="row mt-4">
-                                                @foreach ($data_categorie_produit as $categorie)
-                                                    <div class="col-md-6">
-                                                        <h4 class="my-3 text-capitalize"> {{ $categorie['name'] }} </h4>
+                                                 <?php
+                                                            //get produit_menu
+                                                            $menu_produit = [];
+                                                            foreach ($data_menu['produit_menu'] as  $value) {
+                                                               array_push( $menu_produit , $value['id']);
+                                                             
+                                                            }
+                                                            
+                                                          
 
-                                                        @foreach ($categorie->produit_menus as $produit)
+                                                        ?>
+                                                <?php $__currentLoopData = $data_categorie_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <div class="col-md-6">
+                                                        <h4 class="my-3 text-capitalize"> <?php echo e($categorie['name']); ?> </h4>
+                                                       
+
+                                                        <?php $__currentLoopData = $categorie->produit_menus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                
                                                             <div class="form-check form-check-dark m-2 ">
                                                                 <input class="form-check-input produit"
-                                                                    value="{{ $produit['id'] }}" name="produits[]"
-                                                                    type="checkbox" id="formCheck{{ $produit->id }}">
+                                                                    value="<?php echo e($produit['id']); ?>" name="produits[]"
+                                                                    type="checkbox" id="formCheck<?php echo e($produit->id); ?>" <?php echo e(in_array($produit->id ,$menu_produit ) ? 'checked' :  ''); ?>>
                                                                 <label class="form-check-label"
-                                                                    for="formCheck{{ $produit->id }}">
-                                                                    {{ $produit->nom }} <i class="text-danger">
-                                                                        {{ $produit->prix }} FCFA</i>
+                                                                    for="formCheck<?php echo e($produit->id); ?>">
+                                                                    <?php echo e($produit->nom); ?> <i class="text-danger">
+                                                                        <?php echo e($produit->prix); ?> FCFA</i>
                                                                 </label>
                                                             </div>
-                                                        @endforeach
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 
                                                     </div><!--end col-->
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </div><!--end row-->
 
                                         </div>
@@ -94,7 +107,7 @@
         </div><!-- end col -->
 
         <!--end row-->
-    @section('script')
+    <?php $__env->startSection('script'); ?>
         <script>
             $(function() {
                 // Vérifier lors du clic
@@ -118,6 +131,8 @@
                 });
             });
         </script>
-    @endsection
+    <?php $__env->stopSection(); ?>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\Restaurant-NEUILLY-\resources\views/backend/pages/menu/edit.blade.php ENDPATH**/ ?>

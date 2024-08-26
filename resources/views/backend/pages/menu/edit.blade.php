@@ -8,7 +8,7 @@
             Menu
         @endslot
         @slot('title')
-            Créer un nouveau menu
+            Modifier un menu
         @endslot
     @endcomponent
 
@@ -36,14 +36,14 @@
                                             <div class="col-md-8">
                                                 <label class="form-label" for="meta-title-input">Libellé
                                                 </label>
-                                                <input type="text" name="libelle" class="form-control">
+                                                <input type="text" name="libelle" value="{{$data_menu['libelle']}}" class="form-control">
                                             </div>
 
                                             <div class="col-md-4 mb-3">
                                                 <label class="form-label" for="meta-title-input">Date <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>"
+                                                <input type="date" id="currentDate" value="{{$data_menu['date_menu']}}"
                                                     name="date_menu" class="form-control" required>
                                             </div>
 
@@ -52,15 +52,28 @@
                                             </div>
 
                                             <div class="row mt-4">
+                                                 @php
+                                                            //get produit_menu
+                                                            $menu_produit = [];
+                                                            foreach ($data_menu['produit_menu'] as  $value) {
+                                                               array_push( $menu_produit , $value['id']);
+                                                             
+                                                            }
+                                                            
+                                                          
+
+                                                        @endphp
                                                 @foreach ($data_categorie_produit as $categorie)
                                                     <div class="col-md-6">
                                                         <h4 class="my-3 text-capitalize"> {{ $categorie['name'] }} </h4>
+                                                       
 
                                                         @foreach ($categorie->produit_menus as $produit)
+                                                                
                                                             <div class="form-check form-check-dark m-2 ">
                                                                 <input class="form-check-input produit"
                                                                     value="{{ $produit['id'] }}" name="produits[]"
-                                                                    type="checkbox" id="formCheck{{ $produit->id }}">
+                                                                    type="checkbox" id="formCheck{{ $produit->id }}" {{in_array($produit->id ,$menu_produit ) ? 'checked' :  ''}}>
                                                                 <label class="form-check-label"
                                                                     for="formCheck{{ $produit->id }}">
                                                                     {{ $produit->nom }} <i class="text-danger">
