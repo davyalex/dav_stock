@@ -16,20 +16,20 @@ class CategorieTableSeeder extends Seeder
     {
         $data = [
             [
-                'name' => 'bar',
-                'slug' => 'bar',
+                'name' => 'Boissons',
+                'slug' => 'boissons',
                 'url' => 'bar',
-                'type' => 'categorie-stock',
+                'type' => 'boissons',
                 'status' => 'active',
                 'position' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'name' => 'restaurant',
-                'slug' => 'restaurant',
+                'name' => 'Ingredients',
+                'slug' => 'ingredients',
                 'url' => 'restaurant',
-                'type' => 'categorie-stock',
+                'type' => 'ingredients',
                 'status' => 'active',
                 'position' => 2,
                 'created_at' => Carbon::now(),
@@ -38,10 +38,10 @@ class CategorieTableSeeder extends Seeder
             ],
 
             [
-                'name' => 'menu',
-                'slug' => 'menu',
-                'url' => 'menu',
-                'type' => 'menu',
+                'name' => 'Plats',
+                'slug' => 'plats',
+                'url' => 'restaurant',
+                'type' => 'plats',
                 'status' => 'active',
                 'position' => 3,
                 'created_at' => Carbon::now(),

@@ -7,20 +7,19 @@ use App\Models\Format;
 use App\Models\Produit;
 use App\Models\Categorie;
 use App\Models\Fournisseur;
-use App\Models\ProduitMenu;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
-class ProduitMenuController extends Controller
+class PlatController extends Controller
 {
     //
     public function index()
     {
-        $data_produit_menu = ProduitMenu::all();
-        // dd(  $data_produit_menu->toArray());
-        return view('backend.pages.menu.produit.index', compact('data_produit_menu'));
+        $data_plat = Produit::all();
+        // dd(  $plat->toArray());
+        return view('backend.pages.menu.produit.index', compact('data_plat'));
     }
 
     public function create(Request $request)
@@ -28,10 +27,10 @@ class ProduitMenuController extends Controller
         try {
 
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
-                ->whereIn('name', ['menu'])
+                ->whereIn('type', ['plats'])
                 ->OrderBy('position', 'ASC')->get();
 
-            // dd($data_produit_menu->toArray());
+            // dd($plat->toArray());
 
             return view('backend.pages.menu.produit.create', compact('data_categorie'));
         } catch (\Throwable $e) {
@@ -48,9 +47,8 @@ class ProduitMenuController extends Controller
                 'nom' => 'required|unique:produits',
                 'description' => '',
                 'categorie' => 'required',
-                'prix' => '',
+                'prix' => 'required',
                 'statut' => '',
-                'type' => '',
             ]);
 
             //statut stock libelle active ? desactive
@@ -66,19 +64,19 @@ class ProduitMenuController extends Controller
             $principaCat =  $principaCat->getPrincipalCategory();
 
             $sku = 'PM-' . strtoupper(Str::random(8));
-            $data_produit_menu = ProduitMenu::firstOrCreate([
+            $plat = Produit::firstOrCreate([
                 'nom' => $request['nom'],
                 'code' =>  $sku,
                 'description' => $request['description'],
                 'categorie_id' => $request['categorie'],
                 'prix' => $request['prix'],
-                'type' =>   $principaCat['name'],
+                'type_id' =>   $principaCat['id'], // type produit
                 'statut' => $statut,
                 'user_id' => Auth::id(),
             ]);
 
             if (request()->hasFile('imagePrincipale')) {
-                $data_produit_menu->addMediaFromRequest('imagePrincipale')->toMediaCollection('ProduitImage');
+                $plat->addMediaFromRequest('imagePrincipale')->toMediaCollection('ProduitImage');
             }
 
 
@@ -95,7 +93,7 @@ class ProduitMenuController extends Controller
                     file_put_contents($tempFilePath, $decodedFile);
 
                     // Add file to media library
-                    $data_produit_menu->addMedia($tempFilePath)->toMediaCollection('galleryProduit');
+                    $plat->addMedia($tempFilePath)->toMediaCollection('galleryProduit');
 
                     // // Delete the temporary file
                     // unlink($tempFilePath);
@@ -114,8 +112,8 @@ class ProduitMenuController extends Controller
     public function show($id)
     {
         try {
-            $data_produit_menu = ProduitMenu::find($id);
-            return view('backend.pages.produit.show', compact('data_produit_menu'));
+            $plat = Produit::find($id);
+            return view('backend.pages.produit.show', compact('plat'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -127,15 +125,15 @@ class ProduitMenuController extends Controller
         try {
            
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
-                ->whereIn('name', ['menu'])
+                ->whereIn('type', ['plats'])
                 ->OrderBy('position', 'ASC')->get();
 
-            $data_produit_menu = ProduitMenu::find($id);
+            $data_plat = Produit::find($id);
 
             //get Image from database
             $galleryProduit = [];
 
-            foreach ($data_produit_menu->getMedia('galleryProduit') as $value) {
+            foreach ($data_plat->getMedia('galleryProduit') as $value) {
                 // Read the file content
                 $fileContent = file_get_contents($value->getPath());
 
@@ -147,7 +145,7 @@ class ProduitMenuController extends Controller
             // dd($galleryProduit);
 
             $id = $id;
-            return view('backend.pages.menu.produit.edit', compact('data_produit_menu', 'data_categorie', 'galleryProduit', 'id'));
+            return view('backend.pages.menu.produit.edit', compact('data_plat', 'data_categorie', 'galleryProduit', 'id'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -160,12 +158,11 @@ class ProduitMenuController extends Controller
 
             //request validation
             $request->validate([
-                'nom' => 'required|unique:produits',
+                'nom' => 'required',
                 'description' => '',
                 'categorie' => 'required',
-                'prix' => '',
+                'prix' => 'required',
                 'statut' => '',
-                'type' => '',
             ]);
 
             //statut stock libelle active ? desactive
@@ -180,25 +177,25 @@ class ProduitMenuController extends Controller
             $principaCat = Categorie::find($request['categorie']);
             $principaCat =  $principaCat->getPrincipalCategory();
 
-            $data_produit_menu = tap(ProduitMenu::find($id))->update([
+            $plat = tap(Produit::find($id))->update([
                 'nom' => $request['nom'],
                 'description' => $request['description'],
                 'categorie_id' => $request['categorie'],
                 'prix' => $request['prix'],
-                'type' =>   $principaCat['name'], 
+                'type_id' =>   $principaCat['id'], // type produit
                 'statut' => $statut,
                 'user_id' => Auth::id(),
             ]);
 
 
             if (request()->hasFile('imagePrincipale')) {
-                $data_produit_menu->clearMediaCollection('ProduitImage');
-                $data_produit_menu->addMediaFromRequest('imagePrincipale')->toMediaCollection('ProduitImage');
+                $plat->clearMediaCollection('ProduitImage');
+                $plat->addMediaFromRequest('imagePrincipale')->toMediaCollection('ProduitImage');
             }
 
 
             if ($request->images) {
-                $data_produit_menu->clearMediaCollection('galleryProduit');
+                $plat->clearMediaCollection('galleryProduit');
 
                 foreach ($request->input('images') as $fileData) {
                     // Decode base64 file
@@ -211,7 +208,7 @@ class ProduitMenuController extends Controller
                     file_put_contents($tempFilePath, $decodedFile);
 
                     // Add file to media library
-                    $data_produit_menu->addMedia($tempFilePath)->toMediaCollection('galleryProduit');
+                    $plat->addMedia($tempFilePath)->toMediaCollection('galleryProduit');
 
                     // // Delete the temporary file
                     // unlink($tempFilePath);
@@ -234,7 +231,7 @@ class ProduitMenuController extends Controller
 
     public function delete($id)
     {
-        ProduitMenu::find($id)->delete();
+        Produit::find($id)->forceDelete();
         return response()->json([
             'status' => 200,
         ]);

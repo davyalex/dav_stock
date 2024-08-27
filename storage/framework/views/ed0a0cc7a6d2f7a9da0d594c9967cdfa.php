@@ -26,9 +26,9 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des produits</h5>
-                    <a href="<?php echo e(route('produit-menu.create')); ?>" type="button" class="btn btn-primary ">Créer
-                        un produit</a>
+                    <h5 class="card-title mb-0">Liste des plats</h5>
+                    <a href="<?php echo e(route('plat.create')); ?>" type="button" class="btn btn-primary ">Créer
+                        un plat</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -47,7 +47,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $__currentLoopData = $data_produit_menu; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__currentLoopData = $data_plat; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr id="row_<?php echo e($item['id']); ?>">
                                         <td> <?php echo e(++$key); ?> </td>
                                         <td> <?php echo e($item['statut']); ?> </td>
@@ -56,7 +56,7 @@
                                                 width="50px" alt="">
                                         </td>
                                         <td><?php echo e($item['nom']); ?></td>
-                                        <td><?php echo e($item['categorie']['name']); ?></td>
+                                        <td><?php echo e($item['categorie']['name'] ?? ''); ?></td>
                                         <td><?php echo e($item['prix']); ?></td>
                                         <td><?php echo e($item['user']['first_name']); ?></td>
                                         <td> <?php echo e($item['created_at']); ?> </td>
@@ -68,7 +68,7 @@
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
                                                     
-                                                    <li><a href="<?php echo e(route('produit-menu.edit' ,  $item['id'])); ?>" type="button" class="dropdown-item edit-item-btn"><i
+                                                    <li><a href="<?php echo e(route('plat.edit' ,  $item['id'])); ?>" type="button" class="dropdown-item edit-item-btn"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             Edit</a></li>
                                                     <li>
@@ -116,7 +116,7 @@
 
     <script>
        $(document).ready(function(){
-        var route = "produit-menu"
+        var route = "plat"
         delete_row(route);
        })
     </script>

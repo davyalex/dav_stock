@@ -20,40 +20,43 @@
                         novalidate enctype="multipart/form-data">
                         <?php echo csrf_field(); ?>
                         <div class="row">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="mb-3 row">
-                                            <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show material-shadow"
-                                                role="alert">
-                                                <i class="ri-airplay-line label-icon"></i><strong>Selectionnez les
-                                                    differents plats pour composer votre menu : </strong>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="mb-3 row">
+                                        <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show material-shadow"
+                                            role="alert">
+                                            <i class="ri-airplay-line label-icon"></i><strong>Selectionnez les
+                                                differents plats pour composer votre menu : </strong>
 
-                                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                    aria-label="Close"></button>
-                                            </div>
-
-                                            <div class="col-md-8">
-                                                <label class="form-label" for="meta-title-input">Libellé
-                                                </label>
-                                                <input type="text" name="libelle" class="form-control">
-                                            </div>
-
-                                            <div class="col-md-4 mb-3">
-                                                <label class="form-label" for="meta-title-input">Date <span
-                                                        class="text-danger">*</span>
-                                                </label>
-                                                <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>"
-                                                    name="date_menu" class="form-control" required>
-                                            </div>
-
-                                            <?php echo $__env->make('backend.pages.menu.produit.partials.categorieProduct', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close"></button>
                                         </div>
 
+                                        <div class="col-md-8">
+                                            <label class="form-label" for="meta-title-input">Libellé
+                                            </label>
+                                            <input type="text" name="libelle" class="form-control">
+                                        </div>
+
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label" for="meta-title-input">Date <span
+                                                    class="text-danger">*</span>
+                                            </label>
+                                            <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>"
+                                                name="date_menu" class="form-control" required>
+                                        </div>
+
+                                        <!-- ========== Start product menu for checked ========== -->
+                                        <?php echo $__env->make('backend.pages.menu.partials.categorieProduct', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                        <!-- ========== End product menu for checked ========== -->
+
+
                                     </div>
+
                                 </div>
-                                <!-- end card -->
-                           
+                            </div>
+                            <!-- end card -->
+
                             <!-- end col -->
 
                         </div>

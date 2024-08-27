@@ -105,7 +105,7 @@ class CategorieDepenseController extends Controller
     {
 
         try {
-            CategorieDepense::find($id)->delete();
+            CategorieDepense::find($id)->forceDelete();
 
             //modifier l'ordre des categories
             $data_categorie_depense = CategorieDepense::OrderBy('position', 'ASC')->get();

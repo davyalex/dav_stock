@@ -85,7 +85,7 @@ class DepenseController extends Controller
     {
 
         try {
-            Depense::find($id)->delete();
+            Depense::find($id)->forceDelete();
             return response()->json([
                 'status' => 200,
             ]);

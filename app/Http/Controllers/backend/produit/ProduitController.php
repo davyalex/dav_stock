@@ -26,7 +26,7 @@ class ProduitController extends Controller
         try {
 
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
-                ->whereIn('name', ['bar', 'restaurant'])
+                ->whereIn('type', ['boissons', 'ingredients'])
                 ->OrderBy('position', 'ASC')->get();
 
             // dd($data_produit->toArray());
@@ -48,7 +48,7 @@ class ProduitController extends Controller
                 'categorie' => 'required',
                 'stock' => '',
                 'stock_alerte' => '',
-                'visible' => '',
+                'statut' => '',
             ]);
 
             //get principal category of categorie request
@@ -115,7 +115,7 @@ class ProduitController extends Controller
     {
         try {
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
-                ->whereIn('name', ['bar', 'restaurant'])
+                ->whereIn('type', ['boissons', 'ingredients'])
                 ->OrderBy('position', 'ASC')->get();
 
             $data_produit = Produit::find($id);
@@ -209,7 +209,7 @@ class ProduitController extends Controller
 
     public function delete($id)
     {
-        Produit::find($id)->delete();
+        Produit::find($id)->forceDelete();
         return response()->json([
             'status' => 200,
         ]);

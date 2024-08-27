@@ -28,7 +28,7 @@ class MenuController extends Controller
     {
         try {
 
-            $data_categorie_produit = Categorie::withWhereHas('children.produit_menus')->whereType('menu')->get();
+            $data_categorie_produit = Categorie::withWhereHas('children.produits')->whereIn('type', ['plats' , 'boissons'])->get();
             // dd( $data_categorie_produit->toArray());
 
             return view('backend.pages.menu.create', compact('data_categorie_produit'));
@@ -55,7 +55,7 @@ class MenuController extends Controller
             ]);
 
             //method attach product with menu 
-            $data_menu->produit_menu()->sync($request['produits']);
+            $data_menu->produits()->sync($request['produits']);
 
             Alert::success('Operation réussi', 'Success Message');
             return back();
@@ -74,7 +74,7 @@ class MenuController extends Controller
     public function edit($id)
     {
         try {
-            $data_categorie_produit = Categorie::withWhereHas('children.produit_menus')->whereType('menu')->get();
+            $data_categorie_produit = Categorie::withWhereHas('children.produits')->whereIn('type', ['plats' , 'boissons'])->get();
 
             $data_menu = Menu::find($id);
 
@@ -105,7 +105,7 @@ class MenuController extends Controller
                 'user_id' => Auth::id(),
             ]);
             //method attach product with menu
-            $data_menu->produit_menu()->sync($request['produits']);
+            $data_menu->produits()->sync($request['produits']);
             Alert::success('Operation réussi', 'Success Message');
             return back();
         } catch (\Throwable $e) {
@@ -121,9 +121,9 @@ class MenuController extends Controller
     public function delete($id)
     {
         try {
-            DB::table('menu_produit_menu')->where('menu_id', $id)->delete();
+            DB::table('menu_produit')->where('menu_id', $id)->delete();
 
-            Menu::find($id)->delete();
+            Menu::find($id)->forceDelete();
             return response()->json([
                 'status' => 200,
             ]);

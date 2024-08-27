@@ -17,9 +17,9 @@ class Menu extends Model
     ];
 
  
-    public function produit_menu()
+    public function produits()
     {
-        return $this->belongsToMany(ProduitMenu::class, 'menu_produit_menu')->withTimestamps();
+        return $this->belongsToMany(Produit::class, 'menu_produit')->withTimestamps();
     }
 
     public function user()

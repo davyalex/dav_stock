@@ -46,7 +46,7 @@
                                                 <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" name="nom" value="<?php echo e($data_produit_menu['nom']); ?>"
+                                                <input type="text" name="nom" value="<?php echo e($data_plat['nom']); ?>"
                                                     class="form-control" id="nomProduit" required>
                                             </div>
                                           
@@ -54,7 +54,7 @@
                                                 <label class="form-label" for="meta-title-input">Prix <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="number" value="<?php echo e($data_produit_menu->prix); ?>"
+                                                <input type="number" value="<?php echo e($data_plat->prix); ?>"
                                                     name="prix" class="form-control" id="prix" required>
                                             </div>
 
@@ -63,7 +63,7 @@
                                         <div>
                                             <label>Description</label>
                                             <textarea name="description" id="ckeditor-classic">
-                                                <?php echo e($data_produit_menu['description']); ?>
+                                                <?php echo e($data_plat['description']); ?>
 
                                             </textarea>
                                         </div>
@@ -73,7 +73,7 @@
 
                                             <div class="form-check form-switch form-switch-lg col-md-2" dir="ltr">
                                                 <input type="checkbox" name="statut" class="form-check-input"
-                                                    id="customAff" <?php echo e($data_produit_menu['statut'] =='active' ? 'checked' : ''); ?>>
+                                                    id="customAff" <?php echo e($data_plat['statut'] =='active' ? 'checked' : ''); ?>>
                                             </div>
                                             <div class="valid-feedback">
                                                 Looks good!
@@ -112,7 +112,7 @@
                                                     </div>
                                                     <div class="avatar-lg">
                                                         <div class="avatar-title bg-light rounded">
-                                                            <img src="<?php echo e($data_produit_menu->getFirstMediaUrl('ProduitImage')); ?>"
+                                                            <img src="<?php echo e($data_plat->getFirstMediaUrl('ProduitImage')); ?>"
                                                                 id="product-img" class="avatar-md h-auto" />
                                                         </div>
                                                     </div>
@@ -236,7 +236,7 @@
                 });
 
                 $.ajax({
-                    url: "/produit-menu/update/" + productId, // Adjust the route as needed
+                    url: "/plat/update/" + productId, // Adjust the route as needed
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -257,7 +257,7 @@
                                 buttonsStyling: false,
                                 showCloseButton: true
                             })
-                            var url = "<?php echo e(route('produit-menu.index')); ?>" // redirect route product list
+                            var url = "<?php echo e(route('plat.index')); ?>" // redirect route product list
 
                             window.location.replace(url);
                         } else if (response == 'The nom has already been taken.') {

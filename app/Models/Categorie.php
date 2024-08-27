@@ -15,7 +15,7 @@ class categorie extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'name',
+        'name', // unique
         'slug',
         'status',
         'url',

@@ -2,17 +2,19 @@
     <?php $__currentLoopData = $categories_child; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <li>
             <a href="<?php echo e($categorie->url); ?>"><?php echo e($categorie->name); ?></a>
+          <span class=" float-end">
             <a href="<?php echo e(route('categorie.edit', $categorie['id'])); ?>" class="fs-5" style="margin-left:30px"> <i
-                    class=" ri ri-edit-2-fill ml-4"></i></a>
+                class=" ri ri-edit-2-fill ml-4"></i></a>
 
-            <a href="<?php echo e(route('categorie.add-subCat', $categorie['id'])); ?>" class="fs-5"> <i
-                    class=" ri ri-add-circle-fill ml-4"></i>
+        <a href="<?php echo e(route('categorie.add-subCat', $categorie['id'])); ?>" class="fs-5"> <i
+                class=" ri ri-add-circle-fill ml-4"></i>
+        </a>
+        <?php if(count($categorie->children) == 0): ?>
+            <a href="#" class="fs-5 delete" data-id="<?php echo e($categorie['id']); ?>"> <i
+                    class="ri ri-delete-bin-2-line text-danger"></i>
             </a>
-            <?php if(count($categorie->children) == 0): ?>
-                <a href="#" class="fs-5 delete" data-id="<?php echo e($categorie['id']); ?>"> <i
-                        class="ri ri-delete-bin-2-line text-danger"></i>
-                </a>
-            <?php endif; ?>
+        <?php endif; ?>
+          </span>
             <?php if($categorie->children->count() > 0): ?>
                 <?php echo $__env->make('backend.pages.categorie.partials.subcategorie', [
                     'categories_child' => $categorie->children,

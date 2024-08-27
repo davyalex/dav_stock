@@ -14,6 +14,7 @@ use App\Http\Controllers\backend\SettingController;
 use App\Http\Controllers\backend\AuthAdminController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\menu\MenuController;
+use App\Http\Controllers\backend\menu\PlatController;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use App\Http\Controllers\backend\stock\AchatController;
 use App\Http\Controllers\backend\module\ModuleController;
@@ -117,15 +118,6 @@ Route::middleware(['admin'])->group(function () {
     });
 
 
-    //page
-    Route::prefix('page')->controller(PageController::class)->group(function () {
-        route::get('', 'index')->name('page.index');
-        route::get('create', 'create')->name('page.create');
-        route::post('store', 'store')->name('page.store');
-        route::get('edit/{id}', 'edit')->name('page.edit');
-        route::post('update/{id}', 'update')->name('page.update');
-        route::post('delete/{id}', 'delete')->name('page.delete');
-    });
 
 
     //Setting
@@ -134,63 +126,6 @@ Route::middleware(['admin'])->group(function () {
         route::post('store', 'store')->name('setting.store');
     });
 
-
-    #############  BLOG  #####################
-    //blog---category
-    Route::prefix('blog-category')->controller(BlogCategoryController::class)->group(function () {
-        route::get('', 'index')->name('blog-category.index');
-        route::post('store', 'store')->name('blog-category.store');
-        route::post('update/{id}', 'update')->name('blog-category.update');
-        route::get('delete/{id}', 'delete')->name('blog-category.delete');
-        route::post('position/{id}', 'position')->name('blog-category.position');
-    });
-
-
-    //blog---content
-    Route::prefix('blog-content')->controller(BlogContentController::class)->group(function () {
-        route::get('', 'index')->name('blog-content.index');
-        route::get('create', 'create')->name('blog-content.create');
-        route::post('store', 'store')->name('blog-content.store');
-        route::get('edit/{id}', 'edit')->name('blog-content.edit');
-        route::post('update/{id}', 'update')->name('blog-content.update');
-        route::get('delete/{id}', 'delete')->name('blog-content.delete');
-    });
-
-
-    #############  SERVICE  #####################
-
-    //service of basic site
-    Route::prefix('service')->controller(ServiceController::class)->group(function () {
-        route::get('', 'index')->name('service.index');
-        route::get('create', 'create')->name('service.create');
-        route::post('store', 'store')->name('service.store');
-        route::get('edit/{id}', 'edit')->name('service.edit');
-        route::post('update/{id}', 'update')->name('service.update');
-        route::get('delete/{id}', 'delete')->name('service.delete');
-    });
-
-
-    #############  REFERENCE  #####################
-
-    //reference of basic site
-    Route::prefix('reference')->controller(ReferenceController::class)->group(function () {
-        route::get('', 'index')->name('reference.index');
-        route::post('store', 'store')->name('reference.store');
-        route::post('update/{id}', 'update')->name('reference.update');
-        route::get('delete/{id}', 'delete')->name('reference.delete');
-    });
-
-
-
-    #############  EQUIPE  #####################
-
-    //equipe of basic site
-    Route::prefix('equipe')->controller(EquipeController::class)->group(function () {
-        route::get('', 'index')->name('equipe.index');
-        route::post('store', 'store')->name('equipe.store');
-        route::post('update/{id}', 'update')->name('equipe.update');
-        route::get('delete/{id}', 'delete')->name('equipe.delete');
-    });
 
     #############  SLIDER  #####################
 
@@ -203,39 +138,7 @@ Route::middleware(['admin'])->group(function () {
     });
 
 
-    #############  TEMOIGNAGE  #####################
-
-    //slider of basic site
-    Route::prefix('temoignage')->controller(TemoignageController::class)->group(function () {
-        route::get('', 'index')->name('temoignage.index');
-        route::post('store', 'store')->name('temoignage.store');
-        route::post('update/{id}', 'update')->name('temoignage.update');
-        route::get('delete/{id}', 'delete')->name('temoignage.delete');
-    });
-
-
-    #############  MEDIATHEQUE  #####################
-
-    //mediatheque---category
-    Route::prefix('media-category')->controller(MediaCategoryController::class)->group(function () {
-        route::get('', 'index')->name('media-category.index');
-        route::post('store', 'store')->name('media-category.store');
-        route::post('update/{id}', 'update')->name('media-category.update');
-        route::get('delete/{id}', 'delete')->name('media-category.delete');
-        route::post('position/{id}', 'position')->name('media-category.position');
-    });
-
-
-    //mediatheque---media
-    Route::prefix('media-content')->controller(MediaContentController::class)->group(function () {
-        route::get('', 'index')->name('media-content.index');
-        route::get('create', 'create')->name('media-content.create');
-        route::post('store', 'store')->name('media-content.store');
-        route::get('edit/{id}', 'edit')->name('media-content.edit');
-        route::post('update/{id}', 'update')->name('media-content.update');
-        route::get('delete/{id}', 'delete')->name('media-content.delete');
-    });
-
+  
 
 
     #############  SETTING  #####################
@@ -370,14 +273,14 @@ Route::middleware(['admin'])->group(function () {
 
 
         // produit menu
-        Route::prefix('produit-menu')->controller(ProduitMenuController::class)->group(function () {
-            route::get('', 'index')->name('produit-menu.index');
-            route::get('create', 'create')->name('produit-menu.create');
-            route::post('store', 'store')->name('produit-menu.store');
-            route::get('show/{id}', 'show')->name('produit-menu.show');
-            route::get('edit/{id}', 'edit')->name('produit-menu.edit');
-            route::post('update/{id}', 'update')->name('produit-menu.update');
-            route::get('delete/{id}', 'delete')->name('produit-menu.delete');
+        Route::prefix('plat')->controller(PlatController::class)->group(function () {
+            route::get('', 'index')->name('plat.index');
+            route::get('create', 'create')->name('plat.create');
+            route::post('store', 'store')->name('plat.store');
+            route::get('show/{id}', 'show')->name('plat.show');
+            route::get('edit/{id}', 'edit')->name('plat.edit');
+            route::post('update/{id}', 'update')->name('plat.update');
+            route::get('delete/{id}', 'delete')->name('plat.delete');
         });
 
 

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('code')->unique()->nullable();
             $table->string('statut')->nullable(); //actif ? desactive
 
-            $table->foreignId('type_produit_id')  //type produit  = bar ? restaurant
+            $table->foreignId('type_produit_id')  //type produit  = boissons ? ingredients
                 ->nullable()
                 ->constrained('categories')
                 ->onUpdate('cascade')

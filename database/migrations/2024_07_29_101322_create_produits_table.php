@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('stock')->default(0); //quantité en stock
             $table->integer('stock_alerte')->default(0); //
             $table->longText('description')->nullable();
-            $table->enum('visible', ['oui', 'non'])->default('oui');
+            $table->enum('statut', ['active', 'desactive'])->default('active');
         
             //foreign table
             $table->foreignId('categorie_id')
@@ -29,7 +29,7 @@ return new class extends Migration
             ->onUpdate('cascade')
             ->onDelete('cascade ');
 
-            $table->foreignId('type_id') // type de produit
+            $table->foreignId('type_id') // type de produit  : boissons , ingredients, plats
             ->nullable()
             ->constrained('categories')
             ->onUpdate('cascade')

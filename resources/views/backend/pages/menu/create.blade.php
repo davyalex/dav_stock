@@ -47,7 +47,7 @@
                                         </div>
 
                                         <!-- ========== Start product menu for checked ========== -->
-                                        @include('backend.pages.menu.produit.partials.categorieProduct')
+                                        @include('backend.pages.menu.partials.categorieProduct')
                                         <!-- ========== End product menu for checked ========== -->
 
 

@@ -26,9 +26,9 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des produits</h5>
-                    <a href="{{ route('produit-menu.create') }}" type="button" class="btn btn-primary ">Créer
-                        un produit</a>
+                    <h5 class="card-title mb-0">Liste des plats</h5>
+                    <a href="{{ route('plat.create') }}" type="button" class="btn btn-primary ">Créer
+                        un plat</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -47,7 +47,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data_produit_menu as $key => $item)
+                                @foreach ($data_plat as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
                                         <td> {{ $item['statut'] }} </td>
@@ -56,7 +56,7 @@
                                                 width="50px" alt="">
                                         </td>
                                         <td>{{ $item['nom'] }}</td>
-                                        <td>{{ $item['categorie']['name'] }}</td>
+                                        <td>{{ $item['categorie']['name'] ?? '' }}</td>
                                         <td>{{ $item['prix'] }}</td>
                                         <td>{{ $item['user']['first_name'] }}</td>
                                         <td> {{ $item['created_at'] }} </td>
@@ -71,7 +71,7 @@
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                             View</a>
                                                     </li> --}}
-                                                    <li><a href="{{route('produit-menu.edit' ,  $item['id'])}}" type="button" class="dropdown-item edit-item-btn"><i
+                                                    <li><a href="{{route('plat.edit' ,  $item['id'])}}" type="button" class="dropdown-item edit-item-btn"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             Edit</a></li>
                                                     <li>
@@ -119,7 +119,7 @@
 
     <script>
        $(document).ready(function(){
-        var route = "produit-menu"
+        var route = "plat"
         delete_row(route);
        })
     </script>

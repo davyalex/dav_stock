@@ -14,20 +14,22 @@
                       <hr>
                       <li class="" style="list-style: none">
                           <i class="ri-drag-move-fill align-bottom handle"></i> <a class="fs-5 fw-medium"
-                              href="<?php echo e($categorie->url); ?>"><?php echo e($categorie->name); ?></a>
-                          <a href="<?php echo e(route('categorie.edit', $categorie['id'])); ?>"
-                              class="fs-5 <?php echo e(in_array($categorie->type, ['menu', 'categorie-stock']) ? 'd-none' : ''); ?>"
-                              style="margin-left:30px"> <i class=" ri ri-edit-2-fill ml-4 text-success"></i></a>
+                              href="#"><?php echo e($categorie->name); ?></a>
+                         <span class=" float-end">
+                            <a href="<?php echo e(route('categorie.edit', $categorie['id'])); ?>"
+                            class="fs-5 <?php echo e(in_array($categorie->type, ['menu', 'categorie-stock']) ? 'd-none' : ''); ?>"
+                            style="margin-left:30px"> <i class=" ri ri-edit-2-fill ml-4 text-success"></i></a>
 
-                          <a href="<?php echo e(route('categorie.add-subCat', $categorie['id'])); ?>" class="fs-5"> <i
-                                  class=" ri ri-add-circle-fill ml-4"></i>
-                          </a>
-                          <?php if($categorie['children_count'] == 0): ?>
-                              <a href="#" data-id="<?php echo e($categorie['id']); ?>"
-                                  class="fs-5 delete  <?php echo e(in_array($categorie->type, ['menu', 'categorie-stock']) ? 'd-none' : ''); ?>">
-                                  <i class="ri ri-delete-bin-2-line text-danger "></i>
-                              </a>
-                          <?php endif; ?>
+                        <a href="<?php echo e(route('categorie.add-subCat', $categorie['id'])); ?>" class="fs-5"> <i
+                                class=" ri ri-add-circle-fill ml-4"></i>
+                        </a>
+                        <?php if($categorie['children_count'] == 0): ?>
+                            <a href="#" data-id="<?php echo e($categorie['id']); ?>"
+                                class="fs-5 delete  <?php echo e(in_array($categorie->type, ['plats', 'boissons' , 'ingredients']) ? 'd-none' : ''); ?>">
+                                <i class="ri ri-delete-bin-2-line text-danger "></i>
+                            </a>
+                        <?php endif; ?>
+                         </span>
 
                           <?php if($categorie->children->count() > 0): ?>
                               <?php echo $__env->make('backend.pages.categorie.partials.subcategorie', [

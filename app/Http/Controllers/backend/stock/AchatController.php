@@ -36,7 +36,7 @@ class AchatController extends Controller
         try {
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')->OrderBy('position', 'ASC')->get();
             $data_produit = Produit::with(['categorie.ancestors', 'media'])->get();
-            $type_produit = Categorie::whereNull('parent_id')->whereIn('name', ['bar', 'restaurant'])->get();
+            $type_produit = Categorie::whereNull('parent_id')->whereIn('type', ['boissons', 'ingredients'])->get();
 
             $data_format = Format::all();
             $data_unite = Unite::all();
@@ -67,7 +67,7 @@ class AchatController extends Controller
             //recuperer le type produit : bar ?restaurant            
             $type_produit = $request['type_produit'];
             $type_produit = Categorie::whereId($type_produit)->first();
-            if ($type_produit->name == 'restaurant') {
+            if ($type_produit->type == 'ingredients') {
                 $request->validate([
                     'produit_id' => 'required',
                     'quantite_format' => 'required',
@@ -82,7 +82,7 @@ class AchatController extends Controller
 
                     'statut' => ''
                 ]);
-            } elseif ($type_produit->name == 'bar') {
+            } elseif ($type_produit->type == 'boissons') {
 
                 $request->validate([
                     'produit_id' => 'required',

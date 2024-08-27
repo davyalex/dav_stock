@@ -167,11 +167,11 @@
 
 
                 //show include entree form
-                if (filterType[0].name == 'bar') {
-                    var barForm = ` <?php echo $__env->make('backend.pages.stock.achat.partials.barProduct', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>`
+                if (filterType[0].type == 'boissons') {
+                    var barForm = ` <?php echo $__env->make('backend.pages.stock.achat.partials.boisson', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>`
                     $('#entree').html(barForm)
-                } else if (filterType[0].name == 'restaurant') {
-                    var restaurantForm = ` <?php echo $__env->make('backend.pages.stock.achat.partials.restaurantProduct', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>`
+                } else if (filterType[0].type == 'ingredients') {
+                    var restaurantForm = ` <?php echo $__env->make('backend.pages.stock.achat.partials.ingredient', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>`
                     $('#entree').html(restaurantForm)
                 } else {
                     $('#entree').html('')

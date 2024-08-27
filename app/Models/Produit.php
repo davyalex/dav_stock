@@ -21,12 +21,12 @@ class Produit extends Model implements HasMedia
         'nom', // libellé produit
         'slug',
         'description',
-        // 'prix',
+        'prix',
         'stock', //quantité
         'stock_alerte', // stock de securite
         'categorie_id',
         'type_id', // type produit
-        'visible', // oui , non
+        'statut', // oui , non
         'user_id',
     ];
 
@@ -71,6 +71,12 @@ class Produit extends Model implements HasMedia
     public function achats() // 
     {
         return $this->hasMany(Achat::class);
+    }
+
+
+    public function menus()
+    {
+        return $this->belongsToMany(Menu::class, 'menu_produit')->withTimestamps();
     }
 
 }

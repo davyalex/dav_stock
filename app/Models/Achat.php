@@ -16,7 +16,7 @@ class Achat extends Model
     protected $fillable = [
         'code',
         'statut',
-        'type_produit_id', // bar ? restaurant
+        'type_produit_id', // boissons ? ingredients
         'produit_id',
         'fournisseur_id',
         'format_id',

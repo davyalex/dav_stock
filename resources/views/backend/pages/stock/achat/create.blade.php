@@ -185,11 +185,11 @@
 
 
                 //show include entree form
-                if (filterType[0].name == 'bar') {
-                    var barForm = ` @include('backend.pages.stock.achat.partials.barProduct')`
+                if (filterType[0].type == 'boissons') {
+                    var barForm = ` @include('backend.pages.stock.achat.partials.boisson')`
                     $('#entree').html(barForm)
-                } else if (filterType[0].name == 'restaurant') {
-                    var restaurantForm = ` @include('backend.pages.stock.achat.partials.restaurantProduct')`
+                } else if (filterType[0].type == 'ingredients') {
+                    var restaurantForm = ` @include('backend.pages.stock.achat.partials.ingredient')`
                     $('#entree').html(restaurantForm)
                 } else {
                     $('#entree').html('')

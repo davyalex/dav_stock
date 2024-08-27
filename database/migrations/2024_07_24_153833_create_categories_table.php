@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
+            $table->string('name')->unique()->nullable();
             $table->string('slug')->nullable();
             $table->string('url')->nullable();
             $table->string('status')->nullable();
             $table->string('position')->nullable();
+            
 
             $table->foreignId('parent_id')
                 ->nullable()
@@ -25,7 +26,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->enum('type', ['categorie-stock', 'categorie-simple', 'menu'])->nullable();
+            $table->enum('type', ['boissons', 'ingredients', 'plats'])->nullable();
 
             $table->softDeletes();
             $table->timestamps();

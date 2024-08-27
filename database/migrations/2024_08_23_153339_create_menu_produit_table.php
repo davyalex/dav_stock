@@ -11,14 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('menu_produit_menu', function (Blueprint $table) {
+        Schema::create('menu_produit', function (Blueprint $table) {
             $table->id();
-            //foreign table
-            $table->foreignId('categorie_id')
-                ->nullable()
-                ->constrained('categories')
-                ->onUpdate('cascade')
-                ->onDelete('cascade ');
 
             //foreign table
             $table->foreignId('menu_id')
@@ -28,9 +22,9 @@ return new class extends Migration
                 ->onDelete('cascade ');
 
             //foreign table
-            $table->foreignId('produit_menu_id')
+            $table->foreignId('produit_id')
                 ->nullable()
-                ->constrained('produit_menus')
+                ->constrained('produits')
                 ->onUpdate('cascade')
                 ->onDelete('cascade ');
 
@@ -45,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('menu_produit_menu');
+        Schema::dropIfExists('menu_produit');
     }
 };

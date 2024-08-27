@@ -49,7 +49,7 @@
                                             </div>
 
                                             <!-- ========== Start product menu for checked ========== -->
-                                            <?php echo $__env->make('backend.pages.menu.produit.partials.categorieProductEdit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                            <?php echo $__env->make('backend.pages.menu.partials.categorieProductEdit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                                             <!-- ========== End product menu for checked ========== -->
 
                                         </div>
