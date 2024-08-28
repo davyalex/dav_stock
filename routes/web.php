@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Artisan;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\backend\PageController;
 use App\Http\Controllers\backend\RoleController;
+use App\Http\Controllers\site\AccueilController;
 use App\Http\Controllers\backend\SettingController;
 use App\Http\Controllers\backend\AuthAdminController;
 use App\Http\Controllers\backend\DashboardController;
@@ -138,7 +139,7 @@ Route::middleware(['admin'])->group(function () {
     });
 
 
-  
+
 
 
     #############  SETTING  #####################
@@ -258,7 +259,6 @@ Route::middleware(['admin'])->group(function () {
         route::post('update/{id}', 'update')->name('categorie-depense.update');
         route::get('delete/{id}', 'delete')->name('categorie-depense.delete');
         route::post('position/{id}', 'position')->name('categorie-depense.position');
-
     });
 
     Route::prefix('depense')->controller(DepenseController::class)->group(function () {
@@ -268,35 +268,64 @@ Route::middleware(['admin'])->group(function () {
         route::get('edit/{id}', 'edit')->name('depense.edit');
         route::post('update/{id}', 'update')->name('depense.update');
         route::get('delete/{id}', 'delete')->name('depense.delete');
-
     });
 
 
-        // produit menu
-        Route::prefix('plat')->controller(PlatController::class)->group(function () {
-            route::get('', 'index')->name('plat.index');
-            route::get('create', 'create')->name('plat.create');
-            route::post('store', 'store')->name('plat.store');
-            route::get('show/{id}', 'show')->name('plat.show');
-            route::get('edit/{id}', 'edit')->name('plat.edit');
-            route::post('update/{id}', 'update')->name('plat.update');
-            route::get('delete/{id}', 'delete')->name('plat.delete');
-        });
+    // produit menu
+    Route::prefix('plat')->controller(PlatController::class)->group(function () {
+        route::get('', 'index')->name('plat.index');
+        route::get('create', 'create')->name('plat.create');
+        route::post('store', 'store')->name('plat.store');
+        route::get('show/{id}', 'show')->name('plat.show');
+        route::get('edit/{id}', 'edit')->name('plat.edit');
+        route::post('update/{id}', 'update')->name('plat.update');
+        route::get('delete/{id}', 'delete')->name('plat.delete');
+    });
 
 
-          //  menu
-          Route::prefix('menu')->controller(MenuController::class)->group(function () {
-            route::get('', 'index')->name('menu.index');
-            route::get('create', 'create')->name('menu.create');
-            route::post('store', 'store')->name('menu.store');
-            route::get('show/{id}', 'show')->name('menu.show');
-            route::get('edit/{id}', 'edit')->name('menu.edit');
-            route::post('update/{id}', 'update')->name('menu.update');
-            route::get('delete/{id}', 'delete')->name('menu.delete');
-        });
+    //  menu
+    Route::prefix('menu')->controller(MenuController::class)->group(function () {
+        route::get('', 'index')->name('menu.index');
+        route::get('create', 'create')->name('menu.create');
+        route::post('store', 'store')->name('menu.store');
+        route::get('show/{id}', 'show')->name('menu.show');
+        route::get('edit/{id}', 'edit')->name('menu.edit');
+        route::post('update/{id}', 'update')->name('menu.update');
+        route::get('delete/{id}', 'delete')->name('menu.delete');
+    });
+
+    //  menu
+    Route::prefix('menu')->controller(MenuController::class)->group(function () {
+        route::get('', 'index')->name('menu.index');
+        route::get('create', 'create')->name('menu.create');
+        route::post('store', 'store')->name('menu.store');
+        route::get('show/{id}', 'show')->name('menu.show');
+        route::get('edit/{id}', 'edit')->name('menu.edit');
+        route::post('update/{id}', 'update')->name('menu.update');
+        route::get('delete/{id}', 'delete')->name('menu.delete');
+    });
+
+
+
+
 });
 
+     ######################      END BACKEND ROUTE         ###########################################################
 
 
 
-######################      END BACKEND ROUTE         ###########################################################
+
+
+
+    ######################      START FRONT ROUTE         ###########################################################
+
+    // route::get('', [AccueilController::class,'index'])->name('accueil');
+    route::get('/' , function(){
+        return view('site.template_restaurant.index');
+    });
+
+    
+
+
+    ######################      END FRONT ROUTE         ###########################################################
+
