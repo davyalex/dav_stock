@@ -1,5 +1,5 @@
  <!-- Default Modals -->
- <div id="myModalEdit{{ $item['id'] }}" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+ <div id="myModalEdit<?php echo e($item['id']); ?>" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
      style="display: none;">
      <div class="modal-dialog modal-lg">
          <div class="modal-content">
@@ -10,9 +10,9 @@
              </div>
              <div class="modal-body">
 
-                 <form class="row g-3 needs-validation" method="post" action="{{ route('slide.update', $item['id']) }}"
+                 <form class="row g-3 needs-validation" method="post" action="<?php echo e(route('slide.update', $item['id'])); ?>"
                      novalidate enctype="multipart/form-data">
-                     @csrf
+                     <?php echo csrf_field(); ?>
                      <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show material-shadow"
                          role="alert">
                          <i class="ri-airplay-line label-icon"></i><strong>Dimensions (px) : </strong>
@@ -26,19 +26,20 @@
                          </ol>
                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                      </div>
-                     @php
+                     <?php
                          $type = ['carrousel', 'grande-banniere', 'petite-banniere', 'banniere-best-seller'];
-                     @endphp
+                     ?>
                   
                   <div class="row">
                     <div class="col-md-3">
                         <label for="validationCustom01" class="form-label">Type</label>
                         <select name="type" class="form-control" required>
-                            @foreach ($type as $value)
-                                <option value="{{ $value }}"
-                                    {{$item->type == $value ? 'selected' : '' }}>{{ $value }}
+                            <?php $__currentLoopData = $type; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($value); ?>"
+                                    <?php echo e($item->type == $value ? 'selected' : ''); ?>><?php echo e($value); ?>
+
                                 </option>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                         <div class="valid-feedback">
                             Looks good!
@@ -46,7 +47,7 @@
                     </div>
                     <div class="col-md-9">
                         <label for="validationCustom01" class="form-label">Titre du slide</label>
-                        <input type="text" name="title" value="{{ $item['title'] }}" class="form-control"
+                        <input type="text" name="title" value="<?php echo e($item['title']); ?>" class="form-control"
                             id="validationCustom01">
                         <div class="valid-feedback">
                             Looks good!
@@ -58,7 +59,7 @@
 
                      <div class="col-md-12">
                          <label for="validationCustom01" class="form-label">Sous titre du slide</label>
-                         <input type="text" name="subtitle" value="{{ $item['subtitle'] }}" class="form-control"
+                         <input type="text" name="subtitle" value="<?php echo e($item['subtitle']); ?>" class="form-control"
                              id="validationCustom01">
                          <div class="valid-feedback">
                              Looks good!
@@ -69,7 +70,7 @@
                      <div class="row">
                          <div class="col-md-4">
                              <label for="validationCustom01" class="form-label">Nom du button</label>
-                             <input type="text" name="btn_name" value="{{ $item['btn_name'] }}" class="form-control"
+                             <input type="text" name="btn_name" value="<?php echo e($item['btn_name']); ?>" class="form-control"
                                  id="validationCustom01">
                              <div class="valid-feedback">
                                  Looks good!
@@ -78,7 +79,7 @@
 
                          <div class="col-md-3">
                              <label for="validationCustom01" class="form-label">URl du bouton</label>
-                             <input type="text" name="btn_url" value="{{ $item['btn_url'] }}" class="form-control"
+                             <input type="text" name="btn_url" value="<?php echo e($item['btn_url']); ?>" class="form-control"
                                  id="validationCustom01">
                              <div class="valid-feedback">
                                  Looks good!
@@ -87,7 +88,7 @@
 
                          <div class="col-md-3">
                              <label for="validationCustom01" class="form-label">couleur du bouton</label>
-                             <input type="color" name="btn_color" value="{{ $item['btn_color'] }}"
+                             <input type="color" name="btn_color" value="<?php echo e($item['btn_color']); ?>"
                                  class="form-control" id="validationCustom01">
                              <div class="valid-feedback">
                                  Looks good!
@@ -97,10 +98,10 @@
                          <div class="col-md-2">
                              <label for="validationCustom01" class="form-label">Statut</label>
                              <select name="btn_status" class="form-control">
-                                 <option value="active" {{ $item['btn_status'] == 'active' ? 'selected' : '' }}>
+                                 <option value="active" <?php echo e($item['btn_status'] == 'active' ? 'selected' : ''); ?>>
                                      Activé
                                  </option>
-                                 <option value="desactive" {{ $item['btn_status'] == 'desactive' ? 'selected' : '' }}>
+                                 <option value="desactive" <?php echo e($item['btn_status'] == 'desactive' ? 'selected' : ''); ?>>
                                      Desactivé
                                  </option>
                              </select>
@@ -115,7 +116,7 @@
 
                      <div class="row">
                          <div class="col-md-2">
-                             <img class="rounded-circle" src="{{ $item->getFirstMediaUrl('slideImage') }}"
+                             <img class="rounded-circle" src="<?php echo e($item->getFirstMediaUrl('slideImage')); ?>"
                                  width="50px" alt="">
                          </div>
                          <div class="col-md-10">
@@ -130,10 +131,10 @@
                      <div class="col-md-12">
                          <label for="validationCustom01" class="form-label">Statut</label>
                          <select name="status" class="form-control">
-                             <option value="active" {{ $item['status'] == 'active' ? 'selected' : '' }}>
+                             <option value="active" <?php echo e($item['status'] == 'active' ? 'selected' : ''); ?>>
                                  Activé
                              </option>
-                             <option value="desactive" {{ $item['status'] == 'desactive' ? 'selected' : '' }}>
+                             <option value="desactive" <?php echo e($item['status'] == 'desactive' ? 'selected' : ''); ?>>
                                  Desactivé
                              </option>
                          </select>
@@ -153,11 +154,5 @@
      </div><!-- /.modal -->
  </div><!-- end col -->
 
- {{-- @section('script')
-    <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
-    <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
-    <script src="{{ URL::asset('build/js/pages/modal.init.js') }}"></script>
-
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-    
-@endsection --}}
+ 
+<?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/slide/edit.blade.php ENDPATH**/ ?>

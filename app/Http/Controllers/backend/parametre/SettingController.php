@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\backend;
+namespace App\Http\Controllers\backend\parametre;
 
 use App\Models\Setting;
 use App\Models\Optimize;

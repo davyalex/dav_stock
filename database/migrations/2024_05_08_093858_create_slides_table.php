@@ -17,7 +17,9 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->string('subtitle')->nullable();
             $table->string('btn_name')->nullable();
+            $table->string('btn_color')->nullable();
             $table->string('btn_url')->nullable();
+            $table->string('type')->nullable();
             $table->string('btn_status')->nullable();
             $table->timestamps();
         });

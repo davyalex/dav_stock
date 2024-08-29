@@ -2,7 +2,7 @@
     <?php $__currentLoopData = $categories_child; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <li>
             <a href="<?php echo e($categorie->url); ?>"><?php echo e($categorie->name); ?></a>
-          <span class=" float-end">
+          <span >
             <a href="<?php echo e(route('categorie.edit', $categorie['id'])); ?>" class="fs-5" style="margin-left:30px"> <i
                 class=" ri ri-edit-2-fill ml-4"></i></a>
 

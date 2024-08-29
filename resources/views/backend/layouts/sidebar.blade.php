@@ -101,98 +101,144 @@
                     </a>
                 </li>
 
-
-
-                {{-- <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.settings')</span></li> --}}
-
-
-                {{-- @can('voir-page')
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="{{ route('page.index') }}">
-                            <i class=" ri-file-4-line"></i> <span>PAGES</span>
-                        </a>
-                    </li>
-                @endcan
-
-
-                @can('voir-blog')
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sidebarBlog" data-bs-toggle="collapse" role="button"
-                            aria-expanded="true" aria-controls="sidebarAuth">
-                            <i class=" ri-global-fill"></i> <span>BLOG</span>
-                        </a>
-                        <div class="collapse menu-dropdown {{ Route::is('blog-content.*') || Route::is('blog-category.*')  ? 'show' : '' }} " id="sidebarBlog">
-                            <ul class="nav nav-sm flex-column">
-
-                                <li class="nav-item ">
-                                    <a href="{{ route('blog-category.index') }}" class="nav-link {{ Route::is('blog-category.*')  ? 'active' : '' }}">Categorie</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('blog-content.index') }}" class="nav-link {{ Route::is('blog-content.*')  ? 'active' : '' }} ">Contenu</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                @endcan
-
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarBasicSite" data-bs-toggle="collapse" role="button"
-                        aria-expanded="true" aria-controls="sidebarAuth">
-                        <i class=" ri-globe-fill"></i> <span>SITE BASIQUE</span>
-                    </a>
-                    <div class="collapse menu-dropdown {{ Route::is('menu.*') || Route::is('service.*')  || Route::is('reference.*')  || Route::is('equipe.*')  || Route::is('slide.*') || Route::is('media-category.*') || Route::is('media-content.*') ? 'show' : '' }} " id="sidebarBasicSite">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item ">
-                                <a href="{{ route('menu.create') }}" class="nav-link {{ Route::is('menu.*')  ? 'active' : '' }}">Menus</a>
-                            </li>
-                            <li class="nav-item ">
-                                <a href="{{ route('service.index') }}" class="nav-link {{ Route::is('service.*')  ? 'active' : '' }}">Services</a>
-                            </li>
-                            <li class="nav-item ">
-                                <a href="{{ route('reference.index') }}" class="nav-link {{ Route::is('reference.*')  ? 'active' : '' }}">Réferences</a>
-                            </li>
-                            <li class="nav-item ">
-                                <a href="{{ route('equipe.index') }}" class="nav-link {{ Route::is('equipe.*')  ? 'active' : '' }}">Equipes</a>
-                            </li>
-                            <li class="nav-item ">
-                                <a href="{{ route('slide.index') }}" class="nav-link {{ Route::is('slide.*')  ? 'active' : '' }}">Slide</a>
-                            </li>
-                            <li class="nav-item ">
-                                <a href="{{ route('temoignage.index') }}" class="nav-link {{ Route::is('temoignage.*')  ? 'active' : '' }}">Témoignages</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="#sidebarMedia" class="nav-link {{Route::is('media-category.*') || Route::is('media-content.*') ? 'active' : ''}}" data-bs-toggle="collapse" role="button"
-                                    aria-expanded="false" aria-controls="sidebarMedia">
-                                    Mediathèque
-                                </a>
-                                <div class="collapse menu-dropdown {{Route::is('media-category.*') || Route::is('media-content.*') ? 'show' : ''}}" id="sidebarMedia">
-                                    <ul class="nav nav-sm flex-column">
-                                        <li class="nav-item ">
-                                            <a href="{{ route('media-category.index') }}" class="nav-link {{Route::is('media-category.*') ? 'active' : ''}}">
-                                                Categories </a>
-                                        </li>
-                                        <li class="nav-item ">
-                                            <a href="{{ route('media-content.index') }}" class="nav-link {{ Route::is('media-content.*') ? 'active' : ''}}">
-                                                Medias </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </li> --}}
-
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ Route::is('admin-register.*') ? 'active' : '' }}"
                         href="{{ route('admin-register.index') }}">
-                        <i class="ri ri-lock-2-line"></i> <span>ADMINISTRATEURS</span>
+                        <i class="ri ri-lock-2-line"></i> <span>UTILISATEURS</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarConfiguration" data-bs-toggle="collapse" role="button"
+                         aria-controls="sidebarConfiguration">
+                        <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
+                    </a>
+                    <div class="collapse menu-dropdown {{ Route::is('unite.*') || Route::is('format.*') ? 'show' : '' }}"
+                        id="sidebarConfiguration">
+                        <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item active">
+                                <a href="{{ route('unite.index') }}"
+                                    class="nav-link {{ Route::is('unite.*') ? 'active' : '' }}">Unité de mesure</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="{{ route('format.index') }}"
+                                    class="nav-link {{ Route::is('format.*') ? 'active' : '' }}">Format /
+                                    Emballage</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('categorie.create') }}"
+                        class=" menu-link nav-link {{ Route::is('categorie.*') ? 'active' : '' }}">
+                        <i class="ri ri-database-2-fill"></i> <span>CATEGORIE</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarStock" data-bs-toggle="collapse" role="button"
+                        aria-controls="sidebarStock">
+                        <i class="ri ri-box-1-fill"></i> <span>STOCK</span>
+                    </a>
+                    <div class="collapse menu-dropdown {{ Route::is('ajustement.*') || Route::is('achat.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : '' }}"
+                        id="sidebarStock">
+                        <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item active">
+                                <a href="{{ route('fournisseur.index') }}"
+                                    class="nav-link {{ Route::is('fournisseur.*') ? 'active' : '' }}">Fournisseurs</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="{{ route('produit.index') }}"
+                                    class="nav-link {{ Route::is('produit.*') ? 'active' : '' }}">Produits</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="{{ route('achat.index') }}"
+                                    class="nav-link {{ Route::is('achat.*') ? 'active' : '' }}">Achats</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="{{ route('ajustement.index') }}"
+                                    class="nav-link {{ Route::is('ajustement.*') ? 'active' : '' }}">Ajustements</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarDepense" data-bs-toggle="collapse" role="button"
+                        aria-controls="sidebarDepense">
+                        <i class="ri ri-wallet-fill"></i> <span>DEPENSES</span>
+                    </a>
+                    <div class="collapse menu-dropdown {{ Route::is('categorie-depense.*') || Route::is('depense.*') ? 'show' : '' }}"
+                        id="sidebarDepense">
+                        <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item active">
+                                <a href="{{ route('categorie-depense.index') }}"
+                                    class="nav-link {{ Route::is('categorie-depense.*') ? 'active' : '' }}">Categorie
+                                    depense</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="{{ route('depense.index') }}"
+                                    class="nav-link {{ Route::is('depense.*') ? 'active' : '' }}">Depense</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarMenu" data-bs-toggle="collapse" role="button"
+                        aria-controls="sidebarMenu">
+                        <i class="ri ri-file-list-line"></i> <span>MENU</span>
+                    </a>
+                    <div class="collapse menu-dropdown {{ Route::is('menu.*') || Route::is('plat.*') ? 'show' : '' }}"
+                        id="sidebarMenu">
+                        <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item active">
+                                <a href="{{ route('plat.index') }}"
+                                    class="nav-link {{ Route::is('plat.*') ? 'active' : '' }}">Plat du menu</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="{{ route('menu.index') }}"
+                                    class="nav-link {{ Route::is('menu.*') ? 'active' : '' }}">Menu</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarSite" data-bs-toggle="collapse" role="button"
+                       aria-controls="sidebarSite">
+                        <i class="ri ri-global-fill"></i> <span>SITE</span>
+                    </a>
+                    <div class="collapse menu-dropdown {{ Route::is('slide.*') ? 'show' : '' }}" id="sidebarSite">
+                        <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item active">
+                                <a href="{{ route('slide.index') }}"
+                                    class="nav-link {{ Route::is('slide.*') ? 'active' : '' }}">Slides</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
-                        aria-expanded="true" aria-controls="sidebarAuth">
+                        aria-controls="sidebarAuth">
                         <i class=" ri-settings-2-fill"></i> <span>PARAMETRE</span>
                     </a>
                     <div class="collapse menu-dropdown {{ Route::is('setting.*') || Route::is('module.*') || Route::is('role.*') || Route::is('permission.*') ? 'show' : '' }}"
@@ -218,131 +264,8 @@
                         </ul>
                     </div>
                 </li>
-
-
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarConfiguration" data-bs-toggle="collapse"
-                        role="button" aria-expanded="true" aria-controls="sidebarConfiguration">
-                        <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
-                    </a>
-                    <div class="collapse menu-dropdown {{ Route::is('unite.*') || Route::is('format.*') ? 'show' : '' }}"
-                        id="sidebarConfiguration">
-                        <ul class="nav nav-sm flex-column">
-
-                            <li class="nav-item active">
-                                <a href="{{ route('unite.index') }}"
-                                    class="nav-link {{ Route::is('unite.*') ? 'active' : '' }}">Unité de mesure</a>
-                            </li>
-
-                            <li class="nav-item active">
-                                <a href="{{ route('format.index') }}"
-                                    class="nav-link {{ Route::is('format.*') ? 'active' : '' }}">Format /
-                                    Emballage</a>
-                            </li>
-
-                        </ul>
-                    </div>
-                </li>
-
-
-
-
-                <li class="nav-item">
-                    <a href="{{ route('categorie.create') }}"
-                        class=" menu-link nav-link {{ Route::is('categorie.*') ? 'active' : '' }}">
-                        <i class="ri ri-database-2-fill"></i> <span>CATEGORIE</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="{{ route('fournisseur.index') }}"
-                        class=" menu-link nav-link {{ Route::is('fournisseur.*') ? 'active' : '' }}">
-                        <i class="ri ri-contacts-line"></i> <span>FOURNISSEUR</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarStock" data-bs-toggle="collapse" role="button"
-                        aria-expanded="true" aria-controls="sidebarStock">
-                        <i class="ri ri-box-1-fill"></i> <span>STOCK</span>
-                    </a>
-                    <div class="collapse menu-dropdown {{Route::is('ajustement.*') || Route::is('achat.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : '' }}"
-                        id="sidebarStock">
-                        <ul class="nav nav-sm flex-column">
-
-                            <li class="nav-item active">
-                                <a href="{{ route('fournisseur.index') }}"
-                                    class="nav-link {{ Route::is('fournisseur.*') ? 'active' : '' }}">Fournisseurs</a>
-                            </li>
-
-                            <li class="nav-item active">
-                                <a href="{{ route('produit.index') }}"
-                                    class="nav-link {{ Route::is('produit.*') ? 'active' : '' }}">Produits</a>
-                            </li>
-
-                            <li class="nav-item active">
-                                <a href="{{ route('achat.index') }}"
-                                    class="nav-link {{ Route::is('achat.*') ? 'active' : '' }}">Achats</a>
-                            </li>
-
-                               <li class="nav-item active">
-                                <a href="{{ route('ajustement.index') }}"
-                                    class="nav-link {{ Route::is('ajustement.*') ? 'active' : '' }}">Ajustements</a>
-                            </li>
-
-                        </ul>
-                    </div>
-                </li>
-
-
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarDepense" data-bs-toggle="collapse" role="button"
-                        aria-expanded="true" aria-controls="sidebarDepense">
-                        <i class="ri ri-wallet-fill"></i> <span>DEPENSES</span>
-                    </a>
-                    <div class="collapse menu-dropdown {{ Route::is('categorie-depense.*') || Route::is('depense.*') ? 'show' : '' }}"
-                        id="sidebarDepense">
-                        <ul class="nav nav-sm flex-column">
-
-                            <li class="nav-item active">
-                                <a href="{{ route('categorie-depense.index') }}"
-                                    class="nav-link {{ Route::is('categorie-depense.*') ? 'active' : '' }}">Categorie depense</a>
-                            </li>
-
-                            <li class="nav-item active">
-                                <a href="{{ route('depense.index') }}"
-                                    class="nav-link {{ Route::is('depense.*') ? 'active' : '' }}">Depense</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarMenu" data-bs-toggle="collapse" role="button"
-                        aria-expanded="true" aria-controls="sidebarMenu">
-                        <i class="ri ri-file-list-line"></i> <span>MENU</span>
-                    </a>
-                    <div class="collapse menu-dropdown {{ Route::is('menu.*')|| Route::is('plat.*') ? 'show' : '' }}"
-                        id="sidebarMenu">
-                        <ul class="nav nav-sm flex-column">
-
-                            <li class="nav-item active">
-                                <a href="{{ route('plat.index') }}"
-                                    class="nav-link {{ Route::is('plat.*') ? 'active' : '' }}">Plat du menu</a>
-                            </li>
-
-                            <li class="nav-item active">
-                                <a href="{{ route('menu.index') }}"
-                                    class="nav-link {{ Route::is('menu.*') ? 'active' : '' }}">Menu</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-
         </div>
         </li>
-
-
         </ul>
     </div>
     <!-- Sidebar -->

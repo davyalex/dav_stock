@@ -2,7 +2,7 @@
     @foreach ($categories_child as $categorie)
         <li>
             <a href="{{ $categorie->url }}">{{ $categorie->name }}</a>
-          <span class=" float-end">
+          <span >
             <a href="{{ route('categorie.edit', $categorie['id']) }}" class="fs-5" style="margin-left:30px"> <i
                 class=" ri ri-edit-2-fill ml-4"></i></a>
 

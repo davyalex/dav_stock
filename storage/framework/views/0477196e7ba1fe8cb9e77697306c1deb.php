@@ -15,7 +15,7 @@
                       <li class="" style="list-style: none">
                           <i class="ri-drag-move-fill align-bottom handle"></i> <a class="fs-5 fw-medium"
                               href="#"><?php echo e($categorie->name); ?></a>
-                         <span class=" float-end">
+                         <span>
                             <a href="<?php echo e(route('categorie.edit', $categorie['id'])); ?>"
                             class="fs-5 <?php echo e(in_array($categorie->type, ['menu', 'categorie-stock']) ? 'd-none' : ''); ?>"
                             style="margin-left:30px"> <i class=" ri ri-edit-2-fill ml-4 text-success"></i></a>

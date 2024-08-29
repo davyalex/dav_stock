@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\backend;
+namespace App\Http\Controllers\backend\permission;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;

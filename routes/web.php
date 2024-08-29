@@ -1,43 +1,31 @@
 <?php
 
-use App\Models\Equipe;
 use App\Models\Optimize;
 use App\Models\Maintenance;
-use App\Models\CategorieDepense;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use RealRashid\SweetAlert\Facades\Alert;
-use App\Http\Controllers\backend\PageController;
-use App\Http\Controllers\backend\RoleController;
 use App\Http\Controllers\site\AccueilController;
-use App\Http\Controllers\backend\SettingController;
-use App\Http\Controllers\backend\AuthAdminController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\menu\MenuController;
 use App\Http\Controllers\backend\menu\PlatController;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Http\Controllers\backend\slide\SlideController;
 use App\Http\Controllers\backend\stock\AchatController;
 use App\Http\Controllers\backend\module\ModuleController;
+use App\Http\Controllers\backend\user\AuthAdminController;
 use App\Http\Controllers\backend\depense\DepenseController;
+use App\Http\Controllers\backend\permission\RoleController;
 use App\Http\Controllers\backend\produit\ProduitController;
-use App\Http\Controllers\backend\basic_site\SlideController;
-use App\Http\Controllers\backend\blog\BlogContentController;
-use App\Http\Controllers\backend\menu\ProduitMenuController;
 use App\Http\Controllers\backend\stock\AjustementController;
-use App\Http\Controllers\backend\basic_site\EquipeController;
-use App\Http\Controllers\backend\blog\BlogCategoryController;
-use App\Http\Controllers\backend\basic_site\ServiceController;
-use App\Http\Controllers\backend\media\MediaContentController;
 use App\Http\Controllers\backend\categorie\CategorieController;
-use App\Http\Controllers\backend\media\MediaCategoryController;
-use App\Http\Controllers\backend\basic_site\ReferenceController;
+use App\Http\Controllers\backend\parametre\ParametreController;
 use App\Http\Controllers\backend\configuration\FormatController;
-use App\Http\Controllers\backend\basic_site\TemoignageController;
 use App\Http\Controllers\backend\permission\PermissionController;
 use App\Http\Controllers\backend\fournisseur\FournisseurController;
 use App\Http\Controllers\backend\depense\CategorieDepenseController;
 use App\Http\Controllers\backend\configuration\UniteMesureController;
+use App\Http\Controllers\backend\parametre\SettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -304,28 +292,23 @@ Route::middleware(['admin'])->group(function () {
         route::post('update/{id}', 'update')->name('menu.update');
         route::get('delete/{id}', 'delete')->name('menu.delete');
     });
-
-
-
-
 });
 
-     ######################      END BACKEND ROUTE         ###########################################################
+######################      END BACKEND ROUTE         ###########################################################
 
 
 
 
 
 
-    ######################      START FRONT ROUTE         ###########################################################
+######################      START FRONT ROUTE         ###########################################################
 
-    // route::get('', [AccueilController::class,'index'])->name('accueil');
-    route::get('/' , function(){
-        return view('site.template_restaurant.index');
-    });
+
+//Accueil
+route::get('', [AccueilController::class, 'index'])->name('accueil');
+  
 
     
 
 
     ######################      END FRONT ROUTE         ###########################################################
-

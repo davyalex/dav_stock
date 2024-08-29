@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\backend\basic_site;
+namespace App\Http\Controllers\backend\slide;
 
 use App\Models\Slide;
 use Illuminate\Http\Request;
@@ -13,11 +13,14 @@ class SlideController extends Controller
 
     public function index()
     {
+        try {
 
-        $data_slide = Slide::with('media')->get();
-        $data_slide->sortBy('name');
+            $data_slide = Slide::with('media')->get();
 
-        return view('backend.pages.slide.index', compact('data_slide'));
+            return view('backend.pages.slide.index', compact('data_slide'));
+        } catch (\Throwable $e) {
+            Alert::error('Error', $e->getMessage());
+        }
     }
 
 
@@ -30,6 +33,8 @@ class SlideController extends Controller
             'subtitle' => $request['subtitle'],
             'btn_name' => $request['btn_name'],
             'btn_url' => $request['btn_url'],
+            'btn_color' => $request['btn_color'],
+            'type' => $request['type'],
             'btn_status' => $request['btn_status'],
             'status' => $request['status'],
         ]);
@@ -55,6 +60,8 @@ class SlideController extends Controller
             'subtitle' => $request['subtitle'],
             'btn_name' => $request['btn_name'],
             'btn_url' => $request['btn_url'],
+            'btn_color' => $request['btn_color'],
+            'type' => $request['type'],
             'btn_status' => $request['btn_status'],
             'status' => $request['status'],
         ]);

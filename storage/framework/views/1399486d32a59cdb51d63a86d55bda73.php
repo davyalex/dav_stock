@@ -13,9 +13,9 @@
                         </div>
                         <div class="modal-body">
 
-                            <form class="row g-3 needs-validation" method="post" action="{{ route('slide.store') }}"
+                            <form class="row g-3 needs-validation" method="post" action="<?php echo e(route('slide.store')); ?>"
                                 novalidate enctype="multipart/form-data">
-                                @csrf
+                                <?php echo csrf_field(); ?>
 
                                 <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show material-shadow"
                                     role="alert">
@@ -32,15 +32,15 @@
                                         aria-label="Close"></button>
                                 </div>
 
-                                @php
+                                <?php
                                     $type = ['carrousel', 'grande-banniere', 'petite-banniere' , 'banniere-best-seller'];
-                                @endphp
+                                ?>
                                 <div class="col-md-3">
                                     <label for="validationCustom01" class="form-label">Type</label>
                                     <select name="type" class="form-control" required>
-                                        @foreach ($type as $item)
-                                            <option value="{{ $item }}">{{ $item }}</option>
-                                        @endforeach
+                                        <?php $__currentLoopData = $type; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($item); ?>"><?php echo e($item); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                     <div class="valid-feedback">
                                         Looks good!
@@ -136,10 +136,5 @@
 </div>
 <!--end row-->
 
-{{-- @section('script')
-    <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
-    <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
-    <script src="{{ URL::asset('build/js/pages/modal.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-    
-@endsection --}}
+
+<?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/slide/create.blade.php ENDPATH**/ ?>

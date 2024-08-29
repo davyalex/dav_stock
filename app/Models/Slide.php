@@ -21,6 +21,8 @@ class Slide extends Model implements HasMedia
         'subtitle',
         'btn_name',
         'btn_url',
+        'btn_color',
+        'type',
         'btn_status',
         'status',
     ];
