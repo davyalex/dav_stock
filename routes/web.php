@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use RealRashid\SweetAlert\Facades\Alert;
-use App\Http\Controllers\site\AccueilController;
+use App\Http\Controllers\site\SiteController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\menu\MenuController;
 use App\Http\Controllers\backend\menu\PlatController;
@@ -18,14 +18,13 @@ use App\Http\Controllers\backend\depense\DepenseController;
 use App\Http\Controllers\backend\permission\RoleController;
 use App\Http\Controllers\backend\produit\ProduitController;
 use App\Http\Controllers\backend\stock\AjustementController;
+use App\Http\Controllers\backend\parametre\SettingController;
 use App\Http\Controllers\backend\categorie\CategorieController;
-use App\Http\Controllers\backend\parametre\ParametreController;
 use App\Http\Controllers\backend\configuration\FormatController;
 use App\Http\Controllers\backend\permission\PermissionController;
 use App\Http\Controllers\backend\fournisseur\FournisseurController;
 use App\Http\Controllers\backend\depense\CategorieDepenseController;
 use App\Http\Controllers\backend\configuration\UniteMesureController;
-use App\Http\Controllers\backend\parametre\SettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -282,16 +281,6 @@ Route::middleware(['admin'])->group(function () {
         route::get('delete/{id}', 'delete')->name('menu.delete');
     });
 
-    //  menu
-    Route::prefix('menu')->controller(MenuController::class)->group(function () {
-        route::get('', 'index')->name('menu.index');
-        route::get('create', 'create')->name('menu.create');
-        route::post('store', 'store')->name('menu.store');
-        route::get('show/{id}', 'show')->name('menu.show');
-        route::get('edit/{id}', 'edit')->name('menu.edit');
-        route::post('update/{id}', 'update')->name('menu.update');
-        route::get('delete/{id}', 'delete')->name('menu.delete');
-    });
 });
 
 ######################      END BACKEND ROUTE         ###########################################################
@@ -305,7 +294,11 @@ Route::middleware(['admin'])->group(function () {
 
 
 //Accueil
-route::get('', [AccueilController::class, 'index'])->name('accueil');
+Route::controller(SiteController::class)->group(function () {
+    route::get('', 'accueil')->name('accueil');
+    route::get('{slug}', 'produit')->name('produit'); // get product of categorie selected
+ 
+});
   
 
     

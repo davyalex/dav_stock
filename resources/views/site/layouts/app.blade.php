@@ -17,6 +17,10 @@
    
     @include('site.layouts.header') <!-- header start -->
 
+    @if (!Request::routeIs('accueil'))
+    @include('site.components.breadcrumb')
+    @endif
+
     @yield('content') <!-- content start -->
 
     @include('site.layouts.footer') <!-- footer start -->

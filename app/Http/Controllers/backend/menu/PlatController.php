@@ -17,8 +17,10 @@ class PlatController extends Controller
     //
     public function index()
     {
-        $data_plat = Produit::all();
-        // dd(  $plat->toArray());
+        $categorie = Categorie::where('type', 'plats')->first();
+
+        $data_plat = Produit::where('type_id',  $categorie->id)->get();
+        // dd($data_plat->toArray());
         return view('backend.pages.menu.produit.index', compact('data_plat'));
     }
 
@@ -123,7 +125,7 @@ class PlatController extends Controller
     public function edit($id)
     {
         try {
-           
+
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
                 ->whereIn('type', ['plats'])
                 ->OrderBy('position', 'ASC')->get();
@@ -222,7 +224,7 @@ class PlatController extends Controller
                 'data' => $principaCat
 
 
-            ] , 200);
+            ], 200);
         } catch (\Throwable $e) {
             return $e->getMessage();
         }

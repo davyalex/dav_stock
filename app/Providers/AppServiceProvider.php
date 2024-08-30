@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Setting;
+use App\Models\Categorie;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
@@ -28,13 +29,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-       
+
         //
         Schema::defaultStringLength(191);
 
         //get setting data
         $data_setting = Setting::with('media')->first();
+
+        //get categorie data
+        $menu_link = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
+            ->whereIn('type', ['plats', 'boissons'])
+            ->OrderBy('position', 'ASC')->get();
         // dd($data_setting->toArray);
-        view()->share('setting', $data_setting);
+        view()->share([
+            'setting'=>$data_setting,
+            'menu_link'=>$menu_link
+        ]);
     }
 }

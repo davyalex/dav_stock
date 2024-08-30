@@ -17,6 +17,10 @@
    
     <?php echo $__env->make('site.layouts.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?> <!-- header start -->
 
+    <?php if(!Request::routeIs('accueil')): ?>
+    <?php echo $__env->make('site.components.breadcrumb', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php endif; ?>
+
     <?php echo $__env->yieldContent('content'); ?> <!-- content start -->
 
     <?php echo $__env->make('site.layouts.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?> <!-- footer start -->

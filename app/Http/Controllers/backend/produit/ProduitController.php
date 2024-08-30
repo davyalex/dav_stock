@@ -10,13 +10,16 @@ use App\Models\Fournisseur;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ProduitController extends Controller
 {
     //
     public function index()
     {
-        $data_produit = Produit::all();
+        $categorie = Categorie::whereIn('type', ['ingredients' , 'boissons'])->first();
+
+        $data_produit = Produit::where('type_id',  $categorie->id)->get();
         // dd(  $data_produit->toArray());
         return view('backend.pages.produit.index', compact('data_produit'));
     }
@@ -63,6 +66,8 @@ class ProduitController extends Controller
                 'categorie_id' => $request['categorie'],
                 'stock_alerte' => $request['stock_alerte'],
                 'type_id' =>   $principaCat['id'], // type produit
+                'user_id' => Auth::id(),
+
             ]);
 
             if (request()->hasFile('imagePrincipale')) {
@@ -166,6 +171,9 @@ class ProduitController extends Controller
                 'categorie_id' => $request['categorie'],
                 'stock_alerte' => $request['stock_alerte'],
                 'type_id' =>   $principaCat['id'], // type produit
+                'user_id' => Auth::id(),
+
+                
             ]);
 
 
