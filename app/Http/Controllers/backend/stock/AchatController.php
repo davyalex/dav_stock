@@ -92,7 +92,7 @@ class AchatController extends Controller
                     // 'quantite_unite_unitaire' => 'required', // valeur par unite
                     // 'quantite_unite_total' => 'required', // --qte stockable
                     'quantite_stockable' => 'required',
-                    'fournisseur_id' => 'required',
+                    'fournisseur_id' => '',
                     'prix_achat_unitaire' => 'required',
                     'prix_achat_total' => 'required',
 

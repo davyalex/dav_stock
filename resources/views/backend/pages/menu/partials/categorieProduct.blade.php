@@ -12,8 +12,9 @@
                 <input  class="form-check-input fs-5 produit" value="{{ $produit['id'] }}" name="produits[]" type="checkbox"
                     id="formCheck{{ $produit->id }}">
                 <label class="form-check-label" for="formCheck{{ $produit->id }}">
-                    {{ $produit->nom }} - <i class="text-danger">
-                        {{ $produit->prix }} FCFA</i>
+                    {{ $produit->nom }}
+                     {{-- - <i class="text-danger">
+                        {{ $produit->prix }} FCFA</i> --}}
                 </label>
             </div>
         @endforeach

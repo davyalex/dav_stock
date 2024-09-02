@@ -7,4 +7,4 @@
             </ul>
         </div>
     </div>
-</div><?php /**PATH C:\laragon\www\restaurant\resources\views/site/components/breadcrumb.blade.php ENDPATH**/ ?>
+</div><?php /**PATH C:\laragon\www\Restaurant-NEUILLY-\resources\views/site/components/breadcrumb.blade.php ENDPATH**/ ?>

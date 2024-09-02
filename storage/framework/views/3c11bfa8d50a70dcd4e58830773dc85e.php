@@ -22,4 +22,4 @@
 
 
 <!-- mobile-menu-area-end -->
-<?php /**PATH C:\laragon\www\restaurant\resources\views/site/layouts/menu_desktop/menu.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\Restaurant-NEUILLY-\resources\views/site/layouts/menu_desktop/menu.blade.php ENDPATH**/ ?>

@@ -5,10 +5,10 @@
         <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
 
         <?php $__env->slot('li_1'); ?>
-            Produit menu
+            plat menu
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
-            Créer un nouveau produit
+            Créer un nouveau plat
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
 
@@ -45,10 +45,10 @@
                                                 <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" name="nom" class="form-control" id="SALADE NICOISE"
-                                                    required>
+                                                <input type="text" name="nom" class="form-control"
+                                                   required>
                                             </div>
-                                           
+
                                             <div class="col-md-4 mb-3">
                                                 <label class="form-label" for="meta-title-input">prix <span
                                                         class="text-danger">*</span>
@@ -64,10 +64,12 @@
                                             <textarea name="description" id="ckeditor-classic"></textarea>
                                         </div>
                                         <div class="col-md-12 mt-3">
-                                            <label class="form-check-label" for="customAff">Visible  <span>(activé par defaut )</span> </label>
-                                        
+                                            <label class="form-check-label" for="customAff">Visible <span>(activé par defaut
+                                                    )</span> </label>
+
                                             <div class="form-check form-switch form-switch-lg col-md-2" dir="ltr">
-                                                <input type="checkbox" name="statut" class="form-check-input" id="customAff" checked>
+                                                <input type="checkbox" name="statut" class="form-check-input"
+                                                    id="customAff" checked>
                                             </div>
                                             <div class="valid-feedback">
                                                 Looks good!
@@ -210,7 +212,7 @@
                 });
 
                 $.ajax({
-                    url: "<?php echo e(route('produit-menu.store')); ?>", // Adjust the route as needed
+                    url: "<?php echo e(route('plat.store')); ?>", // Adjust the route as needed
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -220,7 +222,7 @@
 
                         if (response.message == 'operation reussi') {
                             Swal.fire({
-                                title: 'Produit ajouté avec success!',
+                                title: 'plat ajouté avec success!',
                                 // text: 'You clicked the button!',
                                 icon: 'success',
                                 showCancelButton: false,
@@ -231,13 +233,13 @@
                                 buttonsStyling: false,
                                 showCloseButton: true
                             })
-                            var url = "<?php echo e(route('produit-menu.index')); ?>" // redirect route stock
+                            var url = "<?php echo e(route('plat.index')); ?>" // redirect route stock
 
                             window.location.replace(url);
                         } else if (response == 'The nom has already been taken.') {
                             Swal.fire({
-                                title: 'Ce produit existe déjà ?',
-                                text: $('#nomProduit').val(),
+                                title: 'Ce plat existe déjà ?',
+                                text: $('#nomplat').val(),
                                 icon: 'warning',
                                 customClass: {
                                     confirmButton: 'btn btn-primary w-xs me-2 mt-2',

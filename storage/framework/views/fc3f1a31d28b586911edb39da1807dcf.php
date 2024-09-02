@@ -21,10 +21,7 @@
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="card">
-                                    <a href="<?php echo e(route('stock.create')); ?>" class="float-end text-decoration-underline">
-                                        <i class="ri ri-arrow-left-line"></i>
-                                        Retour au stock
-                                    </a>
+                                    
                                     <div class="card-body">
                                         <div class="mb-3 row">
                                             <div class="col-md-5">

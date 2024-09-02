@@ -296,7 +296,7 @@ Route::middleware(['admin'])->group(function () {
 //Accueil
 Route::controller(SiteController::class)->group(function () {
     route::get('', 'accueil')->name('accueil');
-    route::get('{slug}', 'produit')->name('produit'); // get product of categorie selected
+    route::get('/{slug}', 'produit')->name('produit'); // get product of categorie selected
  
 });
   
