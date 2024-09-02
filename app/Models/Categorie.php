@@ -56,7 +56,7 @@ class categorie extends Model
 
     public function produits()
     {
-        return $this->hasMany(Produit::class);
+        return $this->hasMany(Produit::class)->where('statut' , 'active');
     }
 
     public function ancestors()

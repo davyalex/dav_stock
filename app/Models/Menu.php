@@ -19,7 +19,9 @@ class Menu extends Model
  
     public function produits()
     {
-        return $this->belongsToMany(Produit::class, 'menu_produit')->withTimestamps();
+        return $this->belongsToMany(Produit::class, 'menu_produit')
+        ->where('statut' , 'active')
+        ->withTimestamps();
     }
 
     public function user()

@@ -11,7 +11,7 @@
                             @foreach ($menu_link as $menu)
                                 @include('site.layouts.menu_mobile.menuchild', ['menu' => $menu])
                             @endforeach
-                            <li><a href="">Menu du jour</a></li>
+                            <li><a href="{{route('menu')}}">Menu du jour</a></li>
                         </ul>
                     </nav>
                 </div>

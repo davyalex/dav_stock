@@ -62,11 +62,11 @@ Route::controller(AuthAdminController::class)->prefix('admin')->group(function (
  
 
 
-Route::middleware(['admin'])->group(function () {
+Route::prefix('admin')->middleware(['admin'])->group(function () {
 
     //Dashboard
-    Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {
-        route::get('', 'index')->name('dashboard.index');
+    Route::controller(DashboardController::class)->group(function () {
+        route::get('dashboard', 'index')->name('dashboard.index');
     });
 
 
@@ -296,7 +296,8 @@ Route::middleware(['admin'])->group(function () {
 //Accueil
 Route::controller(SiteController::class)->group(function () {
     route::get('', 'accueil')->name('accueil');
-    route::get('/{slug}', 'produit')->name('produit'); // get product of categorie selected
+    route::get('/categorie/{slug}', 'produit')->name('produit'); // get product of categorie selected
+    route::get('/menu', 'menu')->name('menu');
  
 });
   

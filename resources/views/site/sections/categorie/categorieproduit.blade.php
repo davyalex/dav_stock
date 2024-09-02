@@ -1,4 +1,3 @@
-<!-- resources/views/partials/categorie_menu.blade.php -->
 <ul id="faq">
     @foreach($categories as $categorie)
         <li>
@@ -12,7 +11,7 @@
                 <ul id="shop-categorie-{{ $categorie->id }}" 
                     class="panel-collapse collapse {{ $categorieSelect->id == $categorie->id ? 'show' : '' }}">
                     @foreach($categorie->children as $child)
-                        @include('site.sections.categorie.categoriechild', ['categories' => [$child], 'categorieSelect' => $categorieSelect])
+                        @include('site.sections.categorie.categorieproduit', ['categories' => [$child], 'categorieSelect' => $categorieSelect])
                     @endforeach
                 </ul>
             @else

@@ -2,7 +2,7 @@ function delete_row(route){
     $('.delete').on("click", function(e) {
         e.preventDefault();
         var Id = $(this).attr('data-id');
-        var url = '/'+ route +'/delete/'
+        var url = 'admin/'+ route +'/delete/'
         Swal.fire({
             title: 'Etes-vous sûr(e) de vouloir supprimer ?',
             text: "Cette action est irréversible!",

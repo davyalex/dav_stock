@@ -1,6 +1,6 @@
 @extends('site.layouts.app')
 
-@section('title', 'Liste des ' . $categorieSelect->name)
+@section('title', 'Liste du menu')
 
 @section('content')
     <div class="shop-page-area pt-10 pb-100">
@@ -10,14 +10,14 @@
                 <div class="col-lg-3">
                     <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
                         <div class="shop-widget">
-                            <h4 class="shop-sidebar-title">Nos  {{ $categorieSelect->name }}  </h4>
+                            <h4 class="shop-sidebar-title"> {{ $menu->libelle }} </h4>
                             <div class="shop-catigory">
-                                {{-- @include('site.sections.categorie.categoriechild', [
+                                {{-- @include('site.sections.categorie.categoriemenu', [
                                     'categories' => $categories,
                                     'categorieSelect' => $categorieSelect,
                                 ]) --}}
 
-                                @include('site.sections.categorie.categorieproduit')
+                                @include('site.sections.categorie.categoriemenu')
 
                             </div>
                         </div>
@@ -32,14 +32,16 @@
                     <div class="grid-list-product-wrapper">
                         <div class="product-grid product-view pb-20">
                             <div class="row">
-                                <!-- start si type categorie == boissons-->
-                                @if ($categorieSelect->type == 'boissons')
-                                    @foreach ($produits as $produit)
-                                        @foreach ($produit->achats as $item)
+                                <!-- start produits menu-->
+
+                               
+                                @foreach ($menu->produits as $produit)
+                                    @if ($produit->categorie->getPrincipalCategory()->type == 'boissons')
+                                        @foreach ($produit->achats as $achat)
                                             <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
                                                 <div class="product-wrapper">
                                                     <div class="product-img">
-                                                        <a href="product-details.html">
+                                                        <a href="product-de tails.html">
                                                             <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
                                                                 alt="">
                                                         </a>
@@ -63,22 +65,18 @@
                                                             <a href="product-details.html"> {{ $produit->nom }} </a>
                                                         </h4>
                                                         <div class="product-price-wrapper">
-                                                            <span>{{ $item->prix_vente_unitaire }} FCFA</span>
-                                                            {{-- <span class="product-price-old">$120.00 </span> --}}
+                                                            <span>{{$achat->prix_vente_unitaire }} FCFA</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         @endforeach
-                                    @endforeach
-                                @endif
-                                <!-- end si type categorie == boissons-->
 
 
 
-                                <!-- start si type categorie != boissons-->
-                                @if ($categorieSelect->type != 'boissons')
-                                    @foreach ($produits as $produit)
+
+
+                                    @else
                                         <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
                                             <div class="product-wrapper">
                                                 <div class="product-img">
@@ -112,9 +110,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @endforeach
-                                @endif
-                                <!-- end si type categorie != boissons-->
+                                    @endif
+                                @endforeach
+                                <!-- end produits menu-->
+
                             </div>
                         </div>
                         <div class="pagination-total-pages">

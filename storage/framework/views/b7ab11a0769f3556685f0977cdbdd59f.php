@@ -11,7 +11,7 @@
                             <?php $__currentLoopData = $menu_link; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $menu): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <?php echo $__env->make('site.layouts.menu_mobile.menuchild', ['menu' => $menu], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            <li><a href="">Menu du jour</a></li>
+                            <li><a href="<?php echo e(route('menu')); ?>">Menu du jour</a></li>
                         </ul>
                     </nav>
                 </div>

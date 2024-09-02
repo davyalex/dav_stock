@@ -23,15 +23,16 @@
                     <form class="row g-3 needs-validation" method="post" action="<?php echo e(route('categorie.add-subCat-store')); ?>" novalidate>
                         <?php echo csrf_field(); ?>
                         <div class="col-md-12">
-                            <label for="validationCustom01" class="form-label">Ajouter une sous categorie </label>
-                            <input readonly type="text" name="categorie_parent" value="<?php echo e($data_categorie_parent['name']); ?>" class="form-control" id="validationCustom01"
-                                placeholder="categorie1" required>
+                            <h5>Categorie selectionée : <strong><?php echo e($data_categorie_parent['name']); ?></strong></h5>
+                            <input readonly type="text" name="categorie_parent" value="<?php echo e($data_categorie_parent['id']); ?>" class="form-control" id="validationCustom01"
+                                placeholder="categorie1" hidden>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                         </div>
+
                         <div class="col-md-12">
-                            <label for="validationCustom01" class="form-label">Sous categorie</label>
+                            <label for="validationCustom01" class="form-label">Nom de la sous categorie</label>
                             <input type="text" name="name" class="form-control" id="validationCustom01"
                                 required>
                             <div class="valid-feedback">

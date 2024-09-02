@@ -1,8 +1,8 @@
-@extends('site.layouts.app')
 
-@section('title', 'Liste des ' . $categorieSelect->name)
 
-@section('content')
+<?php $__env->startSection('title', 'Liste du menu'); ?>
+
+<?php $__env->startSection('content'); ?>
     <div class="shop-page-area pt-10 pb-100">
         <div class="container">
             <div class="row flex-row">
@@ -10,14 +10,11 @@
                 <div class="col-lg-3">
                     <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
                         <div class="shop-widget">
-                            <h4 class="shop-sidebar-title">Nos  {{ $categorieSelect->name }}  </h4>
+                            <h4 class="shop-sidebar-title"> <?php echo e($menu->libelle); ?> </h4>
                             <div class="shop-catigory">
-                                {{-- @include('site.sections.categorie.categoriechild', [
-                                    'categories' => $categories,
-                                    'categorieSelect' => $categorieSelect,
-                                ]) --}}
+                                
 
-                                @include('site.sections.categorie.categorieproduit')
+                                <?php echo $__env->make('site.sections.categorie.categoriemenu', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
                             </div>
                         </div>
@@ -32,15 +29,17 @@
                     <div class="grid-list-product-wrapper">
                         <div class="product-grid product-view pb-20">
                             <div class="row">
-                                <!-- start si type categorie == boissons-->
-                                @if ($categorieSelect->type == 'boissons')
-                                    @foreach ($produits as $produit)
-                                        @foreach ($produit->achats as $item)
+                                <!-- start produits menu-->
+
+                               
+                                <?php $__currentLoopData = $menu->produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php if($produit->categorie->getPrincipalCategory()->type == 'boissons'): ?>
+                                        <?php $__currentLoopData = $produit->achats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $achat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
                                                 <div class="product-wrapper">
                                                     <div class="product-img">
-                                                        <a href="product-details.html">
-                                                            <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
+                                                        <a href="product-de tails.html">
+                                                            <img src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>"
                                                                 alt="">
                                                         </a>
                                                         <div class="product-action">
@@ -60,30 +59,26 @@
                                                     </div>
                                                     <div class="product-content">
                                                         <h4>
-                                                            <a href="product-details.html"> {{ $produit->nom }} </a>
+                                                            <a href="product-details.html"> <?php echo e($produit->nom); ?> </a>
                                                         </h4>
                                                         <div class="product-price-wrapper">
-                                                            <span>{{ $item->prix_vente_unitaire }} FCFA</span>
-                                                            {{-- <span class="product-price-old">$120.00 </span> --}}
+                                                            <span><?php echo e($achat->prix_vente_unitaire); ?> FCFA</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endforeach
-                                    @endforeach
-                                @endif
-                                <!-- end si type categorie == boissons-->
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 
 
-                                <!-- start si type categorie != boissons-->
-                                @if ($categorieSelect->type != 'boissons')
-                                    @foreach ($produits as $produit)
+
+
+                                    <?php else: ?>
                                         <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
                                             <div class="product-wrapper">
                                                 <div class="product-img">
                                                     <a href="product-details.html">
-                                                        <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
+                                                        <img src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>"
                                                             alt="">
                                                     </a>
                                                     <div class="product-action">
@@ -103,18 +98,19 @@
                                                 </div>
                                                 <div class="product-content">
                                                     <h4>
-                                                        <a href="product-details.html"> {{ $produit->nom }} </a>
+                                                        <a href="product-details.html"> <?php echo e($produit->nom); ?> </a>
                                                     </h4>
                                                     <div class="product-price-wrapper">
-                                                        <span>{{ $produit->prix }} FCFA</span>
-                                                        {{-- <span class="product-price-old">$120.00 </span> --}}
+                                                        <span><?php echo e($produit->prix); ?> FCFA</span>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    @endforeach
-                                @endif
-                                <!-- end si type categorie != boissons-->
+                                    <?php endif; ?>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <!-- end produits menu-->
+
                             </div>
                         </div>
                         <div class="pagination-total-pages">
@@ -146,4 +142,6 @@
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('site.layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/site/pages/menu.blade.php ENDPATH**/ ?>

@@ -12,7 +12,7 @@
                               @foreach ($menu_link as $menu)
                               <li><a href="{{route('produit' , $menu->slug)}}">{{$menu->name}} </a></li>
                             @endforeach
-                            <li><a href="#">Menu du jour</a></li>
+                            <li><a href="{{route('menu')}}">Menu du jour</a></li>
                         </ul>
                     </nav>
                 </div>

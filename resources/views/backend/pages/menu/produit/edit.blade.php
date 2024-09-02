@@ -234,7 +234,7 @@
                 });
 
                 $.ajax({
-                    url: "/plat/update/" + productId, // Adjust the route as needed
+                    url: "/admin/plat/update/" + productId, // Adjust the route as needed
                     type: 'POST',
                     data: formData,
                     contentType: false,

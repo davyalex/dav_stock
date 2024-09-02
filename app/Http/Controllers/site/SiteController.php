@@ -72,7 +72,6 @@ class SiteController extends Controller
                 ->get();
             // dd($categorie->toArray());
 
-
             return view('site.pages.produit', compact(
                 'produits',
                 'categories',
@@ -84,19 +83,35 @@ class SiteController extends Controller
     }
 
 
-    public function menuListe(Request $request){
-       try {
+    public function menu(Request $request)
+    {
+        try {
             $today = Carbon::today();
-            $menu = Menu::where('date_menu',$today)->first();
+            $menu = Menu::where('date_menu', $today)->with(['produits.categorie', 'produits.achats'])->first();
+
+            $catData=[];
+            $cat = $menu->produits->pluck('categorie');
+            foreach ($cat as  $value) {
+                array_push( $catData , $value->getPrincipalCategory());
+            }
 
             // $categorie = Categorie::withWhereHas('children.produits')
             // ->whereIn('type', ['plats', 'boissons'])->get();
-            // dd($menu->produits->toArray());
-            return view('site.pages.menu-liste');
-       } catch (\Throwable $e) {
-        return $e->getMessage();
-       }
 
-        
+            // $categories = Categorie::whereNull('parent_id')
+            //     ->with('children.produits')
+            //     ->whereIn('type', ['plats', 'boissons'])
+            //     ->orderBy('position', 'ASC')
+            //     ->get();
+
+            
+            dd($catData);
+            return view('site.pages.menu', compact('menu' , 'categories'));
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
     }
+
+
+    // public function
 }

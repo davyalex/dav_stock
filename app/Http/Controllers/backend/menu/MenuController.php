@@ -28,7 +28,7 @@ class MenuController extends Controller
     {
         try {
 
-            $data_categorie_produit = Categorie::withWhereHas('children.produits')
+            $data_categorie_produit = Categorie::withWhereHas('children')
             ->whereIn('type', ['plats' , 'boissons'])->get();
             // dd( $data_categorie_produit->toArray());
 
@@ -75,7 +75,7 @@ class MenuController extends Controller
     public function edit($id)
     {
         try {
-            $data_categorie_produit = Categorie::withWhereHas('children.produits')->whereIn('type', ['plats' , 'boissons'])->get();
+            $data_categorie_produit = Categorie::withWhereHas('children')->whereIn('type', ['plats' , 'boissons'])->get();
 
             $data_menu = Menu::find($id);
 
