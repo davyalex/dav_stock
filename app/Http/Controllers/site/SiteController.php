@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\site;
 
+use Carbon\Carbon;
+use App\Models\Menu;
 use App\Models\Slide;
 use App\Models\Produit;
 use App\Models\Categorie;
@@ -35,39 +37,66 @@ class SiteController extends Controller
     public function produit(Request $request, $slug)
     {
         try {
-            $getCategorie = Categorie::whereSlug($slug)->first(); // recuperer les infos de la categorie a partir du slug
+            $categorieSelect = Categorie::whereSlug($slug)->first(); // recuperer les infos de la categorie a partir du slug
 
-            if (!$getCategorie) {
+            if (!$categorieSelect) {
                 return redirect()->route('accueil');
             }
             // retourner les achats du produits si type=boissons
-            if ($getCategorie->type == 'boissons') {
-                $produits = Produit::where('type_id', $getCategorie->id)
+            if ($categorieSelect->type == 'boissons') {
+                $produits = Produit::where('type_id', $categorieSelect->id)
                     ->withWhereHas('achats', fn($q) => $q->whereStatut('active'))
                     ->whereStatut('active')
                     ->get();  // produits de la categorie selectionné si type ==boissons
 
-            } elseif ($getCategorie->type != 'boissons') {
-                $produits = Produit::where('type_id', $getCategorie->id)
+            } elseif ($categorieSelect->type == 'plats') {
+                $produits = Produit::where('type_id', $categorieSelect->id)
+                    ->whereStatut('active')
+                    ->get();
+            } else {
+                $produits = Produit::where('categorie_id', $categorieSelect->id)
                     ->whereStatut('active')
                     ->get();
             }
 
-
+            // dd($produits->toArray());
             // $produits  =   $produits->achats;
 
-            $categorie = Categorie::with('children')
-                ->withCount('children')->whereId($getCategorie->id)->OrderBy('position', 'ASC')->first();  // categorie et ses souscategorie 
+            // $categorie = Categorie::with(['children' , 'parent'])
+            //     ->withCount('children')->where('parent_id', $categorieSelect->id)->OrderBy('position', 'ASC')->get();  // categorie et ses souscategorie 
 
-            // dd($produits->toArray());
+            $categories = Categorie::whereNull('parent_id')
+                ->with('children')
+                ->whereIn('type', ['plats', 'boissons'])
+                ->orderBy('position', 'ASC')
+                ->get();
+            // dd($categorie->toArray());
 
 
             return view('site.pages.produit', compact(
                 'produits',
-                'categorie',
+                'categories',
+                'categorieSelect',
             ));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
+    }
+
+
+    public function menuListe(Request $request){
+       try {
+            $today = Carbon::today();
+            $menu = Menu::where('date_menu',$today)->first();
+
+            // $categorie = Categorie::withWhereHas('children.produits')
+            // ->whereIn('type', ['plats', 'boissons'])->get();
+            // dd($menu->produits->toArray());
+            return view('site.pages.menu-liste');
+       } catch (\Throwable $e) {
+        return $e->getMessage();
+       }
+
+        
     }
 }

@@ -92,6 +92,7 @@ class CategorieController extends Controller
                 'status' => $request['status'],
                 'url' => $request['url'],
                 'position' => $data_count + 1,
+                
             ]);
 
             Alert::success('Operation réussi', 'Success Message');
