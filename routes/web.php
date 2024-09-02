@@ -59,7 +59,7 @@ Route::controller(AuthAdminController::class)->prefix('admin')->group(function (
     route::post('/login', 'login')->name('admin.login');
     route::post('/logout', 'logout')->name('admin.logout');
 });
-
+ 
 
 
 Route::middleware(['admin'])->group(function () {
