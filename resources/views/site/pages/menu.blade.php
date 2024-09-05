@@ -3,6 +3,22 @@
 @section('title', 'Liste du menu')
 
 @section('content')
+
+    <style>
+        .image-container {
+            width: 100%;
+            height: 250px;
+            /* Définissez une hauteur fixe pour vos images */
+            overflow: hidden;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Assure que l'image garde le ratio tout en remplissant l'espace */
+        }
+    </style>
     <div class="shop-page-area pt-10 pb-100">
         <div class="container">
             <div class="row flex-row">
@@ -17,7 +33,7 @@
                                     'categorieSelect' => $categorieSelect,
                                 ]) --}}
 
-                                @include('site.sections.categorie.categoriemenu')
+                                {{-- @include('site.sections.categorie.categoriemenu') --}}
 
                             </div>
                         </div>
@@ -34,17 +50,62 @@
                             <div class="row">
                                 <!-- start produits menu-->
 
-                               
-                                @foreach ($menu->produits as $produit)
-                                    @if ($produit->categorie->getPrincipalCategory()->type == 'boissons')
-                                        @foreach ($produit->achats as $achat)
+
+                                @foreach ($produitsFiltres as $categorie => $produits)
+                                    <h3 class="text-uppercase">{{ $categorie }}</h3>
+                                    {{-- @php
+                                        echo $produits[0]['typeProduit']['name'];
+                                    @endphp --}}
+                                    {{-- si le produit est une boisson --}}
+                                    @foreach ($produits as $produit)
+                                        @if ($categorie == 'boissons')
+                                            @foreach ($produit->achats as $achat)
+                                                <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
+                                                    <div class="product-wrapper">
+                                                        <div class="product-img">
+                                                            <div class="image-container">
+                                                                <a href="product-details.html">
+                                                                    <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
+                                                                        alt="">
+                                                                </a>
+                                                            </div>
+                                                            <div class="product-action">
+                                                                <div class="pro-action-left">
+                                                                    <a title="Add Tto Cart" href="#"
+                                                                        class="btn btn-danger text-white"><i
+                                                                            class="ion-android-cart"></i>Je commande</a>
+                                                                </div>
+                                                                <div class="pro-action-right">
+                                                                    <a title="Wishlist" href="wishlist.html"><i
+                                                                            class="ion-ios-heart-outline"></i></a>
+                                                                    <a title="Quick View" data-bs-toggle="modal"
+                                                                        data-bs-target="#exampleModal" href="#"><i
+                                                                            class="ion-android-open"></i></a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="product-content">
+                                                            <h4>
+                                                                <a href="product-details.html"> {{ $produit->nom }} </a>
+                                                            </h4>
+                                                            <div class="product-price-wrapper">
+                                                                <span>{{ $achat->prix_vente_unitaire }} FCFA</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            {{-- si le produit est un plat --}}
                                             <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
                                                 <div class="product-wrapper">
-                                                    <div class="product-img">
-                                                        <a href="product-de tails.html">
-                                                            <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                                                                alt="">
-                                                        </a>
+                                                    <div class="product-img ">
+                                                        <div class="image-container">
+                                                            <a href="product-details.html">
+                                                                <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
+                                                                    alt="">
+                                                            </a>
+                                                        </div>
                                                         <div class="product-action">
                                                             <div class="pro-action-left">
                                                                 <a title="Add Tto Cart" href="#"
@@ -65,52 +126,14 @@
                                                             <a href="product-details.html"> {{ $produit->nom }} </a>
                                                         </h4>
                                                         <div class="product-price-wrapper">
-                                                            <span>{{$achat->prix_vente_unitaire }} FCFA</span>
+                                                            <span>{{ $produit->prix }} FCFA</span>
+                                                            {{-- <span class="product-price-old">$120.00 </span> --}}
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endforeach
-
-
-
-
-
-                                    @else
-                                        <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
-                                            <div class="product-wrapper">
-                                                <div class="product-img">
-                                                    <a href="product-details.html">
-                                                        <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                                                            alt="">
-                                                    </a>
-                                                    <div class="product-action">
-                                                        <div class="pro-action-left">
-                                                            <a title="Add Tto Cart" href="#"
-                                                                class="btn btn-danger text-white"><i
-                                                                    class="ion-android-cart"></i>Je commande</a>
-                                                        </div>
-                                                        <div class="pro-action-right">
-                                                            <a title="Wishlist" href="wishlist.html"><i
-                                                                    class="ion-ios-heart-outline"></i></a>
-                                                            <a title="Quick View" data-bs-toggle="modal"
-                                                                data-bs-target="#exampleModal" href="#"><i
-                                                                    class="ion-android-open"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="product-content">
-                                                    <h4>
-                                                        <a href="product-details.html"> {{ $produit->nom }} </a>
-                                                    </h4>
-                                                    <div class="product-price-wrapper">
-                                                        <span>{{ $produit->prix }} FCFA</span>
-                                                        {{-- <span class="product-price-old">$120.00 </span> --}}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
+                                        @endif
+                                    @endforeach
                                 @endforeach
                                 <!-- end produits menu-->
 

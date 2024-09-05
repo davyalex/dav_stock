@@ -87,30 +87,83 @@ class SiteController extends Controller
     {
         try {
             $today = Carbon::today();
-            $menu = Menu::where('date_menu', $today)->with(['produits.categorie', 'produits.achats'])->first();
+            // $menu = Menu::where('date_menu', $today)->with(['produits.categorie', 'produits.achats'])->first();
 
-            $catData=[];
-            $cat = $menu->produits->pluck('categorie');
-            foreach ($cat as  $value) {
-                array_push( $catData , $value->getPrincipalCategory());
-            }
+            // Supposez que vous avez une colonne "est_menu_du_jour" pour identifier le menu du jour
+            $menu = Menu::with(['produits.achats', 'produits.categorie' => function ($query) {
+                $query->with(['parent', 'children']); // On récupère le parent pour chaque catégorie
+            }])->first();
 
-            // $categorie = Categorie::withWhereHas('children.produits')
-            // ->whereIn('type', ['plats', 'boissons'])->get();
+            // Filtrer les produits par catégorie principale
+            $produitsFiltres = $menu->produits->groupBy(function ($produit) {
+                return $produit->categorie->getPrincipalCategory()->type;
+            });
 
-            // $categories = Categorie::whereNull('parent_id')
-            //     ->with('children.produits')
-            //     ->whereIn('type', ['plats', 'boissons'])
-            //     ->orderBy('position', 'ASC')
-            //     ->get();
+            // Récupérer toutes les catégories associées au menu du jour
+            $categories = $this->getCategoriesRecursivesFromMenu($menu);
 
-            
-            dd($catData);
-            return view('site.pages.menu', compact('menu' , 'categories'));
+
+
+
+            dd($categories->toArray());
+            return view('site.pages.menu', compact('menu', 'categories', 'produitsFiltres'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
     }
+
+
+
+    // Récupérer toutes les catégories du menu du jour
+    // private function getCategoriesFromMenu($menu)
+    // {
+    //     $categories = collect();
+
+    //     foreach ($menu->produits as $produit) {
+    //         $categorie = $produit->categorie->getPrincipalCategory();
+    //         $categories->push($categorie);
+    //     }
+
+    //     // Éviter les doublons en utilisant `unique` sur l'identifiant de la catégorie
+    //     return $categories->unique('id');
+    // }
+
+
+    // Récupérer toutes les catégories principales et leurs enfants associés au menu du jour
+    private function getCategoriesRecursivesFromMenu($menu)
+    {
+        $categories = collect();
+
+        foreach ($menu->produits as $produit) {
+            $categorie = $produit->categorie->getPrincipalCategory();
+            $categories->push($categorie);
+
+            // Ajouter les enfants de chaque catégorie principale
+            $categories = $categories->merge($this->getEnfantsRecursifs($categorie));
+        }
+
+        // Éviter les doublons dans la liste des catégories
+        return $categories->unique('id');
+    }
+
+    // Récupérer les enfants des catégories récursivement
+    private function getEnfantsRecursifs($categorie)
+    {
+        $categories = collect();
+
+        // Vérification que 'children' est bien un objet itérable
+        if ($categorie->children && $categorie->children->isNotEmpty()) {
+            foreach ($categorie->children as $enfant) {
+                $categories->push($enfant);
+
+                // Appel récursif pour récupérer les enfants des enfants
+                $categories = $categories->merge($this->getEnfantsRecursifs($enfant));
+            }
+        }
+
+        return $categories;
+    }
+
 
 
     // public function
