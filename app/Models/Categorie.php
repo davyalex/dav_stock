@@ -56,7 +56,7 @@ class categorie extends Model
 
     public function produits()
     {
-        return $this->hasMany(Produit::class)->where('statut' , 'active');
+        return $this->hasMany(Produit::class ,'categorie_id')->where('statut' , 'active');
     }
 
     public function ancestors()
@@ -91,8 +91,8 @@ class categorie extends Model
         return $this->hasMany(Achat::class);
     }
 
-    public function produit_menus() 
-    {
-        return $this->hasMany(ProduitMenu::class);
-    }
+    // public function produitMenus() 
+    // {
+    //     return $this->hasMany(Produit::class)->with('');
+    // }
 }

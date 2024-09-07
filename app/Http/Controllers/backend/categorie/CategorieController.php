@@ -95,7 +95,7 @@ class CategorieController extends Controller
                 'status' => $request['status'],
                 'url' => $request['url'],
                 'position' => $data_count + 1,
-                'type' =>  $categorie_parent['type'],
+                // 'type' =>  $categorie_parent['type'],
             ]);
 
             Alert::success('Operation réussi', 'Success Message');

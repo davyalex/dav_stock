@@ -298,6 +298,7 @@ Route::controller(SiteController::class)->group(function () {
     route::get('', 'accueil')->name('accueil');
     route::get('/categorie/{slug}', 'produit')->name('produit'); // get product of categorie selected
     route::get('/menu', 'menu')->name('menu');
+    route::get('/produit/detail/{slug}', 'produitDetail')->name('produit.detail');
  
 });
   

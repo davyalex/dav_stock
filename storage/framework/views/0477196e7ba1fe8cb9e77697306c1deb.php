@@ -72,7 +72,7 @@
                       if (result.isConfirmed) {
                           $.ajax({
                               type: "GET",
-                              url: "/categorie/delete/" + Id,
+                              url: "/admin/categorie/delete/" + Id,
                               dataType: "json",
 
                               success: function(response) {

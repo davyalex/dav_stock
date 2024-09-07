@@ -2,17 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Produit extends Model implements HasMedia
 {
     use HasFactory, SoftDeletes, InteractsWithMedia , sluggable;
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('standard-size')
+            ->width(300) // par exemple 300px de large
+            ->height(300) // 300px de hauteur
+            ->sharpen(10); // pour améliorer la qualité si besoin
+    }
 
     public $incrementing = false;
 
@@ -54,7 +63,7 @@ class Produit extends Model implements HasMedia
 
     public function categorie()
     {
-        return $this->belongsTo(Categorie::class);
+        return $this->belongsTo(Categorie::class ,'categorie_id');
     }
 
 
@@ -78,5 +87,7 @@ class Produit extends Model implements HasMedia
     {
         return $this->belongsToMany(Menu::class, 'menu_produit')->withTimestamps();
     }
+
+  
 
 }
