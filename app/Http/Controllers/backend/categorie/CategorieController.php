@@ -24,7 +24,7 @@ class CategorieController extends Controller
         //type produit
         // $data_type_produit = TypeProduit::all();
         // dd($data_categorie->toArray());
-        return view('backend.pages.Categorie.create', compact('data_categorie'));
+        return view('backend.pages.categorie.create', compact('data_categorie'));
     }
 
 
