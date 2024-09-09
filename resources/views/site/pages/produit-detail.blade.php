@@ -9,55 +9,55 @@
             <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <div class="product-details-img">
-                        <img class="zoompro" src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                            data-zoom-image="{{ $produit->getFirstMediaUrl('ProduitImage') }}" width="10px" alt="{{$produit->nom}}" />
+                        <img class="zoompro" src="{{ $produit->getFirstMediaUrl('ProduitImage' , 'standard-size') }}"
+                            data-zoom-image="{{ $produit->getFirstMediaUrl('ProduitImage') }}" 
+                            alt="{{ $produit->nom }}" />
                         <div id="gallery" class="mt-20 product-dec-slider owl-carousel">
                             @foreach ($produit->getMedia('galleryProduit') as $media)
-                                <a data-image="{{$media->getUrl()}}"
-                                    data-zoom-image="{{$media->getUrl()}}>
-                                    <img src="{{$media->getUrl()}} alt="{{$media->name}}">
+                                <a data-image="{{ $media->getUrl('standard-size') }}" data-zoom-image="{{ $media->getUrl('standard-size') }}">
+                                    <img src="{{ $media->getUrl('small-size') }}" alt="{{ $media->name }}">
                                 </a>
                             @endforeach
-
-
                         </div>
-                        <span> {{$produit->categorie->name}} </span>
+                        <span> {{ $produit->categorie->name }} </span>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="product-details-content">
-                        <h4>{{$produit->nom}} </h4>
+                        <h4>{{ $produit->nom }} </h4>
 
-                        <span> {{$produit->achats->isNotEmpty() ? $produit->achats[0]->prix_vente_unitaire : $produit->prix}} FCFA </span>
-                        
+                        <span>
+                            {{ $produit->achats->isNotEmpty() ? $produit->achats[0]->prix_vente_unitaire : $produit->prix }}
+                            FCFA </span>
+
                         @if ($produit->achats->isNotEmpty())
-                              <div class="in-stock">
-                            <p>En stock: <span> {{$produit->achats->isNotEmpty() ? $produit->stock : ''}} </span></p>
-                        </div>
+                            <div class="in-stock">
+                                <p>En stock: <span> {{ $produit->achats->isNotEmpty() ? $produit->stock : '' }} </span></p>
+                            </div>
                         @endif
-                      
-                        <p> {{$produit->description}} </p>
+
+                        <p> {{ $produit->description }} </p>
 
                         <div class="pro-details-cart-wrap d-flex">
 
-                             <div class="product-quantity">
+                            <div class="product-quantity">
                                 <div class="cart-plus-minus">
                                     <input class="cart-plus-minus-box" type="text" name="qtybutton" value="2">
                                 </div>
                             </div>
                             <div class="shop-list-cart-wishlist mx-3">
-                                <a title="Add To Cart" href="#">
-                                   <i class="ion-android-cart"></i>
+                                <a title="Ajouter au panier" href="#">
+                                    <i class="ion-android-cart"></i>
                                 </a>
-                              
+
                             </div>
-                           
+
                         </div>
                         <div class="pro-dec-categories">
                             <ul>
                                 <li class="categories-title">Categories:</li>
-                                <li><a href="#">{{$produit->categorie->getPrincipalCategory()->name}} ,</a></li>
-                                <li><a href="#"> {{$produit->categorie->name}} </a></li>
+                                <li><a href="#">{{ $produit->categorie->getPrincipalCategory()->name }} ,</a></li>
+                                <li><a href="#"> {{ $produit->categorie->name }} </a></li>
 
                             </ul>
                         </div>
@@ -79,7 +79,7 @@
                 <div class="tab-content description-review-bottom">
                     <div id="des-details1" class="tab-pane active">
                         <div class="product-description-wrapper">
-                           {{$produit->description}}
+                            {{ $produit->description }}
                         </div>
                     </div>
                     <div id="des-details2" class="tab-pane">

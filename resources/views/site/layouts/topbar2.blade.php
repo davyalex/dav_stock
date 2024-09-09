@@ -3,9 +3,11 @@
         <div class="row">
             <div class="col-lg-3 col-md-4 col-12 col-sm-4">
                 <div class="logo">
-                    <a href="index.html">
-                        <img alt="" src="assets/img/logo/logo.png">
+                    @if ($setting !=null)
+                    <a href="{{route('accueil')}}">
+                        <img alt="" src="{{ URL::asset($setting->getFirstMediaUrl('logo_header')) }}" alt=""  width="50">
                     </a>
+                    @endif
                 </div>
             </div>
             <div class="col-lg-9 col-md-8 col-12 col-sm-8">

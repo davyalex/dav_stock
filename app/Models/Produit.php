@@ -21,6 +21,12 @@ class Produit extends Model implements HasMedia
             ->width(300) // par exemple 300px de large
             ->height(300) // 300px de hauteur
             ->sharpen(10); // pour améliorer la qualité si besoin
+
+
+            $this->addMediaConversion('small-size')
+            ->width(90) // par exemple 300px de large
+            ->height(90) // 300px de hauteur
+            ->sharpen(10); // pour améliorer la qualité si besoin
     }
 
     public $incrementing = false;

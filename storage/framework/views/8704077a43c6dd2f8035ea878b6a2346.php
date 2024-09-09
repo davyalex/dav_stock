@@ -31,14 +31,14 @@
     </style>
     <div class="shop-page-area pt-10 pb-100">
         <div class="container">
-            <div class="row flex-row">
-                <!-- start sidebar categorie-->
-                <div class="col-lg-3">
-                    <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
-                        <div class="shop-widget">
-                            <h4 class="shop-sidebar-title"> <?php echo e($menu->libelle); ?> </h4>
-                            <div class="shop-catigory">
 
+            <?php if($menu && $produitsFiltres): ?>
+                <div class="row flex-row">
+                    <!-- start sidebar categorie-->
+                    <div class="col-lg-3">
+                        <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
+                            <div class="shop-widget">
+                                <h4 class="shop-sidebar-title"> <?php echo e($menu->libelle); ?> </h4>
                                 <div class="shop-catigory">
                                     <ul id="faq">
                                         <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $parentId => $categorieGroup): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -65,47 +65,75 @@
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </ul>
                                 </div>
-
-
-
-
-
-
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- end sidebar categorie-->
-                <div class="col-lg-9">
-                    <div class="banner-area pb-30">
-                        <a href="product-details.html"><img alt="" src="assets/img/banner/banner-49.jpg"></a>
-                    </div>
+                    <!-- end sidebar categorie-->
+                    <div class="col-lg-9">
 
-                    <div class="product-area pt-95 pb-70">
-                        <div class="custom-container">
-                            <div class="product-tab-list-wrap text-center mb-40 yellow-color">
-                                <div class="product-tab-list nav">
-                                    <!-- Onglet pour tous les produits -->
-                                    <a class="active" href="#tab_all" data-bs-toggle="tab">
-                                        <h4>Tous les produits</h4>
-                                    </a>
-                                    <!-- Onglets pour chaque catégorie principale -->
-                                    <?php $__currentLoopData = $produitsFiltres; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categoriePrincipale => $produits): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <a href="#tab_<?php echo e(Str::slug($categoriePrincipale)); ?>" data-bs-toggle="tab">
-                                            <h4><?php echo e($categoriePrincipale); ?></h4>
+                        <div class="product-area pt-95 pb-70">
+                            <div class="custom-container">
+                                <div class="product-tab-list-wrap text-center mb-40 yellow-color">
+                                    <div class="product-tab-list nav">
+                                        <!-- Onglet pour tous les produits -->
+                                        <a class="<?php echo e(is_null(request('categorie')) ? 'active' : ''); ?>" href="#tab_all"
+                                            data-bs-toggle="tab">
+                                            <h4>Tous les produits</h4>
                                         </a>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                </div>
-                                <p>Typi non habent claritatem insitam est usus legentis in qui facit eorum claritatem.</p>
-                            </div>
 
-                            <div class="tab-content jump yellow-color">
-                                <!-- Onglet Tous les produits -->
-                                <div id="tab_all" class="tab-pane active">
-                                    <div class="row">
-                                        <?php $__currentLoopData = $menu->produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <?php if($produit->categorie->getPrincipalCategory()->type == 'boissons'): ?>
-                                                <?php $__currentLoopData = $produit->achats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $achat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <!-- Onglets pour chaque catégorie principale -->
+                                        <?php $__currentLoopData = $produitsFiltres; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categoriePrincipale => $produits): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <a href="#tab_<?php echo e(Str::slug($categoriePrincipale)); ?>"
+                                                class="<?php echo e(request('categorie') == Str::slug($categoriePrincipale) ? 'active' : ''); ?>"
+                                                data-bs-toggle="tab">
+                                                <h4><?php echo e($categoriePrincipale); ?></h4>
+                                            </a>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </div>
+                                </div>
+
+                                <div class="tab-content jump yellow-color">
+                                    <!-- Onglet Tous les produits -->
+                                    <div id="tab_all"
+                                        class="tab-pane <?php echo e(is_null(request('categorie')) ? 'active' : ''); ?>">
+                                        <div class="row">
+                                            <?php $__currentLoopData = $menu->produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <?php if($produit->categorie->getPrincipalCategory()->type == 'boissons'): ?>
+                                                    <?php $__currentLoopData = $produit->achats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $achat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <div class="col-4">
+                                                            <div class="product-wrapper mb-25">
+                                                                <div class="product-img position-relative">
+                                                                    <a href="<?php echo e(route('produit.detail', $produit->slug)); ?>">
+                                                                        <img src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>"
+                                                                            alt="<?php echo e($produit->nom); ?>">
+                                                                    </a>
+                                                                    <!-- Sticker de catégorie -->
+                                                                    <span
+                                                                        class="category-sticker"><?php echo e($produit->categorie->name); ?></span>
+
+                                                                    <div class="product-action">
+                                                                        <div class="pro-action-left">
+                                                                            <a class="btn btn-danger text-white"
+                                                                                title="Add To Cart" href="#">
+                                                                                <i class="ion-android-cart text-white"></i>
+                                                                                Je
+                                                                                commande
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="product-content">
+                                                                    <h4><a
+                                                                            href="<?php echo e(route('produit.detail', $produit->slug)); ?>"><?php echo e($produit->nom); ?></a>
+                                                                    </h4>
+                                                                    <div class="product-price-wrapper">
+                                                                        <span><?php echo e($achat->prix_vente_unitaire); ?> FCFA</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                <?php else: ?>
                                                     <div class="col-4">
                                                         <div class="product-wrapper mb-25">
                                                             <div class="product-img position-relative">
@@ -127,84 +155,88 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+
                                                             <div class="product-content">
-                                                                <h4><a
+                                                                <h4>
+                                                                    <a
                                                                         href="<?php echo e(route('produit.detail', $produit->slug)); ?>"><?php echo e($produit->nom); ?></a>
                                                                 </h4>
                                                                 <div class="product-price-wrapper">
-                                                                    <span>$<?php echo e($achat->prix_achat_unitaire); ?></span>
+                                                                    <span><?php echo e($produit->prix); ?> FCFA</span>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                            <?php else: ?>
-                                                <div class="col-4">
-                                                    <div class="product-wrapper mb-25">
-                                                        <div class="product-img position-relative">
-                                                            <a href="<?php echo e(route('produit.detail', $produit->slug)); ?>">
-                                                                <img src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>"
-                                                                    alt="<?php echo e($produit->nom); ?>">
-                                                            </a>
-                                                            <!-- Sticker de catégorie -->
-                                                            <span
-                                                                class="category-sticker"><?php echo e($produit->categorie->name); ?></span>
-
-                                                            <div class="product-action">
-                                                                <div class="pro-action-left">
-                                                                    <a class="btn btn-danger text-white" title="Add To Cart"
-                                                                        href="#">
-                                                                        <i class="ion-android-cart text-white"></i> Je
-                                                                        commande
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="product-content">
-                                                            <h4>
-                                                                <a
-                                                                    href="<?php echo e(route('produit.detail', $produit->slug)); ?>"><?php echo e($produit->nom); ?></a>
-                                                            </h4>
-                                                            <div class="product-price-wrapper">
-                                                                <span>$<?php echo e($produit->prix); ?></span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            <?php endif; ?>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                <?php endif; ?>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <!-- Onglets pour chaque catégorie principale -->
-                                <?php $__currentLoopData = $produitsFiltres; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categoriePrincipale => $produits): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <div id="tab_<?php echo e(Str::slug($categoriePrincipale)); ?>" class="tab-pane">
-                                        <div class="row">
-                                            <?php $__currentLoopData = $produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <?php if($produit->categorie->getPrincipalCategory()->type == 'boissons'): ?>
-                                                    <?php $__currentLoopData = $produit->achats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $achat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <!-- Onglets pour chaque catégorie principale -->
+                                    <?php $__currentLoopData = $produitsFiltres; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categoriePrincipale => $produits): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <div id="tab_<?php echo e(Str::slug($categoriePrincipale)); ?>"
+                                            class="tab-pane <?php echo e(request('categorie') ? 'active' : ''); ?>">
+                                            <div class="row">
+                                                <?php $__currentLoopData = $produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <?php if($produit->categorie->getPrincipalCategory()->type == 'boissons'): ?>
+                                                        <?php $__currentLoopData = $produit->achats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $achat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            <div class="col-5">
+                                                                <div class="product-wrapper mb-25">
+                                                                    <div class="product-img">
+                                                                        <a
+                                                                            href="<?php echo e(route('produit.detail', $produit->slug)); ?>">
+                                                                            <img src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>"
+                                                                                alt="<?php echo e($produit->nom); ?>">
+                                                                        </a>
+                                                                        <!-- Sticker de catégorie -->
+                                                                        <span
+                                                                            class="category-sticker"><?php echo e($produit->categorie->name); ?></span>
+
+                                                                        <div class="product-action">
+                                                                            <div class="pro-action-left">
+                                                                                <a class="btn btn-danger text-white"
+                                                                                    title="Add To Cart" href="#">
+                                                                                    <i
+                                                                                        class="ion-android-cart text-white"></i>
+                                                                                    Je
+                                                                                    commande
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="product-content">
+                                                                        <h4><a
+                                                                                href="<?php echo e(route('produit.detail', $produit->slug)); ?>"><?php echo e($produit->nom); ?></a>
+                                                                        </h4>
+                                                                        <div class="product-price-wrapper">
+                                                                            <span><?php echo e($achat->prix_vente_unitaire); ?>
+
+                                                                                FCFA</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                    <?php else: ?>
                                                         <div class="col-5">
                                                             <div class="product-wrapper mb-25">
-                                                                <div class="product-img">
+                                                                <div class="product-img position-relative">
                                                                     <a
                                                                         href="<?php echo e(route('produit.detail', $produit->slug)); ?>">
                                                                         <img src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>"
                                                                             alt="<?php echo e($produit->nom); ?>">
                                                                     </a>
+                                                                    <!-- Sticker de catégorie -->
+                                                                    <span
+                                                                        class="category-sticker"><?php echo e($produit->categorie->name); ?></span>
+
                                                                     <div class="product-action">
                                                                         <div class="pro-action-left">
-                                                                            <a title="Add To Cart" href="#"><i
-                                                                                    class="ion-android-cart"></i> Add To
-                                                                                Cart</a>
-                                                                        </div>
-                                                                        <div class="pro-action-right">
-                                                                            <a title="Wishlist" href="wishlist.html"><i
-                                                                                    class="ion-ios-heart-outline"></i></a>
-                                                                            <a title="Quick View" data-bs-toggle="modal"
-                                                                                data-bs-target="#exampleModal"
-                                                                                href="#">
-                                                                                <i class="ion-android-open"></i>
+                                                                            <a class="btn btn-danger text-white"
+                                                                                title="Add To Cart" href="#">
+                                                                                <i class="ion-android-cart text-white"></i>
+                                                                                Je
+                                                                                commande
                                                                             </a>
                                                                         </div>
                                                                     </div>
@@ -214,64 +246,28 @@
                                                                             href="<?php echo e(route('produit.detail', $produit->slug)); ?>"><?php echo e($produit->nom); ?></a>
                                                                     </h4>
                                                                     <div class="product-price-wrapper">
-                                                                        <span>$<?php echo e($achat->prix_achat_unitaire); ?></span>
+                                                                        <span><?php echo e($produit->prix); ?> FCFA</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                <?php else: ?>
-                                                    <div class="col-5">
-                                                        <div class="product-wrapper mb-25">
-                                                            <div class="product-img position-relative">
-                                                                <a href="<?php echo e(route('produit.detail', $produit->slug)); ?>">
-                                                                    <img src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>"
-                                                                        alt="<?php echo e($produit->nom); ?>">
-                                                                </a>
-                                                                <!-- Sticker de catégorie -->
-                                                                <span
-                                                                    class="category-sticker"><?php echo e($produit->categorie->name); ?></span>
-
-                                                                <div class="product-action">
-                                                                    <div class="pro-action-left">
-                                                                        <a class="btn btn-danger text-white"
-                                                                            title="Add To Cart" href="#">
-                                                                            <i class="ion-android-cart text-white"></i> Je
-                                                                            commande
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="product-content">
-                                                                <h4><a
-                                                                        href="<?php echo e(route('produit.detail', $produit->slug)); ?>"><?php echo e($produit->nom); ?></a>
-                                                                </h4>
-                                                                <div class="product-price-wrapper">
-                                                                    <span>$<?php echo e($produit->prix); ?></span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                <?php endif; ?>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                    <?php endif; ?>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            </div>
                                         </div>
-                                    </div>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </div>
                             </div>
                         </div>
+
                     </div>
-
-
-
                 </div>
+            <?php else: ?>
+                <span>Pas de menu disponible</span>
+            <?php endif; ?>
 
-
-
-
-
-
-            </div>
         </div>
+
     </div>
 <?php $__env->stopSection(); ?>
 
