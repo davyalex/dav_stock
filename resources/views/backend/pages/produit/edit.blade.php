@@ -218,7 +218,7 @@
                 });
 
                 $.ajax({
-                    url: "/produit/update/" + productId, // Adjust the route as needed
+                    url: "admin/produit/update/" + productId, // Adjust the route as needed
                     type: 'POST',
                     data: formData,
                     contentType: false,
