@@ -8,7 +8,7 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class categorie extends Model
+class Categorie extends Model
 {
     use HasFactory, sluggable, SoftDeletes;
 
