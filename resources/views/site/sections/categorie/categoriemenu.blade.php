@@ -35,10 +35,14 @@
 
 
 <li>
+    
     <!-- Afficher le lien de la catégorie avec un bouton pour la collapse -->
     <a data-bs-toggle="collapse" data-bs-parent="#faq" href="#subcategory-{{ $categorie->id }}">
-        {{ $categorie->name }}
-        <i class="ion-ios-arrow-down"></i>
+        
+
+
+           <a href="/menu?categorie={{$categorie->slug}}"> {{ $categorie->name }}</a>
+        {{-- <i class="ion-ios-arrow-down"></i> --}}
     </a>
 
     <!-- Afficher les enfants de la catégorie actuelle, s'ils existent -->

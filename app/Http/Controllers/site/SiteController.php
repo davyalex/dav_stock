@@ -88,6 +88,7 @@ class SiteController extends Controller
         try {
             $today = Carbon::today();
 
+            // Récupérer le menu du jour avec les relations nécessaires
             $menu = Menu::with([
                 'produits.achats',
                 'produits.categorie' => function ($query) {
@@ -95,23 +96,45 @@ class SiteController extends Controller
                 }
             ])->where('date_menu', $today)->first();
 
-            $categories = $this->getCategoriesFromMenu($today);
+            if ($menu) {
+                // Récupérer toutes les catégories associées aux produits du menu
+                $categories = $this->getCategoriesFromMenu($today);
 
+                // Si une catégorie est passée dans la requête
+                if ($request->has('categorie')) {
+                    $categorieRequest = Categorie::where('slug', $request->categorie)->first();
 
-            // Filtrer les produits par catégorie principale
-            $produitsFiltres = $menu->produits->groupBy(function ($produit) {
-                return $produit->categorie->getPrincipalCategory()->type;
-            });
-            // $categories = Categorie::whereNull('parent_id')->with('children', fn($q) =>
-            // $q->with('produits.menus', fn($q) => $q->where('menu_id', $menu->id))
-            //     ->OrderBy('position', 'ASC'))
-            //     ->withCount('children')
-            //     ->whereIn('type', ['plats', 'boissons'])
-            //     ->OrderBy('position', 'ASC')->get();
+                    if ($categorieRequest) {
+                        // Filtrer les produits appartenant à la catégorie demandée ou ses descendants
+                        $produitsFiltres = $menu->produits->filter(function ($produit) use ($categorieRequest) {
+                            return $produit->categorie->id === $categorieRequest->id ||
+                                $produit->categorie->parent_id === $categorieRequest->id ||
+                                $produit->categorie->descendants->contains('id', $categorieRequest->id);
+                        });
 
+                        // Regrouper les produits filtrés par la catégorie principale
+                        $produitsFiltres = $produitsFiltres->groupBy(function ($produit) {
+                            return $produit->categorie->getPrincipalCategory()->type;
+                        });
 
-            // dd($categories);
-            return view('site.pages.menu', compact('menu',  'produitsFiltres', 'categories'));
+                        return view('site.pages.menu', compact('menu', 'produitsFiltres', 'categories', 'categorieRequest'));
+                    }
+                } else {
+                    // Si aucune catégorie spécifique n'est demandée, on regroupe par catégorie principale
+                    $produitsFiltres = $menu->produits->groupBy(function ($produit) {
+                        return $produit->categorie->getPrincipalCategory()->type;
+                    });
+
+                    return view('site.pages.menu', compact('menu', 'produitsFiltres', 'categories'));
+                }
+            } else {
+                // Si aucun menu n'est trouvé pour aujourd'hui
+                $produitsFiltres = collect();
+                $categories = [];
+                
+
+                return view('site.pages.menu', compact('menu', 'produitsFiltres', 'categories'));
+            }
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -119,45 +142,56 @@ class SiteController extends Controller
 
 
 
-    public function produitDetail($slug) {}
+    public function produitDetail($slug) {
 
-
-
-// Controller
-
-public function getCategoriesFromMenu($today)
-{
-    // Charger le menu avec les produits et les catégories
-    $menu = Menu::with([
-        'produits.categorie' => function ($query) {
-            $query->with(['parent', 'children' => function ($q) {
-                $q->with('children'); // Charger les sous-catégories récursivement
-            }]);
-        }
-    ])->where('date_menu', $today)->first();
-
-    if (!$menu) {
-        return collect(); // Retourner une collection vide si le menu n'existe pas
-    }
-
-    // Récupérer toutes les catégories des produits du menu
-    $categories = collect();
-    foreach ($menu->produits as $produit) {
-        $categorie = $produit->categorie;
-        if ($categorie) {
-            $categories = $categories->merge($categorie->descendants->push($categorie));
+        try {
+            $produit = Produit::where('slug', $slug)->first();
+            $produit = Produit::find($produit->id);
+            // dd($produit->categorie->toArray());
+            
+           return view('site.pages.produit-detail' , compact('produit'));
+        } catch (\Throwable $e) {
+            return $e->getMessage();
         }
     }
 
-    // Grouper les catégories par leur catégorie principale
-    $groupedCategories = $categories->groupBy(function ($categorie) {
-        return $categorie->getPrincipalCategory()->id; // Grouper par catégorie principale
-    })->map(function ($categorieGroup) {
-        return $categorieGroup->unique('id');
-    });
 
-    return $groupedCategories;
-}
+
+    // Controller
+
+    public function getCategoriesFromMenu($today)
+    {
+        // Charger le menu avec les produits et les catégories
+        $menu = Menu::with([
+            'produits.categorie' => function ($query) {
+                $query->with(['parent', 'children' => function ($q) {
+                    $q->with('children'); // Charger les sous-catégories récursivement
+                }]);
+            }
+        ])->where('date_menu', $today)->first();
+
+        if (!$menu) {
+            return collect(); // Retourner une collection vide si le menu n'existe pas
+        }
+
+        // Récupérer toutes les catégories des produits du menu
+        $categories = collect();
+        foreach ($menu->produits as $produit) {
+            $categorie = $produit->categorie;
+            if ($categorie) {
+                $categories = $categories->merge($categorie->descendants->push($categorie));
+            }
+        }
+
+        // Grouper les catégories par leur catégorie principale
+        $groupedCategories = $categories->groupBy(function ($categorie) {
+            return $categorie->getPrincipalCategory()->id; // Grouper par catégorie principale
+        })->map(function ($categorieGroup) {
+            return $categorieGroup->unique('id');
+        });
+
+        return $groupedCategories;
+    }
 
 
 

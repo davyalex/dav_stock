@@ -167,53 +167,10 @@
 
 
 
+            var route = "permission"
+            delete_row(route);
 
 
-            $('.delete').on("click", function(e) {
-                e.preventDefault();
-                var Id = $(this).attr('data-id');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: 'No, cancel!',
-                    customClass: {
-                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
-                        cancelButton: 'btn btn-danger w-xs mt-2',
-                    },
-                    buttonsStyling: false,
-                    showCloseButton: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            type: "POST",
-                            url: "/permission/delete/" + Id,
-                            dataType: "json",
-                            data: {
-                                _token: '<?php echo e(csrf_token()); ?>',
-
-                            },
-                            success: function(response) {
-                                if (response.status == 200) {
-                                    Swal.fire({
-                                        title: 'Deleted!',
-                                        text: 'Your file has been deleted.',
-                                        icon: 'success',
-                                        customClass: {
-                                            confirmButton: 'btn btn-primary w-xs mt-2',
-                                        },
-                                        buttonsStyling: false
-                                    })
-
-                                    $('#row_' + Id).remove();
-                                }
-                            }
-                        });
-                    }
-                });
-            });
         });
     </script>
 <?php $__env->stopSection(); ?>

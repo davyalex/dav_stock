@@ -1,24 +1,25 @@
-@extends('backend.layouts.master')
-@section('title')
-    @lang('translation.datatables')
-@endsection
-@section('css')
+
+<?php $__env->startSection('title'); ?>
+    
+    Depense
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('css'); ?>
     <!--datatable css-->
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
     <!--datatable responsive css-->
     <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet"
         type="text/css" />
     <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
-@endsection
-@section('content')
-    @component('backend.components.breadcrumb')
-        @slot('li_1')
-            Liste des slides
-        @endslot
-        @slot('title')
-            Slide
-        @endslot
-    @endcomponent
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
+        <?php $__env->slot('li_1'); ?>
+            depenses
+        <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?>
+            Depense
+        <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
 
 
 
@@ -26,9 +27,9 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des slides</h5>
+                    <h5 class="card-title mb-0">Liste des depenses</h5>
                     <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#myModal">Créer
-                        un slide</button>
+                        une depense</button>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -36,24 +37,24 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Image</th>
-                                    <th>Statut</th>
-                                    <th>Titre</th>
+                                    <th>Categorie</th>
+                                    <th>Libelle</th>
+                                    <th>Montant</th>
+                                    <th>Créer par</th>
                                     <th>Date creation</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data_slide as $key => $item)
-                                    <tr id="row_{{ $item['id'] }}">
-                                        <td> {{ ++$key }} </td>
-                                        <td>
-                                            <img class="rounded-circle" src="{{ $item->getFirstMediaUrl('slideImage') }}"
-                                                width="50px" alt="">
-                                        </td>
-                                        <td>{{ $item['status'] }}</td>
-                                        <td>{{ $item['title'] }}</td>
-                                        <td> {{ $item['created_at'] }} </td>
+                                <?php $__currentLoopData = $data_depense; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <tr id="row_<?php echo e($item['id']); ?>">
+                                        <td> <?php echo e(++$key); ?> </td>
+                                        <td><?php echo e($item['categorie_depense']['libelle'] ?? ''); ?></td>
+                                        <td> <?php echo e($item['libelle']); ?></td>
+                                        <td> <?php echo e($item['montant']); ?> </td>
+                                        <td> <?php echo e($item['user']['first_name']); ?></td>
+                                        <td> <?php echo e($item['created_at']); ?> </td>
+
                                         <td>
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
@@ -61,18 +62,14 @@
                                                     <i class="ri-more-fill align-middle"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a href="#!" class="dropdown-item"><i
-                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            View</a>
-                                                    </li>
                                                     <li><a type="button" class="dropdown-item edit-item-btn"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#myModalEdit{{ $item['id'] }}"><i
+                                                            data-bs-target="#myModalEdit<?php echo e($item['id']); ?>"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             Edit</a></li>
                                                     <li>
                                                         <a href="#" class="dropdown-item remove-item-btn delete"
-                                                            data-id={{ $item['id'] }}>
+                                                            data-id=<?php echo e($item['id']); ?>>
                                                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
                                                             Delete
                                                         </a>
@@ -81,8 +78,8 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    @include('backend.pages.slide.edit')
-                                @endforeach
+                                    <?php echo $__env->make('backend.pages.depense.edit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 
                         </table>
@@ -91,11 +88,11 @@
             </div>
         </div>
     </div>
-    <!--end row-->
+    <?php echo $__env->make('backend.pages.depense.create', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-    @include('backend.pages.slide.create')
-@endsection
-@section('script')
+    <!--end row-->
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
@@ -108,10 +105,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="<?php echo e(URL::asset('build/js/pages/datatables.init.js')); ?>"></script>
 
-    <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
-
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+    <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
     <script>
        $(document).ready(function(){
@@ -119,4 +115,6 @@
         delete_row(route);
        })
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\Restaurant-NEUILLY-\resources\views/backend/pages/depense/index.blade.php ENDPATH**/ ?>

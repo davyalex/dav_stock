@@ -85,7 +85,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('', 'index')->name('role.index');
         route::post('store', 'store')->name('role.store');
         route::post('update/{id}', 'update')->name('role.update');
-        route::post('delete/{id}', 'delete')->name('role.delete');
+        route::get('delete/{id}', 'delete')->name('role.delete');
     });
 
     //role
@@ -94,7 +94,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::post('store', 'store')->name('permission.store');
         route::get('load-permission/{id}', 'getPermissionOfModule')->name('loadpermission'); // get permission of module with ajax
         route::post('update/{id}', 'update')->name('permission.update');
-        route::post('delete/{id}', 'delete')->name('permission.delete');
+        route::get('delete/{id}', 'delete')->name('permission.delete');
     });
 
     //module
@@ -102,7 +102,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('', 'index')->name('module.index');
         route::post('store', 'store')->name('module.store');
         route::post('update/{id}', 'update')->name('module.update');
-        route::post('delete/{id}', 'delete')->name('module.delete');
+        route::get('delete/{id}', 'delete')->name('module.delete');
     });
 
 
@@ -298,6 +298,7 @@ Route::controller(SiteController::class)->group(function () {
     route::get('', 'accueil')->name('accueil');
     route::get('/categorie/{slug}', 'produit')->name('produit'); // get product of categorie selected
     route::get('/menu', 'menu')->name('menu');
+    
     route::get('/produit/detail/{slug}', 'produitDetail')->name('produit.detail');
  
 });
