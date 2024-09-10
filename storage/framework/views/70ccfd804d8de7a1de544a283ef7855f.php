@@ -9,12 +9,12 @@
             <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <div class="product-details-img">
-                        <img class="zoompro" src="<?php echo e($produit->getFirstMediaUrl('ProduitImage' , 'standard-size')); ?>"
-                            data-zoom-image="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>" 
-                            alt="<?php echo e($produit->nom); ?>" />
+                        <img class="zoompro" src="<?php echo e($produit->getFirstMediaUrl('ProduitImage', 'standard-size')); ?>"
+                            data-zoom-image="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>" alt="<?php echo e($produit->nom); ?>" />
                         <div id="gallery" class="mt-20 product-dec-slider owl-carousel">
                             <?php $__currentLoopData = $produit->getMedia('galleryProduit'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $media): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <a data-image="<?php echo e($media->getUrl('standard-size')); ?>" data-zoom-image="<?php echo e($media->getUrl('standard-size')); ?>">
+                                <a data-image="<?php echo e($media->getUrl('standard-size')); ?>"
+                                    data-zoom-image="<?php echo e($media->getUrl('standard-size')); ?>">
                                     <img src="<?php echo e($media->getUrl('small-size')); ?>" alt="<?php echo e($media->name); ?>">
                                 </a>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -26,7 +26,8 @@
                     <div class="product-details-content">
                         <h4><?php echo e($produit->nom); ?> </h4>
 
-                        <span>
+                        <span id="price"
+                            data-price=<?php echo e($produit->achats->isNotEmpty() ? $produit->achats[0]->prix_vente_unitaire : $produit->prix); ?>>
                             <?php echo e($produit->achats->isNotEmpty() ? $produit->achats[0]->prix_vente_unitaire : $produit->prix); ?>
 
                             FCFA </span>
@@ -37,17 +38,18 @@
                             </div>
                         <?php endif; ?>
 
-                        <p> <?php echo e($produit->description); ?> </p>
+                        <p> <?php echo $produit->description; ?> </p>
 
                         <div class="pro-details-cart-wrap d-flex">
 
                             <div class="product-quantity">
                                 <div class="cart-plus-minus">
-                                    <input class="cart-plus-minus-box" type="text" name="qtybutton" value="2">
+                                    <input id="quantity" class="cart-plus-minus-box" type="text" name="quantity"
+                                        value="1" min="1" readonly>
                                 </div>
                             </div>
                             <div class="shop-list-cart-wishlist mx-3">
-                                <a title="Ajouter au panier" href="#">
+                                <a title="Ajouter au panier" href="#" class="addCart" data-id="<?php echo e($produit->id); ?>">
                                     <i class="ion-android-cart"></i>
                                 </a>
 
@@ -79,7 +81,7 @@
                 <div class="tab-content description-review-bottom">
                     <div id="des-details1" class="tab-pane active">
                         <div class="product-description-wrapper">
-                            <?php echo e($produit->description); ?>
+                            <?php echo $produit->description; ?>
 
                         </div>
                     </div>
@@ -184,6 +186,11 @@
         </div>
     </div>
     
+
+
+
+    <?php echo $__env->make('site.components.ajouter-au-panier', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
 
 <?php $__env->stopSection(); ?>
 

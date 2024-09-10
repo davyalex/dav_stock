@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\site\SiteController;
+use App\Http\Controllers\site\PanierController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\menu\MenuController;
 use App\Http\Controllers\backend\menu\PlatController;
@@ -59,7 +60,7 @@ Route::controller(AuthAdminController::class)->prefix('admin')->group(function (
     route::post('/login', 'login')->name('admin.login');
     route::post('/logout', 'logout')->name('admin.logout');
 });
- 
+
 
 
 Route::prefix('admin')->middleware(['admin'])->group(function () {
@@ -280,7 +281,6 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::post('update/{id}', 'update')->name('menu.update');
         route::get('delete/{id}', 'delete')->name('menu.delete');
     });
-
 });
 
 ######################      END BACKEND ROUTE         ###########################################################
@@ -298,10 +298,18 @@ Route::controller(SiteController::class)->group(function () {
     route::get('', 'accueil')->name('accueil');
     route::get('/categorie/{slug}', 'produit')->name('produit'); // get product of categorie selected
     route::get('/menu', 'menu')->name('menu');
-    
     route::get('/produit/detail/{slug}', 'produitDetail')->name('produit.detail');
- 
 });
+
+
+Route::controller(PanierController::class)->group(function () {
+    route::get('panier', 'index')->name('panier');
+    route::get('add/{id}', 'add')->name('cart.add');
+    route::get('update', 'menu')->name('cart.update');
+    route::get('remove', 'remove')->name('cart.remove');
+    route::get('clear', 'clear')->name('cart.clear');
+});
+  
   
 
     

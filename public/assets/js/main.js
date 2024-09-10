@@ -2,10 +2,10 @@
     'use strict';
     
     /* Cart Currency Search toggle active */
-    $(".header-cart a").on("click", function(e) {
-        e.preventDefault();
-        $(this).parent().find('.shopping-cart-content').slideToggle('medium');
-    })
+    // $(".header-cart a").on("click", function(e) {
+    //     e.preventDefault();
+    //     $(this).parent().find('.shopping-cart-content').slideToggle('medium');
+    // })
     
     /*--
     Menu Stick
@@ -265,7 +265,7 @@
             var newVal = parseFloat(oldValue) + 1;
         } else {
             // Don't allow decrementing below zero
-            if (oldValue > 0) {
+            if (oldValue > 1) {
                 var newVal = parseFloat(oldValue) - 1;
             } else {
                 newVal = 1;

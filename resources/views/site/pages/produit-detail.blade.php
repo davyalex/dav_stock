@@ -9,12 +9,12 @@
             <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <div class="product-details-img">
-                        <img class="zoompro" src="{{ $produit->getFirstMediaUrl('ProduitImage' , 'standard-size') }}"
-                            data-zoom-image="{{ $produit->getFirstMediaUrl('ProduitImage') }}" 
-                            alt="{{ $produit->nom }}" />
+                        <img class="zoompro" src="{{ $produit->getFirstMediaUrl('ProduitImage', 'standard-size') }}"
+                            data-zoom-image="{{ $produit->getFirstMediaUrl('ProduitImage') }}" alt="{{ $produit->nom }}" />
                         <div id="gallery" class="mt-20 product-dec-slider owl-carousel">
                             @foreach ($produit->getMedia('galleryProduit') as $media)
-                                <a data-image="{{ $media->getUrl('standard-size') }}" data-zoom-image="{{ $media->getUrl('standard-size') }}">
+                                <a data-image="{{ $media->getUrl('standard-size') }}"
+                                    data-zoom-image="{{ $media->getUrl('standard-size') }}">
                                     <img src="{{ $media->getUrl('small-size') }}" alt="{{ $media->name }}">
                                 </a>
                             @endforeach
@@ -26,7 +26,8 @@
                     <div class="product-details-content">
                         <h4>{{ $produit->nom }} </h4>
 
-                        <span>
+                        <span id="price"
+                            data-price={{ $produit->achats->isNotEmpty() ? $produit->achats[0]->prix_vente_unitaire : $produit->prix }}>
                             {{ $produit->achats->isNotEmpty() ? $produit->achats[0]->prix_vente_unitaire : $produit->prix }}
                             FCFA </span>
 
@@ -36,17 +37,18 @@
                             </div>
                         @endif
 
-                        <p> {{ $produit->description }} </p>
+                        <p> {!!$produit->description!!} </p>
 
                         <div class="pro-details-cart-wrap d-flex">
 
                             <div class="product-quantity">
                                 <div class="cart-plus-minus">
-                                    <input class="cart-plus-minus-box" type="text" name="qtybutton" value="2">
+                                    <input id="quantity" class="cart-plus-minus-box" type="text" name="quantity"
+                                        value="1" min="1" readonly>
                                 </div>
                             </div>
                             <div class="shop-list-cart-wishlist mx-3">
-                                <a title="Ajouter au panier" href="#">
+                                <a title="Ajouter au panier" href="#" class="addCart" data-id="{{ $produit->id }}">
                                     <i class="ion-android-cart"></i>
                                 </a>
 
@@ -79,7 +81,7 @@
                 <div class="tab-content description-review-bottom">
                     <div id="des-details1" class="tab-pane active">
                         <div class="product-description-wrapper">
-                            {{ $produit->description }}
+                            {!! $produit->description !!}
                         </div>
                     </div>
                     <div id="des-details2" class="tab-pane">
@@ -316,5 +318,10 @@
                 </div>
             </div>
         </div> --}}
+
+
+
+    @include('site.components.ajouter-au-panier')
+
 
 @endsection
