@@ -17,6 +17,12 @@ class Produit extends Model implements HasMedia
 
     public function registerMediaConversions(Media $media = null): void
     {
+
+        // $this->addMediaConversion('large-size')
+        // ->width(570) // par exemple 300px de large
+        // ->height(470) // 300px de hauteur
+        // ->sharpen(10); // pour améliorer la qualité si besoin
+
         $this->addMediaConversion('standard-size')
             ->width(300) // par exemple 300px de large
             ->height(300) // 300px de hauteur
@@ -24,8 +30,8 @@ class Produit extends Model implements HasMedia
 
 
             $this->addMediaConversion('small-size')
-            ->width(90) // par exemple 300px de large
-            ->height(90) // 300px de hauteur
+            ->width(150) // par exemple 300px de large
+            ->height(150) // 300px de hauteur
             ->sharpen(10); // pour améliorer la qualité si besoin
     }
 

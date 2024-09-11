@@ -18,11 +18,12 @@
                         <a href="<?php echo e(route('panier')); ?>">
                             <div class="header-icon-style">
                                 <i class="icon-handbag icons"></i>
-                                <span class="count-style totalQuantity"><?php echo e(Session::get('totalQuantity') ?? '0'); ?></span>
+                                
+                                <span class="count-style totalQuantity"><?php echo e(session('cart') ? Session::get('totalQuantity') :  '0'); ?></span>
                             </div>
                             <div class="cart-text">
                                 <span class="digit">Mon panier</span>
-                                <span class="cart-digit-bold totalPrice"><?php echo e(Session::get('totalPrice') ?? '0'); ?> FCFA</span>
+                                <span class="cart-digit-bold totalPrice"><?php echo e(session('cart') ? Session::get('totalPrice') : '0'); ?> FCFA</span>
                             </div>
                         </a>
                         

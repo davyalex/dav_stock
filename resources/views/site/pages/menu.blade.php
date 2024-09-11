@@ -110,7 +110,7 @@
                                                                     <span
                                                                         class="category-sticker">{{ $produit->categorie->name }}</span>
 
-                                                                    <div class="product-action">
+                                                                    {{-- <div class="product-action">
                                                                         <div class="pro-action-left">
                                                                             <a class="btn btn-danger text-white"
                                                                                 title="Add To Cart" href="#">
@@ -119,7 +119,7 @@
                                                                                 commande
                                                                             </a>
                                                                         </div>
-                                                                    </div>
+                                                                    </div> --}}
                                                                 </div>
                                                                 <div class="product-content">
                                                                     <h4><a
@@ -144,7 +144,7 @@
                                                                 <span
                                                                     class="category-sticker">{{ $produit->categorie->name }}</span>
 
-                                                                <div class="product-action">
+                                                                {{-- <div class="product-action">
                                                                     <div class="pro-action-left">
                                                                         <a class="btn btn-danger text-white"
                                                                             title="Add To Cart" href="#">
@@ -152,7 +152,7 @@
                                                                             commande
                                                                         </a>
                                                                     </div>
-                                                                </div>
+                                                                </div> --}}
                                                             </div>
 
                                                             <div class="product-content">
@@ -191,7 +191,7 @@
                                                                         <span
                                                                             class="category-sticker">{{ $produit->categorie->name }}</span>
 
-                                                                        <div class="product-action">
+                                                                        {{-- <div class="product-action">
                                                                             <div class="pro-action-left">
                                                                                 <a class="btn btn-danger text-white"
                                                                                     title="Add To Cart" href="#">
@@ -201,7 +201,7 @@
                                                                                     commande
                                                                                 </a>
                                                                             </div>
-                                                                        </div>
+                                                                        </div> --}}
                                                                     </div>
                                                                     <div class="product-content">
                                                                         <h4><a
@@ -228,7 +228,7 @@
                                                                     <span
                                                                         class="category-sticker">{{ $produit->categorie->name }}</span>
 
-                                                                    <div class="product-action">
+                                                                    {{-- <div class="product-action">
                                                                         <div class="pro-action-left">
                                                                             <a class="btn btn-danger text-white"
                                                                                 title="Add To Cart" href="#">
@@ -237,7 +237,7 @@
                                                                                 commande
                                                                             </a>
                                                                         </div>
-                                                                    </div>
+                                                                    </div> --}}
                                                                 </div>
                                                                 <div class="product-content">
                                                                     <h4><a

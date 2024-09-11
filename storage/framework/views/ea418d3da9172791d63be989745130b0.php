@@ -1,8 +1,8 @@
-@extends('site.layouts.app')
 
-@section('title', 'Liste des ' . $categorieSelect->name)
 
-@section('content')
+<?php $__env->startSection('title', 'Liste des ' . $categorieSelect->name); ?>
+
+<?php $__env->startSection('content'); ?>
 
     <style>
         .product-img img {
@@ -36,14 +36,11 @@
                 <div class="col-lg-3">
                     <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
                         <div class="shop-widget">
-                            <h4 class="shop-sidebar-title">Nos {{ $categorieSelect->name }} </h4>
+                            <h4 class="shop-sidebar-title">Nos <?php echo e($categorieSelect->name); ?> </h4>
                             <div class="shop-catigory">
-                                {{-- @include('site.sections.categorie.categoriechild', [
-                                    'categories' => $categories,
-                                    'categorieSelect' => $categorieSelect,
-                                ]) --}}
+                                
 
-                                @include('site.sections.categorie.categorieproduit')
+                                <?php echo $__env->make('site.sections.categorie.categorieproduit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
                             </div>
                         </div>
@@ -59,87 +56,69 @@
                         <div class="product-grid product-view pb-20">
                             <div class="row">
                                 <!-- start si type categorie == boissons-->
-                                @if ($categorieSelect->type == 'boissons')
-                                    @foreach ($produits as $produit)
-                                        @foreach ($produit->achats as $item)
+                                <?php if($categorieSelect->type == 'boissons'): ?>
+                                    <?php $__currentLoopData = $produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <?php $__currentLoopData = $produit->achats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
                                                 <div class="product-wrapper">
                                                     <div class="product-img position-relative">
-                                                        <a href="{{ route('produit.detail', $produit->slug) }}">
-                                                            <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                                                                alt="{{ $produit->nom }}">
+                                                        <a href="<?php echo e(route('produit.detail', $produit->slug)); ?>">
+                                                            <img src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>"
+                                                                alt="<?php echo e($produit->nom); ?>">
                                                         </a>
                                                         <!-- Sticker de catégorie -->
                                                         <span
-                                                            class="category-sticker">{{ $produit->categorie->name }}</span>
+                                                            class="category-sticker"><?php echo e($produit->categorie->name); ?></span>
 
-                                                        {{-- <div class="product-action">
-                                                            <div class="pro-action-left">
-                                                                <a class="btn btn-danger text-white" title="Add To Cart"
-                                                                    href="#">
-                                                                    <i class="ion-android-cart text-white"></i>
-                                                                    Je
-                                                                    commande
-                                                                </a>
-                                                            </div>
-                                                        </div> --}}
+                                                        
                                                     </div>
                                                     <div class="product-content">
                                                         <h4>
-                                                            <a href="product-details.html"> {{ $produit->nom }} </a>
+                                                            <a href="product-details.html"> <?php echo e($produit->nom); ?> </a>
                                                         </h4>
                                                         <div class="product-price-wrapper">
-                                                            <span>{{ $item->prix_vente_unitaire }} FCFA</span>
-                                                            {{-- <span class="product-price-old">$120.00 </span> --}}
+                                                            <span><?php echo e($item->prix_vente_unitaire); ?> FCFA</span>
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endforeach
-                                    @endforeach
-                                @endif
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endif; ?>
                                 <!-- end si type categorie == boissons-->
 
 
 
                                 <!-- start si type categorie != boissons-->
-                                @if ($categorieSelect->type != 'boissons')
-                                    @foreach ($produits as $produit)
+                                <?php if($categorieSelect->type != 'boissons'): ?>
+                                    <?php $__currentLoopData = $produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
                                             <div class="product-wrapper">
                                                  <div class="product-img position-relative">
-                                                        <a href="{{ route('produit.detail', $produit->slug) }}">
-                                                            <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                                                                alt="{{ $produit->nom }}">
+                                                        <a href="<?php echo e(route('produit.detail', $produit->slug)); ?>">
+                                                            <img src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>"
+                                                                alt="<?php echo e($produit->nom); ?>">
                                                         </a>
                                                         <!-- Sticker de catégorie -->
                                                         <span
-                                                            class="category-sticker">{{ $produit->categorie->name }}</span>
+                                                            class="category-sticker"><?php echo e($produit->categorie->name); ?></span>
 
-                                                        {{-- <div class="product-action">
-                                                            <div class="pro-action-left">
-                                                                <a class="btn btn-danger text-white" title="Add To Cart"
-                                                                    href="#">
-                                                                    <i class="ion-android-cart text-white"></i>
-                                                                    Je
-                                                                    commande
-                                                                </a>
-                                                            </div>
-                                                        </div> --}}
+                                                        
                                                     </div>
                                                 <div class="product-content">
                                                     <h4>
-                                                        <a href="product-details.html"> {{ $produit->nom }} </a>
+                                                        <a href="product-details.html"> <?php echo e($produit->nom); ?> </a>
                                                     </h4>
                                                     <div class="product-price-wrapper">
-                                                        <span>{{ $produit->prix }} FCFA</span>
-                                                        {{-- <span class="product-price-old">$120.00 </span> --}}
+                                                        <span><?php echo e($produit->prix); ?> FCFA</span>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    @endforeach
-                                @endif
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endif; ?>
                                 <!-- end si type categorie != boissons-->
                             </div>
                         </div>
@@ -172,4 +151,6 @@
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('site.layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/site/pages/produit.blade.php ENDPATH**/ ?>

@@ -6,9 +6,11 @@
 
     <div class="product-details pt-100 pb-90">
         <div class="container">
+
+
             <div class="row">
                 <div class="col-lg-6 col-md-12">
-                    <div class="product-details-img">
+                    {{-- <div class="product-details-img">
                         <img class="zoompro" src="{{ $produit->getFirstMediaUrl('ProduitImage', 'standard-size') }}"
                             data-zoom-image="{{ $produit->getFirstMediaUrl('ProduitImage') }}" alt="{{ $produit->nom }}" />
                         <div id="gallery" class="mt-20 product-dec-slider owl-carousel">
@@ -20,6 +22,23 @@
                             @endforeach
                         </div>
                         <span> {{ $produit->categorie->name }} </span>
+                    </div> --}}
+
+                    <!-- Image principale -->
+                    <div class="main-image">
+                        <img id="mainImage" src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
+                            alt="Image principale" class="product-image" width="570" height="470">
+                    </div>
+
+                    <!-- Miniatures sous l'image principale -->
+                    <div class="thumbnail-carousel owl-carousel owl-theme">
+                        @foreach ($produit->getMedia('galleryProduit') as $media)
+                            <div class="item">
+                                <img src="{{ $media->getUrl('small-size') }}" alt="Image 1" class="thumbnail"
+                                    onclick="changeImage('{{ $media->getUrl() }}')">
+                            </div>
+                        @endforeach
+
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
@@ -37,7 +56,7 @@
                             </div>
                         @endif
 
-                        <p> {!!$produit->description!!} </p>
+                        <p> {!! $produit->description !!} </p>
 
                         <div class="pro-details-cart-wrap d-flex">
 
@@ -322,6 +341,53 @@
 
 
     @include('site.components.ajouter-au-panier')
+
+    <script>
+        var CartPlusMinus = $('.cart-plus-minus');
+        CartPlusMinus.prepend('<div class="dec qtybutton">-</div>');
+        CartPlusMinus.append('<div class="inc qtybutton">+</div>');
+        $(".qtybutton").on("click", function() {
+            var $button = $(this);
+            var oldValue = $button.parent().find("input").val();
+            if ($button.text() === "+") {
+                var newVal = parseFloat(oldValue) + 1;
+            } else {
+                // Don't allow decrementing below zero
+                if (oldValue > 1) {
+                    var newVal = parseFloat(oldValue) - 1;
+                } else {
+                    newVal = 1;
+                }
+            }
+            $button.parent().find("input").val(newVal);
+        });
+
+
+        $(document).ready(function() {
+            $(".thumbnail-carousel").owlCarousel({
+                items: 4, // Nombre de miniatures visibles
+                margin: 10,
+                loop: true,
+                nav: false,
+                dots: false,
+                responsive: {
+                    0: {
+                        items: 2
+                    },
+                    600: {
+                        items: 3
+                    },
+                    1000: {
+                        items: 4
+                    }
+                }
+            });
+        });
+
+        function changeImage(imageSrc) {
+            document.getElementById("mainImage").src = imageSrc;
+        }
+    </script>
 
 
 @endsection

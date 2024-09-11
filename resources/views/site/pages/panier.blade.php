@@ -4,139 +4,261 @@
 
 @section('content')
 
-  <!-- shopping-cart-area start -->
-  <div class="cart-main-area pt-95 pb-100">
-    <div class="container">
-        <h3 class="page-title">Your cart items</h3>
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                <form action="#">
-                    <div class="table-content table-responsive">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Image</th>
-                                    <th>Product Name</th>
-                                    <th>Until Price</th>
-                                    <th>Qty</th>
-                                    <th>Subtotal</th>
-                                    <th>action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="product-thumbnail">
-                                        <a href="#"><img src="assets/img/cart/cart-3.jpg" alt=""></a>
-                                    </td>
-                                    <td class="product-name"><a href="#">PRODUCTS NAME HERE </a></td>
-                                    <td class="product-price-cart"><span class="amount">$260.00</span></td>
-                                    <td class="product-quantity">
-                                        <div class="cart-plus-minus">
-                                            <input class="cart-plus-minus-box" type="text" name="qtybutton" value="2">
-                                        </div>
-                                    </td>
-                                    <td class="product-subtotal">$110.00</td>
-                                    <td class="product-remove">
-                                        <a href="#"><i class="fa fa-pencil"></i></a>
-                                        <a href="#"><i class="fa fa-times"></i></a>
-                                   </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="cart-shiping-update-wrapper">
-                                <div class="cart-shiping-update">
-                                    <a href="#">Continue Shopping</a>
-                                </div>
-                                <div class="cart-clear">
-                                    <button>Update Shopping Cart</button>
-                                    <a href="#">Clear Shopping Cart</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+    <!-- shopping-cart-area start -->
+    <div class="cart-main-area pt-35 pb-100">
+        @if (session('cart'))
+            <div class="container">
+                <h3 class="page-title">Mon panier
+                    <span class="quantityProduct">({{ count((array) session('cart')) }} produits)</span>
+                </h3>
+                @php $sousTotal = 0 @endphp
+                </h3>
                 <div class="row">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="cart-tax">
-                            <div class="title-wrap">
-                                <h4 class="cart-bottom-title section-bg-gray">Estimate Shipping And Tax</h4>
-                            </div>
-                            <div class="tax-wrapper">
-                                <p>Enter your destination to get a shipping estimate.</p>
-                                <div class="tax-select-wrapper">
-                                    <div class="tax-select">
-                                        <label>
-                                            * Country
-                                        </label>
-                                        <select class="email s-email s-wid">
-                                            <option>Bangladesh</option>
-                                            <option>Albania</option>
-                                            <option>Åland Islands</option>
-                                            <option>Afghanistan</option>
-                                            <option>Belgium</option>
-                                        </select>
+                    <!-- ========== Start panier items ========== -->
+                    <div class="col-12 col-md-12 col-lg-8 col-sm-12">
+                        <div class="row">
+
+                            @foreach (session('cart') as $id => $details)
+                                <div class="col-12 col-lg-6 mb-4" id="productDiv_{{ $id }}">
+                                    <div class="card h-100 p-3">
+                                        <div class="d-flex align-items-center">
+                                            <!-- Image du produit -->
+                                            <div class="product-image me-3">
+                                                <img src="{{ $details['image'] }}" class="img-fluid" width="150px"
+                                                    height="150px" alt="Produit 2">
+                                            </div>
+                                            <!-- Détails du produit -->
+                                            <div class="product-info flex-grow-1">
+                                                <h6 class="card-title text-uppercase"> {{ $details['title'] }} </h6>
+                                                {{-- <p class="card-text">Description rapide du produit.</p> --}}
+                                                <!-- Prix et quantité -->
+                                                <div class="d-flex justify-content-between col-sm-12">
+                                                    <div>
+                                                        <p class="font-weight-bold text-danger">Prix :
+                                                            {{ number_format($details['price'], 0, ',', ' ') }} FCFA</p>
+                                                        <p>
+                                                        <div class="product-quantity">
+                                                            <div class="cart-plus-minus">
+                                                                <div class="dec qtybutton"
+                                                                    onclick="decreaseValue({{ $id }})">-</div>
+                                                                <input data-id="{{ $id }}"
+                                                                    id="quantity-{{ $id }}"
+                                                                    class="cart-plus-minus-box" type="text"
+                                                                    name="quantity" value="{{ $details['quantity'] }}"
+                                                                    min="1" readonly>
+                                                                <div class="inc qtybutton"
+                                                                    onclick="increaseValue({{ $id }})">+</div>
+                                                            </div>
+                                                        </div>
+
+                                                        </p>
+                                                        <p class="font-weight-bold text-danger">Total :
+                                                            <span
+                                                                class="totalPriceQty-{{ $id }}">{{ number_format($details['price'] * $details['quantity'], 0, ',', ' ') }}
+                                                                FCFA</span>
+                                                        </p>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button data-id="{{ $id }}"
+                                            class="btn btn-danger btn-sm me-2 remove">Supprimer</button>
                                     </div>
-                                    <div class="tax-select">
-                                        <label>
-                                            * Region / State
-                                        </label>
-                                        <select class="email s-email s-wid">
-                                            <option>Bangladesh</option>
-                                            <option>Albania</option>
-                                            <option>Åland Islands</option>
-                                            <option>Afghanistan</option>
-                                            <option>Belgium</option>
-                                        </select>
-                                    </div>
-                                    <div class="tax-select">
-                                        <label>
-                                            * Zip/Postal Code
-                                        </label>
-                                        <input type="text">
-                                    </div>
-                                    <button class="cart-btn-2" type="submit">Get A Quote</button>
                                 </div>
+                            @endforeach
+
+                        </div>
+                    </div>
+
+                    <!-- ========== End panier items ========== -->
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-4">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="grand-totall">
+                                <div class="title-wrap">
+                                    <h4 class="cart-bottom-title section-bg-gary-cart">Panier Total</h4>
+                                </div>
+                                {{-- <h5>Nombre de produits <span class="countProductCart">{{ count((array) session('cart')) }}
+                                    </span></h5> --}}
+                                     <h5>Nombre de produits <span class="totalQuantity">{{session('totalQuantity')}}
+                                    </span></h5>
+                                <h5>Montant du panier <span class="totalPrice">
+                                        {{ number_format(session('totalPrice'), 0, ',', ' ') }} FCFA </span></h5>
+
+                                <div class="total-shipping">
+                                    <h5>Livraison <small class="text-danger"> * Cocher une option</small> </h5>
+                                    <ul>
+                                        <li><input type="checkbox"> J'envoi un yango <span class="text-danger">A votre
+                                                frais</span></li>
+                                        <li><input type="checkbox"> Je passe recuperer <span class="text-danger">A votre
+                                                frais</span></li>
+                                    </ul>
+                                </div>
+                                <h4 class="grand-totall-title">Total: <span class="totalPrice">
+                                        {{ number_format(session('totalPrice'), 0, ',', ' ') }} FCFA </span></h4>
+                                <a href="#">Finaliser ma commande</a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="discount-code-wrapper">
-                            <div class="title-wrap">
-                               <h4 class="cart-bottom-title section-bg-gray">Use Coupon Code</h4> 
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="cart-shiping-update-wrapper">
+                            <div class="cart-shiping-update">
+                                <a href="#">Continue mes achats</a>
                             </div>
-                            <div class="discount-code">
-                                <p>Enter your coupon code if you have one.</p>
-                                <form>
-                                    <input type="text" required="" name="name">
-                                    <button class="cart-btn-2" type="submit">Apply Coupon</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-12">
-                        <div class="grand-totall">
-                            <div class="title-wrap">
-                                <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
-                            </div>
-                            <h5>Total products <span>$260.00</span></h5>
-                            <div class="total-shipping">
-                                <h5>Total shipping</h5>
-                                <ul>
-                                    <li><input type="checkbox"> Standard <span>$20.00</span></li>
-                                    <li><input type="checkbox"> Express <span>$30.00</span></li>
-                                </ul>
-                            </div>
-                            <h4 class="grand-totall-title">Grand Total  <span>$260.00</span></h4>
-                            <a href="#">Proceed to Checkout</a>
+                            {{-- <div class="cart-clear">
+                            <button>Update Shopping Cart</button>
+                            <a href="#">Clear Shopping Cart</a>
+                        </div> --}}
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @else
+        <h1 class="text-center"><i class="icon-handbag"></i></h1>
+            <h4 class="text-center">Vous n'avez pas de produits dans votre panier</h4>
+        @endif
+
     </div>
-</div>
+
+
+    <link href="
+    https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
+    " rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+
+
+    <script type="text/javascript">
+        // Fonction pour augmenter la quantité
+        function increaseValue(id) {
+            let quantityInput = $(`#quantity-${id}`);
+            let currentQuantity = parseInt(quantityInput.val());
+
+            if (currentQuantity >= 1) {
+                let newQuantity = currentQuantity + 1;
+                updateCartQuantity(id, newQuantity);
+            }
+        }
+
+        // Fonction pour diminuer la quantité
+        function decreaseValue(id) {
+            let quantityInput = $(`#quantity-${id}`);
+            let currentQuantity = parseInt(quantityInput.val());
+
+            if (currentQuantity > 1) {
+                let newQuantity = currentQuantity - 1;
+                updateCartQuantity(id, newQuantity);
+            }
+        }
+
+        // Fonction pour mettre à jour la quantité dans le panier
+        function updateCartQuantity(id, newQuantity) {
+            $.ajax({
+                url: "{{ route('cart.update') }}", // La route pour la mise à jour du panier
+                method: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id,
+                    quantity: newQuantity
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+
+                        $(`#quantity-${id}`).val(newQuantity); // MAJ nouvelle quantité
+                        $('.totalQuantity').html(response.totalQte) //MAJ quantité total panier icone
+                        $('.totalPrice').html(response.totalPrice.toLocaleString("fr-FR") +
+                            ' FCFA') // MAJ montant total panier 
+                        $('.totalPriceQty-' + id).html(response.totalPriceQty.toLocaleString("fr-FR") +
+                            ' FCFA') // MAJ montant total du produit * sa quantite
+
+                        Swal.fire({
+                            title: 'Mise à jour !',
+                            text: 'Quantité modifié avec succès.',
+                            icon: 'success',
+                            showConfirmButton: false, // Masquer le bouton de confirmation
+                            timer: 1000, // L'alerte disparaît après 3000 ms (3 secondes)
+                            timerProgressBar: true // Affiche une barre de progression pour le timer
+                        })
+
+
+
+                    } else {
+                        alert("Erreur lors de la mise à jour du panier.");
+                    }
+                },
+
+            });
+        }
+
+
+
+        //Fonction pour supprimer un produit du panier
+        $(".remove").click(function(e) {
+            e.preventDefault();
+
+            var IdProduct = $(this).attr('data-id');
+            // console.log(productId);
+
+            Swal.fire({
+                title: 'Retirer du panier',
+                text: "Vous ne pourrez pas annuler cela !",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Oui, supprimer !',
+                cancelButtonText: 'Annuler'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '{{ route('cart.remove') }}',
+                        method: "POST",
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            id: IdProduct
+                        },
+
+                        success: function(response) {
+                            if (response.status == 'success') {
+                                $('.totalQuantity').html(response
+                                    .totalQte) //MAJ quantité total panier icone
+                                $('.totalPrice').html(response.totalPrice.toLocaleString(
+                                        "fr-FR") +
+                                    ' FCFA') // MAJ montant total panier 
+                                $('.countProductCart').html(response
+                                    .countProductCart) //MAJ quantité total panier icone
+
+                                Swal.fire({
+                                    title: 'Produit supprimé',
+                                    text: 'Le produit a été supprimé du panier avec succès.',
+                                    icon: 'success',
+                                    showConfirmButton: false, // Masquer le bouton de confirmation
+                                    timer: 1000, // L'alerte disparaît après delai ms (en secondes)
+                                    timerProgressBar: true // Affiche une barre de progression pour le timer
+                                });
+                                $('#productDiv_' + IdProduct).remove(); // supprimer le produit 
+
+                                //rafraichir la page si panier vide
+                                if (response.countProductCart == 0) {
+                                    window.location.href = "{{ route('panier') }}";
+                                }
+                            }
+
+                        }
+                    });
+
+
+                }
+            })
+
+
+        });
+    </script>
+
+
+
 @endsection

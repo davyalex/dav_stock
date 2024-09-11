@@ -305,8 +305,8 @@ Route::controller(SiteController::class)->group(function () {
 Route::controller(PanierController::class)->group(function () {
     route::get('panier', 'index')->name('panier');
     route::get('add/{id}', 'add')->name('cart.add');
-    route::get('update', 'menu')->name('cart.update');
-    route::get('remove', 'remove')->name('cart.remove');
+    route::post('update', 'update')->name('cart.update');
+    route::post('remove', 'remove')->name('cart.remove');
     route::get('clear', 'clear')->name('cart.clear');
 });
   

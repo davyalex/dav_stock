@@ -6,20 +6,27 @@
 
     <div class="product-details pt-100 pb-90">
         <div class="container">
+
+
             <div class="row">
                 <div class="col-lg-6 col-md-12">
-                    <div class="product-details-img">
-                        <img class="zoompro" src="<?php echo e($produit->getFirstMediaUrl('ProduitImage', 'standard-size')); ?>"
-                            data-zoom-image="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>" alt="<?php echo e($produit->nom); ?>" />
-                        <div id="gallery" class="mt-20 product-dec-slider owl-carousel">
-                            <?php $__currentLoopData = $produit->getMedia('galleryProduit'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $media): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <a data-image="<?php echo e($media->getUrl('standard-size')); ?>"
-                                    data-zoom-image="<?php echo e($media->getUrl('standard-size')); ?>">
-                                    <img src="<?php echo e($media->getUrl('small-size')); ?>" alt="<?php echo e($media->name); ?>">
-                                </a>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </div>
-                        <span> <?php echo e($produit->categorie->name); ?> </span>
+                    
+
+                    <!-- Image principale -->
+                    <div class="main-image bg-primary">
+                        <img id="mainImage" src="<?php echo e($produit->getFirstMediaUrl('ProduitImage' , 'large-size')); ?>"
+                            alt="Image principale" class="product-image bg-primary">
+                    </div>
+
+                    <!-- Miniatures sous l'image principale -->
+                    <div class="thumbnail-carousel owl-carousel owl-theme bg-danger">
+                        <?php $__currentLoopData = $produit->getMedia('galleryProduit'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $media): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="item bg-primary">
+                                <img src="<?php echo e($media->getUrl('small-size')); ?>" alt="Image 1" class="thumbnail "
+                                    onclick="changeImage('<?php echo e($media->getUrl('large-size')); ?>')">
+                            </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
@@ -190,6 +197,53 @@
 
 
     <?php echo $__env->make('site.components.ajouter-au-panier', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
+    <script>
+        var CartPlusMinus = $('.cart-plus-minus');
+        CartPlusMinus.prepend('<div class="dec qtybutton">-</div>');
+        CartPlusMinus.append('<div class="inc qtybutton">+</div>');
+        $(".qtybutton").on("click", function() {
+            var $button = $(this);
+            var oldValue = $button.parent().find("input").val();
+            if ($button.text() === "+") {
+                var newVal = parseFloat(oldValue) + 1;
+            } else {
+                // Don't allow decrementing below zero
+                if (oldValue > 1) {
+                    var newVal = parseFloat(oldValue) - 1;
+                } else {
+                    newVal = 1;
+                }
+            }
+            $button.parent().find("input").val(newVal);
+        });
+
+
+        $(document).ready(function() {
+            $(".thumbnail-carousel").owlCarousel({
+                items: 4, // Nombre de miniatures visibles
+                margin: 10,
+                loop: true,
+                nav: false,
+                dots: false,
+                responsive: {
+                    0: {
+                        items: 2
+                    },
+                    600: {
+                        items: 3
+                    },
+                    1000: {
+                        items: 4
+                    }
+                }
+            });
+        });
+
+        function changeImage(imageSrc) {
+            document.getElementById("mainImage").src = imageSrc;
+        }
+    </script>
 
 
 <?php $__env->stopSection(); ?>
