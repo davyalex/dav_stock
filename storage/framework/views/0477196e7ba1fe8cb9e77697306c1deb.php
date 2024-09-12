@@ -3,42 +3,40 @@
           <div class="card-body">
               <div class="d-flex justify-content-between">
                   <h5>Liste des categories</h5>
-                  {{-- <a href="{{ route('categorie.create') }}" class="btn btn-primary">
-                      <i class="ri ri-add-fill"></i>
-                      Ajouter</a> --}}
+                  
               </div>
               <!-- Accordions with Plus Icon -->
-              @foreach ($data_categorie as $key => $categorie)
+              <?php $__currentLoopData = $data_categorie; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                   <div>
 
                       <hr>
                       <li class="" style="list-style: none">
                           <i class="ri-drag-move-fill align-bottom handle"></i> <a class="fs-5 fw-medium"
-                              href="#">{{ $categorie->name }}</a>
+                              href="#"><?php echo e($categorie->name); ?></a>
                          <span>
-                            <a href="{{ route('categorie.edit', $categorie['id']) }}"
-                            class="fs-5 {{ in_array($categorie->type, ['menu', 'categorie-stock']) ? 'd-none' : '' }}"
+                            <a href="<?php echo e(route('categorie.edit', $categorie['id'])); ?>"
+                            class="fs-5 <?php echo e(in_array($categorie->type, ['menu', 'categorie-stock']) ? 'd-none' : ''); ?>"
                             style="margin-left:30px"> <i class=" ri ri-edit-2-fill ml-4 text-success"></i></a>
 
-                        <a href="{{ route('categorie.add-subCat', $categorie['id']) }}" class="fs-5"> <i
+                        <a href="<?php echo e(route('categorie.add-subCat', $categorie['id'])); ?>" class="fs-5"> <i
                                 class=" ri ri-add-circle-fill ml-4"></i>
                         </a>
-                        @if ($categorie['children_count'] == 0)
-                            <a href="#" data-id="{{ $categorie['id'] }}"
-                                class="fs-5 delete  {{ in_array($categorie->type, ['plats', 'boissons' , 'ingredients']) ? 'd-none' : '' }}">
+                        <?php if($categorie['children_count'] == 0): ?>
+                            <a href="#" data-id="<?php echo e($categorie['id']); ?>"
+                                class="fs-5 delete  <?php echo e(in_array($categorie->type, ['plats', 'boissons' , 'ingredients']) ? 'd-none' : ''); ?>">
                                 <i class="ri ri-delete-bin-2-line text-danger "></i>
                             </a>
-                        @endif
+                        <?php endif; ?>
                          </span>
 
-                          @if ($categorie->children->count() > 0)
-                              @include('backend.pages.categorie.partials.subcategorie', [
+                          <?php if($categorie->children->count() > 0): ?>
+                              <?php echo $__env->make('backend.pages.categorie.partials.subcategorie', [
                                   'categories_child' => $categorie->children,
-                              ])
-                          @endif
+                              ], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                          <?php endif; ?>
                       </li>
                   </div>
-              @endforeach
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </div>
 
       </div>
@@ -46,7 +44,7 @@
 
 
 
-  @section('script')
+  <?php $__env->startSection('script'); ?>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"
           integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
@@ -97,4 +95,5 @@
               });
           });
       </script>
-  @endsection
+  <?php $__env->stopSection(); ?>
+<?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/categorie/categorie-list.blade.php ENDPATH**/ ?>
