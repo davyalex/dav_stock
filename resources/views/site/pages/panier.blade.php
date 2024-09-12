@@ -94,7 +94,7 @@
                                                 <input class="form-check-input" type="radio" name="optionLivraison" value="yango"
                                                     id="yango">
                                                 <label class="form-check-label" for="yango">
-                                                    J'envoi un yango <span class="text-danger">A votre frais</span>
+                                                    J'envoi un yango 
                                                 </label>
                                             </div>
                                         </li>
@@ -103,7 +103,7 @@
                                                 <input class="form-check-input" type="radio" name="optionLivraison" value="recuperer"
                                                     id="recuperer">
                                                 <label class="form-check-label" for="recuperer">
-                                                    Je passe récupérer <span class="text-danger">A votre frais</span>
+                                                    Je passe récupérer 
                                                 </label>
                                             </div>
                                         </li>
@@ -111,7 +111,13 @@
                                 </div>
                                 <h4 class="grand-totall-title">Total: <span class="totalPrice">
                                         {{ number_format(session('totalPrice'), 0, ',', ' ') }} FCFA </span></h4>
-                                <a href="#" id="btnSend">Finaliser ma commande</a>
+                                        @auth
+                                        <a href="#" id="btnSend">Finaliser ma commande</a>
+                                        @endauth
+
+                                        @guest
+                                            <a href="{{ route('login') }}" id="">Finaliser ma commande</a>
+                                        @endguest
                             </div>
                         </div>
                     </div>

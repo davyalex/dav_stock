@@ -81,7 +81,7 @@
                                     <h4 class="cart-bottom-title section-bg-gary-cart">Panier Total</h4>
                                 </div>
                                 
-                                     <h5>Nombre de produits <span class="totalQuantity"><?php echo e(session('totalQuantity')); ?>
+                                <h5>Nombre de produits <span class="totalQuantity"><?php echo e(session('totalQuantity')); ?>
 
                                     </span></h5>
                                 <h5>Montant du panier <span class="totalPrice">
@@ -89,16 +89,36 @@
 
                                 <div class="total-shipping">
                                     <h5>Livraison <small class="text-danger"> * Cocher une option</small> </h5>
-                                    <ul>
-                                        <li><input type="checkbox"> J'envoi un yango <span class="text-danger">A votre
-                                                frais</span></li>
-                                        <li><input type="checkbox"> Je passe recuperer <span class="text-danger">A votre
-                                                frais</span></li>
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="optionLivraison" value="yango"
+                                                    id="yango">
+                                                <label class="form-check-label" for="yango">
+                                                    J'envoi un yango 
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="optionLivraison" value="recuperer"
+                                                    id="recuperer">
+                                                <label class="form-check-label" for="recuperer">
+                                                    Je passe récupérer 
+                                                </label>
+                                            </div>
+                                        </li>
                                     </ul>
                                 </div>
                                 <h4 class="grand-totall-title">Total: <span class="totalPrice">
                                         <?php echo e(number_format(session('totalPrice'), 0, ',', ' ')); ?> FCFA </span></h4>
-                                <a href="#">Finaliser ma commande</a>
+                                        <?php if(auth()->guard()->check()): ?>
+                                        <a href="#" id="btnSend">Finaliser ma commande</a>
+                                        <?php endif; ?>
+
+                                        <?php if(auth()->guard()->guest()): ?>
+                                            <a href="<?php echo e(route('login')); ?>" id="">Finaliser ma commande</a>
+                                        <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -115,7 +135,7 @@
                 </div>
             </div>
         <?php else: ?>
-        <h1 class="text-center"><i class="icon-handbag"></i></h1>
+            <h1 class="text-center"><i class="icon-handbag"></i></h1>
             <h4 class="text-center">Vous n'avez pas de produits dans votre panier</h4>
         <?php endif; ?>
 
@@ -131,6 +151,32 @@
 
 
     <script type="text/javascript">
+        // envoi des informations au controllers  pour enregistrer la commande
+        $('#btnSend').click(function(e) {
+            e.preventDefault();
+            //on verifie si une option de livraison à éte selectionné
+            var livraisonValue = $('input[name="optionLivraison"]:checked').val();
+            console.log(livraisonValue);
+            
+            if (livraisonValue == null || livraisonValue == '') {
+                Swal.fire({
+                    title: 'Erreur',
+                    text: 'Veuillez selectionner une option de livraison',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
+                return false;
+            }
+
+
+
+        });
+
+
+
+
+
+
         // Fonction pour augmenter la quantité
         function increaseValue(id) {
             let quantityInput = $(`#quantity-${id}`);

@@ -13,17 +13,17 @@
                     
 
                     <!-- Image principale -->
-                    <div class="main-image bg-primary">
-                        <img id="mainImage" src="<?php echo e($produit->getFirstMediaUrl('ProduitImage' , 'large-size')); ?>"
-                            alt="Image principale" class="product-image bg-primary">
+                    <div class="main-image">
+                        <img id="mainImage" src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>"
+                            alt="Image principale" class="product-image" width="570" height="470">
                     </div>
 
                     <!-- Miniatures sous l'image principale -->
-                    <div class="thumbnail-carousel owl-carousel owl-theme bg-danger">
+                    <div class="thumbnail-carousel owl-carousel owl-theme">
                         <?php $__currentLoopData = $produit->getMedia('galleryProduit'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $media): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <div class="item bg-primary">
-                                <img src="<?php echo e($media->getUrl('small-size')); ?>" alt="Image 1" class="thumbnail "
-                                    onclick="changeImage('<?php echo e($media->getUrl('large-size')); ?>')">
+                            <div class="item">
+                                <img src="<?php echo e($media->getUrl('small-size')); ?>" alt="Image 1" class="thumbnail"
+                                    onclick="changeImage('<?php echo e($media->getUrl()); ?>')">
                             </div>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
