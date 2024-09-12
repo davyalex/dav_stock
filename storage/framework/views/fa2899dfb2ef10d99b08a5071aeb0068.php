@@ -1,60 +1,61 @@
-@extends('site.layouts.app')
 
-@section('title', 'Panier')
 
-@section('content')
+<?php $__env->startSection('title', 'Panier'); ?>
+
+<?php $__env->startSection('content'); ?>
 
     <!-- shopping-cart-area start -->
     <div class="cart-main-area pt-35 pb-100">
-        @if (session('cart'))
+        <?php if(session('cart')): ?>
             <div class="container">
                 <h3 class="page-title">Mon panier
-                    <span class="quantityProduct">({{ count((array) session('cart')) }} produits)</span>
+                    <span class="quantityProduct">(<?php echo e(count((array) session('cart'))); ?> produits)</span>
                 </h3>
-                @php $sousTotal = 0 @endphp
+                <?php $sousTotal = 0 ?>
                 </h3>
                 <div class="row">
                     <!-- ========== Start panier items ========== -->
                     <div class="col-12 col-md-12 col-lg-8 col-sm-12">
                         <div class="row">
 
-                            @foreach (session('cart') as $id => $details)
-                                <div class="col-12 col-lg-6 mb-4" id="productDiv_{{ $id }}">
+                            <?php $__currentLoopData = session('cart'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $details): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <div class="col-12 col-lg-6 mb-4" id="productDiv_<?php echo e($id); ?>">
                                     <div class="card h-100 p-3">
                                         <div class="d-flex align-items-center">
                                             <!-- Image du produit -->
                                             <div class="product-image me-3">
-                                                <img src="{{ $details['image'] }}" class="img-fluid" width="150px"
+                                                <img src="<?php echo e($details['image']); ?>" class="img-fluid" width="150px"
                                                     height="150px" alt="Produit 2">
                                             </div>
                                             <!-- Détails du produit -->
                                             <div class="product-info flex-grow-1">
-                                                <h6 class="card-title text-uppercase"> {{ $details['title'] }} </h6>
-                                                {{-- <p class="card-text">Description rapide du produit.</p> --}}
+                                                <h6 class="card-title text-uppercase"> <?php echo e($details['title']); ?> </h6>
+                                                
                                                 <!-- Prix et quantité -->
                                                 <div class="d-flex justify-content-between col-sm-12">
                                                     <div>
                                                         <p class="font-weight-bold text-danger">Prix :
-                                                            {{ number_format($details['price'], 0, ',', ' ') }} FCFA</p>
+                                                            <?php echo e(number_format($details['price'], 0, ',', ' ')); ?> FCFA</p>
                                                         <p>
                                                         <div class="product-quantity">
                                                             <div class="cart-plus-minus">
                                                                 <div class="dec qtybutton"
-                                                                    onclick="decreaseValue({{ $id }})">-</div>
-                                                                <input data-id="{{ $id }}"
-                                                                    id="quantity-{{ $id }}"
+                                                                    onclick="decreaseValue(<?php echo e($id); ?>)">-</div>
+                                                                <input data-id="<?php echo e($id); ?>"
+                                                                    id="quantity-<?php echo e($id); ?>"
                                                                     class="cart-plus-minus-box" type="text"
-                                                                    name="quantity" value="{{ $details['quantity'] }}"
+                                                                    name="quantity" value="<?php echo e($details['quantity']); ?>"
                                                                     min="1" readonly>
                                                                 <div class="inc qtybutton"
-                                                                    onclick="increaseValue({{ $id }})">+</div>
+                                                                    onclick="increaseValue(<?php echo e($id); ?>)">+</div>
                                                             </div>
                                                         </div>
 
                                                         </p>
                                                         <p class="font-weight-bold text-danger">Total :
                                                             <span
-                                                                class="totalPriceQty-{{ $id }}">{{ number_format($details['price'] * $details['quantity'], 0, ',', ' ') }}
+                                                                class="totalPriceQty-<?php echo e($id); ?>"><?php echo e(number_format($details['price'] * $details['quantity'], 0, ',', ' ')); ?>
+
                                                                 FCFA</span>
                                                         </p>
 
@@ -62,11 +63,11 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <button data-id="{{ $id }}"
+                                        <button data-id="<?php echo e($id); ?>"
                                             class="btn btn-danger btn-sm me-2 remove">Supprimer</button>
                                     </div>
                                 </div>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                         </div>
                     </div>
@@ -79,12 +80,12 @@
                                 <div class="title-wrap">
                                     <h4 class="cart-bottom-title section-bg-gary-cart">Panier Total</h4>
                                 </div>
-                                {{-- <h5>Nombre de produits <span class="countProductCart">{{ count((array) session('cart')) }}
-                                    </span></h5> --}}
-                                <h5>Nombre de produits <span class="totalQuantity">{{ session('totalQuantity') }}
+                                
+                                <h5>Nombre de produits <span class="totalQuantity"><?php echo e(session('totalQuantity')); ?>
+
                                     </span></h5>
                                 <h5>Montant du panier <span class="totalPrice">
-                                        {{ number_format(session('totalPrice'), 0, ',', ' ') }} FCFA </span></h5>
+                                        <?php echo e(number_format(session('totalPrice'), 0, ',', ' ')); ?> FCFA </span></h5>
 
                                 <div class="total-shipping">
                                     <h5>Livraison <small class="text-danger"> * Cocher une option</small> </h5>
@@ -110,7 +111,7 @@
                                     </ul>
                                 </div>
                                 <h4 class="grand-totall-title">Total: <span class="totalPrice">
-                                        {{ number_format(session('totalPrice'), 0, ',', ' ') }} FCFA </span></h4>
+                                        <?php echo e(number_format(session('totalPrice'), 0, ',', ' ')); ?> FCFA </span></h4>
                                 <a href="#" id="btnSend">Finaliser ma commande</a>
                             </div>
                         </div>
@@ -122,18 +123,15 @@
                             <div class="cart-shiping-update">
                                 <a href="#">Continue mes achats</a>
                             </div>
-                            {{-- <div class="cart-clear">
-                            <button>Update Shopping Cart</button>
-                            <a href="#">Clear Shopping Cart</a>
-                        </div> --}}
+                            
                         </div>
                     </div>
                 </div>
             </div>
-        @else
+        <?php else: ?>
             <h1 class="text-center"><i class="icon-handbag"></i></h1>
             <h4 class="text-center">Vous n'avez pas de produits dans votre panier</h4>
-        @endif
+        <?php endif; ?>
 
     </div>
 
@@ -198,10 +196,10 @@
         // Fonction pour mettre à jour la quantité dans le panier
         function updateCartQuantity(id, newQuantity) {
             $.ajax({
-                url: "{{ route('cart.update') }}", // La route pour la mise à jour du panier
+                url: "<?php echo e(route('cart.update')); ?>", // La route pour la mise à jour du panier
                 method: "POST",
                 data: {
-                    _token: "{{ csrf_token() }}",
+                    _token: "<?php echo e(csrf_token()); ?>",
                     id: id,
                     quantity: newQuantity
                 },
@@ -255,10 +253,10 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '{{ route('cart.remove') }}',
+                        url: '<?php echo e(route('cart.remove')); ?>',
                         method: "POST",
                         data: {
-                            _token: '{{ csrf_token() }}',
+                            _token: '<?php echo e(csrf_token()); ?>',
                             id: IdProduct
                         },
 
@@ -284,7 +282,7 @@
 
                                 //rafraichir la page si panier vide
                                 if (response.countProductCart == 0) {
-                                    window.location.href = "{{ route('panier') }}";
+                                    window.location.href = "<?php echo e(route('panier')); ?>";
                                 }
                             }
 
@@ -301,4 +299,6 @@
 
 
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('site.layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\Restaurant-NEUILLY-\resources\views/site/pages/panier.blade.php ENDPATH**/ ?>

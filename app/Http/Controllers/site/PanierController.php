@@ -90,7 +90,7 @@ class PanierController extends Controller
             $totalQuantity = 0;
             $sousTotal = 0;
             $totalPrice = 0;
-
+  
             foreach ($cart as $value) {
                 $totalQuantity += $value['quantity']; // Qté total
                 $sousTotal += $value['quantity'] * $value['price']; // Sous total
