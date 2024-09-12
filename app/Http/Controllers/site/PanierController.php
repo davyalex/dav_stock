@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\site;
 
+use Carbon\Carbon;
 use App\Models\Produit;
+use App\Models\Commande;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 
@@ -90,7 +94,7 @@ class PanierController extends Controller
             $totalQuantity = 0;
             $sousTotal = 0;
             $totalPrice = 0;
-  
+
             foreach ($cart as $value) {
                 $totalQuantity += $value['quantity']; // Qté total
                 $sousTotal += $value['quantity'] * $value['price']; // Sous total
@@ -154,5 +158,50 @@ class PanierController extends Controller
     {
         session()->forget('cart');
         return response()->json(['status' => 'success', 'message' => 'Panier vidé']);
+    }
+
+
+    //la caisse infos panier
+    public function checkout(Request $request){
+        return view('site.pages.caisse');
+    }
+
+
+
+    // Enregistrer la commande
+    public function saveOrder(Request $request)
+    {
+        try {
+            $cart = session()->get('cart');
+
+            if (session('cart') && Auth::check()) {
+
+                ##recuperer les infos du panier
+                $nombreProduit = session('totalQuantity'); //nombre total des produit du panier
+                $montantTotal = session('totalPrice'); //montant total
+
+                $commande = Commande::firstOrCreate([
+                    'code' => 'CMD-' . strtoupper(Str::random(8)),
+                    'user_id' => Auth::id(),
+                    'montant_total' => $montantTotal,
+                    'nombre_produit' => $nombreProduit,
+                    'mode_livraison' => $request->optionLivraison,
+                    'adresse_livraison' => $request->adresseLivraison,
+                    'date_commande' => Carbon::now()->format('Y-m-d'),
+                    'statut' => 'en attente',
+                ]);
+
+
+                return response()->json([
+                    'message' => 'commande enregistrée avec success',
+                    'status' => 'success',
+                ], 200);
+            }
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 }

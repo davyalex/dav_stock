@@ -81,6 +81,13 @@ class User extends Authenticatable
     }
 
 
+    public function commandes(): HasMany
+    {
+        return $this->hasMany(Commande::class);
+    }
+
+
+
     /**
      * The attributes that should be hidden for serialization.
      *

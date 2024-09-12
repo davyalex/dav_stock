@@ -307,8 +307,13 @@ Route::controller(PanierController::class)->group(function () {
     route::get('add/{id}', 'add')->name('cart.add');
     route::post('update', 'update')->name('cart.update');
     route::post('remove', 'remove')->name('cart.remove');
-    route::get('clear', 'clear')->name('cart.clear');
+    route::get('caisse', 'checkout')->name('cart.checkout'); // caisse infos commande
+    route::post('order', 'saveOrder')->name('cart.save-order'); // enregistrer la commande
+    // route::get('clear', 'clear')->name('cart.clear');
 });
+
+
+
   
   
 

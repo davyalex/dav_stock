@@ -88,36 +88,49 @@
 
                                 <div class="total-shipping">
                                     <h5>Livraison <small class="text-danger"> * Cocher une option</small> </h5>
+
+                                    <div class="mt-3 adressYango">
+                                        <label for="" class="form-label">Lieu de livraison</label>
+                                        <input type="text" id="adresseLivraison" name="adresse_livraison"
+                                            class="form-control" placeholder="cocody saint jeane"
+                                            aria-describedby="helpId" />
+                                    </div>
                                     <ul class="list-unstyled">
                                         <li>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="optionLivraison" value="yango"
-                                                    id="yango">
+                                                <input class="form-check-input" type="radio" name="optionLivraison"
+                                                    value="yango" id="yango">
                                                 <label class="form-check-label" for="yango">
-                                                    J'envoi un yango 
+                                                    Yango Moto
                                                 </label>
                                             </div>
+
+
                                         </li>
+
+
                                         <li>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="optionLivraison" value="recuperer"
-                                                    id="recuperer">
+                                                <input class="form-check-input" type="radio" name="optionLivraison"
+                                                    value="recuperer" id="recuperer">
                                                 <label class="form-check-label" for="recuperer">
-                                                    Je passe récupérer 
+                                                    Je passe récupérer
                                                 </label>
                                             </div>
                                         </li>
                                     </ul>
+
+
                                 </div>
                                 <h4 class="grand-totall-title">Total: <span class="totalPrice">
                                         {{ number_format(session('totalPrice'), 0, ',', ' ') }} FCFA </span></h4>
-                                        @auth
-                                        <a href="#" id="btnSend">Finaliser ma commande</a>
-                                        @endauth
+                                @auth
+                                    <a href="{{ route('cart.checkout') }}" id="btnnext">Finaliser ma commande</a>
+                                @endauth
 
-                                        @guest
-                                            <a href="{{ route('login') }}" id="">Finaliser ma commande</a>
-                                        @endguest
+                                @guest
+                                    <a href="#">Continuer</a>
+                                @endguest
                             </div>
                         </div>
                     </div>
@@ -153,31 +166,7 @@
 
 
     <script type="text/javascript">
-        // envoi des informations au controllers  pour enregistrer la commande
-        $('#btnSend').click(function(e) {
-            e.preventDefault();
-            //on verifie si une option de livraison à éte selectionné
-            var livraisonValue = $('input[name="optionLivraison"]:checked').val();
-            console.log(livraisonValue);
-            
-            if (livraisonValue == null || livraisonValue == '') {
-                Swal.fire({
-                    title: 'Erreur',
-                    text: 'Veuillez selectionner une option de livraison',
-                    icon: 'error',
-                    confirmButtonText: 'OK',
-                });
-                return false;
-            }
-
-
-
-        });
-
-
-
-
-
+        // Gestion du panier
 
         // Fonction pour augmenter la quantité
         function increaseValue(id) {

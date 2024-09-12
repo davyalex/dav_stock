@@ -1,9 +1,9 @@
-@extends('site.layouts.app')
-
-@section('title', 'Connexion')
 
 
-@section('content')
+<?php $__env->startSection('title', 'Connexion'); ?>
+
+
+<?php $__env->startSection('content'); ?>
 <div class="login-register-area pt-95 pb-100">
     <div class="container">
         <div class="row justify-content-center">
@@ -56,6 +56,8 @@
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
 
+
+<?php echo $__env->make('site.layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/site/sections/user-auth/login-register.blade.php ENDPATH**/ ?>
