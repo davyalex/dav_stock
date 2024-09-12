@@ -55,7 +55,7 @@
                                                 width="50px" alt="">
                                         </td>
                                         <td>{{ $item['nom'] }}</td>
-                                        <td>{{ $item['categorie']['name'] }}</td>
+                                        <td>{{ $item['categorie']['name'] ?? ''}}</td>
                                         <td>{{ $item['typeProduit']['name'] }}</td>
                                         <td>{{ $item['stock'] }}</td>
                                         <td>{{ $item['stock_alerte'] }}</td>

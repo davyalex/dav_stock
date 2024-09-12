@@ -17,9 +17,9 @@ class ProduitController extends Controller
     //
     public function index()
     {
-        $categorie = Categorie::whereIn('type', ['ingredients' , 'boissons'])->first();
+        $categorie = Categorie::whereIn('type', ['ingredients' , 'boissons'])->get();
 
-        $data_produit = Produit::where('type_id',  $categorie->id)->get();
+        $data_produit = Produit::withWhereHas('typeProduit' , fn($q)=>$q->whereIn('type', ['ingredients' , 'boissons']))->get();
         // dd(  $data_produit->toArray());
         return view('backend.pages.produit.index', compact('data_produit'));
     }

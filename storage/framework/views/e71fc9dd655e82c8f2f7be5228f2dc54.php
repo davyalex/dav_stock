@@ -55,7 +55,7 @@
                                                 width="50px" alt="">
                                         </td>
                                         <td><?php echo e($item['nom']); ?></td>
-                                        <td><?php echo e($item['categorie']['name']); ?></td>
+                                        <td><?php echo e($item['categorie']['name'] ?? ''); ?></td>
                                         <td><?php echo e($item['typeProduit']['name']); ?></td>
                                         <td><?php echo e($item['stock']); ?></td>
                                         <td><?php echo e($item['stock_alerte']); ?></td>
