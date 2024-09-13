@@ -1,7 +1,7 @@
 <!-- mobile-menu-area-start -->
 <li>
     @if ($menu->children->isNotEmpty())
-        <a href="">{{ $menu['name'] }}
+        <a href="{{route('produit' , $menu->slug)}}">{{ $menu['name'] }}
         </a>
         <ul>
             @foreach ($menu->children as $child)
@@ -9,7 +9,7 @@
             @endforeach
         </ul>
     @else
-        <a href="blog-rightsidebar.html">{{ $menu['name'] }} </a>
+        <a href="{{route('produit' , $menu->slug)}}">{{ $menu['name'] }} </a>
     @endif
 </li>
 <!-- mobile-menu-area-end -->

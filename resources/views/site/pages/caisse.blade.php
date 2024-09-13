@@ -19,64 +19,73 @@
                                 <div id="payment-1" class="panel-collapse collapse show" data-bs-parent="#faq">
                                     <div class="panel-body">
                                         <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="checkout-register">
+
+                                            <div class="col-lg-12">
+                                                <div class="checkout-login">
+                                                    <div class="title-wrap mb-2">
+                                                        <h4 class="cart-bottom-title section-bg-white">Infos personnelles
+                                                        </h4>
+                                                    </div>
+
+                                                    <span>Nom: {{ Auth::user()->first_name }} </span>
+                                                    <span>Prenoms: {{ Auth::user()->last_name }} </span>
+                                                    <span>Contact: {{ Auth::user()->phone }} </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="checkout-register mt-3">
                                                     <div class="title-wrap">
-                                                        <h4 class="cart-bottom-title section-bg-white">Mode de livraison</h4>
+                                                        <h4 class="cart-bottom-title section-bg-white">Mode de livraison
+                                                        </h4>
                                                     </div>
                                                     <div class="register-us">
                                                         <div class="total-shipping">
-                                                            <h5>Livraison <small class="text-danger"> * Cocher une option</small> </h5>
-                        
+                                                            <h5>Livraison <small class="text-danger"> * Cocher une
+                                                                    option</small> </h5>
+
                                                             <div class="mt-3 adressYango">
-                                                                <label for="" class="form-label">Lieu de livraison</label>
-                                                                <input type="text" id="adresseLivraison" name="adresse_livraison"
-                                                                    class="form-control" placeholder="cocody saint jeane"
+                                                                <label for="" class="form-label">Lieu de
+                                                                    livraison</label>
+                                                                <input type="text" id="adresseLivraison"
+                                                                    name="adresse_livraison" class="form-control"
+                                                                    placeholder="cocody saint jeane"
                                                                     aria-describedby="helpId" />
                                                             </div>
                                                             <ul class="list-unstyled">
                                                                 <li>
                                                                     <div class="form-check">
-                                                                        <input class="form-check-input" type="radio" name="optionLivraison"
-                                                                            value="yango" id="yango">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="optionLivraison" value="yango"
+                                                                            id="yango">
                                                                         <label class="form-check-label" for="yango">
                                                                             Yango Moto
                                                                         </label>
                                                                     </div>
-                        
-                        
+
+
                                                                 </li>
-                        
-                        
+
+
                                                                 <li>
                                                                     <div class="form-check">
-                                                                        <input class="form-check-input" type="radio" name="optionLivraison"
-                                                                            value="recuperer" id="recuperer">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="optionLivraison" value="recuperer"
+                                                                            id="recuperer">
                                                                         <label class="form-check-label" for="recuperer">
                                                                             Je passe récupérer
                                                                         </label>
                                                                     </div>
                                                                 </li>
                                                             </ul>
-                        
-                        
+
+
                                                         </div>
                                                     </div>
-                                                  
-                                                   
+
+
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6">
-                                                <div class="checkout-login">
-                                                    <div class="title-wrap">
-                                                        <h4 class="cart-bottom-title section-bg-white">Infos personnelles</h4>
-                                                    </div>
-                                                   
-                                                    <span>Nom: {{Auth::user()->first_name}} </span>
-                                                    <span>Nom: {{Auth::user()->last_name}} </span>
-                                                    <span>Contact: {{Auth::user()->phone}} </span>
-                                                </div>
-                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -86,112 +95,51 @@
                                     <h5 class="panel-title"><span>2.</span> <a data-bs-toggle="collapse"
                                             data-bs-target="#payment-6">Facture de la commande</a></h5>
                                 </div>
-                                <div id="payment-6" class="panel-collapse collapse" data-bs-parent="#faq">
-                                    <div class="panel-body">
-                                        <div class="order-review-wrapper">
-                                            <div class="order-review">
-                                                <div class="table-responsive">
-                                                    <table class="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="width-1">Product Name</th>
-                                                                <th class="width-2">Price</th>
-                                                                <th class="width-3">Qty</th>
-                                                                <th class="width-4">Subtotal</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="o-pro-dec">
-                                                                        <p>Fusce aliquam</p>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="o-pro-price">
-                                                                        <p>$236.00</p>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="o-pro-qty">
-                                                                        <p>2</p>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="o-pro-subtotal">
-                                                                        <p>$236.00</p>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="o-pro-dec">
-                                                                        <p>Primis in faucibus</p>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="o-pro-price">
-                                                                        <p>$265.00</p>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="o-pro-qty">
-                                                                        <p>3</p>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="o-pro-subtotal">
-                                                                        <p>$265.00</p>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="o-pro-dec">
-                                                                        <p>Etiam gravida</p>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="o-pro-price">
-                                                                        <p>$363.00</p>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="o-pro-qty">
-                                                                        <p>2</p>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="o-pro-subtotal">
-                                                                        <p>$363.00</p>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="o-pro-dec">
-                                                                        <p>Quisque in arcu</p>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="o-pro-price">
-                                                                        <p>$328.00</p>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="o-pro-qty">
-                                                                        <p>2</p>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="o-pro-subtotal">
-                                                                        <p>$328.00</p>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                        <tfoot>
-                                                            <tr>
+                                @if (session('cart'))
+                                    <div id="payment-6" class="panel-collapse collapse show" data-bs-parent="#faq">
+                                        <div class="panel-body">
+                                            <div class="order-review-wrapper">
+                                                <div class="order-review">
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead>
+
+                                                                <tr>
+                                                                    <th class="width-1">Nom </th>
+                                                                    <th class="width-2">Pu</th>
+                                                                    <th class="width-3">Qté</th>
+                                                                    <th class="width-4">sous-total</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (session('cart') as $id => $details)
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div class="o-pro-dec">
+                                                                                <p>{{ $details['title'] }}</p>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="o-pro-price">
+                                                                                <p>{{ $details['price'] }}</p>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="o-pro-qty">
+                                                                                <p>{{ $details['quantity'] }}</p>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="o-pro-subtotal">
+                                                                                <p>{{ number_format($details['price'] * $details['quantity'], 0, ',', ' ') }}
+                                                                                </p>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                            <tfoot>
+                                                                {{-- <tr>
                                                                 <td colspan="3">Subtotal </td>
                                                                 <td colspan="1">$4,001.00</td>
                                                             </tr>
@@ -199,28 +147,26 @@
                                                                 <td colspan="3">Shipping & Handling (Flat Rate - Fixed
                                                                 </td>
                                                                 <td colspan="1">$45.00</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="3">Grand Total</td>
-                                                                <td colspan="1">$4,722.00</td>
-                                                            </tr>
-                                                        </tfoot>
-                                                    </table>
-                                                </div>
-                                                <div class="billing-back-btn">
-                                                  
-                                                    <div class="billing-btn">
-                                                        <button type="submit">Continue</button>
+                                                            </tr> --}}
+                                                                <tr>
+                                                                    <td colspan="3">Total</td>
+                                                                    <td colspan="1">
+                                                                        {{ number_format(session('totalPrice'), 0, ',', ' ') }}
+                                                                        FCFA</td>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endif
                             </div>
 
                             <div class="billing-btn">
-                                <button id="btnSend">Continue</button>
+                                <button id="btnSend">Valider ma commande</button>
                             </div>
                         </div>
                     </div>
@@ -248,9 +194,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
 
-<script>
-      // afficher le champs adresse de livraison yango si yango est coché
-      $('.adressYango').hide();
+    <script>
+        // afficher le champs adresse de livraison yango si yango est coché
+        $('.adressYango').hide();
         $('input[name="optionLivraison"]').change(function(e) {
             e.preventDefault();
             var livraisonValue = $('input[name="optionLivraison"]:checked').val();
@@ -296,16 +242,28 @@
                         adresseLivraison: yangoValue
                     },
                     success: function(response) {
-                        console.log(response);
-
+                        if (response.status == 'success') {
+                            Swal.fire({
+                                title: 'Félicitation',
+                                text: 'Votre commande a été enregistrée avec succès',
+                                icon: 'success',
+                                showConfirmButton: false, // Masquer le bouton de confirmation
+                                timer: 3000, // L'alerte disparaît après delai ms (en secondes)
+                                timerProgressBar: true // Affiche une barre de progression pour le timer
+                            }).then(() => {
+                                // Redirection après la fermeture de l'alerte
+                                setTimeout(function() {
+                                    window.location.href = "{{ route('accueil') }}";
+                                },
+                                300); // On ajoute un léger délai pour garantir la redirection après la fermeture
+                            });;
+                        }
                     },
 
                 });
             }
         });
-
-
-</script>
+    </script>
 
 
 

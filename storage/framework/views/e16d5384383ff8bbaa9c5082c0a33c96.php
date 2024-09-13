@@ -1,7 +1,7 @@
 <!-- mobile-menu-area-start -->
 <li>
     <?php if($menu->children->isNotEmpty()): ?>
-        <a href=""><?php echo e($menu['name']); ?>
+        <a href="<?php echo e(route('produit' , $menu->slug)); ?>"><?php echo e($menu['name']); ?>
 
         </a>
         <ul>
@@ -10,7 +10,7 @@
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </ul>
     <?php else: ?>
-        <a href="blog-rightsidebar.html"><?php echo e($menu['name']); ?> </a>
+        <a href="<?php echo e(route('produit' , $menu->slug)); ?>"><?php echo e($menu['name']); ?> </a>
     <?php endif; ?>
 </li>
 <!-- mobile-menu-area-end -->

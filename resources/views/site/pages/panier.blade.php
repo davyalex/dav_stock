@@ -86,42 +86,7 @@
                                 <h5>Montant du panier <span class="totalPrice">
                                         {{ number_format(session('totalPrice'), 0, ',', ' ') }} FCFA </span></h5>
 
-                                <div class="total-shipping">
-                                    <h5>Livraison <small class="text-danger"> * Cocher une option</small> </h5>
-
-                                    <div class="mt-3 adressYango">
-                                        <label for="" class="form-label">Lieu de livraison</label>
-                                        <input type="text" id="adresseLivraison" name="adresse_livraison"
-                                            class="form-control" placeholder="cocody saint jeane"
-                                            aria-describedby="helpId" />
-                                    </div>
-                                    <ul class="list-unstyled">
-                                        <li>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="optionLivraison"
-                                                    value="yango" id="yango">
-                                                <label class="form-check-label" for="yango">
-                                                    Yango Moto
-                                                </label>
-                                            </div>
-
-
-                                        </li>
-
-
-                                        <li>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="optionLivraison"
-                                                    value="recuperer" id="recuperer">
-                                                <label class="form-check-label" for="recuperer">
-                                                    Je passe récupérer
-                                                </label>
-                                            </div>
-                                        </li>
-                                    </ul>
-
-
-                                </div>
+                              
                                 <h4 class="grand-totall-title">Total: <span class="totalPrice">
                                         {{ number_format(session('totalPrice'), 0, ',', ' ') }} FCFA </span></h4>
                                 @auth
@@ -129,7 +94,7 @@
                                 @endauth
 
                                 @guest
-                                    <a href="#">Continuer</a>
+                                    <a href="{{route('user.login')}}">Connectez vous pour finaliser la commande</a>
                                 @endguest
                             </div>
                         </div>
@@ -139,7 +104,7 @@
                     <div class="col-lg-12">
                         <div class="cart-shiping-update-wrapper">
                             <div class="cart-shiping-update">
-                                <a href="#">Continue mes achats</a>
+                                <a href="{{route('accueil')}}">Continue mes achats</a>
                             </div>
                             {{-- <div class="cart-clear">
                             <button>Update Shopping Cart</button>

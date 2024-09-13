@@ -26,6 +26,7 @@ use App\Http\Controllers\backend\permission\PermissionController;
 use App\Http\Controllers\backend\fournisseur\FournisseurController;
 use App\Http\Controllers\backend\depense\CategorieDepenseController;
 use App\Http\Controllers\backend\configuration\UniteMesureController;
+use App\Http\Controllers\site\AuthUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -291,9 +292,23 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
 
 
 ######################      START FRONT ROUTE         ###########################################################
+//User Login
+Route::controller(AuthUserController::class)->group(function () {
+    route::get('connexion', 'login')->name('user.login');
+    route::post('connexion', 'login')->name('user.login.post');
+    route::get('inscription', 'register')->name('user.register');
+    route::post('inscription', 'register')->name('user.register.post');
+    route::get('logout', 'logout')->name('user.logout');
+    route::get('profile', 'profile')->name('user.profile');
+    route::get('mes-commandes', 'mesCommandes')->name('user.commande');
 
 
-//Accueil
+
+
+
+});
+
+//site
 Route::controller(SiteController::class)->group(function () {
     route::get('', 'accueil')->name('accueil');
     route::get('/categorie/{slug}', 'produit')->name('produit'); // get product of categorie selected
@@ -301,14 +316,14 @@ Route::controller(SiteController::class)->group(function () {
     route::get('/produit/detail/{slug}', 'produitDetail')->name('produit.detail');
 });
 
-
+//panier
 Route::controller(PanierController::class)->group(function () {
     route::get('panier', 'index')->name('panier');
     route::get('add/{id}', 'add')->name('cart.add');
     route::post('update', 'update')->name('cart.update');
     route::post('remove', 'remove')->name('cart.remove');
-    route::get('caisse', 'checkout')->name('cart.checkout'); // caisse infos commande
-    route::post('order', 'saveOrder')->name('cart.save-order'); // enregistrer la commande
+    route::get('caisse', 'checkout')->name('cart.checkout')->middleware('auth'); // caisse infos commande
+    route::post('order', 'saveOrder')->name('cart.save-order')->middleware('auth'); // enregistrer la commande
     // route::get('clear', 'clear')->name('cart.clear');
 });
 

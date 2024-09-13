@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Commande extends Model
 {
@@ -45,8 +46,8 @@ class Commande extends Model
 
 
 
-    // public function products():BelongsToMany {
-    //     return $this->belongsToMany(Product::class)->withPivot(['quantity','unit_price','total', 'options','available'])->withTimestamps();
-    // }
+    public function produits():BelongsToMany {
+        return $this->belongsToMany(Produit::class)->withPivot(['quantite','prix_unitaire','total'])->withTimestamps();
+    }
 
 }

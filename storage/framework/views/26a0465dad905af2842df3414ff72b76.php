@@ -11,10 +11,10 @@
                 <div class="login-register-wrapper">
                     <div class="login-register-tab-list nav">
                         <a class="active" data-bs-toggle="tab" href="#lg1">
-                            <h4> login </h4>
+                            <h4> Connexion </h4>
                         </a>
                         <a data-bs-toggle="tab" href="#lg2">
-                            <h4> register </h4>
+                            <h4> Inscription </h4>
                         </a>
                     </div>
                     <div class="tab-content">

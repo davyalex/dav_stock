@@ -20,6 +20,7 @@
     <?php if(!Request::routeIs('accueil')): ?>
     <?php echo $__env->make('site.components.breadcrumb', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php endif; ?>
+    <?php echo $__env->make('sweetalert::alert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
     <?php echo $__env->yieldContent('content'); ?> <!-- content start -->
 

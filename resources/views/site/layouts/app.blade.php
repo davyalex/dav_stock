@@ -20,6 +20,7 @@
     @if (!Request::routeIs('accueil'))
     @include('site.components.breadcrumb')
     @endif
+    @include('sweetalert::alert')
 
     @yield('content') <!-- content start -->
 

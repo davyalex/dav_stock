@@ -162,8 +162,14 @@ class PanierController extends Controller
 
 
     //la caisse infos panier
-    public function checkout(Request $request){
-        return view('site.pages.caisse');
+    public function checkout(Request $request)
+    {
+        if (session('cart')) {
+            return view('site.pages.caisse');
+        }else{
+            return redirect()->route('accueil');
+        }
+       
     }
 
 
@@ -191,6 +197,21 @@ class PanierController extends Controller
                     'statut' => 'en attente',
                 ]);
 
+
+                // enregistrement des produits dans la table pivot
+                foreach (session('cart') as $key => $value) {
+                    $commande->produits()->attach($key, [
+                        'quantite' => $value['quantity'],
+                        'prix_unitaire' => $value['price'],
+                        'total' => $value['price'] * $value['quantity'],
+                    ]);
+                }
+
+
+                // suppression de la session panier
+                Session::forget('cart');
+                Session::forget('totalQuantity');
+                Session::forget('totalPrice');
 
                 return response()->json([
                     'message' => 'commande enregistrée avec success',

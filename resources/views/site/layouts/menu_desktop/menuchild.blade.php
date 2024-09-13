@@ -1,6 +1,6 @@
 <li class="top-hover">
     @if ($menu->children->isNotEmpty())
-        <a href="">{{ $menu['name'] }}
+        <a href="#">{{ $menu['name'] }}
             <i class="ion-chevron-down"></i>
         </a>
         <ul class="submenu">
@@ -9,7 +9,7 @@
         @endforeach
         </ul>
     @else
-        <a href="">{{ $menu['name'] }} </a>
+        <a href="{{route('menu')}}">{{ $menu['name'] }} </a>
     @endif
 </li>
 

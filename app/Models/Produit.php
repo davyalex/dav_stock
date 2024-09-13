@@ -10,6 +10,7 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Produit extends Model implements HasMedia
 {
@@ -98,6 +99,10 @@ class Produit extends Model implements HasMedia
     public function menus()
     {
         return $this->belongsToMany(Menu::class, 'menu_produit')->withTimestamps();
+    }
+
+    public function commandes():BelongsToMany {
+        return $this->belongsToMany(Commande::class)->withPivot(['quantite','prix_unitaire','total'])->withTimestamps();
     }
 
   
