@@ -30,7 +30,9 @@ class Achat extends Model
         'prix_achat_total',
         'prix_vente_unitaire', // -->bar
         'prix_vente_total',  // -->bar
-        'user_id'
+        'user_id',
+        'magasin_id',
+
     ];
 
     public static function boot()
@@ -42,7 +44,10 @@ class Achat extends Model
         });
     }
 
-
+    public function magasin()
+    {
+        return $this->belongsTo(Magasin::class, 'magasin_id');
+    }
 
     public function type_produit() // BAR ? RESTAURANT
     {

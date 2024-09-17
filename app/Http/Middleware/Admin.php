@@ -17,12 +17,18 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::user() && in_array(Auth::user()->role, ['developpeur', 'webmaster', 'administrateur', 'gestionnaire' , 'chef de projet'])) {
+        if (Auth::user() && in_array(Auth::user()->role, ['developpeur', 'webmaster', 'administrateur', 'gestionnaire', 'caisse'])) {
             return $next($request);
-        } else {
-            Alert::error('Access non autorisé', 'Error Message');
-
-            return redirect()->route('admin.login')->withError('Autorisation echoué');
         }
+
+        // Si l'utilisateur n'a pas un de ces rôles
+        abort(403, 'Accès non autorisé');
+
+
+        // else {
+        //     Alert::error('Access non autorisé', 'Error Message');
+
+        //     return redirect()->route('admin.login')->withError('Autorisation echoué');
+        // }
     }
 }

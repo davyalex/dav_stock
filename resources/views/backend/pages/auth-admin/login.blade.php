@@ -3,10 +3,10 @@
     @lang('translation.signin')
 @endsection
 @section('content')
-    @if ($data_setting != null)
+    @if ($setting != null)
         <style>
             .auth-one-bg {
-                background-image: url('{{ $data_setting->getFirstMediaUrl('cover') }}');
+                background-image: url('{{ $setting->getFirstMediaUrl('cover') }}');
                 background-position: center;
                 background-size: cover;
             }
@@ -44,18 +44,18 @@
                         <div class="text-center mt-sm-5 mb-4 text-white-50">
                             <div>
 
-                                @if ($data_setting != null)
+                                @if ($setting != null)
                                     <a href="index" class="d-inline-block auth-logo">
-                                        <img src="{{ URL::asset($data_setting->getFirstMediaUrl('logo_header')) }}"
+                                        <img src="{{ URL::asset($setting->getFirstMediaUrl('logo_header')) }}"
                                             alt=""  width="50" class="rounded-circle">
                                     </a>
-                                    <p class="mt-3 fs-15 fw-medium"> {{ $data_setting['projet_title'] ?? '' }} </p>
+                                    <p class="mt-3 fs-15 fw-medium"> {{ $setting['projet_title'] ?? '' }} </p>
                                 @else
                                     <h3>PROJET NAME</h3>
                                 @endif
 
                             </div>
-                            <p class="mt-3 fs-15 fw-medium"> {{ $data_setting['projet_description'] ?? '' }} </p>
+                            <p class="mt-3 fs-15 fw-medium"> {{ $setting['projet_description'] ?? '' }} </p>
                         </div>
                     </div>
                 </div>

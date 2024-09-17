@@ -21,19 +21,19 @@ return new class extends Migration
             $table->integer('stock_alerte')->default(0); //
             $table->longText('description')->nullable();
             $table->enum('statut', ['active', 'desactive'])->default('active');
-        
+
             //foreign table
             $table->foreignId('categorie_id')
-            ->nullable()
-            ->constrained('categories')
-            ->onUpdate('cascade')
-            ->onDelete('cascade ');
+                ->nullable()
+                ->constrained('categories')
+                ->onUpdate('cascade')
+                ->onDelete('cascade ');
 
             $table->foreignId('type_id') // type de produit  : boissons , ingredients, plats
-            ->nullable()
-            ->constrained('categories')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
+                ->nullable()
+                ->constrained('categories')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
             $table->foreignId('user_id')
                 ->nullable()
@@ -41,8 +41,15 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
+
+            $table->foreignId('magasin_id')
+                ->nullable()
+                ->constrained('magasins')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
             $table->softDeletes();
-       
+
             $table->timestamps();
         });
     }

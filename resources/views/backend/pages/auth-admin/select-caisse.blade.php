@@ -1,17 +1,17 @@
-
-<?php $__env->startSection('title'); ?>
-    <?php echo app('translator')->get('translation.signin'); ?>
-<?php $__env->stopSection(); ?>
-<?php $__env->startSection('content'); ?>
-    <?php if($setting != null): ?>
+@extends('backend.layouts.master-without-nav')
+@section('title')
+    @lang('translation.signin')
+@endsection
+@section('content')
+    @if ($setting != null)
         <style>
             .auth-one-bg {
-                background-image: url('<?php echo e($setting->getFirstMediaUrl('cover')); ?>');
+                background-image: url('{{ $setting->getFirstMediaUrl('cover') }}');
                 background-position: center;
                 background-size: cover;
             }
         </style>
-    <?php else: ?>
+    @else
         <style>
             .auth-one-bg {
                 background-image: url(/build/icons/auth-one-bg.jpg);
@@ -19,7 +19,7 @@
                 background-size: cover;
             }
         </style>
-    <?php endif; ?>
+    @endif
 
 
 
@@ -44,18 +44,18 @@
                         <div class="text-center mt-sm-5 mb-4 text-white-50">
                             <div>
 
-                                <?php if($setting != null): ?>
+                                @if ($setting != null)
                                     <a href="index" class="d-inline-block auth-logo">
-                                        <img src="<?php echo e(URL::asset($setting->getFirstMediaUrl('logo_header'))); ?>"
+                                        <img src="{{ URL::asset($setting->getFirstMediaUrl('logo_header')) }}"
                                             alt=""  width="50" class="rounded-circle">
                                     </a>
-                                    <p class="mt-3 fs-15 fw-medium"> <?php echo e($setting['projet_title'] ?? ''); ?> </p>
-                                <?php else: ?>
+                                    <p class="mt-3 fs-15 fw-medium"> {{ $setting['projet_title'] ?? '' }} </p>
+                                @else
                                     <h3>PROJET NAME</h3>
-                                <?php endif; ?>
+                                @endif
 
                             </div>
-                            <p class="mt-3 fs-15 fw-medium"> <?php echo e($setting['projet_description'] ?? ''); ?> </p>
+                            <p class="mt-3 fs-15 fw-medium"> {{ $setting['projet_description'] ?? '' }} </p>
                         </div>
                     </div>
                 </div>
@@ -64,43 +64,31 @@
                 <div class="row justify-content-center">
                     <div class="col-md-8 col-lg-6 col-xl-5">
                         <div class="card mt-4">
-                            <?php echo $__env->make('backend.components.alertMessage', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                            @include('backend.components.alertMessage')
                             <div class="card-body p-4">
                                 <div class="text-center mt-2">
-                                    <h5 class="text-primary">Bienvenue !</h5>
-                                    <p class="text-muted">Connectez vous pour continuer.</p>
+                                    <h5 class="text-primary">Bienvenue ! {{Auth::user()->first_name}} </h5>
+                                    <p class="text-muted">Veuillez sélectionner une caisse pour continuer</p>
                                 </div>
                                 <div class="p-2 mt-4">
-                                    <form action="<?php echo e(route('admin.login')); ?>" method="post" class="needs-validation"
+                                    <form action="{{ route('caisse.select.post') }}" method="post" class="needs-validation"
                                         novalidate>
-                                        <?php echo csrf_field(); ?>
+                                        @csrf
                                         <div class="mb-3">
-                                            <label for="username" class="form-label">Email</label>
-                                            <input type="email" name="email" class="form-control" id="username"
-                                                placeholder="Enter username" required>
+                                            <label for="username" class="form-label">Selectionner une caisse</label>
+                                            <select class="form-control" name="caisse" required>
+                                                <option disabled value selected>Selectionner</option>
+                                                @foreach ($data_caisse as $item)
+                                                <option value="{{ $item->id }}">{{ $item->libelle }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
-
-                                        <div class="mb-3">
-                                            
-                                            <label class="form-label" for="password-input">Mot de passe</label>
-                                            <div class="position-relative auth-pass-inputgroup mb-3">
-                                                <input type="password" name="password"
-                                                    class="form-control pe-5 password-input" placeholder="Enter password"
-                                                    id="password-input" required>
-                                                <button
-                                                    class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon material-shadow-none"
-                                                    type="button" id="password-addon"><i
-                                                        class="ri-eye-fill align-middle"></i></button>
-                                            </div>
-                                        </div>
-
-                                        
 
                                         <div class="mt-4">
-                                            <button class="btn btn-success w-100" type="submit">Connexion</button>
+                                            <button class="btn btn-success w-100" type="submit">Valider</button>
                                         </div>
 
-                                        
+                                       
                                     </form>
                                 </div>
                             </div>
@@ -108,7 +96,7 @@
                         </div>
                         <!-- end card -->
 
-                        
+                       
 
                     </div>
                 </div>
@@ -126,7 +114,7 @@
                         <div class="text-center">
                             <script>
                                 document.write(new Date().getFullYear())
-                            </script> <?php echo e(config('app.name')); ?>. Conçu avec <i
+                            </script> {{ config('app.name') }}. Conçu avec <i
                                 class="mdi mdi-heart text-danger"></i> par
                             Ticafrique</p>
                         </div>
@@ -137,11 +125,11 @@
         <!-- end Footer -->
     </div>
     <!-- end auth-page-wrapper -->
-<?php $__env->stopSection(); ?>
-<?php $__env->startSection('script'); ?>
-    <script src="<?php echo e(URL::asset('build/libs/particles.js/particles.js')); ?>"></script>
-    <script src="<?php echo e(URL::asset('build/js/pages/particles.app.js')); ?>"></script>
-    <script src="<?php echo e(URL::asset('build/js/pages/password-addon.init.js')); ?>"></script>
+@endsection
+@section('script')
+    <script src="{{ URL::asset('build/libs/particles.js/particles.js') }}"></script>
+    <script src="{{ URL::asset('build/js/pages/particles.app.js') }}"></script>
+    <script src="{{ URL::asset('build/js/pages/password-addon.init.js') }}"></script>
 
 
     <script>
@@ -165,6 +153,4 @@
             })
         })()
     </script>
-<?php $__env->stopSection(); ?>
-
-<?php echo $__env->make('backend.layouts.master-without-nav', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/auth-admin/login.blade.php ENDPATH**/ ?>
+@endsection

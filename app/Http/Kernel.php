@@ -3,7 +3,9 @@
 namespace App\Http;
 
 use App\Http\Middleware\Admin;
+use Spatie\Permission\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Spatie\Permission\Middleware\PermissionMiddleware;
 
 class Kernel extends HttpKernel
 {
@@ -68,6 +70,11 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin' => Admin::class,
         'check.session' => \App\Http\Middleware\CheckSession::class,
+
+
+        // Autres middlewares
+        'role' => RoleMiddleware::class,
+        'permission' => PermissionMiddleware::class,
 
     ];
 }

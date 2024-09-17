@@ -67,40 +67,28 @@
                             <?php echo $__env->make('backend.components.alertMessage', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                             <div class="card-body p-4">
                                 <div class="text-center mt-2">
-                                    <h5 class="text-primary">Bienvenue !</h5>
-                                    <p class="text-muted">Connectez vous pour continuer.</p>
+                                    <h5 class="text-primary">Bienvenue ! <?php echo e(Auth::user()->first_name); ?> </h5>
+                                    <p class="text-muted">Veuillez sélectionner une caisse pour continuer</p>
                                 </div>
                                 <div class="p-2 mt-4">
-                                    <form action="<?php echo e(route('admin.login')); ?>" method="post" class="needs-validation"
+                                    <form action="<?php echo e(route('caisse.select.post')); ?>" method="post" class="needs-validation"
                                         novalidate>
                                         <?php echo csrf_field(); ?>
                                         <div class="mb-3">
-                                            <label for="username" class="form-label">Email</label>
-                                            <input type="email" name="email" class="form-control" id="username"
-                                                placeholder="Enter username" required>
+                                            <label for="username" class="form-label">Selectionner une caisse</label>
+                                            <select class="form-control" name="caisse" required>
+                                                <option disabled value selected>Selectionner</option>
+                                                <?php $__currentLoopData = $data_caisse; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($item->id); ?>"><?php echo e($item->libelle); ?></option>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            </select>
                                         </div>
-
-                                        <div class="mb-3">
-                                            
-                                            <label class="form-label" for="password-input">Mot de passe</label>
-                                            <div class="position-relative auth-pass-inputgroup mb-3">
-                                                <input type="password" name="password"
-                                                    class="form-control pe-5 password-input" placeholder="Enter password"
-                                                    id="password-input" required>
-                                                <button
-                                                    class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon material-shadow-none"
-                                                    type="button" id="password-addon"><i
-                                                        class="ri-eye-fill align-middle"></i></button>
-                                            </div>
-                                        </div>
-
-                                        
 
                                         <div class="mt-4">
-                                            <button class="btn btn-success w-100" type="submit">Connexion</button>
+                                            <button class="btn btn-success w-100" type="submit">Valider</button>
                                         </div>
 
-                                        
+                                       
                                     </form>
                                 </div>
                             </div>
@@ -108,7 +96,7 @@
                         </div>
                         <!-- end card -->
 
-                        
+                       
 
                     </div>
                 </div>
@@ -167,4 +155,4 @@
     </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('backend.layouts.master-without-nav', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/auth-admin/login.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('backend.layouts.master-without-nav', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/auth-admin/select-caisse.blade.php ENDPATH**/ ?>

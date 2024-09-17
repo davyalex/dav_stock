@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\site;
 
 use App\Models\User;
+use App\Models\Commande;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -100,6 +101,19 @@ class AuthUserController extends Controller
             return back();
         }
     }
+
+
+    public function profile() {
+        return view('site.sections.user-auth.profile');
+
+    }
+
+
+    public function commande() {
+        $commandes = Commande::where('user_id' , Auth::id())->get();
+        return view('site.sections.user-auth.commande' , compact('commandes'));
+    }
+
 
     public function logout()
     {

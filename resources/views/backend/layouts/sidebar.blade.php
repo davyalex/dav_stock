@@ -113,9 +113,14 @@
                          aria-controls="sidebarConfiguration">
                         <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
                     </a>
-                    <div class="collapse menu-dropdown {{ Route::is('unite.*') || Route::is('format.*') ? 'show' : '' }}"
+                    <div class="collapse menu-dropdown {{ Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*') ? 'show' : '' }}"
                         id="sidebarConfiguration">
                         <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item active">
+                                <a href="{{ route('magasin.index') }}"
+                                    class="nav-link {{ Route::is('magasin.*') ? 'active' : '' }}">Magasin</a>
+                            </li>
 
                             <li class="nav-item active">
                                 <a href="{{ route('unite.index') }}"
@@ -126,6 +131,12 @@
                                 <a href="{{ route('format.index') }}"
                                     class="nav-link {{ Route::is('format.*') ? 'active' : '' }}">Format /
                                     Emballage</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="{{ route('caisse.index') }}"
+                                    class="nav-link {{ Route::is('caisse.*') ? 'active' : '' }}">Caisse
+                                    </a>
                             </li>
 
                         </ul>

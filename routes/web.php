@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Artisan;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\site\SiteController;
 use App\Http\Controllers\site\PanierController;
+use App\Http\Controllers\site\AuthUserController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\menu\MenuController;
 use App\Http\Controllers\backend\menu\PlatController;
@@ -21,12 +22,13 @@ use App\Http\Controllers\backend\produit\ProduitController;
 use App\Http\Controllers\backend\stock\AjustementController;
 use App\Http\Controllers\backend\parametre\SettingController;
 use App\Http\Controllers\backend\categorie\CategorieController;
+use App\Http\Controllers\backend\configuration\CaisseController;
 use App\Http\Controllers\backend\configuration\FormatController;
+use App\Http\Controllers\backend\configuration\MagasinController;
 use App\Http\Controllers\backend\permission\PermissionController;
 use App\Http\Controllers\backend\fournisseur\FournisseurController;
 use App\Http\Controllers\backend\depense\CategorieDepenseController;
 use App\Http\Controllers\backend\configuration\UniteMesureController;
-use App\Http\Controllers\site\AuthUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -170,9 +172,25 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
 
 
 
-    #############  BASIC PAGE  #####################
+    //magasin
+    Route::prefix('magasin')->controller(MagasinController::class)->group(function () {
+        route::get('', 'index')->name('magasin.index');
+        route::post('store', 'store')->name('magasin.store');
+        route::post('update/{id}', 'update')->name('magasin.update');
+        route::get('delete/{id}', 'delete')->name('magasin.delete');
+    });
 
 
+    //caisse
+    Route::prefix('caisse')->controller(CaisseController::class)->group(function () {
+        route::get('', 'index')->name('caisse.index');
+        route::post('store', 'store')->name('caisse.store');
+        route::post('update/{id}', 'update')->name('caisse.update');
+        route::get('select', 'selectCaisse')->name('caisse.select')->middleware('role:caisse');
+        route::post('select', 'selectCaisse')->name('caisse.select.post')->middleware('role:caisse');
+
+        // route::get('delete/{id}', 'delete')->name('caisse.delete');
+    });
 
     //categorie
     Route::prefix('categorie')->controller(CategorieController::class)->group(function () {
@@ -300,12 +318,7 @@ Route::controller(AuthUserController::class)->group(function () {
     route::post('inscription', 'register')->name('user.register.post');
     route::get('logout', 'logout')->name('user.logout');
     route::get('profile', 'profile')->name('user.profile');
-    route::get('mes-commandes', 'mesCommandes')->name('user.commande');
-
-
-
-
-
+    route::get('mes-commandes', 'commande')->name('user.commande');
 });
 
 //site

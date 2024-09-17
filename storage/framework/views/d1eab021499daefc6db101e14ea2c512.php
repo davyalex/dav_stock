@@ -104,9 +104,14 @@
                          aria-controls="sidebarConfiguration">
                         <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
                     </a>
-                    <div class="collapse menu-dropdown <?php echo e(Route::is('unite.*') || Route::is('format.*') ? 'show' : ''); ?>"
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*') ? 'show' : ''); ?>"
                         id="sidebarConfiguration">
                         <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('magasin.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('magasin.*') ? 'active' : ''); ?>">Magasin</a>
+                            </li>
 
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('unite.index')); ?>"
@@ -117,6 +122,12 @@
                                 <a href="<?php echo e(route('format.index')); ?>"
                                     class="nav-link <?php echo e(Route::is('format.*') ? 'active' : ''); ?>">Format /
                                     Emballage</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('caisse.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('caisse.*') ? 'active' : ''); ?>">Caisse
+                                    </a>
                             </li>
 
                         </ul>

@@ -70,6 +70,12 @@ return new class extends Migration
                 ->constrained('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+
+            $table->foreignId('magasin_id')
+                ->nullable()
+                ->constrained('magasins')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
 

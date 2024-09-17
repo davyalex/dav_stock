@@ -45,6 +45,11 @@ class User extends Authenticatable
         });
     }
 
+    public function caisse()
+{
+    return $this->belongsTo(Caisse::class);
+}
+
 
 
     public function produits(): HasMany

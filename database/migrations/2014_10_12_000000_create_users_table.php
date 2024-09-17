@@ -28,6 +28,12 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreignId('caisse_id')
+            ->nullable()
+            ->constrained('caisses')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
         });
         User::create(['last_name' => 'admin', 'first_name' => 'admin','email' => 'admin@admin.com','password' => Hash::make('12345678'),'email_verified_at'=>'2022-01-02 17:04:58','avatar' => 'avatar-1.jpg','created_at' => now(), 'role' => 'administrateur']);
     }

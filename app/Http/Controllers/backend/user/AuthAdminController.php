@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\backend\user;
 
 use App\Models\User;
+use App\Models\Caisse;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -18,8 +19,7 @@ class AuthAdminController extends Controller
     {
 
         if (request()->method() == 'GET') {
-        $data_setting = Setting::with('media')->first();
-            return view('backend.pages.auth-admin.login' , compact('data_setting'));
+            return view('backend.pages.auth-admin.login');
         } elseif (request()->method() == 'POST') {
             $credentials = $request->validate([
                 'email' => ['required',],
@@ -41,6 +41,24 @@ class AuthAdminController extends Controller
     //logout admin
     public function logout()
     {
+
+        $user = Auth::user();
+
+        // Si l'utilisateur a une caisse active, la désactiver
+        if ($user->caisse_id) {
+
+            // niveau caisse
+            $caisse = Caisse::find($user->caisse_id);
+            $caisse->statut = 'desactive';
+            $caisse->save();
+            // mettre caisse_id a null
+            User::whereId($user->id)->update([
+                'caisse_id' => null,
+            ]);
+
+        }
+
+
         Auth::logout();
         // Session::forget('user_auth');
         Alert::success('Vous etes deconnecté', 'Success Message');
@@ -142,7 +160,7 @@ class AuthAdminController extends Controller
 
     public function profil($id)
     {
-        
+
         $data_admin = User::find($id);
         $data_role = Role::get();
         return view('backend.pages.auth-admin.register.profil', compact('data_admin', 'data_role'));
@@ -169,9 +187,8 @@ class AuthAdminController extends Controller
         User::whereId($user->id)->update([
             'password' => Hash::make($request->new_password)
         ]);
-        
+
         Alert::success('Operation réussi', 'Success Message');
         return back();
     }
 }
-
