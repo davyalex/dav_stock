@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Produit extends Model implements HasMedia
 {
-    use HasFactory, SoftDeletes, InteractsWithMedia , sluggable;
+    use HasFactory, SoftDeletes, InteractsWithMedia, sluggable;
 
     public function registerMediaConversions(Media $media = null): void
     {
@@ -30,7 +30,7 @@ class Produit extends Model implements HasMedia
             ->sharpen(10); // pour améliorer la qualité si besoin
 
 
-            $this->addMediaConversion('small-size')
+        $this->addMediaConversion('small-size')
             ->width(150) // par exemple 300px de large
             ->height(150) // 300px de hauteur
             ->sharpen(10); // pour améliorer la qualité si besoin
@@ -51,6 +51,8 @@ class Produit extends Model implements HasMedia
         'statut', // oui , non
         'user_id',
         'magasin_id',
+        'quantite_unite', // qté unite de mesure
+        'unite_id',
     ];
 
 
@@ -77,7 +79,7 @@ class Produit extends Model implements HasMedia
 
     public function categorie()
     {
-        return $this->belongsTo(Categorie::class ,'categorie_id');
+        return $this->belongsTo(Categorie::class, 'categorie_id');
     }
 
 
@@ -91,6 +93,10 @@ class Produit extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
+    public function unite() 
+    {
+        return $this->belongsTo(Unite::class, 'unite_id');
+    }
 
     public function magasin()
     {
@@ -108,10 +114,8 @@ class Produit extends Model implements HasMedia
         return $this->belongsToMany(Menu::class, 'menu_produit')->withTimestamps();
     }
 
-    public function commandes():BelongsToMany {
-        return $this->belongsToMany(Commande::class)->withPivot(['quantite','prix_unitaire','total'])->withTimestamps();
+    public function commandes(): BelongsToMany
+    {
+        return $this->belongsToMany(Commande::class)->withPivot(['quantite', 'prix_unitaire', 'total'])->withTimestamps();
     }
-
-  
-
 }

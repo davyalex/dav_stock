@@ -17,21 +17,12 @@ class CheckSession
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Check if the user is authenticated and the session has a 'last_activity_time'
-        if (Auth::check()) {
-            $lastActivity = $request->session()->get('last_activity_time', time());
-            $sessionLifetime = 1 * 60;
 
-            // Check if the session has expired
-            if (time() - $lastActivity > $sessionLifetime) {
-                // Destroy the session
-                Auth::logout();
-                Alert::success('Votre session à expiré , veuillez vous connecter à nouveau', 'Success Message');
-                return Redirect()->route('admin.login');
-            }
 
-            // Update 'last_activity_time'
-            $request->session()->put('last_activity_time', time());
+        // Si l'utilisateur n'est pas authentifié
+        if (!Auth::check()) {
+            // Rediriger vers la page de connexion avec un message
+            return Redirect()->route('admin.login')->withError('Session expirée , veuillez à nouveau vous connecter');;
         }
 
         return $next($request);

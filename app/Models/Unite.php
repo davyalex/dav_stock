@@ -29,8 +29,5 @@ class Unite extends Model
         });
     }
 
-    public function entrees() // BAR ? RESTAURANT
-    {
-        return $this->hasMany(Stock::class);
-    }
+   
 }

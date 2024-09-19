@@ -65,7 +65,7 @@ class CategorieController extends Controller
             //List Categorie
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')->OrderBy('position', 'ASC')->get();
 
-            $data_categorie_parent = Categorie::find($id);
+            $data_categorie_parent = Categorie::findOrFail($id);
             // dd( $data_categorie_parent->toArray());
 
             return view('backend.pages.categorie.categorie-item',  compact('data_categorie', 'data_categorie_parent'));
@@ -85,7 +85,7 @@ class CategorieController extends Controller
 
             $categorie_parent = Categorie::whereId($request['categorie_parent'])->first();
 
-            // dd($categorie_parent['type']);
+            // dd($categorie_parent->toArray());
             //function for add position
             $data_count = Categorie::where('parent_id', $categorie_parent['id'])->count();
 
@@ -95,7 +95,7 @@ class CategorieController extends Controller
                 'status' => $request['status'],
                 'url' => $request['url'],
                 'position' => $data_count + 1,
-                // 'type' =>  $categorie_parent['type'],
+                'famille' =>  $categorie_parent['famille'],
             ]);
 
             Alert::success('Operation réussi', 'Success Message');

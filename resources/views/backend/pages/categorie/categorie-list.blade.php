@@ -1,4 +1,4 @@
-  <div class="col-lg-6">
+  <div class="col-lg-10 m-auto">
       <div class="card">
           <div class="card-body">
               <div class="d-flex justify-content-between">
@@ -17,7 +17,7 @@
                               href="#">{{ $categorie->name }}</a>
                          <span>
                             <a href="{{ route('categorie.edit', $categorie['id']) }}"
-                            class="fs-5 {{ in_array($categorie->type, ['menu', 'categorie-stock']) ? 'd-none' : '' }}"
+                            class="fs-5 "
                             style="margin-left:30px"> <i class=" ri ri-edit-2-fill ml-4 text-success"></i></a>
 
                         <a href="{{ route('categorie.add-subCat', $categorie['id']) }}" class="fs-5"> <i
@@ -25,7 +25,7 @@
                         </a>
                         @if ($categorie['children_count'] == 0)
                             <a href="#" data-id="{{ $categorie['id'] }}"
-                                class="fs-5 delete  {{ in_array($categorie->type, ['plats', 'boissons' , 'ingredients']) ? 'd-none' : '' }}">
+                                class="fs-5 delete  {{ in_array($categorie->type, ['menu', 'bar' , 'restaurant']) ? 'd-none' : '' }}">
                                 <i class="ri ri-delete-bin-2-line text-danger "></i>
                             </a>
                         @endif

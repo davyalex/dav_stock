@@ -4,6 +4,7 @@ namespace App\Http\Controllers\backend\produit;
 
 use App\Models\Unite;
 use App\Models\Format;
+use App\Models\Magasin;
 use App\Models\Produit;
 use App\Models\Categorie;
 use App\Models\Fournisseur;
@@ -17,9 +18,9 @@ class ProduitController extends Controller
     //
     public function index()
     {
-        $categorie = Categorie::whereIn('type', ['ingredients' , 'boissons'])->get();
+        $categorie = Categorie::whereIn('type', ['restaurant', 'bar'])->get();
 
-        $data_produit = Produit::withWhereHas('typeProduit' , fn($q)=>$q->whereIn('type', ['ingredients' , 'boissons']))->get();
+        $data_produit = Produit::withWhereHas('typeProduit', fn($q) => $q->whereIn('type', ['restaurant', 'bar']))->get();
         // dd(  $data_produit->toArray());
         return view('backend.pages.produit.index', compact('data_produit'));
     }
@@ -29,12 +30,18 @@ class ProduitController extends Controller
         try {
 
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
-                ->whereIn('type', ['boissons', 'ingredients'])
+                ->whereIn('type', ['bar', 'restaurant'])
                 ->OrderBy('position', 'ASC')->get();
+
+            $categorieAll = Categorie::all();
+
+            $data_unite = Unite::all();
+            $data_magasin = Magasin::all();
+
 
             // dd($data_produit->toArray());
 
-            return view('backend.pages.produit.create', compact('data_categorie'));
+            return view('backend.pages.produit.create', compact('data_categorie', 'categorieAll', 'data_unite', 'data_magasin'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -44,19 +51,27 @@ class ProduitController extends Controller
     public function store(Request $request)
     {
         try {
+
+            //get principal category of categorie request
+            $principaCat = Categorie::find($request['categorie']);
+            $principaCat =  $principaCat->getPrincipalCategory();
+
             //request validation
             $request->validate([
                 'nom' => 'required|unique:produits',
                 'description' => '',
                 'categorie' => 'required',
                 'stock' => '',
-                'stock_alerte' => '',
+                'stock_alerte' => 'required',
                 'statut' => '',
+                'magasin' => '',
+                'quantite_unite' => $principaCat->name == 'bar' ? 'required' : '',
+                'unite_mesure' => $principaCat->name == 'bar' ? 'required' : '',
+                'imagePrincipale' => 'required',
+
             ]);
 
-            //get principal category of categorie request
-            $principaCat = Categorie::find($request['categorie']);
-            $principaCat =  $principaCat->getPrincipalCategory();
+
 
             $sku = 'PROD-' . strtoupper(Str::random(8));
             $data_produit = Produit::firstOrCreate([
@@ -66,6 +81,9 @@ class ProduitController extends Controller
                 'categorie_id' => $request['categorie'],
                 'stock_alerte' => $request['stock_alerte'],
                 'type_id' =>   $principaCat['id'], // type produit
+                'quantite_unite' => $request['quantite_unite'],
+                'unite_id' => $request['unite_mesure'],
+                'magasin_id' => $request['magasin'],
                 'user_id' => Auth::id(),
 
             ]);
@@ -104,15 +122,14 @@ class ProduitController extends Controller
     }
 
 
-    public function show($id){
+    public function show($id)
+    {
         try {
             $data_produit = Produit::find($id);
-            return view('backend.pages.produit.show' , compact('data_produit'));
-           
+            return view('backend.pages.produit.show', compact('data_produit'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
-
     }
 
 
@@ -120,10 +137,16 @@ class ProduitController extends Controller
     {
         try {
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
-                ->whereIn('type', ['boissons', 'ingredients'])
+                ->whereIn('type', ['bar', 'restaurant'])
                 ->OrderBy('position', 'ASC')->get();
 
             $data_produit = Produit::find($id);
+
+            $categorieAll = Categorie::all();
+
+            $data_unite = Unite::all();
+            $data_magasin = Magasin::all();
+
 
             //get Image from database
             $galleryProduit = [];
@@ -140,7 +163,7 @@ class ProduitController extends Controller
             // dd($galleryProduit);
 
             $id = $id;
-            return view('backend.pages.produit.edit', compact('data_produit', 'data_categorie', 'galleryProduit', 'id'));
+            return view('backend.pages.produit.edit', compact('data_produit', 'data_categorie', 'categorieAll', 'data_unite', 'data_magasin', 'galleryProduit', 'id'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -150,6 +173,9 @@ class ProduitController extends Controller
     {
         try {
 
+            //get principal category of categorie request
+            $principaCat = Categorie::find($request['categorie']);
+            $principaCat =  $principaCat->getPrincipalCategory();
 
             //request validation
             $request->validate([
@@ -157,13 +183,14 @@ class ProduitController extends Controller
                 'description' => '',
                 'categorie' => 'required',
                 'stock' => '',
-                'stock_alerte' => '',
-                'visible' => '',
+                'stock_alerte' => 'required',
+                'magasin' => '',
+                'quantite_unite' => $principaCat->name == 'bar' ? 'required' : '',
+                'unite_mesure' => $principaCat->name == 'bar' ? 'required' : '',
+                'imagePrincipale' => '',
             ]);
 
-            //get principal category of categorie request
-            $principaCat = Categorie::find($request['categorie']);
-            $principaCat =  $principaCat->getPrincipalCategory();
+
 
             $data_produit = tap(Produit::find($id))->update([
                 'nom' => $request['nom'],
@@ -171,9 +198,11 @@ class ProduitController extends Controller
                 'categorie_id' => $request['categorie'],
                 'stock_alerte' => $request['stock_alerte'],
                 'type_id' =>   $principaCat['id'], // type produit
-                'user_id' => Auth::id(),
 
-                
+                'quantite_unite' => $request['quantite_unite'],
+                'unite_id' => $request['unite_mesure'],
+                'magasin_id' => $request['magasin'],
+                'user_id' => Auth::id(),
             ]);
 
 

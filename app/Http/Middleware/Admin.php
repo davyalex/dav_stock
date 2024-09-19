@@ -22,8 +22,9 @@ class Admin
         }
 
         // Si l'utilisateur n'a pas un de ces rôles
-        abort(403, 'Accès non autorisé');
+        // abort(403, 'Accès non autorisé');
 
+        return redirect()->route('admin.login')->withError('Session expirée , veuillez à nouveau vous connecter');
 
         // else {
         //     Alert::error('Access non autorisé', 'Error Message');

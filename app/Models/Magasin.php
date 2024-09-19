@@ -13,7 +13,7 @@ class Magasin extends Model
 
 
     protected $fillable = [
-        'nom',
+        'libelle',
         'created_at',
         'updated_at'
     ];

@@ -55,6 +55,7 @@ class AchatController extends Controller
     public function store(Request $request)
     {
         try {
+            dd($request->toArray());
 
             //statut stock libelle active ? desactive
             $statut = '';

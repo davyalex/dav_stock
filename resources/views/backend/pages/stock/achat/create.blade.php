@@ -27,39 +27,141 @@
                         novalidate enctype="multipart/form-data">
                         @csrf
                         <div class="row">
-                            <div class="col-lg-9">
+                            <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row mb-3">
+
                                             <div class="col-md-4 mb-3">
-                                                <label class="form-label" for="product-title-input">Type de produit
+                                                <label class="form-label" for="meta-title-input">N° facture
                                                 </label>
-                                                <select class="form-control typeSelected js-example-basic-single"
-                                                    name="type_produit" required>
-                                                    <option value="" disabled selected></option>
-                                                    @foreach ($type_produit as $type)
-                                                        <option value="{{ $type->id }}">
-                                                            {{ $type->name }}</option>
+                                                <input type="text" name="numero_facture" class="form-control">
+                                            </div>
+
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label" for="meta-title-input">Date <span
+                                                        class="text-danger">*</span>
+                                                </label>
+                                                <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>"
+                                                    name="date_menu" class="form-control" required>
+                                            </div>
+
+
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="product-title-input">Fournisseur <span
+                                                        class="text-danger">*</span>
+                                                </label>
+                                                <select class="form-control js-example-basic-single" name="fournisseur_id"
+                                                    required>
+                                                    <option value="" disabled selected>Choisir</option>
+                                                    @foreach ($data_fournisseur as $fournisseur)
+                                                        <option value="{{ $fournisseur->id }}">{{ $fournisseur->nom }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-md-8 mb-3">
-                                                <label class="form-label" for="product-title-input">Sélectionner un produit
-                                                </label>
-                                                <a href="{{ route('produit.create') }}"
-                                                    class="float-end text-decoration-underline">
-                                                    <i class="ri ri-add-fill"></i>
-                                                    Ajouter un nouveau produit
-                                                </a>
-                                                <select class="form-control productSelected  js-example-basic-single"
-                                                    name="produit_id" required>
-                                                </select>
+
+
+                                            <div id="form-container">
+                                                <!-- ========== Start form duplicate ========== -->
+                                                <div class="row mb-3" id="product-form-0">
+                                                    <div class="col-md-12 mb-3">
+                                                        <select class="form-control productSelected js-example-basic-single"
+                                                            id="produit_id" name="produit_id[]" required>
+                                                            <option disabled selected value>Selectionner un produit</option>
+                                                            @foreach ($data_produit as $produit)
+                                                                <option value="{{ $produit->id }}">{{ $produit->nom }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-2 mb-3">
+                                                        <label class="form-label" for="stocks-input">Qté acquise</label>
+                                                        <input type="number" name="quantite_acquise[]"
+                                                            class="form-control qteAcquise" required>
+                                                    </div>
+
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label" for="product-title-input">Format</label>
+                                                        <select class="form-control js-example-basic-single format"
+                                                            id="format_id" name="format_id[]" required>
+                                                            <option value="" disabled selected>Choisir</option>
+                                                            @foreach ($data_format as $format)
+                                                                <option value="{{ $format->id }}">{{ $format->libelle }}
+                                                                    ({{ $format->abreviation }})
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-2 mb-3">
+                                                        <label class="form-label" for="stocks-input">Qté format</label>
+                                                        <input type="number" name="quantite_format[]"
+                                                            class="form-control qteFormat" required>
+                                                    </div>
+
+                                                    <div class="col-md-2 mb-3">
+                                                        <label class="form-label" for="stocks-input">Qté stocké</label>
+                                                        <input type="number" name="quantite_stocke[]"
+                                                            class="form-control qteStockable" readonly>
+                                                    </div>
+
+                                                    <div class="col-md-2 mb-3">
+                                                        <label class="form-label" for="stocks-input">Prix unitaire</label>
+                                                        <input type="number" name="prix_unitaire_format[]"
+                                                            class="form-control prixUnitaireFormat">
+                                                    </div>
+
+                                                    <div class="col-md-3 mb-3">
+                                                        <label class="form-label" for="stocks-input">Total dépensé</label>
+                                                        <input type="number" name="prix_total_format[]"
+                                                            class="form-control prixTotalFormat" readonly>
+                                                    </div>
+
+                                                    <div class="col-md-3 mb-3">
+                                                        <label class="form-label" for="stocks-input">Coût achat de
+                                                            l'unité</label>
+                                                        <input type="number" name="prix_achat_unitaire[]"
+                                                            class="form-control prixAchatUnite" readonly>
+                                                    </div>
+
+                                                    <div class="col-md-3 mb-3">
+                                                        <label class="form-label" for="meta-title-input">Unité de
+                                                            sortie</label>
+                                                        <select id="uniteMesure"
+                                                            class="form-control js-example-basic-single"
+                                                            name="unite_sortie[]" required>
+                                                            <option value="" disabled selected>Choisir</option>
+                                                            @foreach ($data_unite as $unite)
+                                                                <option value="{{ $unite->id }}">{{ $unite->libelle }}
+                                                                    ({{ $unite->abreviation }})
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-3 mb-3">
+                                                        <label class="form-label" for="stocks-input">Prix de vente</label>
+                                                        <input type="number" id="prixVente" name="prix_vente[]"
+                                                            class="form-control">
+                                                    </div>
+
+                                                    <!-- Bouton pour supprimer ce bloc -->
+                                                    <button type="button"
+                                                        class="btn btn-danger remove-form">Supprimer</button>
+                                                </div>
+                                                <!-- ========== End form duplicate ========== -->
+                                            </div>
+
+                                            <!-- Bouton "Plus" -->
+                                            <div class="mb-3">
+                                                <button type="button" id="add-more" class="btn btn-primary">Ajouter
+                                                    plus</button>
                                             </div>
 
 
-                                            <!-- ========== Start include entree  ========== -->
-                                            <div class="row" id="entree"></div>
-                                            <!-- ========== End include entree  ========== -->
+
 
 
                                         </div>
@@ -68,57 +170,7 @@
                                 <!-- end card -->
                             </div>
                             <!-- end col -->
-
-                            <div class="col-lg-3">
-                                <div class="card">
-                                    {{-- <div class="card-header">
-                                        <h5 class="card-title mb-0">Gallerie Images</h5>
-                                    </div> --}}
-
-                                    <div class="card-body border border-primary border-dashed">
-                                        <div class="mb-4">
-                                            <p>Sku : <span class="fw-bold" id="sku">0</span></p>
-                                            <p>Stock actuel : <span class="fw-bold" id="stock">0</span></p>
-                                            <p>Stock alerte : <span class="fw-bold text-danger" id="stockAlerte">0</span>
-                                            </p>
-                                            <p>Categorie : <span class="fw-bold" id="categorie">??</span></p>
-
-                                            <div class="text-center">
-                                                <div class="position-relative d-inline-block">
-                                                    <div class="avatar-lg">
-                                                        <div class="avatar-title bg-light rounded" id="product-img">
-                                                            {{-- <img src="" id="product-img" class="avatar-md h-auto" /> --}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        {{-- <div class="col-md-12 mt-3">
-                                            <label for="imageInput" class="form-label col-12">
-                                                <div class="col-md-12 border border-dark rounded border-dashed text-center px-5 mt-4"
-                                                    style=" cursor: pointer;">
-                                                    <i class="ri ri-image-add-fill fs-1 "></i>
-                                                    <h5>Ajouter des images</h5>
-                                                </div>
-                                            </label>
-                                            <input type="file" id="imageInput" accept="image/*"
-                                                class="form-control d-none" multiple>
-
-                                            <div class="row" id="imageTableBody"></div>
-
-                                            <div class="valid-feedback">
-                                                Success!
-                                            </div>
-                                        </div> --}}
-
-                                    </div>
-                                </div>
-                                <!-- end card -->
-
-
-                            </div>
+                           
                         </div>
                         <!-- end row -->
                         <!-- end card -->
@@ -146,9 +198,67 @@
         <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
         <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                let formCount = 1;
+
+                // Fonction pour réinitialiser les champs dupliqués
+                function resetFields(clonedForm, formCount) {
+                    let inputs = clonedForm.querySelectorAll('input, select');
+                    inputs.forEach(input => {
+                        if (input.tagName === 'INPUT') {
+                            input.value = ''; // Réinitialise la valeur des inputs
+                            // Met à jour les IDs des champs input
+                            input.id = input.id.replace(/_\d+$/, '_' + formCount);
+                        } else if (input.tagName === 'SELECT') {
+                            input.selectedIndex = 0; // Réinitialise la sélection des dropdowns
+                            input.id = input.id.replace(/_\d+$/, '_' + formCount);
+
+
+                        }
+                    });
+
+                    // Réinitialiser et recharger le select2 pour le nouveau select
+                    $(clonedForm).find('.js-example-basic-single').select2();
+                }
+
+                // Écouter le clic sur le bouton "Ajouter plus"
+                document.getElementById('add-more').addEventListener('click', function() {
+                    let originalForm = document.querySelector(
+                        '#product-form-0'); // Sélectionne le premier formulaire
+                    let clonedForm = originalForm.cloneNode(true); // Clone le formulaire
+
+                    // Met à jour l'ID du nouveau formulaire
+                    clonedForm.id = 'product-form-' + formCount;
+
+                    // Réinitialise les champs du formulaire cloné et met à jour les IDs
+                    resetFields(clonedForm, formCount);
+
+                    // Ajoute le formulaire cloné dans le conteneur
+                    document.getElementById('form-container').appendChild(clonedForm);
+                    formCount++;
+
+                    // Ajoute un écouteur sur le bouton de suppression
+                    clonedForm.querySelector('.remove-form').addEventListener('click', function() {
+                        clonedForm.remove();
+                    });
+                });
+
+                // Écouter le clic sur le bouton "Supprimer" du premier formulaire
+                document.querySelector('#product-form-0 .remove-form').addEventListener('click', function() {
+                    document.querySelector('#product-form-0').remove();
+                });
+            });
+
+
+
+
+
+
+
+
             // script for quantity stock increase and dicrease
             function increaseValue() {
-                var input = document.getElementById("quantiteStockable");
+                var input = document.getElementById("qteStockable");
                 var value = parseInt(input.value, 10);
                 value = isNaN(value) ? 0 : value;
                 value++;
@@ -156,7 +266,7 @@
             }
 
             function decreaseValue() {
-                var input = document.getElementById("quantiteStockable");
+                var input = document.getElementById("qteStockable");
                 var value = parseInt(input.value, 10);
                 value = isNaN(value) ? 0 : value;
                 value < 1 ? value = 1 : '';
@@ -169,113 +279,61 @@
             }
 
 
+            // Calculer la quantité stockable
+            function qteStockable(form) {
+                var qte_acquise = form.find(".qteAcquise").val() || 0; // combien de format
+                var qte_format = form.find(".qteFormat").val() || 0; // combien dans le format
+                var qte_stockable = qte_acquise * qte_format;
+                form.find(".qteStockable").val(qte_stockable);
+            }
 
+            // Calculer le total dépensé
+            function prixTotalDepense(form) {
+                var qte_acquise = form.find(".qteAcquise").val() || 0; // combien de format
+                var pu_unitaire_format = form.find(".prixUnitaireFormat").val() || 0; // prix unitaire d'un format
+                var total_depense = qte_acquise * pu_unitaire_format;
+                form.find(".prixTotalFormat").val(total_depense);
+            }
 
+            // Calculer le prix d'achat de l'unité
+            function prixAchatUnite(form) {
+                var qte_acquise = form.find(".qteAcquise").val() || 0;
+                var pu_unitaire_format = form.find(".prixUnitaireFormat").val() || 0;
+                var qte_stocke = form.find(".qteStockable").val() || 0;
+                var prix_achat_unite = qte_acquise * pu_unitaire_format / qte_stocke;
+                form.find(".prixAchatUnite").val(prix_achat_unite);
+            }
 
+            // Calculer le prix d'achat total
+            function calculatePrixAchat(form) {
+                var qte_format = form.find(".qteFormat").val() || 0;
+                var prix_achat_total = form.find(".prixAchatTotal").val() || 0;
+                var prixAchatUnitaire = prix_achat_total / qte_format;
+                var prixAchatTotal = qte_format * prixAchatUnitaire;
+                form.find(".prixAchatUnitaire").val(prixAchatUnitaire);
+            }
 
-            //get list product of type product
-            $('.typeSelected').change(function(e) {
-                e.preventDefault();
-                var typeSelected = $('.typeSelected option:selected').val();
-                var typeProduct = {{ Js::from($type_produit) }} // from contrioller
-                var filterType = typeProduct.filter(function(item) {
-                    return item.id == typeSelected
-                })
-
-
-
-                //show include entree form
-                if (filterType[0].type == 'boissons') {
-                    var barForm = ` @include('backend.pages.stock.achat.partials.boisson')`
-                    $('#entree').html(barForm)
-                } else if (filterType[0].type == 'ingredients') {
-                    var restaurantForm = ` @include('backend.pages.stock.achat.partials.ingredient')`
-                    $('#entree').html(restaurantForm)
-                } else {
-                    $('#entree').html('')
-                }
-
-                // script for field form
-                if (filterType[0].name) {
-                    //format field
-                    $('.format').change(function(e) {
-                        e.preventDefault();
-                        var formatSelected = $('.format option:selected').attr('data-value');
-                        $('#libFormat').html(' de ' + formatSelected)
-                        $('#libPiece').html(' par ' + formatSelected)
-                    })
-
-
-                    // unite field
-                    $('#unite').change(function(e) {
-                        e.preventDefault();
-                        var uniteSelected = $('#unite option:selected').attr('data-value');
-                        $('#labelUnite').html(' ( ' + uniteSelected + ' )')
-
-                    })
-
-                    // calculate qte unite global
-                    // function calculateQteGlobale() {
-                    //     var qte_format = $("#qteFormat").val() || 0;
-                    //     var unite_unitaire = $("#quantiteStockable").val() || 0;
-                    //     var prix_achat_unitaire = $("#prixAchatUnitaire").val() || 0;
-
-
-                    //     var qteUniteGlobale = qte_format * unite_unitaire
-
-                    //     $('#qteUniteGlobale').val(qteUniteGlobale) //update
-
-                    // }
-                    // $('#qteFormat ,#quantiteStockable').on('input', calculateQteGlobale)
-
-
-                    //calculate prix achat 
-                    function calculatePrixAchat() {
-                        var qte_format = $("#qteFormat").val() || 0;
-                        var prix_achat_total = $("#prixAchatTotal").val() || 0;
-
-                        var prixAchatUnitaire = prix_achat_total / qte_format
-                        var prixAchatTotal = qte_format * prixAchatUnitaire
-
-                        $('#prixAchatUnitaire').val(prixAchatUnitaire)
-
-                    }
-
-                    $('#qteFormat ,#prixAchatTotal').on('input', calculatePrixAchat)
-
-
-                    // //calculate prix achat total
-                    function calculatePrixAchatTotal() {
-                        var qte_format = $("#qteFormat").val() || 0;
-                        var prix_achat_unitaire = $("#prixAchatUnitaire").val() || 0;
-
-                        var prixAchatTotal = qte_format * prix_achat_unitaire
-
-                        $('#prixAchatTotal').val(prixAchatTotal)
-
-                    }
-
-                    $('#qteFormat , #prixAchatUnitaire').on('input', calculatePrixAchatTotal)
-
-                }
-
-
-
-                //filter product of typeSelected
-                var dataProduct = {{ Js::from($data_produit) }} // from controller
-                var productList = dataProduct.filter(function(item) {
-                    return item.type_id == typeSelected;
-                });
-
-                $('.productSelected').empty();
-                $('.productSelected').append('<option disabled selected value="">Selectionner un produit</option>');
-                $.each(productList, function(key, value) {
-                    $('.productSelected').append('<option value="' + value.id + '">' + value.nom +
-                        '</option>');
-                });
-
-
+            // Ajouter des écouteurs sur les champs dupliqués
+            $(document).on('input', '.qteAcquise, .qteFormat, .prixUnitaireFormat', function() {
+                var form = $(this).closest('.row');
+                qteStockable(form);
+                prixTotalDepense(form);
+                prixAchatUnite(form);
             });
+
+            // Ajout d'écouteurs pour les champs qui influencent le calcul du prix d'achat
+            $(document).on('input', '.qteFormat, .prixAchatTotal', function() {
+                var form = $(this).closest('.row');
+                calculatePrixAchat(form);
+            });
+
+            // $(document).on('input', '.qteFormat, .prixAchatUnitaire', function() {
+            //     var form = $(this).closest('.row');
+            //     calculatePrixAchatTotal(form);
+            // });
+
+
+
 
             //get product select and show detail of product selected
             $('.productSelected').change(function(e) {
@@ -300,87 +358,6 @@
                 var img = filteredProduct[0].media[0].original_url
                 $('#product-img').html(`<img src="${img}"  class="avatar-md h-auto" />`)
 
-
-
-            });
-
-
-
-
-
-            // product image principal
-            document.querySelector("#product-image-input").addEventListener("change", function() {
-                var preview = document.querySelector("#product-img");
-                var file = document.querySelector("#product-image-input").files[0];
-                var reader = new FileReader();
-                reader.addEventListener("load", function() {
-                    preview.src = reader.result;
-                }, false);
-                if (file) {
-                    reader.readAsDataURL(file);
-                }
-            });
-
-
-            $('#imageInput').on('change', function(e) {
-                var files = e.target.files;
-                for (var i = 0; i < files.length; i++) {
-                    var reader = new FileReader();
-                    reader.onload = function(e) {
-
-                        var image = ` <div class="col-12 d-flex justify-content-between border border-secondary rounded"><img src="${e.target.result}" class="img-thumbnail rounded float-start" width="50" height="100">
-                                   <button type="button" class="btn btn-danger my-2 remove-image">Delete</button>
-                                    </div>  `;
-
-                        $('#imageTableBody').append(image);
-                    }
-                    reader.readAsDataURL(files[i]);
-                }
-            });
-
-            $(document).on('click', '.remove-image', function() {
-                $(this).closest('div').remove();
-            });
-
-            $('#formSend').on('submit', function(e) {
-
-                e.preventDefault();
-                var formData = new FormData(this);
-
-                $('#imageTableBody div').each(function() {
-                    var imageFile = $(this).find('img').attr('src');
-                    formData.append('images[]', imageFile)
-                });
-
-                $.ajax({
-                    url: "{{ route('produit.create') }}", // Adjust the route as needed
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        $('#imageTableBody').empty();
-
-                        if (response.message == 'operation reussi') {
-                            Swal.fire({
-                                title: 'Produit ajouté avec success!',
-                                // text: 'You clicked the button!',
-                                icon: 'success',
-                                showCancelButton: false,
-                                customClass: {
-                                    confirmButton: 'btn btn-primary w-xs me-2 mt-2',
-                                    cancelButton: 'btn btn-danger w-xs mt-2',
-                                },
-                                buttonsStyling: false,
-                                showCloseButton: true
-                            })
-                            var url = "{{ route('achat.create') }}" // redirect route 
-
-                            window.location.replace(url);
-                        }
-                    },
-
-                });
             });
         </script>
     @endsection

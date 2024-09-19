@@ -49,34 +49,34 @@ class Achat extends Model
         return $this->belongsTo(Magasin::class, 'magasin_id');
     }
 
-    public function type_produit() // BAR ? RESTAURANT
+    public function type_produit() 
     {
         return $this->belongsTo(Categorie::class, 'type_produit_id');
     }
-    public function produit() // BAR ? RESTAURANT
+    public function produit() 
     {
         return $this->belongsTo(Produit::class, 'produit_id');
     }
-    public function fournisseur() // BAR ? RESTAURANT
+    public function fournisseur() 
     {
         return $this->belongsTo(Fournisseur::class, 'fournisseur_id');
     }
-    public function format() // BAR ? RESTAURANT
+    public function format() 
     {
         return $this->belongsTo(Format::class, 'format_id');
     }
 
-    public function unite() // BAR ? RESTAURANT
+    public function unite() 
     {
         return $this->belongsTo(Unite::class, 'unite_id');
     }
 
-    public function user() // BAR ? RESTAURANT
+    public function user() 
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function ajustements() // BAR ? RESTAURANT
+    public function ajustements() 
     {
         return $this->hasMany(Ajustement::class);
     }

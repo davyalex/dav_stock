@@ -14,12 +14,10 @@
 
     <div class="row">
 
-        <!-- ========== Start categorie list ========== -->
-        <?php echo $__env->make('backend.pages.categorie.categorie-list', ['data_categorie' => $data_categorie], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-        <!-- ========== End categorie list ========== -->
+    
 
 
-        <div class="col-lg-6">
+        <div class="col-lg-6 d-none">
             <div class="card">
 
                 <div class="card-body">
@@ -67,7 +65,13 @@
                 </div>
                 </form>
             </div>
-        </div><!-- end row -->
+        </div>
+
+            <!-- ========== Start categorie list ========== -->
+            <?php echo $__env->make('backend.pages.categorie.categorie-list', ['data_categorie' => $data_categorie], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+            <!-- ========== End categorie list ========== -->
+        
+        <!-- end row -->
     </div><!-- end col -->
 
     <!--end row-->

@@ -21,7 +21,7 @@
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="card">
-                                    
+
                                     <div class="card-body">
                                         <div class="mb-3 row">
                                             <div class="col-md-5">
@@ -31,12 +31,12 @@
                                                 <input type="text" name="nom" value="<?php echo e($data_produit['nom']); ?>"
                                                     class="form-control" id="nomProduit" required>
                                             </div>
-                                            <div class="mb-3 col-md-5">
+                                            <div class="mb-3 col-md-7">
                                                 <label class="form-label" for="product-title-input">Sélectionner une
                                                     categorie <span class="text-danger">*</span>
                                                 </label>
-                                                <select class="form-control js-example-basic-single" name="categorie"
-                                                    required>
+                                                <select id="categorie" class="form-control js-example-basic-single"
+                                                    name="categorie" required>
                                                     <option value="" disabled selected>Selectionner</option>
 
                                                     <?php $__currentLoopData = $data_categorie; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -48,13 +48,55 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-md-2 mb-3">
+
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label" for="meta-title-input">Magasin
+                                                </label>
+                                                <select class="form-control js-example-basic-single" name="magasin">
+                                                    <option value="" disabled selected>Choisir</option>
+                                                    <?php $__currentLoopData = $data_magasin; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $magasin): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <option value="<?php echo e($magasin->id); ?>"
+                                                            <?php echo e($magasin->id == $data_produit->magasin_id ? 'selected' : ''); ?>>
+                                                            <?php echo e($magasin->libelle); ?></option>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="meta-title-input">Stock alerte <span
                                                         class="text-danger">*</span>
                                                 </label>
                                                 <input type="number" value="<?php echo e($data_produit->stock_alerte); ?>"
                                                     name="stock_alerte" class="form-control" id="stockAlerte" required>
                                             </div>
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label" for="meta-title-input">Qté mesure<span
+                                                        class="text-danger">*</span>
+                                                </label>
+                                                <input type="number" name="quantite_unite"
+                                                    value="<?php echo e($data_produit->quantite_unite); ?>" class="form-control"
+                                                    id="quantiteUnite" required>
+                                            </div>
+
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label" for="meta-title-input">Unite mesure<span
+                                                        class="text-danger">*</span>
+                                                </label>
+                                                <select id="uniteMesure" class="form-control js-example-basic-single"
+                                                    name="unite_mesure" required>
+                                                    <option value="" disabled selected>Choisir</option>
+                                                    <?php $__currentLoopData = $data_unite; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $unite): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <option value="<?php echo e($unite->id); ?>"
+                                                            <?php echo e($unite->id == $data_produit->unite_id ? 'selected' : ''); ?>>
+                                                            <?php echo e($unite->libelle); ?>
+
+                                                            (<?php echo e($unite->abreviation); ?>)
+                                                        </option>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                </select>
+                                            </div>
+
+
 
 
                                         </div>
@@ -155,9 +197,52 @@
         <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
         <script>
+            //Afficher les champs en fonction de la categorie selectionné
+            var categorieData = <?php echo e(Js::from($categorieAll)); ?> // from product controller
+
+            //si quantiteUnite & uniteMesure est vide on disabled=true
+            if ($('#quantiteUnite').val() == '' && $('#uniteMesure').val() == null) {
+                $('#quantiteUnite').prop('disabled', true);
+                $('#uniteMesure').prop('disabled', true);
+
+                $('#quantiteUnite').prop('required', false)
+                $('#quantiteUnite').prop('required', true)
+
+            }
+
+            console.log(categorieData);
+
+            //recuperer la categorie selectionné
+            $('#categorie').change(function(e) {
+                e.preventDefault();
+                var categorieSelect = $(this).val()
+
+                //filtrer pour recuperer la categorie selectionnée
+                var categorieFilter = categorieData.filter(function(item) {
+                    return item.id == categorieSelect
+                })
+
+                // si categorieFilter = restaurant , required false
+                if (categorieFilter[0].famille == 'restaurant') {
+                    $('#quantiteUnite').prop('required', false)
+                    $('#quantiteUnite').prop('disabled', true)
+
+                    $('#uniteMesure').prop('required', false)
+                    $('#uniteMesure').prop('disabled', true)
+                } else {
+                    $('#quantiteUnite').prop('required', true)
+                    $('#quantiteUnite').prop('disabled', false)
+
+                    $('#uniteMesure').prop('required', true)
+                    $('#uniteMesure').prop('disabled', false)
+
+                }
+
+            });
+
+
+
             //script for to send data 
-
-
             // product image
             document.querySelector("#product-image-input").addEventListener("change", function() {
                 var preview = document.querySelector("#product-img");

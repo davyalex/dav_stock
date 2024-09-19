@@ -48,6 +48,15 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
+            $table->integer('quantite_unite')->nullable(); //quantite unite mesure
+
+
+            $table->foreignId('unite_id')
+                ->nullable()
+                ->constrained('unites')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
             $table->softDeletes();
 
             $table->timestamps();

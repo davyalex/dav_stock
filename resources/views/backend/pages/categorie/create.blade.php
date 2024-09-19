@@ -14,12 +14,10 @@
 
     <div class="row">
 
-        <!-- ========== Start categorie list ========== -->
-        @include('backend.pages.categorie.categorie-list', ['data_categorie' => $data_categorie])
-        <!-- ========== End categorie list ========== -->
+    
 
 
-        <div class="col-lg-6">
+        <div class="col-lg-6 d-none">
             <div class="card">
 
                 <div class="card-body">
@@ -87,7 +85,13 @@
                 </div>
                 </form>
             </div>
-        </div><!-- end row -->
+        </div>
+
+            <!-- ========== Start categorie list ========== -->
+            @include('backend.pages.categorie.categorie-list', ['data_categorie' => $data_categorie])
+            <!-- ========== End categorie list ========== -->
+        
+        <!-- end row -->
     </div><!-- end col -->
 
     <!--end row-->

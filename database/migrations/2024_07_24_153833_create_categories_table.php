@@ -26,7 +26,9 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->enum('type', ['boissons', 'ingredients', 'plats'])->nullable();
+            $table->enum('type', ['bar', 'restaurant', 'menu'])->nullable();
+            $table->enum('famille', ['bar', 'restaurant', 'menu'])->nullable();
+
 
             $table->softDeletes();
             $table->timestamps();

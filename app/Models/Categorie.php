@@ -21,7 +21,9 @@ class Categorie extends Model
         'url',
         'position',
         'parent_id',
-        'type' // categorie-stock ? categorie-simple menu
+        'type', // menu, bar , restaurant
+        'famille' // menu, bar , restaurant
+
 
     ];
 
