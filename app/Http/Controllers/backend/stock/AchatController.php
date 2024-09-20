@@ -70,18 +70,23 @@ class AchatController extends Controller
             $type_produit = Categorie::whereId($type_produit)->first();
             if ($type_produit->type == 'ingredients') {
                 $request->validate([
-                    'produit_id' => 'required',
-                    'quantite_format' => 'required',
-                    'format_id' => 'required',
-                    'unite_id' => 'required',
-                    // 'quantite_unite_unitaire' => 'required', // valeur par unite
-                    // 'quantite_unite_total' => 'required', // --qte stockable
-                    'quantite_stockable' => 'required',
-                    'fournisseur_id' => '',
-                    'prix_achat_unitaire' => 'required',
-                    'prix_achat_total' => 'required',
+                    // 'produit_id' => 'required',
+                    // 'quantite_format' => 'required',
+                    // 'format_id' => 'required',
+                    // 'unite_id' => 'required',
+                    // 'quantite_stockable' => 'required',
+                    // 'fournisseur_id' => '',
+                    // 'prix_achat_unitaire' => 'required',
+                    // 'prix_achat_total' => 'required',
+                    // 'statut' => '',
 
-                    'statut' => ''
+                    'numero_facture' => 'required|string|max:255',
+                    'fournisseur_id' => 'required|exists:fournisseurs,id',
+                    'produit_id.*' => 'required|exists:produits,id',
+                    'quantite_acquise.*' => 'required|numeric|min:1',
+                    'format_id.*' => 'required|exists:formats,id',
+                    'quantite_format.*' => 'required|numeric|min:1',
+                    'prix_unitaire_format.*' => 'required|numeric|min:0',
                 ]);
             } elseif ($type_produit->type == 'boissons') {
 

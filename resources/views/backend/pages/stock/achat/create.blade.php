@@ -17,169 +17,190 @@
         form label {
             font-size: 11px
         }
+
+        .form-duplicate {
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            background: white;
+            padding: 10px;
+        }
     </style>
+
+
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body">
-                    <form method="POST" action="{{ route('achat.store') }}" autocomplete="off" class="needs-validation"
-                        novalidate enctype="multipart/form-data">
-                        @csrf
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row mb-3">
+            {{-- <div class="card">
+                <div class="card-body"> --}}
+            <form method="POST" action="{{ route('achat.store') }}" autocomplete="off" class="needs-validation" novalidate
+                enctype="multipart/form-data">
+                @csrf
+                <div class="row">
+                    <div class="col-lg-12">
+                        {{-- <div class="card">
+                                    <div class="card-body"> --}}
+                        <div class="row mb-3">
 
-                                            <div class="col-md-4 mb-3">
-                                                <label class="form-label" for="meta-title-input">N° facture
-                                                </label>
-                                                <input type="text" name="numero_facture" class="form-control">
-                                            </div>
+                            <div id="static-input">
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="meta-title-input">N° facture
+                                        </label>
+                                        <input type="text" name="numero_facture" class="form-control">
+                                    </div>
 
-                                            <div class="col-md-4 mb-3">
-                                                <label class="form-label" for="meta-title-input">Date <span
-                                                        class="text-danger">*</span>
-                                                </label>
-                                                <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>"
-                                                    name="date_menu" class="form-control" required>
-                                            </div>
-
-
-                                            <div class="col-md-4">
-                                                <label class="form-label" for="product-title-input">Fournisseur <span
-                                                        class="text-danger">*</span>
-                                                </label>
-                                                <select class="form-control js-example-basic-single" name="fournisseur_id"
-                                                    required>
-                                                    <option value="" disabled selected>Choisir</option>
-                                                    @foreach ($data_fournisseur as $fournisseur)
-                                                        <option value="{{ $fournisseur->id }}">{{ $fournisseur->nom }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="meta-title-input">Date <span
+                                                class="text-danger">*</span>
+                                        </label>
+                                        <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>" name="date_menu"
+                                            class="form-control" required>
+                                    </div>
 
 
-                                            <div id="form-container">
-                                                <!-- ========== Start form duplicate ========== -->
-                                                <div class="row mb-3" id="product-form-0">
-                                                    <div class="col-md-12 mb-3">
-                                                        <select class="form-control productSelected js-example-basic-single"
-                                                            id="produit_id" name="produit_id[]" required>
-                                                            <option disabled selected value>Selectionner un produit</option>
-                                                            @foreach ($data_produit as $produit)
-                                                                <option value="{{ $produit->id }}">{{ $produit->nom }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="col-md-2 mb-3">
-                                                        <label class="form-label" for="stocks-input">Qté acquise</label>
-                                                        <input type="number" name="quantite_acquise[]"
-                                                            class="form-control qteAcquise" required>
-                                                    </div>
-
-                                                    <div class="col-md-4 mb-3">
-                                                        <label class="form-label" for="product-title-input">Format</label>
-                                                        <select class="form-control js-example-basic-single format"
-                                                            id="format_id" name="format_id[]" required>
-                                                            <option value="" disabled selected>Choisir</option>
-                                                            @foreach ($data_format as $format)
-                                                                <option value="{{ $format->id }}">{{ $format->libelle }}
-                                                                    ({{ $format->abreviation }})
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="col-md-2 mb-3">
-                                                        <label class="form-label" for="stocks-input">Qté format</label>
-                                                        <input type="number" name="quantite_format[]"
-                                                            class="form-control qteFormat" required>
-                                                    </div>
-
-                                                    <div class="col-md-2 mb-3">
-                                                        <label class="form-label" for="stocks-input">Qté stocké</label>
-                                                        <input type="number" name="quantite_stocke[]"
-                                                            class="form-control qteStockable" readonly>
-                                                    </div>
-
-                                                    <div class="col-md-2 mb-3">
-                                                        <label class="form-label" for="stocks-input">Prix unitaire</label>
-                                                        <input type="number" name="prix_unitaire_format[]"
-                                                            class="form-control prixUnitaireFormat">
-                                                    </div>
-
-                                                    <div class="col-md-3 mb-3">
-                                                        <label class="form-label" for="stocks-input">Total dépensé</label>
-                                                        <input type="number" name="prix_total_format[]"
-                                                            class="form-control prixTotalFormat" readonly>
-                                                    </div>
-
-                                                    <div class="col-md-3 mb-3">
-                                                        <label class="form-label" for="stocks-input">Coût achat de
-                                                            l'unité</label>
-                                                        <input type="number" name="prix_achat_unitaire[]"
-                                                            class="form-control prixAchatUnite" readonly>
-                                                    </div>
-
-                                                    <div class="col-md-3 mb-3">
-                                                        <label class="form-label" for="meta-title-input">Unité de
-                                                            sortie</label>
-                                                        <select id="uniteMesure"
-                                                            class="form-control js-example-basic-single"
-                                                            name="unite_sortie[]" required>
-                                                            <option value="" disabled selected>Choisir</option>
-                                                            @foreach ($data_unite as $unite)
-                                                                <option value="{{ $unite->id }}">{{ $unite->libelle }}
-                                                                    ({{ $unite->abreviation }})
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="col-md-3 mb-3">
-                                                        <label class="form-label" for="stocks-input">Prix de vente</label>
-                                                        <input type="number" id="prixVente" name="prix_vente[]"
-                                                            class="form-control">
-                                                    </div>
-
-                                                    <!-- Bouton pour supprimer ce bloc -->
-                                                    <button type="button"
-                                                        class="btn btn-danger remove-form">Supprimer</button>
-                                                </div>
-                                                <!-- ========== End form duplicate ========== -->
-                                            </div>
-
-                                            <!-- Bouton "Plus" -->
-                                            <div class="mb-3">
-                                                <button type="button" id="add-more" class="btn btn-primary">Ajouter
-                                                    plus</button>
-                                            </div>
-
-
-
-
-
-                                        </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="product-title-input">Fournisseur
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <select class="form-control js-example-basic-single" name="fournisseur_id" required>
+                                            <option value="" disabled selected>Choisir</option>
+                                            @foreach ($data_fournisseur as $fournisseur)
+                                                <option value="{{ $fournisseur->id }}">
+                                                    {{ $fournisseur->nom }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
-                                <!-- end card -->
                             </div>
-                            <!-- end col -->
-                           
+
+
+                            <div id="form-container">
+                                <!-- ========== Start form duplicate ========== -->
+                                <!-- Formulaire modèle (caché) -->
+
+
+                                <!-- ========== End form duplicate ========== -->
+                            </div>
+
+                            <!-- Bouton "Plus" -->
+                            <div class="mb-3">
+                                <button type="button" id="add-more" class="btn btn-primary">Ajouter
+                                    plus <i class="ri ri-add-circle-line"></i></button>
+                            </div>
+
+
+
+
+
                         </div>
-                        <!-- end row -->
+                        {{-- </div>
+                                </div> --}}
                         <!-- end card -->
-                        <div class="text-end mb-3">
-                            <button type="submit" class="btn btn-success w-lg">Enregistrer</button>
-                        </div>
-                    </form>
+                    </div>
+                    <!-- end col -->
+
                 </div>
-            </div><!-- end row -->
+                <!-- end row -->
+                <!-- end card -->
+                <div class="text-end mb-3">
+                    <button type="submit" class="btn btn-success w-lg btn-save">Enregistrer</button>
+                </div>
+            </form>
+
+
+            <!-- start form duplicate-->
+            <div id="product-form-template" style="display: none;">
+                <div class="row mb-3 form-duplicate">
+                    <div class="col-md-12 mb-3">
+                        <select class="form-control productSelected selectView" id="produit_id" name="produit_id[]"
+                            required>
+                            <option disabled selected value>Selectionner un produit
+                            </option>
+                            @foreach ($data_produit as $produit)
+                                <option value="{{ $produit->id }}">{{ $produit->nom }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label" for="stocks-input">Qté acquise</label>
+                        <input type="number" name="quantite_acquise[]" class="form-control qteAcquise" required>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" for="product-title-input">Format</label>
+                        <select class="form-control selectView format" id="format_id" name="format_id[]" required>
+                            <option value="" disabled selected>Choisir</option>
+                            @foreach ($data_format as $format)
+                                <option value="{{ $format->id }}">
+                                    {{ $format->libelle }} ({{ $format->abreviation }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label" for="stocks-input">Qté format</label>
+                        <input type="number" name="quantite_format[]" class="form-control qteFormat" required>
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label" for="stocks-input">Qté stocké</label>
+                        <input type="number" name="quantite_stocke[]" class="form-control qteStockable" readonly>
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label" for="stocks-input">Prix
+                            unitaire</label>
+                        <input type="number" name="prix_unitaire_format[]" class="form-control prixUnitaireFormat">
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label" for="stocks-input">Total
+                            dépensé</label>
+                        <input type="number" name="prix_total_format[]" class="form-control prixTotalFormat" readonly>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label" for="stocks-input">Coût achat de
+                            l'unité</label>
+                        <input type="number" name="prix_achat_unitaire[]" class="form-control prixAchatUnite" readonly>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label" for="meta-title-input">Unité de
+                            sortie</label>
+                        <select id="uniteMesure" class="form-control selectView " name="unite_sortie[]" required>
+                            <option value="" disabled selected>Choisir</option>
+                            @foreach ($data_unite as $unite)
+                                <option value="{{ $unite->id }}">
+                                    {{ $unite->libelle }} ({{ $unite->abreviation }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label" for="stocks-input">Prix de
+                            vente</label>
+                        <input type="number" id="prixVente" name="prix_vente[]" class="form-control">
+                    </div>
+
+                    <!-- Bouton pour supprimer ce bloc -->
+                    <div class="text-end">
+                        <button type="button" class="btn btn-success validate">valider</button>
+                        <button type="button" class="btn btn-success edit">modifier</button>
+
+                        <button type="button" class="btn btn-danger remove-form">Supprimer</button>
+                    </div>
+                </div>
+            </div>
+ <!-- end form duplicate-->
+
+
+
+            <!-- end row -->
         </div><!-- end col -->
 
 
@@ -200,54 +221,168 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 let formCount = 1;
-
+                updateSelect2(); // Mettre à jour Select2 après suppression d'un formulaire
                 // Fonction pour réinitialiser les champs dupliqués
                 function resetFields(clonedForm, formCount) {
                     let inputs = clonedForm.querySelectorAll('input, select');
                     inputs.forEach(input => {
                         if (input.tagName === 'INPUT') {
-                            input.value = ''; // Réinitialise la valeur des inputs
-                            // Met à jour les IDs des champs input
+                            input.value = ''; // Réinitialise les valeurs des inputs
                             input.id = input.id.replace(/_\d+$/, '_' + formCount);
                         } else if (input.tagName === 'SELECT') {
                             input.selectedIndex = 0; // Réinitialise la sélection des dropdowns
                             input.id = input.id.replace(/_\d+$/, '_' + formCount);
-
-
                         }
                     });
 
-                    // Réinitialiser et recharger le select2 pour le nouveau select
-                    $(clonedForm).find('.js-example-basic-single').select2();
+
+                    // Ajouter le formCount à la classe js-example-basic-single
+                    clonedForm.querySelectorAll('.selectView').forEach(function(select) {
+                        // Ajoute un identifiant unique à la classe
+                        select.classList.add('js-example-basic-single-' + formCount);
+                    });
                 }
 
-                // Écouter le clic sur le bouton "Ajouter plus"
-                document.getElementById('add-more').addEventListener('click', function() {
-                    let originalForm = document.querySelector(
-                        '#product-form-0'); // Sélectionne le premier formulaire
-                    let clonedForm = originalForm.cloneNode(true); // Clone le formulaire
+                // Fonction pour ajouter un nouveau formulaire
+                function addNewForm() {
+                    let formContainer = document.getElementById('form-container');
 
-                    // Met à jour l'ID du nouveau formulaire
+                    // Clone le formulaire modèle
+                    let templateForm = document.getElementById('product-form-template');
+                    let clonedForm = templateForm.cloneNode(true);
+
+                    // Affiche le formulaire cloné et met à jour l'ID
+                    clonedForm.style.display = 'block';
                     clonedForm.id = 'product-form-' + formCount;
 
-                    // Réinitialise les champs du formulaire cloné et met à jour les IDs
+                    // Réinitialise les champs du formulaire cloné
                     resetFields(clonedForm, formCount);
 
                     // Ajoute le formulaire cloné dans le conteneur
-                    document.getElementById('form-container').appendChild(clonedForm);
+                    formContainer.appendChild(clonedForm);
+
+
+
+                    // // Réinitialise Select2 sur le nouveau champ
+                    // $(clonedForm).find('.js-example-basic-single').select2();
+
+                    // Initialiser Select2 pour le nouveau champ avec une classe unique
+                    $(clonedForm).find('.js-example-basic-single-' + formCount).select2();
+
+
+                    // Activer le 'required' pour les champs du formulaire cloné
+                    setRequiredFields(clonedForm);
+
                     formCount++;
 
-                    // Ajoute un écouteur sur le bouton de suppression
-                    clonedForm.querySelector('.remove-form').addEventListener('click', function() {
-                        clonedForm.remove();
+
+                }
+
+                // Fonction pour activer le 'required' uniquement pour les champs visibles
+                function setRequiredFields(formBlock) {
+                    formBlock.querySelectorAll('input, select').forEach(function(input) {
+                        if (input.hasAttribute('data-required')) {
+                            input.setAttribute('required', 'true');
+                        }
                     });
+                }
+
+                // Fonction pour désactiver les champs 'required' pour le formulaire modèle
+                function disableRequiredInTemplate() {
+                    let templateForm = document.getElementById('product-form-template');
+                    templateForm.querySelectorAll('input[required], select[required]').forEach(function(input) {
+                        input.removeAttribute('required');
+                        // Ajouter un attribut temporaire pour les champs initialement required
+                        input.setAttribute('data-required', 'true');
+                    });
+                }
+
+                // Désactiver les champs 'required' dans le formulaire modèle au chargement
+                disableRequiredInTemplate();
+
+
+
+                // Fonction pour réinitialiser Select2 sur les formulaires dupliqués
+                function updateSelect2() {
+                    // Compter le nombre de duplications dans le conteneur
+                    let totalForms = document.querySelectorAll('#form-container .row').length;
+
+                    // Boucler à travers chaque formulaire dupliqué
+                    for (let i = 1; i <= totalForms; i++) {
+                        // Initialiser Select2 pour chaque champ dupliqué en utilisant la classe unique
+                        $('.js-example-basic-single-' + i).select2();
+                    }
+                }
+
+                // Écouteur pour le bouton "Ajouter un produit"
+                document.getElementById('add-more').addEventListener('click', function() {
+                    addNewForm();
                 });
 
-                // Écouter le clic sur le bouton "Supprimer" du premier formulaire
-                document.querySelector('#product-form-0 .remove-form').addEventListener('click', function() {
-                    document.querySelector('#product-form-0').remove();
+                //cacher le bouton modifier par defaut
+                $('.edit').hide();
+
+                // Utiliser la délégation d'événements pour le bouton "Supprimer"
+                document.getElementById('form-container').addEventListener('click', function(e) {
+                    if (e.target && e.target.classList.contains('remove-form')) {
+                        e.target.closest('.form-duplicate').remove();
+                        updateSelect2(); // Mettre à jour Select2 après suppression d'un formulaire
+                    }
+
+                    // Au clic du bouton "valider"
+                    if (e.target && e.target.classList.contains('validate')) {
+                        let row = e.target.closest('.form-duplicate');
+                        row.querySelectorAll('input, select').forEach(input => {
+                            input.readOnly = true;
+                            input.disabled = true;
+                        });
+
+                        // Cacher le bouton "valider" et afficher le bouton "modifier"
+                        $(row).find('.validate').hide();
+                        $(row).find('.edit').show();
+                    }
+
+                    // Au clic du bouton "modifier"
+                    if (e.target && e.target.classList.contains('edit')) {
+                        let row = e.target.closest('.form-duplicate');
+                        row.querySelectorAll('input, select').forEach(input => {
+                            input.readOnly = false;
+                            input.disabled = false;
+                        });
+
+                        // Cacher le bouton "modifier" et afficher le bouton "valider"
+                        $(row).find('.edit').hide();
+                        $(row).find('.validate').show();
+                    }
+
+
                 });
+
+                // Initialisation de Select2 pour les éléments existants
+               
             });
+
+
+
+
+
+
+
+
+
+            // $('.btn-save').click(function(e) {
+            //     e.preventDefault();
+            //     var form = $(this).closest('.row');
+            //     form.find('input[required], select[required]').each(function() {
+            //         $(this).prop('required', false);
+            //     });
+            // });
+
+
+
+
+
+
 
 
 
@@ -336,29 +471,29 @@
 
 
             //get product select and show detail of product selected
-            $('.productSelected').change(function(e) {
-                var dataProduct = {{ Js::from($data_produit) }} // from controller
+            // $('.productSelected').change(function(e) {
+            //     var dataProduct = {{ Js::from($data_produit) }} // from controller
 
-                e.preventDefault();
-                var productSelected = $('.productSelected option:selected').val();
+            //     e.preventDefault();
+            //     var productSelected = $('.productSelected option:selected').val();
 
-                var filteredProduct = dataProduct.filter(function(item) {
-                    return item.id == productSelected;
-                });
-                console.log(filteredProduct[0].media);
+            //     var filteredProduct = dataProduct.filter(function(item) {
+            //         return item.id == productSelected;
+            //     });
+            //     console.log(filteredProduct[0].media);
 
 
-                //update stock , sku ,  category of product selected
-                $('#stock').html(filteredProduct[0].stock)
-                $('#stockAlerte').html(filteredProduct[0].stock_alerte)
+            //     //update stock , sku ,  category of product selected
+            //     $('#stock').html(filteredProduct[0].stock)
+            //     $('#stockAlerte').html(filteredProduct[0].stock_alerte)
 
-                $('#sku').html(filteredProduct[0].code)
-                $('#categorie').html(filteredProduct[0].categorie.name)
+            //     $('#sku').html(filteredProduct[0].code)
+            //     $('#categorie').html(filteredProduct[0].categorie.name)
 
-                var img = filteredProduct[0].media[0].original_url
-                $('#product-img').html(`<img src="${img}"  class="avatar-md h-auto" />`)
+            //     var img = filteredProduct[0].media[0].original_url
+            //     $('#product-img').html(`<img src="${img}"  class="avatar-md h-auto" />`)
 
-            });
+            // });
         </script>
     @endsection
 @endsection
