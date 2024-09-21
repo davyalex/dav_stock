@@ -35,17 +35,22 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Statut</th>
-                                    <th>code</th>
-                                    <th>Type de produit</th>
                                     <th>Produit</th>
+                                    <th>code</th>
+                                    <th>Magasin</th>
+                                    <th>N°Facture</th>
                                     <th>fournisseur</th>
                                     <th>Format</th>
-                                    <th>Quantite par format</th>
+                                    <th>Qté format</th>
+                                    <th>Qté dans format</th>
+                                    <th>PU format</th>
+                                    <th>Total depensé</th>
+                                    <th>Qté stockée</th>
+                                    <th>PU achat</th>
+                                    <th>PU vente</th>
                                     <th>Unite de vente</th>
-                                    <th>Quantité stockée</th>
-                                    <th>Prix achat</th>
                                     <th>Crée par</th>
-                                    <th>Date creation</th>
+                                    <th>Date achat</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -55,20 +60,29 @@
                                         <td> <?php echo e(++$key); ?> </td>
                                         <td><?php echo e($item['statut']); ?></td>
 
-                                        
-                                        <td><?php echo e($item['code']); ?></td>
-                                        <td><?php echo e($item['type_produit']['name']); ?></td>
-                                        <td><?php echo e($item['produit']['nom']); ?></td>
-                                        <td><?php echo e($item['fournisseur']['nom'] ?? 'N/A'); ?></td>
-                                        <td><?php echo e($item['format']['libelle']); ?></td>
-                                        <td> <?php echo e($item['quantite_format']); ?> </td>
-                                        <td> <?php echo e($item['unite']['libelle']); ?> </td>
-                                        <td> <?php echo e($item['quantite_stockable']); ?> </td>
-                                        <td> <?php echo e($item['prix_achat_unitaire']); ?> </td>
-                                        
-                                        <td> <?php echo e($item['user']['first_name']); ?> </td>
-                                        <td> <?php echo e($item['created_at']); ?> </td>
+                                        <td>
+                                            <img class="rounded-circle"
+                                                src="<?php echo e($item->produit->getFirstMediaUrl('ProduitImage')); ?>" width="50px"
+                                                alt="">
 
+                                            <?php echo e($item['produit']['nom']); ?>
+
+                                        </td>
+                                        <td><?php echo e($item['code']); ?></td>
+                                        <td><?php echo e($item['magasin']['libelle'] ?? 'N/A'); ?></td>
+                                        <td><?php echo e($item['numero_facture'] ?? 'N/A'); ?></td>
+                                        <td><?php echo e($item['fournisseur']['nom'] ?? 'N/A'); ?></td>
+                                        <td><?php echo e($item['format']['libelle'] ?? 'N/A'); ?></td>
+                                        <td> <?php echo e($item['quantite_format']); ?> </td>
+                                        <td> <?php echo e($item['quantite_in_format']); ?> </td>
+                                        <td> <?php echo e($item['prix_unitaire_format']); ?> </td>
+                                        <td> <?php echo e($item['prix_total_format']); ?> </td>
+                                        <td> <?php echo e($item['quantite_stocke']); ?> </td>
+                                        <td> <?php echo e($item['prix_achat_unitaire']); ?> </td>
+                                        <td> <?php echo e($item['prix_vente_unitaire']); ?> </td>
+                                        <td> <?php echo e($item['unite']['libelle'] ?? 'N/A'); ?> </td>
+                                        <td> <?php echo e($item['user']['first_name']); ?> </td>
+                                        <td> <?php echo e($item['date_achat']); ?> </td>
                                         <td>
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
@@ -76,15 +90,13 @@
                                                     <i class="ri-more-fill align-middle"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a href="<?php echo e(route("ajustement.create" , $item['id'])); ?>" class="dropdown-item"><i
+                                                    <li><a href="<?php echo e(route('ajustement.create', $item['id'])); ?>"
+                                                            class="dropdown-item"><i
                                                                 class=" ri-exchange-fill align-bottom me-2 text-muted"></i>
                                                             Ajustement</a>
                                                     </li>
                                                     
-                                                    <li><a href="<?php echo e(route('achat.edit', $item['id'])); ?>" type="button"
-                                                            class="dropdown-item edit-item-btn"><i
-                                                                class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Edit</a></li>
+                                                    
                                                     
                                                 </ul>
                                             </div>
@@ -122,10 +134,10 @@
     <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
     <script>
-       $(document).ready(function(){
-        var route = "depense"
-        delete_row(route);
-       })
+        $(document).ready(function() {
+            var route = "depense"
+            delete_row(route);
+        })
     </script>
 <?php $__env->stopSection(); ?>
 

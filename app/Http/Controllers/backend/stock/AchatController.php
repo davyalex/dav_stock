@@ -36,7 +36,7 @@ class AchatController extends Controller
         try {
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')->OrderBy('position', 'ASC')->get();
             $data_produit = Produit::with(['categorie.ancestors', 'media'])->get();
-            $type_produit = Categorie::whereNull('parent_id')->whereIn('type', ['boissons', 'ingredients'])->get();
+            $type_produit = Categorie::whereNull('parent_id')->whereIn('type', ['bar', 'restaurant'])->get();
 
             $data_format = Format::all();
             $data_unite = Unite::all();
@@ -55,96 +55,97 @@ class AchatController extends Controller
     public function store(Request $request)
     {
         try {
-            dd($request->toArray());
+            // dd($request->all());
 
-            //statut stock libelle active ? desactive
-            $statut = '';
-            if ($request['statut'] == 'on') {
-                $statut = 'active';
-            } else {
-                $statut = 'desactive';
-            }
+            // récupérer les infos de produit en tableau
+            foreach ($request->produit_id as $index => $produitId) {
+                $produit = Produit::find($produitId);
+                $categorie = Categorie::find($produit->categorie_id); // catégorie du produit
 
-            //recuperer le type produit : bar ?restaurant            
-            $type_produit = $request['type_produit'];
-            $type_produit = Categorie::whereId($type_produit)->first();
-            if ($type_produit->type == 'ingredients') {
-                $request->validate([
-                    // 'produit_id' => 'required',
-                    // 'quantite_format' => 'required',
-                    // 'format_id' => 'required',
-                    // 'unite_id' => 'required',
-                    // 'quantite_stockable' => 'required',
-                    // 'fournisseur_id' => '',
-                    // 'prix_achat_unitaire' => 'required',
-                    // 'prix_achat_total' => 'required',
-                    // 'statut' => '',
+                // définir le statut du produit
+                // $statut = $request->statut[$index] == 'on' ? 'active' : 'desactive';
 
-                    'numero_facture' => 'required|string|max:255',
-                    'fournisseur_id' => 'required|exists:fournisseurs,id',
-                    'produit_id.*' => 'required|exists:produits,id',
-                    'quantite_acquise.*' => 'required|numeric|min:1',
-                    'format_id.*' => 'required|exists:formats,id',
-                    'quantite_format.*' => 'required|numeric|min:1',
-                    'prix_unitaire_format.*' => 'required|numeric|min:0',
+                // récupérer le type de produit
+                $type_produit = $categorie->famille;
+
+                // validation en fonction du type de produit
+                if ($type_produit == 'restaurant') {
+                    $request->validate([
+                        'numero_facture' => '',
+                        'date_achat' => 'required',
+                        'magasin_id' => '',
+                        'statut' => '',
+                        'produit_id.*' => 'required|exists:produits,id',
+                        'fournisseur_id' => 'required',
+                        'format_id.*' => 'required|min:1',
+                        'quantite_format.*' => 'required|min:1',
+                        'quantite_in_format.*' => 'required|min:1',
+                        'quantite_stocke.*' => 'required|min:1',
+                        'prix_unitaire_format.*' => 'required|min:1',
+                        'prix_total_format.*' => 'required|min:1',
+                        'prix_achat_unitaire.*' => 'required|min:1',
+                        'prix_vente_unitaire.*' => '',
+                        'unite_sortie.*' => 'required|min:1',
+                    ]);
+                } elseif ($type_produit == 'bar') {
+                    $request->validate([
+                        'numero_facture' => '',
+                        'date_achat' => 'required',
+                        'magasin_id' => '',
+                        'statut' => '',
+                        'produit_id.*' => 'required|exists:produits,id',
+                        'fournisseur_id' => 'required',
+                        'format_id.*' => 'required|min:1',
+                        'quantite_format.*' => 'required|min:1',
+                        'quantite_in_format.*' => 'required|min:1',
+                        'quantite_stocke.*' => 'required|min:1',
+                        'prix_unitaire_format.*' => 'required|min:1',
+                        'prix_total_format.*' => 'required|min:1',
+                        'prix_achat_unitaire.*' => 'required|min:1',
+                        'prix_vente_unitaire.*' => 'required|min:1',
+                        'unite_sortie.*' => 'required|min:1',
+                    ]);
+                }
+
+                // création de l'achat
+                Achat::create([
+                    'code' => 'SA-' . strtoupper(Str::random(8)),
+                    'type_produit_id' => $categorie->id,
+                    'numero_facture' => $request->numero_facture,
+                    'date_achat' => $request->date_achat,
+                    'produit_id' => $request->produit_id[$index],
+                    'fournisseur_id' => $request->fournisseur_id,
+                    'format_id' => $request->format_id[$index],
+                    'quantite_format' => $request->quantite_format[$index],
+                    'quantite_in_format' => $request->quantite_in_format[$index],
+                    'quantite_stocke' => $request->quantite_stocke[$index],
+                    'prix_unitaire_format' => $request->prix_unitaire_format[$index],
+                    'prix_total_format' => $request->prix_total_format[$index],
+                    'prix_achat_unitaire' => $request->prix_achat_unitaire[$index],
+                    'prix_vente_unitaire' => $request->prix_vente_unitaire[$index],
+                    'unite_id' => $request->unite_sortie[$index],
+                    'magasin_id' => $request->magasin_id,
+                    'statut' => 'active',
+                    'user_id' => Auth::id(),
                 ]);
-            } elseif ($type_produit->type == 'boissons') {
 
-                $request->validate([
-                    'produit_id' => 'required',
-                    'quantite_format' => 'required',
-                    'format_id' => 'required',
-                    'unite_id' => 'required',
-                    // 'quantite_unite_unitaire' => 'required', // valeur par unite
-                    // 'quantite_unite_total' => 'required', // --qte stockable
-                    'quantite_stockable' => 'required',
-                    'fournisseur_id' => '',
-                    'prix_achat_unitaire' => 'required',
-                    'prix_achat_total' => 'required',
-
-                    //champs supplementaire
-                    'prix_vente_unitaire' => 'required',
-                    'prix_vente_total' => '',
-
-                    'statut' => ''
-                ]);
-            }
-
-
-            Achat::create([
-                'code' => 'SA-' . strtoupper(Str::random(8)),
-                'type_produit_id' => $type_produit->id,
-                'produit_id' => $request['produit_id'],
-                'format_id' => $request['format_id'],
-                'unite_id' => $request['unite_id'],
-                'fournisseur_id' => $request['fournisseur_id'],
-                'quantite_format' => $request['quantite_format'],
-                'quantite_stockable' => $request['quantite_stockable'],
-                // 'quantite_unite_unitaire' => $request['quantite_unite_unitaire'],
-                // 'quantite_unite_total' => $request['quantite_unite_total'],
-                'prix_achat_unitaire' => $request['prix_achat_unitaire'],
-                'prix_achat_total' => $request['prix_achat_total'],
-                'prix_vente_unitaire' => $request['prix_vente_unitaire'],
-                'prix_vente_total' => $request['prix_vente_unitaire'] * $request['quantite_stockable'],
-                'statut' => $statut,
-                'user_id' => Auth::id(),
-            ]);
-
-
-            //mise a jour du stock dans la table produit si le statut est active
-            if ($statut == 'active') {
-                $produit = Produit::find($request['produit_id']);
-                $produit->stock += $request['quantite_stockable'];
+                // mise à jour du stock dans la table produit si le statut est 'active'
+                $produit->stock += $request->quantite_stocke[$index];
                 $produit->save();
+                // if ($statut == 'active') {
+                //     $produit->stock += $request->quantite_stocke[$index];
+                //     $produit->save();
+                // }
             }
 
-
-            Alert::success('Opération réussi', 'Success Message');
+            // succès après la boucle
+            Alert::success('Opération réussie', 'Tous les produits ont été enregistrés avec succès.');
             return back();
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
     }
+
 
     public function edit($id)
     {

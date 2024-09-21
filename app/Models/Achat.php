@@ -15,21 +15,21 @@ class Achat extends Model
 
     protected $fillable = [
         'code',
+        'numero_facture',
+        'date_achat',
         'statut',
-        'type_produit_id', // boissons ? ingredients
+        'type_produit_id',
         'produit_id',
         'fournisseur_id',
         'format_id',
-        'quantite_format',
-        'unite_id',
-        // 'quantite_unite_unitaire',
-        // 'quantite_unite_total',
-        // 'indice_mesure', // poids ? unite
-        'quantite_stockable',
-        'prix_achat_unitaire',
-        'prix_achat_total',
-        'prix_vente_unitaire', // -->bar
-        'prix_vente_total',  // -->bar
+        'quantite_format',      //quantité de format
+        'quantite_in_format',   //quantité dans un format
+        'quantite_stocke',      //quantite total des piece dans les formats
+        'prix_unitaire_format', //prix unitaire d'un format
+        'prix_total_format',    //prix total d'un format
+        'prix_achat_unitaire', //prix d'achat unitaire d'une piece dans un format (calcule automatique)
+        'prix_vente_unitaire', //prix de vente par unite
+        'unite_id',             // unite de sortie(vente)
         'user_id',
         'magasin_id',
 
@@ -49,34 +49,34 @@ class Achat extends Model
         return $this->belongsTo(Magasin::class, 'magasin_id');
     }
 
-    public function type_produit() 
+    public function type_produit()
     {
         return $this->belongsTo(Categorie::class, 'type_produit_id');
     }
-    public function produit() 
+    public function produit()
     {
         return $this->belongsTo(Produit::class, 'produit_id');
     }
-    public function fournisseur() 
+    public function fournisseur()
     {
         return $this->belongsTo(Fournisseur::class, 'fournisseur_id');
     }
-    public function format() 
+    public function format()
     {
         return $this->belongsTo(Format::class, 'format_id');
     }
 
-    public function unite() 
+    public function unite()
     {
         return $this->belongsTo(Unite::class, 'unite_id');
     }
 
-    public function user() 
+    public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function ajustements() 
+    public function ajustements()
     {
         return $this->hasMany(Ajustement::class);
     }

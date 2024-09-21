@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('achats', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique()->nullable();
-            $table->string('statut')->nullable(); //actif ? desactive
+            $table->string('numero_facture')->nullable();
+            $table->date('date_achat')->nullable();
 
-            $table->foreignId('type_produit_id')  //type produit  = boissons ? ingredients
+            $table->enum('statut' , ['active' , 'desactive'])->default('active')->nullable(); //actif ? desactive
+
+            $table->foreignId('type_produit_id')  //type produit  = bar  ? restaurant
                 ->nullable()
                 ->constrained('categories')
                 ->onUpdate('cascade')
@@ -40,30 +43,24 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->integer('quantite_format')->nullable(); //quantité par format
+            $table->integer('quantite_format')->nullable(); //quantité de format
+            $table->integer('quantite_in_format')->nullable(); //quantité dans un format
+
+            $table->integer('quantite_stocke')->nullable(); // quantite total des piece dans les formats
+            $table->double('prix_unitaire_format')->nullable(); //prix unitaire d'un format
+            $table->double('prix_total_format')->nullable(); //prix total d'un format
+            $table->double('prix_achat_unitaire')->nullable(); //prix d'achat unitaire d'une piece dans un format (calcule automatique)
+            $table->double('prix_vente_unitaire')->nullable(); //prix de vente par unite
 
 
-            $table->foreignId('unite_id')
+
+            $table->foreignId('unite_id')  // unite de sortie(vente)
                 ->nullable()
                 ->constrained('unites')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            // $table->integer('quantite_unite_unitaire')->nullable(); //quantité unitaire par unité
-            // $table->integer('quantite_unite_total')->nullable(); //quantité total par unité --qté stockable
-            $table->integer('quantite_stockable')->nullable(); //
-            // $table->integer('quantite_sortie')->nullable(); //qté stockable total
-            $table->double('prix_achat_unitaire')->nullable(); //prix d'achat unitaire
-            $table->double('prix_achat_total')->nullable(); //prix d'achat total
 
-
-            //autre chams de type bar
-            // $table->string('ugs_poids')->nullable(); // unite de mesure
-            // $table->string('ugs_valeur')->nullable(); // valeur
-            // $table->string('ugs_ballon')->nullable(); // nombre de par rapport à la mesure
-            // $table->string('ugs_tournee')->nullable(); // 
-            $table->double('prix_vente_unitaire')->nullable(); //prix de vente par unite
-            $table->double('prix_vente_total')->nullable(); //prix de vente total
 
             $table->foreignId('user_id')
                 ->nullable()
@@ -76,9 +73,10 @@ return new class extends Migration
                 ->constrained('magasins')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+
+
             $table->softDeletes();
             $table->timestamps();
-
         });
     }
 

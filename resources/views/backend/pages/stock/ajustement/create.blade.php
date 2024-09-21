@@ -42,78 +42,13 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row mb-3">
-
-                                            <div class="col-md-3 mb-3">
-                                                <label class="form-label" for="product-title-input">Type de produit
-                                                </label>
-                                                <input type="text" class="form-control"
-                                                    value="{{ $data_ajustement['type_produit']['name'] }}" readonly>
-
-
-                                            </div>
-                                            {{-- <div class="col-md-4 mb-3">
-                                                <label class="form-label" for="product-title-input">Produit
-                                                </label>
-                                                <input type="text" class="form-control"
-                                                    value="{{ $data_ajustement['produit']['nom'] }}" readonly>
-                                            </div> --}}
-
-                                            <div class="col-md-3 mb-3">
-                                                <label class="form-label" for="product-title-input">Format
-                                                </label>
-                                                <input type="text" class="form-control"
-                                                    value="{{ $data_ajustement['format']['libelle'] ?? '' }}" readonly>
-                                            </div>
-
-                                            <div class="col-md-3 mb-3">
-                                                <label class="form-label" for="product-title-input">Nombre de
-                                                    {{ $data_ajustement['format']['libelle'] }}
-                                                </label>
-                                                <input type="text" class="form-control"
-                                                    value="{{ $data_ajustement['quantite_format'] }}" readonly>
-                                            </div>
-
-                                            <div class="col-md-3 mb-3">
-                                                <label class="form-label" for="product-title-input">Fournisseur
-                                                </label>
-                                                <input type="text" class="form-control"
-                                                    value="{{ $data_ajustement['fournisseur']['nom'] ?? '' }}" readonly>
-                                            </div>
-
-
-                                            <div class="col-md-3 mb-3">
-                                                <label class="form-label" for="product-title-input">Unite de vente
-                                                </label>
-                                                <input type="text" class="form-control"
-                                                    value="{{ $data_ajustement['unite']['libelle'] }}" readonly>
-                                            </div>
-
-                                            <div class="col-md-3 mb-3">
+                                            <div class="col-md-3 mb-3 d-none">
                                                 <label class="form-label" for="product-title-input">Quantité stocké
                                                 </label>
                                                 <input type="text" id="quantiteStocke" class="form-control"
-                                                    value="{{ $data_ajustement['quantite_stockable'] }}" readonly>
+                                                    value="{{ $data_ajustement['quantite_stocke'] }}" readonly>
                                             </div>
 
-                                            <div class="col-md-3 mb-3">
-                                                <label class="form-label" for="stocks-input">Prix d'achat unitaire </label>
-                                                <input type="number" id="prixAchatUnitaire"
-                                                    value="{{ $data_ajustement['prix_achat_unitaire'] }}"
-                                                    class="form-control" name="prix_achat_unitaire" readonly>
-                                            </div>
-                                            <div class="col-md-3 mb-3">
-                                                <label class="form-label" for="stocks-input">Prix d'achat total </label>
-                                                <input type="number" id="prixAchatTotal"
-                                                    value="{{ $data_ajustement['prix_achat_total'] }}" class="form-control"
-                                                    name="prix_achat_total" readonly>
-                                            </div>
-
-
-                                            <div class="d-flex justify-content-between">
-                                                <hr class="w-50" size="5">
-                                                <h5>Ajustement</h5>
-                                                <hr class="w-50 text-primary" size="5">
-                                            </div>
                                             <p id="MsgError" class="text-danger fw-bold"></p>
                                             <div class="col-md-6">
                                                 <label class="form-label" for="product-title-input">Mouvement du stock
@@ -131,8 +66,7 @@
                                                         class="text-danger" id="labelUnite"></span></label>
                                                 <br>
                                                 <div class="input-step w-100">
-                                                    <button type="button"
-                                                        class="minus w-50 btn btn-primary decreaseValue"
+                                                    <button type="button" class="minus w-50 btn btn-primary decreaseValue"
                                                         disabled>-</button>
                                                     <input type="number" class="form-control" id="quantiteStockable"
                                                         value="0" name="stock_ajustement" readonly>

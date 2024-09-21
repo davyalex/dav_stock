@@ -56,17 +56,17 @@ class AjustementController extends Controller
                 'code' => 'SAJ-' . strtoupper(Str::random(8)),
                 'achat_id' => $request['achat_id'],
                 'mouvement' => $request['mouvement'],
-                'stock_actuel' =>  $data_ajustement['quantite_stockable'],
+                'stock_actuel' =>  $data_ajustement['quantite_stocke'],
                 'stock_ajustement' =>  $request['stock_ajustement'],
                 'user_id' => Auth::id(),
             ]);
 
             //mise a jour du stock dans la table achat
             if ($request['mouvement'] == 'ajouter') {
-                $data_ajustement->quantite_stockable += $request['stock_ajustement'];
+                $data_ajustement->quantite_stocke += $request['stock_ajustement'];
                 $data_ajustement->save();
             } elseif ($request['mouvement'] == 'retirer') {
-                $data_ajustement->quantite_stockable -= $request['stock_ajustement'];
+                $data_ajustement->quantite_stocke -= $request['stock_ajustement'];
                 $data_ajustement->save();
             }
 

@@ -52,7 +52,7 @@
                                         <label class="form-label" for="meta-title-input">Date <span
                                                 class="text-danger">*</span>
                                         </label>
-                                        <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>" name="date_menu"
+                                        <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>" name="date_achat"
                                             class="form-control" required>
                                     </div>
 
@@ -112,8 +112,7 @@
             <div id="product-form-template" style="display: none;">
                 <div class="row mb-3 form-duplicate">
                     <div class="col-md-12 mb-3">
-                        <select class="form-control productSelected selectView" id="produit_id" name="produit_id[]"
-                            required>
+                        <select class="form-control productSelected selectView" id="produitId" name="produit_id[]" required>
                             <option disabled selected value>Selectionner un produit
                             </option>
                             @foreach ($data_produit as $produit)
@@ -125,7 +124,7 @@
 
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="stocks-input">Qté acquise</label>
-                        <input type="number" name="quantite_acquise[]" class="form-control qteAcquise" required>
+                        <input type="number" name="quantite_format[]" class="form-control qteAcquise" required>
                     </div>
 
                     <div class="col-md-4 mb-3">
@@ -142,7 +141,7 @@
 
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="stocks-input">Qté format</label>
-                        <input type="number" name="quantite_format[]" class="form-control qteFormat" required>
+                        <input type="number" name="quantite_in_format[]" class="form-control qteFormat" required>
                     </div>
 
                     <div class="col-md-2 mb-3">
@@ -152,7 +151,7 @@
 
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="stocks-input">Prix
-                            unitaire</label>
+                            unitaire du format</label>
                         <input type="number" name="prix_unitaire_format[]" class="form-control prixUnitaireFormat">
                     </div>
 
@@ -162,11 +161,6 @@
                         <input type="number" name="prix_total_format[]" class="form-control prixTotalFormat" readonly>
                     </div>
 
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label" for="stocks-input">Coût achat de
-                            l'unité</label>
-                        <input type="number" name="prix_achat_unitaire[]" class="form-control prixAchatUnite" readonly>
-                    </div>
 
                     <div class="col-md-3 mb-3">
                         <label class="form-label" for="meta-title-input">Unité de
@@ -181,11 +175,33 @@
                         </select>
                     </div>
 
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-3 mb-3 prixAchatUniteDiv">
+                        <label class="form-label" for="stocks-input">Coût achat de
+                            l'unité</label>
+                        <input type="number" name="prix_achat_unitaire[]" class="form-control prixAchatUnite" readonly>
+                    </div>
+
+
+
+                    <div class="col-md-3 mb-3 prixVenteDiv">
                         <label class="form-label" for="stocks-input">Prix de
                             vente</label>
-                        <input type="number" id="prixVente" name="prix_vente[]" class="form-control">
+                        <input type="number" name="prix_vente_unitaire[]" class="form-control prixVente">
                     </div>
+
+                    {{-- <div class="col-md-6">
+                        <label class="form-check-label" for="customAff">Activer ou desactiver le produit <br> <span
+                                class="text-danger">(Activé par defaut)</span></label>
+
+                        <div class="form-check form-switch form-switch-lg col-md-2" dir="ltr">
+                            <input type="hidden" name="statut[]" value="off">
+                            <input type="checkbox" name="statut[]" class="form-check-input" id="customAff"
+                                value="on" checked>
+                        </div>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div> --}}
 
                     <!-- Bouton pour supprimer ce bloc -->
                     <div class="text-end">
@@ -196,7 +212,7 @@
                     </div>
                 </div>
             </div>
- <!-- end form duplicate-->
+            <!-- end form duplicate-->
 
 
 
@@ -220,6 +236,9 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
+
+
+
                 let formCount = 1;
                 updateSelect2(); // Mettre à jour Select2 après suppression d'un formulaire
                 // Fonction pour réinitialiser les champs dupliqués
@@ -245,6 +264,7 @@
 
                 // Fonction pour ajouter un nouveau formulaire
                 function addNewForm() {
+
                     let formContainer = document.getElementById('form-container');
 
                     // Clone le formulaire modèle
@@ -356,10 +376,11 @@
                     }
 
 
+
+
                 });
 
-                // Initialisation de Select2 pour les éléments existants
-               
+
             });
 
 
@@ -420,6 +441,11 @@
                 var qte_format = form.find(".qteFormat").val() || 0; // combien dans le format
                 var qte_stockable = qte_acquise * qte_format;
                 form.find(".qteStockable").val(qte_stockable);
+
+                var dataProduct = {{ Js::from($data_produit) }}; // Données du contrôleur
+
+                console.log(dataProduct);
+
             }
 
             // Calculer le total dépensé
@@ -461,6 +487,45 @@
                 var form = $(this).closest('.row');
                 calculatePrixAchat(form);
             });
+
+
+            // Fonction pour ajouter l'écouteur à chaque champ select
+            function addProductSelectListener(form) {
+                var dataProduct = {{ Js::from($data_produit) }}; // Données du contrôleur
+                var dataCategory = {{ Js::from($data_categorie) }}; // Données du contrôleur
+
+                var productSelected = form.find('.productSelected').val(); // Récupère la valeur du select actuel
+                var filteredCatRestaurant = dataCategory.filter(function(item) {
+                    return item.type == 'restaurant';
+                });
+
+                var filteredProduct = dataProduct.filter(function(item) {
+                    return item.id == productSelected;
+                });
+
+                if (filteredProduct[0].type_id == filteredCatRestaurant[0].id) {
+
+                    form.find('.prixAchatUniteDiv').hide()
+                    form.find('.prixVenteDiv').hide()
+
+                } else {
+                    form.find('.prixAchatUniteDiv').show()
+                    form.find('.prixVenteDiv').show()
+                }
+
+
+            }
+
+
+            $(document).on('change', '.productSelected', function() {
+                var form = $(this).closest('.row');
+                addProductSelectListener(form); // Pour le premier élément
+            });
+
+
+
+
+
 
             // $(document).on('input', '.qteFormat, .prixAchatUnitaire', function() {
             //     var form = $(this).closest('.row');
