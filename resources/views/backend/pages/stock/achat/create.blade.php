@@ -13,14 +13,20 @@
             Créer un nouveau stock
         @endslot
     @endcomponent
+
+
+
     <style>
         /* Simuler le readonly en CSS */
-        .readonly {
+        .select-no-interaction {
             pointer-events: none;
-            /* Désactive l'interaction */
-            background-color: #e9ecef;
-            /* Facultatif : changement de style pour indiquer que le champ est "readonly" */
+            /* Empêche les interactions */
+            cursor: not-allowed;
+            /* Change le curseur en "non autorisé" */
+            background-color: #f2f2f2;
+            /* Change la couleur de fond pour indiquer que c'est désactivé */
         }
+
 
         form label {
             font-size: 11px
@@ -362,13 +368,11 @@
                         let row = e.target.closest('.form-duplicate');
                         row.querySelectorAll('input, select').forEach(input => {
                             if (input.tagName === 'INPUT') {
-                                // Pour les éléments input
+                                // Rendre les inputs en lecture seule
                                 input.readOnly = true;
                             } else if (input.tagName === 'SELECT') {
-                                // Pour les éléments select
-                                // input.disabled = true;
-                                input.classList.add('readonly');
-
+                                // Empêcher les interactions sur le select
+                                input.classList.add('select-no-interaction');
                             }
                         });
 
@@ -385,9 +389,8 @@
                                 // Pour les éléments input
                                 input.readOnly = false;
                             } else if (input.tagName === 'SELECT') {
-                                // Pour les éléments select
-                                // input.disabled = false;
-                                input.classList.remove('readonly');
+                                // Pour les éléments select, empêcher l'interaction
+                                input.classList.remove('select-no-interaction'); // Réactiver le select
                             }
                         });
 
@@ -395,6 +398,7 @@
                         $(row).find('.edit').hide();
                         $(row).find('.validate').show();
                     }
+
 
 
 
