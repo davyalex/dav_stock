@@ -45,7 +45,7 @@
                                 @foreach ($data_magasin as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
-                                        <td>{{ $item['nom'] }}</td>
+                                        <td>{{ $item['libelle'] }}</td>
                                         <td> {{ $item['created_at'] }} </td>
                                         <td>
                                             <div class="dropdown d-inline-block">

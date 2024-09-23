@@ -46,10 +46,14 @@ class User extends Authenticatable
     }
 
     public function caisse()
-{
-    return $this->belongsTo(Caisse::class);
-}
+    {
+        return $this->belongsTo(Caisse::class);
+    }
 
+    public function factures()
+    {
+        return $this->hasMany(Facture::class);
+    }
 
 
     public function produits(): HasMany
@@ -63,24 +67,24 @@ class User extends Authenticatable
         return $this->hasMany(Achat::class);
     }
 
-    public function ajustements() 
+    public function ajustements()
     {
         return $this->hasMany(Ajustement::class);
     }
 
-    public function depenses() 
+    public function depenses()
     {
         return $this->hasMany(Depense::class);
     }
 
 
-    public function produit_menus() 
+    public function produit_menus()
     {
         return $this->hasMany(ProduitMenu::class);
     }
 
 
-    public function menus() 
+    public function menus()
     {
         return $this->hasMany(Menu::class);
     }

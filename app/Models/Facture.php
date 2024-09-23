@@ -2,24 +2,24 @@
 
 namespace App\Models;
 
-use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Fournisseur extends Model implements HasMedia
+class Facture extends Model
 {
-    use HasFactory, SoftDeletes,  InteractsWithMedia;
+    use HasFactory, SoftDeletes;
 
     public $incrementing = false;
 
     protected $fillable = [
-        'nom',
-        'adresse',
-        'telephone',
-        'email',
+        'type',
+        'numero_facture',
+        'date_facture',
+        'montant',
+        'fournisseur_id',
+        'user_id',
         'created_at',
         'updated_at'
     ];
@@ -29,7 +29,7 @@ class Fournisseur extends Model implements HasMedia
     {
         parent::boot();
         self::creating(function ($model) {
-            $model->id = IdGenerator::generate(['table' => 'fournisseurs', 'length' => 10, 'prefix' =>
+            $model->id = IdGenerator::generate(['table' => 'factures', 'length' => 10, 'prefix' =>
             mt_rand()]);
         });
     }
@@ -40,10 +40,12 @@ class Fournisseur extends Model implements HasMedia
     }
 
 
-    public function factures() 
+    public function fournisseur()
     {
-        return $this->hasMany(Facture::class);
+        return $this->belongsTo(Fournisseur::class, 'fournisseur_id');
     }
-
-    
+   public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

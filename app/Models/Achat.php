@@ -15,6 +15,7 @@ class Achat extends Model
 
     protected $fillable = [
         'code',
+        'facture_id',
         'numero_facture',
         'date_achat',
         'statut',
@@ -47,6 +48,12 @@ class Achat extends Model
     public function magasin()
     {
         return $this->belongsTo(Magasin::class, 'magasin_id');
+    }
+
+
+    public function facture()
+    {
+        return $this->belongsTo(Facture::class, 'facture_id');
     }
 
     public function type_produit()

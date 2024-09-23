@@ -13,21 +13,7 @@
             Créer un nouveau stock
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
-
-
-
     <style>
-        /* Simuler le readonly en CSS */
-        .select-no-interaction {
-            pointer-events: none;
-            /* Empêche les interactions */
-            cursor: not-allowed;
-            /* Change le curseur en "non autorisé" */
-            background-color: #f2f2f2;
-            /* Change la couleur de fond pour indiquer que c'est désactivé */
-        }
-
-
         form label {
             font-size: 11px
         }
@@ -36,6 +22,16 @@
             box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
             background: white;
             padding: 10px;
+        }
+
+
+        .select-no-interaction {
+            pointer-events: none;
+            /* Empêche les interactions */
+            cursor: not-allowed;
+            /* Change le curseur en "non autorisé" */
+            background-color: #d6d6d6;
+            /* Change la couleur de fond pour indiquer que c'est désactivé */
         }
     </style>
 
@@ -54,26 +50,30 @@
 
                             <div id="static-input">
                                 <div class="row">
-                                    <div class="col-md-4 mb-3">
+
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="meta-title-input">Type de facture
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <select name="type" class="form-control" required>
+                                            <option value="" disabled selected>Choisir</option>
+                                            <option value="facture">Facture</option>
+                                            <option value="bon de commande">Bon de commande</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-2 mb-3">
                                         <label class="form-label" for="meta-title-input">N° facture
+                                            <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" name="numero_facture" class="form-control">
+                                        <input type="text" name="numero_facture" class="form-control" required>
                                     </div>
 
-                                    <div class="col-md-4 mb-3">
-                                        <label class="form-label" for="meta-title-input">Date <span
-                                                class="text-danger">*</span>
-                                        </label>
-                                        <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>" name="date_achat"
-                                            class="form-control" required>
-                                    </div>
-
-
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label class="form-label" for="product-title-input">Fournisseur
                                             <span class="text-danger">*</span>
                                         </label>
-                                        <select class="form-control js-example-basic-single" name="fournisseur_id" required>
+                                        <select class="form-control" name="fournisseur_id" required>
                                             <option value="" disabled selected>Choisir</option>
                                             <?php $__currentLoopData = $data_fournisseur; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fournisseur): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <option value="<?php echo e($fournisseur->id); ?>">
@@ -83,6 +83,24 @@
                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </select>
                                     </div>
+
+                                    <div class="col-md-2 mb-3">
+                                        <label class="form-label" for="meta-title-input">Montant 
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="number" name="montant" class="form-control" required>
+                                    </div>
+
+                                    <div class="col-md-2 mb-3">
+                                        <label class="form-label" for="meta-title-input">Date <span
+                                                class="text-danger">*</span>
+                                        </label>
+                                        <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>" name="date_achat"
+                                            class="form-control" required>
+                                    </div>
+
+                                  
+
                                 </div>
                             </div>
 
@@ -123,12 +141,30 @@
             <!-- start form duplicate-->
             <div id="product-form-template" style="display: none;">
                 <div class="row mb-3 form-duplicate">
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label" for="product-title-input">Produits
+                            <span class="text-danger">*</span>
+                        </label>
                         <select class="form-control productSelected selectView" id="produitId" name="produit_id[]" required>
                             <option disabled selected value>Selectionner un produit
                             </option>
                             <?php $__currentLoopData = $data_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <option value="<?php echo e($produit->id); ?>"><?php echo e($produit->nom); ?>
+
+                                </option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label" for="product-title-input">Magasin
+                            <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-control" name="magasin_id" required>
+                            <option value="" disabled selected>Choisir</option>
+                            <?php $__currentLoopData = $data_magasin; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $magasin): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($magasin->id); ?>">
+                                    <?php echo e($magasin->libelle); ?>
 
                                 </option>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -350,16 +386,29 @@
                         updateSelect2(); // Mettre à jour Select2 après suppression d'un formulaire
                     }
 
-                    // Au clic du bouton "valider"
-                    if (e.target && e.target.classList.contains('validate')) {
+
+
+                     // Au clic du bouton "valider"
+                     if (e.target && e.target.classList.contains('validate')) {
                         let row = e.target.closest('.form-duplicate');
                         row.querySelectorAll('input, select').forEach(input => {
                             if (input.tagName === 'INPUT') {
-                                // Rendre les inputs en lecture seule
-                                input.readOnly = true;
-                            } else if (input.tagName === 'SELECT') {
-                                // Empêcher les interactions sur le select
+                                // Pour les éléments input
+                                // input.readOnly = true;
                                 input.classList.add('select-no-interaction');
+                            } else if (input.tagName === 'SELECT') {
+                                // Ajouter une classe empêchant les interactions sur Select2
+                                input.classList.add('select-no-interaction');
+
+                                // Récupérer le conteneur Select2 et désactiver les interactions
+                                let select2Container = $(input).next('.select2-container');
+                                select2Container.find('.select2-selection').css({
+                                    'pointer-events': 'none',
+                                    'cursor': 'not-allowed',
+                                    'background-color': '#d6d6d6',
+
+
+                                });
                             }
                         });
 
@@ -368,16 +417,27 @@
                         $(row).find('.edit').show();
                     }
 
+
                     // Au clic du bouton "modifier"
                     if (e.target && e.target.classList.contains('edit')) {
                         let row = e.target.closest('.form-duplicate');
                         row.querySelectorAll('input, select').forEach(input => {
                             if (input.tagName === 'INPUT') {
                                 // Pour les éléments input
-                                input.readOnly = false;
+                                // input.readOnly = false;
+                                input.classList.remove('select-no-interaction');
                             } else if (input.tagName === 'SELECT') {
-                                // Pour les éléments select, empêcher l'interaction
-                                input.classList.remove('select-no-interaction'); // Réactiver le select
+                                // Supprimer la classe empêchant les interactions sur Select2
+                                input.classList.remove('select-no-interaction');
+
+                                // Récupérer le conteneur Select2 et réactiver les interactions
+                                let select2Container = $(input).next('.select2-container');
+                                select2Container.find('.select2-selection').css({
+                                    'pointer-events': 'auto',
+                                    'cursor': 'default',
+                                    'background-color': '#fff',
+                                    
+                                });
                             }
                         });
 
@@ -385,9 +445,6 @@
                         $(row).find('.edit').hide();
                         $(row).find('.validate').show();
                     }
-
-
-
 
 
                 });
@@ -519,6 +576,7 @@
 
                     form.find('.prixAchatUniteDiv').hide()
                     form.find('.prixVenteDiv').hide()
+                    form.find('.prixAchatUnite').val('')
 
                 } else {
                     form.find('.prixAchatUniteDiv').show()

@@ -6,6 +6,8 @@ use App\Models\Achat;
 use App\Models\Stock;
 use App\Models\Unite;
 use App\Models\Format;
+use App\Models\Facture;
+use App\Models\Magasin;
 use App\Models\Produit;
 use App\Models\Categorie;
 use App\Models\Fournisseur;
@@ -41,9 +43,11 @@ class AchatController extends Controller
             $data_format = Format::all();
             $data_unite = Unite::all();
             $data_fournisseur = Fournisseur::all();
+            $data_magasin = Magasin::all();
+
 
             // dd($data_produit->toArray());
-            return view('backend.pages.stock.achat.create', compact('type_produit', 'data_categorie', 'data_produit', 'data_format', 'data_unite', 'data_fournisseur'));
+            return view('backend.pages.stock.achat.create', compact('type_produit', 'data_categorie', 'data_produit', 'data_format', 'data_unite', 'data_fournisseur', 'data_magasin'));
         } catch (\Throwable $e) {
             return  $e->getMessage();
         }
@@ -71,9 +75,13 @@ class AchatController extends Controller
                 // validation en fonction du type de produit
                 if ($type_produit == 'restaurant') {
                     $request->validate([
-                        'numero_facture' => '',
+                        //facture
+                        'type' => 'required', // type facture
+                        'numero_facture' => 'required',
+                        'montant' => 'required', // montant de la facture
+
                         'date_achat' => 'required',
-                        'magasin_id' => '',
+                        'magasin_id.*' => 'required|required|min:1',
                         'statut' => '',
                         'produit_id.*' => 'required|exists:produits,id',
                         'fournisseur_id' => 'required',
@@ -83,15 +91,19 @@ class AchatController extends Controller
                         'quantite_stocke.*' => 'required|min:1',
                         'prix_unitaire_format.*' => 'required|min:1',
                         'prix_total_format.*' => 'required|min:1',
-                        'prix_achat_unitaire.*' => 'required|min:1',
-                        'prix_vente_unitaire.*' => '',
+                        'prix_achat_unitaire' => '',
+                        'prix_vente_unitaire' => '',
                         'unite_sortie.*' => 'required|min:1',
                     ]);
                 } elseif ($type_produit == 'bar') {
                     $request->validate([
-                        'numero_facture' => '',
+                        //facture
+                        'type' => 'required', // type facture
+                        'numero_facture' => 'required',
+                        'montant' => 'required', // montant de la facture
+
                         'date_achat' => 'required',
-                        'magasin_id' => '',
+                        'magasin_id.*' => 'required|required|min:1',
                         'statut' => '',
                         'produit_id.*' => 'required|exists:produits,id',
                         'fournisseur_id' => 'required',
@@ -107,9 +119,23 @@ class AchatController extends Controller
                     ]);
                 }
 
+
+                //enregistrer la facture 
+                $facture = new Facture();
+                $facture->type = $request->type;
+                $facture->numero_facture = $request->numero_facture;
+                $facture->date_facture = $request->date_achat;
+                $facture->fournisseur_id = $request->fournisseur_id;
+                $facture->montant = $request->montant;
+                $facture->user_id = Auth::id();
+                $facture->save();
+
+
+
                 // création de l'achat
                 Achat::create([
                     'code' => 'SA-' . strtoupper(Str::random(8)),
+                    'facture_id' => $facture->id,
                     'type_produit_id' => $categorie->id,
                     'numero_facture' => $request->numero_facture,
                     'date_achat' => $request->date_achat,

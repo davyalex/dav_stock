@@ -17,7 +17,7 @@
                                 <?php echo csrf_field(); ?>
                                 <div class="col-md-12">
                                     <label for="validationCustom01" class="form-label">Libelle</label>
-                                    <input type="text" name="nom" class="form-control" id="validationCustom01" 
+                                    <input type="text" name="libelle" class="form-control" id="validationCustom01" 
                                         required>
                                     <div class="valid-feedback">
                                         Looks good!

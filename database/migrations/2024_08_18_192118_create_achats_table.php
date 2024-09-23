@@ -74,6 +74,12 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
+                $table->foreignId('facture_id')
+                ->nullable()
+                ->constrained('factures')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
 
             $table->softDeletes();
             $table->timestamps();

@@ -15,7 +15,7 @@ class MagasinController extends Controller
     {
 
         $data_magasin = Magasin::get();
-        $data_magasin->sortBy('nom');
+        $data_magasin->sortBy('libelle');
 
         return view('backend.pages.configuration.magasin.index', compact('data_magasin'));
     }
@@ -27,7 +27,7 @@ class MagasinController extends Controller
 
         try {
             $data =  $request->validate([
-                'nom' => 'required',
+                'libelle' => 'required',
             ]);
             $data_magasin = Magasin::firstOrCreate($data);
 
@@ -44,7 +44,7 @@ class MagasinController extends Controller
 
         try {
             $data_magasin = tap(Magasin::find($id))->update([
-                'nom' => $request['nom'],
+                'libelle' => $request['libelle'],
 
             ]);
 

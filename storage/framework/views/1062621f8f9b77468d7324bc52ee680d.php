@@ -15,7 +15,7 @@
                      <?php echo csrf_field(); ?>
                      <div class="col-md-12">
                          <label for="validationCustom01" class="form-label">Libellé</label>
-                         <input type="text" name="nom" value="<?php echo e($item['nom']); ?>" class="form-control"
+                         <input type="text" name="libelle" value="<?php echo e($item['libelle']); ?>" class="form-control"
                              id="validationCustom01" required>
                          <div class="valid-feedback">
                              Looks good!
