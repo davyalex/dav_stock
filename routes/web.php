@@ -26,6 +26,7 @@ use App\Http\Controllers\backend\configuration\CaisseController;
 use App\Http\Controllers\backend\configuration\FormatController;
 use App\Http\Controllers\backend\configuration\MagasinController;
 use App\Http\Controllers\backend\permission\PermissionController;
+use App\Http\Controllers\backend\depense\LibelleDepenseController;
 use App\Http\Controllers\backend\fournisseur\FournisseurController;
 use App\Http\Controllers\backend\depense\CategorieDepenseController;
 use App\Http\Controllers\backend\configuration\UniteMesureController;
@@ -266,6 +267,17 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::post('update/{id}', 'update')->name('categorie-depense.update');
         route::get('delete/{id}', 'delete')->name('categorie-depense.delete');
         route::post('position/{id}', 'position')->name('categorie-depense.position');
+    });
+
+
+    Route::prefix('libelle-depense')->controller(LibelleDepenseController::class)->group(function () {
+        route::get('', 'index')->name('libelle-depense.index');
+        route::get('create', 'create')->name('libelle-depense.create');
+        route::post('store', 'store')->name('libelle-depense.store');
+        route::get('edit/{id}', 'edit')->name('libelle-depense.edit');
+        route::post('update/{id}', 'update')->name('libelle-depense.update');
+        route::get('delete/{id}', 'delete')->name('libelle-depense.delete');
+        route::post('position/{id}', 'position')->name('libelle-depense.position');
     });
 
     Route::prefix('depense')->controller(DepenseController::class)->group(function () {

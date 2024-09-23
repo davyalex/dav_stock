@@ -14,6 +14,14 @@
         @endslot
     @endcomponent
     <style>
+        /* Simuler le readonly en CSS */
+        .readonly {
+            pointer-events: none;
+            /* Désactive l'interaction */
+            background-color: #e9ecef;
+            /* Facultatif : changement de style pour indiquer que le champ est "readonly" */
+        }
+
         form label {
             font-size: 11px
         }
@@ -353,8 +361,15 @@
                     if (e.target && e.target.classList.contains('validate')) {
                         let row = e.target.closest('.form-duplicate');
                         row.querySelectorAll('input, select').forEach(input => {
-                            input.readOnly = true;
-                            input.disabled = true;
+                            if (input.tagName === 'INPUT') {
+                                // Pour les éléments input
+                                input.readOnly = true;
+                            } else if (input.tagName === 'SELECT') {
+                                // Pour les éléments select
+                                // input.disabled = true;
+                                input.classList.add('readonly');
+
+                            }
                         });
 
                         // Cacher le bouton "valider" et afficher le bouton "modifier"
@@ -366,8 +381,14 @@
                     if (e.target && e.target.classList.contains('edit')) {
                         let row = e.target.closest('.form-duplicate');
                         row.querySelectorAll('input, select').forEach(input => {
-                            input.readOnly = false;
-                            input.disabled = false;
+                            if (input.tagName === 'INPUT') {
+                                // Pour les éléments input
+                                input.readOnly = false;
+                            } else if (input.tagName === 'SELECT') {
+                                // Pour les éléments select
+                                // input.disabled = false;
+                                input.classList.remove('readonly');
+                            }
                         });
 
                         // Cacher le bouton "modifier" et afficher le bouton "valider"
@@ -489,7 +510,7 @@
             });
 
 
-            // Fonction pour ajouter l'écouteur à chaque champ select
+            // Fonction pour cacher les champs en fonction du type de produit selectionné
             function addProductSelectListener(form) {
                 var dataProduct = {{ Js::from($data_produit) }}; // Données du contrôleur
                 var dataCategory = {{ Js::from($data_categorie) }}; // Données du contrôleur
@@ -519,7 +540,7 @@
 
             $(document).on('change', '.productSelected', function() {
                 var form = $(this).closest('.row');
-                addProductSelectListener(form); // Pour le premier élément
+                addProductSelectListener(form);
             });
 
 

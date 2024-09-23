@@ -17,7 +17,7 @@ class MagasinController extends Controller
         $data_magasin = Magasin::get();
         $data_magasin->sortBy('nom');
 
-        return view('backend.pages.configuration.Magasin.index', compact('data_magasin'));
+        return view('backend.pages.configuration.magasin.index', compact('data_magasin'));
     }
 
 

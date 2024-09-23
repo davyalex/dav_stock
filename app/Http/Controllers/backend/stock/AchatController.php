@@ -55,7 +55,7 @@ class AchatController extends Controller
     public function store(Request $request)
     {
         try {
-            // dd($request->all());
+            dd($request->all());
 
             // récupérer les infos de produit en tableau
             foreach ($request->produit_id as $index => $produitId) {

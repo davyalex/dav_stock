@@ -180,14 +180,20 @@
                         aria-controls="sidebarDepense">
                         <i class="ri ri-wallet-fill"></i> <span>DEPENSES</span>
                     </a>
-                    <div class="collapse menu-dropdown <?php echo e(Route::is('categorie-depense.*') || Route::is('depense.*') ? 'show' : ''); ?>"
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('libelle-depense.*') || Route::is('categorie-depense.*') || Route::is('depense.*') ? 'show' : ''); ?>"
                         id="sidebarDepense">
                         <ul class="nav nav-sm flex-column">
 
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('categorie-depense.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('categorie-depense.*') ? 'active' : ''); ?>">Categorie
-                                    depense</a>
+                                    class="nav-link <?php echo e(Route::is('categorie-depense.*') ? 'active' : ''); ?>">Categorie des
+                                    depenses</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('libelle-depense.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('categorie-depense.*') ? 'active' : ''); ?>">Libellé des 
+                                    depenses</a>
                             </li>
 
                             <li class="nav-item active">

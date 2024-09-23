@@ -11,20 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('depenses', function (Blueprint $table) {
+        Schema::create('libelle_depenses', function (Blueprint $table) {
             $table->id();
             $table->string('libelle')->nullable();
-            $table->double('montant')->nullable();
             $table->longText('description')->nullable();
             $table->foreignId('categorie_depense_id')
                 ->nullable()
                 ->constrained('categorie_depenses')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
-            $table->foreignId('libelle_depense_id') // sous categorie depenses
-                ->nullable()
-                ->constrained('libelle_depenses')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
@@ -44,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('depenses');
+        Schema::dropIfExists('libelle_depenses');
     }
 };

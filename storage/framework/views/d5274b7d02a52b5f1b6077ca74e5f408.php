@@ -13,17 +13,17 @@
                         </div>
                         <div class="modal-body">
 
-                            <form class="row g-3 needs-validation" method="post" action="{{ route('depense.store') }}"
+                            <form class="row g-3 needs-validation" method="post" action="<?php echo e(route('depense.store')); ?>"
                                 novalidate>
-                                @csrf
+                                <?php echo csrf_field(); ?>
 
                                 <div class="col-md-12">
                                     <label for="validationCustom01" class="form-label">Categorie</label>
                                     <select name="categorie_depense_id" class="form-control" required>
                                         <option disabled selected value="">Selectionner</option>
-                                        @foreach ($categorie_depense as $item)
-                                        <option value="{{$item['id']}}"> {{$item['libelle']}} </option>
-                                        @endforeach
+                                        <?php $__currentLoopData = $categorie_depense; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($item['id']); ?>"> <?php echo e($item['libelle']); ?> </option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                     <div class="valid-feedback">
                                         Looks good!
@@ -72,10 +72,5 @@
 </div>
 <!--end row-->
 
-{{-- @section('script')
-    <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
-    <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
-    <script src="{{ URL::asset('build/js/pages/modal.init.js') }}"></script>
 
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-@endsection --}}
+<?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/depense/create.blade.php ENDPATH**/ ?>
