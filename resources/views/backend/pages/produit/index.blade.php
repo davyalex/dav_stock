@@ -54,9 +54,9 @@
                                             <img class="rounded-circle" src="{{ $item->getFirstMediaUrl('ProduitImage') }}"
                                                 width="50px" alt="">
                                         </td>
-                                        <td>{{ $item['nom'] }}</td>
+                                        <td>{{ $item['nom'] }} <br> {{$item['quantite_unite']}} {{$item['unite']['libelle'] ?? ''}}</td>
                                         <td>{{ $item['categorie']['name'] ?? ''}}</td>
-                                        <td>{{ $item['typeProduit']['name'] }}</td>
+                                        <td>{{ $item['typeProduit']['name'] }}  </td>
                                         <td>{{ $item['stock'] }}</td>
                                         <td>{{ $item['stock_alerte'] }}</td>
                                         <td> {{ $item['created_at'] }} </td>
@@ -69,18 +69,18 @@
                                                 <ul class="dropdown-menu dropdown-menu-end">
                                                     <li><a href="{{route('produit.show' , $item['id'])}}" class="dropdown-item"><i
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            View</a>
+                                                            Detail</a>
                                                     </li>
                                                     <li><a href="{{route('produit.edit' ,  $item['id'])}}" type="button" class="dropdown-item edit-item-btn"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Edit</a></li>
-                                                    <li>
+                                                            Modifier</a></li>
+                                                    {{-- <li>
                                                         <a href="#" class="dropdown-item remove-item-btn delete"
                                                             data-id={{ $item['id'] }}>
                                                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
                                                             Delete
                                                         </a>
-                                                    </li>
+                                                    </li> --}}
                                                 </ul>
                                             </div>
                                         </td>

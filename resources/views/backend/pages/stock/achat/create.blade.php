@@ -52,7 +52,7 @@
 
                             <div id="static-input">
                                 <div class="row">
-
+                                    <span class="text-danger text-center" id="msgExist"></span>
                                     <div class="col-md-3 mb-3">
                                         <label class="form-label" for="meta-title-input">Type de facture
                                             <span class="text-danger">*</span>
@@ -68,14 +68,15 @@
                                         <label class="form-label" for="meta-title-input">N° facture
                                             <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" name="numero_facture" class="form-control" required>
+                                        <input type="text" name="numero_facture" class="form-control" id="facture"
+                                            required>
                                     </div>
 
                                     <div class="col-md-3">
                                         <label class="form-label" for="product-title-input">Fournisseur
                                             <span class="text-danger">*</span>
                                         </label>
-                                        <select class="form-control" name="fournisseur_id" required>
+                                        <select id="fournisseur" class="form-control" name="fournisseur_id" required>
                                             <option value="" disabled selected>Choisir</option>
                                             @foreach ($data_fournisseur as $fournisseur)
                                                 <option value="{{ $fournisseur->id }}">
@@ -86,7 +87,7 @@
                                     </div>
 
                                     <div class="col-md-2 mb-3">
-                                        <label class="form-label" for="meta-title-input">Montant 
+                                        <label class="form-label" for="meta-title-input">Montant
                                             <span class="text-danger">*</span>
                                         </label>
                                         <input type="number" name="montant" class="form-control" required>
@@ -100,7 +101,7 @@
                                             class="form-control" required>
                                     </div>
 
-                                  
+
 
                                 </div>
                             </div>
@@ -284,10 +285,59 @@
         <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
         <script>
+            // Vérifier si le numéro et le fournisseur existent déjà
+            function checkExistFacture() {
+                var numero = $('#facture').val();
+                var fournisseur = $('#fournisseur').val();
+
+                if (numero && fournisseur) { // Assurez-vous que les deux champs ne sont pas vides
+                    var url = "{{ route('achat.check-facture') }}"; // Définissez la bonne route pour la vérification
+
+                    $.ajax({
+                        type: "POST", // Utilisez POST pour des opérations sécurisées
+                        url: url,
+                        data: {
+                            numero: numero,
+                            fournisseur: fournisseur,
+                            _token: '{{ csrf_token() }}' // Ajoutez le token CSRF nécessaire
+                        },
+                        success: function(response) {
+                            if (response.exist == true) {
+                                // Afficher un message si la facture existe déjà
+                                //swal message error
+                                Swal.fire({
+                                    title: 'Attention',
+                                    text: response.message,
+                                    icon: 'warning',
+                                    customClass: {
+                                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                                        cancelButton: 'btn btn-danger w-xs mt-2',
+                                    },
+                                    buttonsStyling: false,
+                                    showCloseButton: true
+                                })
+
+                                // vider les champs
+                                $('#facture').val("");
+                                $('#fournisseur').val("");
+                            }
+
+                        },
+                        error: function(xhr, status, error) {
+                            console.log(error);
+                        }
+                    });
+                }
+            }
+
+            // Déclenche la vérification lorsque le fournisseur ou le numéro de facture change
+            $(document).on('change input', '#fournisseur, #facture', function(e) {
+                checkExistFacture();
+            });
+
+
+
             document.addEventListener('DOMContentLoaded', function() {
-
-
-
                 let formCount = 1;
                 updateSelect2(); // Mettre à jour Select2 après suppression d'un formulaire
                 // Fonction pour réinitialiser les champs dupliqués
@@ -400,8 +450,8 @@
 
 
 
-                     // Au clic du bouton "valider"
-                     if (e.target && e.target.classList.contains('validate')) {
+                    // Au clic du bouton "valider"
+                    if (e.target && e.target.classList.contains('validate')) {
                         let row = e.target.closest('.form-duplicate');
                         row.querySelectorAll('input, select').forEach(input => {
                             if (input.tagName === 'INPUT') {
@@ -448,7 +498,7 @@
                                     'pointer-events': 'auto',
                                     'cursor': 'default',
                                     'background-color': '#fff',
-                                    
+
                                 });
                             }
                         });
@@ -463,31 +513,6 @@
 
 
             });
-
-
-
-
-
-
-
-
-
-            // $('.btn-save').click(function(e) {
-            //     e.preventDefault();
-            //     var form = $(this).closest('.row');
-            //     form.find('input[required], select[required]').each(function() {
-            //         $(this).prop('required', false);
-            //     });
-            // });
-
-
-
-
-
-
-
-
-
 
 
 

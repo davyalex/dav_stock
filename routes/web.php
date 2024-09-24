@@ -250,6 +250,8 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('edit/{id}', 'edit')->name('achat.edit');
         route::post('update/{id}', 'update')->name('achat.update');
         route::get('delete/{id}', 'delete')->name('achat.delete');
+        route::post('check-facture', 'checkFactureExist')->name('achat.check-facture');
+
     });
 
     // stock -ajustement

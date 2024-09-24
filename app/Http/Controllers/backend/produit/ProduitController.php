@@ -53,21 +53,23 @@ class ProduitController extends Controller
         try {
 
             //get principal category of categorie request
-            $principaCat = Categorie::find($request['categorie']);
-            $principaCat =  $principaCat->getPrincipalCategory();
+            $categorie = Categorie::find($request['categorie']);
+            $principaCat =  $categorie->getPrincipalCategory();
+        
+            // dd($categorie->famille);
 
             //request validation
             $request->validate([
-                'nom' => 'required|unique:produits',
+                'nom' => 'required',
                 'description' => '',
                 'categorie' => 'required',
                 'stock' => '',
                 'stock_alerte' => 'required',
                 'statut' => '',
-                'magasin' => '',
-                'quantite_unite' => $principaCat->name == 'bar' ? 'required' : '',
-                'unite_mesure' => $principaCat->name == 'bar' ? 'required' : '',
-                'imagePrincipale' => 'required',
+                // 'magasin' => '',
+                'quantite_unite' => $categorie->famille == 'bar' ? 'required' : '',
+                'unite_mesure' => $categorie->famille == 'bar' ? 'required' : '',
+                'imagePrincipale' => $categorie->famille == 'bar' ? 'required' : '',
 
             ]);
 
@@ -83,7 +85,7 @@ class ProduitController extends Controller
                 'type_id' =>   $principaCat['id'], // type produit
                 'quantite_unite' => $request['quantite_unite'],
                 'unite_id' => $request['unite_mesure'],
-                'magasin_id' => $request['magasin'],
+                // 'magasin_id' => $request['magasin'],
                 'user_id' => Auth::id(),
 
             ]);
@@ -174,8 +176,8 @@ class ProduitController extends Controller
         try {
 
             //get principal category of categorie request
-            $principaCat = Categorie::find($request['categorie']);
-            $principaCat =  $principaCat->getPrincipalCategory();
+            $categorie = Categorie::find($request['categorie']);
+            $principaCat =  $categorie->getPrincipalCategory();
 
             //request validation
             $request->validate([
@@ -184,9 +186,9 @@ class ProduitController extends Controller
                 'categorie' => 'required',
                 'stock' => '',
                 'stock_alerte' => 'required',
-                'magasin' => '',
-                'quantite_unite' => $principaCat->name == 'bar' ? 'required' : '',
-                'unite_mesure' => $principaCat->name == 'bar' ? 'required' : '',
+                // 'magasin' => '',
+                'quantite_unite' => $categorie->famille == 'bar' ? 'required' : '',
+                'unite_mesure' => $categorie->famille == 'bar' ? 'required' : '',
                 'imagePrincipale' => '',
             ]);
 
@@ -201,7 +203,7 @@ class ProduitController extends Controller
 
                 'quantite_unite' => $request['quantite_unite'],
                 'unite_id' => $request['unite_mesure'],
-                'magasin_id' => $request['magasin'],
+                // 'magasin_id' => $request['magasin'],
                 'user_id' => Auth::id(),
             ]);
 

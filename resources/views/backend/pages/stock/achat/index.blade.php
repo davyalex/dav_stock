@@ -89,11 +89,11 @@
                                                     <i class="ri-more-fill align-middle"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a href="{{ route('ajustement.create', $item['id']) }}"
+                                                    {{-- <li><a href="{{ route('ajustement.create', $item['id']) }}"
                                                             class="dropdown-item"><i
                                                                 class=" ri-exchange-fill align-bottom me-2 text-muted"></i>
                                                             Ajustement</a>
-                                                    </li>
+                                                    </li> --}}
                                                     {{-- <li><a href="#!" class="dropdown-item"><i
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                             View</a>

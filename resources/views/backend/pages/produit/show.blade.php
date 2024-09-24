@@ -55,7 +55,7 @@
 
 
             </div>
-            <div class="card">
+            <div class="card d-none">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Liste des achats</h5>
                     {{-- <a href="{{ route('achat.create') }}" type="button" class="btn btn-primary ">Faire

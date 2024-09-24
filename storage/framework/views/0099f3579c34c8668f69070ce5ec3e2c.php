@@ -90,11 +90,7 @@
                                                     <i class="ri-more-fill align-middle"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a href="<?php echo e(route('ajustement.create', $item['id'])); ?>"
-                                                            class="dropdown-item"><i
-                                                                class=" ri-exchange-fill align-bottom me-2 text-muted"></i>
-                                                            Ajustement</a>
-                                                    </li>
+                                                    
                                                     
                                                     
                                                     

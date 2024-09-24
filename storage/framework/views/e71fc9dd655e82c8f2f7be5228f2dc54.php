@@ -54,9 +54,9 @@
                                             <img class="rounded-circle" src="<?php echo e($item->getFirstMediaUrl('ProduitImage')); ?>"
                                                 width="50px" alt="">
                                         </td>
-                                        <td><?php echo e($item['nom']); ?></td>
+                                        <td><?php echo e($item['nom']); ?> <br> <?php echo e($item['quantite_unite']); ?> <?php echo e($item['unite']['libelle'] ?? ''); ?></td>
                                         <td><?php echo e($item['categorie']['name'] ?? ''); ?></td>
-                                        <td><?php echo e($item['typeProduit']['name']); ?></td>
+                                        <td><?php echo e($item['typeProduit']['name']); ?>  </td>
                                         <td><?php echo e($item['stock']); ?></td>
                                         <td><?php echo e($item['stock_alerte']); ?></td>
                                         <td> <?php echo e($item['created_at']); ?> </td>
@@ -69,18 +69,12 @@
                                                 <ul class="dropdown-menu dropdown-menu-end">
                                                     <li><a href="<?php echo e(route('produit.show' , $item['id'])); ?>" class="dropdown-item"><i
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            View</a>
+                                                            Detail</a>
                                                     </li>
                                                     <li><a href="<?php echo e(route('produit.edit' ,  $item['id'])); ?>" type="button" class="dropdown-item edit-item-btn"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Edit</a></li>
-                                                    <li>
-                                                        <a href="#" class="dropdown-item remove-item-btn delete"
-                                                            data-id=<?php echo e($item['id']); ?>>
-                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Delete
-                                                        </a>
-                                                    </li>
+                                                            Modifier</a></li>
+                                                    
                                                 </ul>
                                             </div>
                                         </td>

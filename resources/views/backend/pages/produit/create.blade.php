@@ -27,13 +27,7 @@
                                     </a> --}}
                                     <div class="card-body">
                                         <div class="mb-3 row">
-                                            <div class="col-md-5">
-                                                <label class="form-label" for="meta-title-input">Libellé <span
-                                                        class="text-danger">*</span>
-                                                </label>
-                                                <input type="text" name="nom" class="form-control" id="nomProduit"
-                                                    required>
-                                            </div>
+
                                             <div class="mb-3 col-md-7">
                                                 <label class="form-label" for="product-title-input">Sélectionner une
                                                     categorie <span class="text-danger">*</span>
@@ -51,7 +45,15 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-md-3 mb-3">
+                                            <div class="col-md-5">
+                                                <label class="form-label" for="meta-title-input">Libellé <span
+                                                        class="text-danger">*</span>
+                                                </label>
+                                                <input type="text" name="nom" class="form-control" id="nomProduit"
+                                                    required>
+                                            </div>
+
+                                            {{-- <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="meta-title-input">Magasin
                                                 </label>
                                                 <select class="form-control js-example-basic-single" name="magasin">
@@ -60,25 +62,18 @@
                                                         <option value="{{ $magasin->id }}">{{ $magasin->libelle }}</option>
                                                     @endforeach
                                                 </select>
-                                            </div>
+                                            </div> --}}
 
-                                            <div class="col-md-3 mb-3">
-                                                <label class="form-label" for="meta-title-input">Stock alerte <span
-                                                        class="text-danger">*</span>
-                                                </label>
-                                                <input type="number" name="stock_alerte" class="form-control"
-                                                    id="stockAlerte" required>
-                                            </div>
 
-                                            <div class="col-md-3 mb-3">
+                                            <div class="col-md-4 mb-3">
                                                 <label class="form-label" for="meta-title-input">Qté mesure<span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="number" name="quantite_unite" class="form-control"
-                                                    id="quantiteUnite" required>
+                                                <input type="number" name="quantite_unite"
+                                                    class="form-control customNumberInput" id="quantiteUnite" required>
                                             </div>
 
-                                            <div class="col-md-3 mb-3">
+                                            <div class="col-md-4 mb-3">
                                                 <label class="form-label" for="meta-title-input">Unite mesure<span
                                                         class="text-danger">*</span>
                                                 </label>
@@ -92,6 +87,15 @@
                                                     @endforeach
                                                 </select>
                                             </div>
+
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label" for="meta-title-input">Stock alerte <span
+                                                        class="text-danger">*</span>
+                                                </label>
+                                                <input type="number" name="stock_alerte" class="form-control"
+                                                    id="stockAlerte" required>
+                                            </div>
+
 
                                         </div>
                                         <div>
@@ -157,8 +161,6 @@
                                     </div>
                                 </div>
                                 <!-- end card -->
-
-
                             </div>
                         </div>
                         <!-- end row -->
@@ -188,6 +190,7 @@
 
         <script>
             //Afficher les champs en fonction de la categorie selectionné
+            let categoryFamille;
             var categorieData = {{ Js::from($categorieAll) }} // from product controller
             //recuperer la categorie selectionné
             $('#categorie').change(function(e) {
@@ -199,13 +202,16 @@
                     return item.id == categorieSelect
                 })
 
+
                 // si categorieFilter = restaurant , required false
                 if (categorieFilter[0].famille == 'restaurant') {
                     $('#quantiteUnite').prop('required', false)
                     $('#quantiteUnite').prop('disabled', true)
+                    $('#quantiteUnite').val('')
 
                     $('#uniteMesure').prop('required', false)
                     $('#uniteMesure').prop('disabled', true)
+                    $('#uniteMesure').val('')
                 } else {
                     $('#quantiteUnite').prop('required', true)
                     $('#quantiteUnite').prop('disabled', false)
@@ -214,6 +220,10 @@
                     $('#uniteMesure').prop('disabled', false)
 
                 }
+
+                // recuperer la famille de la categorie
+                categoryFamille = categorieFilter[0];
+
 
             });
 
@@ -258,10 +268,11 @@
             });
 
             $('#formSend').on('submit', function(e) {
-
+                
                 // on verifie si une image principale à éte inseré
-                if ($('#product-image-input').val() != '') {
+                if ($('#product-image-input').val() === '' && categoryFamille === 'bar') {
                     e.preventDefault();
+                } else {
                     var formData = new FormData(this);
 
                     $('#imageTableBody div').each(function() {

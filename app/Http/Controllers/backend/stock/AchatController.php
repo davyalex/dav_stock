@@ -56,15 +56,44 @@ class AchatController extends Controller
 
     }
 
+    public function checkFactureExist(Request $request)
+    {
+        // Récupérer les valeurs envoyées par AJAX
+        $numero = $request->input('numero'); // Récupère la valeur de 'numero'
+        $fournisseur = $request->input('fournisseur'); // Récupère la valeur de 'fournisseur'
+
+        // Vérifier dans la base de données si la facture existe
+        $factureExistante = Facture::where('numero_facture', $numero)
+            ->where('fournisseur_id', $fournisseur)
+            ->exists();
+
+        // si exist on retourne une response
+
+        return response()->json(
+            [
+                'exist' => $factureExistante,
+                'message' => $factureExistante == true ? 'Vous avez déjà enregistré cette facture' : ''
+            ],
+            200
+        );
+    }
+
     public function store(Request $request)
     {
         try {
             // dd($request->all());
-
             // récupérer les infos de produit en tableau
             foreach ($request->produit_id as $index => $produitId) {
                 $produit = Produit::find($produitId);
                 $categorie = Categorie::find($produit->categorie_id); // catégorie du produit
+
+                $montant_facture = 0;
+                // Parcourir tous les éléments de prix_total_format
+                foreach ($request->prix_total_format as $index => $prixTotal) {
+                    // Additionner chaque prix_total_format au montant total de la facture
+                    $montant_facture += $prixTotal;
+                }
+
 
                 // définir le statut du produit
                 // $statut = $request->statut[$index] == 'on' ? 'active' : 'desactive';
@@ -119,14 +148,13 @@ class AchatController extends Controller
                     ]);
                 }
 
-
                 //enregistrer la facture 
                 $facture = new Facture();
                 $facture->type = $request->type;
                 $facture->numero_facture = $request->numero_facture;
                 $facture->date_facture = $request->date_achat;
                 $facture->fournisseur_id = $request->fournisseur_id;
-                $facture->montant = $request->montant;
+                $facture->montant = $montant_facture;
                 $facture->user_id = Auth::id();
                 $facture->save();
 
@@ -162,6 +190,7 @@ class AchatController extends Controller
                 //     $produit->stock += $request->quantite_stocke[$index];
                 //     $produit->save();
                 // }
+
             }
 
             // succès après la boucle

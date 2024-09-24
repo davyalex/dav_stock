@@ -24,13 +24,7 @@
 
                                     <div class="card-body">
                                         <div class="mb-3 row">
-                                            <div class="col-md-5">
-                                                <label class="form-label" for="meta-title-input">Libellé <span
-                                                        class="text-danger">*</span>
-                                                </label>
-                                                <input type="text" name="nom" value="<?php echo e($data_produit['nom']); ?>"
-                                                    class="form-control" id="nomProduit" required>
-                                            </div>
+
                                             <div class="mb-3 col-md-7">
                                                 <label class="form-label" for="product-title-input">Sélectionner une
                                                     categorie <span class="text-danger">*</span>
@@ -48,28 +42,18 @@
                                                 </select>
                                             </div>
 
-
-                                            <div class="col-md-3 mb-3">
-                                                <label class="form-label" for="meta-title-input">Magasin
-                                                </label>
-                                                <select class="form-control js-example-basic-single" name="magasin">
-                                                    <option value="" disabled selected>Choisir</option>
-                                                    <?php $__currentLoopData = $data_magasin; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $magasin): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                        <option value="<?php echo e($magasin->id); ?>"
-                                                            <?php echo e($magasin->id == $data_produit->magasin_id ? 'selected' : ''); ?>>
-                                                            <?php echo e($magasin->libelle); ?></option>
-                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-3 mb-3">
-                                                <label class="form-label" for="meta-title-input">Stock alerte <span
+                                            <div class="col-md-5">
+                                                <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="number" value="<?php echo e($data_produit->stock_alerte); ?>"
-                                                    name="stock_alerte" class="form-control" id="stockAlerte" required>
+                                                <input type="text" name="nom" value="<?php echo e($data_produit['nom']); ?>"
+                                                    class="form-control" id="nomProduit" required>
                                             </div>
-                                            <div class="col-md-3 mb-3">
+
+                                            
+
+
+                                            <div class="col-md-4 mb-3">
                                                 <label class="form-label" for="meta-title-input">Qté mesure<span
                                                         class="text-danger">*</span>
                                                 </label>
@@ -78,7 +62,7 @@
                                                     id="quantiteUnite" required>
                                             </div>
 
-                                            <div class="col-md-3 mb-3">
+                                            <div class="col-md-4 mb-3">
                                                 <label class="form-label" for="meta-title-input">Unite mesure<span
                                                         class="text-danger">*</span>
                                                 </label>
@@ -96,7 +80,13 @@
                                                 </select>
                                             </div>
 
-
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label" for="meta-title-input">Stock alerte <span
+                                                        class="text-danger">*</span>
+                                                </label>
+                                                <input type="number" value="<?php echo e($data_produit->stock_alerte); ?>"
+                                                    name="stock_alerte" class="form-control" id="stockAlerte" required>
+                                            </div>
 
 
                                         </div>
