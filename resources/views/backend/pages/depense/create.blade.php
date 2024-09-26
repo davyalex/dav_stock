@@ -19,16 +19,30 @@
 
                                 <div class="col-md-12">
                                     <label for="validationCustom01" class="form-label">Categorie</label>
-                                    <select name="categorie_depense_id" class="form-control" required>
+                                    <select name="categorie_depense_id" class="form-control categorie-select" required>
                                         <option disabled selected value="">Selectionner</option>
                                         @foreach ($categorie_depense as $item)
-                                        <option value="{{$item['id']}}"> {{$item['libelle']}} </option>
+                                            <!-- Si la catégorie a des libelleDepenses, rendre l'option non cliquable -->
+                                            <option value="{{ $item['id'] }}" class="categorie" 
+                                                @if($item->libelleDepenses->isNotEmpty()) disabled @endif>
+                                                {{ strtoupper($item['libelle']) }}
+                                            </option>
+                                
+                                            <!-- Boucle pour les libelleDepenses de cette catégorie -->
+                                            @foreach ($item->libelleDepenses as $libelle)
+                                                <option value="{{ $libelle['id'] }}" class="libelle-depense">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;{{ $libelle['libelle'] }}
+                                                </option>
+                                            @endforeach
                                         @endforeach
                                     </select>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
                                 </div>
+                                
+
+
 
                                 <div class="col-md-8">
                                     <label for="validationCustom01" class="form-label">Libelle</label>
@@ -39,7 +53,7 @@
                                     </div>
                                 </div>
 
-                               
+
 
                                 <div class="col-md-4">
                                     <label for="validationCustom01" class="form-label">Montant</label>
@@ -52,7 +66,7 @@
 
                                 <div class="col-md-12">
                                     <label for="validationCustom01" class="form-label">Description</label>
-                                   <textarea class="form-control" name="description" id="" cols="30" rows="10"></textarea>
+                                    <textarea class="form-control" name="description" id="" cols="30" rows="10"></textarea>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -79,3 +93,16 @@
 
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 @endsection --}}
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Sélectionner toutes les options avec la classe 'categorie'
+        let categories = document.querySelectorAll('.categorie-select .categorie');
+        categories.forEach(function(option) {
+            // Appliquer le style inline pour chaque catégorie
+            option.style.fontWeight = 'bold'; // Texte en gras
+            option.style.textTransform = 'uppercase'; // Texte en majuscule
+        });
+    });
+</script>

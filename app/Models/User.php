@@ -78,6 +78,12 @@ class User extends Authenticatable
     }
 
 
+    public function libelleDepenses()
+    {
+        return $this->hasMany(LibelleDepense::class);
+    }
+
+
     public function produit_menus()
     {
         return $this->hasMany(ProduitMenu::class);

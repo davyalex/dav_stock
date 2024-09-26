@@ -14,10 +14,10 @@
 @section('content')
     @component('backend.components.breadcrumb')
         @slot('li_1')
-            Categorie
+            depenses
         @endslot
         @slot('title')
-            Depense
+            Libelle des Depenses
         @endslot
     @endcomponent
 
@@ -27,9 +27,9 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des categorie</h5>
+                    <h5 class="card-title mb-0">Liste des depenses</h5>
                     <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#myModal">Créer
-                        une categorie</button>
+                        un libelle de depense</button>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -37,20 +37,20 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>statut</th>
+                                    <th>Categorie</th>
                                     <th>Libelle</th>
-                                    <th>Position</th>
+                                    <th>Créer par</th>
                                     <th>Date creation</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data_categorie_depense as $key => $item)
+                                @foreach ($data_libelleDepense as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
-                                        <td>{{ $item['statut'] }}</td>
+                                        <td>{{ $item['categorie_depense']['libelle'] ?? '' }}</td>
                                         <td> {{ $item['libelle'] }}</td>
-                                        <td> {{ $item['position'] }} </td>
+                                        <td> {{ $item['user']['first_name'] }}</td>
                                         <td> {{ $item['created_at'] }} </td>
 
                                         <td>
@@ -60,12 +60,6 @@
                                                     <i class="ri-more-fill align-middle"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-
-                                                    <li><a type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                            data-bs-target="#myModalPosition{{ $item['id'] }}"><i
-                                                                class="ri-list-ordered  align-bottom me-2 text-muted"></i>
-                                                            Position</a>
-                                                    </li>
                                                     <li><a type="button" class="dropdown-item edit-item-btn"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#myModalEdit{{ $item['id'] }}"><i
@@ -82,8 +76,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    @include('backend.pages.depense.categorie-depense.edit')
-                                    @include('backend.pages.depense.categorie-depense.position')
+                                    @include('backend.pages.depense.libelle-depense.edit')
                                 @endforeach
 
 
@@ -93,7 +86,7 @@
             </div>
         </div>
     </div>
-    @include('backend.pages.depense.categorie-depense.create')
+    @include('backend.pages.depense.libelle-depense.create')
 
     <!--end row-->
 @endsection
@@ -115,9 +108,9 @@
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
     <script>
-       $(document).ready(function(){
-        var route = "categorie-depense"
-        delete_row(route);
-       })
+        $(document).ready(function() {
+            var route = "libelle-depense"
+            delete_row(route);
+        })
     </script>
 @endsection

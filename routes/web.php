@@ -5,6 +5,7 @@ use App\Models\Maintenance;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\HomeController;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\site\SiteController;
 use App\Http\Controllers\site\PanierController;
@@ -244,13 +245,15 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
 
     // stock -achat
     Route::prefix('achat')->controller(AchatController::class)->group(function () {
-        route::get('', 'index')->name('achat.index');
+        route::get('facture', 'facture')->name('achat.facture');  // liste des facture
+        route::get('facture/{id}', 'index')->name('achat.index');
         route::get('create', 'create')->name('achat.create');
         route::post('store', 'store')->name('achat.store');
         route::get('edit/{id}', 'edit')->name('achat.edit');
         route::post('update/{id}', 'update')->name('achat.update');
         route::get('delete/{id}', 'delete')->name('achat.delete');
         route::post('check-facture', 'checkFactureExist')->name('achat.check-facture');
+        route::post('check-montant', 'verifiyMontant')->name('achat.check-montant');  // check montant facture
 
     });
 

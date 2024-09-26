@@ -55,7 +55,7 @@
                                         <label class="form-label" for="meta-title-input">Type de facture
                                             <span class="text-danger">*</span>
                                         </label>
-                                        <select name="type" class="form-control" required>
+                                        <select name="type" id="type" class="form-control" required>
                                             <option value="" disabled selected>Choisir</option>
                                             <option value="facture">Facture</option>
                                             <option value="bon de commande">Bon de commande</option>
@@ -89,7 +89,8 @@
                                         <label class="form-label" for="meta-title-input">Montant
                                             <span class="text-danger">*</span>
                                         </label>
-                                        <input type="number" name="montant" class="form-control" required>
+                                        <input type="number" name="montant" id="montant_facture" class="form-control"
+                                            required>
                                     </div>
 
                                     <div class="col-md-2 mb-3">
@@ -120,6 +121,8 @@
                                     plus <i class="ri ri-add-circle-line"></i></button>
                             </div>
 
+                            <div>Total Dépensé: <span id="total_depense">0</span></div>
+
 
 
 
@@ -134,7 +137,8 @@
                 <!-- end row -->
                 <!-- end card -->
                 <div class="text-end mb-3">
-                    <button type="submit" class="btn btn-success w-lg btn-save">Enregistrer</button>
+                    <button type="submit" id="save" class="btn btn-success w-lg btn-save"
+                        disabled>Enregistrer</button>
                 </div>
             </form>
 
@@ -278,9 +282,6 @@
                 var numero = $('#facture').val();
                 var fournisseur = $('#fournisseur').val();
 
-                console.log(fournisseur);
-
-
                 if (numero && fournisseur) { // Assurez-vous que les deux champs ne sont pas vides
                     var url = "<?php echo e(route('achat.check-facture')); ?>"; // Définissez la bonne route pour la vérification
 
@@ -311,8 +312,8 @@
                                 // vider les champs
                                 $('#facture').val("");
                                 $('#fournisseur').val("");
-                            } 
-                            
+                            }
+
                         },
                         error: function(xhr, status, error) {
                             console.log(error);
@@ -327,6 +328,7 @@
             });
 
 
+            //verifier si le montant de la facture VS montant depensé total
 
 
 
@@ -335,6 +337,59 @@
                 let formCount = 1;
                 updateSelect2(); // Mettre à jour Select2 après suppression d'un formulaire
                 // Fonction pour réinitialiser les champs dupliqués
+
+
+
+
+                // Fonction pour calculer le total dépensé
+                function calculerTotalDepense() {
+                    let totalDepense = 0;
+                    document.querySelectorAll('.prixTotalFormat').forEach(input => {
+                        let valeur = parseFloat(input.value) || 0;
+                        totalDepense += valeur;
+                    });
+                    // Mettre à jour le champ affichant le total dépensé
+                    document.getElementById('total_depense').textContent = totalDepense;
+
+                    // Comparer avec le montant de la facture
+                    let montantFacture = parseFloat(document.getElementById('montant_facture').value) || 0;
+                    if (totalDepense > montantFacture) {
+                        // Désactiver les boutons si le total dépasse la facture
+                        document.getElementById('add-more').disabled = true;
+                        document.getElementById('save').disabled = true;
+
+
+                        //swalfire
+                        Swal.fire({
+                            title: 'Erreur',
+                            text: 'Le total dépensé dépasse le montant de la facture !',
+                            icon: 'error',
+                            confirmButtonText: 'OK',
+                        });
+
+                    } else {
+                        // Réactiver les boutons si le total est inférieur ou égal à la facture
+                        document.getElementById('add-more').disabled = false;
+                        // document.getElementById('save').disabled = false;
+                    }
+                }
+
+
+
+                // Fonction pour vérifier et activer/désactiver le bouton "Enregistrer"
+                function toggleEnregistrerButton() {
+                    let formDuplicates = document.querySelectorAll('.form-duplicate');
+
+                    // Si il n'y a qu'un seul élément, désactiver le bouton
+                    if (formDuplicates.length <= 1) {
+                        document.getElementById('save').disabled = true;
+                    } else {
+                        document.getElementById('save').disabled = false;
+                    }
+                    calculerTotalDepense()
+                }
+
+
                 function resetFields(clonedForm, formCount) {
                     let inputs = clonedForm.querySelectorAll('input, select');
                     inputs.forEach(input => {
@@ -388,8 +443,21 @@
 
                     formCount++;
 
+                    // Recalculer le total quand on ajoute un nouveau formulaire
+                    calculerTotalDepense();
 
+                    toggleEnregistrerButton(); // Vérifier si "Enregistrer" doit être actif
                 }
+
+
+                // Écouter les changements dans le champ du montant de la facture pour comparer
+                $(document).on('input', '#montant_facture ', function() {
+                    calculerTotalDepense();
+                })
+                // document.getElementById('montant_facture').addEventListener('input', calculerTotalDepense);
+
+                // Initial check when the page loads
+                toggleEnregistrerButton();
 
                 // Fonction pour activer le 'required' uniquement pour les champs visibles
                 function setRequiredFields(formBlock) {
@@ -429,8 +497,25 @@
 
                 // Écouteur pour le bouton "Ajouter un produit"
                 document.getElementById('add-more').addEventListener('click', function() {
-                    addNewForm();
+                    // on verifie si les champs sont differents de null avant de dupliquer
+                    var type = $('#type').val();
+                    var facture = $('#facture').val();
+                    var fournisseur = $('#fournisseur').val();
+                    var montant = $('#montant_facture').val();
+                    var date = $('#currentDate').val();
+
+                    //si les champs sont !=null on de sactive le bouton add plus
+                    if (type != null && facture != null && fournisseur != null && montant != null && date !=
+                        null) {
+                        addNewForm();
+                    }
+
+                    calculerTotalDepense(); // Recalculer le total quand on ajoute un nouveau formulaire
+                    toggleEnregistrerButton(); // Vérifier si "Enregistrer" doit être actif
+
                 });
+
+
 
                 //cacher le bouton modifier par defaut
                 $('.edit').hide();
@@ -440,7 +525,12 @@
                     if (e.target && e.target.classList.contains('remove-form')) {
                         e.target.closest('.form-duplicate').remove();
                         updateSelect2(); // Mettre à jour Select2 après suppression d'un formulaire
+                        calculerTotalDepense(); // Recalculer le total quand on ajoute un nouveau formulaire
+                        toggleEnregistrerButton(); // Vérifier si "Enregistrer" doit être actif
+
                     }
+
+
 
 
 
@@ -535,6 +625,32 @@
             }
 
 
+
+            // on verifie si les champs sont differents de null avant de dupliquer
+
+            $('#add-more').click(function(e) {
+
+                var type = $('#type').val();
+                var facture = $('#facture').val();
+                var fournisseur = $('#fournisseur').val();
+                var montant = $('#montant_facture').val();
+                var date = $('#currentDate').val();
+
+
+                if (type == null || facture == null || fournisseur == null || montant == "" || date ==
+                    null) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Erreur',
+                        text: 'Veuillez remplir tous les champs avant de continuer',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                    });
+                }
+
+            });
+
+
             // Calculer la quantité stockable
             function qteStockable(form) {
                 var qte_acquise = form.find(".qteAcquise").val() || 0; // combien de format
@@ -552,8 +668,27 @@
             function prixTotalDepense(form) {
                 var qte_acquise = form.find(".qteAcquise").val() || 0; // combien de format
                 var pu_unitaire_format = form.find(".prixUnitaireFormat").val() || 0; // prix unitaire d'un format
+                var montant_facture = $("#montant_facture").val();
                 var total_depense = qte_acquise * pu_unitaire_format;
                 form.find(".prixTotalFormat").val(total_depense);
+
+                //on verifie si la montant depensé depasse le montant de la facture
+                if (total_depense > montant_facture) {
+                    $('#save').prop('disabled', true);
+
+                    $('#add-more').prop('disabled', true);
+                    Swal.fire({
+                        title: 'Erreur',
+                        text: 'Le total dépensé dépasse le montant de la facture !',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                    });
+                } else {
+                    $('#save').prop('disabled', false);
+                    $('#add-more').prop('disabled', false);
+                }
+
+
             }
 
             // Calculer le prix d'achat de l'unité
@@ -575,11 +710,12 @@
             }
 
             // Ajouter des écouteurs sur les champs dupliqués
-            $(document).on('input', '.qteAcquise, .qteFormat, .prixUnitaireFormat', function() {
+            $(document).on('input', '.qteAcquise, .qteFormat, .prixUnitaireFormat , #montant_facture', function() {
                 var form = $(this).closest('.row');
                 qteStockable(form);
                 prixTotalDepense(form);
                 prixAchatUnite(form);
+
             });
 
             // Ajout d'écouteurs pour les champs qui influencent le calcul du prix d'achat

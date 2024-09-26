@@ -13,7 +13,7 @@
 <?php $__env->startSection('content'); ?>
     <?php $__env->startComponent('backend.components.breadcrumb'); ?>
         <?php $__env->slot('li_1'); ?>
-            Liste des achats
+            Liste des facture
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
             Achat
@@ -24,9 +24,9 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des achats de la facture <strong>#<?php echo e($facture->numero_facture); ?></strong> </h5>
-                    <a href="<?php echo e(route('achat.create')); ?>" type="button" class="btn btn-primary ">Faire
-                        un achat</a>
+                    <h5 class="card-title mb-0">Liste des facture</h5>
+                    <a href="<?php echo e(route('achat.create')); ?>" type="button" class="btn btn-primary ">Enregistrer
+                        une facture</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -34,55 +34,25 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Statut</th>
-                                    <th>Produit</th>
-                                    <th>code</th>
-                                    <th>Magasin</th>
                                     <th>N°Facture</th>
+                                    <th>Type</th>
                                     <th>fournisseur</th>
-                                    <th>Format</th>
-                                    <th>Qté format</th>
-                                    <th>Qté dans format</th>
-                                    <th>PU format</th>
-                                    <th>Total depensé</th>
-                                    <th>Qté stockée</th>
-                                    <th>PU achat</th>
-                                    <th>PU vente</th>
-                                    <th>Unite de vente</th>
+                                    <th>Montant</th>
+                                    <th>Date</th>
                                     <th>Crée par</th>
-                                    <th>Date achat</th>
                                     <th class="d-none">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $__currentLoopData = $data_achat; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__currentLoopData = $data_facture; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr id="row_<?php echo e($item['id']); ?>">
                                         <td> <?php echo e(++$key); ?> </td>
-                                        <td><?php echo e($item['statut']); ?></td>
-
-                                        <td>
-                                            <img class="rounded-circle"
-                                                src="<?php echo e($item->produit->getFirstMediaUrl('ProduitImage')); ?>" width="50px"
-                                                alt="">
-
-                                            <?php echo e($item['produit']['nom']); ?>
-
-                                        </td>
-                                        <td><?php echo e($item['code']); ?></td>
-                                        <td><?php echo e($item['magasin']['libelle'] ?? 'N/A'); ?></td>
-                                        <td><?php echo e($item['numero_facture'] ?? 'N/A'); ?></td>
+                                        <td> <a class="fw-bold" href="<?php echo e(route('achat.index' , $item->id)); ?>">#<?php echo e($item['numero_facture']); ?></a> </td>
+                                        <td><?php echo e($item['type']); ?></td>
                                         <td><?php echo e($item['fournisseur']['nom'] ?? 'N/A'); ?></td>
-                                        <td><?php echo e($item['format']['libelle'] ?? 'N/A'); ?></td>
-                                        <td> <?php echo e($item['quantite_format']); ?> </td>
-                                        <td> <?php echo e($item['quantite_in_format']); ?> </td>
-                                        <td> <?php echo e($item['prix_unitaire_format']); ?> </td>
-                                        <td> <?php echo e($item['prix_total_format']); ?> </td>
-                                        <td> <?php echo e($item['quantite_stocke']); ?> </td>
-                                        <td> <?php echo e($item['prix_achat_unitaire']); ?> </td>
-                                        <td> <?php echo e($item['prix_vente_unitaire']); ?> </td>
-                                        <td> <?php echo e($item['unite']['libelle'] ?? 'N/A'); ?> </td>
+                                        <td> <?php echo e($item['montant']); ?> </td>
+                                        <td> <?php echo e($item['date_facture']); ?> </td>
                                         <td> <?php echo e($item['user']['first_name']); ?> </td>
-                                        <td> <?php echo e($item['date_achat']); ?> </td>
                                         <td class="d-none">
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
@@ -153,4 +123,4 @@
     </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/stock/achat/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/stock/achat/facture.blade.php ENDPATH**/ ?>

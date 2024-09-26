@@ -4,20 +4,34 @@
             <!-- Default Modals -->
             <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
                 style="display: none;">
-                <div class="modal-dialog modal-">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="myModalLabel">Créer une nouvelle categorie </h5>
+                            <h5 class="modal-title" id="myModalLabel">Créer un nouveau libellé </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                             </button>
                         </div>
                         <div class="modal-body">
 
-                            <form class="row g-3 needs-validation" method="post"
-                                action="{{ route('categorie-depense.store') }}" novalidate>
+                            <form class="row g-3 needs-validation" method="post" action="{{ route('libelle-depense.store') }}"
+                                novalidate>
                                 @csrf
+
                                 <div class="col-md-12">
-                                    <label for="validationCustom01" class="form-label">Nom de la categorie</label>
+                                    <label for="validationCustom01" class="form-label">Categorie</label>
+                                    <select name="categorie_depense_id" class="form-control" required>
+                                        <option disabled selected value="">Selectionner</option>
+                                        @foreach ($categorie_depense as $item)
+                                        <option value="{{$item['id']}}"> {{$item['libelle']}} </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label for="validationCustom01" class="form-label">Libelle</label>
                                     <input type="text" name="libelle" class="form-control" id="validationCustom01"
                                         required>
                                     <div class="valid-feedback">
@@ -26,12 +40,8 @@
                                 </div>
 
                                 <div class="col-md-12">
-                                    <label for="validationCustom01" class="form-label">Statut</label>
-                                    <select name="statut" class="form-control">
-                                        <option value="active">Activé</option>
-                                        <option value="desactive">Desactivé</option>
-
-                                    </select>
+                                    <label for="validationCustom01" class="form-label">Description</label>
+                                   <textarea class="form-control" name="description" id="" cols="30" rows="10"></textarea>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>

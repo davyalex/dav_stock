@@ -21,12 +21,25 @@ class AchatController extends Controller
 {
     //
 
-    public function index()
+
+    public function facture()
     {
         try {
-            $data_achat = Achat::get();
-            // dd($data_achat->toArray());
-            return view('backend.pages.stock.achat.index', compact('data_achat'));
+            $data_facture = Facture::with('achats')->get();
+            // dd($data_facture->toArray());
+            return view('backend.pages.stock.achat.facture', compact('data_facture'));
+        } catch (\Throwable $e) {
+            return  $e->getMessage();
+        }
+    }
+
+    public function index($id)
+    {
+        try {
+            $facture = Facture::whereId($id)->first();
+            $data_achat = Achat::where('facture_id' , $id)->get();
+            // dd($data_facture->toArray());
+            return view('backend.pages.stock.achat.index', compact('data_achat', 'facture'));
         } catch (\Throwable $e) {
             return  $e->getMessage();
         }
@@ -78,6 +91,26 @@ class AchatController extends Controller
         );
     }
 
+
+
+    public function verifiyMontant(Request $request)
+    {
+        $montant_facture = 0;
+        // Parcourir tous les éléments de prix_total_format
+        foreach ($request->prix_total_format as $index => $prixTotal) {
+            // Additionner chaque prix_total_format au montant total de la facture
+            $montant_facture += $prixTotal;
+        }
+
+        // Vérifier si le montant total de la facture est égal au montant
+        // de la facture
+        if ($montant_facture == $request->montant_facture) {
+            return response()->json(['message' => 'Montant facture correct', 'status' => true], 200);
+        } else {
+            return response()->json(['message' => 'Montant facture incorrect', 'status' => false], 400);
+        }
+    }
+
     public function store(Request $request)
     {
         try {
@@ -93,6 +126,7 @@ class AchatController extends Controller
                     // Additionner chaque prix_total_format au montant total de la facture
                     $montant_facture += $prixTotal;
                 }
+
 
 
                 // définir le statut du produit
@@ -197,7 +231,19 @@ class AchatController extends Controller
             Alert::success('Opération réussie', 'Tous les produits ont été enregistrés avec succès.');
             return back();
         } catch (\Throwable $e) {
-            return $e->getMessage();
+
+            if ($e->getMessage() == "foreach() argument must be of type array|object, null given") {
+                Alert::error('Erreur', 'Veuillez ajouter un achat pour continuer.');
+                return back();
+            } else {
+                Alert::error('Erreur', 'Une erreur s\'est produite lors de l\'en
+                registrement des achats.');
+                return back();
+            }
+            // si une erreur se produit, afficher le message d'erreur
+            // Alert::error('Erreur', 'Verifiez si u');
+            // return back();
+            // return $e->getMessage();
         }
     }
 

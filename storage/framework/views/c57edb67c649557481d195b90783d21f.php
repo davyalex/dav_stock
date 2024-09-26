@@ -7,46 +7,30 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="myModalLabel">Créer une nouvelle depense </h5>
+                            <h5 class="modal-title" id="myModalLabel">Créer un nouveau libellé </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                             </button>
                         </div>
                         <div class="modal-body">
 
-                            <form class="row g-3 needs-validation" method="post" action="<?php echo e(route('depense.store')); ?>"
+                            <form class="row g-3 needs-validation" method="post" action="<?php echo e(route('libelle-depense.store')); ?>"
                                 novalidate>
                                 <?php echo csrf_field(); ?>
 
                                 <div class="col-md-12">
                                     <label for="validationCustom01" class="form-label">Categorie</label>
-                                    <select name="categorie_depense_id" class="form-control categorie-select" required>
+                                    <select name="categorie_depense_id" class="form-control" required>
                                         <option disabled selected value="">Selectionner</option>
                                         <?php $__currentLoopData = $categorie_depense; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <!-- Si la catégorie a des libelleDepenses, rendre l'option non cliquable -->
-                                            <option value="<?php echo e($item['id']); ?>" class="categorie" 
-                                                <?php if($item->libelleDepenses->isNotEmpty()): ?> disabled <?php endif; ?>>
-                                                <?php echo e(strtoupper($item['libelle'])); ?>
-
-                                            </option>
-                                
-                                            <!-- Boucle pour les libelleDepenses de cette catégorie -->
-                                            <?php $__currentLoopData = $item->libelleDepenses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $libelle): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($libelle['id']); ?>" class="libelle-depense">
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;<?php echo e($libelle['libelle']); ?>
-
-                                                </option>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($item['id']); ?>"> <?php echo e($item['libelle']); ?> </option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
                                 </div>
-                                
 
-
-
-                                <div class="col-md-8">
+                                <div class="col-md-12">
                                     <label for="validationCustom01" class="form-label">Libelle</label>
                                     <input type="text" name="libelle" class="form-control" id="validationCustom01"
                                         required>
@@ -55,20 +39,9 @@
                                     </div>
                                 </div>
 
-
-
-                                <div class="col-md-4">
-                                    <label for="validationCustom01" class="form-label">Montant</label>
-                                    <input type="number" name="montant" class="form-control" id="validationCustom01"
-                                        required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                </div>
-
                                 <div class="col-md-12">
                                     <label for="validationCustom01" class="form-label">Description</label>
-                                    <textarea class="form-control" name="description" id="" cols="30" rows="10"></textarea>
+                                   <textarea class="form-control" name="description" id="" cols="30" rows="10"></textarea>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
@@ -89,17 +62,4 @@
 <!--end row-->
 
 
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Sélectionner toutes les options avec la classe 'categorie'
-        let categories = document.querySelectorAll('.categorie-select .categorie');
-        categories.forEach(function(option) {
-            // Appliquer le style inline pour chaque catégorie
-            option.style.fontWeight = 'bold'; // Texte en gras
-            option.style.textTransform = 'uppercase'; // Texte en majuscule
-        });
-    });
-</script>
-<?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/depense/create.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/depense/libelle-depense/create.blade.php ENDPATH**/ ?>

@@ -13,7 +13,7 @@
 @section('content')
     @component('backend.components.breadcrumb')
         @slot('li_1')
-            Liste des achats
+            Liste des facture
         @endslot
         @slot('title')
             Achat
@@ -24,9 +24,9 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des achats de la facture <strong>#{{$facture->numero_facture}}</strong> </h5>
-                    <a href="{{ route('achat.create') }}" type="button" class="btn btn-primary ">Faire
-                        un achat</a>
+                    <h5 class="card-title mb-0">Liste des facture</h5>
+                    <a href="{{ route('achat.create') }}" type="button" class="btn btn-primary ">Enregistrer
+                        une facture</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -34,54 +34,25 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Statut</th>
-                                    <th>Produit</th>
-                                    <th>code</th>
-                                    <th>Magasin</th>
                                     <th>N°Facture</th>
+                                    <th>Type</th>
                                     <th>fournisseur</th>
-                                    <th>Format</th>
-                                    <th>Qté format</th>
-                                    <th>Qté dans format</th>
-                                    <th>PU format</th>
-                                    <th>Total depensé</th>
-                                    <th>Qté stockée</th>
-                                    <th>PU achat</th>
-                                    <th>PU vente</th>
-                                    <th>Unite de vente</th>
+                                    <th>Montant</th>
+                                    <th>Date</th>
                                     <th>Crée par</th>
-                                    <th>Date achat</th>
                                     <th class="d-none">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data_achat as $key => $item)
+                                @foreach ($data_facture as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
-                                        <td>{{ $item['statut'] }}</td>
-
-                                        <td>
-                                            <img class="rounded-circle"
-                                                src="{{ $item->produit->getFirstMediaUrl('ProduitImage') }}" width="50px"
-                                                alt="">
-
-                                            {{ $item['produit']['nom'] }}
-                                        </td>
-                                        <td>{{ $item['code'] }}</td>
-                                        <td>{{ $item['magasin']['libelle'] ?? 'N/A' }}</td>
-                                        <td>{{ $item['numero_facture'] ?? 'N/A' }}</td>
+                                        <td> <a class="fw-bold" href="{{route('achat.index' , $item->id)}}">#{{ $item['numero_facture'] }}</a> </td>
+                                        <td>{{ $item['type'] }}</td>
                                         <td>{{ $item['fournisseur']['nom'] ?? 'N/A' }}</td>
-                                        <td>{{ $item['format']['libelle'] ?? 'N/A' }}</td>
-                                        <td> {{ $item['quantite_format'] }} </td>
-                                        <td> {{ $item['quantite_in_format'] }} </td>
-                                        <td> {{ $item['prix_unitaire_format'] }} </td>
-                                        <td> {{ $item['prix_total_format'] }} </td>
-                                        <td> {{ $item['quantite_stocke'] }} </td>
-                                        <td> {{ $item['prix_achat_unitaire'] }} </td>
-                                        <td> {{ $item['prix_vente_unitaire'] }} </td>
-                                        <td> {{ $item['unite']['libelle'] ?? 'N/A' }} </td>
+                                        <td> {{ $item['montant'] }} </td>
+                                        <td> {{ $item['date_facture'] }} </td>
                                         <td> {{ $item['user']['first_name'] }} </td>
-                                        <td> {{ $item['date_achat'] }} </td>
                                         <td class="d-none">
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"

@@ -170,8 +170,8 @@
                             </li>
 
                             <li class="nav-item active">
-                                <a href="{{ route('achat.index') }}"
-                                    class="nav-link {{ Route::is('achat.*') ? 'active' : '' }}">Achats</a>
+                                <a href="{{ route('achat.facture') }}"
+                                    class="nav-link {{ Route::is('achat.*') ? 'active' : '' }}">Factures</a>
                             </li>
 
                             <li class="nav-item active">
@@ -201,7 +201,7 @@
 
                             <li class="nav-item active">
                                 <a href="{{ route('libelle-depense.index') }}"
-                                    class="nav-link {{ Route::is('categorie-depense.*') ? 'active' : '' }}">Libellé des 
+                                    class="nav-link {{ Route::is('libelle-depense.*') ? 'active' : '' }}">Libellé des 
                                     depenses</a>
                             </li>
 

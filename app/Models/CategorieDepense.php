@@ -44,5 +44,11 @@ class CategorieDepense extends Model
         return $this->hasMany(Depense::class);
     }
 
+
+    public function libelleDepenses()
+    {
+        return $this->hasMany(LibelleDepense::class);
+    }
+
 }
 

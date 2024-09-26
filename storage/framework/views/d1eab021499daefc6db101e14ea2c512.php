@@ -161,8 +161,8 @@
                             </li>
 
                             <li class="nav-item active">
-                                <a href="<?php echo e(route('achat.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('achat.*') ? 'active' : ''); ?>">Achats</a>
+                                <a href="<?php echo e(route('achat.facture')); ?>"
+                                    class="nav-link <?php echo e(Route::is('achat.*') ? 'active' : ''); ?>">Factures</a>
                             </li>
 
                             <li class="nav-item active">
@@ -192,7 +192,7 @@
 
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('libelle-depense.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('categorie-depense.*') ? 'active' : ''); ?>">Libellé des 
+                                    class="nav-link <?php echo e(Route::is('libelle-depense.*') ? 'active' : ''); ?>">Libellé des 
                                     depenses</a>
                             </li>
 
