@@ -50,7 +50,7 @@
                                     <tr id="row_<?php echo e($item['id']); ?>">
                                         <td> <?php echo e(++$key); ?> </td>
                                         <td><?php echo e($item['categorie_depense']['libelle'] ?? ''); ?></td>
-                                        <td> <?php echo e($item['libelle']); ?></td>
+                                        <td><?php echo e($item['libelle_depense']['libelle'] ?? ''); ?></td>
                                         <td> <?php echo e($item['montant']); ?> </td>
                                         <td> <?php echo e($item['user']['first_name']); ?></td>
                                         <td> <?php echo e($item['created_at']); ?> </td>

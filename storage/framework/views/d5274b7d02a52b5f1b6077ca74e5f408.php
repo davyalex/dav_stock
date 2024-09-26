@@ -17,9 +17,9 @@
                                 novalidate>
                                 <?php echo csrf_field(); ?>
 
-                                <div class="col-md-12">
+                                <div class="col-md-9">
                                     <label for="validationCustom01" class="form-label">Categorie</label>
-                                    <select name="categorie_depense_id" class="form-control categorie-select" required>
+                                    <select name="categorie_depense" class="form-control categorie-select" required>
                                         <option disabled selected value="">Selectionner</option>
                                         <?php $__currentLoopData = $categorie_depense; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <!-- Si la catégorie a des libelleDepenses, rendre l'option non cliquable -->
@@ -44,20 +44,7 @@
                                 </div>
                                 
 
-
-
-                                <div class="col-md-8">
-                                    <label for="validationCustom01" class="form-label">Libelle</label>
-                                    <input type="text" name="libelle" class="form-control" id="validationCustom01"
-                                        required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                </div>
-
-
-
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label for="validationCustom01" class="form-label">Montant</label>
                                     <input type="number" name="montant" class="form-control" id="validationCustom01"
                                         required>

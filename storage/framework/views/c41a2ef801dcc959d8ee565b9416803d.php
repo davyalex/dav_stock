@@ -1,5 +1,5 @@
 <!-- Default Modals -->
-<div id="myModalEdit{{ $item['id'] }}" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+<div id="myModalEdit<?php echo e($item['id']); ?>" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
     style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -10,30 +10,33 @@
             </div>
             <div class="modal-body">
                 <form class="row g-3 needs-validation" method="post"
-                    action="{{ route('depense.update', $item['id']) }}" novalidate>
-                    @csrf
+                    action="<?php echo e(route('depense.update', $item['id'])); ?>" novalidate>
+                    <?php echo csrf_field(); ?>
 
                     <div class="row">
                         <div class="col-md-9">
                             <label for="validationCustom01" class="form-label">Categorie</label>
                             <select name="categorie_depense" class="form-control categorie-select" required>
                                 <option disabled selected value="">Selectionner</option>
-                                @foreach ($categorie_depense as $data)
+                                <?php $__currentLoopData = $categorie_depense; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <!-- Si la catégorie a des libelleDepenses, rendre l'option non cliquable -->
                                     <option
-                                        {{ $data['id'] == $item['categorie_depense_id'] ? 'selected' : '' }}value="{{ $data['id'] }}"
-                                        class="categorie" @if ($data->libelleDepenses->isNotEmpty()) disabled @endif>
-                                        {{ strtoupper($data['libelle']) }}
+                                        <?php echo e($data['id'] == $item['categorie_depense_id'] ? 'selected' : ''); ?>value="<?php echo e($data['id']); ?>"
+                                        class="categorie" <?php if($data->libelleDepenses->isNotEmpty()): ?> disabled <?php endif; ?>>
+                                        <?php echo e(strtoupper($data['libelle'])); ?>
+
                                     </option>
 
                                     <!-- Boucle pour les libelleDepenses de cette catégorie -->
-                                    @foreach ($data->libelleDepenses as $data_libelle)
-                                        <option {{ $data_libelle['id'] == $item['libelle_depense_id'] ? 'selected' : '' }}
-                                            value="{{ $data_libelle['id'] }}" class="libelle-depense">
-                                            &nbsp;&nbsp;&nbsp;&nbsp;{{ $data_libelle['libelle'] }}
+                                    <?php $__currentLoopData = $data->libelleDepenses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data_libelle): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option <?php echo e($data_libelle['id'] == $item['libelle_depense_id'] ? 'selected' : ''); ?>
+
+                                            value="<?php echo e($data_libelle['id']); ?>" class="libelle-depense">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;<?php echo e($data_libelle['libelle']); ?>
+
                                         </option>
-                                    @endforeach
-                                @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                             <div class="valid-feedback">
                                 Looks good!
@@ -42,7 +45,7 @@
 
                         <div class="col-md-3 mb-3">
                             <label for="validationCustom01" class="form-label">Montant</label>
-                            <input type="number" name="montant" value="{{ $item['montant'] }}" class="form-control"
+                            <input type="number" name="montant" value="<?php echo e($item['montant']); ?>" class="form-control"
                                 id="validationCustom01" required>
                             <div class="valid-feedback">
                                 Looks good!
@@ -52,7 +55,8 @@
                         <div class="col-md-12">
                             <label for="validationCustom01" class="form-label">Description</label>
                             <textarea class="form-control" name="description" id="" cols="30" rows="10">
-                                {{ $item['description'] }}
+                                <?php echo e($item['description']); ?>
+
                              </textarea>
                             <div class="valid-feedback">
                                 Looks good!
@@ -69,3 +73,4 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/depense/edit.blade.php ENDPATH**/ ?>

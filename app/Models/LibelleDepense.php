@@ -37,6 +37,12 @@ class LibelleDepense extends Model
         return $this->belongsTo(CategorieDepense::class, 'categorie_depense_id');
     }
 
+
+    public function depenses()
+    {
+        return $this->hasMany(Depense::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

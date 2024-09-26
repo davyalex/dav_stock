@@ -50,7 +50,7 @@
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
                                         <td>{{ $item['categorie_depense']['libelle'] ?? '' }}</td>
-                                        <td> {{ $item['libelle'] }}</td>
+                                        <td>{{ $item['libelle_depense']['libelle'] ?? '' }}</td>
                                         <td> {{ $item['montant'] }} </td>
                                         <td> {{ $item['user']['first_name'] }}</td>
                                         <td> {{ $item['created_at'] }} </td>

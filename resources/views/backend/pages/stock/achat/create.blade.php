@@ -41,8 +41,8 @@
         <div class="col-lg-12">
             {{-- <div class="card">
                 <div class="card-body"> --}}
-            <form method="POST" action="{{ route('achat.store') }}" autocomplete="off" class="needs-validation" novalidate
-                enctype="multipart/form-data">
+            <form id="myForm" method="POST" action="{{ route('achat.store') }}" autocomplete="off" class="needs-validation"
+                novalidate enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-lg-12">
@@ -58,7 +58,7 @@
                                             <span class="text-danger">*</span>
                                         </label>
                                         <select name="type" id="type" class="form-control" required>
-                                            <option value="" disabled selected>Choisir</option>
+                                            <option disabled selected value="">Choisir</option>
                                             <option value="facture">Facture</option>
                                             <option value="bon de commande">Bon de commande</option>
                                         </select>
@@ -77,7 +77,7 @@
                                             <span class="text-danger">*</span>
                                         </label>
                                         <select id="fournisseur" class="form-control" name="fournisseur_id" required>
-                                            <option value="" disabled selected>Choisir</option>
+                                            <option disabled selected value="">Choisir</option>
                                             @foreach ($data_fournisseur as $fournisseur)
                                                 <option value="{{ $fournisseur->id }}">
                                                     {{ $fournisseur->nom }}
@@ -156,7 +156,8 @@
                             <option disabled selected value>Selectionner un produit
                             </option>
                             @foreach ($data_produit as $produit)
-                                <option value="{{ $produit->id }}">{{ $produit->nom }}
+                                <option value="{{ $produit->id }}">{{ $produit->nom }} {{ $produit->quantite_unite }}
+                                    {{ $produit->unite->libelle ?? '' }}
                                 </option>
                             @endforeach
                         </select>
@@ -166,8 +167,8 @@
                         <label class="form-label" for="product-title-input">Magasin
                             <span class="text-danger">*</span>
                         </label>
-                        <select class="form-control" name="magasin_id" required>
-                            <option value="" disabled selected>Choisir</option>
+                        <select class="form-control selectView" name="magasin_id" required>
+                            <option disabled selected value="">Choisir</option>
                             @foreach ($data_magasin as $magasin)
                                 <option value="{{ $magasin->id }}">
                                     {{ $magasin->libelle }}
@@ -184,7 +185,7 @@
                     <div class="col-md-4 mb-3">
                         <label class="form-label" for="product-title-input">Format</label>
                         <select class="form-control selectView format" id="format_id" name="format_id[]" required>
-                            <option value="" disabled selected>Choisir</option>
+                            <option disabled selected value="">Choisir</option>
                             @foreach ($data_format as $format)
                                 <option value="{{ $format->id }}">
                                     {{ $format->libelle }} ({{ $format->abreviation }})
@@ -194,7 +195,7 @@
                     </div>
 
                     <div class="col-md-2 mb-3">
-                        <label class="form-label" for="stocks-input">Qté format</label>
+                        <label class="form-label" for="stocks-input">Qté dans le format</label>
                         <input type="number" name="quantite_in_format[]" class="form-control qteFormat" required>
                     </div>
 
@@ -206,7 +207,8 @@
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="stocks-input">Prix
                             unitaire du format</label>
-                        <input type="number" name="prix_unitaire_format[]" class="form-control prixUnitaireFormat">
+                        <input type="number" name="prix_unitaire_format[]" class="form-control prixUnitaireFormat"
+                            required>
                     </div>
 
                     <div class="col-md-3 mb-3">
@@ -220,7 +222,7 @@
                         <label class="form-label" for="meta-title-input">Unité de
                             sortie</label>
                         <select id="uniteMesure" class="form-control selectView " name="unite_sortie[]" required>
-                            <option value="" disabled selected>Choisir</option>
+                            <option value disabled selected>Choisir</option>
                             @foreach ($data_unite as $unite)
                                 <option value="{{ $unite->id }}">
                                     {{ $unite->libelle }} ({{ $unite->abreviation }})
@@ -365,19 +367,19 @@
 
                     // Comparer avec le montant de la facture
                     let montantFacture = parseFloat(document.getElementById('montant_facture').value) || 0;
-                    if (totalDepense > montantFacture) {
+                    if (totalDepense >= montantFacture) {
                         // Désactiver les boutons si le total dépasse la facture
                         document.getElementById('add-more').disabled = true;
-                        document.getElementById('save').disabled = true;
+                        // document.getElementById('save').disabled = true;
 
 
                         //swalfire
-                        Swal.fire({
-                            title: 'Erreur',
-                            text: 'Le total dépensé dépasse le montant de la facture !',
-                            icon: 'error',
-                            confirmButtonText: 'OK',
-                        });
+                        // Swal.fire({
+                        //     title: 'Erreur',
+                        //     text: 'Le total dépensé dépasse le montant de la facture !',
+                        //     icon: 'error',
+                        //     confirmButtonText: 'OK',
+                        // });
 
                     } else {
                         // Réactiver les boutons si le total est inférieur ou égal à la facture
@@ -544,8 +546,6 @@
 
 
 
-
-
                     // Au clic du bouton "valider"
                     if (e.target && e.target.classList.contains('validate')) {
                         let row = e.target.closest('.form-duplicate');
@@ -605,6 +605,260 @@
                     }
 
 
+                });
+
+                //enregister le formulaire
+                // $('#myForm').on('submit', function(event) {
+                //     calculerTotalDepense()
+                //     event.preventDefault(); // Empêcher le rechargement de la page
+
+                //     let formData = $(this).serialize(); // Récupérer les données du formulaire
+
+                //     $.ajax({
+                //         url: $(this).attr('action'), // URL de la soumission du formulaire
+                //         type: 'POST',
+                //         data: formData,
+                //         dataType: 'json',
+                //         success: function(response, textStatus, xhr) {
+                //             let statusCode = xhr.status;
+
+                //             // Si la soumission est réussie
+                //             if (statusCode === 200) {
+                //                 // Afficher un message de succès avec Swal
+                //                 Swal.fire({
+                //                     title: 'Succès',
+                //                     text: response.message,
+                //                     icon: 'success',
+                //                 });
+
+                //                 //redirect to route
+                //                 var url = "{{ route('achat.facture') }}" // redirect route liste facture
+                //                 window.location.replace(url);
+
+                //             }
+                //         },
+
+                //         error: function(xhr, textStatus, errorThrown) {
+                //             let statusCode = xhr.status;
+
+                //             // Si une erreur serveur (500) est rencontrée
+                //             if (statusCode === 500) {
+                //                 Swal.fire({
+                //                     title: 'Erreur',
+                //                     text: xhr.responseJSON ? xhr.responseJSON.message :
+                //                     'Une erreur est survenue.',
+                //                     icon: 'error',
+                //                     confirmButtonText: 'OK',
+                //                 });
+                //             } else {
+                //                 // Pour d'autres erreurs (comme 400, 404, etc.)
+                //                 Swal.fire({
+                //                     title: 'Erreur',
+                //                     text: xhr.responseJSON ? xhr.responseJSON.message :
+                //                         'Une erreur est survenue.',
+                //                     icon: 'error',
+                //                     confirmButtonText: 'OK',
+                //                 });
+                //             }
+                //         }
+
+
+                //     });
+                // });
+
+
+                // $('#myForm').on('submit', function(event) {
+                //     event.preventDefault(); // Empêcher le rechargement de la page
+
+                //     let hasError = false;
+                //     let formData = $(this).serialize(); // Récupérer les données du formulaire
+
+                //     // Parcourir chaque groupe de champs dupliqués
+                //     $('.duplicated-group').each(function(index, element) {
+                //         let magasin = $(this).find('select[name="magasin_id[]"]').val();
+                //         let produit = $(this).find('select[name="produit_id[]"]').val();
+                //         let format = $(this).find('select[name="format_id[]"]').val();
+                //         let unite = $(this).find('select[name="unite_sortie[]"]').val();
+
+
+
+                //         // Vérifier si les champs sont valides (selon vos règles)
+                //         if (!magasin) {
+                //             hasError = true;
+                //             Swal.fire({
+                //                 title: 'Erreur',
+                //                 text: 'Le champ Magasin est obligatoire.',
+                //                 icon: 'error',
+                //                 confirmButtonText: 'OK',
+                //             });
+                //             return false; // Stopper l'itération
+                //         }
+
+                //         if (!unite) {
+                //             hasError = true;
+                //             Swal.fire({
+                //                 title: 'Erreur',
+                //                 text: 'Le champ Unite est obligatoire.',
+                //                 icon: 'error',
+                //                 confirmButtonText: 'OK',
+                //             });
+                //             return false; // Stopper l'itération
+                //         }
+
+                //         if (!produit) {
+                //             hasError = true;
+                //             Swal.fire({
+                //                 title: 'Erreur',
+                //                 text: 'Le champ Produit est obligatoire.',
+                //                 icon: 'error',
+                //                 confirmButtonText: 'OK',
+                //             });
+                //             return false; // Stopper l'itération
+                //         }
+                //         if (!format) {
+                //             hasError = true;
+                //             Swal.fire({
+                //                 title: 'Erreur',
+                //                 text: 'Le champ Format est obligatoire.',
+                //                 icon: 'error',
+                //                 confirmButtonText: 'OK',
+                //             });
+                //             return false; // Stopper l'itération
+                //         }
+                //     });
+
+                //     // Si une erreur a été trouvée, arrêter le processus
+                //     if (hasError) {
+                //         return false;
+                //     }
+
+                //     // Si tout est correct, soumettre le formulaire avec Ajax
+                //     $.ajax({
+                //         url: $(this).attr('action'), // URL de la soumission du formulaire
+                //         type: 'POST',
+                //         data: formData,
+                //         dataType: 'json',
+                //         success: function(response, textStatus, xhr) {
+                //             let statusCode = xhr.status;
+
+                //             // Si la soumission est réussie
+                //             if (statusCode === 200) {
+                //                 // Afficher un message de succès avec Swal
+                //                 Swal.fire({
+                //                     title: 'Succès',
+                //                     text: response.message,
+                //                     icon: 'success',
+                //                 });
+
+                //                 // Rediriger vers la liste des factures
+                //                 var url =
+                //                 "{{ route('achat.facture') }}"; // Rediriger vers la route liste facture
+                //                 window.location.replace(url);
+                //             }
+                //         },
+                //         error: function(xhr, textStatus, errorThrown) {
+                //             let statusCode = xhr.status;
+
+                //             // Si une erreur serveur (500) est rencontrée
+                //             if (statusCode === 500) {
+                //                 Swal.fire({
+                //                     title: 'Erreur',
+                //                     text: xhr.responseJSON ? xhr.responseJSON.message :
+                //                         'Une erreur est survenue.',
+                //                     icon: 'error',
+                //                     confirmButtonText: 'OK',
+                //                 });
+                //             } else {
+                //                 // Pour d'autres erreurs (comme 400, 404, etc.)
+                //                 Swal.fire({
+                //                     title: 'Erreur',
+                //                     text: xhr.responseJSON ? xhr.responseJSON.message :
+                //                         'Une erreur est survenue.',
+                //                     icon: 'error',
+                //                     confirmButtonText: 'OK',
+                //                 });
+                //             }
+                //         }
+                //     });
+                // });
+
+                $('#myForm').on('submit', function(event) {
+                    event.preventDefault(); // Empêcher le rechargement de la page
+
+                    let hasError = false;
+
+                    // Parcourir tous les champs ayant l'attribut `required`
+                    $(this).find('[required]').each(function() {
+                        // Vérifier si le champ est vide
+                        if (!$(this).val()) {
+                            hasError = true;
+                            let fieldName = $(this).attr('name'); // Récupérer le nom du champ
+                            let label = $(this).closest('div').find('label').text() ||
+                            fieldName; // Trouver le label ou utiliser le nom du champ
+
+                            Swal.fire({
+                                title: 'Erreur',
+                                text: `Le champ ${label} est obligatoire.`,
+                                icon: 'error',
+                                confirmButtonText: 'OK',
+                            });
+
+                            return false; // Stopper l'itération et éviter l'envoi
+                        }
+                    });
+
+                    // Si une erreur a été trouvée, arrêter l'envoi
+                    if (hasError) {
+                        return false;
+                    }
+
+                    // Si tout est correct, soumettre le formulaire avec Ajax
+                    let formData = $(this).serialize(); // Récupérer les données du formulaire
+                    $.ajax({
+                        url: $(this).attr('action'), // URL de la soumission du formulaire
+                        type: 'POST',
+                        data: formData,
+                        dataType: 'json',
+                        success: function(response, textStatus, xhr) {
+                            let statusCode = xhr.status;
+
+                            // Si la soumission est réussie
+                            if (statusCode === 200) {
+                                Swal.fire({
+                                    title: 'Succès',
+                                    text: response.message,
+                                    icon: 'success',
+                                });
+
+                                // Rediriger vers la liste des factures
+                                var url =
+                                "{{ route('achat.facture') }}"; // Rediriger vers la route liste facture
+                                window.location.replace(url);
+                            }
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            let statusCode = xhr.status;
+
+                            // Si une erreur serveur (500) est rencontrée
+                            if (statusCode === 500) {
+                                Swal.fire({
+                                    title: 'Erreur',
+                                    text: xhr.responseJSON ? xhr.responseJSON.message :
+                                        'Une erreur est survenue.',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK',
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Erreur',
+                                    text: xhr.responseJSON ? xhr.responseJSON.message :
+                                        'Une erreur est survenue.',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK',
+                                });
+                            }
+                        }
+                    });
                 });
 
 
@@ -755,11 +1009,16 @@
 
                     form.find('.prixAchatUniteDiv').hide()
                     form.find('.prixVenteDiv').hide()
-                    form.find('.prixAchatUnite').val('')
+                    form.find('.prixAchatUnite').val(0)
+                    form.find('.prixVente').val(0)
+
 
                 } else {
                     form.find('.prixAchatUniteDiv').show()
                     form.find('.prixVenteDiv').show()
+                    form.find('.prixVente').prop('required', true)
+                    form.find('.prixAchatUnite').prop('required', true)
+
                 }
 
 
@@ -773,6 +1032,39 @@
 
 
 
+
+
+            //enregister le formulaire
+            // $('#myForm').on('submit', function(event) {
+            //     event.preventDefault(); // Empêcher le rechargement de la page
+
+            //     calculerTotalDepense()
+
+            //     let formData = $(this).serialize(); // Récupérer les données du formulaire
+
+            //     $.ajax({
+            //         url: $(this).attr('action'), // URL de la soumission du formulaire
+            //         type: 'POST',
+            //         data: formData,
+            //         dataType: 'json',
+            //         success: function(response) {
+            //             // Si la soumission est réussie
+            //             if (response.success) {
+            //                 $('#successMessage').text(response.message)
+            //                     .show(); // Afficher le message de succès
+            //                 $('#nameError').hide(); // Cacher le message d'erreur
+            //                 $('#myForm')[0].reset(); // Réinitialiser le formulaire
+            //             }
+            //         },
+            //         error: function(xhr) {
+            //             // Gérer l'erreur
+            //             if (xhr.responseJSON && xhr.responseJSON.message) {
+            //                 $('#nameError').text(xhr.responseJSON.message)
+            //                     .show(); // Afficher le message d'erreur
+            //             }
+            //         }
+            //     });
+            // });
 
 
 

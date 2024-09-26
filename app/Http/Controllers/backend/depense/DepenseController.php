@@ -4,8 +4,9 @@ namespace App\Http\Controllers\backend\depense;
 
 use App\Models\Depense;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Models\LibelleDepense;
 use App\Models\CategorieDepense;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -33,18 +34,40 @@ class DepenseController extends Controller
     public function store(Request $request)
     {
         try {
+            // dd($request->all());
+
+            $data_libelle = LibelleDepense::whereId($request->categorie_depense)->first();
+            $data_categorie = CategorieDepense::whereId($request->categorie_depense)->first();
+
+            $libelle = '';
+            $categorie = '';
+            // dd($data_categorie->toArray());
+
+            if ($data_libelle) {
+                $libelle =  $data_libelle->id;
+                $categorie =  $data_libelle->categorie_depense_id;
+            } elseif ($data_categorie) {
+                $categorie =  $data_categorie->id;
+                $libelle = null;
+            }
 
             $data = $request->validate([
-                'libelle' => 'required',
-                'categorie_depense_id' => '',
+                'libelle' => '',
+                'categorie_depense' => 'required',
                 'montant' => 'required',
                 'description' => '',
-               
             ]);
 
             $data_count = Depense::count();
 
-            $data_depense = Depense::firstOrCreate($data, ['user_id' => Auth::id()]);
+            $data_depense = Depense::firstOrCreate([
+                'categorie_depense_id' => $categorie,
+                'libelle_depense_id' => $libelle,
+                'libelle' => $request->libelle,
+                'montant' => $request->montant,
+                'description' => $request->description,
+                'user_id' => Auth::id()
+            ]);
 
             Alert::success('Operation réussi', 'Success Message');
             return back();
@@ -63,15 +86,40 @@ class DepenseController extends Controller
         try {
             //request validation ......
             $data = $request->validate([
-                'libelle' => 'required',
+                'libelle' => '',
                 'categorie_depense_id' => '',
                 'montant' => 'required',
                 'description' => '',
-               
+
             ]);
 
 
-            $data_depense = Depense::find($id)->update($data, ['user_id' => Auth::id()]);
+            $data_libelle = LibelleDepense::whereId($request->categorie_depense)->first();
+            $data_categorie = CategorieDepense::whereId($request->categorie_depense)->first();
+
+            $libelle = '';
+            $categorie = '';
+            // dd($data_categorie->toArray());
+
+            if ($data_libelle) {
+                $libelle =  $data_libelle->id;
+                $categorie =  $data_libelle->categorie_depense_id;
+            } elseif ($data_categorie) {
+                $categorie =  $data_categorie->id;
+                $libelle = null;
+            }
+
+
+            $data_depense = Depense::find($id)->update(
+                [
+                    'categorie_depense_id' => $categorie,
+                    'libelle_depense_id' => $libelle,
+                    'libelle' => $request->libelle,
+                    'montant' => $request->montant,
+                    'description' => $request->description,
+                    'user_id' => Auth::id()
+                ]
+            );
 
             Alert::success('Opération réussi', 'Success Message');
             return back();
@@ -93,6 +141,4 @@ class DepenseController extends Controller
             return $e->getMessage();
         }
     }
-
-    
 }

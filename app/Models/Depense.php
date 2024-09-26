@@ -18,6 +18,7 @@ class Depense extends Model
         'montant',
         'description',
         'categorie_depense_id',
+        'libelle_depense_id',
         'user_id',
 
     ];
@@ -36,6 +37,11 @@ class Depense extends Model
     public function categorie_depense()
     {
         return $this->belongsTo(CategorieDepense::class, 'categorie_depense_id');
+    }
+
+    public function libelle_depense()
+    {
+        return $this->belongsTo(LibelleDepense::class, 'libelle_depense_id');
     }
 
     public function user()
