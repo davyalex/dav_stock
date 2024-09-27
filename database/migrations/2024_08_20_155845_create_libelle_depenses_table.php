@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('libelle_depenses', function (Blueprint $table) {
             $table->id();
             $table->string('libelle')->nullable();
-            $table->longText('slug')->nullable()->unique();;
+            $table->string('slug')->nullable()->unique();;
             $table->longText('description')->nullable();
             $table->foreignId('categorie_depense_id')
                 ->nullable()
