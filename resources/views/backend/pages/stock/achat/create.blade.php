@@ -65,7 +65,7 @@
                                     </div>
 
                                     <div class="col-md-2 mb-3">
-                                        <label class="form-label" for="meta-title-input">N° facture
+                                        <label class="form-label" for="meta-title-input">N° facture ou Bon de commande
                                             <span class="text-danger">*</span>
                                         </label>
                                         <input type="text" name="numero_facture" class="form-control" id="facture"
