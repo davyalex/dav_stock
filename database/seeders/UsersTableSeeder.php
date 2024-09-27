@@ -22,8 +22,8 @@ class UsersTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 6484939514,
-                'first_name' => 'Tanoh Davy Alex',
                 'last_name' => 'kouamelan',
+                'first_name' => 'Tanoh Davy Alex',
                 'phone' => '0779613593',
                 'email' => 'alexkouamelan96@gmail.com',
                 'email_verified_at' => NULL,
@@ -34,22 +34,24 @@ class UsersTableSeeder extends Seeder
                 'created_at' => '2024-05-09 18:22:35',
                 'updated_at' => '2024-05-09 22:54:27',
                 'deleted_at' => NULL,
+                'caisse_id' => NULL,
             ),
             1 => 
             array (
-                'id' => 19361350221,
+                'id' => 10127531461,
+                'last_name' => 'admin',
                 'first_name' => 'admin',
-                'last_name' => 'admin1',
-                'phone' => '0000000000',
-                'email' => 'admin1@gmail.com',
+                'phone' => '0102030405',
+                'email' => 'admin@gmail.com',
                 'email_verified_at' => NULL,
-                'password' => '$2y$10$DMe6X316H4UOgTc6meV7xucgXFC9tZOiBdYzGrRgB3OB7QtaBgcmu',
+                'password' => '$2y$10$LVhJ1DghgCDGnarVJZ/vUOtA/sy53KTS04id0Ln2XvJv3CQAt5qr.',
                 'avatar' => NULL,
                 'role' => 'developpeur',
                 'remember_token' => NULL,
-                'created_at' => '2024-05-27 11:12:14',
-                'updated_at' => '2024-05-27 11:12:14',
+                'created_at' => '2024-09-23 08:33:00',
+                'updated_at' => '2024-09-23 08:33:00',
                 'deleted_at' => NULL,
+                'caisse_id' => NULL,
             ),
         ));
         
