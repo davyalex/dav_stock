@@ -783,7 +783,7 @@
                             hasError = true;
                             let fieldName = $(this).attr('name'); // Récupérer le nom du champ
                             let label = $(this).closest('div').find('label').text() ||
-                            fieldName; // Trouver le label ou utiliser le nom du champ
+                                fieldName; // Trouver le label ou utiliser le nom du champ
 
                             Swal.fire({
                                 title: 'Erreur',
@@ -821,7 +821,7 @@
 
                                 // Rediriger vers la liste des factures
                                 var url =
-                                "<?php echo e(route('achat.facture')); ?>"; // Rediriger vers la route liste facture
+                                    "<?php echo e(route('achat.facture')); ?>"; // Rediriger vers la route liste facture
                                 window.location.replace(url);
                             }
                         },
@@ -851,12 +851,7 @@
                 });
 
 
-            });
-
-
-
-
-
+                
             // script for quantity stock increase and dicrease
             function increaseValue() {
                 var input = document.getElementById("qteStockable");
@@ -943,7 +938,7 @@
                     $('#add-more').prop('disabled', false);
                 }
 
-
+                calculerTotalDepense()
             }
 
             // Calculer le prix d'achat de l'unité
@@ -1089,6 +1084,13 @@
             //     $('#product-img').html(`<img src="${img}"  class="avatar-md h-auto" />`)
 
             // });
+
+            });
+
+
+
+
+
         </script>
     <?php $__env->stopSection(); ?>
 <?php $__env->stopSection(); ?>

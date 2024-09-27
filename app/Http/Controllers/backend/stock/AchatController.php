@@ -248,7 +248,7 @@ class AchatController extends Controller
 
             // retur response
             return response()->json([
-                'message' => 'Tous les produits ont été enregistrés avec succès.',
+                'message' => 'Facture enregistré avec succès.',
                 'statut' => 'success',
             ], 200);
 
@@ -276,7 +276,7 @@ class AchatController extends Controller
                 // registrement des achats.');
                 // return back();
                 return response()->json([
-                    'message' => 'Verifier si tous les champs sont remplis',
+                    'message' => $e->getMessage(),
                     'statut' => 'error',
                 ], 500);
             }
