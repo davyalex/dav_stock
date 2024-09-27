@@ -47,7 +47,7 @@
                              <option disabled selected value>Selectionner...</option>
                              @foreach ($data_role as $role)
                                  <option value="{{ $role['name'] }}"
-                                     {{ $role['id'] == $item['roles'][0]['id'] ? 'selected' : '' }}>{{ $role['name'] }}
+                                     >{{ $role['name'] }}
                                  </option>
                              @endforeach
                          </select>
