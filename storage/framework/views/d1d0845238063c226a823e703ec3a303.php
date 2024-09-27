@@ -24,6 +24,17 @@
             padding: 10px;
         }
 
+        .error-text {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+            text-shadow: none;
+            /* Cacher le texte par défaut */
+        }
+
+
+
 
         .select-no-interaction {
             pointer-events: none;
@@ -40,8 +51,8 @@
     <div class="row">
         <div class="col-lg-12">
             
-            <form id="myForm" method="POST" action="<?php echo e(route('achat.store')); ?>" autocomplete="off" class="needs-validation"
-                novalidate enctype="multipart/form-data">
+            <form id="myForm" method="POST" action="<?php echo e(route('achat.store')); ?>" autocomplete="off" novalidate
+                enctype="multipart/form-data">
                 <?php echo csrf_field(); ?>
                 <div class="row">
                     <div class="col-lg-12">
@@ -63,7 +74,7 @@
                                     </div>
 
                                     <div class="col-md-2 mb-3">
-                                        <label class="form-label" for="meta-title-input">N° facture
+                                        <label class="form-label" for="meta-title-input">N° facture ou Bon
                                             <span class="text-danger">*</span>
                                         </label>
                                         <input type="text" name="numero_facture" class="form-control" id="facture"
@@ -150,7 +161,8 @@
                         <label class="form-label" for="product-title-input">Produits
                             <span class="text-danger">*</span>
                         </label>
-                        <select class="form-control productSelected selectView" id="produitId" name="produit_id[]" required>
+                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
+                        <select class="form-control productSelected selectView" name="produit_id[]" required>
                             <option disabled selected value>Selectionner un produit
                             </option>
                             <?php $__currentLoopData = $data_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -167,6 +179,7 @@
                         <label class="form-label" for="product-title-input">Magasin
                             <span class="text-danger">*</span>
                         </label>
+                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
                         <select class="form-control selectView" name="magasin_id" required>
                             <option disabled selected value="">Choisir</option>
                             <?php $__currentLoopData = $data_magasin; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $magasin): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -179,12 +192,18 @@
                     </div>
 
                     <div class="col-md-2 mb-3">
-                        <label class="form-label" for="stocks-input">Qté acquise</label>
+                        <label class="form-label" for="stocks-input">Qté acquise
+                            <span class="text-danger">*</span>
+                        </label>
+                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
                         <input type="number" name="quantite_format[]" class="form-control qteAcquise" required>
                     </div>
 
                     <div class="col-md-4 mb-3">
-                        <label class="form-label" for="product-title-input">Format</label>
+                        <label class="form-label" for="product-title-input">Format
+                            <span class="text-danger">*</span>
+                        </label>
+                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
                         <select class="form-control selectView format" id="format_id" name="format_id[]" required>
                             <option disabled selected value="">Choisir</option>
                             <?php $__currentLoopData = $data_format; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $format): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -196,33 +215,48 @@
                     </div>
 
                     <div class="col-md-2 mb-3">
-                        <label class="form-label" for="stocks-input">Qté dans le format</label>
+                        <label class="form-label" for="stocks-input">Qté dans le format
+                            <span class="text-danger">*</span>
+                        </label>
+                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
                         <input type="number" name="quantite_in_format[]" class="form-control qteFormat" required>
                     </div>
 
                     <div class="col-md-2 mb-3">
-                        <label class="form-label" for="stocks-input">Qté stocké</label>
+                        <label class="form-label" for="stocks-input">Qté stocké
+                            <span class="text-danger">*</span>
+                        </label>
+                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
                         <input type="number" name="quantite_stocke[]" class="form-control qteStockable" readonly>
                     </div>
 
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="stocks-input">Prix
-                            unitaire du format</label>
+                            unitaire du format
+                            <span class="text-danger">*</span>
+                        </label>
+                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
                         <input type="number" name="prix_unitaire_format[]" class="form-control prixUnitaireFormat"
                             required>
                     </div>
 
                     <div class="col-md-3 mb-3">
                         <label class="form-label" for="stocks-input">Total
-                            dépensé</label>
+                            dépensé
+                            <span class="text-danger">*</span>
+                        </label>
+                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
                         <input type="number" name="prix_total_format[]" class="form-control prixTotalFormat" readonly>
                     </div>
 
 
                     <div class="col-md-3 mb-3">
                         <label class="form-label" for="meta-title-input">Unité de
-                            sortie</label>
-                        <select id="uniteMesure" class="form-control selectView " name="unite_sortie[]" required>
+                            sortie
+                            <span class="text-danger">*</span>
+                        </label>
+                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
+                        <select class="form-control selectView " name="unite_sortie[]" required>
                             <option value disabled selected>Choisir</option>
                             <?php $__currentLoopData = $data_unite; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $unite): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <option value="<?php echo e($unite->id); ?>">
@@ -234,7 +268,10 @@
 
                     <div class="col-md-3 mb-3 prixAchatUniteDiv">
                         <label class="form-label" for="stocks-input">Coût achat de
-                            l'unité</label>
+                            l'unité
+                            <span class="text-danger">*</span>
+                        </label>
+                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
                         <input type="number" name="prix_achat_unitaire[]" class="form-control prixAchatUnite" readonly>
                     </div>
 
@@ -242,7 +279,10 @@
 
                     <div class="col-md-3 mb-3 prixVenteDiv">
                         <label class="form-label" for="stocks-input">Prix de
-                            vente</label>
+                            vente
+                            <span class="text-danger">*</span>
+                        </label>
+                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
                         <input type="number" name="prix_vente_unitaire[]" class="form-control prixVente">
                     </div>
 
@@ -785,6 +825,14 @@
                             let label = $(this).closest('div').find('label').text() ||
                                 fieldName; // Trouver le label ou utiliser le nom du champ
 
+                            // Ajouter le texte d'erreur sous le champ
+                            // $(this).closest('div').find('.error-text').text(
+                            //     `Le champ ${label} est obligatoire.`).show();
+                            $(this).closest('div').find('.error-text').text('Champs obligatoire')
+                                .show();
+
+
+                            // Afficher une alerte avec SweetAlert
                             Swal.fire({
                                 title: 'Erreur',
                                 text: `Le champ ${label} est obligatoire.`,
@@ -793,8 +841,12 @@
                             });
 
                             return false; // Stopper l'itération et éviter l'envoi
+                        } else {
+                            // Cacher le message d'erreur si le champ est rempli
+                            $(this).closest('div').find('.error-text').hide();
                         }
                     });
+
 
                     // Si une erreur a été trouvée, arrêter l'envoi
                     if (hasError) {
@@ -851,246 +903,241 @@
                 });
 
 
-                
-            // script for quantity stock increase and dicrease
-            function increaseValue() {
-                var input = document.getElementById("qteStockable");
-                var value = parseInt(input.value, 10);
-                value = isNaN(value) ? 0 : value;
-                value++;
-                input.value = value;
-            }
 
-            function decreaseValue() {
-                var input = document.getElementById("qteStockable");
-                var value = parseInt(input.value, 10);
-                value = isNaN(value) ? 0 : value;
-                value < 1 ? value = 1 : '';
-                if (value > 1) {
-                    value--;
-                }
-                input.value = value;
-
-
-            }
-
-
-
-            // on verifie si les champs sont differents de null avant de dupliquer
-
-            $('#add-more').click(function(e) {
-
-                var type = $('#type').val();
-                var facture = $('#facture').val();
-                var fournisseur = $('#fournisseur').val();
-                var montant = $('#montant_facture').val();
-                var date = $('#currentDate').val();
-
-
-                if (type == null || facture == null || fournisseur == null || montant == "" || date ==
-                    null) {
-                    e.preventDefault();
-                    Swal.fire({
-                        title: 'Erreur',
-                        text: 'Veuillez remplir tous les champs avant de continuer',
-                        icon: 'error',
-                        confirmButtonText: 'OK',
-                    });
+                // script for quantity stock increase and dicrease
+                function increaseValue() {
+                    var input = document.getElementById("qteStockable");
+                    var value = parseInt(input.value, 10);
+                    value = isNaN(value) ? 0 : value;
+                    value++;
+                    input.value = value;
                 }
 
-            });
+                function decreaseValue() {
+                    var input = document.getElementById("qteStockable");
+                    var value = parseInt(input.value, 10);
+                    value = isNaN(value) ? 0 : value;
+                    value < 1 ? value = 1 : '';
+                    if (value > 1) {
+                        value--;
+                    }
+                    input.value = value;
 
 
-            // Calculer la quantité stockable
-            function qteStockable(form) {
-                var qte_acquise = form.find(".qteAcquise").val() || 0; // combien de format
-                var qte_format = form.find(".qteFormat").val() || 0; // combien dans le format
-                var qte_stockable = qte_acquise * qte_format;
-                form.find(".qteStockable").val(qte_stockable);
-
-                var dataProduct = <?php echo e(Js::from($data_produit)); ?>; // Données du contrôleur
-
-                console.log(dataProduct);
-
-            }
-
-            // Calculer le total dépensé
-            function prixTotalDepense(form) {
-                var qte_acquise = form.find(".qteAcquise").val() || 0; // combien de format
-                var pu_unitaire_format = form.find(".prixUnitaireFormat").val() || 0; // prix unitaire d'un format
-                var montant_facture = $("#montant_facture").val();
-                var total_depense = qte_acquise * pu_unitaire_format;
-                form.find(".prixTotalFormat").val(total_depense);
-
-                //on verifie si la montant depensé depasse le montant de la facture
-                if (total_depense > montant_facture) {
-                    $('#save').prop('disabled', true);
-
-                    $('#add-more').prop('disabled', true);
-                    Swal.fire({
-                        title: 'Erreur',
-                        text: 'Le total dépensé dépasse le montant de la facture !',
-                        icon: 'error',
-                        confirmButtonText: 'OK',
-                    });
-                } else {
-                    $('#save').prop('disabled', false);
-                    $('#add-more').prop('disabled', false);
                 }
 
-                calculerTotalDepense()
-            }
-
-            // Calculer le prix d'achat de l'unité
-            function prixAchatUnite(form) {
-                var qte_acquise = form.find(".qteAcquise").val() || 0;
-                var pu_unitaire_format = form.find(".prixUnitaireFormat").val() || 0;
-                var qte_stocke = form.find(".qteStockable").val() || 0;
-                var prix_achat_unite = qte_acquise * pu_unitaire_format / qte_stocke;
-                form.find(".prixAchatUnite").val(prix_achat_unite);
-            }
-
-            // Calculer le prix d'achat total
-            function calculatePrixAchat(form) {
-                var qte_format = form.find(".qteFormat").val() || 0;
-                var prix_achat_total = form.find(".prixAchatTotal").val() || 0;
-                var prixAchatUnitaire = prix_achat_total / qte_format;
-                var prixAchatTotal = qte_format * prixAchatUnitaire;
-                form.find(".prixAchatUnitaire").val(prixAchatUnitaire);
-            }
-
-            // Ajouter des écouteurs sur les champs dupliqués
-            $(document).on('input', '.qteAcquise, .qteFormat, .prixUnitaireFormat , #montant_facture', function() {
-                var form = $(this).closest('.row');
-                qteStockable(form);
-                prixTotalDepense(form);
-                prixAchatUnite(form);
-
-            });
-
-            // Ajout d'écouteurs pour les champs qui influencent le calcul du prix d'achat
-            $(document).on('input', '.qteFormat, .prixAchatTotal', function() {
-                var form = $(this).closest('.row');
-                calculatePrixAchat(form);
-            });
 
 
-            // Fonction pour cacher les champs en fonction du type de produit selectionné
-            function addProductSelectListener(form) {
-                var dataProduct = <?php echo e(Js::from($data_produit)); ?>; // Données du contrôleur
-                var dataCategory = <?php echo e(Js::from($data_categorie)); ?>; // Données du contrôleur
+                // on verifie si les champs sont differents de null avant de dupliquer
 
-                var productSelected = form.find('.productSelected').val(); // Récupère la valeur du select actuel
-                var filteredCatRestaurant = dataCategory.filter(function(item) {
-                    return item.type == 'restaurant';
+                $('#add-more').click(function(e) {
+
+                    var type = $('#type').val();
+                    var facture = $('#facture').val();
+                    var fournisseur = $('#fournisseur').val();
+                    var montant = $('#montant_facture').val();
+                    var date = $('#currentDate').val();
+
+
+                    if (type == null || facture == null || fournisseur == null || montant == "" || date ==
+                        null) {
+                        e.preventDefault();
+                        Swal.fire({
+                            title: 'Erreur',
+                            text: 'Veuillez remplir tous les champs avant de continuer',
+                            icon: 'error',
+                            confirmButtonText: 'OK',
+                        });
+                    }
+
                 });
 
-                var filteredProduct = dataProduct.filter(function(item) {
-                    return item.id == productSelected;
+
+                // Calculer la quantité stockable
+                function qteStockable(form) {
+                    var qte_acquise = form.find(".qteAcquise").val() || 0; // combien de format
+                    var qte_format = form.find(".qteFormat").val() || 0; // combien dans le format
+                    var qte_stockable = qte_acquise * qte_format;
+                    form.find(".qteStockable").val(qte_stockable);
+
+                    var dataProduct = <?php echo e(Js::from($data_produit)); ?>; // Données du contrôleur
+
+                    console.log(dataProduct);
+
+                }
+
+                // Calculer le total dépensé
+                function prixTotalDepense(form) {
+                    var qte_acquise = form.find(".qteAcquise").val() || 0; // combien de format
+                    var pu_unitaire_format = form.find(".prixUnitaireFormat").val() || 0; // prix unitaire d'un format
+                    var montant_facture = $("#montant_facture").val();
+                    var total_depense = qte_acquise * pu_unitaire_format;
+                    form.find(".prixTotalFormat").val(total_depense);
+
+                    //on verifie si la montant depensé depasse le montant de la facture
+                    if (total_depense > montant_facture) {
+                        $('#save').prop('disabled', true);
+
+                        $('#add-more').prop('disabled', true);
+                        Swal.fire({
+                            title: 'Erreur',
+                            text: 'Le total dépensé dépasse le montant de la facture !',
+                            icon: 'error',
+                            confirmButtonText: 'OK',
+                        });
+                    } else {
+                        $('#save').prop('disabled', false);
+                        $('#add-more').prop('disabled', false);
+                    }
+
+                    calculerTotalDepense()
+                }
+
+                // Calculer le prix d'achat de l'unité
+                function prixAchatUnite(form) {
+                    var qte_acquise = form.find(".qteAcquise").val() || 0;
+                    var pu_unitaire_format = form.find(".prixUnitaireFormat").val() || 0;
+                    var qte_stocke = form.find(".qteStockable").val() || 0;
+                    var prix_achat_unite = qte_acquise * pu_unitaire_format / qte_stocke;
+                    form.find(".prixAchatUnite").val(prix_achat_unite);
+                }
+
+                // Calculer le prix d'achat total
+                function calculatePrixAchat(form) {
+                    var qte_format = form.find(".qteFormat").val() || 0;
+                    var prix_achat_total = form.find(".prixAchatTotal").val() || 0;
+                    var prixAchatUnitaire = prix_achat_total / qte_format;
+                    var prixAchatTotal = qte_format * prixAchatUnitaire;
+                    form.find(".prixAchatUnitaire").val(prixAchatUnitaire);
+                }
+
+                // Ajouter des écouteurs sur les champs dupliqués
+                $(document).on('input', '.qteAcquise, .qteFormat, .prixUnitaireFormat , #montant_facture', function() {
+                    var form = $(this).closest('.row');
+                    qteStockable(form);
+                    prixTotalDepense(form);
+                    prixAchatUnite(form);
+
                 });
 
-                if (filteredProduct[0].type_id == filteredCatRestaurant[0].id) {
+                // Ajout d'écouteurs pour les champs qui influencent le calcul du prix d'achat
+                $(document).on('input', '.qteFormat, .prixAchatTotal', function() {
+                    var form = $(this).closest('.row');
+                    calculatePrixAchat(form);
+                });
 
-                    form.find('.prixAchatUniteDiv').hide()
-                    form.find('.prixVenteDiv').hide()
-                    form.find('.prixAchatUnite').val(0)
-                    form.find('.prixVente').val(0)
+
+                // Fonction pour cacher les champs en fonction du type de produit selectionné
+                function addProductSelectListener(form) {
+                    var dataProduct = <?php echo e(Js::from($data_produit)); ?>; // Données du contrôleur
+                    var dataCategory = <?php echo e(Js::from($data_categorie)); ?>; // Données du contrôleur
+
+                    var productSelected = form.find('.productSelected').val(); // Récupère la valeur du select actuel
+                    var filteredCatRestaurant = dataCategory.filter(function(item) {
+                        return item.type == 'restaurant';
+                    });
+
+                    var filteredProduct = dataProduct.filter(function(item) {
+                        return item.id == productSelected;
+                    });
+
+                    if (filteredProduct[0].type_id == filteredCatRestaurant[0].id) {
+
+                        form.find('.prixAchatUniteDiv').hide()
+                        form.find('.prixVenteDiv').hide()
+                        form.find('.prixAchatUnite').val(0)
+                        form.find('.prixVente').val(0)
 
 
-                } else {
-                    form.find('.prixAchatUniteDiv').show()
-                    form.find('.prixVenteDiv').show()
-                    form.find('.prixVente').prop('required', true)
-                    form.find('.prixAchatUnite').prop('required', true)
+                    } else {
+                        form.find('.prixAchatUniteDiv').show()
+                        form.find('.prixVenteDiv').show()
+                        form.find('.prixVente').prop('required', true)
+                        form.find('.prixAchatUnite').prop('required', true)
+
+                    }
+
 
                 }
 
 
-            }
-
-
-            $(document).on('change', '.productSelected', function() {
-                var form = $(this).closest('.row');
-                addProductSelectListener(form);
-            });
+                $(document).on('change', '.productSelected', function() {
+                    var form = $(this).closest('.row');
+                    addProductSelectListener(form);
+                });
 
 
 
 
 
-            //enregister le formulaire
-            // $('#myForm').on('submit', function(event) {
-            //     event.preventDefault(); // Empêcher le rechargement de la page
+                //enregister le formulaire
+                // $('#myForm').on('submit', function(event) {
+                //     event.preventDefault(); // Empêcher le rechargement de la page
 
-            //     calculerTotalDepense()
+                //     calculerTotalDepense()
 
-            //     let formData = $(this).serialize(); // Récupérer les données du formulaire
+                //     let formData = $(this).serialize(); // Récupérer les données du formulaire
 
-            //     $.ajax({
-            //         url: $(this).attr('action'), // URL de la soumission du formulaire
-            //         type: 'POST',
-            //         data: formData,
-            //         dataType: 'json',
-            //         success: function(response) {
-            //             // Si la soumission est réussie
-            //             if (response.success) {
-            //                 $('#successMessage').text(response.message)
-            //                     .show(); // Afficher le message de succès
-            //                 $('#nameError').hide(); // Cacher le message d'erreur
-            //                 $('#myForm')[0].reset(); // Réinitialiser le formulaire
-            //             }
-            //         },
-            //         error: function(xhr) {
-            //             // Gérer l'erreur
-            //             if (xhr.responseJSON && xhr.responseJSON.message) {
-            //                 $('#nameError').text(xhr.responseJSON.message)
-            //                     .show(); // Afficher le message d'erreur
-            //             }
-            //         }
-            //     });
-            // });
-
-
-
-            // $(document).on('input', '.qteFormat, .prixAchatUnitaire', function() {
-            //     var form = $(this).closest('.row');
-            //     calculatePrixAchatTotal(form);
-            // });
+                //     $.ajax({
+                //         url: $(this).attr('action'), // URL de la soumission du formulaire
+                //         type: 'POST',
+                //         data: formData,
+                //         dataType: 'json',
+                //         success: function(response) {
+                //             // Si la soumission est réussie
+                //             if (response.success) {
+                //                 $('#successMessage').text(response.message)
+                //                     .show(); // Afficher le message de succès
+                //                 $('#nameError').hide(); // Cacher le message d'erreur
+                //                 $('#myForm')[0].reset(); // Réinitialiser le formulaire
+                //             }
+                //         },
+                //         error: function(xhr) {
+                //             // Gérer l'erreur
+                //             if (xhr.responseJSON && xhr.responseJSON.message) {
+                //                 $('#nameError').text(xhr.responseJSON.message)
+                //                     .show(); // Afficher le message d'erreur
+                //             }
+                //         }
+                //     });
+                // });
 
 
 
-
-            //get product select and show detail of product selected
-            // $('.productSelected').change(function(e) {
-            //     var dataProduct = <?php echo e(Js::from($data_produit)); ?> // from controller
-
-            //     e.preventDefault();
-            //     var productSelected = $('.productSelected option:selected').val();
-
-            //     var filteredProduct = dataProduct.filter(function(item) {
-            //         return item.id == productSelected;
-            //     });
-            //     console.log(filteredProduct[0].media);
+                // $(document).on('input', '.qteFormat, .prixAchatUnitaire', function() {
+                //     var form = $(this).closest('.row');
+                //     calculatePrixAchatTotal(form);
+                // });
 
 
-            //     //update stock , sku ,  category of product selected
-            //     $('#stock').html(filteredProduct[0].stock)
-            //     $('#stockAlerte').html(filteredProduct[0].stock_alerte)
 
-            //     $('#sku').html(filteredProduct[0].code)
-            //     $('#categorie').html(filteredProduct[0].categorie.name)
 
-            //     var img = filteredProduct[0].media[0].original_url
-            //     $('#product-img').html(`<img src="${img}"  class="avatar-md h-auto" />`)
+                //get product select and show detail of product selected
+                // $('.productSelected').change(function(e) {
+                //     var dataProduct = <?php echo e(Js::from($data_produit)); ?> // from controller
 
-            // });
+                //     e.preventDefault();
+                //     var productSelected = $('.productSelected option:selected').val();
+
+                //     var filteredProduct = dataProduct.filter(function(item) {
+                //         return item.id == productSelected;
+                //     });
+                //     console.log(filteredProduct[0].media);
+
+
+                //     //update stock , sku ,  category of product selected
+                //     $('#stock').html(filteredProduct[0].stock)
+                //     $('#stockAlerte').html(filteredProduct[0].stock_alerte)
+
+                //     $('#sku').html(filteredProduct[0].code)
+                //     $('#categorie').html(filteredProduct[0].categorie.name)
+
+                //     var img = filteredProduct[0].media[0].original_url
+                //     $('#product-img').html(`<img src="${img}"  class="avatar-md h-auto" />`)
+
+                // });
 
             });
-
-
-
-
-
         </script>
     <?php $__env->stopSection(); ?>
 <?php $__env->stopSection(); ?>

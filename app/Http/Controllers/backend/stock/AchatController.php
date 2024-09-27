@@ -6,6 +6,7 @@ use App\Models\Achat;
 use App\Models\Stock;
 use App\Models\Unite;
 use App\Models\Format;
+use App\Models\Depense;
 use App\Models\Facture;
 use App\Models\Magasin;
 use App\Models\Produit;
@@ -13,7 +14,9 @@ use App\Models\Categorie;
 use App\Models\Fournisseur;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\CategorieDepense;
 use App\Http\Controllers\Controller;
+use App\Models\LibelleDepense;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -124,8 +127,7 @@ class AchatController extends Controller
             }
 
 
-
-
+            //gestion des validations 
             foreach ($request->produit_id as $index => $produitId) {
                 $produit = Produit::find($produitId);
                 $categorie = Categorie::find($produit->categorie_id); // catégorie du produit
@@ -157,8 +159,6 @@ class AchatController extends Controller
                     ]);
                 } elseif ($type_produit == 'bar') {
                     // Validation pour un produit de type "bar"
-
-                    
                     $request->validate([
                         'type' => 'required', // type facture
                         'numero_facture' => 'required',
@@ -181,7 +181,7 @@ class AchatController extends Controller
                 }
             }
 
-
+            //on verifie le montant de la facture et le montant total des achats
             if ($request->montant != $montant_facture) {
                 return response()->json(['message' => 'Montant facture incorrect', 'status' => false], 500);
             }
@@ -246,6 +246,19 @@ class AchatController extends Controller
 
             }
 
+            //ajouter l'achat comme depense
+            $categorie = CategorieDepense::whereSlug('achats')->first();
+            $libelle_depense = LibelleDepense::whereSlug('marchandises')->first();
+
+            $data_depense = Depense::firstOrCreate([
+                'categorie_depense_id' => $categorie->id,
+                'libelle_depense_id' => $libelle_depense->id,
+                'montant' => $request->montant,
+                'date_depense' => $request->date_achat,
+                'user_id' => Auth::id()
+            ]);
+
+
             // retur response
             return response()->json([
                 'message' => 'Facture enregistré avec succès.',
@@ -259,7 +272,7 @@ class AchatController extends Controller
             // return back();
 
 
-            
+
         } catch (\Throwable $e) {
 
 

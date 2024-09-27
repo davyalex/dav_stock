@@ -24,7 +24,7 @@
                                     
                                     <div class="card-body">
                                         <div class="mb-3 row">
-                                         
+
                                             <div class="mb-3 col-md-7">
                                                 <label class="form-label" for="product-title-input">Sélectionner une
                                                     categorie <span class="text-danger">*</span>
@@ -52,12 +52,12 @@
 
                                             
 
-                                           
+
                                             <div class="col-md-4 mb-3">
                                                 <label class="form-label" for="meta-title-input">Qté mesure<span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" name="quantite_unite"
+                                                <input type="number" name="quantite_unite"
                                                     class="form-control customNumberInput" id="quantiteUnite" required>
                                             </div>
 
@@ -150,8 +150,6 @@
                                     </div>
                                 </div>
                                 <!-- end card -->
-
-
                             </div>
                         </div>
                         <!-- end row -->
@@ -180,9 +178,6 @@
         <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
         <script>
-           
-
-
             //Afficher les champs en fonction de la categorie selectionné
             let categoryFamille;
             var categorieData = <?php echo e(Js::from($categorieAll)); ?> // from product controller
@@ -262,9 +257,7 @@
             });
 
             $('#formSend').on('submit', function(e) {
-
-
-
+                
                 // on verifie si une image principale à éte inseré
                 if ($('#product-image-input').val() === '' && categoryFamille === 'bar') {
                     e.preventDefault();

@@ -33,6 +33,9 @@ return new class extends Migration
                 ->constrained('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+
+            $table->date('date_depense')->nullable();
+
             $table->softDeletes();
 
             $table->timestamps();

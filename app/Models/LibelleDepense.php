@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -9,12 +9,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class LibelleDepense extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes , sluggable;
 
     public $incrementing = false;
 
     protected $fillable = [
         'libelle',
+        'slug',
         'description',
         'categorie_depense_id',
         'user_id',
@@ -29,6 +30,16 @@ class LibelleDepense extends Model
             mt_rand()]);
         });
     }
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'libelle'
+            ]
+        ];
+    }
+
 
 
 

@@ -16,6 +16,7 @@ class Depense extends Model
     protected $fillable = [
         'libelle',
         'montant',
+        'date_depense',
         'description',
         'categorie_depense_id',
         'libelle_depense_id',

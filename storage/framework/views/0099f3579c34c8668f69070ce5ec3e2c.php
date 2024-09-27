@@ -24,7 +24,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des achats de la facture <strong>#<?php echo e($facture->numero_facture); ?></strong> </h5>
+                    <h5 class="card-title mb-0">Liste des achats de la facture <strong>#<?php echo e($facture->numero_facture); ?></strong>  <span class="px-5">Montant : <strong><?php echo e($facture->montant); ?> FCFA</strong></span> </h5>
                     <a href="<?php echo e(route('achat.create')); ?>" type="button" class="btn btn-primary ">Faire
                         un achat</a>
                 </div>
@@ -116,6 +116,15 @@
                                     </tr>
                                     
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="11" style="text-align:right">Montant de la facture :</th>
+                                        
+                                        <th colspan="6"><strong><?php echo e($facture->montant); ?> FCFA</strong></th> <!-- Les autres colonnes n'ont pas de total -->
+                                    </tr>
+                                </tfoot>
+                                
                             </tbody>
                         </table>
                     </div>

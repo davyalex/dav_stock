@@ -24,7 +24,7 @@ return new class extends Migration
                 ->onDelete('cascade');
 
 
-            $table->float('montant');
+            $table->double('montant');
 
 
             $table->foreignId('user_id')

@@ -17,7 +17,7 @@
                                 novalidate>
                                 <?php echo csrf_field(); ?>
 
-                                <div class="col-md-9">
+                                <div class="col-md-8">
                                     <label for="validationCustom01" class="form-label">Categorie</label>
                                     <select name="categorie_depense" class="form-control categorie-select" required>
                                         <option disabled selected value="">Selectionner</option>
@@ -44,13 +44,21 @@
                                 </div>
                                 
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label for="validationCustom01" class="form-label">Montant</label>
                                     <input type="number" name="montant" class="form-control" id="validationCustom01"
                                         required>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
+                                </div>
+
+                                <div class="col-md-2 mb-3">
+                                    <label class="form-label" for="meta-title-input">Date <span
+                                            class="text-danger">*</span>
+                                    </label>
+                                    <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>" name="date_depense"
+                                        class="form-control" required>
                                 </div>
 
                                 <div class="col-md-12">

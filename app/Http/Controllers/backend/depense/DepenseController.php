@@ -56,6 +56,7 @@ class DepenseController extends Controller
                 'categorie_depense' => 'required',
                 'montant' => 'required',
                 'description' => '',
+                'date_depense' => 'required',
             ]);
 
             $data_count = Depense::count();
@@ -66,6 +67,7 @@ class DepenseController extends Controller
                 'libelle' => $request->libelle,
                 'montant' => $request->montant,
                 'description' => $request->description,
+                'date_depense' => $request->date_depense,
                 'user_id' => Auth::id()
             ]);
 
@@ -90,6 +92,8 @@ class DepenseController extends Controller
                 'categorie_depense_id' => '',
                 'montant' => 'required',
                 'description' => '',
+                'date_depense' => 'required',
+
 
             ]);
 
@@ -117,6 +121,7 @@ class DepenseController extends Controller
                     'libelle' => $request->libelle,
                     'montant' => $request->montant,
                     'description' => $request->description,
+                    'date_depense' => $request->date_depense,
                     'user_id' => Auth::id()
                 ]
             );

@@ -48,7 +48,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->integer('quantite_unite')->nullable(); //quantite unite mesure
+            $table->float('quantite_unite')->nullable(); //quantite unite mesure
 
 
             $table->foreignId('unite_id')
