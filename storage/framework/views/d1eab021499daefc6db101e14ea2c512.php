@@ -93,20 +93,19 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link <?php echo e(Route::is('admin-register.*') ? 'active' : ''); ?>"
-                        href="<?php echo e(route('admin-register.index')); ?>">
-                        <i class="ri ri-lock-2-line"></i> <span>UTILISATEURS</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarConfiguration" data-bs-toggle="collapse" role="button"
-                         aria-controls="sidebarConfiguration">
+                        aria-controls="sidebarConfiguration">
                         <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
                     </a>
-                    <div class="collapse menu-dropdown <?php echo e(Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*') ? 'show' : ''); ?>"
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('categorie.*')|| Route::is('produit.*')|| Route::is('fournisseur.*')|| Route::is('admin-register.*') || Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*') ? 'show' : ''); ?>"
                         id="sidebarConfiguration">
                         <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('admin-register.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('admin-register.*') ? 'active' : ''); ?>">Utilisateurs</a>
+                            </li>
+
 
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('magasin.index')); ?>"
@@ -127,48 +126,57 @@
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('caisse.index')); ?>"
                                     class="nav-link <?php echo e(Route::is('caisse.*') ? 'active' : ''); ?>">Caisse
-                                    </a>
+                                </a>
                             </li>
 
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('fournisseur.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('fournisseur.*') ? 'active' : ''); ?>">Fournisseurs
+                                </a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('categorie.create')); ?>"
+                                    class="nav-link <?php echo e(Route::is('categorie.*') ? 'active' : ''); ?>">Categories
+                                </a>
+                            </li>
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('produit.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('produit.*') ? 'active' : ''); ?>">Produits
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
 
-                <li class="nav-item">
-                    <a href="<?php echo e(route('categorie.create')); ?>"
-                        class=" menu-link nav-link <?php echo e(Route::is('categorie.*') ? 'active' : ''); ?>">
-                        <i class="ri ri-database-2-fill"></i> <span>CATEGORIE</span>
-                    </a>
-                </li>
+              
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarStock" data-bs-toggle="collapse" role="button"
                         aria-controls="sidebarStock">
-                        <i class="ri ri-box-1-fill"></i> <span>STOCK</span>
+                        <i class="ri ri-box-1-fill"></i> <span>GESTION DE STOCK</span>
                     </a>
                     <div class="collapse menu-dropdown <?php echo e(Route::is('ajustement.*') || Route::is('achat.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : ''); ?>"
                         id="sidebarStock">
                         <ul class="nav nav-sm flex-column">
 
                             <li class="nav-item active">
-                                <a href="<?php echo e(route('fournisseur.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('fournisseur.*') ? 'active' : ''); ?>">Fournisseurs</a>
-                            </li>
-
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('produit.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('produit.*') ? 'active' : ''); ?>">Produits</a>
-                            </li>
-
-                            <li class="nav-item active">
                                 <a href="<?php echo e(route('achat.facture')); ?>"
-                                    class="nav-link <?php echo e(Route::is('achat.*') ? 'active' : ''); ?>">Factures</a>
+                                    class="nav-link <?php echo e(Route::is('achat.*') ? 'active' : ''); ?>">Reception de stock</a>
                             </li>
 
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('ajustement.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('ajustement.*') ? 'active' : ''); ?>">Ajustements</a>
+                                    class="nav-link <?php echo e(Route::is('ajustement.*') ? 'active' : ''); ?>">Etat du stock</a>
                             </li>
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('ajustement.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('ajustement.*') ? 'active' : ''); ?>">Inventaire</a>
+                            </li>
+
+
+                            
 
                         </ul>
                     </div>
@@ -186,19 +194,48 @@
 
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('categorie-depense.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('categorie-depense.*') ? 'active' : ''); ?>">Categorie des
+                                    class="nav-link <?php echo e(Route::is('categorie-depense.*') ? 'active' : ''); ?>">Categorie
+                                    des
                                     depenses</a>
                             </li>
 
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('libelle-depense.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('libelle-depense.*') ? 'active' : ''); ?>">Libellé des 
+                                    class="nav-link <?php echo e(Route::is('libelle-depense.*') ? 'active' : ''); ?>">Libellé des
                                     depenses</a>
                             </li>
 
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('depense.index')); ?>"
                                     class="nav-link <?php echo e(Route::is('depense.*') ? 'active' : ''); ?>">Depense</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarMenu" data-bs-toggle="collapse" role="button"
+                        aria-controls="sidebarMenu">
+                        <i class="ri ri-file-list-line"></i> <span>VENTES</span>
+                    </a>
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('menu.*') || Route::is('plat.*') ? 'show' : ''); ?>"
+                        id="sidebarMenu">
+                        <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('plat.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('plat.*') ? 'active' : ''); ?>">Creer une vente</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('plat.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('plat.*') ? 'active' : ''); ?>">Chiffre d'affaire par categorie</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('menu.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Chiffre d'affaire par produit</a>
                             </li>
                         </ul>
                     </div>
@@ -229,7 +266,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarSite" data-bs-toggle="collapse" role="button"
-                       aria-controls="sidebarSite">
+                        aria-controls="sidebarSite">
                         <i class="ri ri-global-fill"></i> <span>SITE</span>
                     </a>
                     <div class="collapse menu-dropdown <?php echo e(Route::is('slide.*') ? 'show' : ''); ?>" id="sidebarSite">
