@@ -44,7 +44,7 @@
                              <option disabled selected value>Selectionner...</option>
                              <?php $__currentLoopData = $data_role; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                  <option value="<?php echo e($role['name']); ?>"
-                                     <?php echo e($role['id'] == $item['roles'][0]['id'] ? 'selected' : ''); ?>><?php echo e($role['name']); ?>
+                                     ><?php echo e($role['name']); ?>
 
                                  </option>
                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

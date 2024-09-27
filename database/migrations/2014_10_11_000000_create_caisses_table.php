@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('code');
             $table->string('libelle')->nullable(); // libelle
             $table->string('description')->nullable(); // description
-            $table->enum('statut' ,['active', 'desactive'])->nullable(); //
+            $table->enum('statut' ,['active', 'desactive'])->default('desactive'); //
             $table->timestamps();
         });
     }

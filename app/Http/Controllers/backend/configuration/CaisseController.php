@@ -36,6 +36,8 @@ class CaisseController extends Controller
                 'code' => 'C-' . strtoupper(Str::random(5)),
                 'libelle' => $request['libelle'],
                 'description' => $request['description'],
+                'statut' => 'desactive',
+
             ]);
 
             Alert::success('Operation réussi', 'Success Message');
