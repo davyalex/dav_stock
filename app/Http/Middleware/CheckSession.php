@@ -17,12 +17,10 @@ class CheckSession
      */
     public function handle(Request $request, Closure $next): Response
     {
-
-
         // Si l'utilisateur n'est pas authentifié
         if (!Auth::check()) {
             // Rediriger vers la page de connexion avec un message
-            return Redirect()->route('admin.login')->withError('Session expirée , veuillez à nouveau vous connecter');;
+            return Redirect()->route('admin.login')->withError('Session expirée , veuillez à nouveau vous connecter');
         }
 
         return $next($request);

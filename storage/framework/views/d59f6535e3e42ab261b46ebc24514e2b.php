@@ -106,55 +106,11 @@
     <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
     <script>
-        $(document).ready(function() {
-            $('.delete').on("click", function(e) {
-                e.preventDefault();
-                var Id = $(this).attr('data-id');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: 'No, cancel!',
-                    customClass: {
-                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
-                        cancelButton: 'btn btn-danger w-xs mt-2',
-                    },
-                    buttonsStyling: false,
-                    showCloseButton: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            type: "POST",
-                            url: "/role/delete/" + Id,
-                            dataType: "json",
-                            data: {
-                                _token: '<?php echo e(csrf_token()); ?>',
-
-                            }
-                            ,
-                            success: function(response) {
-                                if (response.status == 200) {
-                                    Swal.fire({
-                                        title: 'Deleted!',
-                                        text: 'Your file has been deleted.',
-                                        icon: 'success',
-                                        customClass: {
-                                            confirmButton: 'btn btn-primary w-xs mt-2',
-                                        },
-                                        buttonsStyling: false
-                                    })
-
-                                    $('#row_' + Id).remove();
-                                }
-                            }
-                        });
-                    }
-                });
-            });
-        });
-    </script>
+        $(document).ready(function(){
+         var route = "role"
+         delete_row(route);
+        })
+     </script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/role/index.blade.php ENDPATH**/ ?>
