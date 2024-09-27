@@ -31,10 +31,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CategorieTableSeeder::class);
 
         $this->call(CategorieDepensesTableSeeder::class);
-<<<<<<< HEAD
         $this->call(LibelleDepensesTableSeeder::class);
-=======
-
->>>>>>> a5523234f34261c7c78b5db23027e42d65e008cd
     }
 }
