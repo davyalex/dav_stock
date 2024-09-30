@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Optimize;
+use App\Models\Inventaire;
 use App\Models\Maintenance;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -15,12 +16,14 @@ use App\Http\Controllers\backend\menu\MenuController;
 use App\Http\Controllers\backend\menu\PlatController;
 use App\Http\Controllers\backend\slide\SlideController;
 use App\Http\Controllers\backend\stock\AchatController;
+use App\Http\Controllers\backend\stock\SortieController;
 use App\Http\Controllers\backend\module\ModuleController;
 use App\Http\Controllers\backend\user\AuthAdminController;
 use App\Http\Controllers\backend\depense\DepenseController;
 use App\Http\Controllers\backend\permission\RoleController;
 use App\Http\Controllers\backend\produit\ProduitController;
 use App\Http\Controllers\backend\stock\AjustementController;
+use App\Http\Controllers\backend\stock\InventaireController;
 use App\Http\Controllers\backend\parametre\SettingController;
 use App\Http\Controllers\backend\categorie\CategorieController;
 use App\Http\Controllers\backend\configuration\CaisseController;
@@ -263,6 +266,23 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('create/{id}', 'create')->name('ajustement.create');
         route::post('store', 'store')->name('ajustement.store');
     });
+
+    // stock -sortie
+    Route::prefix('sortie')->controller(SortieController::class)->group(function () {
+        route::get('', 'index')->name('sortie.index');
+        route::get('produit/{id}', 'produitSortie')->name('sortie.produit');
+        route::get('create', 'create')->name('sortie.create');
+        route::post('store', 'store')->name('sortie.store');
+    });
+
+
+        // stock -inventaire
+        Route::prefix('inventaire')->controller(InventaireController::class)->group(function () {
+            route::get('', 'index')->name('inventaire.index');
+            route::get('produit/{id}', 'produitSortie')->name('inventaire.produit');
+            route::get('create', 'create')->name('inventaire.create');
+            route::post('store', 'store')->name('inventaire.store');
+        });
 
     Route::prefix('categorie-depense')->controller(CategorieDepenseController::class)->group(function () {
         route::get('', 'index')->name('categorie-depense.index');

@@ -13,10 +13,10 @@
 <?php $__env->startSection('content'); ?>
     <?php $__env->startComponent('backend.components.breadcrumb'); ?>
         <?php $__env->slot('li_1'); ?>
-            Liste des achats
+           Gestion de stock
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
-            Achat
+            Liste des achats
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
 

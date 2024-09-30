@@ -101,6 +101,11 @@ class User extends Authenticatable
         return $this->hasMany(Commande::class);
     }
 
+    public function sorties(): HasMany
+    {
+        return $this->hasMany(Sortie::class);
+    }
+
 
 
     /**

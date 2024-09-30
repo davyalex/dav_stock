@@ -7,10 +7,10 @@
         <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 
         @slot('li_1')
-            Gestion de stock
+           Stock
         @endslot
         @slot('title')
-            Créer un nouveau stock
+            Créer une sortie
         @endslot
     @endcomponent
     <style>
@@ -61,7 +61,7 @@
                                     <div class="card-body"> --}}
                         <div class="row mb-3">
 
-                            <div id="static-input">
+                            {{-- <div id="static-input">
                                 <div class="row">
                                     <span class="text-danger text-center" id="msgExist"></span>
                                     <div class="col-md-3 mb-3">
@@ -116,7 +116,7 @@
 
 
                                 </div>
-                            </div>
+                            </div> --}}
 
 
                             <div id="form-container">
@@ -175,7 +175,7 @@
                         </select>
                     </div>
 
-                    <div class="col-md-4">
+                    {{-- <div class="col-md-4">
                         <label class="form-label" for="product-title-input">Magasin
                             <span class="text-danger">*</span>
                         </label>
@@ -188,7 +188,7 @@
                                 </option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> --}}
 
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="stocks-input">Qté acquise
@@ -198,6 +198,9 @@
                         <input type="number" name="quantite_format[]" class="form-control qteAcquise" required>
                     </div>
 
+
+
+{{-- 
                     <div class="col-md-4 mb-3">
                         <label class="form-label" for="product-title-input">Format
                             <span class="text-danger">*</span>
@@ -283,7 +286,7 @@
                         </label>
                         <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
                         <input type="number" name="prix_vente_unitaire[]" class="form-control prixVente">
-                    </div>
+                    </div> --}}
 
                     {{-- <div class="col-md-6">
                         <label class="form-check-label" for="customAff">Activer ou desactiver le produit <br> <span
@@ -647,41 +650,180 @@
 
                 });
 
+                //enregister le formulaire
+                // $('#myForm').on('submit', function(event) {
+                //     calculerTotalDepense()
+                //     event.preventDefault(); // Empêcher le rechargement de la page
+
+                //     let formData = $(this).serialize(); // Récupérer les données du formulaire
+
+                //     $.ajax({
+                //         url: $(this).attr('action'), // URL de la soumission du formulaire
+                //         type: 'POST',
+                //         data: formData,
+                //         dataType: 'json',
+                //         success: function(response, textStatus, xhr) {
+                //             let statusCode = xhr.status;
+
+                //             // Si la soumission est réussie
+                //             if (statusCode === 200) {
+                //                 // Afficher un message de succès avec Swal
+                //                 Swal.fire({
+                //                     title: 'Succès',
+                //                     text: response.message,
+                //                     icon: 'success',
+                //                 });
+
+                //                 //redirect to route
+                //                 var url = "{{ route('achat.facture') }}" // redirect route liste facture
+                //                 window.location.replace(url);
+
+                //             }
+                //         },
+
+                //         error: function(xhr, textStatus, errorThrown) {
+                //             let statusCode = xhr.status;
+
+                //             // Si une erreur serveur (500) est rencontrée
+                //             if (statusCode === 500) {
+                //                 Swal.fire({
+                //                     title: 'Erreur',
+                //                     text: xhr.responseJSON ? xhr.responseJSON.message :
+                //                     'Une erreur est survenue.',
+                //                     icon: 'error',
+                //                     confirmButtonText: 'OK',
+                //                 });
+                //             } else {
+                //                 // Pour d'autres erreurs (comme 400, 404, etc.)
+                //                 Swal.fire({
+                //                     title: 'Erreur',
+                //                     text: xhr.responseJSON ? xhr.responseJSON.message :
+                //                         'Une erreur est survenue.',
+                //                     icon: 'error',
+                //                     confirmButtonText: 'OK',
+                //                 });
+                //             }
+                //         }
 
 
-                // Fonction pour verifier si un produit est selectionner 2 fois
-                function validateProductSelection() {
-                    let selectedProducts = [];
-
-                    $('.productSelected').each(function(index, element) {
-                        let produitId = $(element).val();
-
-                        // Vérifier si le produit a déjà été sélectionné
-                        if (selectedProducts.includes(produitId)) {
-                            Swal.fire({
-                                title: 'Erreur',
-                                text: 'Ce produit a déjà été sélectionné.',
-                                icon: 'error',
-                                confirmButtonText: 'OK',
-                            });
+                //     });
+                // });
 
 
-                            // Réinitialiser le champ select pour éviter la sélection en double
-                            $(element).val(null).trigger('change.select2');
+                // $('#myForm').on('submit', function(event) {
+                //     event.preventDefault(); // Empêcher le rechargement de la page
 
-                        } else {
-                            selectedProducts.push(produitId);
+                //     let hasError = false;
+                //     let formData = $(this).serialize(); // Récupérer les données du formulaire
 
-                        }
-                    });
-                }
-
-                // Attacher l'événement de changement aux champs select des produits
-                $(document).on('change', '.productSelected', function() {
-                    validateProductSelection();
-                });
+                //     // Parcourir chaque groupe de champs dupliqués
+                //     $('.duplicated-group').each(function(index, element) {
+                //         let magasin = $(this).find('select[name="magasin_id[]"]').val();
+                //         let produit = $(this).find('select[name="produit_id[]"]').val();
+                //         let format = $(this).find('select[name="format_id[]"]').val();
+                //         let unite = $(this).find('select[name="unite_sortie[]"]').val();
 
 
+
+                //         // Vérifier si les champs sont valides (selon vos règles)
+                //         if (!magasin) {
+                //             hasError = true;
+                //             Swal.fire({
+                //                 title: 'Erreur',
+                //                 text: 'Le champ Magasin est obligatoire.',
+                //                 icon: 'error',
+                //                 confirmButtonText: 'OK',
+                //             });
+                //             return false; // Stopper l'itération
+                //         }
+
+                //         if (!unite) {
+                //             hasError = true;
+                //             Swal.fire({
+                //                 title: 'Erreur',
+                //                 text: 'Le champ Unite est obligatoire.',
+                //                 icon: 'error',
+                //                 confirmButtonText: 'OK',
+                //             });
+                //             return false; // Stopper l'itération
+                //         }
+
+                //         if (!produit) {
+                //             hasError = true;
+                //             Swal.fire({
+                //                 title: 'Erreur',
+                //                 text: 'Le champ Produit est obligatoire.',
+                //                 icon: 'error',
+                //                 confirmButtonText: 'OK',
+                //             });
+                //             return false; // Stopper l'itération
+                //         }
+                //         if (!format) {
+                //             hasError = true;
+                //             Swal.fire({
+                //                 title: 'Erreur',
+                //                 text: 'Le champ Format est obligatoire.',
+                //                 icon: 'error',
+                //                 confirmButtonText: 'OK',
+                //             });
+                //             return false; // Stopper l'itération
+                //         }
+                //     });
+
+                //     // Si une erreur a été trouvée, arrêter le processus
+                //     if (hasError) {
+                //         return false;
+                //     }
+
+                //     // Si tout est correct, soumettre le formulaire avec Ajax
+                //     $.ajax({
+                //         url: $(this).attr('action'), // URL de la soumission du formulaire
+                //         type: 'POST',
+                //         data: formData,
+                //         dataType: 'json',
+                //         success: function(response, textStatus, xhr) {
+                //             let statusCode = xhr.status;
+
+                //             // Si la soumission est réussie
+                //             if (statusCode === 200) {
+                //                 // Afficher un message de succès avec Swal
+                //                 Swal.fire({
+                //                     title: 'Succès',
+                //                     text: response.message,
+                //                     icon: 'success',
+                //                 });
+
+                //                 // Rediriger vers la liste des factures
+                //                 var url =
+                //                 "{{ route('achat.facture') }}"; // Rediriger vers la route liste facture
+                //                 window.location.replace(url);
+                //             }
+                //         },
+                //         error: function(xhr, textStatus, errorThrown) {
+                //             let statusCode = xhr.status;
+
+                //             // Si une erreur serveur (500) est rencontrée
+                //             if (statusCode === 500) {
+                //                 Swal.fire({
+                //                     title: 'Erreur',
+                //                     text: xhr.responseJSON ? xhr.responseJSON.message :
+                //                         'Une erreur est survenue.',
+                //                     icon: 'error',
+                //                     confirmButtonText: 'OK',
+                //                 });
+                //             } else {
+                //                 // Pour d'autres erreurs (comme 400, 404, etc.)
+                //                 Swal.fire({
+                //                     title: 'Erreur',
+                //                     text: xhr.responseJSON ? xhr.responseJSON.message :
+                //                         'Une erreur est survenue.',
+                //                     icon: 'error',
+                //                     confirmButtonText: 'OK',
+                //                 });
+                //             }
+                //         }
+                //     });
+                // });
 
                 $('#myForm').on('submit', function(event) {
                     event.preventDefault(); // Empêcher le rechargement de la page
@@ -900,37 +1042,37 @@
 
 
                 // Fonction pour cacher les champs en fonction du type de produit selectionné
-                function addProductSelectListener(form) {
-                    var dataProduct = {{ Js::from($data_produit) }}; // Données du contrôleur
-                    var dataCategory = {{ Js::from($data_categorie) }}; // Données du contrôleur
+                // function addProductSelectListener(form) {
+                //     var dataProduct = {{ Js::from($data_produit) }}; // Données du contrôleur
+                //     var dataCategory = {{ Js::from($data_categorie) }}; // Données du contrôleur
 
-                    var productSelected = form.find('.productSelected').val(); // Récupère la valeur du select actuel
-                    var filteredCatRestaurant = dataCategory.filter(function(item) {
-                        return item.type == 'restaurant';
-                    });
+                //     var productSelected = form.find('.productSelected').val(); // Récupère la valeur du select actuel
+                //     var filteredCatRestaurant = dataCategory.filter(function(item) {
+                //         return item.type == 'restaurant';
+                //     });
 
-                    var filteredProduct = dataProduct.filter(function(item) {
-                        return item.id == productSelected;
-                    });
+                //     var filteredProduct = dataProduct.filter(function(item) {
+                //         return item.id == productSelected;
+                //     });
 
-                    if (filteredProduct[0].type_id == filteredCatRestaurant[0].id) {
+                //     if (filteredProduct[0].type_id == filteredCatRestaurant[0].id) {
 
-                        form.find('.prixAchatUniteDiv').hide()
-                        form.find('.prixVenteDiv').hide()
-                        form.find('.prixAchatUnite').val(0)
-                        form.find('.prixVente').val(0)
-
-
-                    } else {
-                        form.find('.prixAchatUniteDiv').show()
-                        form.find('.prixVenteDiv').show()
-                        form.find('.prixVente').prop('required', true)
-                        form.find('.prixAchatUnite').prop('required', true)
-
-                    }
+                //         form.find('.prixAchatUniteDiv').hide()
+                //         form.find('.prixVenteDiv').hide()
+                //         form.find('.prixAchatUnite').val(0)
+                //         form.find('.prixVente').val(0)
 
 
-                }
+                //     } else {
+                //         form.find('.prixAchatUniteDiv').show()
+                //         form.find('.prixVenteDiv').show()
+                //         form.find('.prixVente').prop('required', true)
+                //         form.find('.prixAchatUnite').prop('required', true)
+
+                //     }
+
+
+                // }
 
 
                 $(document).on('change', '.productSelected', function() {

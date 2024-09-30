@@ -13,10 +13,10 @@
 @section('content')
     @component('backend.components.breadcrumb')
         @slot('li_1')
-           Gestion de stock
+          Liste des sorties
         @endslot
         @slot('title')
-        Liste des facture
+        Gestion de stock
         @endslot
     @endcomponent
 
@@ -24,9 +24,9 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des facture</h5>
-                    <a href="{{ route('achat.create') }}" type="button" class="btn btn-primary ">Enregistrer
-                        une facture</a>
+                    <h5 class="card-title mb-0">Liste des sorties</h5>
+                    <a href="{{ route('sortie.create') }}" type="button" class="btn btn-primary ">Enregistrer
+                        une sortie de stock</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -34,26 +34,20 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>N°Facture</th>
-                                    <th>Type</th>
-                                    <th>fournisseur</th>
-                                    <th>Montant</th>
+                                    <th>N°de sortie</th>
                                     <th>Date</th>
                                     <th>Crée par</th>
                                     <th class="d-none">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data_facture as $key => $item)
+                                @foreach ($data_sortie as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
-                                        <td> <a class="fw-bold" href="{{route('achat.index' , $item->id)}}">#{{ $item['numero_facture'] }}</a> </td>
-                                        <td>{{ $item['type'] }}</td>
-                                        <td>{{ $item['fournisseur']['nom'] ?? 'N/A' }}</td>
-                                        <td> {{ $item['montant'] }} </td>
-                                        <td> {{ $item['date_facture'] }} </td>
+                                        <td> <a class="fw-bold" href="{{route('sortie.produit' , $item->id)}}">#{{ $item['code'] }}</a> </td>
+                                        <td> {{ $item['date_sortie'] }} </td>
                                         <td> {{ $item['user']['first_name'] }} </td>
-                                        <td class="d-none">
+                                        {{-- <td class="d-none">
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -69,7 +63,7 @@
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                             View</a>
                                                     </li>
-                                                    <li><a href="{{ route('achat.edit', $item['id']) }}" type="button"
+                                                    <li><a href="{{ route('sortie.edit', $item['id']) }}" type="button"
                                                             class="dropdown-item edit-item-btn"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             Edit</a></li>
@@ -82,9 +76,8 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                        </td>
+                                        </td> --}}
                                     </tr>
-                                    {{-- @include('backend.pages.produit.edit') --}}
                                 @endforeach
                             </tbody>
                         </table>
@@ -95,7 +88,6 @@
     </div>
     <!--end row-->
 
-    {{-- @include('backend.pages.produit.create') --}}
 @endsection
 @section('script')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"

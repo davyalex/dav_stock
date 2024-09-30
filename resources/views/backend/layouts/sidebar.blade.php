@@ -165,7 +165,7 @@
                         aria-controls="sidebarStock">
                         <i class="ri ri-box-1-fill"></i> <span>GESTION DE STOCK</span>
                     </a>
-                    <div class="collapse menu-dropdown {{ Route::is('ajustement.*') || Route::is('achat.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : '' }}"
+                    <div class="collapse menu-dropdown {{ Route::is('inventaire.*') || Route::is('sortie.*') ||Route::is('ajustement.*') || Route::is('achat.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : '' }}"
                         id="sidebarStock">
                         <ul class="nav nav-sm flex-column">
 
@@ -180,12 +180,16 @@
                             </li>
 
                             <li class="nav-item active">
-                                <a href="{{ route('ajustement.index') }}"
-                                    class="nav-link {{ Route::is('ajustement.*') ? 'active' : '' }}">Inventaire</a>
+                                <a href="{{ route('sortie.index') }}"
+                                    class="nav-link {{ Route::is('sortie.*') ? 'active' : '' }}">Sortie de stock</a>
                             </li>
 
 
-                            
+                            <li class="nav-item active">
+                                <a href="{{ route('inventaire.create') }}"
+                                    class="nav-link {{ Route::is('inventaire.*') ? 'active' : '' }}">Inventaire</a>
+                            </li>
+
 
                         </ul>
                     </div>

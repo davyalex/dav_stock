@@ -18,34 +18,24 @@ File: Main Js File
     var default_lang = "en"; // set Default Language
     var language = localStorage.getItem("language");
 
-  
-
-    //gerer les nombre a virgule
-    // $(".customNumberInput").on("input", function () {
-    //     let value = $(this).val();
-
-    //     // Remplacer les virgules par des points
-    //     value = value.replace(",", ".");
-
-    //     // Supprimer les caractères non numériques sauf le point
-    //     let validValue = value.replace(/[^0-9.]/g, "");
-
-    //     // Limiter à un seul point décimal
-    //     if ((validValue.match(/\./g) || []).length > 1) {
-    //         validValue = validValue.substring(0, validValue.length - 1);
-    //     }
-
-    //     $(this).val(validValue);
-    // });
-
+    // mettre une couleur de fond pour tous les champs avec la proprite  readonly
+    var inputs = document.querySelectorAll("input[readonly]");
+    inputs.forEach(function (input) {
+        input.style.backgroundColor = "#f0f0f0";
+    });
+    // mettre une couleur de fond pour tous les champs avec la proprite  readonly
+    var selects = document.querySelectorAll("select[readonly]");
+    selects.forEach(function (select) {
+        select.style.backgroundColor = "#f0f0f0";
+    });
 
     // Sélectionner tous les inputs de type number
-    $('input[type="number"]').each(function() {
+    $('input[type="number"]').each(function () {
         // Changer le type à 'text'
-        $(this).attr('type', 'text');
-        
+        $(this).attr("type", "text");
+
         // Ajouter un événement pour remplacer les virgules par des points
-        $(this).on('input', function() {
+        $(this).on("input", function () {
             let value = $(this).val();
 
             // Remplacer les virgules par des points

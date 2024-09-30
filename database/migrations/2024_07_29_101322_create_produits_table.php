@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('nom')->nullable(); // libelle
             $table->string('slug')->nullable();
             $table->double('prix')->nullable();
-            $table->integer('stock')->default(0); //quantité en stock
-            $table->integer('stock_alerte')->default(0); //
+            $table->float('stock_global')->default(0)->after('prix'); // stock net
+            $table->float('stock')->default(0); //quantité en stock
+            $table->float('stock_alerte')->default(0); //
             $table->longText('description')->nullable();
             $table->enum('statut', ['active', 'desactive'])->default('active');
 

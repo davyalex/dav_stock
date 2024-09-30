@@ -13,10 +13,10 @@
 @section('content')
     @component('backend.components.breadcrumb')
         @slot('li_1')
-            Liste des achats
+           Gestion de stock
         @endslot
         @slot('title')
-            Achat
+            Liste des achats
         @endslot
     @endcomponent
 
