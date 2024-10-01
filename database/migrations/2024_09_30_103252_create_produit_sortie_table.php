@@ -27,8 +27,8 @@ return new class extends Migration
                 ->onDelete('cascade');
 
 
-            $table->float('quantite_existant')->nullable();
-            $table->float('quantite_utilise')->nullable();
+            $table->double('quantite_existant')->nullable();
+            $table->double('quantite_utilise')->nullable();
 
             $table->foreignId('unite_id')  // unite de sortie
                 ->nullable()

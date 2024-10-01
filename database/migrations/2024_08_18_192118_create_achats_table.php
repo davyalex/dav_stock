@@ -43,10 +43,10 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->float('quantite_format')->nullable(); //quantité de format
-            $table->float('quantite_in_format')->nullable(); //quantité dans un format
+            $table->double('quantite_format')->nullable(); //quantité de format
+            $table->double('quantite_in_format')->nullable(); //quantité dans un format
 
-            $table->float('quantite_stocke')->nullable(); // quantite total des piece dans les formats
+            $table->double('quantite_stocke')->nullable(); // quantite total des piece dans les formats
             $table->double('prix_unitaire_format')->nullable(); //prix unitaire d'un format
             $table->double('prix_total_format')->nullable(); //prix total d'un format
             $table->double('prix_achat_unitaire')->nullable(); //prix d'achat unitaire d'une piece dans un format (calcule automatique)

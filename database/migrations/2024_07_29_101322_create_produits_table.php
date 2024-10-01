@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('nom')->nullable(); // libelle
             $table->string('slug')->nullable();
             $table->double('prix')->nullable();
-            $table->float('stock_initial')->default(0)->after('prix'); // stock net
-            $table->float('stock')->default(0); //quantité en stock
-            $table->float('stock_alerte')->default(0); //
+            $table->double('stock_initial')->default(0); // stock net
+            $table->double('stock')->default(0); //quantité en stock
+            $table->double('stock_alerte')->default(0); //
             $table->longText('description')->nullable();
             $table->enum('statut', ['active', 'desactive'])->default('active');
 
@@ -49,7 +49,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->float('quantite_unite')->nullable(); //quantite unite mesure
+            $table->double('quantite_unite')->nullable(); //quantite unite mesure
 
 
             $table->foreignId('unite_id')
