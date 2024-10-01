@@ -16,6 +16,7 @@ use App\Http\Controllers\backend\menu\MenuController;
 use App\Http\Controllers\backend\menu\PlatController;
 use App\Http\Controllers\backend\slide\SlideController;
 use App\Http\Controllers\backend\stock\AchatController;
+use App\Http\Controllers\backend\vente\VenteController;
 use App\Http\Controllers\backend\stock\SortieController;
 use App\Http\Controllers\backend\module\ModuleController;
 use App\Http\Controllers\backend\user\AuthAdminController;
@@ -283,13 +284,22 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     });
 
 
-        // stock -inventaire
-        Route::prefix('inventaire')->controller(InventaireController::class)->group(function () {
-            route::get('', 'index')->name('inventaire.index');
-            route::get('show/{id}', 'show')->name('inventaire.show');
-            route::get('create', 'create')->name('inventaire.create');
-            route::post('store', 'store')->name('inventaire.store');
-        });
+    // stock -inventaire
+    Route::prefix('inventaire')->controller(InventaireController::class)->group(function () {
+        route::get('', 'index')->name('inventaire.index');
+        route::get('show/{id}', 'show')->name('inventaire.show');
+        route::get('create', 'create')->name('inventaire.create');
+        route::post('store', 'store')->name('inventaire.store');
+    });
+
+
+    // stock -vente
+    Route::prefix('vente')->controller(VenteController::class)->group(function () {
+        route::get('', 'index')->name('vente.index');
+        route::get('show/{id}', 'show')->name('vente.show');
+        route::get('create', 'create')->name('vente.create');
+        route::post('store', 'store')->name('vente.store');
+    });
 
     Route::prefix('categorie-depense')->controller(CategorieDepenseController::class)->group(function () {
         route::get('', 'index')->name('categorie-depense.index');

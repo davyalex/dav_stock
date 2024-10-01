@@ -221,17 +221,17 @@
 
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarMenu" data-bs-toggle="collapse" role="button"
-                        aria-controls="sidebarMenu">
+                    <a class="nav-link menu-link" href="#sideBarVente" data-bs-toggle="collapse" role="button"
+                        aria-controls="sideBarVente">
                         <i class="ri ri-file-list-line"></i> <span>VENTES</span>
                     </a>
-                    <div class="collapse menu-dropdown <?php echo e(Route::is('menu.*') || Route::is('plat.*') ? 'show' : ''); ?>"
-                        id="sidebarMenu">
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('vente.*') || Route::is('plat.*') ? 'show' : ''); ?>"
+                        id="sideBarVente">
                         <ul class="nav nav-sm flex-column">
 
                             <li class="nav-item active">
-                                <a href="<?php echo e(route('plat.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('plat.*') ? 'active' : ''); ?>">Creer une vente</a>
+                                <a href="<?php echo e(route('vente.create')); ?>"
+                                    class="nav-link <?php echo e(Route::is('vente.*') ? 'active' : ''); ?>">Faire une vente</a>
                             </li>
 
                             <li class="nav-item active">

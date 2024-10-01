@@ -17,7 +17,7 @@ class PlatController extends Controller
     //
     public function index()
     {
-        $categorie = Categorie::where('type', 'plats')->first();
+        $categorie = Categorie::where('famille', 'menu')->first();
 
         $data_plat = Produit::where('type_id',  $categorie->id)->get();
         // dd($data_plat->toArray());
@@ -29,7 +29,7 @@ class PlatController extends Controller
         try {
 
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
-                ->whereIn('type', ['plats'])
+                ->whereIn('famille', ['menu'])
                 ->OrderBy('position', 'ASC')->get();
 
             // dd($plat->toArray());
@@ -127,7 +127,7 @@ class PlatController extends Controller
         try {
 
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
-                ->whereIn('type', ['plats'])
+                ->whereIn('famille', ['menu'])
                 ->OrderBy('position', 'ASC')->get();
 
             $data_plat = Produit::find($id);

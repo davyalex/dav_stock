@@ -13,6 +13,33 @@ return new class extends Migration
     {
         Schema::create('ventes', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique()->nullable();
+            $table->date('date_vente')->nullable();
+            $table->double('montant_total')->nullable();
+          
+            $table->foreignId('client_id')  // client qui a fait la vente
+            ->nullable()
+            ->constrained('users')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+
+
+            $table->foreignId('caisse_id')
+            ->nullable()
+            ->constrained('caisses')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+
+            $table->foreignId('user_id')  // utilisateur qui a fait la vente
+            ->nullable()
+            ->constrained('users')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+
+            $table->enum('statut' , ['en attente' ,'confirmée' , 'livrée' , 'annulée'])->nullable();
+
+            $table->softDeletes();
+
             $table->timestamps();
         });
     }

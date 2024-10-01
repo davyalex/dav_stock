@@ -230,17 +230,17 @@
 
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarMenu" data-bs-toggle="collapse" role="button"
-                        aria-controls="sidebarMenu">
+                    <a class="nav-link menu-link" href="#sideBarVente" data-bs-toggle="collapse" role="button"
+                        aria-controls="sideBarVente">
                         <i class="ri ri-file-list-line"></i> <span>VENTES</span>
                     </a>
-                    <div class="collapse menu-dropdown {{ Route::is('menu.*') || Route::is('plat.*') ? 'show' : '' }}"
-                        id="sidebarMenu">
+                    <div class="collapse menu-dropdown {{ Route::is('vente.*') || Route::is('plat.*') ? 'show' : '' }}"
+                        id="sideBarVente">
                         <ul class="nav nav-sm flex-column">
 
                             <li class="nav-item active">
-                                <a href="{{ route('plat.index') }}"
-                                    class="nav-link {{ Route::is('plat.*') ? 'active' : '' }}">Creer une vente</a>
+                                <a href="{{ route('vente.create') }}"
+                                    class="nav-link {{ Route::is('vente.*') ? 'active' : '' }}">Faire une vente</a>
                             </li>
 
                             <li class="nav-item active">
