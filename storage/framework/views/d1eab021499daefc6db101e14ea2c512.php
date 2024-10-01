@@ -156,7 +156,7 @@
                         aria-controls="sidebarStock">
                         <i class="ri ri-box-1-fill"></i> <span>GESTION DE STOCK</span>
                     </a>
-                    <div class="collapse menu-dropdown <?php echo e(Route::is('inventaire.*') || Route::is('sortie.*') ||Route::is('ajustement.*') || Route::is('achat.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : ''); ?>"
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('etat-stock.*') || Route::is('inventaire.*') || Route::is('sortie.*') ||Route::is('ajustement.*') || Route::is('achat.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : ''); ?>"
                         id="sidebarStock">
                         <ul class="nav nav-sm flex-column">
 
@@ -165,10 +165,7 @@
                                     class="nav-link <?php echo e(Route::is('achat.*') ? 'active' : ''); ?>">Reception de stock</a>
                             </li>
 
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('ajustement.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('ajustement.*') ? 'active' : ''); ?>">Etat du stock</a>
-                            </li>
+                          
 
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('sortie.index')); ?>"
@@ -177,8 +174,13 @@
 
 
                             <li class="nav-item active">
-                                <a href="<?php echo e(route('inventaire.create')); ?>"
+                                <a href="<?php echo e(route('inventaire.index')); ?>"
                                     class="nav-link <?php echo e(Route::is('inventaire.*') ? 'active' : ''); ?>">Inventaire</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('etat-stock.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('etat-stock.*') ? 'active' : ''); ?>">Etat du stock</a>
                             </li>
 
 

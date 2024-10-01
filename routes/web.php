@@ -22,6 +22,7 @@ use App\Http\Controllers\backend\user\AuthAdminController;
 use App\Http\Controllers\backend\depense\DepenseController;
 use App\Http\Controllers\backend\permission\RoleController;
 use App\Http\Controllers\backend\produit\ProduitController;
+use App\Http\Controllers\backend\stock\EtatStockController;
 use App\Http\Controllers\backend\stock\AjustementController;
 use App\Http\Controllers\backend\stock\InventaireController;
 use App\Http\Controllers\backend\parametre\SettingController;
@@ -245,6 +246,12 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('delete/{id}', 'delete')->name('produit.delete');
     });
 
+    //etat stock
+    Route::prefix('etat-stock')->controller(EtatStockController::class)->group(function () {
+        route::get('', 'index')->name('etat-stock.index');
+    });
+
+
 
     // stock -achat
     Route::prefix('achat')->controller(AchatController::class)->group(function () {
@@ -270,7 +277,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     // stock -sortie
     Route::prefix('sortie')->controller(SortieController::class)->group(function () {
         route::get('', 'index')->name('sortie.index');
-        route::get('produit/{id}', 'produitSortie')->name('sortie.produit');
+        route::get('show/{id}', 'show')->name('sortie.show');
         route::get('create', 'create')->name('sortie.create');
         route::post('store', 'store')->name('sortie.store');
     });
@@ -279,7 +286,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         // stock -inventaire
         Route::prefix('inventaire')->controller(InventaireController::class)->group(function () {
             route::get('', 'index')->name('inventaire.index');
-            route::get('produit/{id}', 'produitSortie')->name('inventaire.produit');
+            route::get('show/{id}', 'show')->name('inventaire.show');
             route::get('create', 'create')->name('inventaire.create');
             route::post('store', 'store')->name('inventaire.store');
         });

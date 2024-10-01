@@ -34,12 +34,16 @@
         }
 
         .btn-custom-size {
-        padding: 4px 8px; /* Ajuste la taille du bouton */
-        font-size: 10px; /* Ajuste la taille du texte */
-    }
-    .btn-custom-size i {
-        font-size: 14px; /* Ajuste la taille de l'icône */
-    }
+            padding: 4px 8px;
+            /* Ajuste la taille du bouton */
+            font-size: 10px;
+            /* Ajuste la taille du texte */
+        }
+
+        .btn-custom-size i {
+            font-size: 14px;
+            /* Ajuste la taille de l'icône */
+        }
 
 
 
@@ -60,7 +64,7 @@
         <div class="col-lg-12">
             {{-- <div class="card">
                 <div class="card-body"> --}}
-            <form id="myForm" method="POST" action="{{ route('sortie.store') }}" autocomplete="off" novalidate
+            <form id="myForm" method="POST" action="{{ route('inventaire.store') }}" autocomplete="off" novalidate
                 enctype="multipart/form-data">
                 @csrf
                 <div class="row">
@@ -104,7 +108,8 @@
                     <div class="col-md-12 text-end">
                         <button type="button" class="btn btn-success validate btn-custom-size"> <i
                                 class="ri ri-checkbox-circle-fill fs-5 validate"></i> </button>
-                        <button type="button" class="btn btn-primary edit btn-custom-size"> <i class="ri ri-edit-box-fill fs-5 edit"></i>
+                        <button type="button" class="btn btn-primary edit btn-custom-size"> <i
+                                class="ri ri-edit-box-fill fs-5 edit"></i>
                         </button>
                         <button type="button" class="btn btn-danger remove-form btn-custom-size"> <i
                                 class="ri ri-delete-bin-fill fs-5 remove-form"></i> </button>
@@ -127,53 +132,47 @@
 
 
                     <div class="col-md-2 mb-3">
-                        <label class="form-label" for="stocks-input">Qté global
+                        <label class="form-label" for="stocks-input">Stock initial
                             <span class="text-danger">*</span>
                         </label>
-                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
-                        <input type="number" name="quantite_utilise[]" class="form-control qteUtilise" readonly>
+                        <input type="number" name="stock_initial[]" class="form-control stockInitial" readonly>
                     </div>
 
 
                     <div class="col-md-2 mb-3">
-                        <label class="form-label" for="stocks-input">Qté restante
+                        <label class="form-label" for="stocks-input">Stock théorique
                             <span class="text-danger">*</span>
                         </label>
-                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
-                        <input type="number" name="quantite_utilise[]" class="form-control qteUtilise" readonly>
+                        <input type="number" name="stock_theorique[]" class="form-control stockTheorique" readonly>
                     </div>
 
 
                     <div class="col-md-2 mb-3">
-                        <label class="form-label" for="stocks-input">Qté physique
+                        <label class="form-label" for="stocks-input">Stock physique
                             <span class="text-danger">*</span>
                         </label>
                         <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
-                        <input type="number" name="quantite_utilise[]" class="form-control qteUtilise" required>
+                        <input type="number" name="stock_physique[]" class="form-control stockPhysique" required>
                     </div>
 
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="stocks-input">Rapport Ecart
                             <span class="text-danger">*</span>
                         </label>
-                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
-                        <input type="number" name="quantite_utilise[]" class="form-control qteUtilise" readonly>
+                        <input type="number" name="ecart[]" class="form-control ecart" readonly>
                     </div>
 
                     <div class="col-md-4 mb-3">
                         <label class="form-label" for="stocks-input">Etat de stock
                             <span class="text-danger">*</span>
                         </label>
-                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
-                        <input type="number" name="quantite_utilise[]" class="form-control qteUtilise" readonly>
+                        <input type="text" name="etat[]" class="form-control etatStock" readonly>
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="stocks-input">Observation
-                            <span class="text-danger">*</span>
                         </label>
-                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
-                        <input type="number" name="quantite_utilise[]" class="form-control qteUtilise">
+                        <input type="text" name="observation[]" class="form-control observation">
                     </div>
 
 
@@ -403,41 +402,41 @@
 
 
                 //Fonction pour  verifier la quantité entrée , elle ,e dois pas depasser la quantité en stock
-                function verifyQty(form) {
-                    var dataProduct = @json($data_produit); // Données du contrôleur
+                // function verifyQty(form) {
+                //     var dataProduct = @json($data_produit); // Données du contrôleur
 
-                    // Récupérer la quantité utilisée et l'ID du produit sélectionné
-                    var qteStock = form.find('.qteUtilise').val(); // Assurez-vous que la classe est correcte
-                    var productSelected = form.find('.productSelected')
-                        .val(); // Assurez-vous que la classe est correcte
+                //     // Récupérer la quantité utilisée et l'ID du produit sélectionné
+                //     var qteStock = form.find('.qteUtilise').val(); // Assurez-vous que la classe est correcte
+                //     var productSelected = form.find('.productSelected')
+                //         .val(); // Assurez-vous que la classe est correcte
 
-                    // Trouver le produit dans dataProduct basé sur l'ID sélectionné
-                    var product = dataProduct.find(function(item) {
-                        return item.id == productSelected;
-                    });
+                //     // Trouver le produit dans dataProduct basé sur l'ID sélectionné
+                //     var product = dataProduct.find(function(item) {
+                //         return item.id == productSelected;
+                //     });
 
-                    if (qteStock > product.stock) {
-                        //swalfire
-                        Swal.fire({
-                            title: 'Erreur',
-                            text: 'La quantité entrée dépasse la quantité en stock',
-                            icon: 'error',
-                        });
+                //     if (qteStock > product.stock) {
+                //         //swalfire
+                //         Swal.fire({
+                //             title: 'Erreur',
+                //             text: 'La quantité entrée dépasse la quantité en stock',
+                //             icon: 'error',
+                //         });
 
-                        //mettre le button save en disabled
-                        $('#save').prop('disabled', true)
+                //         //mettre le button save en disabled
+                //         $('#save').prop('disabled', true)
 
-                    } else {
-                        //mettre le button save en enable
-                        $('#save').prop('disabled', false)
-                    }
-                }
+                //     } else {
+                //         //mettre le button save en enable
+                //         $('#save').prop('disabled', false)
+                //     }
+                // }
 
                 // Utiliser la délégation d'événements pour les champs dynamiques
-                $(document).on('input change', '.qteUtilise , .productSelected', function() {
-                    var form = $(this).closest('.row'); // Cibler le formulaire ou la ligne parent
-                    verifyQty(form); // Appeler la fonction avec le formulaire
-                });
+                // $(document).on('input change', '.qteUtilise , .productSelected', function() {
+                //     var form = $(this).closest('.row'); // Cibler le formulaire ou la ligne parent
+                //     verifyQty(form); // Appeler la fonction avec le formulaire
+                // });
 
 
                 // Fonction pour verifier si un produit est selectionner 2 fois
@@ -446,7 +445,7 @@
 
                     $('.productSelected').each(function(index, element) {
                         let produitId = $(element).val();
-
+                        let form = $(element).closest('.row');
                         // Vérifier si le produit a déjà été sélectionné
                         if (selectedProducts.includes(produitId)) {
                             Swal.fire({
@@ -467,10 +466,64 @@
                     });
                 }
 
+
+                //fonction pour remplir les champs stock initial et stock restante
+                function getProductInfo(form) {
+                    //recuperer les infos de produit
+                    var dataProduct = @json($data_produit); // Données du contrôleur
+                    var productId = form.find('.productSelected').val();
+                    var product = dataProduct.find(function(item) {
+                        return item.id == productId;
+                    });
+                    form.find('.stockInitial').val(product.stock_initial); // stock globale
+                    form.find('.stockTheorique').val(product.stock); // stock restante
+
+                }
+
                 // Attacher l'événement de changement aux champs select des produits
                 $(document).on('change', '.productSelected', function() {
                     validateProductSelection();
+                    var form = $(this).closest('.row');
+                    getProductInfo(form);
                 });
+
+
+                // calculer l'ecart de stock
+                function calculEcart(form) {
+                    var stock_physique = form.find('.stockPhysique').val() || 0;
+                    var stock_theorique = form.find('.stockTheorique').val() || 0;
+                    var ecart = stock_physique - stock_theorique;
+                    form.find('.ecart').val(ecart);
+                    gestionEtatStock(form);
+                }
+
+                // Attacher l'événement de changement aux champs select des produits
+                $(document).on('input change', '.stockPhysique , .productSelected', function() {
+                    var form = $(this).closest('.row');
+                    calculEcart(form);
+                });
+
+
+                //gestion des etats de stock
+                function gestionEtatStock(form) {
+                    var ecart = form.find('.ecart').val();
+                    var stock_physique = form.find('.stockPhysique').val();
+                    var stock_theorique = form.find('.stockTheorique').val();
+                    var etat = '';
+                    if (ecart < 0) {
+                        etat = 'Perte';
+                    } else if (ecart > 0) {
+                        etat = 'Surplus';
+                    } else if (ecart == 0) {
+                        etat = 'Conforme';
+                    }
+
+                    if (stock_theorique == 0 && stock_physique == 0) {
+                        etat = 'Rupture';
+                    }
+
+                    form.find('.etatStock').val(etat);
+                }
 
 
 
@@ -538,7 +591,7 @@
 
                                 // Rediriger vers la liste des sortie
                                 var url =
-                                    "{{ route('sortie.create') }}"; // Rediriger vers la route liste sortie
+                                    "{{ route('inventaire.index') }}"; // Rediriger vers la route liste sortie
                                 window.location.replace(url);
                             }
                         },

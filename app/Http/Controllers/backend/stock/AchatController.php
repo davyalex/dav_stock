@@ -238,7 +238,7 @@ class AchatController extends Controller
 
                 // mise à jour du stock dans la table produit si le statut est 'active'
                 $produit->stock += $request->quantite_stocke[$index];
-                $produit->stock_global += $request->quantite_stocke[$index];
+                $produit->stock_initial += $request->quantite_stocke[$index];
                 $produit->save();
                 // if ($statut == 'active') {
                 //     $produit->stock += $request->quantite_stocke[$index];

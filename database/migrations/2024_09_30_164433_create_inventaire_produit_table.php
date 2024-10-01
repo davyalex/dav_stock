@@ -27,10 +27,11 @@ return new class extends Migration
                 ->onDelete('cascade');
 
             // $table->float('stock_global')->nullable(); // stock net
-            $table->float('stock_systeme')->nullable(); //stock apres vente
+            $table->float('stock_initial')->nullable();
+            $table->float('stock_theorique')->nullable(); //stock theorique
             $table->float('stock_physique')->nullable(); // stock disponible
             $table->float('ecart')->nullable();
-            $table->enum('etat', ['en rupture', 'en stock', 'stock critique', 'stock manquant', 'Stock excédentaire'])->nullable(); //en rupture , en stock , endommagé, Stock critique 
+            $table->string('etat')->nullable(); //en rupture , en stock , endommagé, Stock critique 
             $table->string('observation')->nullable();
             $table->timestamps();
         });

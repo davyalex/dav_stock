@@ -44,6 +44,7 @@ class Produit extends Model implements HasMedia
         'slug',
         'description',
         'prix',
+        'stock_initial',
         'stock', //quantité
         'stock_alerte', // stock de securite
         'categorie_id',
@@ -124,6 +125,6 @@ class Produit extends Model implements HasMedia
     }
 
     public function inventaires() {
-        return $this->belongsToMany(Produit::class)->withPivot(['stock_systeme','stock_physique','ecart' ,'etat' , 'observation'])->withTimestamps();
+        return $this->belongsToMany(Produit::class)->withPivot(['stock_initial','stock_theorique','stock_physique','ecart' ,'etat' , 'observation'])->withTimestamps();
     }
 }

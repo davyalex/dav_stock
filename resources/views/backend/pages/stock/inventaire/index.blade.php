@@ -1,0 +1,72 @@
+
+@extends('backend.layouts.master')
+@section('title')
+    @lang('translation.datatables')
+@endsection
+@section('css')
+    <!--datatable css-->
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+    <!--datatable responsive css-->
+    <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet"
+        type="text/css" />
+    <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+@endsection
+@section('content')
+    @component('backend.components.breadcrumb')
+        @slot('li_1')
+          Liste des inventaires
+        @endslot
+        @slot('title')
+        Gestion de stock
+        @endslot
+    @endcomponent
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h5 class="card-title mb-0">Liste des inventaires</h5>
+                    <a href="{{ route('inventaire.create') }}" type="button" class="btn btn-primary ">Effectuer
+                        un nouvel inventaire</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>N° d'inventaire</th>
+                                    <th>Date</th>
+                                    <th>Crée par</th>
+                                    <th class="d-none">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($data_inventaire as $key => $item)
+                                    <tr id="row_{{ $item['id'] }}">
+                                        <td> {{ ++$key }} </td>
+                                        <td> <a class="fw-bold" href="{{route('inventaire.show' , $item->id)}}">#{{ $item['code'] }}</a> </td>
+                                        <td> {{ $item['date_inventaire'] }} </td>
+                                        <td> {{ $item['user']['first_name'] }} </td>
+                                        <td class="d-none">
+                                            <!-- Actions si nécessaire -->
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end row-->
+
+@endsection
+@section('script')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+@endsection

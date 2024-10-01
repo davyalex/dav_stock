@@ -27,14 +27,14 @@ class SortieController extends Controller
     }
 
 
-    public function produitSortie($id)
+    public function show($id)
     {
         try {
             $sortie = Sortie::with('produits')->whereId($id)->first();
 
             // dd(  $sortie->toArray());
 
-            return view('backend.pages.stock.sortie.sortie-produit', compact('sortie'));
+            return view('backend.pages.stock.sortie.show', compact('sortie'));
         } catch (\Throwable $e) {
             return  $e->getMessage();
         }
