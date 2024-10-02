@@ -45,8 +45,7 @@
                                                 <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" name="nom" class="form-control"
-                                                   required>
+                                                <input type="text" name="nom" class="form-control" required>
                                             </div>
 
                                             <div class="col-md-4 mb-3">
@@ -203,55 +202,62 @@
 
             $('#formSend').on('submit', function(e) {
 
-                e.preventDefault();
-                var formData = new FormData(this);
+                // on verifie si une image principale à éte inseré
+                if ($('#product-image-input').val() === '') {
+                    e.preventDefault();
+                } else {
+                    e.preventDefault();
+                    var formData = new FormData(this);
 
-                $('#imageTableBody div').each(function() {
-                    var imageFile = $(this).find('img').attr('src');
-                    formData.append('images[]', imageFile)
-                });
+                    $('#imageTableBody div').each(function() {
+                        var imageFile = $(this).find('img').attr('src');
+                        formData.append('images[]', imageFile)
+                    });
 
-                $.ajax({
-                    url: "<?php echo e(route('plat.store')); ?>", // Adjust the route as needed
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        $('#imageTableBody').empty();
+                    $.ajax({
+                        url: "<?php echo e(route('plat.store')); ?>", // Adjust the route as needed
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            $('#imageTableBody').empty();
 
-                        if (response.message == 'operation reussi') {
-                            Swal.fire({
-                                title: 'plat ajouté avec success!',
-                                // text: 'You clicked the button!',
-                                icon: 'success',
-                                showCancelButton: false,
-                                customClass: {
-                                    confirmButton: 'btn btn-primary w-xs me-2 mt-2',
-                                    cancelButton: 'btn btn-danger w-xs mt-2',
-                                },
-                                buttonsStyling: false,
-                                showCloseButton: true
-                            })
-                            var url = "<?php echo e(route('plat.index')); ?>" // redirect route stock
+                            if (response.message == 'operation reussi') {
+                                Swal.fire({
+                                    title: 'plat ajouté avec success!',
+                                    // text: 'You clicked the button!',
+                                    icon: 'success',
+                                    showCancelButton: false,
+                                    customClass: {
+                                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                                        cancelButton: 'btn btn-danger w-xs mt-2',
+                                    },
+                                    buttonsStyling: false,
+                                    showCloseButton: true
+                                })
+                                var url = "<?php echo e(route('plat.index')); ?>" // redirect route stock
 
-                            window.location.replace(url);
-                        } else if (response == 'The nom has already been taken.') {
-                            Swal.fire({
-                                title: 'Ce plat existe déjà ?',
-                                text: $('#nomplat').val(),
-                                icon: 'warning',
-                                customClass: {
-                                    confirmButton: 'btn btn-primary w-xs me-2 mt-2',
-                                    cancelButton: 'btn btn-danger w-xs mt-2',
-                                },
-                                buttonsStyling: false,
-                                showCloseButton: true
-                            })
-                        }
-                    },
+                                window.location.replace(url);
+                            } else if (response == 'The nom has already been taken.') {
+                                Swal.fire({
+                                    title: 'Ce plat existe déjà ?',
+                                    text: $('#nomplat').val(),
+                                    icon: 'warning',
+                                    customClass: {
+                                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                                        cancelButton: 'btn btn-danger w-xs mt-2',
+                                    },
+                                    buttonsStyling: false,
+                                    showCloseButton: true
+                                })
+                            }
+                        },
 
-                });
+                    });
+                }
+
+
             });
         </script>
     <?php $__env->stopSection(); ?>

@@ -53,7 +53,9 @@ class AchatController extends Controller
 
         try {
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')->OrderBy('position', 'ASC')->get();
-            $data_produit = Produit::with(['categorie.ancestors', 'media'])->get();
+            $data_produit = Produit::whereHas('categorie', function($query) {
+                $query->whereIn('famille', ['bar', 'restaurant']);
+            })->with(['categorie.ancestors', 'media'])->get();
             $type_produit = Categorie::whereNull('parent_id')->whereIn('type', ['bar', 'restaurant'])->get();
 
             $data_format = Format::all();

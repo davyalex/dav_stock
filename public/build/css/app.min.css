@@ -11167,8 +11167,8 @@ div.code-toolbar > .toolbar button:hover {
     line-height: 0.1em;
     font-size: 1.4em;
     padding: 0.2em !important;
-    background: var(--vz-light);
-    color: var(--vz-body-color);
+    background: #1e80b5;
+    color: white;
     border: none;
     border-radius: var(--vz-border-radius);
 }
