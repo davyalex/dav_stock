@@ -112,7 +112,6 @@ class CaisseController extends Controller
                         'user_id' => $user->id,
                         'caisse_id' => $request->caisse,
                         'date_ouverture' => Carbon::now()
-
                     ]);
 
                     Alert::success('Connexion réussi,  Bienvenue  ' . Auth::user()->first_name, 'Success Message');

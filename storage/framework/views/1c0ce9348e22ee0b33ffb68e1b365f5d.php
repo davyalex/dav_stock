@@ -9,7 +9,7 @@
                  </button>
              </div>
              <div class="modal-body">
-                 <form class="needs-validation" novalidate method="POST"
+                 <form autocomplete="off" class="needs-validation" novalidate method="POST"
                      action="<?php echo e(route('admin-register.update', $item['id'])); ?>" enctype="multipart/form-data">
                      <?php echo csrf_field(); ?>
                      <div class="mb-3">
@@ -36,15 +36,17 @@
                              id="username" required>
                      </div>
 
-                     
+                     <div class="mb-3">
+                         <label for="username" class="form-label">Mot de passe</label>
+                         <input type="password" name="password" class="form-control" id="username" autocomplete="off">
+                     </div>
 
                      <div class="mb-3">
                          <label for="username" class="form-label">Role</label>
                          <select class="form-control" name="role" id="" required>
                              <option disabled selected value>Selectionner...</option>
                              <?php $__currentLoopData = $data_role; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                 <option value="<?php echo e($role['name']); ?>"
-                                     ><?php echo e($role['name']); ?>
+                                 <option value="<?php echo e($role['name']); ?>" <?php echo e($item['roles'][0]['name'] == $role['name'] ? 'selected' : ''); ?>><?php echo e($role['name']); ?>
 
                                  </option>
                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

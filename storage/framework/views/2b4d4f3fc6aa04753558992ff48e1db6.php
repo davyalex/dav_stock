@@ -13,10 +13,10 @@
 <?php $__env->startSection('content'); ?>
     <?php $__env->startComponent('backend.components.breadcrumb'); ?>
         <?php $__env->slot('li_1'); ?>
-          Liste des sorties
+            Gestion des ventes
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
-        Gestion de stock
+            Détails de la vente
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
 
@@ -24,9 +24,10 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des sorties</h5>
-                    <a href="<?php echo e(route('sortie.create')); ?>" type="button" class="btn btn-primary ">Enregistrer
-                        une sortie de stock</a>
+                    <h5 class="card-title mb-0">Produits de la vente
+                        <strong>#<?php echo e($vente->code); ?> du <?php echo e($vente->date_vente); ?> </strong>
+                    </h5>
+                    <a href="<?php echo e(route('vente.create')); ?>" type="button" class="btn btn-primary">Nouvelle vente</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -34,20 +35,25 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>N°de sortie</th>
-                                    <th>Date</th>
-                                    <th>Crée par</th>
-                                    <th class="d-none">Actions</th>
+                                    <th>Image</th>
+                                    <th>Nom du produit</th>
+                                    <th>Quantité</th>
+                                    <th>Prix unitaire</th>
+                                    <th>Montant total</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $__currentLoopData = $data_sortie; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__currentLoopData = $vente->produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr id="row_<?php echo e($item['id']); ?>">
-                                        <td> <?php echo e(++$key); ?> </td>
-                                        <td> <a class="fw-bold" href="<?php echo e(route('sortie.show' , $item->id)); ?>">#<?php echo e($item['code']); ?></a> </td>
-                                        <td> <?php echo e($item['date_sortie']); ?> </td>
-                                        <td> <?php echo e($item['user']['first_name']); ?> </td>
-                                        
+                                        <td><?php echo e(++$key); ?></td>
+                                        <td>
+                                            <img class="rounded-circle" src="<?php echo e($item->getFirstMediaUrl('ProduitImage')); ?>"
+                                                width="50px" alt="">
+                                        </td>
+                                        <td><?php echo e($item['nom']); ?></td>
+                                        <td><?php echo e($item['pivot']['quantite']); ?></td>
+                                        <td><?php echo e(number_format($item['pivot']['prix_unitaire'], 0, ',', ' ')); ?> FCFA</td>
+                                        <td><?php echo e(number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ')); ?> FCFA</td>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
@@ -57,8 +63,6 @@
             </div>
         </div>
     </div>
-    <!--end row-->
-
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -77,13 +81,6 @@
     <script src="<?php echo e(URL::asset('build/js/pages/datatables.init.js')); ?>"></script>
 
     <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
-
-    <script>
-        $(document).ready(function() {
-            var route = "depense"
-            delete_row(route);
-        })
-    </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/stock/sortie/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/vente/show.blade.php ENDPATH**/ ?>

@@ -38,7 +38,7 @@ class InventaireController extends Controller
             $data_produit = Produit::whereHas('categorie', function ($q) {
                 $q->whereIn('famille', ['restaurant', 'bar']);
             })->get();
-                
+
 
 
             // dd($data_produit->toArray());

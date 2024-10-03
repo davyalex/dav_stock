@@ -64,7 +64,7 @@
         <div class="col-lg-12">
             {{-- <div class="card">
                 <div class="card-body"> --}}
-            <form id="myForm" method="POST" action="{{ route('inventaire.store') }}" autocomplete="off" novalidate
+            <form id="myForm" method="POST" action="{{ route('vente.store') }}" autocomplete="off" novalidate
                 enctype="multipart/form-data">
                 @csrf
                 <div class="row">
@@ -80,7 +80,7 @@
                                 <select class="form-control" name="client_id" required>
                                     <option disabled selected value>Sélectionner un client</option>
                                     @foreach ($data_client as $client)
-                                        <option value="{{ $client->id }}">{{ $client->nom }} {{ $client->prenom }}
+                                        <option value="{{ $client->id }}">{{ $client->first_name }} {{ $client->last_name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -89,8 +89,9 @@
                                 <label class="form-label" for="date-input">Date
                                     <span class="text-danger">*</span>
                                 </label>
-                                <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>" name="date_vente"
-                                            class="form-control" required>
+                                <input type="datetime-local" id="currentDate" value="<?php echo date('Y-m-d\TH:i'); ?>" name="date_vente"
+                                class="form-control" readonly>
+                         
                             </div>
 
                             <div id="form-container">
@@ -119,7 +120,7 @@
                         <h5 class="card-title">Montant total</h5>
                         <p class="card-text h3 " id="montantTotal">0 FCFA</p>
                     </div>
-                    <input type="hidden" name="montant_total" class="montant_total">
+                    <input type="number" name="montant_total"  class="montant_total" hidden>
                 </div>
 
 
@@ -389,7 +390,7 @@
                         style: 'currency',
                         currency: 'XOF'
                     }).format(total);
-                    document.getElementsByClassName('montant_total').value = total;
+                    $('input[name="montant_total"]').val(total);
                 }
 
                 // Calculer le montant total initialement

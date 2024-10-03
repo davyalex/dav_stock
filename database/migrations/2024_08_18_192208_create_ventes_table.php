@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ventes', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique()->nullable();
-            $table->date('date_vente')->nullable();
+            $table->dateTime('date_vente')->nullable();
             $table->double('montant_total')->nullable();
           
             $table->foreignId('client_id')  // client qui a fait la vente
@@ -37,6 +37,8 @@ return new class extends Migration
             ->onDelete('cascade');
 
             $table->enum('statut' , ['en attente' ,'confirmée' , 'livrée' , 'annulée'])->nullable();
+
+            $table->boolean('statut_cloture')->default(false);
 
             $table->softDeletes();
 

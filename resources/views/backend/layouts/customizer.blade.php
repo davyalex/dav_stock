@@ -7,7 +7,7 @@
 <div id="preloader">
     <div id="status">
         <div class="spinner-border text-primary avatar-sm" role="status">
-            <span class="visually-hidden">Loading...</span>
+            <span class="visually-hidden">Chargement...</span>
         </div>
     </div>
 </div>
@@ -24,7 +24,7 @@
 <!-- Theme Settings -->
 <div class="offcanvas offcanvas-end border-0" tabindex="-1" id="theme-settings-offcanvas">
     <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
-        <h5 class="m-0 me-2 text-white">Theme Customizer</h5>
+        <h5 class="m-0 me-2 text-white">Personnalisation du thème</h5>
 
         <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn"
             data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -32,8 +32,8 @@
     <div class="offcanvas-body p-0">
         <div data-simplebar class="h-100">
             <div class="p-4">
-                <h6 class="mb-0 fw-semibold text-uppercase">Layout</h6>
-                <p class="text-muted">Choose your layout</p>
+                <h6 class="mb-0 fw-semibold text-uppercase">Mise en page</h6>
+                <p class="text-muted">Choisissez votre mise en page</p>
 
                 <div class="row gy-3">
                     <div class="col-4">
@@ -110,7 +110,7 @@
                                 </span>
                             </label>
                         </div>
-                        <h5 class="fs-13 text-center mt-2">Two Column</h5>
+                        <h5 class="fs-13 text-center mt-2">Deux colonnes</h5>
                     </div>
                     <!-- end col -->
 
@@ -137,18 +137,18 @@
                                 </span>
                             </label>
                         </div>
-                        <h5 class="fs-13 text-center mt-2">Semi Box</h5>
+                        <h5 class="fs-13 text-center mt-2">Semi-boîte</h5>
                     </div>
                     <!-- end col -->
                 </div>
 
                 <div class="form-check form-switch form-switch-md mb-3 mt-4">
                     <input type="checkbox" class="form-check-input" id="sidebarUserProfile">
-                    <label class="form-check-label" for="sidebarUserProfile">Sidebar User Profile Avatar</label>
+                    <label class="form-check-label" for="sidebarUserProfile">Avatar de profil utilisateur dans la barre latérale</label>
                 </div>
 
-                <h6 class="mt-4 mb-0 fw-semibold text-uppercase">Theme</h6>
-                <p class="text-muted">Choose your suitable Theme.</p>
+                <h6 class="mt-4 mb-0 fw-semibold text-uppercase">Thème</h6>
+                <p class="text-muted">Choisissez votre thème approprié.</p>
 
                 <div class="row">
                     <div class="col-6">
@@ -158,7 +158,7 @@
                                 <img src="https://themesbrand.com/velzon/assets/images/demo/default.png" alt="" class="img-fluid">
                             </label>
                         </div>
-                        <h5 class="fs-13 text-center fw-medium mt-2">Default</h5>
+                        <h5 class="fs-13 text-center fw-medium mt-2">Par défaut</h5>
                     </div>
                     <div class="col-6">
                         <div class="form-check card-radio">
@@ -167,7 +167,7 @@
                                 <img src="https://themesbrand.com/velzon/assets/images/demo//saas.png" alt="" class="img-fluid">
                             </label>
                         </div>
-                        <h5 class="fs-13 text-center fw-medium mt-2">Sass</h5>
+                        <h5 class="fs-13 text-center fw-medium mt-2">SaaS</h5>
                     </div>
                     <div class="col-6">
                         <div class="form-check card-radio">
@@ -176,7 +176,7 @@
                                 <img src="https://themesbrand.com/velzon/assets/images/demo//corporate.png" alt="" class="img-fluid">
                             </label>
                         </div>
-                        <h5 class="fs-13 text-center fw-medium mt-2">Corporate</h5>
+                        <h5 class="fs-13 text-center fw-medium mt-2">Entreprise</h5>
                     </div>
                     <div class="col-6">
                         <div class="form-check card-radio">
@@ -185,7 +185,7 @@
                                 <img src="https://themesbrand.com/velzon/assets/images/demo//galaxy.png" alt="" class="img-fluid">
                             </label>
                         </div>
-                        <h5 class="fs-13 text-center fw-medium mt-2">Galaxy</h5>
+                        <h5 class="fs-13 text-center fw-medium mt-2">Galaxie</h5>
                     </div>
                     <div class="col-6">
                         <div class="form-check card-radio">
@@ -194,7 +194,7 @@
                                 <img src="https://themesbrand.com/velzon/assets/images/demo//material.png" alt="" class="img-fluid">
                             </label>
                         </div>
-                        <h5 class="fs-13 text-center fw-medium mt-2">Material</h5>
+                        <h5 class="fs-13 text-center fw-medium mt-2">Matériel</h5>
                     </div>
                     <div class="col-6">
                         <div class="form-check card-radio">
@@ -203,7 +203,7 @@
                                 <img src="https://themesbrand.com/velzon/assets/images/demo/creative.png" alt="" class="img-fluid">
                             </label>
                         </div>
-                        <h5 class="fs-13 text-center fw-medium mt-2">Creative</h5>
+                        <h5 class="fs-13 text-center fw-medium mt-2">Créatif</h5>
                     </div>
                     <div class="col-6">
                         <div class="form-check card-radio">
@@ -221,7 +221,7 @@
                                 <img src="https://themesbrand.com/velzon/assets/images/demo/modern.png" alt="" class="img-fluid">
                             </label>
                         </div>
-                        <h5 class="fs-13 text-center fw-medium mt-2">Modern</h5>
+                        <h5 class="fs-13 text-center fw-medium mt-2">Moderne</h5>
                     </div>
                     <!-- end col -->
                     <div class="col-6">
@@ -231,7 +231,7 @@
                                 <img src="https://themesbrand.com/velzon/assets/images/demo/interactive.png" alt="" class="img-fluid">
                             </label>
                         </div>
-                        <h5 class="fs-13 text-center fw-medium mt-2">Interactive</h5>
+                        <h5 class="fs-13 text-center fw-medium mt-2">Interactif</h5>
                     </div><!-- end col -->
 
                     <div class="col-6">
@@ -241,7 +241,7 @@
                                 <img src="https://themesbrand.com/velzon/assets/images/demo/classic.png" alt="" class="img-fluid">
                             </label>
                         </div>
-                        <h5 class="fs-13 text-center fw-medium mt-2">Classic</h5>
+                        <h5 class="fs-13 text-center fw-medium mt-2">Classique</h5>
                     </div><!-- end col -->
 
                     <div class="col-6">
@@ -255,8 +255,8 @@
                     </div><!-- end col -->
                 </div>
 
-                <h6 class="mt-4 mb-0 fw-semibold text-uppercase">Color Scheme</h6>
-                <p class="text-muted">Choose Light or Dark Scheme.</p>
+                <h6 class="mt-4 mb-0 fw-semibold text-uppercase">Schéma de couleurs</h6>
+                <p class="text-muted">Choisissez le mode clair ou sombre.</p>
 
                 <div class="colorscheme-cardradio">
                     <div class="row">
@@ -283,7 +283,7 @@
                                     </span>
                                 </label>
                             </div>
-                            <h5 class="fs-13 text-center mt-2">Light</h5>
+                            <h5 class="fs-13 text-center mt-2">Clair</h5>
                         </div>
 
                         <div class="col-4">
@@ -310,14 +310,14 @@
                                     </span>
                                 </label>
                             </div>
-                            <h5 class="fs-13 text-center mt-2">Dark</h5>
+                            <h5 class="fs-13 text-center mt-2">Sombre</h5>
                         </div>
                     </div>
                 </div>
 
                 <div id="sidebar-visibility">
-                    <h6 class="mt-4 mb-0 fw-semibold text-uppercase">Sidebar Visibility</h6>
-                    <p class="text-muted">Choose show or Hidden sidebar.</p>
+                    <h6 class="mt-4 mb-0 fw-semibold text-uppercase">Visibilité de la barre latérale</h6>
+                    <p class="text-muted">Choisissez d'afficher ou de masquer la barre latérale.</p>
 
                     <div class="row">
                         <div class="col-4">
@@ -343,7 +343,7 @@
                                     </span>
                                 </label>
                             </div>
-                            <h5 class="fs-13 text-center mt-2">Show</h5>
+                            <h5 class="fs-13 text-center mt-2">Afficher</h5>
                         </div>
                         <div class="col-4">
                             <div class="form-check card-radio">
@@ -361,14 +361,14 @@
                                     </span>
                                 </label>
                             </div>
-                            <h5 class="fs-13 text-center mt-2">Hidden</h5>
+                            <h5 class="fs-13 text-center mt-2">Masquer</h5>
                         </div>
                     </div>
                 </div>
 
                 <div id="layout-width">
-                    <h6 class="mt-4 mb-0 fw-semibold text-uppercase">Layout Width</h6>
-                    <p class="text-muted">Choose Fluid or Boxed layout.</p>
+                    <h6 class="mt-4 mb-0 fw-semibold text-uppercase">Largeur de mise en page</h6>
+                    <p class="text-muted">Choisissez une mise en page fluide ou en boîte.</p>
 
                     <div class="row">
                         <div class="col-4">
@@ -394,7 +394,7 @@
                                     </span>
                                 </label>
                             </div>
-                            <h5 class="fs-13 text-center mt-2">Fluid</h5>
+                            <h5 class="fs-13 text-center mt-2">Fluide</h5>
                         </div>
                         <div class="col-4">
                             <div class="form-check card-radio">
@@ -419,27 +419,27 @@
                                     </span>
                                 </label>
                             </div>
-                            <h5 class="fs-13 text-center mt-2">Boxed</h5>
+                            <h5 class="fs-13 text-center mt-2">En boîte</h5>
                         </div>
                     </div>
                 </div>
 
                 <div id="layout-position">
-                    <h6 class="mt-4 mb-0 fw-semibold text-uppercase">Layout Position</h6>
-                    <p class="text-muted">Choose Fixed or Scrollable Layout Position.</p>
+                    <h6 class="mt-4 mb-0 fw-semibold text-uppercase">Position de mise en page</h6>
+                    <p class="text-muted">Choisissez une position de mise en page fixe ou défilable.</p>
 
                     <div class="btn-group radio" role="group">
                         <input type="radio" class="btn-check" name="data-layout-position"
                             id="layout-position-fixed" value="fixed">
-                        <label class="btn btn-light w-sm" for="layout-position-fixed">Fixed</label>
+                        <label class="btn btn-light w-sm" for="layout-position-fixed">Fixe</label>
 
                         <input type="radio" class="btn-check" name="data-layout-position"
                             id="layout-position-scrollable" value="scrollable">
-                        <label class="btn btn-light w-sm ms-0" for="layout-position-scrollable">Scrollable</label>
+                        <label class="btn btn-light w-sm ms-0" for="layout-position-scrollable">Défilable</label>
                     </div>
                 </div>
-                <h6 class="mt-4 mb-0 fw-semibold text-uppercase">Topbar Color</h6>
-                <p class="text-muted">Choose Light or Dark Topbar Color.</p>
+                <h6 class="mt-4 mb-0 fw-semibold text-uppercase">Couleur de la barre supérieure</h6>
+                <p class="text-muted">Choisissez une couleur claire ou sombre pour la barre supérieure.</p>
 
                 <div class="row">
                     <div class="col-4">

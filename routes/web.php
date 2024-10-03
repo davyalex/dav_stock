@@ -16,10 +16,11 @@ use App\Http\Controllers\backend\menu\MenuController;
 use App\Http\Controllers\backend\menu\PlatController;
 use App\Http\Controllers\backend\slide\SlideController;
 use App\Http\Controllers\backend\stock\AchatController;
+use App\Http\Controllers\backend\user\ClientController;
 use App\Http\Controllers\backend\vente\VenteController;
 use App\Http\Controllers\backend\stock\SortieController;
+use App\Http\Controllers\backend\user\AdminController;  
 use App\Http\Controllers\backend\module\ModuleController;
-use App\Http\Controllers\backend\user\AuthAdminController;
 use App\Http\Controllers\backend\depense\DepenseController;
 use App\Http\Controllers\backend\permission\RoleController;
 use App\Http\Controllers\backend\produit\ProduitController;
@@ -65,7 +66,7 @@ Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang'
 ######################      START BACKEND ROUTE         ###########################################################
 
 //login  for dashboard
-Route::controller(AuthAdminController::class)->prefix('admin')->group(function () {
+Route::controller(AdminController::class)->prefix('admin')->group(function () {
     route::get('/login', 'login')->name('admin.login');
     route::post('/login', 'login')->name('admin.login');
     route::post('/logout', 'logout')->name('admin.logout');
@@ -80,9 +81,19 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('', 'index')->name('dashboard.index');
     });
 
+    //register client
+    Route::prefix('client')->controller(ClientController::class)->group(function () {
+        route::get('', 'index')->name('client.index');
+        route::post('store', 'store')->name('client.store');
+        route::post('update/{id}', 'update')->name('client.update');
+        route::get('delete/{id}', 'delete')->name('client.delete');
+        route::get('profil/{id}', 'profil')->name('client.profil');
+        route::post('change-password', 'changePassword')->name('client.new-password');
+    });
+
 
     //register admin
-    Route::prefix('register')->controller(AuthAdminController::class)->group(function () {
+    Route::prefix('register')->controller(AdminController::class)->group(function () {
         route::get('', 'index')->name('admin-register.index');
         route::post('store', 'store')->name('admin-register.store');
         route::post('update/{id}', 'update')->name('admin-register.update');
@@ -299,6 +310,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('show/{id}', 'show')->name('vente.show');
         route::get('create', 'create')->name('vente.create');
         route::post('store', 'store')->name('vente.store');
+        route::get('cloture-caisse', 'clotureCaisse')->name('vente.cloture-caisse');
     });
 
     Route::prefix('categorie-depense')->controller(CategorieDepenseController::class)->group(function () {

@@ -11,24 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('historique_caisses', function (Blueprint $table) {
+        Schema::create('cloture_caisses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('caisse_id')
-            ->nullable()
-            ->constrained('caisses')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
-
+            $table->double('montant_total')->nullable();
+            $table->dateTime('date_cloture')->nullable();
             $table->foreignId('user_id')
             ->nullable()
             ->constrained('users')
             ->onUpdate('cascade')
             ->onDelete('cascade');
 
-            $table->dateTime('date_ouverture')->nullable();
-            $table->dateTime('date_fermeture')->nullable();
+        $table->foreignId('caisse_id')
+            ->nullable()
+            ->constrained('caisses')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
 
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -38,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('historique_caisses');
+        Schema::dropIfExists('cloture_caisses');
     }
 };

@@ -63,7 +63,7 @@
     <div class="row">
         <div class="col-lg-12">
             
-            <form id="myForm" method="POST" action="<?php echo e(route('inventaire.store')); ?>" autocomplete="off" novalidate
+            <form id="myForm" method="POST" action="<?php echo e(route('vente.store')); ?>" autocomplete="off" novalidate
                 enctype="multipart/form-data">
                 <?php echo csrf_field(); ?>
                 <div class="row">
@@ -78,7 +78,7 @@
                                 <select class="form-control" name="client_id" required>
                                     <option disabled selected value>Sélectionner un client</option>
                                     <?php $__currentLoopData = $data_client; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $client): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <option value="<?php echo e($client->id); ?>"><?php echo e($client->nom); ?> <?php echo e($client->prenom); ?>
+                                        <option value="<?php echo e($client->id); ?>"><?php echo e($client->first_name); ?> <?php echo e($client->last_name); ?>
 
                                         </option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -88,8 +88,9 @@
                                 <label class="form-label" for="date-input">Date
                                     <span class="text-danger">*</span>
                                 </label>
-                                <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>" name="date_vente"
-                                            class="form-control" required>
+                                <input type="datetime-local" id="currentDate" value="<?php echo date('Y-m-d\TH:i'); ?>" name="date_vente"
+                                class="form-control" readonly>
+                         
                             </div>
 
                             <div id="form-container">
@@ -118,7 +119,7 @@
                         <h5 class="card-title">Montant total</h5>
                         <p class="card-text h3 " id="montantTotal">0 FCFA</p>
                     </div>
-                    <input type="hidden" name="montant_total" class="montant_total">
+                    <input type="number" name="montant_total"  class="montant_total" hidden>
                 </div>
 
 
@@ -390,7 +391,7 @@
                         style: 'currency',
                         currency: 'XOF'
                     }).format(total);
-                    document.getElementsByClassName('montant_total').value = total;
+                    $('input[name="montant_total"]').val(total);
                 }
 
                 // Calculer le montant total initialement

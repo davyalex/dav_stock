@@ -9,7 +9,7 @@
                  </button>
              </div>
              <div class="modal-body">
-                 <form class="needs-validation" novalidate method="POST"
+                 <form autocomplete="off" class="needs-validation" novalidate method="POST"
                      action="{{ route('admin-register.update', $item['id']) }}" enctype="multipart/form-data">
                      @csrf
                      <div class="mb-3">
@@ -36,18 +36,17 @@
                              id="username" required>
                      </div>
 
-                     {{-- <div class="mb-3">
-                                    <label for="username" class="form-label">Mot de passe</label>
-                                    <input type="password" name="password" class="form-control" id="username" required>
-                                </div> --}}
+                     <div class="mb-3">
+                         <label for="username" class="form-label">Mot de passe</label>
+                         <input type="password" name="password" class="form-control" id="username" autocomplete="off">
+                     </div>
 
                      <div class="mb-3">
                          <label for="username" class="form-label">Role</label>
                          <select class="form-control" name="role" id="" required>
                              <option disabled selected value>Selectionner...</option>
                              @foreach ($data_role as $role)
-                                 <option value="{{ $role['name'] }}"
-                                     >{{ $role['name'] }}
+                                 <option value="{{ $role['name'] }}" {{ $item['roles'][0]['name'] == $role['name'] ? 'selected' : '' }}>{{ $role['name'] }}
                                  </option>
                              @endforeach
                          </select>

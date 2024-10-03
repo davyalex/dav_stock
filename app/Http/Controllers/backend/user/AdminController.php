@@ -10,9 +10,10 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class AuthAdminController extends Controller
+class AdminController extends Controller
 {
     //
     public function login(Request $request)
@@ -39,7 +40,7 @@ class AuthAdminController extends Controller
 
 
     //logout admin
-    public function logout()
+    public function logout(Request $request)
     {
 
         $user = Auth::user();
@@ -55,18 +56,20 @@ class AuthAdminController extends Controller
             User::whereId($user->id)->update([
                 'caisse_id' => null,
             ]);
-
         }
 
 
         Auth::logout();
+        // Supprimer toutes les sessions de connexion
+
+        // $request->session()->invalidate();
+        // $request->session()->regenerateToken();
+
+
         // Session::forget('user_auth');
         Alert::success('Vous etes deconnecté', 'Success Message');
         return Redirect()->route('admin.login');
     }
-
-
-
 
 
 
@@ -75,9 +78,11 @@ class AuthAdminController extends Controller
     public function index()
     {
 
-        $data_role = Role::get();
+        $data_role = Role::where('name', '!=', 'client')->get();
 
-        $data_admin = User::with('roles')->get();
+        $data_admin = User::with('roles')->whereHas('roles', function ($query) {
+            $query->where('name', '!=', 'client');
+        })->get();
         // dd($data_admin->toArray());
 
         return view('backend.pages.auth-admin.register.index', compact('data_admin', 'data_role'));
@@ -86,25 +91,33 @@ class AuthAdminController extends Controller
 
     public function store(Request $request)
     {
+        try {
+            $request->validate([
+                'last_name' => 'required',
+                'first_name' => 'required',
+                'email' => 'required|email',
+                'phone' => 'required|',
+                'role' => 'required',
+                'password' => 'required|min:6',
+            ]);
 
-        //on verifie si le nouvel utilisateur est déja dans la BD à partir du phone et email
-        $user_verify_phone = User::wherePhone($request['phone'])->first();
-        $user_verify_email = User::whereEmail($request['email'])->first();
+            // Vérifier si le téléphone existe déjà
+            if (User::where('phone', $request->phone)->exists()) {
+                Alert::error('Le numéro de téléphone existe déjà associé à un utilisateur', 'Erreur');
+                return back()->withInput();
+            }
 
-        if ($user_verify_phone != null) {
-            Alert::error('Ce numero de telephone est dejà associé un compte, veuillez utiliser un autre', 'Error Message');
-            return back();
-        } elseif ($user_verify_email != null) {
-            Alert::error('Ce email est dejà associé un compte, veuillez utiliser un autre', 'Error Message');
-            return back();
-        } else {
-            // dd($request);
-            // $request->validate([
-            //     'name' => 'required',
-            //     'phone' => 'required',
-            //     'email' => 'required|unique:users',
-            //     'password' => 'required',
-            // ]);
+            // Vérification supplémentaire pour le numéro de téléphone
+            if (!preg_match('/^[0-9]{10}$/', $request->phone)) {
+                Alert::error('Erreur', 'Le numéro de téléphone doit contenir exactement 10 chiffres.');
+                return back();
+            }
+
+            // Vérifier si l'email existe déjà
+            if (User::where('email', $request->email)->exists()) {
+                Alert::error('L\'adresse email existe déjà associé à un utilisateur', 'Erreur');
+                return back()->withInput();
+            }
 
             $data_user = User::firstOrCreate([
                 'last_name' => $request['last_name'],
@@ -114,11 +127,15 @@ class AuthAdminController extends Controller
                 'role' => $request->role,
                 'password' => Hash::make($request->password),
             ]);
+
             if ($request->has('role')) {
-                $data_user->assignRole([$request['role']]);
+                $data_user->assignRole($request['role']);
             }
 
-            Alert::success('Operation réussi', 'Success Message');
+            Alert::success('Opération réussie', 'Succès');
+            return back();
+        } catch (\Exception $e) {
+            Alert::error('Erreur', $e->getMessage());
             return back();
         }
     }
@@ -128,29 +145,38 @@ class AuthAdminController extends Controller
     public function update(Request $request, $id)
     {
 
+        try {
+            $user = User::findOrFail($id);
 
-        $data_user = tap(User::find($id))->update([
-            'last_name' => $request['last_name'],
-            'first_name' => $request['first_name'],
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'role' => $request->role,
-        ]);
+            $updateData = [
+                'last_name' => $request['last_name'],
+                'first_name' => $request['first_name'],
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'role' => $request->role,
+            ];
 
-        // DB::table('model_has_roles')->where('model_id', $id)->delete();
+            if ($request->filled('password')) {
+                $updateData['password'] = Hash::make($request->password);
+            }
 
-        if ($request->has('role')) {
-            $data_user->syncRoles($request['role']);
+            $user->update($updateData);
+
+            if ($request->has('role')) {
+                $user->syncRoles($request['role']);
+            }
+
+            Alert::success('Opération réussie', 'Les informations ont été mises à jour');
+            return back();
+        } catch (\Exception $e) {
+            Alert::error('Erreur', 'Une erreur est survenue lors de la mise à jour : ' . $e->getMessage());
+            return back();
         }
-
-
-        Alert::success('Operation réussi', 'Success Message');
-        return back();
     }
 
     public function delete($id)
     {
-        User::find($id)->delete();
+        User::find($id)->forceDelete();
         return response()->json([
             'status' => 200,
         ]);

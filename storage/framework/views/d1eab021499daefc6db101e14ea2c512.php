@@ -35,36 +35,22 @@
                     <span class="d-block fw-medium sidebar-user-name-text"><?php echo e(Auth::user()->name); ?></span>
                     <span class="d-block fs-14 sidebar-user-name-sub-text"><i
                             class="ri ri-circle-fill fs-10 text-success align-baseline"></i> <span
-                            class="align-middle">Online</span></span>
+                            class="align-middle">En ligne</span></span>
                 </span>
             </span>
         </button>
         <div class="dropdown-menu dropdown-menu-end">
             <!-- item-->
-            <h6 class="dropdown-header">Welcome <?php echo e(Auth::user()->name); ?>!</h6>
-            <a class="dropdown-item" href="pages-profile"><i
+            <h6 class="dropdown-header">Bienvenue <?php echo e(Auth::user()->first_name); ?>!</h6>
+            <a class="dropdown-item" href="<?php echo e(route('admin-register.profil', Auth::user()->id)); ?>"><i
                     class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
-                    class="align-middle">Profile</span></a>
-            <a class="dropdown-item" href="apps-chat"><i
-                    class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span
-                    class="align-middle">Messages</span></a>
-            <a class="dropdown-item" href="apps-tasks-kanban"><i
-                    class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i> <span
-                    class="align-middle">Taskboard</span></a>
-            <a class="dropdown-item" href="pages-faqs"><i
-                    class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span
-                    class="align-middle">Help</span></a>
+                    class="align-middle">Profil</span></a>
+
+            <a class="dropdown-item" href="#"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i>
+                <span class="align-middle">Aide</span></a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="pages-profile"><i
-                    class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Balance :
-                    <b>$5971.67</b></span></a>
-            <a class="dropdown-item" href="pages-profile-settings"><span
-                    class="badge bg-success-subtle text-success mt-1 float-end">New</span><i
-                    class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span
-                    class="align-middle">Settings</span></a>
-            <a class="dropdown-item" href="auth-lockscreen-basic"><i
-                    class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Lock
-                    screen</span></a>
+
+
 
             <a class="dropdown-item " href="javascript:void();"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
@@ -97,14 +83,17 @@
                         aria-controls="sidebarConfiguration">
                         <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
                     </a>
-                    <div class="collapse menu-dropdown <?php echo e(Route::is('categorie.*')|| Route::is('produit.*')|| Route::is('fournisseur.*')|| Route::is('admin-register.*') || Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*') ? 'show' : ''); ?>"
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('categorie.*') || Route::is('produit.*') || Route::is('fournisseur.*') || Route::is('admin-register.*') || Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*') || Route::is('client.*') ? 'show' : ''); ?>"
                         id="sidebarConfiguration">
                         <ul class="nav nav-sm flex-column">
 
+
+
                             <li class="nav-item active">
-                                <a href="<?php echo e(route('admin-register.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('admin-register.*') ? 'active' : ''); ?>">Utilisateurs</a>
+                                <a href="<?php echo e(route('client.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('client.*') ? 'active' : ''); ?>">Clients</a>
                             </li>
+
 
 
                             <li class="nav-item active">
@@ -149,14 +138,14 @@
                     </div>
                 </li>
 
-              
+
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarStock" data-bs-toggle="collapse" role="button"
                         aria-controls="sidebarStock">
                         <i class="ri ri-box-1-fill"></i> <span>GESTION DE STOCK</span>
                     </a>
-                    <div class="collapse menu-dropdown <?php echo e(Route::is('etat-stock.*') || Route::is('inventaire.*') || Route::is('sortie.*') ||Route::is('ajustement.*') || Route::is('achat.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : ''); ?>"
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('etat-stock.*') || Route::is('inventaire.*') || Route::is('sortie.*') || Route::is('ajustement.*') || Route::is('achat.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : ''); ?>"
                         id="sidebarStock">
                         <ul class="nav nav-sm flex-column">
 
@@ -165,7 +154,7 @@
                                     class="nav-link <?php echo e(Route::is('achat.*') ? 'active' : ''); ?>">Reception de stock</a>
                             </li>
 
-                          
+
 
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('sortie.index')); ?>"
@@ -230,18 +219,25 @@
                         <ul class="nav nav-sm flex-column">
 
                             <li class="nav-item active">
-                                <a href="<?php echo e(route('vente.create')); ?>"
+                                <a href="<?php echo e(route('vente.index')); ?>"
                                     class="nav-link <?php echo e(Route::is('vente.*') ? 'active' : ''); ?>">Faire une vente</a>
                             </li>
 
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('plat.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('plat.*') ? 'active' : ''); ?>">Chiffre d'affaire par categorie</a>
+                                    class="nav-link <?php echo e(Route::is('plat.*') ? 'active' : ''); ?>">Chiffre d'affaire par
+                                    categorie</a>
                             </li>
 
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('menu.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Chiffre d'affaire par produit</a>
+                                    class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Chiffre d'affaire par
+                                    produit</a>
+                            </li>
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('menu.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Chiffre d'affaire par
+                                    Caisse</a>
                             </li>
                         </ul>
                     </div>
@@ -295,6 +291,10 @@
                     <div class="collapse menu-dropdown <?php echo e(Route::is('setting.*') || Route::is('module.*') || Route::is('role.*') || Route::is('permission.*') ? 'show' : ''); ?>"
                         id="sidebarAuth">
                         <ul class="nav nav-sm flex-column">
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('admin-register.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('admin-register.*') ? 'active' : ''); ?>">Administrateurs</a>
+                            </li>
 
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('setting.index')); ?>"

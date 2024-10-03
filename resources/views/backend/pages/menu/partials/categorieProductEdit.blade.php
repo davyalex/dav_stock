@@ -3,10 +3,10 @@
         @php
             //style manipulation
             $dNone =
-                $categorie->produits->isEmpty() && $categorie->type != 'plats' && $categorie->children->isEmpty()
+                $categorie->produits->isEmpty() && $categorie->type != 'menu' && $categorie->children->isEmpty()
                     ? 'd-none'
                     : '';
-            $textUpper = in_array($categorie->type, ['plats', 'boissons'])
+            $textUpper = in_array($categorie->type, ['menu', 'bar'])
                 ? 'text-uppercase alert alert-primary alert-border-left fs-4 mt-4'
                 : 'text-capitalize fw-bold';
 

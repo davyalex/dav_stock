@@ -13,10 +13,10 @@
 @section('content')
     @component('backend.components.breadcrumb')
         @slot('li_1')
-            Liste des inventaires
+            Gestion des ventes
         @endslot
         @slot('title')
-            Gestion de stock
+            Détails de la vente
         @endslot
     @endcomponent
 
@@ -24,9 +24,10 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des inventaires</h5>
-                    <a href="{{ route('inventaire.create') }}" type="button" class="btn btn-primary ">Effectuer
-                        un nouvel inventaire</a>
+                    <h5 class="card-title mb-0">Produits de la vente
+                        <strong>#{{ $vente->code }} du {{ $vente->date_vente }} </strong>
+                    </h5>
+                    <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">Nouvelle vente</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -34,24 +35,25 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>N° d'inventaire</th>
-                                    <th>Date</th>
-                                    <th>Crée par</th>
-                                    <th class="d-none">Actions</th>
+                                    <th>Image</th>
+                                    <th>Nom du produit</th>
+                                    <th>Quantité</th>
+                                    <th>Prix unitaire</th>
+                                    <th>Montant total</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data_inventaire as $key => $item)
+                                @foreach ($vente->produits as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
-                                        <td> {{ ++$key }} </td>
-                                        <td> <a class="fw-bold"
-                                                href="{{ route('inventaire.show', $item->id) }}">#{{ $item['code'] }}</a>
+                                        <td>{{ ++$key }}</td>
+                                        <td>
+                                            <img class="rounded-circle" src="{{ $item->getFirstMediaUrl('ProduitImage') }}"
+                                                width="50px" alt="">
                                         </td>
-                                        <td> {{ $item['date_inventaire'] }} </td>
-                                        <td> {{ $item['user']['first_name'] }} </td>
-                                        <td class="d-none">
-                                            <!-- Actions si nécessaire -->
-                                        </td>
+                                        <td>{{ $item['nom'] }}</td>
+                                        <td>{{ $item['pivot']['quantite'] }}</td>
+                                        <td>{{ number_format($item['pivot']['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
+                                        <td>{{ number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -61,7 +63,6 @@
             </div>
         </div>
     </div>
-    <!--end row-->
 @endsection
 @section('script')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('produit_vente`', function (Blueprint $table) {
+        Schema::create('produit_vente', function (Blueprint $table) {
             $table->id();
             $table->integer('quantite')->nullable(); // quantite du produit
             $table->double('prix_unitaire')->nullable(); //prix  unitaire

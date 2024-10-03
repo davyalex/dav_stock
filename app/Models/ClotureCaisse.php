@@ -4,41 +4,36 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class HistoriqueCaisse extends Model
+class ClotureCaisse extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
+    protected $table = 'cloture_caisses';
     public $incrementing = false;
-
-
     protected $fillable = [
+        'montant_total',
+        'date_cloture',
         'user_id',
         'caisse_id',
-        'date_ouverture',
-        'date_fermeture',
-        'created_at',
-        'updated_at'
     ];
-
-
     public static function boot()
     {
         parent::boot();
         self::creating(function ($model) {
-            $model->id = IdGenerator::generate(['table' => 'historique_caisses ', 'length' => 10, 'prefix' =>
+            $model->id = IdGenerator::generate(['table' => 'cloture_caisses', 'length' => 10, 'prefix' =>
             mt_rand()]);
         });
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
-
     public function caisse()
     {
-        return $this->belongsTo(Caisse::class, 'caisse_id');
+        return $this->belongsTo(Caisse::class);
     }
 }

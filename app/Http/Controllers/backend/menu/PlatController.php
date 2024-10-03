@@ -17,9 +17,10 @@ class PlatController extends Controller
     //
     public function index()
     {
-        $categorie = Categorie::where('famille', 'menu')->first();
 
-        $data_plat = Produit::where('type_id',  $categorie->id)->get();
+        $data_plat = Produit::whereHas('categorie', function($query) {
+            $query->where('famille', 'menu');
+        })->get();
         // dd($data_plat->toArray());
         return view('backend.pages.menu.produit.index', compact('data_plat'));
     }

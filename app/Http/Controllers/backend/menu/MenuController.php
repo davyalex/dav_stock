@@ -29,7 +29,7 @@ class MenuController extends Controller
         try {
 
             $data_categorie_produit = Categorie::withWhereHas('children')
-            ->whereIn('type', ['plats' , 'boissons'])->get();
+            ->whereIn('famille', ['menu' , 'bar'])->get();
             // dd( $data_categorie_produit->toArray());
 
             return view('backend.pages.menu.create', compact('data_categorie_produit'));
@@ -75,7 +75,7 @@ class MenuController extends Controller
     public function edit($id)
     {
         try {
-            $data_categorie_produit = Categorie::withWhereHas('children')->whereIn('type', ['plats' , 'boissons'])->get();
+            $data_categorie_produit = Categorie::withWhereHas('children')->whereIn('famille', ['menu' , 'bar'])->get();
 
             $data_menu = Menu::find($id);
 

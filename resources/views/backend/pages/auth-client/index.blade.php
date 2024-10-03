@@ -14,10 +14,10 @@
 @section('content')
     @component('backend.components.breadcrumb')
         @slot('li_1')
-            Liste des adminisitrateurs
+            Liste des clients
         @endslot
         @slot('title')
-            Administrateurs
+            Clients
         @endslot
     @endcomponent
 
@@ -27,9 +27,9 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des administrateurs</h5>
+                    <h5 class="card-title mb-0">Liste des clients</h5>
                     <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#myModal">Créer
-                        un administrateur</button>
+                        un client</button>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -40,21 +40,17 @@
                                     <th>Nom</th>
                                     <th>Prenoms</th>
                                     <th>Telephone</th>
-                                    <th>Email</th>
-                                    <th>role</th>
                                     <th>Date creation</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data_admin as $key => $item)
+                                @foreach ($clients as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
                                         <td>{{ $item['last_name'] }}</td>
                                         <td>{{ $item['first_name'] }}</td>
                                         <td>{{ $item['phone'] }}</td>
-                                        <td>{{ $item['email'] }}</td>
-                                        <td>{{ $item['roles'][0]['name'] ?? '' }}</td>
                                         <td> {{ $item['created_at'] }} </td>
                                         <td>
                                             <div class="dropdown d-inline-block">
@@ -76,25 +72,25 @@
                                                         <a href="#" class="dropdown-item remove-item-btn delete"
                                                             data-id={{ $item['id'] }}>
                                                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Supprimer
+                                                            supprimer
                                                         </a>
                                                     </li>
                                                 </ul>
                                             </div>
                                         </td>
                                     </tr>
-                                    @include('backend.pages.auth-admin.register.edit')
+                                    @include('backend.pages.auth-client.edit')
                                 @endforeach
 
 
-                        </table>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!--end row-->
-    @include('backend.pages.auth-admin.register.create')
+        <!--end row-->
+        @include('backend.pages.auth-client.create')
 @endsection
 @section('script')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -114,57 +110,9 @@
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
     <script>
-        $(document).ready(function() {
-
-            var route = "register"
-            delete_row(route);
-        })
-        // $(document).ready(function() {
-        //     $('.delete').on("click", function(e) {
-        //         e.preventDefault();
-        //         var Id = $(this).attr('data-id');
-        //         Swal.fire({
-        //             title: 'Are you sure?',
-        //             text: "You won't be able to revert this!",
-        //             icon: 'warning',
-        //             showCancelButton: true,
-        //             confirmButtonText: 'Yes, delete it!',
-        //             cancelButtonText: 'No, cancel!',
-        //             customClass: {
-        //                 confirmButton: 'btn btn-primary w-xs me-2 mt-2',
-        //                 cancelButton: 'btn btn-danger w-xs mt-2',
-        //             },
-        //             buttonsStyling: false,
-        //             showCloseButton: true
-        //         }).then((result) => {
-        //             if (result.isConfirmed) {
-        //                 $.ajax({
-        //                     type: "GET",
-        //                     url: "/register/delete/" + Id,
-        //                     dataType: "json",
-        //                     // data: {
-        //                     //     _token: '{{ csrf_token() }}',
-
-        //                     // },
-        //                     success: function(response) {
-        //                         if (response.status == 200) {
-        //                             Swal.fire({
-        //                                 title: 'Deleted!',
-        //                                 text: 'Your file has been deleted.',
-        //                                 icon: 'success',
-        //                                 customClass: {
-        //                                     confirmButton: 'btn btn-primary w-xs mt-2',
-        //                                 },
-        //                                 buttonsStyling: false
-        //                             })
-
-        //                             $('#row_' + Id).remove();
-        //                         }
-        //                     }
-        //                 });
-        //             }
-        //         });
-        //     });
-        // });
+         $(document).ready(function(){
+        var route = "client"
+        delete_row(route);
+       })
     </script>
 @endsection

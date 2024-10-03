@@ -1,5 +1,4 @@
 
-
 <?php $__env->startSection('title'); ?>
     <?php echo app('translator')->get('translation.datatables'); ?>
 <?php $__env->stopSection(); ?>
@@ -14,10 +13,10 @@
 <?php $__env->startSection('content'); ?>
     <?php $__env->startComponent('backend.components.breadcrumb'); ?>
         <?php $__env->slot('li_1'); ?>
-          Liste des inventaires
+            Liste des inventaires
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
-        Gestion de stock
+            Gestion de stock
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
 
@@ -45,7 +44,9 @@
                                 <?php $__currentLoopData = $data_inventaire; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr id="row_<?php echo e($item['id']); ?>">
                                         <td> <?php echo e(++$key); ?> </td>
-                                        <td> <a class="fw-bold" href="<?php echo e(route('inventaire.show' , $item->id)); ?>">#<?php echo e($item['code']); ?></a> </td>
+                                        <td> <a class="fw-bold"
+                                                href="<?php echo e(route('inventaire.show', $item->id)); ?>">#<?php echo e($item['code']); ?></a>
+                                        </td>
                                         <td> <?php echo e($item['date_inventaire']); ?> </td>
                                         <td> <?php echo e($item['user']['first_name']); ?> </td>
                                         <td class="d-none">
@@ -61,7 +62,6 @@
         </div>
     </div>
     <!--end row-->
-
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -69,6 +69,17 @@
 
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+    <script src="<?php echo e(URL::asset('build/js/pages/datatables.init.js')); ?>"></script>
+
+    <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/stock/inventaire/index.blade.php ENDPATH**/ ?>

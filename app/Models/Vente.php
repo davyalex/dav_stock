@@ -21,6 +21,8 @@ class Vente extends Model
         'user_id',
         'client_id',
         'caisse_id',
+        'statut', // confirmée , en attente , livrée , annulée  
+        'statut_cloture', // boolean true ou false
     ];
 
     public $incrementing = false;
