@@ -39,7 +39,7 @@
                                     <th>#</th>
                                     <th>statut</th>
                                     <th>Libelle</th>
-                                    <th>Position</th>
+                                    
                                     <th>Date creation</th>
                                     <th>Actions</th>
                                 </tr>
@@ -50,7 +50,7 @@
                                         <td> <?php echo e(++$key); ?> </td>
                                         <td><?php echo e($item['statut']); ?></td>
                                         <td> <?php echo e($item['libelle']); ?></td>
-                                        <td> <?php echo e($item['position']); ?> </td>
+                                        
                                         <td> <?php echo e($item['created_at']); ?> </td>
 
                                         <td>
@@ -61,21 +61,17 @@
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
 
-                                                    <li><a type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                            data-bs-target="#myModalPosition<?php echo e($item['id']); ?>"><i
-                                                                class="ri-list-ordered  align-bottom me-2 text-muted"></i>
-                                                            Position</a>
-                                                    </li>
+                                                    
                                                     <li><a type="button" class="dropdown-item edit-item-btn"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#myModalEdit<?php echo e($item['id']); ?>"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Edit</a></li>
+                                                            Modifier</a></li>
                                                     <li>
                                                         <a href="#" class="dropdown-item remove-item-btn delete"
                                                             data-id=<?php echo e($item['id']); ?>>
                                                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Delete
+                                                            Supprimer
                                                         </a>
                                                     </li>
                                                 </ul>

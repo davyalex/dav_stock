@@ -31,31 +31,28 @@ class ModuleController extends Controller
     public function store(Request $request)
     {
 
-
-
-
-
-        $data_module = Module::firstOrCreate([
+        // Créer ou récupérer le module
+        $module = Module::firstOrCreate([
             'name' => $request['name'],
         ]);
 
+        // Définir les permissions pour ce module
+        $permissions = [
+            'ajouter-' . $module->name,
+            'voir-' . $module->name,
+            'modifier-' . $module->name,
+            'supprimer-' . $module->name
+        ];
 
-        if ($data_module) {
-            //request validation .......
-            $permissions = [
-                '0' => 'ajouter-' . $request['name'],
-                '1' => 'voir-' . $request['name'],
-                '2' => 'modifier-' . $request['name'],
-                '3' => 'supprimer-' . $request['name']
-            ];
+        // Créer les permissions et les associer au module
+        foreach ($permissions as $permissionName) {
+            $permission = Permission::firstOrCreate([
+                'name' => $permissionName,
+                'module_id' => $module->id,  // Associer à un module                
+                'guard_name' => 'web',
+            ]);
 
-            foreach ($permissions as $value) {
-                Permission::firstOrCreate([
-                    'name' => $value,
-                    'module_name' => $request['name'],
-                    'guard_name' => 'web',
-                ]);
-            }
+            
         }
 
         Alert::success('Operation réussi', 'Success Message');
@@ -95,8 +92,6 @@ class ModuleController extends Controller
 
         // $data = Permission::where('module_name', $module['name'])->get();
         // dd($data);
-
-
 
 
         Alert::success('Opération réussi', 'Success Message');

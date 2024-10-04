@@ -45,7 +45,7 @@
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
                                         <td> <a class="fw-bold" href="{{route('sortie.show' , $item->id)}}">#{{ $item['code'] }}</a> </td>
-                                        <td> {{ $item['date_sortie'] }} </td>
+                                        <td> {{ $item['created_at'] }} </td>
                                         <td> {{ $item['user']['first_name'] }} </td>
                                         {{-- <td class="d-none">
                                             <div class="dropdown d-inline-block">

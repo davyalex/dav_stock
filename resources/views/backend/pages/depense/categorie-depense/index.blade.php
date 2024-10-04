@@ -39,7 +39,7 @@
                                     <th>#</th>
                                     <th>statut</th>
                                     <th>Libelle</th>
-                                    <th>Position</th>
+                                    {{-- <th>Position</th> --}}
                                     <th>Date creation</th>
                                     <th>Actions</th>
                                 </tr>
@@ -50,7 +50,7 @@
                                         <td> {{ ++$key }} </td>
                                         <td>{{ $item['statut'] }}</td>
                                         <td> {{ $item['libelle'] }}</td>
-                                        <td> {{ $item['position'] }} </td>
+                                        {{-- <td> {{ $item['position'] }} </td> --}}
                                         <td> {{ $item['created_at'] }} </td>
 
                                         <td>
@@ -61,21 +61,21 @@
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
 
-                                                    <li><a type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                    {{-- <li><a type="button" class="dropdown-item" data-bs-toggle="modal"
                                                             data-bs-target="#myModalPosition{{ $item['id'] }}"><i
                                                                 class="ri-list-ordered  align-bottom me-2 text-muted"></i>
                                                             Position</a>
-                                                    </li>
+                                                    </li> --}}
                                                     <li><a type="button" class="dropdown-item edit-item-btn"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#myModalEdit{{ $item['id'] }}"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Edit</a></li>
+                                                            Modifier</a></li>
                                                     <li>
                                                         <a href="#" class="dropdown-item remove-item-btn delete"
                                                             data-id={{ $item['id'] }}>
                                                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Delete
+                                                            Supprimer
                                                         </a>
                                                     </li>
                                                 </ul>

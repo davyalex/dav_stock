@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Permission;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\MediaLibrary\HasMedia;
 
 class Module extends Model implements HasMedia
 {
@@ -39,4 +40,11 @@ class Module extends Model implements HasMedia
             ]
         ];
     }
+
+
+     // Relation avec les permissions
+     public function permissions()
+     {
+         return $this->hasMany(Permission::class);
+     }
 }

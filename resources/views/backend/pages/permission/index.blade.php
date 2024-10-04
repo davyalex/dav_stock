@@ -1,19 +1,9 @@
 @extends('backend.layouts.master')
 @section('title')
-    @lang('translation.datatables')
+    @lang('translation.permissions')
 @endsection
 @section('css')
-    <!--datatable css-->
-    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
-    <!--datatable responsive css-->
-    <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" type="text/css" />
-    <!--select2 cdn-->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-    <script src="{{ URL::asset('build/js/pages/select2.init.js') }}"></script>
 @endsection
 @section('content')
     @component('backend.components.breadcrumb')
@@ -25,150 +15,80 @@
         @endslot
     @endcomponent
 
-
-
     <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des Permissions</h5>
-                    <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#myModal">Créer
-                        une permission</button>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Roles</th>
-                                    <th>Permissions</th>
-                                    <th>Date creation</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($role_with_permission as $key => $item)
-                                    <tr id="row_{{ $item['id'] }}">
-                                        <td> {{ ++$key }} </td>
-                                        <td>{{ $item['name'] }}</td>
-                                        <td>
-                                            @foreach ($item->permissions->groupBy('module_name') as $module_name => $permission_of_role)
-                                                <div>
-                                                    <span class="fw-bold text-uppercase">
-                                                        {{ $module_name }}
-                                                    </span>
-
-                                                    @foreach ($permission_of_role as $data)
-                                                        <br> {{ $data['name'] }}
-                                                    @endforeach
-                                                    <hr>
-
-                                                </div>
-                                            @endforeach
-                                        </td>
-                                        <td> {{ $item['created_at'] }} </td>
-                                        <td>
-                                            <div class="dropdown d-inline-block">
-                                                <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
-                                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="ri-more-fill align-middle"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a href="#!" class="dropdown-item"><i
-                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            View</a>
-                                                    </li>
-                                                    <li><a type="button" class="dropdown-item edit-item-btn"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#myModalEdit{{ $item['id'] }}"><i
-                                                                class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Edit</a></li>
-                                                    <li>
-                                                        <a href="#" class="dropdown-item remove-item-btn delete"
-                                                            data-id={{ $item['id'] }}>
-                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Delete
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @include('backend.pages.permission.edit')
-                                @endforeach
-
-                            </tbody>
-                        </table>
+        <form action="{{ route('permission.store') }}" method="POST">
+            @csrf
+            <div class="row">
+                <div class="col-lg-12 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Créer un nouveau rôle</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="role_name" class="form-label">Nom du rôle</label>
+                                <input type="text" class="form-control" id="role_name" name="role_name" required>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                @foreach ($modules_with_permissions as $module)
+                    <div class="col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">{{ $module->name }}</h5>
+                                <button type="button" class="btn btn-sm btn-primary toggle-all"
+                                    data-module="{{ $module->id }}">Tout cocher/décocher</button>
+                            </div>
+                            <div class="card-body">
+                                @foreach ($module->permissions as $permission)
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input module-{{ $module->id }}" type="checkbox"
+                                            name="permissions[]" value="{{ $permission->id }}"
+                                            id="permission_{{ $permission->id }}">
+                                        <label class="form-check-label" for="permission_{{ $permission->id }}">
+                                            {{ $permission->name }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
-        </div>
-    </div>
-    <!--end row-->
+            <div class="row mt-3">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Enregistrer les permissions</button>
+                </div>
+            </div>
+        </form>
 
-    @include('backend.pages.permission.create')
+
+    </div>
 @endsection
 @section('script')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-
-    <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-    <script src="{{ URL::asset('build/js/pages/select2.init.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
     <script>
-        $(document).ready(function() {
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButtons = document.querySelectorAll('.toggle-all');
 
-            //get permissions of module
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const moduleId = this.getAttribute('data-module');
+                    const checkboxes = document.querySelectorAll(`.module-${moduleId}`);
 
-            $('#module').on('change', function() {
-                var moduleId = $(this).val();
-                var moduleName = $('#module option:selected').attr('data-name');
-                if (moduleId) {
-                    $.ajax({
-                        url: '/permission/load-permission/' + moduleId,
-                        type: "GET",
-                        dataType: "json",
-                        success: function(data) {
-                            $('select[name="permissions[]"]').empty();
-                            // $('select[name="permissions[]"]')
-                            //     .append(
-                            //         '<option value="" selected disabled value>Selectionner</option>'
-                            //     );
-                            $.each(data, function(key, value) {
-                                $('select[name="permissions[]"]').append(
-                                    '<option value=" ' + value
-                                    .name + '">' + value.name + '</option>');
-                            })
-                        }
+                    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
 
-                    })
-                } else {
-                    $('select[name="subcategories"]').empty();
-                    $('.subcat').hide(200);
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = !allChecked;
+                    });
 
-                }
+                    this.textContent = allChecked ? 'Tout cocher' : 'Tout décocher';
+                });
             });
-
-
-
-            var route = "permission"
-            delete_row(route);
-
-
         });
     </script>
 @endsection

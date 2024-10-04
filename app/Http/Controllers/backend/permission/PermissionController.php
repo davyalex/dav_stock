@@ -18,24 +18,15 @@ class PermissionController extends Controller
 
     public function index()
     {
+        $modules_with_permissions = Module::with('permissions')->orderBy('name', 'ASC')->get();
+        // $role = Role::get();
+        // $permission = Permission::get();
+        // $role_with_permission = Role::withWhereHas('permissions')->get();
 
-        $role = Role::get();
-        $module = Module::OrderBy('name' , 'ASC')->get();
-        $permission = Permission::get();
-
-        $role_with_permission = Role::withWhereHas('permissions')->get();
-
-        // $user = User::find(Auth::user()->id);
-        // $roles = $user->getRoleNames();
-        // $permissions = $user->getPermissionsViaRoles();
-
- 
-        // dd($permissions->toArray());
-        // dd($role_with_permission->toArray());
+        
 
 
-
-        return view('backend.pages.permission.index', compact('role', 'module', 'permission', 'role_with_permission'));
+        return view('backend.pages.permission.index', compact('modules_with_permissions'));
     }
 
 

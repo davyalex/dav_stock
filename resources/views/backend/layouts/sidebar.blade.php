@@ -258,6 +258,8 @@
                     </div>
                 </li>
 
+
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarMenu" data-bs-toggle="collapse" role="button"
                         aria-controls="sidebarMenu">
@@ -299,6 +301,35 @@
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sideBarRapport" data-bs-toggle="collapse" role="button"
+                        aria-controls="sideBarRapport">
+                        <i class="ri ri-file-list-line"></i> <span>RAPPORTS</span>
+                    </a>
+                    <div class="collapse menu-dropdown {{ Route::is('vente.*') || Route::is('commande.*') ? 'show' : '' }}"
+                        id="sideBarRapport">
+                        <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item active">
+                                <a href="{{ route('plat.index') }}"
+                                    class="nav-link {{ Route::is('plat.*') ? 'active' : '' }}">Chiffre d'affaire par
+                                    categorie</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="{{ route('menu.index') }}"
+                                    class="nav-link {{ Route::is('menu.*') ? 'active' : '' }}">Chiffre d'affaire par
+                                    produit</a>
+                            </li>
+                            <li class="nav-item active">
+                                <a href="{{ route('menu.index') }}"
+                                    class="nav-link {{ Route::is('menu.*') ? 'active' : '' }}">Chiffre d'affaire par
+                                    Caisse</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
                         aria-controls="sidebarAuth">
                         <i class=" ri-settings-2-fill"></i> <span>PARAMETRE</span>
@@ -330,6 +361,9 @@
                         </ul>
                     </div>
                 </li>
+
+
+                
         </div>
         </li>
         </ul>

@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('commandes', function (Blueprint $table) {
+        Schema::table('permissions', function (Blueprint $table) {
             //
-            $table->foreignId('caisse_id') // user qui passe la commande
-            ->nullable()
-            ->constrained('caisses')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
+              //
+              $table->foreignId('module_id')
+              ->nullable()
+              ->constrained('modules')
+              ->onUpdate('cascade')
+              ->onDelete('cascade');
         });
     }
 
@@ -26,7 +27,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('commandes', function (Blueprint $table) {
+        Schema::table('permissions', function (Blueprint $table) {
             //
         });
     }
