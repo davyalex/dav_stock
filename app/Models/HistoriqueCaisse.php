@@ -23,14 +23,17 @@ class HistoriqueCaisse extends Model
     ];
 
 
+
+
     public static function boot()
     {
         parent::boot();
         self::creating(function ($model) {
-            $model->id = IdGenerator::generate(['table' => 'historique_caisses ', 'length' => 10, 'prefix' =>
+            $model->id = IdGenerator::generate(['table' => 'historique_caisses', 'length' => 10, 'prefix' =>
             mt_rand()]);
         });
     }
+
 
     public function user()
     {
