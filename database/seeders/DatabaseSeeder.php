@@ -32,6 +32,5 @@ class DatabaseSeeder extends Seeder
         $this->call(CategorieDepensesTableSeeder::class);
         $this->call(CategoriesTableSeeder::class);
         $this->call(LibelleDepensesTableSeeder::class);
-        $this->call(ProduitsTableSeeder::class);
     }
 }

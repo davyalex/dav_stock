@@ -19,7 +19,7 @@ use App\Http\Controllers\backend\stock\AchatController;
 use App\Http\Controllers\backend\user\ClientController;
 use App\Http\Controllers\backend\vente\VenteController;
 use App\Http\Controllers\backend\stock\SortieController;
-use App\Http\Controllers\backend\user\AdminController;  
+use App\Http\Controllers\backend\user\AdminController;
 use App\Http\Controllers\backend\module\ModuleController;
 use App\Http\Controllers\backend\depense\DepenseController;
 use App\Http\Controllers\backend\permission\RoleController;
