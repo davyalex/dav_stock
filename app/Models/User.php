@@ -112,6 +112,7 @@ class User extends Authenticatable
         return $this->hasMany(Sortie::class);
     }
     
+    
 
 
 
