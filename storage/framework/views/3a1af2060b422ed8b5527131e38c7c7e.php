@@ -143,7 +143,7 @@
                                                                 
                                                                 <tr>
                                                                     <td colspan="3">Total</td>
-                                                                    <td colspan="1">
+                                                                    <td colspan="1" class=" fw-bold">
                                                                         <?php echo e(number_format(session('totalPrice'), 0, ',', ' ')); ?>
 
                                                                         FCFA</td>

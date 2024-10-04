@@ -123,13 +123,7 @@
                             <span class="text-danger">*</span>
                         </label>
                         <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
-                        <select name="unite_id[]" class="form control selectView" required>
-                            <option disabled selected value>Choisir</option>
-                            @foreach ($data_unite as $item)
-                                <option value="{{ $item->id }}">{{ $item->libelle }}</option>
-                            @endforeach
-
-                        </select>
+                        <input class="form-control unite" type="text" name="unite_id[]" readonly>
 
                     </div>
 
@@ -302,7 +296,6 @@
                     }
 
 
-
                     // Au clic du bouton "valider"
                     if (e.target && e.target.classList.contains('validate')) {
                         let row = e.target.closest('.form-duplicate');
@@ -434,6 +427,28 @@
                 // Attacher l'événement de changement aux champs select des produits
                 $(document).on('change', '.productSelected', function() {
                     validateProductSelection();
+                });
+
+
+                // Fonction pour récupérer les détails du produit sélectionné
+                function getProductDetails(form) {
+                    let produitId = form.find('.productSelected').val();
+
+                    if (produitId) {
+                        // Récupérer les données du produit
+                        let produit = @json($data_produit).find(p => p.id == produitId);
+                        if (produit && produit.achats && produit.achats.length > 0) {
+                            // Récupérer l'unité de sortie du dernier achat
+                            let uniteSortie = produit.achats[0].unite.libelle;
+                            form.find('.unite').val(uniteSortie)
+                        }
+                    } 
+                }
+
+                // Appeler la fonction au chargement de la page
+                $(document).on('change', '.productSelected', function() {
+                    var form = $(this).closest('.row'); // Cibler le formulaire ou la ligne parent
+                    getProductDetails(form);
                 });
 
 

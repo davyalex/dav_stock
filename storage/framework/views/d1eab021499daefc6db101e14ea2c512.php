@@ -214,7 +214,7 @@
                         aria-controls="sideBarVente">
                         <i class="ri ri-file-list-line"></i> <span>VENTES</span>
                     </a>
-                    <div class="collapse menu-dropdown <?php echo e(Route::is('vente.*') || Route::is('plat.*') ? 'show' : ''); ?>"
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('vente.*') || Route::is('commande.*') ? 'show' : ''); ?>"
                         id="sideBarVente">
                         <ul class="nav nav-sm flex-column">
 
@@ -222,6 +222,12 @@
                                 <a href="<?php echo e(route('vente.index')); ?>"
                                     class="nav-link <?php echo e(Route::is('vente.*') ? 'active' : ''); ?>">Faire une vente</a>
                             </li>
+
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('commande.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('commande.*') ? 'active' : ''); ?>">Commandes</a>
+                            </li>
+
 
                             <li class="nav-item active">
                                 <a href="<?php echo e(route('plat.index')); ?>"

@@ -223,7 +223,7 @@
                         aria-controls="sideBarVente">
                         <i class="ri ri-file-list-line"></i> <span>VENTES</span>
                     </a>
-                    <div class="collapse menu-dropdown {{ Route::is('vente.*') || Route::is('plat.*') ? 'show' : '' }}"
+                    <div class="collapse menu-dropdown {{ Route::is('vente.*') || Route::is('commande.*') ? 'show' : '' }}"
                         id="sideBarVente">
                         <ul class="nav nav-sm flex-column">
 
@@ -231,6 +231,12 @@
                                 <a href="{{ route('vente.index') }}"
                                     class="nav-link {{ Route::is('vente.*') ? 'active' : '' }}">Faire une vente</a>
                             </li>
+
+                            <li class="nav-item active">
+                                <a href="{{ route('commande.index') }}"
+                                    class="nav-link {{ Route::is('commande.*') ? 'active' : '' }}">Commandes</a>
+                            </li>
+
 
                             <li class="nav-item active">
                                 <a href="{{ route('plat.index') }}"

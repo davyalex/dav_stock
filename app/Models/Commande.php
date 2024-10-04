@@ -23,7 +23,12 @@ class Commande extends Model
         'adresse_livraison',
         'montant_total',
         'date_commande', 
+        'client_id',
         'user_id',
+        'caisse_id',
+
+
+
     ];
 
 
@@ -39,10 +44,23 @@ class Commande extends Model
         });
     }
 
-    public function user()
+    public function client() // client
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class , 'client_id');
     }
+
+
+    public function user() // caissier
+    {
+        return $this->belongsTo(User::class , 'user_id');
+    }
+
+
+    public function caisse() // caisse qui confirme la vente
+    {
+        return $this->belongsTo(Caisse::class);
+    }
+
 
 
 

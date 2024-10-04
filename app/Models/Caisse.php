@@ -34,7 +34,13 @@ class Caisse extends Model
 
     public function user()
 {
-    return $this->hasMany(Caisse::class);
+    return $this->hasMany(User::class);
+}
+
+
+public function commandes()
+{
+    return $this->hasMany(Commande::class);
 }
 
     

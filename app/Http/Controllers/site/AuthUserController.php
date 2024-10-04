@@ -110,7 +110,7 @@ class AuthUserController extends Controller
 
 
     public function commande() {
-        $commandes = Commande::where('user_id' , Auth::id())->get();
+        $commandes = Commande::where('client_id' , Auth::id())->get();
         return view('site.sections.user-auth.commande' , compact('commandes'));
     }
 

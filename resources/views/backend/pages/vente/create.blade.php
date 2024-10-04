@@ -73,7 +73,7 @@
                                     <div class="card-body"> --}}
                         <div class="row mb-3">
 
-                            <div class="col-md-6 mb-3">
+                            {{-- <div class="col-md-6 mb-3">
                                 <label class="form-label" for="client-input">Client
                                     <span class="text-danger">*</span>
                                 </label>
@@ -92,7 +92,7 @@
                                 <input type="datetime-local" id="currentDate" value="<?php echo date('Y-m-d\TH:i'); ?>" name="date_vente"
                                 class="form-control" readonly>
                          
-                            </div>
+                            </div> --}}
 
                             <div id="form-container">
                                 <!-- ========== Start form duplicate ========== -->

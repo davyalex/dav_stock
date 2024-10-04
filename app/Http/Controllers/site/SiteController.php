@@ -42,14 +42,14 @@ class SiteController extends Controller
             if (!$categorieSelect) {
                 return redirect()->route('accueil');
             }
-            // retourner les achats du produits si type=boissons
-            if ($categorieSelect->type == 'boissons') {
+            // retourner les achats du produits si type=bar
+            if ($categorieSelect->type == 'bar') {
                 $produits = Produit::where('type_id', $categorieSelect->id)
                     ->withWhereHas('achats', fn($q) => $q->whereStatut('active'))
                     ->whereStatut('active')
-                    ->get();  // produits de la categorie selectionné si type ==boissons
+                    ->get();  // produits de la categorie selectionné si type ==bar
 
-            } elseif ($categorieSelect->type == 'plats') {
+            } elseif ($categorieSelect->type == 'menu') {
                 $produits = Produit::where('type_id', $categorieSelect->id)
                     ->whereStatut('active')
                     ->get();
@@ -67,7 +67,7 @@ class SiteController extends Controller
 
             $categories = Categorie::whereNull('parent_id')
                 ->with('children')
-                ->whereIn('type', ['plats', 'boissons'])
+                ->whereIn('type', ['menu', 'bar'])
                 ->orderBy('position', 'ASC')
                 ->get();
             // dd($categorie->toArray());

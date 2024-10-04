@@ -22,6 +22,7 @@ class VenteController extends Controller
                 ->where('caisse_id', auth()->user()->caisse_id)
                 ->where('user_id', auth()->user()->id)
                 ->whereDate('created_at', today())
+                ->whereStatut('confirmée',)
                 ->where('statut_cloture', false)
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -74,7 +75,7 @@ class VenteController extends Controller
         try {
             // Validation des données
             $request->validate([
-                'client_id' => 'required|exists:users,id',
+                // 'client_id' => 'required|exists:users,id',
                 'date_vente' => 'required|date',
                 'produit_id' => 'required|array',
                 'produit_id.*' => 'exists:produits,id',
@@ -89,11 +90,12 @@ class VenteController extends Controller
             // Création de la vente
             $vente = Vente::create([
                 'code' => 'V-' . strtoupper(Str::random(8)),
-                'client_id' => $request->client_id,
+                // 'client_id' => $request->client_id,
                 'caisse_id' => auth()->user()->caisse_id, // la caisse qui fait la vente
                 'user_id' => auth()->user()->id, // l'admin qui a fait la vente
                 'date_vente' => $request->date_vente,
                 'montant_total' => $request->montant_total,
+                'statut' =>'confirmée',
             ]);
 
             // Préparation des données pour la table pivot

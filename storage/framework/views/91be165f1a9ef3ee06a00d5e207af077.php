@@ -71,27 +71,7 @@
                         
                         <div class="row mb-3">
 
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" for="client-input">Client
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <select class="form-control" name="client_id" required>
-                                    <option disabled selected value>Sélectionner un client</option>
-                                    <?php $__currentLoopData = $data_client; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $client): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <option value="<?php echo e($client->id); ?>"><?php echo e($client->first_name); ?> <?php echo e($client->last_name); ?>
-
-                                        </option>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" for="date-input">Date
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <input type="datetime-local" id="currentDate" value="<?php echo date('Y-m-d\TH:i'); ?>" name="date_vente"
-                                class="form-control" readonly>
-                         
-                            </div>
+                            
 
                             <div id="form-container">
                                 <!-- ========== Start form duplicate ========== -->

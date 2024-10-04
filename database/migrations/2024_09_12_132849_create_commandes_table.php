@@ -22,7 +22,20 @@ return new class extends Migration
             $table->date('date_commande')->nullable();
 
 
-            $table->foreignId('user_id')
+            $table->foreignId('client_id') // user qui passe la commande
+            ->nullable()
+            ->constrained('users')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+
+
+            $table->foreignId('caisse_id') // caisse qui confirme la vente
+            ->nullable()
+            ->constrained('caisses')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+
+            $table->foreignId('user_id')  // utilisateur qui confirme la vente
             ->nullable()
             ->constrained('users')
             ->onUpdate('cascade')

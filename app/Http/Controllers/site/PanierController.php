@@ -188,7 +188,7 @@ class PanierController extends Controller
 
                 $commande = Commande::firstOrCreate([
                     'code' => 'CMD-' . strtoupper(Str::random(8)),
-                    'user_id' => Auth::id(),
+                    'client_id' => Auth::id(),
                     'montant_total' => $montantTotal,
                     'nombre_produit' => $nombreProduit,
                     'mode_livraison' => $request->optionLivraison,

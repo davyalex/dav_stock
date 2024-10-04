@@ -14,13 +14,14 @@ use App\Http\Controllers\site\AuthUserController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\menu\MenuController;
 use App\Http\Controllers\backend\menu\PlatController;
+use App\Http\Controllers\backend\user\AdminController;
 use App\Http\Controllers\backend\slide\SlideController;
 use App\Http\Controllers\backend\stock\AchatController;
 use App\Http\Controllers\backend\user\ClientController;
 use App\Http\Controllers\backend\vente\VenteController;
 use App\Http\Controllers\backend\stock\SortieController;
-use App\Http\Controllers\backend\user\AdminController;
 use App\Http\Controllers\backend\module\ModuleController;
+use App\Http\Controllers\backend\vente\CommandeController;
 use App\Http\Controllers\backend\depense\DepenseController;
 use App\Http\Controllers\backend\permission\RoleController;
 use App\Http\Controllers\backend\produit\ProduitController;
@@ -304,13 +305,20 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     });
 
 
-    // stock -vente
+    // vente
     Route::prefix('vente')->controller(VenteController::class)->group(function () {
         route::get('', 'index')->name('vente.index');
         route::get('show/{id}', 'show')->name('vente.show');
         route::get('create', 'create')->name('vente.create');
         route::post('store', 'store')->name('vente.store');
         route::get('cloture-caisse', 'clotureCaisse')->name('vente.cloture-caisse');
+    });
+
+      // Commande
+      Route::prefix('commande')->controller(CommandeController::class)->group(function () {
+        route::get('', 'index')->name('commande.index');
+        route::get('show/{id}', 'show')->name('commande.show');
+        route::post('statut', 'changerStatut')->name('commande.statut');
     });
 
     Route::prefix('categorie-depense')->controller(CategorieDepenseController::class)->group(function () {
