@@ -71,184 +71,193 @@
             <ul class="navbar-nav" id="navbar-nav">
                 
 
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?php echo e(Route::is('dashboard.*') ? 'active' : ''); ?> "
-                        href="<?php echo e(route('dashboard.index')); ?>">
-                        <i class="ri-dashboard-2-line"></i> <span>TABLEAU DE BORD</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarConfiguration" data-bs-toggle="collapse" role="button"
-                        aria-controls="sidebarConfiguration">
-                        <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
-                    </a>
-                    <div class="collapse menu-dropdown <?php echo e(Route::is('categorie.*') || Route::is('produit.*') || Route::is('fournisseur.*') || Route::is('admin-register.*') || Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*') || Route::is('client.*') ? 'show' : ''); ?>"
-                        id="sidebarConfiguration">
-                        <ul class="nav nav-sm flex-column">
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-tableau-de-bord')): ?>
+                    <li class="nav-item">
+                        <a class="nav-link menu-link <?php echo e(Route::is('dashboard.*') ? 'active' : ''); ?> "
+                            href="<?php echo e(route('dashboard.index')); ?>">
+                            <i class="ri-dashboard-2-line"></i> <span>TABLEAU DE BORD</span>
+                        </a>
+                    </li>
+                <?php endif; ?>
 
 
-
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('client.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('client.*') ? 'active' : ''); ?>">Clients</a>
-                            </li>
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-configuration')): ?>
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sidebarConfiguration" data-bs-toggle="collapse" role="button"
+                            aria-controls="sidebarConfiguration">
+                            <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
+                        </a>
+                        <div class="collapse menu-dropdown <?php echo e(Route::is('categorie.*') || Route::is('produit.*') || Route::is('fournisseur.*') || Route::is('admin-register.*') || Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*') || Route::is('client.*') ? 'show' : ''); ?>"
+                            id="sidebarConfiguration">
+                            <ul class="nav nav-sm flex-column">
 
 
 
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('magasin.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('magasin.*') ? 'active' : ''); ?>">Magasin</a>
-                            </li>
-
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('unite.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('unite.*') ? 'active' : ''); ?>">Unité de mesure</a>
-                            </li>
-
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('format.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('format.*') ? 'active' : ''); ?>">Format /
-                                    Emballage</a>
-                            </li>
-
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('caisse.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('caisse.*') ? 'active' : ''); ?>">Caisse
-                                </a>
-                            </li>
-
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('fournisseur.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('fournisseur.*') ? 'active' : ''); ?>">Fournisseurs
-                                </a>
-                            </li>
-
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('categorie.create')); ?>"
-                                    class="nav-link <?php echo e(Route::is('categorie.*') ? 'active' : ''); ?>">Categories
-                                </a>
-                            </li>
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('produit.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('produit.*') ? 'active' : ''); ?>">Produits
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('client.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('client.*') ? 'active' : ''); ?>">Clients</a>
+                                </li>
 
 
 
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarStock" data-bs-toggle="collapse" role="button"
-                        aria-controls="sidebarStock">
-                        <i class="ri ri-box-1-fill"></i> <span>GESTION DE STOCK</span>
-                    </a>
-                    <div class="collapse menu-dropdown <?php echo e(Route::is('etat-stock.*') || Route::is('inventaire.*') || Route::is('sortie.*') || Route::is('ajustement.*') || Route::is('achat.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : ''); ?>"
-                        id="sidebarStock">
-                        <ul class="nav nav-sm flex-column">
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('magasin.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('magasin.*') ? 'active' : ''); ?>">Magasin</a>
+                                </li>
 
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('achat.facture')); ?>"
-                                    class="nav-link <?php echo e(Route::is('achat.*') ? 'active' : ''); ?>">Reception de stock</a>
-                            </li>
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('unite.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('unite.*') ? 'active' : ''); ?>">Unité de mesure</a>
+                                </li>
 
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('format.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('format.*') ? 'active' : ''); ?>">Format /
+                                        Emballage</a>
+                                </li>
 
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('caisse.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('caisse.*') ? 'active' : ''); ?>">Caisse
+                                    </a>
+                                </li>
 
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('sortie.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('sortie.*') ? 'active' : ''); ?>">Sortie de stock</a>
-                            </li>
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('fournisseur.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('fournisseur.*') ? 'active' : ''); ?>">Fournisseurs
+                                    </a>
+                                </li>
 
-
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('inventaire.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('inventaire.*') ? 'active' : ''); ?>">Inventaire</a>
-                            </li>
-
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('etat-stock.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('etat-stock.*') ? 'active' : ''); ?>">Etat du stock</a>
-                            </li>
-
-
-                        </ul>
-                    </div>
-                </li>
-
-
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarDepense" data-bs-toggle="collapse" role="button"
-                        aria-controls="sidebarDepense">
-                        <i class="ri ri-wallet-fill"></i> <span>DEPENSES</span>
-                    </a>
-                    <div class="collapse menu-dropdown <?php echo e(Route::is('libelle-depense.*') || Route::is('categorie-depense.*') || Route::is('depense.*') ? 'show' : ''); ?>"
-                        id="sidebarDepense">
-                        <ul class="nav nav-sm flex-column">
-
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('categorie-depense.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('categorie-depense.*') ? 'active' : ''); ?>">Categorie
-                                    des
-                                    depenses</a>
-                            </li>
-
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('libelle-depense.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('libelle-depense.*') ? 'active' : ''); ?>">Libellé des
-                                    depenses</a>
-                            </li>
-
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('depense.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('depense.*') ? 'active' : ''); ?>">Depense</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('categorie.create')); ?>"
+                                        class="nav-link <?php echo e(Route::is('categorie.*') ? 'active' : ''); ?>">Categories
+                                    </a>
+                                </li>
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('produit.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('produit.*') ? 'active' : ''); ?>">Produits
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                <?php endif; ?>
 
 
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sideBarVente" data-bs-toggle="collapse" role="button"
-                        aria-controls="sideBarVente">
-                        <i class="ri ri-file-list-line"></i> <span>VENTES</span>
-                    </a>
-                    <div class="collapse menu-dropdown <?php echo e(Route::is('vente.*') || Route::is('commande.*') ? 'show' : ''); ?>"
-                        id="sideBarVente">
-                        <ul class="nav nav-sm flex-column">
 
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('vente.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('vente.*') ? 'active' : ''); ?>">Faire une vente</a>
-                            </li>
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-gestion de stock')): ?>
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sidebarStock" data-bs-toggle="collapse" role="button"
+                            aria-controls="sidebarStock">
+                            <i class="ri ri-box-1-fill"></i> <span>GESTION DE STOCK</span>
+                        </a>
+                        <div class="collapse menu-dropdown <?php echo e(Route::is('etat-stock.*') || Route::is('inventaire.*') || Route::is('sortie.*') || Route::is('ajustement.*') || Route::is('achat.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : ''); ?>"
+                            id="sidebarStock">
+                            <ul class="nav nav-sm flex-column">
 
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('commande.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('commande.*') ? 'active' : ''); ?>">Commandes</a>
-                            </li>
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('achat.facture')); ?>"
+                                        class="nav-link <?php echo e(Route::is('achat.*') ? 'active' : ''); ?>">Reception de stock</a>
+                                </li>
 
 
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('plat.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('plat.*') ? 'active' : ''); ?>">Chiffre d'affaire par
-                                    categorie</a>
-                            </li>
 
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('menu.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Chiffre d'affaire par
-                                    produit</a>
-                            </li>
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('menu.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Chiffre d'affaire par
-                                    Caisse</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('sortie.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('sortie.*') ? 'active' : ''); ?>">Sortie de stock</a>
+                                </li>
 
+
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('inventaire.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('inventaire.*') ? 'active' : ''); ?>">Inventaire</a>
+                                </li>
+
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('etat-stock.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('etat-stock.*') ? 'active' : ''); ?>">Etat du stock</a>
+                                </li>
+
+
+                            </ul>
+                        </div>
+                    </li>
+                <?php endif; ?>
+
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-depense')): ?>
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sidebarDepense" data-bs-toggle="collapse" role="button"
+                            aria-controls="sidebarDepense">
+                            <i class="ri ri-wallet-fill"></i> <span>DEPENSES</span>
+                        </a>
+                        <div class="collapse menu-dropdown <?php echo e(Route::is('libelle-depense.*') || Route::is('categorie-depense.*') || Route::is('depense.*') ? 'show' : ''); ?>"
+                            id="sidebarDepense">
+                            <ul class="nav nav-sm flex-column">
+
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('categorie-depense.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('categorie-depense.*') ? 'active' : ''); ?>">Categorie
+                                        des
+                                        depenses</a>
+                                </li>
+
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('libelle-depense.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('libelle-depense.*') ? 'active' : ''); ?>">Libellé des
+                                        depenses</a>
+                                </li>
+
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('depense.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('depense.*') ? 'active' : ''); ?>">Depense</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                <?php endif; ?>
+
+          <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-vente')): ?>
+          <li class="nav-item">
+            <a class="nav-link menu-link" href="#sideBarVente" data-bs-toggle="collapse" role="button"
+                aria-controls="sideBarVente">
+                <i class="ri ri-file-list-line"></i> <span>VENTES</span>
+            </a>
+            <div class="collapse menu-dropdown <?php echo e(Route::is('vente.*') || Route::is('commande.*') ? 'show' : ''); ?>"
+                id="sideBarVente">
+                <ul class="nav nav-sm flex-column">
+
+                    <li class="nav-item active">
+                        <a href="<?php echo e(route('vente.index')); ?>"
+                            class="nav-link <?php echo e(Route::is('vente.*') ? 'active' : ''); ?>">Faire une vente</a>
+                    </li>
+
+                    <li class="nav-item active">
+                        <a href="<?php echo e(route('commande.index')); ?>"
+                            class="nav-link <?php echo e(Route::is('commande.*') ? 'active' : ''); ?>">Commandes</a>
+                    </li>
+
+
+                    <li class="nav-item active">
+                        <a href="<?php echo e(route('plat.index')); ?>"
+                            class="nav-link <?php echo e(Route::is('plat.*') ? 'active' : ''); ?>">Chiffre d'affaire par
+                            categorie</a>
+                    </li>
+
+                    <li class="nav-item active">
+                        <a href="<?php echo e(route('menu.index')); ?>"
+                            class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Chiffre d'affaire par
+                            produit</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="<?php echo e(route('menu.index')); ?>"
+                            class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Chiffre d'affaire par
+                            Caisse</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+          <?php endif; ?>
 
 
                 <li class="nav-item">
@@ -354,7 +363,7 @@
                 </li>
 
 
-                
+
         </div>
         </li>
         </ul>

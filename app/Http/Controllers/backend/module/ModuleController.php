@@ -38,10 +38,10 @@ class ModuleController extends Controller
 
         // Définir les permissions pour ce module
         $permissions = [
-            'ajouter-' . $module->name,
+            'creer-' . $module->name,
             'voir-' . $module->name,
             'modifier-' . $module->name,
-            'supprimer-' . $module->name
+            'supprimer-' . $module->name,
         ];
 
         // Créer les permissions et les associer au module
@@ -51,8 +51,6 @@ class ModuleController extends Controller
                 'module_id' => $module->id,  // Associer à un module                
                 'guard_name' => 'web',
             ]);
-
-            
         }
 
         Alert::success('Operation réussi', 'Success Message');
@@ -63,38 +61,48 @@ class ModuleController extends Controller
 
     public function update(Request $request, $id)
     {
-
-        //request validation ......
-
-        //suppression  des permission pour une nouvelle insertion
-        $module = Module::find($id);
-        Permission::where('module_name', $module['name'])->delete();
-
-        $data_page = Module::find($id)->update([
-            'name' => $request['name'],
+        // Validation de la requête
+        $request->validate([
+            'name' => 'required|string|max:255|unique:modules,name,' . $id,
         ]);
 
-        $permissions = [
-            '0' => 'ajouter-' . $request['name'],
-            '1' => 'voir-' . $request['name'],
-            '2' => 'modifier-' . $request['name'],
-            '3' => 'supprimer-' . $request['name']
-        ];
+        // Trouver le module existant
+        $module = Module::findOrFail($id);
 
+        // Si le nom du module a changé
+        if ($module->name !== $request['name']) {
 
-        foreach ($permissions as $value) {
-            Permission::firstOrCreate([
-                'name' => $value,
-                'module_name' => $request['name'],
-                'guard_name' => 'web',
+            // Définir les nouvelles permissions basées sur le nouveau nom
+            $permissions = [
+                'creer-' . $request['name'],
+                'voir-' . $request['name'],
+                'modifier-' . $request['name'],
+                'supprimer-' . $request['name'],
+            ];
+
+            // Récupérer les permissions associées au module
+            $existingPermissions = Permission::where('module_id', $module->id)->get();
+
+            // Mettre à jour chaque permission
+            foreach ($existingPermissions as $key => $permission) {
+                if (isset($permissions[$key])) {
+                    // Mettre à jour le nom de la permission
+                    $permission->update([
+                        'name' => $permissions[$key], // Le nouveau nom de la permission
+                        'guard_name' => 'web',        // Garde toujours 'web'
+                    ]);
+                }
+            }
+
+            // Mettre à jour le nom du module
+            $module->update([
+                'name' => $request['name'],
             ]);
         }
 
-        // $data = Permission::where('module_name', $module['name'])->get();
-        // dd($data);
 
 
-        Alert::success('Opération réussi', 'Success Message');
+        Alert::success('Opération réussie', 'Le module a été mis à jour avec succès');
         return back();
     }
 

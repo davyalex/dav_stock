@@ -114,9 +114,10 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     //role
     Route::prefix('permission')->controller(PermissionController::class)->group(function () {
         route::get('', 'index')->name('permission.index');
+        route::get('create', 'create')->name('permission.create');
         route::post('store', 'store')->name('permission.store');
-        route::get('load-permission/{id}', 'getPermissionOfModule')->name('loadpermission'); // get permission of module with ajax
-        route::post('update/{id}', 'update')->name('permission.update');
+        route::get('edit{id}', 'edit')->name('permission.edit');
+        route::put('update/{id}', 'update')->name('permission.update');
         route::get('delete/{id}', 'delete')->name('permission.delete');
     });
 
@@ -314,8 +315,8 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('cloture-caisse', 'clotureCaisse')->name('vente.cloture-caisse');
     });
 
-      // Commande
-      Route::prefix('commande')->controller(CommandeController::class)->group(function () {
+    // Commande
+    Route::prefix('commande')->controller(CommandeController::class)->group(function () {
         route::get('', 'index')->name('commande.index');
         route::get('show/{id}', 'show')->name('commande.show');
         route::post('statut', 'changerStatut')->name('commande.statut');

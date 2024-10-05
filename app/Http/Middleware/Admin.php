@@ -17,19 +17,11 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::user() && in_array(Auth::user()->role, ['developpeur', 'webmaster', 'administrateur', 'gestionnaire', 'caisse'])) {
+        if (Auth::user() && Auth::user()->role !== 'client') {
             return $next($request);
         }
 
-        // Si l'utilisateur n'a pas un de ces rôles
-        // abort(403, 'Accès non autorisé');
-
-        return redirect()->route('admin.login')->withError('Session expirée , veuillez à nouveau vous connecter');
-
-        // else {
-        //     Alert::error('Access non autorisé', 'Error Message');
-
-        //     return redirect()->route('admin.login')->withError('Autorisation echoué');
-        // }
+        // Si l'utilisateur est un client ou n'est pas authentifié
+        return redirect()->route('admin.login')->withError('Session expirée ou accès non autorisé, veuillez vous connecter');
     }
 }

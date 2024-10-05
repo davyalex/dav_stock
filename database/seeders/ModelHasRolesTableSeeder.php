@@ -21,21 +21,15 @@ class ModelHasRolesTableSeeder extends Seeder
         \DB::table('model_has_roles')->insert(array (
             0 => 
             array (
-                'role_id' => 4,
+                'role_id' => 1,
                 'model_type' => 'App\\Models\\User',
-                'model_id' => 6484939514,
+                'model_id' => 15591038721,
             ),
             1 => 
             array (
-                'role_id' => 4,
+                'role_id' => 1,
                 'model_type' => 'App\\Models\\User',
-                'model_id' => 11868144821,
-            ),
-            2 => 
-            array (
-                'role_id' => 6,
-                'model_type' => 'App\\Models\\User',
-                'model_id' => 14515841191,
+                'model_id' => 16484939514,
             ),
         ));
         

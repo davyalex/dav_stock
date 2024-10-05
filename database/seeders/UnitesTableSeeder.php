@@ -30,6 +30,15 @@ class UnitesTableSeeder extends Seeder
             ),
             1 => 
             array (
+                'id' => 4225322402,
+                'libelle' => 'test',
+                'abreviation' => 'FR',
+                'deleted_at' => '2024-10-04 12:24:49',
+                'created_at' => '2024-10-04 12:23:15',
+                'updated_at' => '2024-10-04 12:24:49',
+            ),
+            2 => 
+            array (
                 'id' => 5921641171,
                 'libelle' => 'kilogramme',
                 'abreviation' => 'KG',

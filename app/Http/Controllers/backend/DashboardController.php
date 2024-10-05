@@ -36,6 +36,8 @@ class DashboardController extends Controller
             }
         }
         
+        
+        
         // Si l'utilisateur n'a pas le rôle 'caisse' ou a déjà sélectionné une caisse, afficher la page d'index
         return view('backend.pages.index');
     }
