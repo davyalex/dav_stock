@@ -268,7 +268,7 @@
             });
 
             $('#formSend').on('submit', function(e) {
-                
+                e.preventDefault();
                 // on verifie si une image principale à éte inseré
                 if ($('#product-image-input').val() === '' && categoryFamille === 'bar') {
                     e.preventDefault();
@@ -281,18 +281,17 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('produit.store') }}", // Adjust the route as needed
+                        url: "{{ route('produit.store') }}", // Ajustez la route si nécessaire
                         type: 'POST',
                         data: formData,
                         contentType: false,
                         processData: false,
                         success: function(response) {
-                            $('#imageTableBody').empty();
+                            if (response.success === true) {
+                                $('#imageTableBody').empty();
 
-                            if (response.message == 'operation reussi') {
                                 Swal.fire({
-                                    title: 'Produit ajouté avec success!',
-                                    // text: 'You clicked the button!',
+                                    title: 'Produit ajouté avec succès !',
                                     icon: 'success',
                                     showCancelButton: false,
                                     customClass: {
@@ -301,13 +300,18 @@
                                     },
                                     buttonsStyling: false,
                                     showCloseButton: true
-                                })
-                                var url = "{{ route('produit.index') }}" // redirect route stock
+                                });
 
+                                var url = "{{ route('produit.index') }}"; // Rediriger vers la route stock
                                 window.location.replace(url);
-                            } else if (response == 'The nom has already been taken.') {
+                            }
+                        },
+                        error: function(xhr) {
+                            // Gérer les erreurs
+                            if (xhr.status === 409) {
+                                // Produit déjà existant
                                 Swal.fire({
-                                    title: 'Ce produit existe déjà ?',
+                                    title: 'Ce produit a déjà été enregistré',
                                     text: $('#nomProduit').val(),
                                     icon: 'warning',
                                     customClass: {
@@ -316,11 +320,24 @@
                                     },
                                     buttonsStyling: false,
                                     showCloseButton: true
-                                })
+                                });
+                            } else {
+                                // Autres types d'erreurs
+                                Swal.fire({
+                                    title: 'Erreur',
+                                    text: 'Une erreur est survenue, veuillez réessayer.',
+                                    icon: 'error',
+                                    customClass: {
+                                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                                        cancelButton: 'btn btn-danger w-xs mt-2',
+                                    },
+                                    buttonsStyling: false,
+                                    showCloseButton: true
+                                });
                             }
-                        },
-
+                        }
                     });
+
 
                 }
 
