@@ -237,22 +237,7 @@
                     </li>
 
 
-                    <li class="nav-item active">
-                        <a href="<?php echo e(route('plat.index')); ?>"
-                            class="nav-link <?php echo e(Route::is('plat.*') ? 'active' : ''); ?>">Chiffre d'affaire par
-                            categorie</a>
-                    </li>
-
-                    <li class="nav-item active">
-                        <a href="<?php echo e(route('menu.index')); ?>"
-                            class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Chiffre d'affaire par
-                            produit</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a href="<?php echo e(route('menu.index')); ?>"
-                            class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Chiffre d'affaire par
-                            Caisse</a>
-                    </li>
+                   
                 </ul>
             </div>
         </li>
@@ -305,24 +290,24 @@
                         aria-controls="sideBarRapport">
                         <i class="ri ri-file-list-line"></i> <span>RAPPORTS</span>
                     </a>
-                    <div class="collapse menu-dropdown <?php echo e(Route::is('vente.*') || Route::is('commande.*') ? 'show' : ''); ?>"
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('rapport.categorie') || Route::is('rapport.produit') || Route::is('rapport.caisse') ? 'show' : ''); ?>"
                         id="sideBarRapport">
                         <ul class="nav nav-sm flex-column">
 
                             <li class="nav-item active">
-                                <a href="<?php echo e(route('plat.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('plat.*') ? 'active' : ''); ?>">Chiffre d'affaire par
+                                <a href="<?php echo e(route('rapport.categorie')); ?>"
+                                    class="nav-link <?php echo e(Route::is('rapport.categorie') ? 'active' : ''); ?>">Chiffre d'affaire par
                                     categorie</a>
                             </li>
 
                             <li class="nav-item active">
-                                <a href="<?php echo e(route('menu.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Chiffre d'affaire par
+                                <a href="<?php echo e(route('rapport.produit')); ?>"
+                                    class="nav-link <?php echo e(Route::is('rapport.produit') ? 'active' : ''); ?>">Chiffre d'affaire par
                                     produit</a>
                             </li>
                             <li class="nav-item active">
-                                <a href="<?php echo e(route('menu.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Chiffre d'affaire par
+                                <a href="<?php echo e(route('rapport.caisse')); ?>"
+                                    class="nav-link <?php echo e(Route::is('rapport.caisse') ? 'active' : ''); ?>">Chiffre d'affaire par
                                     Caisse</a>
                             </li>
                         </ul>

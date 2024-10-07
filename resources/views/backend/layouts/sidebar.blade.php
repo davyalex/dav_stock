@@ -80,7 +80,7 @@
             <ul class="navbar-nav" id="navbar-nav">
                 {{-- <li class="menu-title"><span>@lang('translation.menu')</span></li> --}}
 
-                @can('voir-tableau-de-bord')
+                @can('voir-tableau de bord')
                     <li class="nav-item">
                         <a class="nav-link menu-link {{ Route::is('dashboard.*') ? 'active' : '' }} "
                             href="{{ route('dashboard.index') }}">
