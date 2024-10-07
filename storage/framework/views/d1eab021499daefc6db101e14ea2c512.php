@@ -311,8 +311,8 @@
                                         produit</a>
                                 </li>
                                 <li class="nav-item active">
-                                    <a href="<?php echo e(route('rapport.caisse')); ?>"
-                                        class="nav-link <?php echo e(Route::is('rapport.caisse') ? 'active' : ''); ?>">Chiffre
+                                    <a href="<?php echo e(route('rapport.produit')); ?>"
+                                        class="nav-link <?php echo e(Route::is('rapport.produit') ? 'active' : ''); ?>">Chiffre
                                         d'affaire par
                                         Caisse</a>
                                 </li>

@@ -7,8 +7,17 @@
                         <ul>
                             <li><a href="<?php echo e(route('accueil')); ?>">Accueil</a></li>
                             
-                              <?php $__currentLoopData = $menu_link; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $menu): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                              <li><a href="<?php echo e(route('produit' , $menu->slug)); ?>"><?php echo e($menu->name); ?> </a></li>
+                            <?php $__currentLoopData = $menu_link; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $menu): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <li><a href="<?php echo e(route('produit', $menu->slug)); ?>">
+                                        <?php if($menu->slug === 'bar'): ?>
+                                            Nos boissons
+                                        <?php elseif($menu->slug === 'menu'): ?>
+                                            Nos plats
+                                        <?php else: ?>
+                                            <?php echo e($menu->name); ?>
+
+                                        <?php endif; ?>
+                                    </a></li>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <li><a href="<?php echo e(route('menu')); ?>">Menu du jour</a></li>
                         </ul>

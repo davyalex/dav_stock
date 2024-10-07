@@ -123,10 +123,12 @@
                             <span class="text-danger">*</span>
                         </label>
                         <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
-                        <input class="form-control unite" type="text" name="unite_id[]" readonly>
+                        <input class="form-control uniteLibelle" type="text" name="unite_libelle[]" readonly>
+                        <input class="form-control uniteId" type="text" name="unite_id[]" hidden>
 
                     </div>
 
+                 
 
                     <!-- Bouton pour supprimer ce bloc -->
                     <div class="col-md-2 mb-3 pt-4">
@@ -439,8 +441,10 @@
                         let produit = @json($data_produit).find(p => p.id == produitId);
                         if (produit && produit.achats && produit.achats.length > 0) {
                             // Récupérer l'unité de sortie du dernier achat
-                            let uniteSortie = produit.achats[0].unite.libelle;
-                            form.find('.unite').val(uniteSortie)
+                            let uniteSortie = produit.achats[0].unite;
+                            form.find('.uniteLibelle').val(uniteSortie.libelle)
+                            form.find('.uniteId').val(uniteSortie.id)
+
                         }
                     } 
                 }

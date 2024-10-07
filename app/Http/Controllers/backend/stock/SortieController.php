@@ -84,7 +84,6 @@ class SortieController extends Controller
             // enregistrer les produits de la sortie
             foreach ($request->produit_id as $key => $produit_id) {
                 // Trouver l'unité correspondante pour ce produit
-                $unite = Unite::find($request->unite_id[$key]);
                 $produit = Produit::find($produit_id);
 
                 // Attacher le produit à la sortie avec les informations associées
@@ -92,7 +91,7 @@ class SortieController extends Controller
                     'quantite_utilise' => $request->quantite_utilise[$key],
                     'quantite_existant' => $produit->stock,
                     'unite_id' => $request->unite_id[$key],
-                    'unite_sortie' => $unite->libelle,  // Assurez-vous que $unite contient une instance valide
+                    'unite_sortie' => $request->unite_libelle[$key],
                 ]);
 
                 // Retirer la quantité utilisée dans le stock de chaque produit

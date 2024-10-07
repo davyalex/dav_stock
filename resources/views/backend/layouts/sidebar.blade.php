@@ -320,8 +320,8 @@
                                         produit</a>
                                 </li>
                                 <li class="nav-item active">
-                                    <a href="{{ route('rapport.caisse') }}"
-                                        class="nav-link {{ Route::is('rapport.caisse') ? 'active' : '' }}">Chiffre
+                                    <a href="{{ route('rapport.produit') }}"
+                                        class="nav-link {{ Route::is('rapport.produit') ? 'active' : '' }}">Chiffre
                                         d'affaire par
                                         Caisse</a>
                                 </li>

@@ -55,8 +55,8 @@
                     <div class="grid-list-product-wrapper">
                         <div class="product-grid product-view pb-20">
                             <div class="row">
-                                <!-- start si type categorie == boissons-->
-                                <?php if($categorieSelect->type == 'boissons'): ?>
+                                <!-- start si type categorie == bar-->
+                                <?php if($categorieSelect->type == 'bar'): ?>
                                     <?php $__currentLoopData = $produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <?php $__currentLoopData = $produit->achats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
@@ -86,12 +86,12 @@
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 <?php endif; ?>
-                                <!-- end si type categorie == boissons-->
+                                <!-- end si type categorie == bar-->
 
 
 
-                                <!-- start si type categorie != boissons-->
-                                <?php if($categorieSelect->type != 'boissons'): ?>
+                                <!-- start si type categorie != bar-->
+                                <?php if($categorieSelect->type != 'bar'): ?>
                                     <?php $__currentLoopData = $produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
                                             <div class="product-wrapper">
@@ -119,7 +119,7 @@
                                         </div>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 <?php endif; ?>
-                                <!-- end si type categorie != boissons-->
+                                <!-- end si type categorie != bar-->
                             </div>
                         </div>
                         <div class="pagination-total-pages">

@@ -24,7 +24,7 @@
                                     height="100">
 
                                 @foreach ($produit->getMedia('galleryProduit') as $media)
-                                    <img src="{{ $media->getUrl('small-size') }}" alt="{{ $media->name }}"
+                                    <img src="{{ $media->getUrl() }}" alt="{{ $media->name }}"
                                         class="thumbnail" onclick="changeImage('{{ $media->getUrl() }}')" width="100"
                                         height="100">
                                 @endforeach
@@ -354,17 +354,19 @@
             // Incrémentation
             if ($button.text() === "+") {
                 var newVal = oldValue + 1;
-                if (newVal > maxQuantity) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Attention',
-                        text: 'La quantité demandée dépasse le stock disponible.',
-                        confirmButtonText: 'OK'
-                    });
-                    newVal = maxQuantity-1;
-                    $('.addCart').prop('disabled', true); // Désactiver le bouton si max atteint
-                } else {
-                    $('.addCart').prop('disabled', false); // Activer le bouton si la quantité est valide
+                if ('{{ $produit->categorie->famille }}' === 'bar') {
+                    if (newVal > maxQuantity) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Attention',
+                            text: 'La quantité demandée dépasse le stock disponible.',
+                            confirmButtonText: 'OK'
+                        });
+                        newVal = maxQuantity;
+                        $('.addCart').prop('disabled', true); // Désactiver le bouton si max atteint
+                    } else {
+                        $('.addCart').prop('disabled', false); // Activer le bouton si la quantité est valide
+                    }
                 }
             }
             // Décrémentation

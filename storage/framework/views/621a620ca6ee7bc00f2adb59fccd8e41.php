@@ -45,7 +45,7 @@
                                     <tr id="row_<?php echo e($item['id']); ?>">
                                         <td> <?php echo e(++$key); ?> </td>
                                         <td> <a class="fw-bold" href="<?php echo e(route('sortie.show' , $item->id)); ?>">#<?php echo e($item['code']); ?></a> </td>
-                                        <td> <?php echo e($item['date_sortie']); ?> </td>
+                                        <td> <?php echo e($item['created_at']); ?> </td>
                                         <td> <?php echo e($item['user']['first_name']); ?> </td>
                                         
                                     </tr>

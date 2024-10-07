@@ -10,23 +10,27 @@
 
             <div class="row">
                 <div class="col-lg-6 col-md-12">
-                    
+                    <div class="product-images-slider position-relative">
+                        <div class="main-image-container">
+                            <img id="mainImage" src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>" alt="Image principale"
+                                class="product-image" width="570" height="470">
+                        </div>
 
-                    <!-- Image principale -->
-                    <div class="main-image">
-                        <img id="mainImage" src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>"
-                            alt="Image principale" class="product-image" width="570" height="470">
-                    </div>
+                        <div class="thumbnail-slider">
+                            <div class="thumbnails-container d-flex">
+                                <img src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>" alt="Image principale"
+                                    class="thumbnail active"
+                                    onclick="changeImage('<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>')" width="100"
+                                    height="100">
 
-                    <!-- Miniatures sous l'image principale -->
-                    <div class="thumbnail-carousel owl-carousel owl-theme">
-                        <?php $__currentLoopData = $produit->getMedia('galleryProduit'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $media): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <div class="item">
-                                <img src="<?php echo e($media->getUrl('small-size')); ?>" alt="Image 1" class="thumbnail"
-                                    onclick="changeImage('<?php echo e($media->getUrl()); ?>')">
+                                <?php $__currentLoopData = $produit->getMedia('galleryProduit'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $media): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <img src="<?php echo e($media->getUrl()); ?>" alt="<?php echo e($media->name); ?>"
+                                        class="thumbnail" onclick="changeImage('<?php echo e($media->getUrl()); ?>')" width="100"
+                                        height="100">
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
@@ -41,7 +45,10 @@
 
                         <?php if($produit->achats->isNotEmpty()): ?>
                             <div class="in-stock">
-                                <p>En stock: <span> <?php echo e($produit->achats->isNotEmpty() ? $produit->stock : ''); ?> </span></p>
+                                <p>En stock: <span>
+                                        <?php echo e($produit->achats->isNotEmpty() ? $produit->achats[0]->quantite_stocke : ''); ?>
+
+                                    </span></p>
                             </div>
                         <?php endif; ?>
 
@@ -52,7 +59,7 @@
                             <div class="product-quantity">
                                 <div class="cart-plus-minus">
                                     <input id="quantity" class="cart-plus-minus-box" type="text" name="quantity"
-                                        value="1" min="1" readonly>
+                                        value="1" readonly>
                                 </div>
                             </div>
                             <div class="shop-list-cart-wishlist mx-3">
@@ -200,23 +207,51 @@
 
     <script>
         var CartPlusMinus = $('.cart-plus-minus');
+
+        // Ajouter les boutons - et +
         CartPlusMinus.prepend('<div class="dec qtybutton">-</div>');
         CartPlusMinus.append('<div class="inc qtybutton">+</div>');
+
+        // Gestion de l'incrémentation et de la décrémentation
         $(".qtybutton").on("click", function() {
             var $button = $(this);
-            var oldValue = $button.parent().find("input").val();
+            var $input = $button.parent().find("input");
+            var oldValue = parseFloat($input.val());
+            var maxQuantity =
+            <?php echo e($produit->achats->isNotEmpty() ? $produit->stock : 0); ?>; // S'assurer que maxQuantity est bien défini
+
+            // Incrémentation
             if ($button.text() === "+") {
-                var newVal = parseFloat(oldValue) + 1;
-            } else {
-                // Don't allow decrementing below zero
-                if (oldValue > 1) {
-                    var newVal = parseFloat(oldValue) - 1;
-                } else {
-                    newVal = 1;
+                var newVal = oldValue + 1;
+                if ('<?php echo e($produit->categorie->famille); ?>' === 'bar') {
+                    if (newVal > maxQuantity) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Attention',
+                            text: 'La quantité demandée dépasse le stock disponible.',
+                            confirmButtonText: 'OK'
+                        });
+                        newVal = maxQuantity;
+                        $('.addCart').prop('disabled', true); // Désactiver le bouton si max atteint
+                    } else {
+                        $('.addCart').prop('disabled', false); // Activer le bouton si la quantité est valide
+                    }
                 }
             }
-            $button.parent().find("input").val(newVal);
+            // Décrémentation
+            else {
+                if (oldValue > 1) {
+                    var newVal = oldValue - 1;
+                } else {
+                    newVal = 1; // Ne pas aller en dessous de 1
+                }
+                $('.addCart').prop('disabled', false); // Activer le bouton si la quantité est valide
+            }
+
+            // Mettre à jour la valeur de l'input
+            $input.val(newVal);
         });
+
 
 
         $(document).ready(function() {

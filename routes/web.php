@@ -194,11 +194,11 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     //rapport
     Route::prefix('rapport')->controller(RapportController::class)->group(function () {
         route::get('categorie', 'categorie')->name('rapport.categorie');
-        route::post('produit', 'produit')->name('rapport.produit');
-        route::post('vente', 'vente')->name('rapport.vente');
-        route::post('caisse', 'caisse')->name('rapport.caisse');
-        route::post('commande', 'commande')->name('rapport.commande');
-        route::post('depense', 'depense')->name('rapport.depense');
+        route::get('produit', 'produits')->name('rapport.produit');
+        route::get('vente', 'ventes')->name('rapport.vente');
+        route::get('caisse', 'caisses')->name('rapport.caisse');
+        route::get('commande', 'commandes')->name('rapport.commande');
+        route::get('depense', 'depenses')->name('rapport.depense');
     });
 
 
