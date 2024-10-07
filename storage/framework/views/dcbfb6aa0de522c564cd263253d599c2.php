@@ -28,8 +28,18 @@
                         <div class="card-body">
                             <div class="mb-3">
                                 <label for="role_name" class="form-label">Nom du rôle</label>
-                                <input type="text" class="form-control" id="role_name" name="name" value="<?php echo e($role->name); ?>" required>
+                                <input type="text" class="form-control" id="role_name" name="name"
+                                    value="<?php echo e($role->name); ?>" required>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Autorisations / Permissions</h5>
+                            <button type="button" class="btn btn-sm btn-primary" id="toggle-all-modules">Tout
+                                cocher/décocher</button>
                         </div>
                     </div>
                 </div>
@@ -54,7 +64,7 @@
                                         </label>
                                     </div>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -89,6 +99,26 @@
                     });
 
                     this.textContent = allChecked ? 'Tout cocher' : 'Tout décocher';
+                });
+            });
+
+
+            // Fonction pour tout cocher en même temps
+            const cocherTout = document.getElementById('toggle-all-modules');
+            cocherTout.addEventListener('click', function() {
+                const toutesLesCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+                const toutCoche = Array.from(toutesLesCheckboxes).every(checkbox => checkbox.checked);
+
+                toutesLesCheckboxes.forEach(checkbox => {
+                    checkbox.checked = !toutCoche;
+                });
+
+                cocherTout.textContent = toutCoche ? 'Tout cocher' : 'Tout décocher';
+
+                // Mettre à jour le texte des boutons de chaque module
+                const toggleButtons = document.querySelectorAll('.toggle-all');
+                toggleButtons.forEach(button => {
+                    button.textContent = toutCoche ? 'Tout cocher' : 'Tout décocher';
                 });
             });
         });
