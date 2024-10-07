@@ -71,7 +71,7 @@
             <ul class="navbar-nav" id="navbar-nav">
                 
 
-                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-tableau-de-bord')): ?>
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-tableau de bord')): ?>
                     <li class="nav-item">
                         <a class="nav-link menu-link <?php echo e(Route::is('dashboard.*') ? 'active' : ''); ?> "
                             href="<?php echo e(route('dashboard.index')); ?>">
