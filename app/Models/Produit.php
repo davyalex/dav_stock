@@ -16,25 +16,25 @@ class Produit extends Model implements HasMedia
 {
     use HasFactory, SoftDeletes, InteractsWithMedia, sluggable;
 
-    public function registerMediaConversions(Media $media = null): void
-    {
+    // public function registerMediaConversions(Media $media = null): void
+    // {
 
-        // $this->addMediaConversion('large-size')
-        // ->width(570) // par exemple 300px de large
-        // ->height(470) // 300px de hauteur
-        // ->sharpen(10); // pour améliorer la qualité si besoin
+    //     // $this->addMediaConversion('large-size')
+    //     // ->width(570) // par exemple 300px de large
+    //     // ->height(470) // 300px de hauteur
+    //     // ->sharpen(10); // pour améliorer la qualité si besoin
 
-        $this->addMediaConversion('standard-size')
-            ->width(300) // par exemple 300px de large
-            ->height(300) // 300px de hauteur
-            ->sharpen(10); // pour améliorer la qualité si besoin
+    //     $this->addMediaConversion('standard-size')
+    //         ->width(300) // par exemple 300px de large
+    //         ->height(300) // 300px de hauteur
+    //         ->sharpen(10); // pour améliorer la qualité si besoin
 
 
-        $this->addMediaConversion('small-size')
-            ->width(150) // par exemple 300px de large
-            ->height(150) // 300px de hauteur
-            ->sharpen(10); // pour améliorer la qualité si besoin
-    }
+    //     $this->addMediaConversion('small-size')
+    //         ->width(150) // par exemple 300px de large
+    //         ->height(150) // 300px de hauteur
+    //         ->sharpen(10); // pour améliorer la qualité si besoin
+    // }
 
     public $incrementing = false;
 
