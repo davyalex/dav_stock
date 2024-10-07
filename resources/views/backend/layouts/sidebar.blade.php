@@ -76,7 +76,8 @@
 
             <div id="two-column-menu">
             </div>
-
+            @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur')
+            @endif
             <ul class="navbar-nav" id="navbar-nav">
                 {{-- <li class="menu-title"><span>@lang('translation.menu')</span></li> --}}
 
@@ -329,7 +330,7 @@
                     </li>
                 @endcan
 
-                @if(Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur' || Auth::user()->can('voir-permission'))
+                @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur' || Auth::user()->can('voir-permission'))
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
                             aria-controls="sidebarAuth">
@@ -366,13 +367,13 @@
 
 
 
+
+
+            </ul>
         </div>
-        </li>
-        </ul>
+        <!-- Sidebar -->
     </div>
-    <!-- Sidebar -->
-</div>
-<div class="sidebar-background"></div>
+    <div class="sidebar-background"></div>
 </div>
 <!-- Left Sidebar End -->
 <!-- Vertical Overlay-->

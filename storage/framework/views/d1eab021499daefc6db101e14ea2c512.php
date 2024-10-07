@@ -67,7 +67,8 @@
 
             <div id="two-column-menu">
             </div>
-
+            <?php if(Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur'): ?>
+            <?php endif; ?>
             <ul class="navbar-nav" id="navbar-nav">
                 
 
@@ -357,13 +358,13 @@
 
 
 
+
+
+            </ul>
         </div>
-        </li>
-        </ul>
+        <!-- Sidebar -->
     </div>
-    <!-- Sidebar -->
-</div>
-<div class="sidebar-background"></div>
+    <div class="sidebar-background"></div>
 </div>
 <!-- Left Sidebar End -->
 <!-- Vertical Overlay-->

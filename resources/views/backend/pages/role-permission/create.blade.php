@@ -32,6 +32,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Autorisations / Permissions</h5>
+                            <button type="button" class="btn btn-sm btn-primary" id="toggle-all-modules">Tout cocher/décocher</button>
+                        </div>
+                    </div>
+                </div>
                 @foreach ($modules_with_permissions as $module)
                     <div class="col-lg-4 mb-4">
                         <div class="card h-100">
@@ -91,6 +99,24 @@
             });
 
 
+        // Fonction pour tout cocher en même temps
+        const cocherTout = document.getElementById('toggle-all-modules');
+        cocherTout.addEventListener('click', function() {
+            const toutesLesCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+            const toutCoche = Array.from(toutesLesCheckboxes).every(checkbox => checkbox.checked);
+            
+            toutesLesCheckboxes.forEach(checkbox => {
+                checkbox.checked = !toutCoche;
+            });
+            
+            cocherTout.textContent = toutCoche ? 'Tout cocher' : 'Tout décocher';
+            
+            // Mettre à jour le texte des boutons de chaque module
+            const toggleButtons = document.querySelectorAll('.toggle-all');
+            toggleButtons.forEach(button => {
+                button.textContent = toutCoche ? 'Tout cocher' : 'Tout décocher';
+            });
+        });
             
         });
     </script>
