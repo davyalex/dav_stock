@@ -9,10 +9,18 @@
                             {{-- @foreach ($menu_link as $menu)
                                 @include('site.layouts.menu_desktop.menuchild', ['menu' => $menu])
                             @endforeach --}}
-                              @foreach ($menu_link as $menu)
-                              <li><a href="{{route('produit' , $menu->slug)}}">{{$menu->name}} </a></li>
+                            @foreach ($menu_link as $menu)
+                                <li><a href="{{ route('produit', $menu->slug) }}">
+                                        @if ($menu->slug === 'bar')
+                                            Nos boissons
+                                        @elseif($menu->slug === 'menu')
+                                            Nos plats
+                                        @else
+                                            {{ $menu->name }}
+                                        @endif
+                                    </a></li>
                             @endforeach
-                            <li><a href="{{route('menu')}}">Menu du jour</a></li>
+                            <li><a href="{{ route('menu') }}">Menu du jour</a></li>
                         </ul>
                     </nav>
                 </div>

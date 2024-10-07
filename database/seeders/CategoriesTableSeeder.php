@@ -51,36 +51,6 @@ class CategoriesTableSeeder extends Seeder
             ),
             2 => 
             array (
-                'id' => 18042711451,
-                'name' => 'vin rouge',
-                'slug' => 'vin-rouge',
-                'url' => NULL,
-                'status' => 'active',
-                'position' => '1',
-                'parent_id' => 14323465711,
-                'type' => NULL,
-                'famille' => 'bar',
-                'deleted_at' => NULL,
-                'created_at' => '2024-10-02 12:04:19',
-                'updated_at' => '2024-10-02 12:04:19',
-            ),
-            3 => 
-            array (
-                'id' => 20317026211,
-                'name' => 'entrées',
-                'slug' => 'entrees',
-                'url' => NULL,
-                'status' => 'active',
-                'position' => '1',
-                'parent_id' => 20671449961,
-                'type' => NULL,
-                'famille' => 'menu',
-                'deleted_at' => NULL,
-                'created_at' => '2024-10-03 20:00:46',
-                'updated_at' => '2024-10-03 20:00:46',
-            ),
-            4 => 
-            array (
                 'id' => 20671449961,
                 'name' => 'Menu',
                 'slug' => 'menu',

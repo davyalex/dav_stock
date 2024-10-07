@@ -18,7 +18,7 @@
                          <span>
                             <a href="{{ route('categorie.edit', $categorie['id']) }}"
                             class="fs-5 "
-                            style="margin-left:30px"> <i class=" ri ri-edit-2-fill ml-4 text-success"></i></a>
+                            style="margin-left:30px"> <i class=" ri ri-edit-2-fill ml-4 text-success  {{ in_array($categorie->type, ['menu', 'bar' , 'restaurant']) ? 'd-none' : '' }}"></i></a>
 
                         <a href="{{ route('categorie.add-subCat', $categorie['id']) }}" class="fs-5"> <i
                                 class=" ri ri-add-circle-fill ml-4"></i>

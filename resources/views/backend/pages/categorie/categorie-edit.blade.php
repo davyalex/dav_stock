@@ -11,12 +11,9 @@
     @endcomponent
 
     <div class="row">
-        <!-- ========== Start categorie list ========== -->
-        @include('backend.pages.categorie.categorie-list')
-        <!-- ========== End categorie list ========== -->
+      
 
-
-        <div class="col-lg-6">
+        <div class="col-lg-10 m-auto">
             <div class="card">
 
                 <div class="card-body">
@@ -25,8 +22,8 @@
                         @csrf
                         <div class="col-md-10">
                             <label for="validationCustom01" class="form-label">Modifier une categorie </label>
-                            <input type="text" name="name" value="{{ $data_categorie_edit['name'] }}" class="form-control"
-                                id="validationCustom01" placeholder="categorie1" required>
+                            <input type="text" name="name" value="{{ $data_categorie_edit['name'] }}"
+                                class="form-control" id="validationCustom01" placeholder="categorie1" required>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
@@ -36,7 +33,8 @@
                             <label for="validationCustom01" class="form-label">Position </label>
                             <select name="position" class="form-control">
                                 @for ($i = 1; $i <= $data_count; $i++)
-                                    <option value="{{ $i }}" {{ $data_categorie_edit['position'] == $i ? 'selected' : '' }}>
+                                    <option value="{{ $i }}"
+                                        {{ $data_categorie_edit['position'] == $i ? 'selected' : '' }}>
                                         {{ $i }}
                                     </option>
                                 @endfor
@@ -68,7 +66,8 @@
                                 <option value="active" {{ $data_categorie_edit['status'] == 'active' ? 'selected' : '' }}>
                                     Activé
                                 </option>
-                                <option value="desactive" {{ $data_categorie_edit['status'] == 'desactive' ? 'selected' : '' }}>
+                                <option value="desactive"
+                                    {{ $data_categorie_edit['status'] == 'desactive' ? 'selected' : '' }}>
                                     Desactivé
                                 </option>
                             </select>
@@ -86,6 +85,11 @@
                 </form>
             </div>
         </div><!-- end row -->
+
+          <!-- ========== Start categorie list ========== -->
+        @include('backend.pages.categorie.categorie-list')
+        <!-- ========== End categorie list ========== -->
+
     </div><!-- end col -->
 
     <!--end row-->

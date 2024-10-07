@@ -145,19 +145,19 @@ class AchatController extends Controller
                         'numero_facture' => 'required',
                         'montant' => 'required', // montant de la facture
                         'date_achat' => 'required',
-                        'magasin_id' => 'required|exists:magasins,id',
-                        'produit_id' => 'required|exists:produits,id',
-                        'fournisseur_id' => 'required|exists:fournisseurs,id',
-                        'format_id' => 'required|exists:formats,id|min:1',
-                        'quantite_format' => 'required',
-                        'quantite_in_format' => 'required',
-                        'quantite_stocke' => 'required',
+                        'magasin_id.*' => 'required|exists:magasins,id',
+                        'produit_id.*' => 'required|exists:produits,id',
+                        'fournisseur_id.*' => 'required|exists:fournisseurs,id',
+                        'format_id.*' => 'required|exists:formats,id|min:1',
+                        'quantite_format.*' => 'required',
+                        'quantite_in_format.*' => 'required',
+                        'quantite_stocke.*' => 'required',
                         'prix_unitaire_format.*' => 'required',
                         'prix_total_format.*' => 'required',
                         // Ces champs ne sont pas requis pour le restaurant
                         'prix_achat_unitaire.*' => 'nullable',
-                        'prix_vente_unitaire' => 'nullable',
-                        'unite_sortie' => 'required',
+                        'prix_vente_unitaire.*' => 'nullable',
+                        'unite_sortie.*' => 'required',
                     ]);
                 } elseif ($type_produit == 'bar') {
                     // Validation pour un produit de type "bar"
@@ -166,19 +166,19 @@ class AchatController extends Controller
                         'numero_facture' => 'required',
                         'montant' => 'required', // montant de la facture
                         'date_achat' => 'required',
-                        'magasin_id' => 'required|exists:magasins,id',
-                        'produit_id' => 'required|exists:produits,id',
-                        'fournisseur_id' => 'required|exists:fournisseurs,id',
-                        'format_id' => 'required|exists:formats,id',
-                        'quantite_format' => 'required',
-                        'quantite_in_format' => 'required',
-                        'quantite_stocke' => 'required',
-                        'prix_unitaire_format' => 'required',
-                        'prix_total_format' => 'required',
+                        'magasin_id.*' => 'required|exists:magasins,id',
+                        'produit_id.*' => 'required|exists:produits,id',
+                        'fournisseur_id.*' => 'required|exists:fournisseurs,id',
+                        'format_id.*' => 'required|exists:formats,id',
+                        'quantite_format.*' => 'required',
+                        'quantite_in_format.*' => 'required',
+                        'quantite_stocke.*' => 'required',
+                        'prix_unitaire_format.*' => 'required',
+                        'prix_total_format.*' => 'required',
                         // Ces champs sont requis pour le bar
-                        'prix_achat_unitaire' => 'required',
-                        'prix_vente_unitaire' => 'required',
-                        'unite_sortie' => 'required|exists:unites,id',
+                        'prix_achat_unitaire.*' => 'required',
+                        'prix_vente_unitaire.*' => 'required',
+                        'unite_sortie.*' => 'required|exists:unites,id',
                     ]);
                 }
             }
@@ -216,7 +216,7 @@ class AchatController extends Controller
 
 
                 // création de l'achat
-                Achat::create([
+                Achat::firstOrCreate([
                     'code' => 'SA-' . strtoupper(Str::random(8)),
                     'facture_id' => $facture->id,
                     'type_produit_id' => $categorie->id,

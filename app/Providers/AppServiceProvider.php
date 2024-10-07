@@ -34,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
 
+
         // Fonction pour vérifier la quantité stockée des achats
         $this->app->singleton('verifierQuantiteStockee', function ($app) {
             return function () {
@@ -41,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
                     foreach ($achats as $achat) {
                         if ($achat->quantite_stocke == 0) {
                             $achat->update(['statut' => 'desactive']);
-                        }elseif($achat->quantite_stockee > 0){
+                        }elseif($achat->quantite_stocke > 0){
                             $achat->update(['statut' => 'active']);
                         }
                     }

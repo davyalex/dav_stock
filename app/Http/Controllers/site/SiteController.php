@@ -20,8 +20,48 @@ class SiteController extends Controller
             //slider
             $data_slide = Slide::with('media')->orderBy('id', 'DESC')->get();
 
+            // Récupérer les produits de type bar
+            $produitsBar = Produit::whereHas('categorie', function($query) {
+                $query->where('famille', 'bar');
+            })
+            ->withWhereHas('achats', fn($q) => $q->whereStatut('active'))
+            ->where('statut', 'active')
+            ->get();
+
+            // Récupérer les produits de type menu
+            $produitsMenu = Produit::whereHas('categorie', function($query) {
+                $query->where('famille', 'menu');
+            })
+            ->where('statut', 'active')
+            ->get();
+
+            // dd($produitsMenu->toArray());
+
+            // Combiner les produits bar et menu
+            $produits = $produitsBar->concat($produitsMenu);
+            // dd($produits->toArray());
+
+
+            // Récupérer les produits les plus commandés
+            $produitsLesPlusCommandes = Produit::withCount('commandes')
+                ->orderBy('commandes_count', 'desc')
+                ->take(10)  // Limiter aux 10 premiers produits les plus commandés
+                ->get();
+
+                
             return view('site.pages.accueil', compact(
                 'data_slide',
+                'produitsBar',
+                'produitsMenu', 
+                'produits',
+                'produitsLesPlusCommandes'
+            ));
+
+            return view('site.pages.accueil', compact(
+                'data_slide',
+                'produitsBar',
+                'produitsMenu', 
+                'produits',
             ));
         } catch (\Throwable $e) {
             return $e->getMessage();

@@ -25,6 +25,7 @@ use App\Http\Controllers\backend\vente\CommandeController;
 use App\Http\Controllers\backend\depense\DepenseController;
 use App\Http\Controllers\backend\permission\RoleController;
 use App\Http\Controllers\backend\produit\ProduitController;
+use App\Http\Controllers\backend\rapport\RapportController;
 use App\Http\Controllers\backend\stock\EtatStockController;
 use App\Http\Controllers\backend\stock\AjustementController;
 use App\Http\Controllers\backend\stock\InventaireController;
@@ -190,6 +191,15 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         }
     )->name('setting.maintenance-down');
 
+    //rapport
+    Route::prefix('rapport')->controller(RapportController::class)->group(function () {
+        route::get('categorie', 'categorie')->name('rapport.categorie');
+        route::post('produit', 'produit')->name('rapport.produit');
+        route::post('vente', 'vente')->name('rapport.vente');
+        route::post('caisse', 'caisse')->name('rapport.caisse');
+        route::post('commande', 'commande')->name('rapport.commande');
+        route::post('depense', 'depense')->name('rapport.depense');
+    });
 
 
     //magasin

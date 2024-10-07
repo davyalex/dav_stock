@@ -1,7 +1,15 @@
 <!-- mobile-menu-area-start -->
 <li>
     @if ($menu->children->isNotEmpty())
-        <a href="{{route('produit' , $menu->slug)}}">{{ $menu['name'] }}
+        <a href="{{ route('produit', $menu->slug) }}">
+            @if ($menu->slug === 'bar')
+                Nos boissons
+            @elseif ($menu->slug === 'menu')
+                Nos plats
+            @else
+                {{ $menu['name'] }}
+            @endif
+        </a>
         </a>
         <ul>
             @foreach ($menu->children as $child)
@@ -9,9 +17,15 @@
             @endforeach
         </ul>
     @else
-        <a href="{{route('produit' , $menu->slug)}}">{{ $menu['name'] }} </a>
+        <a href="{{ route('produit', $menu->slug) }}">
+            @if ($menu->slug === 'bar')
+                Nos boissons
+            @elseif ($menu->slug === 'menu')
+                Nos plats
+            @else
+                {{ $menu['name'] }}
+            @endif
+        </a>
     @endif
 </li>
 <!-- mobile-menu-area-end -->
-
-

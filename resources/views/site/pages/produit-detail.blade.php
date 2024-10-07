@@ -10,35 +10,27 @@
 
             <div class="row">
                 <div class="col-lg-6 col-md-12">
-                    {{-- <div class="product-details-img">
-                        <img class="zoompro" src="{{ $produit->getFirstMediaUrl('ProduitImage', 'standard-size') }}"
-                            data-zoom-image="{{ $produit->getFirstMediaUrl('ProduitImage') }}" alt="{{ $produit->nom }}" />
-                        <div id="gallery" class="mt-20 product-dec-slider owl-carousel">
-                            @foreach ($produit->getMedia('galleryProduit') as $media)
-                                <a data-image="{{ $media->getUrl('standard-size') }}"
-                                    data-zoom-image="{{ $media->getUrl('standard-size') }}">
-                                    <img src="{{ $media->getUrl('small-size') }}" alt="{{ $media->name }}">
-                                </a>
-                            @endforeach
+                    <div class="product-images-slider position-relative">
+                        <div class="main-image-container">
+                            <img id="mainImage" src="{{ $produit->getFirstMediaUrl('ProduitImage') }}" alt="Image principale"
+                                class="product-image" width="570" height="470">
                         </div>
-                        <span> {{ $produit->categorie->name }} </span>
-                    </div> --}}
 
-                    <!-- Image principale -->
-                    <div class="main-image">
-                        <img id="mainImage" src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                            alt="Image principale" class="product-image" width="570" height="470">
-                    </div>
+                        <div class="thumbnail-slider">
+                            <div class="thumbnails-container d-flex">
+                                <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}" alt="Image principale"
+                                    class="thumbnail active"
+                                    onclick="changeImage('{{ $produit->getFirstMediaUrl('ProduitImage') }}')" width="100"
+                                    height="100">
 
-                    <!-- Miniatures sous l'image principale -->
-                    <div class="thumbnail-carousel owl-carousel owl-theme">
-                        @foreach ($produit->getMedia('galleryProduit') as $media)
-                            <div class="item">
-                                <img src="{{ $media->getUrl('small-size') }}" alt="Image 1" class="thumbnail"
-                                    onclick="changeImage('{{ $media->getUrl() }}')">
+                                @foreach ($produit->getMedia('galleryProduit') as $media)
+                                    <img src="{{ $media->getUrl('small-size') }}" alt="{{ $media->name }}"
+                                        class="thumbnail" onclick="changeImage('{{ $media->getUrl() }}')" width="100"
+                                        height="100">
+                                @endforeach
                             </div>
-                        @endforeach
 
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
@@ -52,7 +44,9 @@
 
                         @if ($produit->achats->isNotEmpty())
                             <div class="in-stock">
-                                <p>En stock: <span> {{ $produit->achats->isNotEmpty() ? $produit->stock : '' }} </span></p>
+                                <p>En stock: <span>
+                                        {{ $produit->achats->isNotEmpty() ? $produit->achats[0]->quantite_stocke : '' }}
+                                    </span></p>
                             </div>
                         @endif
 
@@ -63,7 +57,7 @@
                             <div class="product-quantity">
                                 <div class="cart-plus-minus">
                                     <input id="quantity" class="cart-plus-minus-box" type="text" name="quantity"
-                                        value="1" min="1" readonly>
+                                        value="1" readonly>
                                 </div>
                             </div>
                             <div class="shop-list-cart-wishlist mx-3">
@@ -344,23 +338,49 @@
 
     <script>
         var CartPlusMinus = $('.cart-plus-minus');
+
+        // Ajouter les boutons - et +
         CartPlusMinus.prepend('<div class="dec qtybutton">-</div>');
         CartPlusMinus.append('<div class="inc qtybutton">+</div>');
+
+        // Gestion de l'incrémentation et de la décrémentation
         $(".qtybutton").on("click", function() {
             var $button = $(this);
-            var oldValue = $button.parent().find("input").val();
+            var $input = $button.parent().find("input");
+            var oldValue = parseFloat($input.val());
+            var maxQuantity =
+            {{ $produit->achats->isNotEmpty() ? $produit->stock : 0 }}; // S'assurer que maxQuantity est bien défini
+
+            // Incrémentation
             if ($button.text() === "+") {
-                var newVal = parseFloat(oldValue) + 1;
-            } else {
-                // Don't allow decrementing below zero
-                if (oldValue > 1) {
-                    var newVal = parseFloat(oldValue) - 1;
+                var newVal = oldValue + 1;
+                if (newVal > maxQuantity) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Attention',
+                        text: 'La quantité demandée dépasse le stock disponible.',
+                        confirmButtonText: 'OK'
+                    });
+                    newVal = maxQuantity-1;
+                    $('.addCart').prop('disabled', true); // Désactiver le bouton si max atteint
                 } else {
-                    newVal = 1;
+                    $('.addCart').prop('disabled', false); // Activer le bouton si la quantité est valide
                 }
             }
-            $button.parent().find("input").val(newVal);
+            // Décrémentation
+            else {
+                if (oldValue > 1) {
+                    var newVal = oldValue - 1;
+                } else {
+                    newVal = 1; // Ne pas aller en dessous de 1
+                }
+                $('.addCart').prop('disabled', false); // Activer le bouton si la quantité est valide
+            }
+
+            // Mettre à jour la valeur de l'input
+            $input.val(newVal);
         });
+
 
 
         $(document).ready(function() {

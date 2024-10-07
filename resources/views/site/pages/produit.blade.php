@@ -58,8 +58,8 @@
                     <div class="grid-list-product-wrapper">
                         <div class="product-grid product-view pb-20">
                             <div class="row">
-                                <!-- start si type categorie == boissons-->
-                                @if ($categorieSelect->type == 'boissons')
+                                <!-- start si type categorie == bar-->
+                                @if ($categorieSelect->type == 'bar')
                                     @foreach ($produits as $produit)
                                         @foreach ($produit->achats as $item)
                                             <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
@@ -98,12 +98,12 @@
                                         @endforeach
                                     @endforeach
                                 @endif
-                                <!-- end si type categorie == boissons-->
+                                <!-- end si type categorie == bar-->
 
 
 
-                                <!-- start si type categorie != boissons-->
-                                @if ($categorieSelect->type != 'boissons')
+                                <!-- start si type categorie != bar-->
+                                @if ($categorieSelect->type != 'bar')
                                     @foreach ($produits as $produit)
                                         <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
                                             <div class="product-wrapper">
@@ -140,7 +140,7 @@
                                         </div>
                                     @endforeach
                                 @endif
-                                <!-- end si type categorie != boissons-->
+                                <!-- end si type categorie != bar-->
                             </div>
                         </div>
                         <div class="pagination-total-pages">
