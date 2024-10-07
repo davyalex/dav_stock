@@ -329,7 +329,7 @@
                     </li>
                 @endcan
 
-                {{-- @can('voir-parametre') --}}
+                @if(Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur' || Auth::user()->can('voir-permission'))
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
                             aria-controls="sidebarAuth">
@@ -362,7 +362,7 @@
                             </ul>
                         </div>
                     </li>
-                {{-- @endcan --}}
+                @endif
 
 
 
