@@ -76,7 +76,7 @@ class VenteController extends Controller
             // Validation des données
             $request->validate([
                 // 'client_id' => 'required|exists:users,id',
-                'date_vente' => 'required|date',
+                // 'date_vente' => 'required|date',
                 'produit_id' => 'required|array',
                 'produit_id.*' => 'exists:produits,id',
                 'quantite' => 'required|array',
