@@ -6,7 +6,7 @@
     
 
     <div class="row">
-        <div class="col-xxl-12">
+        <div class="col-xxl-12  mt-5">
             <div class="card mt-xxl-n5">
                 <div class="card-header">
                     <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
@@ -32,90 +32,58 @@
                                 <div class="row">
 
                                     <!-- ========== Start Section ========== -->
-                                    <div class="col-lg-12 mb-3">
-                                        <label for="">Background image</label>
-                                        <input type="file" name="cover" class="form-control" accept="image/*">
-
-
-                                        <div class="profile-wid-bg profile-setting-img mt-2">
-                                            <?php if($data_setting != null): ?>
-                                            <img src="<?php echo e(URL::asset($data_setting->getFirstMediaUrl('cover'))); ?>"
-                                               class="profile-wid-img"
-                                                alt="<?php echo e($data_setting->getFirstMediaUrl('cover')); ?>">
-                                        <?php else: ?>
-                                            <img src="<?php echo e(URL::asset('build/images/profile-bg.jpg')); ?>"
-                                                class="rounded-circle avatar-xl img-thumbnail user-profile-image-header material-shadow"
-                                                alt="">
-                                        <?php endif; ?>
-                                          
+                                    <div class="row mb-3">
+                                        <div class="col-lg-4">
+                                            <label for="background-image">Image d'arrière-plan</label>
+                                            <input type="file" id="background-image" name="cover" class="form-control" accept="image/*">
+                                            <div class="mt-2">
+                                                <img id="background-preview" src="<?php echo e($data_setting ? URL::asset($data_setting->getFirstMediaUrl('cover')) : URL::asset('build/images/profile-bg.jpg')); ?>" class="rounded-circle avatar-xl img-thumbnail" alt="Aperçu de l'arrière-plan">
+                                            </div>
                                         </div>
-
-                                      
+                                        
+                                        <div class="col-lg-4">
+                                            <label for="logo-header">Logo d'en-tête</label>
+                                            <input type="file" id="logo-header" name="logo_header" class="form-control" accept="image/*">
+                                            <div class="mt-2 text-center">
+                                                <img id="header-preview" src="<?php echo e($data_setting ? URL::asset($data_setting->getFirstMediaUrl('logo_header')) : URL::asset('images/avatar-1.jpg')); ?>" class="rounded-circle avatar-xl img-thumbnail" alt="Aperçu du logo d'en-tête">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-lg-4">
+                                            <label for="logo-footer">Logo de pied de page</label>
+                                            <input type="file" id="logo-footer" name="logo_footer" class="form-control" accept="image/*">
+                                            <div class="mt-2 text-center">
+                                                <img id="footer-preview" src="<?php echo e($data_setting ? URL::asset($data_setting->getFirstMediaUrl('logo_footer')) : URL::asset('images/avatar-1.jpg')); ?>" class="rounded-circle avatar-xl img-thumbnail" alt="Aperçu du logo de pied de page">
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    <script>
+                                    function previewImage(input, previewId) {
+                                        if (input.files && input.files[0]) {
+                                            var reader = new FileReader();
+                                            
+                                            reader.onload = function(e) {
+                                                document.getElementById(previewId).src = e.target.result;
+                                            }
+                                            
+                                            reader.readAsDataURL(input.files[0]);
+                                        }
+                                    }
+
+                                    document.getElementById('background-image').addEventListener('change', function() {
+                                        previewImage(this, 'background-preview');
+                                    });
+
+                                    document.getElementById('logo-header').addEventListener('change', function() {
+                                        previewImage(this, 'header-preview');
+                                    });
+
+                                    document.getElementById('logo-footer').addEventListener('change', function() {
+                                        previewImage(this, 'footer-preview');
+                                    });
+                                    </script>
                                     <!-- ========== End Section ========== -->
-
-
-                                    <!-- ========== Start logo header ========== -->
-                                    <div class="text-center col-lg-6">
-                                        <div class="profile-user position-relative d-inline-block mx-auto  ">
-                                            <?php if($data_setting != null): ?>
-                                                <img src="<?php echo e(URL::asset($data_setting->getFirstMediaUrl('logo_header'))); ?>"
-                                                    class="rounded-circle avatar-xl img-thumbnail user-profile-image-header material-shadow"
-                                                    alt="<?php echo e($data_setting->getFirstMediaUrl('logo_header')); ?>">
-                                            <?php else: ?>
-                                                <img src="<?php echo e(URL::asset('images/avatar-1.jpg')); ?>"
-                                                    class="rounded-circle avatar-xl img-thumbnail user-profile-image-header material-shadow"
-                                                    alt="">
-                                            <?php endif; ?>
-
-                                            <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
-                                                <input id="profile-img-file-input-header" type="file" name="logo_header"
-                                                    class="profile-img-file-input-header">
-                                                <label for="profile-img-file-input-header"
-                                                    class="profile-photo-edit avatar-xs">
-                                                    <span
-                                                        class="avatar-title rounded-circle bg-light text-body material-shadow">
-                                                        <i class="ri-camera-fill"></i>
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <h5 class="fs-16 mb-1">Logo header</h5>
-                                        <p class="text-muted mb-0">Logo du haut</p>
-                                    </div>
-                                    <!-- ========== End logo header ========== -->
-
-
-                                    <!-- ========== Start logo footer ========== -->
-                                    <div class="text-center col-lg-6">
-                                        <div class="profile-user position-relative d-inline-block mx-auto ">
-
-                                            <?php if($data_setting != null): ?>
-                                                <img src="<?php echo e(URL::asset($data_setting->getFirstMediaUrl('logo_footer'))); ?>"
-                                                    class="rounded-circle avatar-xl img-thumbnail user-profile-image-footer material-shadow"
-                                                    alt="<?php echo e($data_setting->getFirstMediaUrl('logo_footer')); ?>">
-                                            <?php else: ?>
-                                                <img src="<?php echo e(URL::asset('images/avatar-1.jpg')); ?>"
-                                                    class="rounded-circle avatar-xl img-thumbnail user-profile-image-header material-shadow"
-                                                    alt="">
-                                            <?php endif; ?>
-
-                                            <div class="avatar-xs p-0 rounded-circle profile-photo-edit1">
-                                                <input id="profile-img-file-input-footer" type="file" name="logo_footer"
-                                                    class="profile-img-file-input-footer">
-                                                <label for="profile-img-file-input-footer"
-                                                    class="profile-photo-edit avatar-xs">
-                                                    <span
-                                                        class="avatar-title rounded-circle bg-light text-body material-shadow">
-                                                        <i class="ri-camera-fill"></i>
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <h5 class="fs-16 mb-1">Logo footer</h5>
-                                        <p class="text-muted mb-0">Logo du pied de page</p>
-                                    </div>
-                                    <!-- ========== End logo footer ========== -->
                                 </div>
                                 <hr>
                                 <div class="row">
