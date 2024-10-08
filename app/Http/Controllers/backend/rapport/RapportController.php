@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\backend\rapport;
 
 use App\Models\Vente;
+use App\Models\Depense;
 use App\Models\Produit;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
@@ -170,4 +171,39 @@ class RapportController extends Controller
             ], 500);
         }
     }
+
+
+public function exploitation(Request $request)
+{
+    try {
+        $venteQuery = Vente::query();
+        $depenseQuery = Depense::query();
+        
+        // Application des filtres de date
+        if ($request->filled(['date_debut', 'date_fin'])) {
+            $venteQuery->whereBetween('created_at', [$request->date_debut, $request->date_fin]);
+            $depenseQuery->whereBetween('date_depense', [$request->date_debut, $request->date_fin]); 
+        } elseif ($request->filled('date_debut')) {
+            $venteQuery->where('created_at', '>=', $request->date_debut);
+            $depenseQuery->where('date_depense', '>=', $request->date_debut); 
+        } elseif ($request->filled('date_fin')) {
+            $venteQuery->where('created_at', '<=', $request->date_fin);
+            $depenseQuery->where('date_depense', '<=', $request->date_fin); 
+        }
+        
+        $totalVentes = $venteQuery->sum('montant_total');
+        $totalDepenses = $depenseQuery->sum('montant');
+        
+        $benefice = $totalVentes - $totalDepenses;
+        $ratio = $totalVentes > 0 ? ($benefice / $totalVentes) * 100 : 0;
+        
+
+        return view('backend.pages.rapport.exploitation', compact('totalVentes', 'totalDepenses', 'benefice', 'ratio'));
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'erreur',
+            'message' => 'Une erreur est survenue lors du calcul du compte d\'exploitation : ' . $e->getMessage()
+        ], 500);
+    }
+}
 }

@@ -302,7 +302,7 @@
                             aria-controls="sideBarRapport">
                             <i class="ri ri-file-list-line"></i> <span>RAPPORTS</span>
                         </a>
-                        <div class="collapse menu-dropdown {{ Route::is('rapport.categorie') || Route::is('rapport.produit') || Route::is('rapport.caisse') ? 'show' : '' }}"
+                        <div class="collapse menu-dropdown {{Route::is('rapport.exploitation') || Route::is('rapport.categorie') || Route::is('rapport.produit') || Route::is('rapport.caisse') ? 'show' : '' }}"
                             id="sideBarRapport">
                             <ul class="nav nav-sm flex-column">
 
@@ -324,6 +324,10 @@
                                         class="nav-link {{ Route::is('rapport.produit') ? 'active' : '' }}">Chiffre
                                         d'affaire par
                                         Caisse</a>
+                                </li>
+                                <li class="nav-item active">
+                                    <a href="{{ route('rapport.exploitation') }}"
+                                        class="nav-link {{ Route::is('rapport.exploitation') ? 'active' : '' }}">Exploitation</a>
                                 </li>
                             </ul>
                         </div>
