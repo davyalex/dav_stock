@@ -30,18 +30,43 @@
                     <form action="<?php echo e(route('rapport.exploitation')); ?>" method="GET">
                         <?php echo csrf_field(); ?>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="date_debut" class="form-label">Date de début</label>
                                     <input type="date" class="form-control" id="date_debut" name="date_debut"
                                         value="<?php echo e(request('date_debut')); ?>">
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="date_fin" class="form-label">Date de fin</label>
                                     <input type="date" class="form-control" id="date_fin" name="date_fin"
                                         value="<?php echo e(request('date_fin')); ?>">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="categorie_depense" class="form-label">Catégorie de dépense</label>
+                                    <select class="form-select" id="categorie_depense" name="categorie_depense">
+                                        <option value="">Toutes les catégories</option>
+                                        <?php if(request('categorie_depense')): ?>
+                                            <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($categorie->id); ?>"
+                                                    <?php echo e(request('categorie_depense') == $categorie->id ? 'selected' : ''); ?>>
+                                                    <?php echo e($categorie->libelle); ?>
+
+                                                </option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php else: ?>
+                                            <?php $__currentLoopData = $categories_depense; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($categorie->id); ?>"
+                                                    <?php echo e(request('categorie_depense') == $categorie->id ? 'selected' : ''); ?>>
+                                                    <?php echo e($categorie->libelle); ?>
+
+                                                </option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php endif; ?>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -60,8 +85,8 @@
                 <div class="card-header">
                     <h5 class="card-title mb-0">
                         Rapport d'exploitation
-                        <?php if(request('date_debut') || request('date_fin')): ?>
-                            du 
+                        <?php if(request('date_debut') || request('date_fin') || request('categorie_depense')): ?>
+                            du
                             <?php if(request('date_debut')): ?>
                                 <?php echo e(\Carbon\Carbon::parse(request('date_debut'))->format('d/m/Y')); ?>
 
@@ -70,36 +95,74 @@
                                 au <?php echo e(\Carbon\Carbon::parse(request('date_fin'))->format('d/m/Y')); ?>
 
                             <?php endif; ?>
+                            <?php if(request('categorie_depense')): ?>
+                                - Catégorie de dépense :
+                                <?php echo e($categories_depense->where('id', request('categorie_depense'))->first()->libelle); ?>
+
+                            <?php endif; ?>
                         <?php endif; ?>
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
+                        <table id="rapport-table" class="display table table-bordered" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Libellé</th>
-                                    <th>Montant</th>
+                                    <th>Catégorie de dépense</th>
+                                    <th>Montant total</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Total des ventes</td>
-                                    <td><?php echo e(number_format($totalVentes, 0, ',', ' ')); ?> FCFA</td>
-                                </tr>
-                                <tr>
-                                    <td>Total des dépenses</td>
-                                    <td><?php echo e(number_format($totalDepenses, 0, ',', ' ')); ?> FCFA</td>
-                                </tr>
-                                <tr>
-                                    <td>Bénéfice</td>
-                                    <td><?php echo e(number_format($benefice, 0, ',', ' ')); ?> FCFA</td>
-                                </tr>
-                                <tr>
-                                    <td>Ratio bénéfice/ventes</td>
-                                    <td><?php echo e(number_format($ratio, 2)); ?>%</td>
-                                </tr>
+                                <?php $__currentLoopData = $categories_depense; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <tr class="table-secondary">
+                                        <td><strong><?php echo e($categorie->libelle); ?></strong></td>
+                                        <td><strong><?php echo e(number_format($depensesParCategorie->get($categorie->libelle, collect())->sum('total_montant'), 0, ',', ' ')); ?>
+
+                                                FCFA</strong></td>
+                                    </tr>
+                                    <?php $__currentLoopData = $categorie->libelleDepenses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $libelle): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <tr>
+                                            <td style="padding-left: 20px;">- <?php echo e($libelle->libelle); ?></td>
+                                            <td><?php echo e(number_format($depensesParCategorie->get($categorie->libelle, collect())->where('libelle_depense_id', $libelle->id)->sum('total_montant'),0,',',' ')); ?>
+
+                                                FCFA</td>
+                                        </tr>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
+                            <tfoot>
+                                <tr class="table-dark">
+                                    <td><strong>Total des dépenses</strong></td>
+                                    <td><strong><?php echo e(number_format($totalDepenses, 0, ',', ' ')); ?> FCFA</strong></td>
+                                </tr>
+                                <div class="row">
+                                    <tr class="table-info">
+                                        <td><strong>Total des ventes</strong></td>
+                                        <td><strong><?php echo e(number_format($totalVentes, 0, ',', ' ')); ?> FCFA</strong>
+                                        </td>
+                                    </tr>
+
+                                    <?php $__currentLoopData = $dataParFamille; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $famille => $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <tr>
+                                            <td style="padding-left: 20px;">- <?php echo e($famille); ?></td>
+                                            <td><strong><?php echo e(number_format($data['ventes'], 0, ',', ' ')); ?> FCFA</strong>
+                                            </td>
+                                        </tr>
+                                        
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <tr class="table-success">
+                                        <td><strong>Bénéfice</strong></td>
+                                        <td><strong><?php echo e(number_format($benefice, 0, ',', ' ')); ?> FCFA</strong></td>
+                                    </tr>
+                                    <tr class="table-warning">
+                                        <td><strong>Ratio bénéfice/ventes</strong></td>
+                                        <td><strong><?php echo e(number_format($ratio, 2)); ?>%</strong></td>
+                                    </tr>
+                                    
+                                </div>
+
+
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -122,7 +185,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
-    <script src="<?php echo e(URL::asset('build/js/pages/datatables.init.js')); ?>"></script>
+    
 
     <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 <?php $__env->stopSection(); ?>

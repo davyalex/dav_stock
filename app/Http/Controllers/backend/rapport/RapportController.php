@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\backend\rapport;
 
+use Carbon\Carbon;
 use App\Models\Vente;
 use App\Models\Depense;
 use App\Models\Produit;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
+use App\Models\CategorieDepense;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
@@ -173,37 +175,135 @@ class RapportController extends Controller
     }
 
 
-public function exploitation(Request $request)
-{
-    try {
-        $venteQuery = Vente::query();
-        $depenseQuery = Depense::query();
-        
-        // Application des filtres de date
-        if ($request->filled(['date_debut', 'date_fin'])) {
-            $venteQuery->whereBetween('created_at', [$request->date_debut, $request->date_fin]);
-            $depenseQuery->whereBetween('date_depense', [$request->date_debut, $request->date_fin]); 
-        } elseif ($request->filled('date_debut')) {
-            $venteQuery->where('created_at', '>=', $request->date_debut);
-            $depenseQuery->where('date_depense', '>=', $request->date_debut); 
-        } elseif ($request->filled('date_fin')) {
-            $venteQuery->where('created_at', '<=', $request->date_fin);
-            $depenseQuery->where('date_depense', '<=', $request->date_fin); 
-        }
-        
-        $totalVentes = $venteQuery->sum('montant_total');
-        $totalDepenses = $depenseQuery->sum('montant');
-        
-        $benefice = $totalVentes - $totalDepenses;
-        $ratio = $totalVentes > 0 ? ($benefice / $totalVentes) * 100 : 0;
-        
+    // public function exploitation(Request $request)
+    // {
+    //     try {
+    //         $venteQuery = Vente::query();
+    //         $depenseQuery = Depense::query();
 
-        return view('backend.pages.rapport.exploitation', compact('totalVentes', 'totalDepenses', 'benefice', 'ratio'));
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => 'erreur',
-            'message' => 'Une erreur est survenue lors du calcul du compte d\'exploitation : ' . $e->getMessage()
-        ], 500);
+    //         // Application des filtres de date
+    //         if ($request->filled(['date_debut', 'date_fin'])) {
+    //             $venteQuery->whereBetween('created_at', [$request->date_debut, $request->date_fin]);
+    //             $depenseQuery->whereBetween('date_depense', [$request->date_debut, $request->date_fin]);
+    //         } elseif ($request->filled('date_debut')) {
+    //             $venteQuery->where('created_at', '>=', $request->date_debut);
+    //             $depenseQuery->where('date_depense', '>=', $request->date_debut);
+    //         } elseif ($request->filled('date_fin')) {
+    //             $venteQuery->where('created_at', '<=', $request->date_fin);
+    //             $depenseQuery->where('date_depense', '<=', $request->date_fin);
+    //         }
+
+    //         $totalVentes = $venteQuery->sum('montant_total');
+    //         $totalDepenses = $depenseQuery->sum('montant');
+
+    //         $benefice = $totalVentes - $totalDepenses;
+    //         $ratio = $totalVentes > 0 ? ($benefice / $totalVentes) * 100 : 0;
+
+
+    //         return view('backend.pages.rapport.exploitation', compact('totalVentes', 'totalDepenses', 'benefice', 'ratio'));
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'status' => 'erreur',
+    //             'message' => 'Une erreur est survenue lors du calcul du compte d\'exploitation : ' . $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
+
+
+    public function exploitation(Request $request)
+    {
+        try {
+            // 1. Récupération des catégories de dépense
+            $categories_depense = CategorieDepense::with('libelleDepenses')->orderBy('libelle')->get(); //categorie pour recuperer les libelles de cat_depense selectionner
+            $categories = CategorieDepense::with('libelleDepenses')->orderBy('libelle')->get(); // pour le filtre des cat_depense
+
+            // 2. Création des requêtes de base pour les ventes et les dépenses
+            $venteQuery = Vente::query();
+            $depenseQuery = Depense::query();
+
+            // 3. Application des filtres de date
+            // Formatage des dates
+            $dateDebut = $request->filled('date_debut') ? Carbon::parse($request->date_debut)->format('Y-m-d') : null;
+            $dateFin = $request->filled('date_fin') ? Carbon::parse($request->date_fin)->format('Y-m-d') : null;
+
+            // Application des filtres de date
+            if ($dateDebut && $dateFin) {
+                $venteQuery->whereBetween('ventes.created_at', [$dateDebut, $dateFin]);
+                $depenseQuery->whereBetween('date_depense', [$dateDebut, $dateFin]);
+            } elseif ($dateDebut) {
+                $venteQuery->where('ventes.created_at', '>=', $dateDebut);
+                $depenseQuery->where('date_depense', '>=', $dateDebut);
+            } elseif ($dateFin) {
+                $venteQuery->where('ventes.created_at', '<=', $dateFin);
+                $depenseQuery->where('date_depense', '<=', $dateFin);
+            }
+            // 4. Filtrage par catégorie de dépense
+            if ($request->filled('categorie_depense')) {
+                $categories_depense = $categories_depense->where('id', $request->categorie_depense);
+                $depenseQuery->where('categorie_depense_id', $request->categorie_depense);
+                $categories = CategorieDepense::with('libelleDepenses')->orderBy('libelle')->get(); // si une categorie on affiche toute les categories
+            }
+
+            // 5. Somme des dépenses par libellé et catégorie
+            $depenses = $depenseQuery->with(['libelle_depense', 'categorie_depense'])
+                ->select('libelle_depense_id', 'categorie_depense_id', DB::raw('SUM(montant) as total_montant'))
+                ->groupBy('libelle_depense_id', 'categorie_depense_id')
+                ->get();
+
+            // 6. Groupement des dépenses par catégorie
+            $depensesParCategorie = $depenses->groupBy('categorie_depense.libelle');
+
+            // 7. Total des ventes
+            $totalVentes = $venteQuery->sum('montant_total');
+
+            // 8. Calcul des ventes par famille (bar et menu) avec la table pivot
+            $ventesParFamille = $venteQuery->with('produits.categorie')
+                ->select('categories.famille', DB::raw('SUM(produit_vente.quantite * produit_vente.prix_unitaire) as total_ventes'))
+                ->join('produit_vente', 'ventes.id', '=', 'produit_vente.vente_id')
+                ->join('produits', 'produit_vente.produit_id', '=', 'produits.id')
+                ->join('categories', 'produits.categorie_id', '=', 'categories.id')
+                ->whereIn('categories.famille', ['bar', 'menu'])
+                ->groupBy('categories.famille')
+                ->get()
+                ->pluck('total_ventes', 'famille')
+                ->toArray();
+
+            $venteBar = $ventesParFamille['bar'] ?? 0;
+            $venteMenu = $ventesParFamille['menu'] ?? 0;
+
+            // 9. Calcul des totaux et ratios
+            $totalDepenses = $depenses->sum('total_montant');
+            $benefice = $totalVentes - $totalDepenses;
+            $ratio = $totalVentes > 0 ? ($benefice / $totalVentes) * 100 : 0;
+
+            // 10. Calcul benefice et du ratio pour chaque famille
+
+            $beneficeBar = $venteBar - $totalDepenses;
+            $beneficeMenu = $venteMenu - $totalDepenses;
+
+            $ratioBar = $venteBar > 0 ? ($beneficeBar / $venteBar) * 100 : 0;
+            $ratioMenu = $venteMenu > 0 ? ($beneficeMenu / $venteMenu) * 100 : 0;
+
+            // 11. Préparation des données pour la vue
+            $dataParFamille = [
+                'Bar' => [
+                    'ventes' => $venteBar,
+                    'benefice' => $beneficeBar,
+                    'ratio' => $ratioBar
+                ],
+                'Menu' => [
+                    'ventes' => $venteMenu,
+                    'benefice' => $beneficeMenu,
+                    'ratio' => $ratioMenu
+                ]
+            ];
+
+            //   dd($dataParFamille);
+
+
+            return view('backend.pages.rapport.exploitation', compact('totalVentes', 'totalDepenses', 'benefice', 'ratio', 'categories_depense', 'depensesParCategorie', 'dataParFamille','categories'));
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
-}
 }

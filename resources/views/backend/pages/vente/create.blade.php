@@ -100,7 +100,7 @@
                         <h5 class="card-title">Montant total</h5>
                         <p class="card-text h3 " id="montantTotal">0 FCFA</p>
                     </div>
-                    <input type="number" name="montant_total"  class="montant_total" hidden>
+                    <input type="number" name="montant_total" class="montant_total" hidden>
                 </div>
 
 
@@ -229,6 +229,25 @@
 
                 // Fonction pour ajouter un nouveau formulaire
                 function addNewForm() {
+                    // Vérifier si tous les champs du formulaire précédent sont remplis
+                    let lastForm = document.querySelector('#form-container .row:last-child');
+                    if (lastForm) {
+                        let allFieldsFilled = Array.from(lastForm.querySelectorAll('input[required], select[required]')).every(field => field.value.trim() !== '');
+                        if (!allFieldsFilled) {
+                            // Griser le bouton si les champs ne sont pas tous remplis
+                            document.getElementById('add-more').classList.add('disabled');
+                            Swal.fire({
+                                title: 'Erreur',
+                                text: 'Veuillez remplir tous les champs du formulaire précédent avant d\'en ajouter un nouveau.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                            return;
+                        }
+                    }
+
+                    // Réactiver le bouton
+                    document.getElementById('add-more').classList.remove('disabled');
 
                     let formContainer = document.getElementById('form-container');
 
@@ -248,7 +267,6 @@
 
                     // Initialiser Select2 pour le nouveau champ avec une classe unique
                     $(clonedForm).find('.js-example-basic-single-' + formCount).select2();
-
 
                     // Activer le 'required' pour les champs du formulaire cloné
                     setRequiredFields(clonedForm);
@@ -426,6 +444,8 @@
                     verifyQty(form); // Appeler la fonction avec le formulaire
                 });
 
+            
+
 
                 // Fonction pour verifier si un produit est selectionner 2 fois
                 function validateProductSelection() {
@@ -453,6 +473,20 @@
                         }
                     });
                 }
+
+              
+
+                // // Ajouter un écouteur d'événements pour vérifier à chaque changement
+                // $(document).on('change', '.productSelected', function() {
+                //     verifierProduitSelectionne();
+                // });
+
+                // // Modifier l'événement du bouton "Ajouter un produit"
+                // $('#add-more').on('click', function() {
+                //     if (empecherDuplicationSansProduit()) {
+                //         addNewForm();
+                //     }
+                // });
 
 
                 //fonction pour remplir les champs stock initial et stock restante

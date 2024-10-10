@@ -22,7 +22,7 @@ class DepenseController extends Controller
         //
         try {
             $data_depense = Depense::OrderBy('created_at', 'ASC')->get();
-            $categorie_depense = CategorieDepense::get();
+            $categorie_depense = CategorieDepense::whereNotIn('slug', ['achats'])->get();
             return view('backend.pages.depense.index', compact('data_depense', 'categorie_depense'));
         } catch (\Throwable $th) {
             //throw $th;
