@@ -4,6 +4,7 @@ namespace App\Http\Controllers\backend\rapport;
 
 use Carbon\Carbon;
 use App\Models\Vente;
+use App\Models\Caisse;
 use App\Models\Depense;
 use App\Models\Produit;
 use App\Models\Categorie;
@@ -301,9 +302,151 @@ class RapportController extends Controller
             //   dd($dataParFamille);
 
 
-            return view('backend.pages.rapport.exploitation', compact('totalVentes', 'totalDepenses', 'benefice', 'ratio', 'categories_depense', 'depensesParCategorie', 'dataParFamille','categories'));
+            return view('backend.pages.rapport.exploitation', compact('totalVentes', 'totalDepenses', 'benefice', 'ratio', 'categories_depense', 'depensesParCategorie', 'dataParFamille', 'categories'));
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
+
+    public function detail(Request $request)
+    {
+        try {
+
+
+            $dateDebut = $request->input('date_debut');
+            $dateFin = $request->input('date_fin');
+            $categorieDepense = $request->input('categorie_depense');
+
+            // Vérification de la catégorie de dépense
+            // Vérification si la catégorie de dépense existe
+            $categorieDepenseExiste = CategorieDepense::where('id', $categorieDepense)->first();
+
+
+            if ($categorieDepenseExiste->slug === 'achats') {
+                // Récupération des produits avec des achats dans la période spécifiée
+                $produits = Produit::whereHas('achats', function ($query) use ($dateDebut, $dateFin) {
+                    if ($dateDebut && $dateFin) {
+                        $query->whereBetween('date_achat', [$dateDebut, $dateFin]);
+                    } elseif ($dateDebut) {
+                        $query->where('date_achat', '>=', $dateDebut);
+                    } elseif ($dateFin) {
+                        $query->where('date_achat', '<=', $dateFin);
+                    }
+                })->with(['achats' => function ($query) use ($dateDebut, $dateFin) {
+                    if ($dateDebut && $dateFin) {
+                        $query->whereBetween('date_achat', [$dateDebut, $dateFin]);
+                    } elseif ($dateDebut) {
+                        $query->where('date_achat', '>=', $dateDebut);
+                    } elseif ($dateFin) {
+                        $query->where('date_achat', '<=', $dateFin);
+                    }
+                }])->get()->groupBy('id');
+
+                $produitsGroupes = $produits->map(function ($groupe) {
+                    $premierProduit = $groupe->first();
+                    return [
+                        'id' => $premierProduit->id,
+                        'nom' => $premierProduit->nom,
+                        'stock_restant' => $premierProduit->stock,
+                        'achats' => $groupe->flatMap->achats,
+                        'quantite_achat' => $groupe->flatMap->achats->sum('quantite_stocke'),
+
+                        'prix_total_format' => number_format($groupe->flatMap->achats->sum(function ($achat) {
+                            return $achat->prix_total_format;
+                        }), 0, ',', ' ') . ' FCFA'
+                    ];
+                })->values();
+
+                // dd($produitsGroupes->toArray());
+
+                return view('backend.pages.rapport.detail_achat', compact('produitsGroupes', 'dateDebut', 'dateFin'));
+            } else {
+                // Récupération des dépenses de la catégorie sélectionnée dans la période spécifiée
+                $depenses = Depense::where('categorie_depense_id', $categorieDepense)
+                    ->when($dateDebut && $dateFin, function ($query) use ($dateDebut, $dateFin) {
+                        return $query->whereBetween('date_depense', [$dateDebut, $dateFin]);
+                    })
+                    ->when($dateDebut && !$dateFin, function ($query) use ($dateDebut) {
+                        return $query->where('date_depense', '>=', $dateDebut);
+                    })
+                    ->when(!$dateDebut && $dateFin, function ($query) use ($dateFin) {
+                        return $query->where('date_depense', '<=', $dateFin);
+                    })
+                    ->with(['categorie_depense', 'libelle_depense'])
+                    ->get()
+                    ->groupBy('libelle_depense_id')
+                    ->map(function ($groupe) {
+                        return [
+                            'libelle' => $groupe->first()->libelle_depense->libelle,
+                            'montant_total' => $groupe->sum('montant'),
+                            'details' => $groupe
+                        ];
+                    })
+                    ->values();
+                // dd($depenses->toArray());
+
+                return view('backend.pages.rapport.detail_depense', compact('depenses', 'dateDebut', 'dateFin', 'categorieDepense'));
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+
+   
+    public function vente(Request $request)
+    {
+        try {
+            $dateDebut = $request->input('date_debut');
+            $dateFin = $request->input('date_fin');
+            $caisseId = $request->input('caisse_id');
+            $categorieFamille = $request->input('categorie_famille');
+
+
+
+            $query = Vente::with(['produits.categorie', 'caisse']);
+
+            if ($dateDebut && $dateFin) {
+                $query->whereBetween('date_vente', [$dateDebut, $dateFin]);
+            } elseif ($dateDebut) {
+                $query->where('date_vente', '>=', $dateDebut);
+            } elseif ($dateFin) {
+                $query->where('date_vente', '<=', $dateFin);
+            }
+
+            if ($caisseId) {
+                $query->where('caisse_id', $caisseId);
+            }
+
+            $ventes = $query->get();
+
+            $produitsVendus = $ventes->flatMap(function ($vente) {
+                return $vente->produits;
+            })->groupBy('id')->map(function ($groupe) use ($categorieFamille) {
+                $produit = $groupe->first();
+                if ($categorieFamille && $produit->categorie->famille !== $categorieFamille) {
+                    return null;
+                }
+                return [
+                    'id' => $produit->id,
+                    'nom' => $produit->nom,
+                    'categorie' => $produit->categorie->name,
+                    'famille' => $produit->categorie->famille,
+                    'quantite_vendue' => $groupe->sum('pivot.quantite'),
+                    'montant_total' => $groupe->sum(function ($item) {
+                        return $item->pivot->quantite * $item->pivot->prix_unitaire;
+                    }),
+                ];
+            })->filter()->values();
+
+            $caisses = Caisse::all();
+            $famille = Categorie::whereNull('parent_id')->whereIn('type', ['bar', 'menu'])->get();
+
+
+            return view('backend.pages.rapport.vente', compact('produitsVendus', 'caisses', 'dateDebut', 'dateFin', 'caisseId', 'categorieFamille' , 'famille'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Une erreur s\'est produite : ' . $e->getMessage());
+        }
+    }
+   
 }

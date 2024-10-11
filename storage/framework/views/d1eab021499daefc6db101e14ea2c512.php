@@ -293,28 +293,17 @@
                             aria-controls="sideBarRapport">
                             <i class="ri ri-file-list-line"></i> <span>RAPPORTS</span>
                         </a>
-                        <div class="collapse menu-dropdown <?php echo e(Route::is('rapport.exploitation') || Route::is('rapport.categorie') || Route::is('rapport.produit') || Route::is('rapport.caisse') ? 'show' : ''); ?>"
+                        <div class="collapse menu-dropdown <?php echo e(Route::is('rapport.*') ? 'show' : ''); ?>"
                             id="sideBarRapport">
                             <ul class="nav nav-sm flex-column">
 
-                                <li class="nav-item active">
-                                    <a href="<?php echo e(route('rapport.categorie')); ?>"
-                                        class="nav-link <?php echo e(Route::is('rapport.categorie') ? 'active' : ''); ?>">Chiffre
-                                        d'affaire par
-                                        categorie</a>
-                                </li>
+                                
 
+                                
                                 <li class="nav-item active">
-                                    <a href="<?php echo e(route('rapport.produit')); ?>"
-                                        class="nav-link <?php echo e(Route::is('rapport.produit') ? 'active' : ''); ?>">Chiffre
-                                        d'affaire par
-                                        produit</a>
-                                </li>
-                                <li class="nav-item active">
-                                    <a href="<?php echo e(route('rapport.produit')); ?>"
-                                        class="nav-link <?php echo e(Route::is('rapport.produit') ? 'active' : ''); ?>">Chiffre
-                                        d'affaire par
-                                        Caisse</a>
+                                    <a href="<?php echo e(route('rapport.vente')); ?>"
+                                        class="nav-link <?php echo e(Route::is('rapport.vente') ? 'active' : ''); ?>">
+                                        Vente</a>
                                 </li>
                                 <li class="nav-item active">
                                     <a href="<?php echo e(route('rapport.exploitation')); ?>"

@@ -195,8 +195,9 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     Route::prefix('rapport')->controller(RapportController::class)->group(function () {
         route::get('categorie', 'categorie')->name('rapport.categorie');
         route::get('produit', 'produits')->name('rapport.produit');
-        route::get('vente', 'ventes')->name('rapport.vente');
+        route::get('vente', 'vente')->name('rapport.vente');
         route::get('exploitation', 'exploitation')->name('rapport.exploitation');
+        route::get('detail', 'detail')->name('rapport.detail');  //detail exploitation 
 
         route::get('caisse', 'caisses')->name('rapport.caisse');
         route::get('commande', 'commandes')->name('rapport.commande');

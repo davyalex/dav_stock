@@ -115,14 +115,14 @@
                             <tbody>
                                 <?php $__currentLoopData = $categories_depense; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr class="table-secondary">
-                                        <td><strong><?php echo e($categorie->libelle); ?></strong></td>
+                                        <td><strong><a href="<?php echo e(route('rapport.detail', ['categorie_depense' => $categorie->id, 'date_debut' => request('date_debut'), 'date_fin' => request('date_fin')])); ?>"><?php echo e($categorie->libelle); ?></a></strong></td>
                                         <td><strong><?php echo e(number_format($depensesParCategorie->get($categorie->libelle, collect())->sum('total_montant'), 0, ',', ' ')); ?>
 
                                                 FCFA</strong></td>
                                     </tr>
                                     <?php $__currentLoopData = $categorie->libelleDepenses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $libelle): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
-                                            <td style="padding-left: 20px;">- <?php echo e($libelle->libelle); ?></td>
+                                            <td style="padding-left: 20px;">- <a href="<?php echo e(route('rapport.detail', ['libelle_depense' => $libelle->id, 'categorie_depense' => $categorie->id, 'date_debut' => request('date_debut'), 'date_fin' => request('date_fin')])); ?>"><?php echo e($libelle->libelle); ?></a></td>
                                             <td><?php echo e(number_format($depensesParCategorie->get($categorie->libelle, collect())->where('libelle_depense_id', $libelle->id)->sum('total_montant'),0,',',' ')); ?>
 
                                                 FCFA</td>

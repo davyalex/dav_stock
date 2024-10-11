@@ -302,28 +302,27 @@
                             aria-controls="sideBarRapport">
                             <i class="ri ri-file-list-line"></i> <span>RAPPORTS</span>
                         </a>
-                        <div class="collapse menu-dropdown {{Route::is('rapport.exploitation') || Route::is('rapport.categorie') || Route::is('rapport.produit') || Route::is('rapport.caisse') ? 'show' : '' }}"
+                        <div class="collapse menu-dropdown {{Route::is('rapport.*') ? 'show' : '' }}"
                             id="sideBarRapport">
                             <ul class="nav nav-sm flex-column">
 
-                                <li class="nav-item active">
+                                {{-- <li class="nav-item active">
                                     <a href="{{ route('rapport.categorie') }}"
                                         class="nav-link {{ Route::is('rapport.categorie') ? 'active' : '' }}">Chiffre
                                         d'affaire par
                                         categorie</a>
-                                </li>
+                                </li> --}}
 
-                                <li class="nav-item active">
+                                {{-- <li class="nav-item active">
                                     <a href="{{ route('rapport.produit') }}"
                                         class="nav-link {{ Route::is('rapport.produit') ? 'active' : '' }}">Chiffre
                                         d'affaire par
                                         produit</a>
-                                </li>
+                                </li> --}}
                                 <li class="nav-item active">
-                                    <a href="{{ route('rapport.produit') }}"
-                                        class="nav-link {{ Route::is('rapport.produit') ? 'active' : '' }}">Chiffre
-                                        d'affaire par
-                                        Caisse</a>
+                                    <a href="{{ route('rapport.vente') }}"
+                                        class="nav-link {{ Route::is('rapport.vente') ? 'active' : '' }}">
+                                        Vente</a>
                                 </li>
                                 <li class="nav-item active">
                                     <a href="{{ route('rapport.exploitation') }}"
