@@ -1,33 +1,33 @@
-@extends('backend.layouts.master')
-@section('title')
-    @lang('translation.datatables')
-@endsection
-@section('css')
+
+<?php $__env->startSection('title'); ?>
+    <?php echo app('translator')->get('translation.datatables'); ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('css'); ?>
     <!--datatable css-->
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
     <!--datatable responsive css-->
     <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet"
         type="text/css" />
     <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
-@endsection
-@section('content')
-    @component('backend.components.breadcrumb')
-        @slot('li_1')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
+        <?php $__env->slot('li_1'); ?>
             Gestion des ventes
-        @endslot
-        @slot('title')
+        <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?>
             Détails de la vente
-        @endslot
-    @endcomponent
+        <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
 
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Produits de la vente 
-                        <strong>#{{ $vente->code }} du {{ $vente->created_at }} </strong>
+                        <strong>#<?php echo e($vente->code); ?> du <?php echo e($vente->created_at); ?> </strong>
                     </h5>
-                    <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">Nouvelle vente</a>
+                    <a href="<?php echo e(route('vente.create')); ?>" type="button" class="btn btn-primary">Nouvelle vente</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -43,19 +43,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($vente->produits as $key => $item)
-                                    <tr id="row_{{ $item['id'] }}">
-                                        <td>{{ ++$key }}</td>
+                                <?php $__currentLoopData = $vente->produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <tr id="row_<?php echo e($item['id']); ?>">
+                                        <td><?php echo e(++$key); ?></td>
                                         <td>
-                                            <img class="rounded-circle" src="{{ $item->getFirstMediaUrl('ProduitImage') }}"
+                                            <img class="rounded-circle" src="<?php echo e($item->getFirstMediaUrl('ProduitImage')); ?>"
                                                 width="50px" alt="">
                                         </td>
-                                        <td>{{ $item['nom'] }}</td>
-                                        <td>{{ $item['pivot']['quantite'] }}</td>
-                                        <td>{{ number_format($item['pivot']['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
-                                        <td>{{ number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
+                                        <td><?php echo e($item['nom']); ?></td>
+                                        <td><?php echo e($item['pivot']['quantite']); ?></td>
+                                        <td><?php echo e(number_format($item['pivot']['prix_unitaire'], 0, ',', ' ')); ?> FCFA</td>
+                                        <td><?php echo e(number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ')); ?> FCFA</td>
                                     </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
                     </div>
@@ -63,8 +63,8 @@
             </div>
         </div>
     </div>
-@endsection
-@section('script')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
@@ -78,7 +78,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
-    <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
+    <script src="<?php echo e(URL::asset('build/js/pages/datatables.init.js')); ?>"></script>
 
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-@endsection
+    <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/vente/show.blade.php ENDPATH**/ ?>
