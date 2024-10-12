@@ -24,11 +24,71 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Produits de la vente 
+                    <h5 class="card-title mb-0">Produits de la vente
                         <strong>#{{ $vente->code }} du {{ $vente->created_at }} </strong>
                     </h5>
+                    <button id="btnImprimerTicket" class="btn btn-secondary me-2">Imprimer le ticket</button>
                     <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">Nouvelle vente</a>
                 </div>
+                <div class="ticket-container" style="font-family: 'Courier New', monospace; font-size: 12px; width: 350px;">
+                    <div class="ticket-header" style="text-align: center;">
+                        <h3>CHEZ JEANNE</h3>
+                        <h4>RESTAURANT LOUNGE</h4>
+                        <h5>AFRICAIN ET EUROPEEN</h5>
+                        <p>-------------------------------</p>
+                        <div style="display: flex; justify-content: space-between; padding: 0 10px;">
+                            <span><strong>Vente:</strong> #{{ $vente->code }}</span>
+                            <span><strong>Date:</strong> {{ $vente->created_at->format('d/m/Y H:i') }}</span>
+                        </div>
+                    </div>
+                    <div class="ticket-info" style="padding: 0 10px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span><strong>Caisse:</strong> {{ $vente->caisse->libelle ?? 'Non définie' }}</span>
+                            <span><strong>Caissier:</strong> {{ $vente->user->first_name }} {{ $vente->user->last_name }}</span>
+                        </div>
+                    </div>
+                    <p>-------------------------------</p>
+                    <div class="ticket-products">
+                        <table style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Designation</th>
+                                    <th>Qté</th>
+                                    <th>P.U.</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($vente->produits as $produit)
+                                    <tr>
+                                        <td>{{ $produit->nom }}</td>
+                                        <td>{{ $produit->pivot->quantite }}</td>
+                                        <td>{{ number_format($produit->pivot->prix_unitaire, 0, ',', ' ') }}</td>
+                                        <td>{{ number_format($produit->pivot->quantite * $produit->pivot->prix_unitaire, 0, ',', ' ') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>-------------------------------</p>
+                    <div class="ticket-total" style="text-align: right;">
+                        <p><strong>Total:</strong> {{ number_format($vente->montant_total, 0, ',', ' ') }} FCFA</p>
+                    </div>
+                </div>
+                
+                <script>
+                    document.getElementById('btnImprimerTicket').addEventListener('click', function() {
+                        var ticketContent = document.querySelector('.ticket-container').innerHTML;
+                        var win = window.open('', '', 'height=700,width=700');
+                        win.document.write('<html><head><title>Ticket de vente</title></head><body>');
+                        win.document.write(ticketContent);
+                        win.document.write('</body></html>');
+                        win.document.close();
+                        win.print();
+                    });
+                </script>
+                
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
@@ -53,7 +113,8 @@
                                         <td>{{ $item['nom'] }}</td>
                                         <td>{{ $item['pivot']['quantite'] }}</td>
                                         <td>{{ number_format($item['pivot']['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
-                                        <td>{{ number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
+                                        <td>{{ number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ') }}
+                                            FCFA</td>
                                     </tr>
                                 @endforeach
                             </tbody>
