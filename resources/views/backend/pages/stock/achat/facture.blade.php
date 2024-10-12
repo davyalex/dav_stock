@@ -47,7 +47,7 @@
                                 @foreach ($data_facture as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
-                                        <td> <a class="fw-bold" href="{{route('achat.index' , $item->id)}}">#{{ $item['numero_facture'] }}</a> </td>
+                                        <td> <a class="fw-bold" href="{{route('achat.index' , $item->id)}}">{{ $item['numero_facture'] }}</a> </td>
                                         <td>{{ $item['type'] }}</td>
                                         <td>{{ $item['fournisseur']['nom'] ?? 'N/A' }}</td>
                                         <td> {{ $item['montant'] }} </td>

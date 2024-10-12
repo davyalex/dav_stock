@@ -55,7 +55,7 @@ class ProduitController extends Controller
             //get principal category of categorie request
             $categorie = Categorie::find($request['categorie']);
             $principaCat =  $categorie->getPrincipalCategory();
-        
+
             //request validation
             $request->validate([
                 'nom' => 'required',
@@ -64,17 +64,17 @@ class ProduitController extends Controller
                 'stock' => '',
                 'stock_alerte' => 'required',
                 'statut' => '',
-                'quantite_unite' => $categorie->famille == 'bar' ? 'required' : '',
-                'unite_mesure' => $categorie->famille == 'bar' ? 'required' : '',
+                // 'quantite_unite' => $categorie->famille == 'bar' ? 'required' : '',
+                // 'unite_mesure' => $categorie->famille == 'bar' ? 'required' : '',
                 'imagePrincipale' => $categorie->famille == 'bar' ? 'required' : '',
             ]);
 
             // Vérifier si le produit existe déjà
             $existingProduct = Produit::where('nom', $request['nom'])
-                                      ->where('quantite_unite', $request['quantite_unite'])
-                                      ->exists();
+                ->where('quantite_unite', $request['quantite_unite'])
+                ->exists();
 
-            if ($existingProduct) {  
+            if ($existingProduct) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Ce produit existe déjà',
@@ -90,13 +90,15 @@ class ProduitController extends Controller
                 'categorie_id' => $request['categorie'],
                 'stock_alerte' => $request['stock_alerte'],
                 'type_id' =>   $principaCat['id'], // type produit
-                'quantite_unite' => $request['quantite_unite'],
-                'unite_id' => $request['unite_mesure'],
+                // 'quantite_unite' => $request['quantite_unite'],
+                // 'unite_id' => $request['unite_mesure'],
                 'user_id' => Auth::id(),
             ]);
 
             if (request()->hasFile('imagePrincipale')) {
-                $data_produit->addMediaFromRequest('imagePrincipale')->toMediaCollection('ProduitImage');
+                $media = $data_produit->addMediaFromRequest('imagePrincipale')->toMediaCollection('ProduitImage');
+                // Optimiser l'image après l'ajout
+                \Spatie\ImageOptimizer\OptimizerChainFactory::create()->optimize($media->getPath());
             }
 
             if ($request->images) {
@@ -111,7 +113,10 @@ class ProduitController extends Controller
                     file_put_contents($tempFilePath, $decodedFile);
 
                     // Add file to media library
-                    $data_produit->addMedia($tempFilePath)->toMediaCollection('galleryProduit');
+                    $media = $data_produit->addMedia($tempFilePath)->toMediaCollection('galleryProduit');
+
+                    // Optimiser l'image après l'ajout
+                    \Spatie\ImageOptimizer\OptimizerChainFactory::create()->optimize($media->getPath());
                 }
             }
 
@@ -189,8 +194,8 @@ class ProduitController extends Controller
                 'stock' => '',
                 'stock_alerte' => 'required',
                 // 'magasin' => '',
-                'quantite_unite' => $categorie->famille == 'bar' ? 'required' : '',
-                'unite_mesure' => $categorie->famille == 'bar' ? 'required' : '',
+                // 'quantite_unite' => $categorie->famille == 'bar' ? 'required' : '',
+                // 'unite_mesure' => $categorie->famille == 'bar' ? 'required' : '',
                 'imagePrincipale' => '',
             ]);
 
@@ -203,8 +208,8 @@ class ProduitController extends Controller
                 'stock_alerte' => $request['stock_alerte'],
                 'type_id' =>   $principaCat['id'], // type produit
 
-                'quantite_unite' => $request['quantite_unite'],
-                'unite_id' => $request['unite_mesure'],
+                // 'quantite_unite' => $request['quantite_unite'],
+                // 'unite_id' => $request['unite_mesure'],
                 // 'magasin_id' => $request['magasin'],
                 'user_id' => Auth::id(),
             ]);
@@ -212,8 +217,11 @@ class ProduitController extends Controller
 
             if (request()->hasFile('imagePrincipale')) {
                 $data_produit->clearMediaCollection('ProduitImage');
-                $data_produit->addMediaFromRequest('imagePrincipale')->toMediaCollection('ProduitImage');
+                $media = $data_produit->addMediaFromRequest('imagePrincipale')->toMediaCollection('ProduitImage');
+                \Spatie\ImageOptimizer\OptimizerChainFactory::create()->optimize($media->getPath());
             }
+
+
 
 
             if ($request->images) {
@@ -230,10 +238,11 @@ class ProduitController extends Controller
                     file_put_contents($tempFilePath, $decodedFile);
 
                     // Add file to media library
-                    $data_produit->addMedia($tempFilePath)->toMediaCollection('galleryProduit');
+                    // Add file to media library
+                    $media = $data_produit->addMedia($tempFilePath)->toMediaCollection('galleryProduit');
 
-                    // // Delete the temporary file
-                    // unlink($tempFilePath);
+                    // Optimiser l'image après l'ajout
+                    \Spatie\ImageOptimizer\OptimizerChainFactory::create()->optimize($media->getPath());
                 }
             }
 

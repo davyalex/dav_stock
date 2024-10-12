@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('mode_livraison' , ['yango' , 'recuperer'])->nullable();
             $table->longText('adresse_livraison')->nullable();
             $table->double('montant_total')->nullable();
-            $table->date('date_commande')->nullable();
+            $table->dateTime('date_commande')->nullable();
 
 
             $table->foreignId('client_id') // user qui passe la commande

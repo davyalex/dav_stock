@@ -1,18 +1,18 @@
-@extends('backend.layouts.master')
-
-@section('content')
 
 
-    @component('backend.components.breadcrumb')
-        <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
+<?php $__env->startSection('content'); ?>
 
-        @slot('li_1')
+
+    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
+        <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
+
+        <?php $__env->slot('li_1'); ?>
             Stock
-        @endslot
-        @slot('title')
-            Créer une sortie
-        @endslot
-    @endcomponent
+        <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?>
+            Faire un inventaire
+        <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
     <style>
         form label {
             font-size: 11px
@@ -33,6 +33,18 @@
             /* Cacher le texte par défaut */
         }
 
+        .btn-custom-size {
+            padding: 4px 8px;
+            /* Ajuste la taille du bouton */
+            font-size: 10px;
+            /* Ajuste la taille du texte */
+        }
+
+        .btn-custom-size i {
+            font-size: 14px;
+            /* Ajuste la taille de l'icône */
+        }
+
 
 
 
@@ -50,15 +62,13 @@
 
     <div class="row">
         <div class="col-lg-12">
-            {{-- <div class="card">
-                <div class="card-body"> --}}
-            <form id="myForm" method="POST" action="{{ route('sortie.store') }}" autocomplete="off" novalidate
+            
+            <form id="myForm" method="POST" action="<?php echo e(route('inventaire.store')); ?>" autocomplete="off" novalidate
                 enctype="multipart/form-data">
-                @csrf
+                <?php echo csrf_field(); ?>
                 <div class="row">
                     <div class="col-lg-12">
-                        {{-- <div class="card">
-                                    <div class="card-body"> --}}
+                        
                         <div class="row mb-3">
 
                             <div id="form-container">
@@ -92,6 +102,16 @@
             <!-- start form duplicate-->
             <div id="product-form-template" style="display: none;">
                 <div class="row mb-3 form-duplicate">
+                    <!-- Bouton pour supprimer ce bloc -->
+                    <div class="col-md-12 text-end">
+                        <button type="button" class="btn btn-success validate btn-custom-size"> <i
+                                class="ri ri-checkbox-circle-fill fs-5 validate"></i> </button>
+                        <button type="button" class="btn btn-primary edit btn-custom-size"> <i
+                                class="ri ri-edit-box-fill fs-5 edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger remove-form btn-custom-size"> <i
+                                class="ri ri-delete-bin-fill fs-5 remove-form"></i> </button>
+                    </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="product-title-input">Produits
                             <span class="text-danger">*</span>
@@ -100,46 +120,65 @@
                         <select class="form-control productSelected selectView" name="produit_id[]" required>
                             <option disabled selected value>Selectionner un produit
                             </option>
-                            @foreach ($data_produit as $produit)
-                                <option value="{{ $produit->id }}">{{ $produit->nom }} {{ $produit->quantite_unite }}
-                                    {{ $produit->unite->libelle ?? '' }}
+                            <?php $__currentLoopData = $data_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($produit->id); ?>"><?php echo e($produit->nom); ?> <?php echo e($produit->quantite_unite); ?>
+
+                                    <?php echo e($produit->unite->libelle ?? ''); ?>
+
                                 </option>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
 
 
                     <div class="col-md-2 mb-3">
-                        <label class="form-label" for="stocks-input">Qté utilisée
+                        <label class="form-label" for="stocks-input">Stock initial
                             <span class="text-danger">*</span>
                         </label>
-                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
-                        <input type="number" name="quantite_utilise[]" class="form-control qteUtilise" required>
+                        <input type="number" name="stock_initial[]" class="form-control stockInitial" readonly>
                     </div>
 
 
                     <div class="col-md-2 mb-3">
-                        <label class="form-label" for="stocks-input">Unité de sortie
+                        <label class="form-label" for="stocks-input">Stock théorique
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="number" name="stock_theorique[]" class="form-control stockTheorique" readonly>
+                    </div>
+
+
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label" for="stocks-input">Stock physique
                             <span class="text-danger">*</span>
                         </label>
                         <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
-                        <input class="form-control uniteLibelle" type="text" name="unite_libelle[]" readonly>
-                        <input class="form-control uniteId" type="text" name="unite_id[]" hidden>
+                        <input type="number" name="stock_physique[]" class="form-control stockPhysique" required>
+                    </div>
 
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label" for="stocks-input">Rapport Ecart
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="number" name="ecart[]" class="form-control ecart" readonly>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" for="stocks-input">Etat de stock
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" name="etat[]" class="form-control etatStock" readonly>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="stocks-input">Observation
+                        </label>
+                        <input type="text" name="observation[]" class="form-control observation">
                     </div>
 
 
 
-                    <!-- Bouton pour supprimer ce bloc -->
-                    <div class="col-md-2 mb-3 pt-4">
-                        <button type="button" class="btn btn-success validate"> <i
-                                class="ri ri-checkbox-circle-fill fs-4"></i> </button>
-                        <button type="button" class="btn btn-primary edit"> <i class="ri ri-edit-box-fill fs-4"></i>
-                        </button>
-                        <button type="button" class="btn btn-danger remove-form"> <i
-                                class="ri ri-delete-bin-fill fs-4"></i> </button>
-                    </div>
                 </div>
+
             </div>
             <!-- end form duplicate-->
 
@@ -151,17 +190,17 @@
 
         <!--end row-->
 
-    @section('script')
-        <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
+    <?php $__env->startSection('script'); ?>
+        <script src="<?php echo e(URL::asset('build/libs/prismjs/prism.js')); ?>"></script>
         <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
-        <script src="{{ URL::asset('build/js/pages/modal.init.js') }}"></script>
-        {{-- <script src="{{ URL::asset('build/js/pages/form-editor.init.js') }}"></script> --}}
-        <script src="{{ URL::asset('build/tinymce/tinymce.min.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
+        <script src="<?php echo e(URL::asset('build/js/pages/modal.init.js')); ?>"></script>
+        
+        <script src="<?php echo e(URL::asset('build/tinymce/tinymce.min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js')); ?>"></script>
 
-        <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/ecommerce-product-create.init.js') }}"></script>
-        <script src="{{ URL::asset('build/js/app.js') }}"></script>
+        <script src="<?php echo e(URL::asset('build/libs/dropzone/dropzone-min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/js/pages/ecommerce-product-create.init.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -298,6 +337,7 @@
                     }
 
 
+
                     // Au clic du bouton "valider"
                     if (e.target && e.target.classList.contains('validate')) {
                         let row = e.target.closest('.form-duplicate');
@@ -362,55 +402,50 @@
 
 
                 //Fonction pour  verifier la quantité entrée , elle ,e dois pas depasser la quantité en stock
-                function verifyQty(form) {
-                    var dataProduct = @json($data_produit); // Données du contrôleur
+                // function verifyQty(form) {
+                //     var dataProduct = <?php echo json_encode($data_produit, 15, 512) ?>; // Données du contrôleur
 
-                    // Récupérer la quantité utilisée et l'ID du produit sélectionné
-                    var qteStock = form.find('.qteUtilise').val(); // Assurez-vous que la classe est correcte
-                    var productSelected = form.find('.productSelected')
-                        .val(); // Assurez-vous que la classe est correcte
+                //     // Récupérer la quantité utilisée et l'ID du produit sélectionné
+                //     var qteStock = form.find('.qteUtilise').val(); // Assurez-vous que la classe est correcte
+                //     var productSelected = form.find('.productSelected')
+                //         .val(); // Assurez-vous que la classe est correcte
 
-                    // Trouver le produit dans dataProduct basé sur l'ID sélectionné
-                    var product = dataProduct.find(function(item) {
-                        return item.id == productSelected;
-                    });
+                //     // Trouver le produit dans dataProduct basé sur l'ID sélectionné
+                //     var product = dataProduct.find(function(item) {
+                //         return item.id == productSelected;
+                //     });
 
-                    if (qteStock > product.stock) {
-                        //swalfire
-                        Swal.fire({
-                            title: 'Erreur',
-                            text: 'La quantité entrée dépasse la quantité en stock',
-                            icon: 'error',
-                        });
+                //     if (qteStock > product.stock) {
+                //         //swalfire
+                //         Swal.fire({
+                //             title: 'Erreur',
+                //             text: 'La quantité entrée dépasse la quantité en stock',
+                //             icon: 'error',
+                //         });
 
-                        //mettre le button save en disabled
-                        $('#save').prop('disabled', true)
+                //         //mettre le button save en disabled
+                //         $('#save').prop('disabled', true)
 
-                    } else {
-                        //mettre le button save en enable
-                        $('#save').prop('disabled', false)
-                    }
-                }
+                //     } else {
+                //         //mettre le button save en enable
+                //         $('#save').prop('disabled', false)
+                //     }
+                // }
 
                 // Utiliser la délégation d'événements pour les champs dynamiques
-                $(document).on('input change', '.qteUtilise , .productSelected', function() {
-                    var form = $(this).closest('.row'); // Cibler le formulaire ou la ligne parent
-                    verifyQty(form); // Appeler la fonction avec le formulaire
-                });
+                // $(document).on('input change', '.qteUtilise , .productSelected', function() {
+                //     var form = $(this).closest('.row'); // Cibler le formulaire ou la ligne parent
+                //     verifyQty(form); // Appeler la fonction avec le formulaire
+                // });
 
 
-                // Fonction pour verifier si un produit est sélectionné 2 fois
+                // Fonction pour verifier si un produit est selectionner 2 fois
                 function validateProductSelection() {
                     let selectedProducts = [];
 
                     $('.productSelected').each(function(index, element) {
                         let produitId = $(element).val();
-
-                        // Ignorer les champs qui n'ont pas encore de produit sélectionné
-                        if (produitId === null || produitId === '') {
-                            return; // Continuer à la prochaine itération sans valider ce champ
-                        }
-
+                        let form = $(element).closest('.row');
                         // Vérifier si le produit a déjà été sélectionné
                         if (selectedProducts.includes(produitId)) {
                             Swal.fire({
@@ -420,42 +455,75 @@
                                 confirmButtonText: 'OK',
                             });
 
+
                             // Réinitialiser le champ select pour éviter la sélection en double
                             $(element).val(null).trigger('change.select2');
+
                         } else {
                             selectedProducts.push(produitId);
+
                         }
                     });
+                }
+
+
+                //fonction pour remplir les champs stock initial et stock restante
+                function getProductInfo(form) {
+                    //recuperer les infos de produit
+                    var dataProduct = <?php echo json_encode($data_produit, 15, 512) ?>; // Données du contrôleur
+                    var productId = form.find('.productSelected').val();
+                    var product = dataProduct.find(function(item) {
+                        return item.id == productId;
+                    });
+                    form.find('.stockInitial').val(product.stock_initial); // stock globale
+                    form.find('.stockTheorique').val(product.stock); // stock restante
+
                 }
 
                 // Attacher l'événement de changement aux champs select des produits
                 $(document).on('change', '.productSelected', function() {
                     validateProductSelection();
+                    var form = $(this).closest('.row');
+                    getProductInfo(form);
                 });
 
 
-                // Fonction pour récupérer les détails du produit sélectionné
-                function getProductDetails(form) {
-                    let produitId = form.find('.productSelected').val();
-
-                    if (produitId) {
-                        // Récupérer les données du produit
-                        let produit = @json($data_produit).find(p => p.id == produitId);
-                        if (produit && produit.achats && produit.achats.length > 0) {
-                            // Récupérer l'unité de sortie du dernier achat
-                            let uniteSortie = produit.achats[0].unite;
-                            form.find('.uniteLibelle').val(uniteSortie.libelle)
-                            form.find('.uniteId').val(uniteSortie.id)
-
-                        }
-                    }
+                // calculer l'ecart de stock
+                function calculEcart(form) {
+                    var stock_physique = form.find('.stockPhysique').val() || 0;
+                    var stock_theorique = form.find('.stockTheorique').val() || 0;
+                    var ecart = stock_physique - stock_theorique;
+                    form.find('.ecart').val(ecart);
+                    gestionEtatStock(form);
                 }
 
-                // Appeler la fonction au chargement de la page
-                $(document).on('change', '.productSelected', function() {
-                    var form = $(this).closest('.row'); // Cibler le formulaire ou la ligne parent
-                    getProductDetails(form);
+                // Attacher l'événement de changement aux champs select des produits
+                $(document).on('input change', '.stockPhysique , .productSelected', function() {
+                    var form = $(this).closest('.row');
+                    calculEcart(form);
                 });
+
+
+                //gestion des etats de stock
+                function gestionEtatStock(form) {
+                    var ecart = form.find('.ecart').val();
+                    var stock_physique = form.find('.stockPhysique').val();
+                    var stock_theorique = form.find('.stockTheorique').val();
+                    var etat = '';
+                    if (ecart < 0) {
+                        etat = 'Perte';
+                    } else if (ecart > 0) {
+                        etat = 'Surplus';
+                    } else if (ecart == 0) {
+                        etat = 'Conforme';
+                    }
+
+                    if (stock_theorique == 0 && stock_physique == 0) {
+                        etat = 'Rupture';
+                    }
+
+                    form.find('.etatStock').val(etat);
+                }
 
 
 
@@ -523,7 +591,7 @@
 
                                 // Rediriger vers la liste des sortie
                                 var url =
-                                    "{{ route('sortie.create') }}"; // Rediriger vers la route liste sortie
+                                    "<?php echo e(route('inventaire.index')); ?>"; // Rediriger vers la route liste sortie
                                 window.location.replace(url);
                             }
                         },
@@ -588,7 +656,7 @@
                     var qte_stockable = qte_acquise * qte_format;
                     form.find(".qteStockable").val(qte_stockable);
 
-                    var dataProduct = {{ Js::from($data_produit) }}; // Données du contrôleur
+                    var dataProduct = <?php echo e(Js::from($data_produit)); ?>; // Données du contrôleur
 
                     console.log(dataProduct);
 
@@ -656,5 +724,7 @@
 
             });
         </script>
-    @endsection
-@endsection
+    <?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/stock/inventaire/create.blade.php ENDPATH**/ ?>

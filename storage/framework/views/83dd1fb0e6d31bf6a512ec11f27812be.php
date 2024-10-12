@@ -1,27 +1,27 @@
-@extends('backend.layouts.master')
 
-@section('content')
-    @component('backend.components.breadcrumb')
-        <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 
-        @slot('li_1')
+<?php $__env->startSection('content'); ?>
+    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
+        <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
+
+        <?php $__env->slot('li_1'); ?>
             Produit
-        @endslot
-        @slot('title')
-            Modifier un nouveau produit
-        @endslot
-    @endcomponent
+        <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?>
+            Créer un nouveau produit
+        <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
 
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
                     <form id="formSend" autocomplete="off" class="needs-validation" novalidate enctype="multipart/form-data">
-                        @csrf
+                        <?php echo csrf_field(); ?>
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="card">
-
+                                    
                                     <div class="card-body">
                                         <div class="mb-3 row">
 
@@ -33,12 +33,12 @@
                                                     name="categorie" required>
                                                     <option value="" disabled selected>Selectionner</option>
 
-                                                    @foreach ($data_categorie as $categorie)
-                                                        @include(
-                                                            'backend.pages.produit.partials.subCategorieOptionEdit',
+                                                    <?php $__currentLoopData = $data_categorie; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <?php echo $__env->make(
+                                                            'backend.pages.produit.partials.subCategorieOption',
                                                             ['category' => $categorie]
-                                                        )
-                                                    @endforeach
+                                                        , \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </select>
                                             </div>
 
@@ -46,56 +46,20 @@
                                                 <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" name="nom" value="{{ $data_produit['nom'] }}"
-                                                    class="form-control" id="nomProduit" required>
+                                                <input type="text" name="nom" class="form-control" id="nomProduit"
+                                                    required>
                                             </div>
 
-                                            {{-- <div class="col-md-3 mb-3">
-                                                <label class="form-label" for="meta-title-input">Magasin
-                                                </label>
-                                                <select class="form-control js-example-basic-single" name="magasin">
-                                                    <option value="" disabled selected>Choisir</option>
-                                                    @foreach ($data_magasin as $magasin)
-                                                        <option value="{{ $magasin->id }}"
-                                                            {{ $magasin->id == $data_produit->magasin_id ? 'selected' : '' }}>
-                                                            {{ $magasin->libelle }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div> --}}
+                                            
 
-{{-- 
-                                            <div class="col-md-4 mb-3">
-                                                <label class="form-label" for="meta-title-input">Qté mesure<span
-                                                        class="text-danger">*</span>
-                                                </label>
-                                                <input type="number" name="quantite_unite"
-                                                    value="{{ $data_produit->quantite_unite }}" class="form-control"
-                                                    id="quantiteUnite" required>
-                                            </div> --}}
-
-                                            {{-- <div class="col-md-4 mb-3">
-                                                <label class="form-label" for="meta-title-input">Unite mesure<span
-                                                        class="text-danger">*</span>
-                                                </label>
-                                                <select id="uniteMesure" class="form-control js-example-basic-single"
-                                                    name="unite_mesure" required>
-                                                    <option value="" disabled selected>Choisir</option>
-                                                    @foreach ($data_unite as $unite)
-                                                        <option value="{{ $unite->id }}"
-                                                            {{ $unite->id == $data_produit->unite_id ? 'selected' : '' }}>
-                                                            {{ $unite->libelle }}
-                                                            ({{ $unite->abreviation }})
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div> --}}
+                                            
 
                                             <div class="col-md-2 mb-3">
                                                 <label class="form-label" for="meta-title-input">Stock alerte <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="number" value="{{ $data_produit->stock_alerte }}"
-                                                    name="stock_alerte" class="form-control" id="stockAlerte" required>
+                                                <input type="number" name="stock_alerte" class="form-control"
+                                                    id="stockAlerte" required>
                                             </div>
 
 
@@ -112,10 +76,7 @@
 
                             <div class="col-lg-4">
                                 <div class="card">
-
-
                                     <div class="card-body">
-
                                         <div class="mb-4">
                                             <h5 class="fs-14 mb-1">Image principale <span class="text-danger">*</span></h5>
                                             <div class="text-center">
@@ -132,13 +93,12 @@
                                                             </div>
                                                         </label>
                                                         <input class="form-control d-none" id="product-image-input"
-                                                            type="file" name="imagePrincipale" accept="image/*">
+                                                            type="file" name="imagePrincipale" accept="image/*" required>
                                                         <div class="invalid-feedback">Ajouter une image</div>
                                                     </div>
                                                     <div class="avatar-lg">
                                                         <div class="avatar-title bg-light rounded">
-                                                            <img src="{{ $data_produit->getFirstMediaUrl('ProduitImage') }}"
-                                                                id="product-img" class="avatar-md h-auto" />
+                                                            <img src="" id="product-img" class="avatar-md h-auto" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -167,8 +127,6 @@
                                     </div>
                                 </div>
                                 <!-- end card -->
-
-
                             </div>
                         </div>
                         <!-- end row -->
@@ -184,32 +142,22 @@
 
         <!--end row-->
 
-    @section('script')
-        <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
+    <?php $__env->startSection('script'); ?>
+        <script src="<?php echo e(URL::asset('build/libs/prismjs/prism.js')); ?>"></script>
         <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
-        <script src="{{ URL::asset('build/js/pages/modal.init.js') }}"></script>
-        {{-- <script src="{{ URL::asset('build/js/pages/form-editor.init.js') }}"></script> --}}
-        <script src="{{ URL::asset('build/tinymce/tinymce.min.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
+        <script src="<?php echo e(URL::asset('build/js/pages/modal.init.js')); ?>"></script>
+        
+        <script src="<?php echo e(URL::asset('build/tinymce/tinymce.min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js')); ?>"></script>
 
-        <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/ecommerce-product-create.init.js') }}"></script>
-        <script src="{{ URL::asset('build/js/app.js') }}"></script>
+        <script src="<?php echo e(URL::asset('build/libs/dropzone/dropzone-min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/js/pages/ecommerce-product-create.init.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
         <script>
             //Afficher les champs en fonction de la categorie selectionné
-            var categorieData = {{ Js::from($categorieAll) }} // from product controller
-
-            //si quantiteUnite & uniteMesure est vide on disabled=true
-            // if ($('#quantiteUnite').val() == '' && $('#uniteMesure').val() == null) {
-            //     $('#quantiteUnite').prop('disabled', true);
-            //     $('#uniteMesure').prop('disabled', true);
-
-            //     $('#quantiteUnite').prop('required', false)
-            //     $('#quantiteUnite').prop('required', true)
-
-            // }
-
+            // let categoryFamille;
+            // var categorieData = <?php echo e(Js::from($categorieAll)); ?> // from product controller
 
             //recuperer la categorie selectionné
             // $('#categorie').change(function(e) {
@@ -221,13 +169,16 @@
             //         return item.id == categorieSelect
             //     })
 
+
             //     // si categorieFilter = restaurant , required false
             //     if (categorieFilter[0].famille == 'restaurant') {
             //         $('#quantiteUnite').prop('required', false)
             //         $('#quantiteUnite').prop('disabled', true)
+            //         $('#quantiteUnite').val('')
 
             //         $('#uniteMesure').prop('required', false)
             //         $('#uniteMesure').prop('disabled', true)
+            //         $('#uniteMesure').val('')
             //     } else {
             //         $('#quantiteUnite').prop('required', true)
             //         $('#quantiteUnite').prop('disabled', false)
@@ -237,11 +188,18 @@
 
             //     }
 
+            //     // recuperer la famille de la categorie
+            //     categoryFamille = categorieFilter[0];
+
+
             // });
 
 
 
+
+
             //script for to send data 
+
             // product image
             document.querySelector("#product-image-input").addEventListener("change", function() {
                 var preview = document.querySelector("#product-img");
@@ -254,20 +212,6 @@
                     reader.readAsDataURL(file);
                 }
             });
-
-
-            //get gallery Image from controller for edit
-            var getGalleryProduct = {{ Js::from($galleryProduit) }}
-
-            for (let i = 0; i < getGalleryProduct.length; i++) {
-                const element = getGalleryProduct[i];
-                var image = ` <div class="col-12 d-flex justify-content-between border border-secondary rounded"><img src="data:image/jpeg;base64,${element}" class="img-thumbnail rounded float-start" width="50" height="100">
-                                   <button type="button" class="btn btn-danger my-2 remove-image">Delete</button>
-                                    </div>  `;
-                console.log('edit:', image);
-                $('#imageTableBody').append(image);
-            }
-
 
 
             $('#imageInput').on('change', function(e) {
@@ -291,58 +235,86 @@
             });
 
             $('#formSend').on('submit', function(e) {
-
                 e.preventDefault();
-                var productId = {{ Js::from($id) }} // product Id
-                var formData = new FormData(this);
+                // on verifie si une image principale à éte inseré
+                if ($('#product-image-input').val() === '' && categoryFamille === 'bar') {
+                    e.preventDefault();
+                } else {
+                    var formData = new FormData(this);
 
-                $('#imageTableBody div').each(function() {
-                    var imageFile = $(this).find('img').attr('src');
-                    formData.append('images[]', imageFile)
-                });
+                    $('#imageTableBody div').each(function() {
+                        var imageFile = $(this).find('img').attr('src');
+                        formData.append('images[]', imageFile)
+                    });
 
-                $.ajax({
-                    url: "/admin/produit/update/" + productId, // Adjust the route as needed
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        $('#imageTableBody').empty();
+                    $.ajax({
+                        url: "<?php echo e(route('produit.store')); ?>", // Ajustez la route si nécessaire
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            if (response.success === true) {
+                                $('#imageTableBody').empty();
 
-                        if (response.message == 'operation reussi') {
-                            Swal.fire({
-                                title: 'Produit ajouté avec success!',
-                                // text: 'You clicked the button!',
-                                icon: 'success',
-                                showCancelButton: false,
-                                customClass: {
-                                    confirmButton: 'btn btn-primary w-xs me-2 mt-2',
-                                    cancelButton: 'btn btn-danger w-xs mt-2',
-                                },
-                                buttonsStyling: false,
-                                showCloseButton: true
-                            })
-                            var url = "{{ route('produit.index') }}" // redirect route product list
+                                Swal.fire({
+                                    title: 'Produit ajouté avec succès !',
+                                    icon: 'success',
+                                    showCancelButton: false,
+                                    customClass: {
+                                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                                        cancelButton: 'btn btn-danger w-xs mt-2',
+                                    },
+                                    buttonsStyling: false,
+                                    showCloseButton: true
+                                });
 
-                            window.location.replace(url);
-                        } else if (response == 'The nom has already been taken.') {
-                            Swal.fire({
-                                title: 'Ce produit existe déjà ?',
-                                text: $('#nomProduit').val(),
-                                icon: 'warning',
-                                customClass: {
-                                    confirmButton: 'btn btn-primary w-xs me-2 mt-2',
-                                    cancelButton: 'btn btn-danger w-xs mt-2',
-                                },
-                                buttonsStyling: false,
-                                showCloseButton: true
-                            })
+                                var url = "<?php echo e(route('produit.index')); ?>"; // Rediriger vers la route stock
+                                window.location.replace(url);
+                            }
+                        },
+                        error: function(xhr) {
+                            // Gérer les erreurs
+                            if (xhr.status === 409) {
+                                // Produit déjà existant
+                                Swal.fire({
+                                    title: 'Ce produit a déjà été enregistré',
+                                    text: $('#nomProduit').val(),
+                                    icon: 'warning',
+                                    customClass: {
+                                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                                        cancelButton: 'btn btn-danger w-xs mt-2',
+                                    },
+                                    buttonsStyling: false,
+                                    showCloseButton: true
+                                });
+                            } else {
+                                // Autres types d'erreurs
+                                Swal.fire({
+                                    title: 'Erreur',
+                                    text: 'Une erreur est survenue, veuillez réessayer.',
+                                    icon: 'error',
+                                    customClass: {
+                                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                                        cancelButton: 'btn btn-danger w-xs mt-2',
+                                    },
+                                    buttonsStyling: false,
+                                    showCloseButton: true
+                                });
+                            }
                         }
-                    },
+                    });
 
-                });
+
+                }
+
+
+
+
+
             });
         </script>
-    @endsection
-@endsection
+    <?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/produit/create.blade.php ENDPATH**/ ?>

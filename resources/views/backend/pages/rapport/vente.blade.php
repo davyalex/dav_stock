@@ -87,7 +87,7 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
+            <div class="card divPrint">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
                         Rapport des ventes 
@@ -128,27 +128,37 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Nom du produit</th>
+                                        <th>Code</th>
+                                        <th>Designation</th>
                                         <th>Catégorie</th>
                                         <th>Quantité vendue</th>
+                                        <th>Prix de vente</th>
                                         <th>Montant total</th>
+                                        <th>Stock disponible</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($produits as $produit)
                                         <tr>
-                                            <td>{{ $produit['nom'] }}</td>
+                                            <td>{{ $produit['code'] }}</td>
+                                            <td>{{ $produit['designation'] }}</td>
                                             <td>{{ $produit['categorie'] }}</td>
                                             <td>{{ $produit['quantite_vendue'] }}</td>
+                                            <td>{{ number_format($produit['prix_vente'], 0, ',', ' ') }} FCFA</td>
                                             <td>{{ number_format($produit['montant_total'], 0, ',', ' ') }} FCFA</td>
+                                            <td>{{ $produit['stock'] }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="2">Total pour {{ $famille }}</th>
-                                        <th>{{ $produits->sum('quantite_vendue') }}</th>
-                                        <th>{{ number_format($produits->sum('montant_total'), 0, ',', ' ') }} FCFA</th>
+                                        <th colspan="7">
+                                            <div class="text-end">
+                                                {{-- <div>Total pour {{ $famille }}</div> --}}
+                                                <div>Nombre d'articles : {{ $produits->sum('quantite_vendue') }}</div>
+                                                <div>Montant total : {{ number_format($produits->sum('montant_total'), 0, ',', ' ') }} FCFA</div>
+                                            </div>
+                                        </th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -162,6 +172,9 @@
                     </div>
                 </div>
             </div>
+
+            <button id="btnImprimer" class="w-100" ><i class="ri ri-printer-fill"></i></button>
+
         </div>
     </div>
     <!--end row-->
@@ -183,4 +196,53 @@
     <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
 
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            // Fonction pour imprimer le rapport
+            function imprimerRapport() {
+                // Créer une nouvelle fenêtre pour l'impression
+                var fenetreImpression = window.open('', '_blank');
+                
+                // Contenu à imprimer
+                var contenuImprimer = `
+                    <html>
+                        <head>
+                            <title style="text-align: center;">Rapport de Vente</title>
+                            <style>
+                                body { font-family: Arial, sans-serif; }
+                                table { width: 100%; border-collapse: collapse; }
+                                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                                th { background-color: #f2f2f2; }
+                            </style>
+                        </head>
+                        <body>
+                            <h2 style="text-align: center;">Rapport de Vente</h2>
+                            ${$('.divPrint').html()}
+                            <footer style="position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 12px; margin-top: 20px;">
+                                <p>Imprimé le : ${new Date().toLocaleString()} par {{ Auth::user()->first_name }}</p>
+                            </footer>
+                        </body>
+                    </html>
+                `;
+                
+                // Écrire le contenu dans la nouvelle fenêtre
+                fenetreImpression.document.write(contenuImprimer);
+                
+                // Fermer le document
+                fenetreImpression.document.close();
+                
+                // Imprimer la fenêtre
+                fenetreImpression.print();
+            }
+
+            // Ajouter un bouton d'impression
+            $('#btnImprimer')
+                .text('Imprimer le Rapport')
+                .addClass('btn btn-primary mt-3')
+                .on('click', imprimerRapport);
+                // .appendTo('.divPrint');
+        });
+    </script>
 @endsection

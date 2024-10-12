@@ -11,7 +11,8 @@ class EtatStockController extends Controller
     public function index()
     {
         try {
-            $produits = Produit::with('categorie')->get();
+            $produits = Produit::with(['categorie' ,'achats'])->get();
+            // dd($produits->toArray());
             return view('backend.pages.stock.etat-stock.index', compact('produits'));
         } catch (\Exception $e) {
             return response()->json([

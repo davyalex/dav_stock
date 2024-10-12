@@ -89,7 +89,7 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
+            <div class="card divPrint">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
                         Rapport des ventes 
@@ -134,27 +134,37 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Nom du produit</th>
+                                        <th>Code</th>
+                                        <th>Designation</th>
                                         <th>Catégorie</th>
                                         <th>Quantité vendue</th>
+                                        <th>Prix de vente</th>
                                         <th>Montant total</th>
+                                        <th>Stock disponible</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php $__currentLoopData = $produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
-                                            <td><?php echo e($produit['nom']); ?></td>
+                                            <td><?php echo e($produit['code']); ?></td>
+                                            <td><?php echo e($produit['designation']); ?></td>
                                             <td><?php echo e($produit['categorie']); ?></td>
                                             <td><?php echo e($produit['quantite_vendue']); ?></td>
+                                            <td><?php echo e(number_format($produit['prix_vente'], 0, ',', ' ')); ?> FCFA</td>
                                             <td><?php echo e(number_format($produit['montant_total'], 0, ',', ' ')); ?> FCFA</td>
+                                            <td><?php echo e($produit['stock']); ?></td>
                                         </tr>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="2">Total pour <?php echo e($famille); ?></th>
-                                        <th><?php echo e($produits->sum('quantite_vendue')); ?></th>
-                                        <th><?php echo e(number_format($produits->sum('montant_total'), 0, ',', ' ')); ?> FCFA</th>
+                                        <th colspan="7">
+                                            <div class="text-end">
+                                                
+                                                <div>Nombre d'articles : <?php echo e($produits->sum('quantite_vendue')); ?></div>
+                                                <div>Montant total : <?php echo e(number_format($produits->sum('montant_total'), 0, ',', ' ')); ?> FCFA</div>
+                                            </div>
+                                        </th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -168,6 +178,9 @@
                     </div>
                 </div>
             </div>
+
+            <button id="btnImprimer" class="w-100" ><i class="ri ri-printer-fill"></i></button>
+
         </div>
     </div>
     <!--end row-->
@@ -189,6 +202,55 @@
     <script src="<?php echo e(URL::asset('build/js/pages/datatables.init.js')); ?>"></script>
 
     <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            // Fonction pour imprimer le rapport
+            function imprimerRapport() {
+                // Créer une nouvelle fenêtre pour l'impression
+                var fenetreImpression = window.open('', '_blank');
+                
+                // Contenu à imprimer
+                var contenuImprimer = `
+                    <html>
+                        <head>
+                            <title style="text-align: center;">Rapport de Vente</title>
+                            <style>
+                                body { font-family: Arial, sans-serif; }
+                                table { width: 100%; border-collapse: collapse; }
+                                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                                th { background-color: #f2f2f2; }
+                            </style>
+                        </head>
+                        <body>
+                            <h2 style="text-align: center;">Rapport de Vente</h2>
+                            ${$('.divPrint').html()}
+                            <footer style="position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 12px; margin-top: 20px;">
+                                <p>Imprimé le : ${new Date().toLocaleString()} par <?php echo e(Auth::user()->first_name); ?></p>
+                            </footer>
+                        </body>
+                    </html>
+                `;
+                
+                // Écrire le contenu dans la nouvelle fenêtre
+                fenetreImpression.document.write(contenuImprimer);
+                
+                // Fermer le document
+                fenetreImpression.document.close();
+                
+                // Imprimer la fenêtre
+                fenetreImpression.print();
+            }
+
+            // Ajouter un bouton d'impression
+            $('#btnImprimer')
+                .text('Imprimer le Rapport')
+                .addClass('btn btn-primary mt-3')
+                .on('click', imprimerRapport);
+                // .appendTo('.divPrint');
+        });
+    </script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/rapport/vente.blade.php ENDPATH**/ ?>

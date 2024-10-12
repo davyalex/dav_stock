@@ -191,7 +191,7 @@ class AchatController extends Controller
             //enregistrer la facture 
             $facture = new Facture();
             $facture->type = $request->type;
-            $facture->numero_facture = $request->numero_facture;
+            $facture->numero_facture = $request->type == 'facture' ? 'FAC.' . $request->numero_facture : 'BC.' . $request->numero_facture;
             $facture->date_facture = $request->date_achat;
             $facture->fournisseur_id = $request->fournisseur_id;
             $facture->montant = $request->montant;

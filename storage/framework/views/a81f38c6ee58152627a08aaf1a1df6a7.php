@@ -13,20 +13,52 @@
 <?php $__env->startSection('content'); ?>
     <?php $__env->startComponent('backend.components.breadcrumb'); ?>
         <?php $__env->slot('li_1'); ?>
-           Gestion de stock
+            Detail produit
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
-            Liste des achats
+            Produit
         <?php $__env->endSlot(); ?>
+        
     <?php echo $__env->renderComponent(); ?>
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body border border-primary border-dashed">
+                        <div class="mb-4 d-flex justify-content-around">
+
+                            <p>Sku : <span class="fw-bold" id="sku"><?php echo e($data_produit['code']); ?> </span></p>
+                            <p>Nom : <span class="fw-bold" id="sku"><?php echo e($data_produit['nom']); ?> </span></p>
+                            <p>Stock actuel : <span class="fw-bold" id="stock"><?php echo e($data_produit['stock']); ?></span></p>
+                            <p>Stock alerte : <span class="fw-bold text-danger"
+                                    id="stockAlerte"><?php echo e($data_produit['stock_alerte']); ?></span>
+                            </p>
+                            <p>Categorie : <span class="fw-bold"
+                                    id="categorie"><?php echo e($data_produit['categorie']['name']); ?></span>
+                            </p>
+
+                            <div class="text-center">
+                                <div class="position-relative d-inline-block">
+                                    <div class="avatar-lg">
+                                        <div class="avatar-title bg-light rounded" id="product-img">
+                                            <img src="<?php echo e(asset($data_produit->getFirstMediaUrl('ProduitImage'))); ?>"
+                                                id="product-img" class="avatar-md h-auto" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end card -->
+
+
+            </div>
+            <div class="card d-none">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des achats de la facture <strong>#<?php echo e($facture->numero_facture); ?></strong>  <span class="px-5">Montant : <strong><?php echo e($facture->montant); ?> FCFA</strong></span> </h5>
-                    <a href="<?php echo e(route('achat.create')); ?>" type="button" class="btn btn-primary ">Faire
-                        un achat</a>
+                    <h5 class="card-title mb-0">Liste des achats</h5>
+                    
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -35,51 +67,54 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Statut</th>
-                                    <th>code</th>
                                     <th>Produit</th>
+                                    <th>code</th>
                                     <th>Magasin</th>
                                     <th>N°Facture</th>
                                     <th>fournisseur</th>
                                     <th>Format</th>
+                                    <th>Qté format</th>
                                     <th>Qté dans format</th>
                                     <th>PU format</th>
                                     <th>Total depensé</th>
                                     <th>Qté stockée</th>
                                     <th>PU achat</th>
                                     <th>PU vente</th>
+                                    <th>Unite de vente</th>
                                     <th>Crée par</th>
                                     <th>Date achat</th>
-                                    <th class="d-none">Actions</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $__currentLoopData = $data_achat; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__currentLoopData = $data_produit['achats']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr id="row_<?php echo e($item['id']); ?>">
                                         <td> <?php echo e(++$key); ?> </td>
                                         <td><?php echo e($item['statut']); ?></td>
-                                        <td><?php echo e($item['code']); ?></td>
 
                                         <td>
-                                            <img class="rounded-circle"
-                                                src="<?php echo e($item->produit->getFirstMediaUrl('ProduitImage')); ?>" width="50px"
-                                                alt="">
+                                            
 
                                             <?php echo e($item['produit']['nom']); ?>
 
                                         </td>
-                                        <td><?php echo e($item['magasin']['libelle'] ?? 'N/D'); ?></td>
-                                        <td><?php echo e($item['numero_facture'] ?? 'N/D'); ?></td>
-                                        <td><?php echo e($item['fournisseur']['nom'] ?? 'N/D'); ?></td>
-                                        <td><?php echo e($item['quantite_format']); ?> <?php echo e($item['format']['libelle'] ?? 'N/D'); ?></td>
-                                        <td><?php echo e($item['quantite_in_format']); ?> <?php echo e($item['unite']['libelle'] ?? 'N/D'); ?>  </td>
+                                        <td><?php echo e($item['code']); ?></td>
+                                        <td><?php echo e($item['magasin']['libelle'] ?? 'N/A'); ?></td>
+                                        <td><?php echo e($item['numero_facture'] ?? 'N/A'); ?></td>
+                                        <td><?php echo e($item['fournisseur']['nom'] ?? 'N/A'); ?></td>
+                                        <td><?php echo e($item['format']['libelle'] ?? 'N/A'); ?></td>
+                                        <td> <?php echo e($item['quantite_format']); ?> </td>
+                                        <td> <?php echo e($item['quantite_in_format']); ?> </td>
                                         <td> <?php echo e($item['prix_unitaire_format']); ?> </td>
                                         <td> <?php echo e($item['prix_total_format']); ?> </td>
                                         <td> <?php echo e($item['quantite_stocke']); ?> </td>
-                                        <td> <?php echo e($item['prix_achat_unitaire'] ?? 'N/D'); ?> </td>
-                                        <td> <?php echo e($item['prix_vente_unitaire'] ?? 'N/D'); ?> </td>
+                                        <td> <?php echo e($item['prix_achat_unitaire']); ?> </td>
+                                        <td> <?php echo e($item['prix_vente_unitaire']); ?> </td>
+                                        <td> <?php echo e($item['unite']['libelle'] ?? 'N/A'); ?> </td>
                                         <td> <?php echo e($item['user']['first_name']); ?> </td>
                                         <td> <?php echo e($item['date_achat']); ?> </td>
-                                        <td class="d-none">
+
+                                        <td>
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -91,14 +126,8 @@
                                                                 class=" ri-exchange-fill align-bottom me-2 text-muted"></i>
                                                             Ajustement</a>
                                                     </li>
-                                                    <li><a href="#!" class="dropdown-item"><i
-                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            View</a>
-                                                    </li>
-                                                    <li><a href="<?php echo e(route('achat.edit', $item['id'])); ?>" type="button"
-                                                            class="dropdown-item edit-item-btn"><i
-                                                                class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Edit</a></li>
+                                                    
+                                                    
                                                     <li>
                                                         <a href="#" class="dropdown-item remove-item-btn delete"
                                                             data-id=<?php echo e($item['id']); ?>>
@@ -112,15 +141,6 @@
                                     </tr>
                                     
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                                <tfoot>
-                                    <tr>
-                                        <th colspan="11" style="text-align:right">Montant de la facture :</th>
-                                        
-                                        <th colspan="6"><strong><?php echo e($facture->montant); ?> FCFA</strong></th> <!-- Les autres colonnes n'ont pas de total -->
-                                    </tr>
-                                </tfoot>
-                                
                             </tbody>
                         </table>
                     </div>
@@ -152,10 +172,50 @@
 
     <script>
         $(document).ready(function() {
-            var route = "depense"
-            delete_row(route);
-        })
+            $('.delete').on("click", function(e) {
+                e.preventDefault();
+                var Id = $(this).attr('data-id');
+                Swal.fire({
+                    title: 'Etes-vous sûr(e) de vouloir supprimer ?',
+                    text: "Cette action est irréversible!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Supprimer!',
+                    cancelButtonText: 'Annuler',
+                    customClass: {
+                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                        cancelButton: 'btn btn-danger w-xs mt-2',
+                    },
+                    buttonsStyling: false,
+                    showCloseButton: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "GET",
+                            url: "/achat/delete/" + Id,
+                            dataType: "json",
+
+                            success: function(response) {
+                                if (response.status == 200) {
+                                    Swal.fire({
+                                        title: 'Supprimé!',
+                                        text: 'Votre fichier a été supprimé.',
+                                        icon: 'success',
+                                        customClass: {
+                                            confirmButton: 'btn btn-primary w-xs mt-2',
+                                        },
+                                        buttonsStyling: false
+                                    })
+
+                                    $('#row_' + Id).remove();
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        });
     </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/stock/achat/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/produit/show.blade.php ENDPATH**/ ?>

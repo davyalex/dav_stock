@@ -13,20 +13,22 @@
 <?php $__env->startSection('content'); ?>
     <?php $__env->startComponent('backend.components.breadcrumb'); ?>
         <?php $__env->slot('li_1'); ?>
-           Gestion de stock
+            Liste des slides
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
-        Liste des facture
+            Slide
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
+
+
 
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des facture</h5>
-                    <a href="<?php echo e(route('achat.create')); ?>" type="button" class="btn btn-primary ">Enregistrer
-                        une facture</a>
+                    <h5 class="card-title mb-0">Liste des slides</h5>
+                    <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#myModal">Créer
+                        un slide</button>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -34,43 +36,38 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>N°Facture</th>
-                                    <th>Type</th>
-                                    <th>fournisseur</th>
-                                    <th>Montant</th>
-                                    <th>Date</th>
-                                    <th>Crée par</th>
-                                    <th class="d-none">Actions</th>
+                                    <th>Image</th>
+                                    <th>Statut</th>
+                                    <th>Titre</th>
+                                    <th>Date creation</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $__currentLoopData = $data_facture; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__currentLoopData = $data_slide; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr id="row_<?php echo e($item['id']); ?>">
                                         <td> <?php echo e(++$key); ?> </td>
-                                        <td> <a class="fw-bold" href="<?php echo e(route('achat.index' , $item->id)); ?>"><?php echo e($item['numero_facture']); ?></a> </td>
-                                        <td><?php echo e($item['type']); ?></td>
-                                        <td><?php echo e($item['fournisseur']['nom'] ?? 'N/A'); ?></td>
-                                        <td> <?php echo e($item['montant']); ?> </td>
-                                        <td> <?php echo e($item['date_facture']); ?> </td>
-                                        <td> <?php echo e($item['user']['first_name']); ?> </td>
-                                        <td class="d-none">
+                                        <td>
+                                            <img class="rounded-circle" src="<?php echo e($item->getFirstMediaUrl('slideImage')); ?>"
+                                                width="50px" alt="">
+                                        </td>
+                                        <td><?php echo e($item['status']); ?></td>
+                                        <td><?php echo e($item['title']); ?></td>
+                                        <td> <?php echo e($item['created_at']); ?> </td>
+                                        <td>
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
                                                     data-bs-toggle="dropdown" aria-expanded="false">
                                                     <i class="ri-more-fill align-middle"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a href="<?php echo e(route('ajustement.create', $item['id'])); ?>"
-                                                            class="dropdown-item"><i
-                                                                class=" ri-exchange-fill align-bottom me-2 text-muted"></i>
-                                                            Ajustement</a>
-                                                    </li>
                                                     <li><a href="#!" class="dropdown-item"><i
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                             View</a>
                                                     </li>
-                                                    <li><a href="<?php echo e(route('achat.edit', $item['id'])); ?>" type="button"
-                                                            class="dropdown-item edit-item-btn"><i
+                                                    <li><a type="button" class="dropdown-item edit-item-btn"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#myModalEdit<?php echo e($item['id']); ?>"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             Edit</a></li>
                                                     <li>
@@ -84,9 +81,10 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    
+                                    <?php echo $__env->make('backend.pages.slide.edit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </tbody>
+
+
                         </table>
                     </div>
                 </div>
@@ -95,7 +93,7 @@
     </div>
     <!--end row-->
 
-    
+    <?php echo $__env->make('backend.pages.slide.create', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -116,11 +114,11 @@
     <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
     <script>
-        $(document).ready(function() {
-            var route = "depense"
-            delete_row(route);
-        })
+       $(document).ready(function(){
+        var route = "depense"
+        delete_row(route);
+       })
     </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/stock/achat/facture.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/slide/index.blade.php ENDPATH**/ ?>

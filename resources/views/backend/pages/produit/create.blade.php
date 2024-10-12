@@ -28,7 +28,7 @@
                                     <div class="card-body">
                                         <div class="mb-3 row">
 
-                                            <div class="mb-3 col-md-7">
+                                            <div class="mb-3 col-md-5">
                                                 <label class="form-label" for="product-title-input">Sélectionner une
                                                     categorie <span class="text-danger">*</span>
                                                 </label>
@@ -64,7 +64,7 @@
                                                 </select>
                                             </div> --}}
 
-
+                                            {{-- 
                                             <div class="col-md-4 mb-3">
                                                 <label class="form-label" for="meta-title-input">Qté mesure<span
                                                         class="text-danger">*</span>
@@ -86,9 +86,9 @@
                                                         </option>
                                                     @endforeach
                                                 </select>
-                                            </div>
+                                            </div> --}}
 
-                                            <div class="col-md-4 mb-3">
+                                            <div class="col-md-2 mb-3">
                                                 <label class="form-label" for="meta-title-input">Stock alerte <span
                                                         class="text-danger">*</span>
                                                 </label>
@@ -190,42 +190,43 @@
 
         <script>
             //Afficher les champs en fonction de la categorie selectionné
-            let categoryFamille;
-            var categorieData = {{ Js::from($categorieAll) }} // from product controller
+            // let categoryFamille;
+            // var categorieData = {{ Js::from($categorieAll) }} // from product controller
+
             //recuperer la categorie selectionné
-            $('#categorie').change(function(e) {
-                e.preventDefault();
-                var categorieSelect = $(this).val()
+            // $('#categorie').change(function(e) {
+            //     e.preventDefault();
+            //     var categorieSelect = $(this).val()
 
-                //filtrer pour recuperer la categorie selectionnée
-                var categorieFilter = categorieData.filter(function(item) {
-                    return item.id == categorieSelect
-                })
-
-
-                // si categorieFilter = restaurant , required false
-                if (categorieFilter[0].famille == 'restaurant') {
-                    $('#quantiteUnite').prop('required', false)
-                    $('#quantiteUnite').prop('disabled', true)
-                    $('#quantiteUnite').val('')
-
-                    $('#uniteMesure').prop('required', false)
-                    $('#uniteMesure').prop('disabled', true)
-                    $('#uniteMesure').val('')
-                } else {
-                    $('#quantiteUnite').prop('required', true)
-                    $('#quantiteUnite').prop('disabled', false)
-
-                    $('#uniteMesure').prop('required', true)
-                    $('#uniteMesure').prop('disabled', false)
-
-                }
-
-                // recuperer la famille de la categorie
-                categoryFamille = categorieFilter[0];
+            //     //filtrer pour recuperer la categorie selectionnée
+            //     var categorieFilter = categorieData.filter(function(item) {
+            //         return item.id == categorieSelect
+            //     })
 
 
-            });
+            //     // si categorieFilter = restaurant , required false
+            //     if (categorieFilter[0].famille == 'restaurant') {
+            //         $('#quantiteUnite').prop('required', false)
+            //         $('#quantiteUnite').prop('disabled', true)
+            //         $('#quantiteUnite').val('')
+
+            //         $('#uniteMesure').prop('required', false)
+            //         $('#uniteMesure').prop('disabled', true)
+            //         $('#uniteMesure').val('')
+            //     } else {
+            //         $('#quantiteUnite').prop('required', true)
+            //         $('#quantiteUnite').prop('disabled', false)
+
+            //         $('#uniteMesure').prop('required', true)
+            //         $('#uniteMesure').prop('disabled', false)
+
+            //     }
+
+            //     // recuperer la famille de la categorie
+            //     categoryFamille = categorieFilter[0];
+
+
+            // });
 
 
 

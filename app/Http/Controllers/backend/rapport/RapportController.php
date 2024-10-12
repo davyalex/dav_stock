@@ -429,10 +429,13 @@ class RapportController extends Controller
                 }
                 return [
                     'id' => $produit->id,
-                    'nom' => $produit->nom,
+                    'code' => $produit->code,
+                    'stock' => $produit->stock,
+                    'designation' => $produit->nom,
                     'categorie' => $produit->categorie->name,
                     'famille' => $produit->categorie->famille,
                     'quantite_vendue' => $groupe->sum('pivot.quantite'),
+                    'prix_vente' => $groupe->first()->pivot->prix_unitaire,
                     'montant_total' => $groupe->sum(function ($item) {
                         return $item->pivot->quantite * $item->pivot->prix_unitaire;
                     }),

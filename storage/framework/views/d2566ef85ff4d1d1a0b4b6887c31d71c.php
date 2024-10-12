@@ -1,18 +1,18 @@
-@extends('backend.layouts.master')
-
-@section('content')
 
 
-    @component('backend.components.breadcrumb')
-        <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
+<?php $__env->startSection('content'); ?>
 
-        @slot('li_1')
-            Vente
-        @endslot
-        @slot('title')
-            Faire une vente
-        @endslot
-    @endcomponent
+
+    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
+        <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
+
+        <?php $__env->slot('li_1'); ?>
+            Stock
+        <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?>
+            Créer une sortie
+        <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
     <style>
         form label {
             font-size: 11px
@@ -33,18 +33,6 @@
             /* Cacher le texte par défaut */
         }
 
-        .btn-custom-size {
-            padding: 4px 8px;
-            /* Ajuste la taille du bouton */
-            font-size: 10px;
-            /* Ajuste la taille du texte */
-        }
-
-        .btn-custom-size i {
-            font-size: 14px;
-            /* Ajuste la taille de l'icône */
-        }
-
 
 
 
@@ -62,17 +50,14 @@
 
     <div class="row">
         <div class="col-lg-12">
-            {{-- <div class="card">
-                <div class="card-body"> --}}
-            <form id="myForm" method="POST" action="{{ route('vente.store') }}" autocomplete="off" novalidate
+            
+            <form id="myForm" method="POST" action="<?php echo e(route('sortie.store')); ?>" autocomplete="off" novalidate
                 enctype="multipart/form-data">
-                @csrf
+                <?php echo csrf_field(); ?>
                 <div class="row">
                     <div class="col-lg-12">
-                        {{-- <div class="card">
-                                    <div class="card-body"> --}}
+                        
                         <div class="row mb-3">
-
 
                             <div id="form-container">
                                 <!-- ========== Start form duplicate ========== -->
@@ -95,17 +80,8 @@
                 </div>
                 <!-- end row -->
                 <!-- end card -->
-                <div class="col-md-4 card mb-3 float-end">
-                    <div class="card-body">
-                        <h5 class="card-title">Montant total</h5>
-                        <p class="card-text h3 " id="montantTotal">0 FCFA</p>
-                    </div>
-                    <input type="number" name="montant_total" class="montant_total" hidden>
-                </div>
-
-
-                <div class="mb-3">
-                    <button type="submit" id="save" class="btn btn-success w-100 btn-save"
+                <div class="text-end mb-3">
+                    <button type="submit" id="save" class="btn btn-success w-lg btn-save"
                         disabled>Enregistrer</button>
                 </div>
             </form>
@@ -113,10 +89,8 @@
 
             <!-- start form duplicate-->
             <div id="product-form-template" style="display: none;">
-                <div class="row mb-3 form-duplicate m-auto">
-                    <!-- Bouton pour supprimer ce bloc -->
-
-                    <div class="col-md-5 mb-3">
+                <div class="row mb-3 form-duplicate">
+                    <div class="col-md-6 mb-3">
                         <label class="form-label" for="product-title-input">Produits
                             <span class="text-danger">*</span>
                         </label>
@@ -124,46 +98,48 @@
                         <select class="form-control productSelected selectView" name="produit_id[]" required>
                             <option disabled selected value>Selectionner un produit
                             </option>
-                            @foreach ($data_produit as $produit)
-                                <option value="{{ $produit->id }}">{{ $produit->nom }} {{ $produit->quantite_unite }}
-                                    {{ $produit->unite->libelle ?? '' }}
+                            <?php $__currentLoopData = $data_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($produit->id); ?>"><?php echo e($produit->nom); ?> <?php echo e($produit->quantite_unite); ?>
+
+                                    <?php echo e($produit->unite->libelle ?? ''); ?>
+
                                 </option>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
 
 
-
                     <div class="col-md-2 mb-3">
-                        <label class="form-label" for="prix-input">Prix unitaire
+                        <label class="form-label" for="stocks-input">Qté utilisée
                             <span class="text-danger">*</span>
                         </label>
-                        <input type="number" name="prix_unitaire[]" class="form-control prixUnitaire" readonly>
+                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
+                        <input type="number" name="quantite_utilise[]" class="form-control qteUtilise" required>
                     </div>
 
-                    <div class="col-md-2 mb-3 ">
-                        <label class="form-label" for="quantite-input">Quantité <span></span> <span class="text-danger"
-                                id="labelUnite"></span></label>
-                        <br>
-                        <div class="input-step w-100">
-                            <button type="button" class="minus w-25 btn btn-primary decreaseValue">-</button>
-                            <input type="number" class="form-control quantite w-100" value="1" name="quantite[]"
-                                readonly>
-                            <button type="button" class="plus w-25 btn btn-primary increaseValue">+</button>
-                        </div>
-                    </div>
+
                     <div class="col-md-2 mb-3">
-                        <label class="form-label" for="sous-total-input">Sous-total
+                        <label class="form-label" for="stocks-input">Unité de sortie
                             <span class="text-danger">*</span>
                         </label>
-                        <input type="number" name="sous_total[]" class="form-control sousTotal" readonly>
+                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
+                        <input class="form-control uniteLibelle" type="text" name="unite_libelle[]" readonly>
+                        <input class="form-control uniteId" type="text" name="unite_id[]" hidden>
+
                     </div>
-                    <div class="col-md-1 mb-3 pt-4">
-                        <button type="button" class="btn btn-danger remove-form btn-custom-size"> <i
-                                class="ri ri-delete-bin-fill fs-5 remove-form"></i> </button>
+
+
+
+                    <!-- Bouton pour supprimer ce bloc -->
+                    <div class="col-md-2 mb-3 pt-4">
+                        <button type="button" class="btn btn-success validate"> <i
+                                class="ri ri-checkbox-circle-fill fs-4"></i> </button>
+                        <button type="button" class="btn btn-primary edit"> <i class="ri ri-edit-box-fill fs-4"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger remove-form"> <i
+                                class="ri ri-delete-bin-fill fs-4"></i> </button>
                     </div>
                 </div>
-
             </div>
             <!-- end form duplicate-->
 
@@ -175,17 +151,17 @@
 
         <!--end row-->
 
-    @section('script')
-        <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
+    <?php $__env->startSection('script'); ?>
+        <script src="<?php echo e(URL::asset('build/libs/prismjs/prism.js')); ?>"></script>
         <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
-        <script src="{{ URL::asset('build/js/pages/modal.init.js') }}"></script>
-        {{-- <script src="{{ URL::asset('build/js/pages/form-editor.init.js') }}"></script> --}}
-        <script src="{{ URL::asset('build/tinymce/tinymce.min.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
+        <script src="<?php echo e(URL::asset('build/js/pages/modal.init.js')); ?>"></script>
+        
+        <script src="<?php echo e(URL::asset('build/tinymce/tinymce.min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js')); ?>"></script>
 
-        <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/ecommerce-product-create.init.js') }}"></script>
-        <script src="{{ URL::asset('build/js/app.js') }}"></script>
+        <script src="<?php echo e(URL::asset('build/libs/dropzone/dropzone-min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/js/pages/ecommerce-product-create.init.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -229,9 +205,6 @@
 
                 // Fonction pour ajouter un nouveau formulaire
                 function addNewForm() {
-               
-                    // Réactiver le bouton
-                    document.getElementById('add-more').classList.remove('disabled');
 
                     let formContainer = document.getElementById('form-container');
 
@@ -251,6 +224,7 @@
 
                     // Initialiser Select2 pour le nouveau champ avec une classe unique
                     $(clonedForm).find('.js-example-basic-single-' + formCount).select2();
+
 
                     // Activer le 'required' pour les champs du formulaire cloné
                     setRequiredFields(clonedForm);
@@ -323,80 +297,76 @@
 
                     }
 
-                });
-                // Fonction pour incrémenter et décrémenter la quantité
-                function updateQuantity(form, action) {
-                    var input = form.find(".quantite");
-                    var value = parseInt(input.val(), 10);
-                    value = isNaN(value) ? 1 : value; // Valeur par défaut à 1 si non numérique
 
-                    if (action === 'increase') {
-                        value++;
-                    } else if (action === 'decrease' && value > 1) {
-                        value--;
+                    // Au clic du bouton "valider"
+                    if (e.target && e.target.classList.contains('validate')) {
+                        let row = e.target.closest('.form-duplicate');
+                        row.querySelectorAll('input, select').forEach(input => {
+                            if (input.tagName === 'INPUT') {
+                                // Pour les éléments input
+                                // input.readOnly = true;
+                                input.classList.add('select-no-interaction');
+                            } else if (input.tagName === 'SELECT') {
+                                // Ajouter une classe empêchant les interactions sur Select2
+                                input.classList.add('select-no-interaction');
+
+                                // Récupérer le conteneur Select2 et désactiver les interactions
+                                let select2Container = $(input).next('.select2-container');
+                                select2Container.find('.select2-selection').css({
+                                    'pointer-events': 'none',
+                                    'cursor': 'not-allowed',
+                                    'background-color': '#d6d6d6',
+
+
+                                });
+                            }
+                        });
+
+                        // Cacher le bouton "valider" et afficher le bouton "modifier"
+                        $(row).find('.validate').hide();
+                        $(row).find('.edit').show();
                     }
 
-                    input.val(value);
-                    verifyQty(form);
-                    calculerMontantTotal();
-                }
 
-                // Gestionnaire d'événements pour les boutons + et -
-                $(document).on('click', '.increaseValue, .decreaseValue', function() {
-                    var form = $(this).closest('.row');
-                    var action = $(this).hasClass('increaseValue') ? 'increase' : 'decrease';
-                    updateQuantity(form, action);
-                    calculateSousTotal(form);
-                });
+                    // Au clic du bouton "modifier"
+                    if (e.target && e.target.classList.contains('edit')) {
+                        let row = e.target.closest('.form-duplicate');
+                        row.querySelectorAll('input, select').forEach(input => {
+                            if (input.tagName === 'INPUT') {
+                                // Pour les éléments input
+                                // input.readOnly = false;
+                                input.classList.remove('select-no-interaction');
+                            } else if (input.tagName === 'SELECT') {
+                                // Supprimer la classe empêchant les interactions sur Select2
+                                input.classList.remove('select-no-interaction');
 
-                //fonction pour calculer le prix total
-                function calculateSousTotal(form) {
-                    var prixUnitaire = form.find('.prixUnitaire').val();
-                    var quantite = form.find('.quantite').val();
-                    var sousTotal = prixUnitaire * quantite;
-                    form.find('.sousTotal').val(sousTotal);
-                }
+                                // Récupérer le conteneur Select2 et réactiver les interactions
+                                let select2Container = $(input).next('.select2-container');
+                                select2Container.find('.select2-selection').css({
+                                    'pointer-events': 'auto',
+                                    'cursor': 'default',
+                                    'background-color': '#fff',
 
+                                });
+                            }
+                        });
 
-
-                function calculerMontantTotal() {
-                    let total = 0;
-                    const prixUnitaires = document.querySelectorAll('.prixUnitaire');
-                    const quantites = document.querySelectorAll('.quantite');
-
-                    for (let i = 0; i < prixUnitaires.length; i++) {
-                        total += parseFloat(prixUnitaires[i].value || 0) * parseFloat(quantites[i].value || 0);
+                        // Cacher le bouton "modifier" et afficher le bouton "valider"
+                        $(row).find('.edit').hide();
+                        $(row).find('.validate').show();
                     }
 
-                    document.getElementById('montantTotal').textContent = new Intl.NumberFormat('fr-FR', {
-                        style: 'currency',
-                        currency: 'XOF'
-                    }).format(total);
-                    $('input[name="montant_total"]').val(total);
-                }
 
-                // Calculer le montant total initialement
-                calculerMontantTotal();
-
-                // Recalculer le montant total lorsque les quantités ou les prix changent
-                document.querySelectorAll('.prixUnitaire, .quantite').forEach(input => {
-                    input.addEventListener('change', calculerMontantTotal);
-                });
-
-                // Recalculer le montant total lorsqu'un produit est ajouté ou supprimé
-                const observer = new MutationObserver(calculerMontantTotal);
-                observer.observe(document.getElementById('form-container'), {
-                    childList: true,
-                    subtree: true
                 });
 
 
-                // Fonction pour  verifier la quantité entrée , elle ,e dois pas depasser la quantité en stock
+
+                //Fonction pour  verifier la quantité entrée , elle ,e dois pas depasser la quantité en stock
                 function verifyQty(form) {
-                    var dataProduct = @json($data_produit); // Données du contrôleur
+                    var dataProduct = <?php echo json_encode($data_produit, 15, 512) ?>; // Données du contrôleur
 
                     // Récupérer la quantité utilisée et l'ID du produit sélectionné
-                    var qte = form.find('.quantite').val(); // quantité entrée
+                    var qteStock = form.find('.qteUtilise').val(); // Assurez-vous que la classe est correcte
                     var productSelected = form.find('.productSelected')
                         .val(); // Assurez-vous que la classe est correcte
 
@@ -404,59 +374,30 @@
                     var product = dataProduct.find(function(item) {
                         return item.id == productSelected;
                     });
-                    //si le produit a un achat on verifier la quantite en stock 
-                    if (product.achats && product.achats.length > 0) {
-                        if (qte > product.achats[0].quantite_stocke) {
-                            //swalfire
-                            Swal.fire({
-                                title: 'Erreur',
-                                text: 'La quantité entrée dépasse la quantité en stock',
-                                icon: 'error',
-                            });
-                            //mettre le button save en disabled
-                            $('#save').prop('disabled', true)
 
-                        } else {
-                            //mettre le button save en enable
-                            $('#save').prop('disabled', false)
-                        }
+                    if (qteStock > product.stock) {
+                        //swalfire
+                        Swal.fire({
+                            title: 'Erreur',
+                            text: 'La quantité entrée dépasse la quantité en stock',
+                            icon: 'error',
+                        });
+
+                        //mettre le button save en disabled
+                        $('#save').prop('disabled', true)
+
+                    } else {
+                        //mettre le button save en enable
+                        $('#save').prop('disabled', false)
                     }
                 }
 
-                $(document).on('input change', '.quantite , .productSelected ', function() {
+                // Utiliser la délégation d'événements pour les champs dynamiques
+                $(document).on('input change', '.qteUtilise , .productSelected', function() {
                     var form = $(this).closest('.row'); // Cibler le formulaire ou la ligne parent
                     verifyQty(form); // Appeler la fonction avec le formulaire
                 });
 
-
-
-
-                // Fonction pour verifier si un produit est selectionner 2 fois
-                // function validateProductSelection() {
-                //     let selectedProducts = [];
-
-                //     $('.productSelected').each(function(index, element) {
-                //         let produitId = $(element).val();
-                //         let form = $(element).closest('.row');
-                //         // Vérifier si le produit a déjà été sélectionné
-                //         if (selectedProducts.includes(produitId)) {
-                //             Swal.fire({
-                //                 title: 'Erreur',
-                //                 text: 'Ce produit a déjà été sélectionné.',
-                //                 icon: 'error',
-                //                 confirmButtonText: 'OK',
-                //             });
-
-
-                //             // Réinitialiser le champ select pour éviter la sélection en double
-                //             $(element).val(null).trigger('change.select2');
-
-                //         } else {
-                //             selectedProducts.push(produitId);
-
-                //         }
-                //     });
-                // }
 
                 // Fonction pour verifier si un produit est sélectionné 2 fois
                 function validateProductSelection() {
@@ -488,54 +429,34 @@
                 }
 
                 // Attacher l'événement de changement aux champs select des produits
-                // $(document).on('change', '.productSelected', function() {
-                //     validateProductSelection();
-                // });
-
-
-
-
-                // // Ajouter un écouteur d'événements pour vérifier à chaque changement
-                // $(document).on('change', '.productSelected', function() {
-                //     verifierProduitSelectionne();
-                // });
-
-                // // Modifier l'événement du bouton "Ajouter un produit"
-                // $('#add-more').on('click', function() {
-                //     if (empecherDuplicationSansProduit()) {
-                //         addNewForm();
-                //     }
-                // });
-
-
-                //fonction pour remplir les champs stock initial et stock restante
-                function getProductInfo(form) {
-                    //recuperer les infos de produit
-                    var dataProduct = @json($data_produit); // Données du contrôleur
-                    var productId = form.find('.productSelected').val();
-                    var product = dataProduct.find(function(item) {
-                        return item.id == productId;
-                    });
-                    console.log(product);
-                    form.find('.quantite').val(1); // quantite par defaut
-                    //si le produit a un achat
-                    if (product.achats.length > 0) {
-                        form.find('.prixUnitaire').val(product.achats[0].prix_vente_unitaire);
-                        form.find('.sousTotal').val(product.achats[0].prix_vente_unitaire);
-                    } else {
-                        form.find('.prixUnitaire').val(product.prix);
-                    }
-                    form.find('.prixTotal').val(product.prix_vente);
-                    form.find('.sousTotal').val(product.prix_vente);
-                }
-
-                // Attacher l'événement de changement aux champs select des produits
                 $(document).on('change', '.productSelected', function() {
                     validateProductSelection();
-                    var form = $(this).closest('.row');
-                    getProductInfo(form);
-                    calculateSousTotal(form);
                 });
+
+
+                // Fonction pour récupérer les détails du produit sélectionné
+                function getProductDetails(form) {
+                    let produitId = form.find('.productSelected').val();
+
+                    if (produitId) {
+                        // Récupérer les données du produit
+                        let produit = <?php echo json_encode($data_produit, 15, 512) ?>.find(p => p.id == produitId);
+                        if (produit && produit.achats && produit.achats.length > 0) {
+                            // Récupérer l'unité de sortie du dernier achat
+                            let uniteSortie = produit.achats[0].unite;
+                            form.find('.uniteLibelle').val(uniteSortie.libelle)
+                            form.find('.uniteId').val(uniteSortie.id)
+
+                        }
+                    }
+                }
+
+                // Appeler la fonction au chargement de la page
+                $(document).on('change', '.productSelected', function() {
+                    var form = $(this).closest('.row'); // Cibler le formulaire ou la ligne parent
+                    getProductDetails(form);
+                });
+
 
 
 
@@ -602,7 +523,7 @@
 
                                 // Rediriger vers la liste des sortie
                                 var url =
-                                    "{{ route('vente.index') }}"; // Rediriger vers la route liste sortie
+                                    "<?php echo e(route('sortie.create')); ?>"; // Rediriger vers la route liste sortie
                                 window.location.replace(url);
                             }
                         },
@@ -634,8 +555,108 @@
 
 
 
+                // script for quantity stock increase and dicrease
+                function increaseValue() {
+                    var input = document.getElementById("qteStockable");
+                    var value = parseInt(input.value, 10);
+                    value = isNaN(value) ? 0 : value;
+                    value++;
+                    input.value = value;
+                }
+
+                function decreaseValue() {
+                    var input = document.getElementById("qteStockable");
+                    var value = parseInt(input.value, 10);
+                    value = isNaN(value) ? 0 : value;
+                    value < 1 ? value = 1 : '';
+                    if (value > 1) {
+                        value--;
+                    }
+                    input.value = value;
+
+
+                }
+
+
+
+                // on verifie si les champs sont differents de null avant de dupliquer
+
+                // Calculer la quantité stockable
+                function qteStockable(form) {
+                    var qte_acquise = form.find(".qteAcquise").val() || 0; // combien de format
+                    var qte_format = form.find(".qteFormat").val() || 0; // combien dans le format
+                    var qte_stockable = qte_acquise * qte_format;
+                    form.find(".qteStockable").val(qte_stockable);
+
+                    var dataProduct = <?php echo e(Js::from($data_produit)); ?>; // Données du contrôleur
+
+                    console.log(dataProduct);
+
+                }
+
+                // Calculer le total dépensé
+                function prixTotalDepense(form) {
+                    var qte_acquise = form.find(".qteAcquise").val() || 0; // combien de format
+                    var pu_unitaire_format = form.find(".prixUnitaireFormat").val() || 0; // prix unitaire d'un format
+                    var montant_facture = $("#montant_facture").val();
+                    var total_depense = qte_acquise * pu_unitaire_format;
+                    form.find(".prixTotalFormat").val(total_depense);
+
+                    //on verifie si la montant depensé depasse le montant de la facture
+                    if (total_depense > montant_facture) {
+                        $('#save').prop('disabled', true);
+
+                        $('#add-more').prop('disabled', true);
+                        Swal.fire({
+                            title: 'Erreur',
+                            text: 'Le total dépensé dépasse le montant de la facture !',
+                            icon: 'error',
+                            confirmButtonText: 'OK',
+                        });
+                    } else {
+                        $('#save').prop('disabled', false);
+                        $('#add-more').prop('disabled', false);
+                    }
+
+
+                }
+
+                // Calculer le prix d'achat de l'unité
+                function prixAchatUnite(form) {
+                    var qte_acquise = form.find(".qteAcquise").val() || 0;
+                    var pu_unitaire_format = form.find(".prixUnitaireFormat").val() || 0;
+                    var qte_stocke = form.find(".qteStockable").val() || 0;
+                    var prix_achat_unite = qte_acquise * pu_unitaire_format / qte_stocke;
+                    form.find(".prixAchatUnite").val(prix_achat_unite);
+                }
+
+                // Calculer le prix d'achat total
+                function calculatePrixAchat(form) {
+                    var qte_format = form.find(".qteFormat").val() || 0;
+                    var prix_achat_total = form.find(".prixAchatTotal").val() || 0;
+                    var prixAchatUnitaire = prix_achat_total / qte_format;
+                    var prixAchatTotal = qte_format * prixAchatUnitaire;
+                    form.find(".prixAchatUnitaire").val(prixAchatUnitaire);
+                }
+
+                // Ajouter des écouteurs sur les champs dupliqués
+                $(document).on('input', '.qteAcquise, .qteFormat, .prixUnitaireFormat , #montant_facture', function() {
+                    var form = $(this).closest('.row');
+                    qteStockable(form);
+                    prixTotalDepense(form);
+                    prixAchatUnite(form);
+
+                });
+
+                // Ajout d'écouteurs pour les champs qui influencent le calcul du prix d'achat
+                $(document).on('input', '.qteFormat, .prixAchatTotal', function() {
+                    var form = $(this).closest('.row');
+                    calculatePrixAchat(form);
+                });
 
             });
         </script>
-    @endsection
-@endsection
+    <?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/stock/sortie/create.blade.php ENDPATH**/ ?>

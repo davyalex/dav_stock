@@ -48,7 +48,11 @@
                                 <p class="card-text h3 text-success">
                                     {{ number_format($data_vente->sum('montant_total'), 0, ',', ' ') }} FCFA
                                 </p>
-                                <a href="{{route('vente.cloture-caisse')}}" class="btn btn-danger mt-3">Clôturer la caisse</a>
+                                @if($data_vente->sum('montant_total') > 0)
+                                    <a href="{{route('vente.cloture-caisse')}}" class="btn btn-danger mt-3">Clôturer la caisse</a>
+                                @else
+                                    <button class="btn btn-danger mt-3" disabled>Clôturer la caisse</button>
+                                @endif
                             </div>
                         </div>
                     </div>

@@ -1,18 +1,18 @@
-@extends('backend.layouts.master')
-
-@section('content')
 
 
-    @component('backend.components.breadcrumb')
-        <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
+<?php $__env->startSection('content'); ?>
 
-        @slot('li_1')
+
+    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
+        <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
+
+        <?php $__env->slot('li_1'); ?>
             Vente
-        @endslot
-        @slot('title')
+        <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?>
             Faire une vente
-        @endslot
-    @endcomponent
+        <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
     <style>
         form label {
             font-size: 11px
@@ -62,15 +62,13 @@
 
     <div class="row">
         <div class="col-lg-12">
-            {{-- <div class="card">
-                <div class="card-body"> --}}
-            <form id="myForm" method="POST" action="{{ route('vente.store') }}" autocomplete="off" novalidate
+            
+            <form id="myForm" method="POST" action="<?php echo e(route('vente.store')); ?>" autocomplete="off" novalidate
                 enctype="multipart/form-data">
-                @csrf
+                <?php echo csrf_field(); ?>
                 <div class="row">
                     <div class="col-lg-12">
-                        {{-- <div class="card">
-                                    <div class="card-body"> --}}
+                        
                         <div class="row mb-3">
 
 
@@ -124,11 +122,13 @@
                         <select class="form-control productSelected selectView" name="produit_id[]" required>
                             <option disabled selected value>Selectionner un produit
                             </option>
-                            @foreach ($data_produit as $produit)
-                                <option value="{{ $produit->id }}">{{ $produit->nom }} {{ $produit->quantite_unite }}
-                                    {{ $produit->unite->libelle ?? '' }}
+                            <?php $__currentLoopData = $data_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($produit->id); ?>"><?php echo e($produit->nom); ?> <?php echo e($produit->quantite_unite); ?>
+
+                                    <?php echo e($produit->unite->libelle ?? ''); ?>
+
                                 </option>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
 
@@ -175,17 +175,17 @@
 
         <!--end row-->
 
-    @section('script')
-        <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
+    <?php $__env->startSection('script'); ?>
+        <script src="<?php echo e(URL::asset('build/libs/prismjs/prism.js')); ?>"></script>
         <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
-        <script src="{{ URL::asset('build/js/pages/modal.init.js') }}"></script>
-        {{-- <script src="{{ URL::asset('build/js/pages/form-editor.init.js') }}"></script> --}}
-        <script src="{{ URL::asset('build/tinymce/tinymce.min.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
+        <script src="<?php echo e(URL::asset('build/js/pages/modal.init.js')); ?>"></script>
+        
+        <script src="<?php echo e(URL::asset('build/tinymce/tinymce.min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js')); ?>"></script>
 
-        <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/ecommerce-product-create.init.js') }}"></script>
-        <script src="{{ URL::asset('build/js/app.js') }}"></script>
+        <script src="<?php echo e(URL::asset('build/libs/dropzone/dropzone-min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/js/pages/ecommerce-product-create.init.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -393,7 +393,7 @@
 
                 // Fonction pour  verifier la quantité entrée , elle ,e dois pas depasser la quantité en stock
                 function verifyQty(form) {
-                    var dataProduct = @json($data_produit); // Données du contrôleur
+                    var dataProduct = <?php echo json_encode($data_produit, 15, 512) ?>; // Données du contrôleur
 
                     // Récupérer la quantité utilisée et l'ID du produit sélectionné
                     var qte = form.find('.quantite').val(); // quantité entrée
@@ -511,7 +511,7 @@
                 //fonction pour remplir les champs stock initial et stock restante
                 function getProductInfo(form) {
                     //recuperer les infos de produit
-                    var dataProduct = @json($data_produit); // Données du contrôleur
+                    var dataProduct = <?php echo json_encode($data_produit, 15, 512) ?>; // Données du contrôleur
                     var productId = form.find('.productSelected').val();
                     var product = dataProduct.find(function(item) {
                         return item.id == productId;
@@ -602,7 +602,7 @@
 
                                 // Rediriger vers la liste des sortie
                                 var url =
-                                    "{{ route('vente.index') }}"; // Rediriger vers la route liste sortie
+                                    "<?php echo e(route('vente.index')); ?>"; // Rediriger vers la route liste sortie
                                 window.location.replace(url);
                             }
                         },
@@ -637,5 +637,7 @@
 
             });
         </script>
-    @endsection
-@endsection
+    <?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/vente/create.blade.php ENDPATH**/ ?>

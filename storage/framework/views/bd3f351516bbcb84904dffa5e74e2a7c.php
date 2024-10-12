@@ -81,7 +81,7 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
+            <div class="card divPrint">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
                         Rapport d'exploitation
@@ -103,7 +103,7 @@
                         <?php endif; ?>
                     </h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body ">
                     <div class="table-responsive">
                         <table id="rapport-table" class="display table table-bordered" style="width:100%">
                             <thead>
@@ -115,14 +115,18 @@
                             <tbody>
                                 <?php $__currentLoopData = $categories_depense; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr class="table-secondary">
-                                        <td><strong><a href="<?php echo e(route('rapport.detail', ['categorie_depense' => $categorie->id, 'date_debut' => request('date_debut'), 'date_fin' => request('date_fin')])); ?>"><?php echo e($categorie->libelle); ?></a></strong></td>
+                                        <td><strong><a
+                                                    href="<?php echo e(route('rapport.detail', ['categorie_depense' => $categorie->id, 'date_debut' => request('date_debut'), 'date_fin' => request('date_fin')])); ?>" style="text-decoration: none; color: black;"><?php echo e($categorie->libelle); ?></a></strong>
+                                        </td>
                                         <td><strong><?php echo e(number_format($depensesParCategorie->get($categorie->libelle, collect())->sum('total_montant'), 0, ',', ' ')); ?>
 
                                                 FCFA</strong></td>
                                     </tr>
                                     <?php $__currentLoopData = $categorie->libelleDepenses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $libelle): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
-                                            <td style="padding-left: 20px;">- <a href="<?php echo e(route('rapport.detail', ['libelle_depense' => $libelle->id, 'categorie_depense' => $categorie->id, 'date_debut' => request('date_debut'), 'date_fin' => request('date_fin')])); ?>"><?php echo e($libelle->libelle); ?></a></td>
+                                            <td style="padding-left: 20px;">- <a
+                                                    href="<?php echo e(route('rapport.detail', ['libelle_depense' => $libelle->id, 'categorie_depense' => $categorie->id, 'date_debut' => request('date_debut'), 'date_fin' => request('date_fin')])); ?>" style="text-decoration: none; color: black;"><?php echo e($libelle->libelle); ?></a>
+                                            </td>
                                             <td><?php echo e(number_format($depensesParCategorie->get($categorie->libelle, collect())->where('libelle_depense_id', $libelle->id)->sum('total_montant'),0,',',' ')); ?>
 
                                                 FCFA</td>
@@ -166,7 +170,9 @@
                         </table>
                     </div>
                 </div>
+
             </div>
+            <button id="btnImprimer" class="w-100"><i class="ri ri-printer-fill"></i></button>
         </div>
     </div>
     <!--end row-->
@@ -188,6 +194,55 @@
     
 
     <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            // Fonction pour imprimer le rapport
+            function imprimerRapport() {
+                // Créer une nouvelle fenêtre pour l'impression
+                var fenetreImpression = window.open('', '_blank');
+
+                // Contenu à imprimer
+                var contenuImprimer = `
+                    <html>
+                        <head>
+                            <title style="text-align: center;">Compte exploitation</title>
+                            <style>
+                                body { font-family: Arial, sans-serif; }
+                                table { width: 100%; border-collapse: collapse; }
+                                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                                th { background-color: #f2f2f2; }
+                            </style>
+                        </head>
+                        <body>
+                            <h2 style="text-align: center;">Compte exploitation</h2>
+                            ${$('.divPrint').html()}
+                            <footer style="position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 12px; margin-top: 20px;">
+                                <p>Imprimé le : ${new Date().toLocaleString()} par <?php echo e(Auth::user()->first_name); ?></p>
+                            </footer>
+                        </body>
+                    </html>
+                `;
+
+                // Écrire le contenu dans la nouvelle fenêtre
+                fenetreImpression.document.write(contenuImprimer);
+
+                // Fermer le document
+                fenetreImpression.document.close();
+
+                // Imprimer la fenêtre
+                fenetreImpression.print();
+            }
+
+            // Ajouter un bouton d'impression
+            $('#btnImprimer')
+                .text('Imprimer le Rapport')
+                .addClass('btn btn-primary mt-3')
+                .on('click', imprimerRapport);
+            // .appendTo('.divPrint');
+        });
+    </script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/rapport/exploitation.blade.php ENDPATH**/ ?>

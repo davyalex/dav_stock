@@ -35,20 +35,18 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Statut</th>
-                                    <th>Produit</th>
                                     <th>code</th>
+                                    <th>Produit</th>
                                     <th>Magasin</th>
                                     <th>N°Facture</th>
                                     <th>fournisseur</th>
                                     <th>Format</th>
-                                    <th>Qté format</th>
                                     <th>Qté dans format</th>
                                     <th>PU format</th>
                                     <th>Total depensé</th>
                                     <th>Qté stockée</th>
                                     <th>PU achat</th>
                                     <th>PU vente</th>
-                                    <th>Unite de vente</th>
                                     <th>Crée par</th>
                                     <th>Date achat</th>
                                     <th class="d-none">Actions</th>
@@ -59,6 +57,7 @@
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
                                         <td>{{ $item['statut'] }}</td>
+                                        <td>{{ $item['code'] }}</td>
 
                                         <td>
                                             <img class="rounded-circle"
@@ -67,19 +66,16 @@
 
                                             {{ $item['produit']['nom'] }}
                                         </td>
-                                        <td>{{ $item['code'] }}</td>
-                                        <td>{{ $item['magasin']['libelle'] ?? 'N/A' }}</td>
-                                        <td>{{ $item['numero_facture'] ?? 'N/A' }}</td>
-                                        <td>{{ $item['fournisseur']['nom'] ?? 'N/A' }}</td>
-                                        <td>{{ $item['format']['libelle'] ?? 'N/A' }}</td>
-                                        <td> {{ $item['quantite_format'] }} </td>
-                                        <td> {{ $item['quantite_in_format'] }} </td>
+                                        <td>{{ $item['magasin']['libelle'] ?? 'N/D' }}</td>
+                                        <td>{{ $item['numero_facture'] ?? 'N/D' }}</td>
+                                        <td>{{ $item['fournisseur']['nom'] ?? 'N/D' }}</td>
+                                        <td>{{ $item['quantite_format'] }} {{ $item['format']['libelle'] ?? 'N/D' }}</td>
+                                        <td>{{ $item['quantite_in_format'] }} {{ $item['unite']['libelle'] ?? 'N/D' }}  </td>
                                         <td> {{ $item['prix_unitaire_format'] }} </td>
                                         <td> {{ $item['prix_total_format'] }} </td>
                                         <td> {{ $item['quantite_stocke'] }} </td>
-                                        <td> {{ $item['prix_achat_unitaire'] }} </td>
-                                        <td> {{ $item['prix_vente_unitaire'] }} </td>
-                                        <td> {{ $item['unite']['libelle'] ?? 'N/A' }} </td>
+                                        <td> {{ $item['prix_achat_unitaire'] ?? 'N/D'}} </td>
+                                        <td> {{ $item['prix_vente_unitaire'] ?? 'N/D'}} </td>
                                         <td> {{ $item['user']['first_name'] }} </td>
                                         <td> {{ $item['date_achat'] }} </td>
                                         <td class="d-none">

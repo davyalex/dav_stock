@@ -1,24 +1,9 @@
-@extends('backend.layouts.master')
-@section('title')
-    @lang('translation.settings')
-@endsection
-@section('content')
-    {{-- <div class="position-relative mx-n4 mt-n4">
-        <div class="profile-wid-bg profile-setting-img">
-            <img src="{{ URL::asset('build/images/profile-bg.jpg') }}" class="profile-wid-img" alt="">
-            <div class="overlay-content">
-                <div class="text-end p-3">
-                    <div class="p-0 ms-auto rounded-circle profile-photo-edit">
-                        <input id="profile-foreground-img-file-input" type="file"
-                            class="profile-foreground-img-file-input">
-                        <label for="profile-foreground-img-file-input" class="profile-photo-edit btn btn-light">
-                            <i class="ri-image-edit-line align-bottom me-1"></i> Change Cover
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
+
+<?php $__env->startSection('title'); ?>
+    <?php echo app('translator')->get('translation.settings'); ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    
 
     <div class="row">
         <div class="col-xxl-12  mt-5">
@@ -41,8 +26,8 @@
                 <div class="card-body p-4">
                     <div class="tab-content">
                         <div class="tab-pane active" id="personalDetails" role="tabpanel">
-                            <form action="{{ route('setting.store') }}" method="post" enctype="multipart/form-data">
-                                @csrf
+                            <form action="<?php echo e(route('setting.store')); ?>" method="post" enctype="multipart/form-data">
+                                <?php echo csrf_field(); ?>
 
                                 <div class="row">
 
@@ -54,7 +39,7 @@
                                                 accept="image/*">
                                             <div class="mt-2">
                                                 <img id="background-preview"
-                                                    src="{{ $data_setting ? URL::asset($data_setting->getFirstMediaUrl('cover')) : URL::asset('build/images/profile-bg.jpg') }}"
+                                                    src="<?php echo e($data_setting ? URL::asset($data_setting->getFirstMediaUrl('cover')) : URL::asset('build/images/profile-bg.jpg')); ?>"
                                                     class="rounded-circle avatar-xl img-thumbnail"
                                                     alt="Aperçu de l'arrière-plan">
                                             </div>
@@ -66,7 +51,7 @@
                                                 accept="image/*">
                                             <div class="mt-2 text-center">
                                                 <img id="header-preview"
-                                                    src="{{ $data_setting ? URL::asset($data_setting->getFirstMediaUrl('logo_header')) : URL::asset('images/avatar-1.jpg') }}"
+                                                    src="<?php echo e($data_setting ? URL::asset($data_setting->getFirstMediaUrl('logo_header')) : URL::asset('images/avatar-1.jpg')); ?>"
                                                     class="rounded-circle avatar-xl img-thumbnail"
                                                     alt="Aperçu du logo d'en-tête">
                                             </div>
@@ -78,7 +63,7 @@
                                                 accept="image/*">
                                             <div class="mt-2 text-center">
                                                 <img id="footer-preview"
-                                                    src="{{ $data_setting ? URL::asset($data_setting->getFirstMediaUrl('logo_footer')) : URL::asset('images/avatar-1.jpg') }}"
+                                                    src="<?php echo e($data_setting ? URL::asset($data_setting->getFirstMediaUrl('logo_footer')) : URL::asset('images/avatar-1.jpg')); ?>"
                                                     class="rounded-circle avatar-xl img-thumbnail"
                                                     alt="Aperçu du logo de pied de page">
                                             </div>
@@ -118,7 +103,7 @@
                                         <div class="mb-3">
                                             <label for="emailInput" class="form-label">Titre du projet</label>
                                             <input type="text" name="projet_title" class="form-control" id="emailInput"
-                                                value="{{ $data_setting['projet_title'] ?? '' }}">
+                                                value="<?php echo e($data_setting['projet_title'] ?? ''); ?>">
                                         </div>
                                     </div>
 
@@ -126,7 +111,7 @@
                                         <div class="mb-3">
                                             <label for="emailInput" class="form-label">Description du projet</label>
                                             <input type="text" name="projet_description" class="form-control"
-                                                id="emailInput" value="{{ $data_setting['projet_description'] ?? '' }}">
+                                                id="emailInput" value="<?php echo e($data_setting['projet_description'] ?? ''); ?>">
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -135,7 +120,7 @@
                                         <div class="mb-3">
                                             <label for="phonenumberInput" class="form-label">Telephone1</label>
                                             <input type="text" name="phone1" class="form-control" id="phonenumberInput"
-                                                value="{{ $data_setting['phone1'] ?? '' }}">
+                                                value="<?php echo e($data_setting['phone1'] ?? ''); ?>">
                                         </div>
                                     </div>
 
@@ -143,14 +128,14 @@
                                         <div class="mb-3">
                                             <label for="phonenumberInput" class="form-label">Telephone2</label>
                                             <input type="text" name="phone2" class="form-control" id="phonenumberInput"
-                                                value="{{ $data_setting['phone2'] ?? '' }}">
+                                                value="<?php echo e($data_setting['phone2'] ?? ''); ?>">
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-3">
                                             <label for="phonenumberInput" class="form-label">Telephone3</label>
                                             <input type="text" name="phone3" class="form-control"
-                                                id="phonenumberInput" value="{{ $data_setting['phone3'] ?? '' }}">
+                                                id="phonenumberInput" value="<?php echo e($data_setting['phone3'] ?? ''); ?>">
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -158,7 +143,7 @@
                                         <div class="mb-3">
                                             <label for="emailInput" class="form-label">Email 1</label>
                                             <input type="email" name="email1" class="form-control" id="emailInput"
-                                                value="{{ $data_setting['email1'] ?? '' }}">
+                                                value="<?php echo e($data_setting['email1'] ?? ''); ?>">
                                         </div>
                                     </div>
 
@@ -166,7 +151,7 @@
                                         <div class="mb-3">
                                             <label for="emailInput" class="form-label">Email 2</label>
                                             <input type="email" name="email2" class="form-control" id="emailInput"
-                                                value="{{ $data_setting['email2'] ?? '' }}">
+                                                value="<?php echo e($data_setting['email2'] ?? ''); ?>">
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -176,7 +161,7 @@
                                         <div class="mb-3">
                                             <label for="countryInput" class="form-label">Siège social</label>
                                             <input type="text" name="siege_social" class="form-control"
-                                                id="countryInput" value="{{ $data_setting['siege_social'] ?? '' }}" />
+                                                id="countryInput" value="<?php echo e($data_setting['siege_social'] ?? ''); ?>" />
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -185,7 +170,7 @@
                                         <div class="mb-3">
                                             <label for="countryInput" class="form-label">Localisation</label>
                                             <input type="text" name="localisation" class="form-control"
-                                                id="countryInput" value="{{ $data_setting['localisation'] ?? '' }}" />
+                                                id="countryInput" value="<?php echo e($data_setting['localisation'] ?? ''); ?>" />
                                         </div>
                                     </div>
 
@@ -193,7 +178,7 @@
                                         <div class="mb-3">
                                             <label for="countryInput" class="form-label">Google maps</label>
                                             <input type="text" name="google_maps" class="form-control"
-                                                id="countryInput" value="{{ $data_setting['google_maps'] ?? '' }}" />
+                                                id="countryInput" value="<?php echo e($data_setting['google_maps'] ?? ''); ?>" />
                                         </div>
                                     </div>
 
@@ -212,7 +197,7 @@
                                             </div>
                                             <input type="text" name="facebook_link" class="form-control"
                                                 id="websiteInput" 
-                                                value="{{ $data_setting['facebook_link'] ?? '' }}">
+                                                value="<?php echo e($data_setting['facebook_link'] ?? ''); ?>">
                                         </div>
                                         <div class="mb-3 d-flex">
                                             <div class="avatar-xs d-block flex-shrink-0 me-3">
@@ -222,7 +207,7 @@
                                             </div>
                                             <input type="text" name="instagram_link" class="form-control"
                                                 id="websiteInput" 
-                                                value="{{ $data_setting['instagram_link'] ?? '' }}">
+                                                value="<?php echo e($data_setting['instagram_link'] ?? ''); ?>">
                                         </div>
 
                                         <div class=" mb-3 d-flex">
@@ -233,7 +218,7 @@
                                             </div>
                                             <input type="text" name="tiktok_link" class="form-control"
                                                 id="pinterestName" 
-                                                value="{{ $data_setting['tiktok_link'] ?? '' }}">
+                                                value="<?php echo e($data_setting['tiktok_link'] ?? ''); ?>">
                                         </div>
                                         <div class="mb-3 d-flex">
                                             <div class="avatar-xs d-block flex-shrink-0 me-3">
@@ -242,7 +227,7 @@
                                                 </span>
                                             </div>
                                             <input type="text" name="linkedin_link" class="form-control"
-                                                id="pinterestName" value="{{ $data_setting['linkedin_link'] ?? '' }}">
+                                                id="pinterestName" value="<?php echo e($data_setting['linkedin_link'] ?? ''); ?>">
                                         </div>
 
                                         <div class="mb-3 d-flex">
@@ -253,7 +238,7 @@
                                             </div>
                                             <input type="text" name="twitter_link" class="form-control"
                                                 id="pinterestName" 
-                                                value="{{ $data_setting['twitter_link'] ?? '' }}">
+                                                value="<?php echo e($data_setting['twitter_link'] ?? ''); ?>">
                                         </div>
                                     </div>
                                     <!-- ========== End social network ========== -->
@@ -262,7 +247,7 @@
                                     <div class="col-lg-12">
                                         <div class="hstack gap-2 justify-content-end">
                                             <button type="submit" class="btn btn-primary">Valider</button>
-                                            {{-- <button type="button" class="btn btn-soft-success">A</button> --}}
+                                            
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -275,7 +260,7 @@
 
                         <div class="tab-pane" id="privacy" role="tabpanel">
                             <div class="mb-4 pb-2">
-                                {{-- <h5 class="card-title text-decoration-underline mb-3">Security:</h5> --}}
+                                
 
                                 <div class="d-flex flex-column flex-sm-row mb-4 mb-sm-0">
                                     <input type="text" name="type_clear" value="cache" hidden>
@@ -295,7 +280,7 @@
 
                             </div>
                             <div class="mb-3">
-                                {{-- <h5 class="card-title text-decoration-underline mb-3">Application </h5> --}}
+                                
                                 <ul class="list-unstyled mb-0">
                                     <li class="d-flex">
                                         <div class="flex-grow-1">
@@ -304,17 +289,17 @@
                                             <p class="text-muted">Mettre l'application en mode maintenance</p>
                                         </div>
                                         <div class="flex-shrink-0">
-                                            @if ($data_maintenance == null || $data_maintenance['type'] == 'up')
+                                            <?php if($data_maintenance == null || $data_maintenance['type'] == 'up'): ?>
                                                 <div class="form-check form-switch">
                                                     <a href="#"
                                                         class="btn btn-sm btn-primary btn-mode-down">Activer</a>
                                                 </div>
-                                            @else
+                                            <?php else: ?>
                                                 <div class="form-check form-switch">
                                                     <a href="#"
                                                         class="btn btn-sm btn-primary btn-mode-up">Désactiver</a>
                                                 </div>
-                                            @endif
+                                            <?php endif; ?>
 
                                         </div>
                                     </li>
@@ -331,10 +316,10 @@
         <!--end col-->
     </div>
     <!--end row-->
-@endsection
-@section('script')
-    <script src="{{ URL::asset('build/js/pages/profile-setting.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+    <script src="<?php echo e(URL::asset('build/js/pages/profile-setting.init.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
     <script>
         $(document).ready(function() {
@@ -344,7 +329,7 @@
                 e.preventDefault();
                 $.ajax({
                     type: "get",
-                    url: "{{ route('setting.cache-clear') }}",
+                    url: "<?php echo e(route('setting.cache-clear')); ?>",
                     // data: "data",
                     dataType: "json",
                     success: function(response) {
@@ -383,7 +368,7 @@
                 e.preventDefault();
                 $.ajax({
                     type: "get",
-                    url: "{{ route('setting.maintenance-down') }}",
+                    url: "<?php echo e(route('setting.maintenance-down')); ?>",
                     // data: "data",
                     dataType: "json",
                     success: function(response) {
@@ -408,7 +393,7 @@
                 e.preventDefault();
                 $.ajax({
                     type: "get",
-                    url: "{{ route('setting.maintenance-up') }}",
+                    url: "<?php echo e(route('setting.maintenance-up')); ?>",
                     // data: "data",
                     dataType: "json",
                     success: function(response) {
@@ -430,4 +415,6 @@
 
         });
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/setting/index.blade.php ENDPATH**/ ?>

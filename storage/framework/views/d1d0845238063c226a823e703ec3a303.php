@@ -638,12 +638,50 @@
 
 
 
-                // Fonction pour verifier si un produit est selectionner 2 fois
+                // // Fonction pour verifier si un produit est selectionner 2 fois
+                // function validateProductSelection() {
+                //     let selectedProducts = [];
+
+                //     $('.productSelected').each(function(index, element) {
+                //         let produitId = $(element).val();
+
+                //         // Vérifier si le produit a déjà été sélectionné
+                //         if (selectedProducts.includes(produitId)) {
+                //             Swal.fire({
+                //                 title: 'Erreur',
+                //                 text: 'Ce produit a déjà été sélectionné.',
+                //                 icon: 'error',
+                //                 confirmButtonText: 'OK',
+                //             });
+
+
+                //             // Réinitialiser le champ select pour éviter la sélection en double
+                //             $(element).val(null).trigger('change.select2');
+
+                //         } else {
+                //             selectedProducts.push(produitId);
+
+                //         }
+                //     });
+                // }
+
+                // // Attacher l'événement de changement aux champs select des produits
+                // $(document).on('change', '.productSelected', function() {
+                //     validateProductSelection();
+                // });
+
+
+                // Fonction pour verifier si un produit est sélectionné 2 fois
                 function validateProductSelection() {
                     let selectedProducts = [];
 
                     $('.productSelected').each(function(index, element) {
                         let produitId = $(element).val();
+
+                        // Ignorer les champs qui n'ont pas encore de produit sélectionné
+                        if (produitId === null || produitId === '') {
+                            return; // Continuer à la prochaine itération sans valider ce champ
+                        }
 
                         // Vérifier si le produit a déjà été sélectionné
                         if (selectedProducts.includes(produitId)) {
@@ -654,13 +692,10 @@
                                 confirmButtonText: 'OK',
                             });
 
-
                             // Réinitialiser le champ select pour éviter la sélection en double
                             $(element).val(null).trigger('change.select2');
-
                         } else {
                             selectedProducts.push(produitId);
-
                         }
                     });
                 }
@@ -669,6 +704,7 @@
                 $(document).on('change', '.productSelected', function() {
                     validateProductSelection();
                 });
+
 
 
 

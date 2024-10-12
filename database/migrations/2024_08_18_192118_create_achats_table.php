@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code')->unique()->nullable();
             $table->string('numero_facture')->nullable();
-            $table->date('date_achat')->nullable();
+            $table->dateTime('date_achat')->nullable();
 
             $table->enum('statut' , ['active' , 'desactive'])->default('active')->nullable(); //actif ? desactive
 
