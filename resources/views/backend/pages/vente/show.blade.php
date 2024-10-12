@@ -47,7 +47,7 @@
                             <span><strong>Caissier:</strong> {{ $vente->user->first_name }} {{ $vente->user->last_name }}</span>
                         </div>
                     </div>
-                    <p>-------------------------------</p>
+                    <p style="text-align: center;">-------------------------------</p>
                     <div class="ticket-products">
                         <table style="width: 100%;">
                             <thead>
@@ -70,7 +70,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <p>-------------------------------</p>
+                    <p style="text-align: center;">-------------------------------</p>
                     <div class="ticket-total" style="text-align: right;">
                         <p><strong>Total:</strong> {{ number_format($vente->montant_total, 0, ',', ' ') }} FCFA</p>
                     </div>
