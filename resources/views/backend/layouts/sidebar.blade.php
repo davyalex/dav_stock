@@ -255,7 +255,7 @@
                     </li>
                 @endcan
 
-                @can('voir-menu')
+                {{-- @can('voir-menu')
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarMenu" data-bs-toggle="collapse" role="button"
                             aria-controls="sidebarMenu">
@@ -277,7 +277,7 @@
                             </ul>
                         </div>
                     </li>
-                @endcan
+                @endcan --}}
 
 
 
@@ -286,8 +286,18 @@
                         aria-controls="sidebarSite">
                         <i class="ri ri-global-fill"></i> <span>SITE</span>
                     </a>
-                    <div class="collapse menu-dropdown {{ Route::is('slide.*') ? 'show' : '' }}" id="sidebarSite">
+                    <div class="collapse menu-dropdown {{ Route::is('menu.*') || Route::is('plat.*')  || Route::is('slide.*') ? 'show' : '' }}" id="sidebarSite">
                         <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item active">
+                                <a href="{{ route('plat.index') }}"
+                                    class="nav-link {{ Route::is('plat.*') ? 'active' : '' }}">Produit menu</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a href="{{ route('menu.index') }}"
+                                    class="nav-link {{ Route::is('menu.*') ? 'active' : '' }}">Menu</a>
+                            </li>
 
                             <li class="nav-item active">
                                 <a href="{{ route('slide.index') }}"
@@ -324,7 +334,7 @@
                                 <li class="nav-item active">
                                     <a href="{{ route('rapport.vente') }}"
                                         class="nav-link {{ Route::is('rapport.vente') ? 'active' : '' }}">
-                                        Vente</a>
+                                        Ventes</a>
                                 </li>
                                 <li class="nav-item active">
                                     <a href="{{ route('rapport.exploitation') }}"

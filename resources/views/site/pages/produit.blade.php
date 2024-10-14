@@ -67,10 +67,10 @@
                                                     <div class="product-img position-relative">
                                                         <a href="{{ route('produit.detail', $produit->slug) }}">
                                                             <div class="image-container"
-                                                                style="width: 100%; height: 200px; overflow: hidden;">
+                                                                style="width: 326px; height: 326px; overflow: hidden;">
                                                                 <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
                                                                     alt="{{ $produit->nom }}"
-                                                                    style="width: 100%; height: 100%; object-fit: cover;">
+                                                                    style="width: 100%; height: 100%; object-fit: contain;">
                                                             </div>
                                                         </a>
                                                         <span
@@ -102,10 +102,10 @@
                                                 <div class="product-img position-relative">
                                                     <a href="{{ route('produit.detail', $produit->slug) }}">
                                                         <div class="image-container"
-                                                            style="width: 100%; height: 200px; overflow: hidden;">
+                                                            style="width: 326px; height: 326px; overflow: hidden;">
                                                             <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
                                                                 alt="{{ $produit->nom }}"
-                                                                style="width: 100%; height: 100%; object-fit: cover;">
+                                                                style="width: 100%; height: 100%; object-fit: contain;">
                                                         </div>
                                                     </a>
                                                     <!-- Sticker de catégorie -->
