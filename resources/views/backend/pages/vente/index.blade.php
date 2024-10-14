@@ -25,10 +25,39 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Liste des ventes </strong></h5>
-                    @if(auth()->user()->hasRole('caisse'))
+                    @if (auth()->user()->hasRole('caisse'))
                         <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">Effectuer
                             une nouvelle vente</a>
                     @endif
+
+                    @if (!auth()->user()->hasRole('caisse'))
+                    <form action="{{ route('vente.index') }}" method="GET">
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label for="date_debut" class="form-label">Date de début</label>
+                                <input type="date" class="form-control" id="date_debut" name="date_debut">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="date_fin" class="form-label">Date de fin</label>
+                                <input type="date" class="form-control" id="date_fin" name="date_fin">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="caisse" class="form-label">Caisse</label>
+                                <select class="form-select" id="caisse" name="caisse">
+                                    <option value="">Toutes les caisses</option>
+                                    @foreach ($caisses as $caisse)
+                                        <option value="{{ $caisse->id }}">{{ $caisse->libelle }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-3 mt-4">
+                                <button type="submit" class="btn btn-primary">Filtrer</button>
+                            </div>
+                        </div>
+                    </form>
+                    @endif
+
                 </div>
 
                 @if (auth()->user()->hasRole('caisse'))

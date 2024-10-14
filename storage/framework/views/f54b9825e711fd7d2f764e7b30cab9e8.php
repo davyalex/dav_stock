@@ -29,6 +29,35 @@
                         <a href="<?php echo e(route('vente.create')); ?>" type="button" class="btn btn-primary">Effectuer
                             une nouvelle vente</a>
                     <?php endif; ?>
+
+                    <?php if(!auth()->user()->hasRole('caisse')): ?>
+                    <form action="<?php echo e(route('vente.index')); ?>" method="GET">
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label for="date_debut" class="form-label">Date de début</label>
+                                <input type="date" class="form-control" id="date_debut" name="date_debut">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="date_fin" class="form-label">Date de fin</label>
+                                <input type="date" class="form-control" id="date_fin" name="date_fin">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="caisse" class="form-label">Caisse</label>
+                                <select class="form-select" id="caisse" name="caisse">
+                                    <option value="">Toutes les caisses</option>
+                                    <?php $__currentLoopData = $caisses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $caisse): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($caisse->id); ?>"><?php echo e($caisse->libelle); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3 mt-4">
+                                <button type="submit" class="btn btn-primary">Filtrer</button>
+                            </div>
+                        </div>
+                    </form>
+                    <?php endif; ?>
+
                 </div>
 
                 <?php if(auth()->user()->hasRole('caisse')): ?>

@@ -26,13 +26,26 @@ class VenteController extends Controller
             //     ->where('statut_cloture', false)
             //     ->orderBy('created_at', 'desc')
             //     ->get();
+            $caisses = \App\Models\Caisse::all();
 
 
             $query = Vente::with('produits')
-                // ->whereDate('created_at', today())
                 ->whereStatut('confirmée')
-                // ->where('statut_cloture', false)
                 ->orderBy('created_at', 'desc');
+
+            // Filtre par date
+            if ($request->filled('date_debut') && $request->filled('date_fin')) {
+                $query->whereBetween('created_at', [$request->date_debut, $request->date_fin]);
+            } elseif ($request->filled('date_debut')) {
+                $query->whereDate('created_at', '>=', $request->date_debut);
+            } elseif ($request->filled('date_fin')) {
+                $query->whereDate('created_at', '<=', $request->date_fin);
+            }
+            
+            // Filtre par caisse
+            if ($request->filled('caisse')) {
+                $query->where('caisse_id', $request->caisse);
+            }
 
             if ($request->user()->hasRole('caisse')) {
                 $query->where('caisse_id', auth()->user()->caisse_id)
@@ -42,7 +55,7 @@ class VenteController extends Controller
 
             $data_vente = $query->get();
             // dd($data_vente->toArray());
-            return view('backend.pages.vente.index', compact('data_vente'));
+            return view('backend.pages.vente.index', compact('data_vente' ,'caisses'));
         } catch (\Exception $e) {
             Alert::error('Erreur', 'Une erreur est survenue lors du chargement des ventes : ' . $e->getMessage());
             return back();
