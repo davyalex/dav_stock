@@ -33,11 +33,11 @@
                         @foreach ($produitsBar->concat($produitsMenu) as $produit)
                             <div class="custom-col-5">
                                 <div class="product-wrapper mb-25">
-                                    <div class="product-img" style="width: 100%; height: 200px; overflow: hidden;">
+                                    <div class="product-img" style="width: 326px; height: 326px; overflow: hidden;">
                                         <a href="{{ route('produit.detail', $produit->slug) }}">
                                             <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
                                                 alt="{{ $produit->nom }}"
-                                                style="width: 100%; height: 100%; object-fit: cover;">
+                                                style="width: 100%; height: 100%; object-fit: contain;">
                                         </a>
                                     </div>
                                     <div class="product-content">
@@ -65,11 +65,11 @@
                         @foreach ($produitsBar as $produit)
                             <div class="custom-col-5">
                                 <div class="product-wrapper mb-25">
-                                    <div class="product-img" style="width: 100%; height: 200px; overflow: hidden;">
+                                    <div class="product-img" style="width: 326px; height: 326px; overflow: hidden;">
                                         <a href="{{ route('produit.detail', $produit->slug) }}">
                                             <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
                                                 alt="{{ $produit->nom }}"
-                                                style="width: 100%; height: 100%; object-fit: cover;">
+                                                style="width: 100%; height: 100%; object-fit: contain;">
                                         </a>
                                     </div>
                                     <div class="product-content">
@@ -98,11 +98,11 @@
                         @foreach ($produitsMenu as $produit)
                             <div class="custom-col-5">
                                 <div class="product-wrapper mb-25">
-                                    <div class="product-img" style="width: 100%; height: 200px; overflow: hidden;">
+                                    <div class="product-img" style="width: 326px; height: 326px; overflow: hidden;">
                                         <a href="{{ route('produit.detail', $produit->slug) }}">
                                             <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
                                                 alt="{{ $produit->nom }}"
-                                                style="width: 100%; height: 100%; object-fit: cover;">
+                                                style="width: 100%; height: 100%; object-fit: contain;">
                                         </a>
                                     </div>
                                     <div class="product-content">
