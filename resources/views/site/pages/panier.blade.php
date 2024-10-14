@@ -24,8 +24,9 @@
                                         <div class="d-flex align-items-center">
                                             <!-- Image du produit -->
                                             <div class="product-image me-3">
-                                                <img src="{{ $details['image'] }}" class="img-fluid" width="150px"
-                                                    height="150px" alt="Produit 2">
+                                                <div style="width: 150px; height: 150px; overflow: hidden;">
+                                                    <img src="{{ $details['image'] }}" class="img-fluid" style="object-fit: cover; width: 100%; height: 100%;" alt="Produit 2">
+                                                </div>
                                             </div>
                                             <!-- Détails du produit -->
                                             <div class="product-info flex-grow-1">
