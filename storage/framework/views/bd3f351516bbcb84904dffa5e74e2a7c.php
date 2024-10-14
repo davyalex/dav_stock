@@ -148,20 +148,17 @@
 
                                     <?php $__currentLoopData = $dataParFamille; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $famille => $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
-                                            <td style="padding-left: 20px;">- <?php echo e($famille); ?></td>
+                                            <td style="padding-left: 20px;">- <?php echo e($famille == 'Menu' ? 'Restaurant' : $famille); ?></td>
                                             <td><strong><?php echo e(number_format($data['ventes'], 0, ',', ' ')); ?> FCFA</strong>
                                             </td>
                                         </tr>
                                         
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                    <tr class="table-success">
-                                        <td><strong>Bénéfice</strong></td>
+                                    <tr class="<?php echo e($benefice >= 0 ? 'table-success' : 'table-danger'); ?>">
+                                        <td><strong>Resultats</strong></td>
                                         <td><strong><?php echo e(number_format($benefice, 0, ',', ' ')); ?> FCFA</strong></td>
                                     </tr>
-                                    <tr class="table-warning">
-                                        <td><strong>Ratio bénéfice/ventes</strong></td>
-                                        <td><strong><?php echo e(number_format($ratio, 2)); ?>%</strong></td>
-                                    </tr>
+                                    
                                     
                                 </div>
 
