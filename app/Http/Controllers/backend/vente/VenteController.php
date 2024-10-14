@@ -15,17 +15,33 @@ use RealRashid\SweetAlert\Facades\Alert;
 class VenteController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $data_vente = Vente::with('produits')
-                ->where('caisse_id', auth()->user()->caisse_id)
-                ->where('user_id', auth()->user()->id)
-                ->whereDate('created_at', today())
-                ->whereStatut('confirmée',)
-                ->where('statut_cloture', false)
-                ->orderBy('created_at', 'desc')
-                ->get();
+            // $data_vente = Vente::with('produits')
+            //     ->where('caisse_id', auth()->user()->caisse_id)
+            //     ->where('user_id', auth()->user()->id)
+            //     ->whereDate('created_at', today())
+            //     ->whereStatut('confirmée',)
+            //     ->where('statut_cloture', false)
+            //     ->orderBy('created_at', 'desc')
+            //     ->get();
+
+
+            $query = Vente::with('produits')
+                // ->whereDate('created_at', today())
+                ->whereStatut('confirmée')
+                // ->where('statut_cloture', false)
+                ->orderBy('created_at', 'desc');
+
+            if ($request->user()->hasRole('caisse')) {
+                $query->where('caisse_id', auth()->user()->caisse_id)
+                    ->where('user_id', auth()->user()->id)
+                    ->where('statut_cloture', false);
+            }
+
+            $data_vente = $query->get();
+            // dd($data_vente->toArray());
             return view('backend.pages.vente.index', compact('data_vente'));
         } catch (\Exception $e) {
             Alert::error('Erreur', 'Une erreur est survenue lors du chargement des ventes : ' . $e->getMessage());
@@ -87,16 +103,27 @@ class VenteController extends Controller
                 'sous_total.*' => 'numeric|min:0',
             ]);
 
-            
+
             // Création de la vente
+            // Obtenir les deux premières lettres du nom de la caissière
+            $initialesCaissiere = substr(auth()->user()->name, 0, 2);
+
+            // Obtenir le numéro d'ordre de la vente pour aujourd'hui
+            $numeroOrdre = Vente::whereDate('created_at', today())->count() + 1;
+
+            // Obtenir la date et l'heure actuelles
+            $dateHeure = now()->format('dmYHis');
+
+            // Générer le code de vente
+            $codeVente = strtoupper($initialesCaissiere) . str_pad($numeroOrdre, 4, '0', STR_PAD_LEFT) . $dateHeure;
             $vente = Vente::create([
-                'code' => 'V-' . strtoupper(Str::random(8)),
+                'code' => 'V-' . $codeVente,
                 // 'client_id' => $request->client_id,
                 'caisse_id' => auth()->user()->caisse_id, // la caisse qui fait la vente
                 'user_id' => auth()->user()->id, // l'admin qui a fait la vente
                 'date_vente' => $request->date_vente,
                 'montant_total' => $request->montant_total,
-                'statut' =>'confirmée',
+                'statut' => 'confirmée',
             ]);
 
             // Préparation des données pour la table pivot
@@ -174,7 +201,7 @@ class VenteController extends Controller
             $caisse->statut = 'desactive';
             $caisse->save();
 
-        
+
             //mettre statut_cloture a true
             Vente::where('caisse_id', $caisse->id)->update([
                 'statut_cloture' => true,

@@ -97,17 +97,13 @@
                             aria-controls="sidebarConfiguration">
                             <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
                         </a>
-                        <div class="collapse menu-dropdown {{ Route::is('categorie.*') || Route::is('produit.*') || Route::is('fournisseur.*') || Route::is('admin-register.*') || Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*') || Route::is('client.*') ? 'show' : '' }}"
+                        <div class="collapse menu-dropdown {{ Route::is('categorie.*') || Route::is('produit.*') || Route::is('fournisseur.*') || Route::is('admin-register.*') || Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*')  ? 'show' : '' }}"
                             id="sidebarConfiguration">
                             <ul class="nav nav-sm flex-column">
 
 
 
-                                <li class="nav-item active">
-                                    <a href="{{ route('client.index') }}"
-                                        class="nav-link {{ Route::is('client.*') ? 'active' : '' }}">Clients</a>
-                                </li>
-
+                             
 
 
                                 <li class="nav-item active">
@@ -198,7 +194,7 @@
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarDepense" data-bs-toggle="collapse" role="button"
                             aria-controls="sidebarDepense">
-                            <i class="ri ri-wallet-fill"></i> <span>DEPENSES</span>
+                            <i class="ri ri-wallet-fill"></i> <span>GESTION DES DEPENSES</span>
                         </a>
                         <div class="collapse menu-dropdown {{ Route::is('libelle-depense.*') || Route::is('categorie-depense.*') || Route::is('depense.*') ? 'show' : '' }}"
                             id="sidebarDepense">
@@ -230,15 +226,21 @@
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sideBarVente" data-bs-toggle="collapse" role="button"
                             aria-controls="sideBarVente">
-                            <i class="ri ri-file-list-line"></i> <span>VENTES</span>
+                            <i class="ri ri-file-list-line"></i> <span>GESTION DESVENTES</span>
                         </a>
-                        <div class="collapse menu-dropdown {{ Route::is('vente.*') || Route::is('commande.*') ? 'show' : '' }}"
+                        <div class="collapse menu-dropdown {{ Route::is('vente.*') || Route::is('commande.*') || Route::is('client.*') ? 'show' : '' }}"
                             id="sideBarVente">
                             <ul class="nav nav-sm flex-column">
 
                                 <li class="nav-item active">
+                                    <a href="{{ route('client.index') }}"
+                                        class="nav-link {{ Route::is('client.*') ? 'active' : '' }}">Clients</a>
+                                </li>
+
+
+                                <li class="nav-item active">
                                     <a href="{{ route('vente.index') }}"
-                                        class="nav-link {{ Route::is('vente.*') ? 'active' : '' }}">Faire une vente</a>
+                                        class="nav-link {{ Route::is('vente.*') ? 'active' : '' }}">Ventes</a>
                                 </li>
 
                                 <li class="nav-item active">
@@ -257,7 +259,7 @@
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarMenu" data-bs-toggle="collapse" role="button"
                             aria-controls="sidebarMenu">
-                            <i class="ri ri-file-list-line"></i> <span>MENU</span>
+                            <i class="ri ri-file-list-line"></i> <span>GESTION DU MENU</span>
                         </a>
                         <div class="collapse menu-dropdown {{ Route::is('menu.*') || Route::is('plat.*') ? 'show' : '' }}"
                             id="sidebarMenu">
