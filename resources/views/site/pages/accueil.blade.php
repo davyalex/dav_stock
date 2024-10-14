@@ -31,8 +31,8 @@
                 <div id="tab1" class="tab-pane active">
                     <div class="row">
                         @foreach ($produitsBar->concat($produitsMenu) as $produit)
-                            <div class="custom-col-5">
-                                <div class="product-wrapper mb-25">
+                            <div class="custom-col-5 mb-4">
+                                <div class="product-wrapper mb-25 mx-2">
                                     <div class="product-img" style="width: 326px; height: 326px; overflow: hidden;">
                                         <a href="{{ route('produit.detail', $produit->slug) }}">
                                             <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
@@ -63,12 +63,13 @@
                 <div id="tab2" class="tab-pane">
                     <div class="row">
                         @foreach ($produitsBar as $produit)
-                            <div class="custom-col-5">
-                                <div class="product-wrapper mb-25">
-                                    <div class="product-img">
+                            <div class="custom-col-5 mb-4">
+                                <div class="product-wrapper mb-25 mx-2">
+                                    <div class="product-img" style="width: 326px; height: 326px; overflow: hidden;">
                                         <a href="{{ route('produit.detail', $produit->slug) }}">
                                             <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                                                alt="{{ $produit->nom }}">
+                                                alt="{{ $produit->nom }}"
+                                                style="width: 100%; height: 100%; object-fit: contain;">
                                         </a>
                                     </div>
                                     <div class="product-content">
@@ -95,12 +96,13 @@
                 <div id="tab3" class="tab-pane">
                     <div class="row">
                         @foreach ($produitsMenu as $produit)
-                            <div class="custom-col-5">
-                                <div class="product-wrapper mb-25">
-                                    <div class="product-img">
+                            <div class="custom-col-5 mb-4">
+                                <div class="product-wrapper mb-25 mx-2">
+                                    <div class="product-img" style="width: 326px; height: 326px; overflow: hidden;">
                                         <a href="{{ route('produit.detail', $produit->slug) }}">
                                             <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                                                alt="{{ $produit->nom }}">
+                                                alt="{{ $produit->nom }}"
+                                                style="width: 100%; height: 100%; object-fit: contain;">
                                         </a>
                                     </div>
                                     <div class="product-content">
@@ -169,9 +171,10 @@
                                     <div class="product-wrapper">
                                         <div class="product-img">
                                             <a href="{{ route('produit.detail', $produit->slug) }}">
-                                                <div>
+                                                <div style="width: 100%; height: 200px; overflow: hidden;">
                                                     <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                                                        alt="{{ $produit->nom }}">
+                                                        alt="{{ $produit->nom }}"
+                                                        style="width: 100%; height: 100%; object-fit: cover;">
                                                 </div>
                                             </a>
                                         </div>
