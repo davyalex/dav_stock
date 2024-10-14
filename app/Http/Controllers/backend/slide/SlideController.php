@@ -28,7 +28,7 @@ class SlideController extends Controller
     {
         //request validation .......
 
-        $data_Slide = Slide::firstOrCreate([
+        $data_Slide = Slide::create([
             'title' => $request['title'],
             'subtitle' => $request['subtitle'],
             'btn_name' => $request['btn_name'],
@@ -40,7 +40,7 @@ class SlideController extends Controller
         ]);
 
         if (request()->hasFile('image')) {
-            $data_Slide->addMediaFromRequest('image')->toMediaCollection('slideImage');
+            $data_Slide->addMediaFromRequest('image')->toMediaCollection($request['type']);
         }
 
 
@@ -67,8 +67,8 @@ class SlideController extends Controller
         ]);
 
         if (request()->hasFile('image')) {
-            $data_Slide->clearMediaCollection('slideImage');
-            $data_Slide->addMediaFromRequest('image')->toMediaCollection('slideImage');
+            $data_Slide->clearMediaCollection($request['type']);
+            $data_Slide->addMediaFromRequest('image')->toMediaCollection($request['type']);
         }
 
         Alert::success('Opération réussi', 'Success Message');

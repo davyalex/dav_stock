@@ -16,7 +16,7 @@
                 </span>
             </a> --}}
             <!-- Light Logo-->
-            <a href="{{ route('dashboard.index') }}" class="logo logo-light">
+            <a href="#" class="logo logo-light">
                 <span class="logo-sm">
                     <img src="{{ URL::asset($setting->getFirstMediaUrl('logo_header')) }}" alt="" height="22">
                 </span>

@@ -58,7 +58,7 @@
                         </div>
                        
                         <div class="col-md-12">
-                            <label for="validationCustom01" class="form-label">Description</label>
+                            <label for="validationCustom01" class="form-label">Objet</label>
                             <textarea class="form-control" name="description" id="" cols="30" rows="10">
                                 {{ $item['description'] }}
                              </textarea>

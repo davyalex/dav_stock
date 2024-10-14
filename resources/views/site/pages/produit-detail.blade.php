@@ -11,25 +11,27 @@
             <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <div class="product-images-slider position-relative">
-                        <div class="main-image-container">
+                        <div class="main-image-container ratio ratio-4x3">
                             <img id="mainImage" src="{{ $produit->getFirstMediaUrl('ProduitImage') }}" alt="Image principale"
-                                class="product-image" width="570" height="470">
+                                class="product-image img-fluid w-100 h-100 object-fit-cover">
                         </div>
 
-                        <div class="thumbnail-slider">
-                            <div class="thumbnails-container d-flex">
-                                <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}" alt="Image principale"
-                                    class="thumbnail active"
-                                    onclick="changeImage('{{ $produit->getFirstMediaUrl('ProduitImage') }}')" width="100"
-                                    height="100">
+                        <div class="thumbnail-slider mt-3">
+                            <div class="thumbnails-container d-flex flex-wrap justify-content-start">
+                                <div class="thumbnail-wrapper ratio ratio-1x1 m-1" style="width: 80px;">
+                                    <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}" alt="Image principale"
+                                        class="thumbnail active img-fluid w-100 h-100 object-fit-cover"
+                                        onclick="changeImage('{{ $produit->getFirstMediaUrl('ProduitImage') }}')">
+                                </div>
 
                                 @foreach ($produit->getMedia('galleryProduit') as $media)
-                                    <img src="{{ $media->getUrl() }}" alt="{{ $media->name }}"
-                                        class="thumbnail" onclick="changeImage('{{ $media->getUrl() }}')" width="100"
-                                        height="100">
+                                    <div class="thumbnail-wrapper ratio ratio-1x1 m-1" style="width: 80px;">
+                                        <img src="{{ $media->getUrl() }}" alt="{{ $media->name }}"
+                                            class="thumbnail img-fluid w-100 h-100 object-fit-cover"
+                                            onclick="changeImage('{{ $media->getUrl() }}')">
+                                    </div>
                                 @endforeach
                             </div>
-
                         </div>
                     </div>
                 </div>

@@ -48,7 +48,7 @@
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
                                         <td>
-                                            <img class="rounded-circle" src="{{ $item->getFirstMediaUrl('slideImage') }}"
+                                            <img class="rounded-circle" src="{{ $item->getFirstMediaUrl($item->type) }}"
                                                 width="50px" alt="">
                                         </td>
                                         <td>{{ $item['status'] }}</td>
@@ -63,18 +63,18 @@
                                                 <ul class="dropdown-menu dropdown-menu-end">
                                                     <li><a href="#!" class="dropdown-item"><i
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            View</a>
+                                                            voir</a>
                                                     </li>
                                                     <li><a type="button" class="dropdown-item edit-item-btn"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#myModalEdit{{ $item['id'] }}"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Edit</a></li>
+                                                            Modifier</a></li>
                                                     <li>
                                                         <a href="#" class="dropdown-item remove-item-btn delete"
                                                             data-id={{ $item['id'] }}>
                                                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Delete
+                                                            Supprimer
                                                         </a>
                                                     </li>
                                                 </ul>
@@ -115,7 +115,7 @@
 
     <script>
        $(document).ready(function(){
-        var route = "depense"
+        var route = "slide"
         delete_row(route);
        })
     </script>

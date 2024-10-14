@@ -24,7 +24,9 @@ class SiteController extends Controller
             $produitsBar = Produit::whereHas('categorie', function($query) {
                 $query->where('famille', 'bar');
             })
-            ->withWhereHas('achats', fn($q) => $q->whereStatut('active'))
+            ->whereHas('achats', function($query) {
+                $query->where('statut', 'active');
+            })
             ->where('statut', 'active')
             ->get();
 
@@ -43,12 +45,15 @@ class SiteController extends Controller
 
 
             // Récupérer les produits les plus commandés
-            $produitsLesPlusCommandes = Produit::withCount('commandes')
+            $produitsLesPlusCommandes = Produit::whereHas('categorie', function($query) {
+                    $query->whereIn('famille', ['bar', 'menu']);
+                })
+                ->withCount('commandes')
+                ->havingRaw('commandes_count > 1')
                 ->orderBy('commandes_count', 'desc')
-                ->take(10)  // Limiter aux 10 premiers produits les plus commandés
                 ->get();
 
-                
+                // dd($produitsLesPlusCommandes->toArray());
             return view('site.pages.accueil', compact(
                 'data_slide',
                 'produitsBar',
@@ -87,16 +92,22 @@ class SiteController extends Controller
                 $produits = Produit::where('type_id', $categorieSelect->id)
                     ->withWhereHas('achats', fn($q) => $q->whereStatut('active'))
                     ->whereStatut('active')
-                    ->get();  // produits de la categorie selectionné si type ==bar
+                    ->paginate(10);  
 
             } elseif ($categorieSelect->type == 'menu') {
                 $produits = Produit::where('type_id', $categorieSelect->id)
                     ->whereStatut('active')
-                    ->get();
-            } else {
+                    ->paginate(10);
+            } elseif ($categorieSelect->famille == 'bar') {
                 $produits = Produit::where('categorie_id', $categorieSelect->id)
+                    ->withWhereHas('achats', fn($q) => $q->whereStatut('active'))
                     ->whereStatut('active')
-                    ->get();
+                    ->paginate(10);
+            }elseif ($categorieSelect->famille == 'menu') {
+                $produits = Produit::where('categorie_id', $categorieSelect->id)
+                    // ->withWhereHas('achats', fn($q) => $q->whereStatut('active'))
+                    ->whereStatut('active')
+                    ->paginate(10);
             }
 
             // dd($produits->toArray());

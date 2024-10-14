@@ -33,7 +33,7 @@
     $('.slider-active').owlCarousel({
         loop: true,
         nav: true,
-        autoplay: false,
+        autoplay: true,
         autoplayTimeout: 5000,
         animateOut: 'fadeOut',
         animateIn: 'fadeIn',
@@ -56,10 +56,10 @@
     $('.product-slider-active').owlCarousel({
         loop: true,
         nav: true,
-        autoplay: false,
+        autoplay: true,
         autoplayTimeout: 5000,
         navText: ['<i class="ion-ios-arrow-back"></i>', '<i class="ion-ios-arrow-forward"></i>'],
-        item: 3,
+        item: 4,
         margin: 30,
         responsive: {
             0: {

@@ -87,6 +87,7 @@ class VenteController extends Controller
                 'sous_total.*' => 'numeric|min:0',
             ]);
 
+            
             // Création de la vente
             $vente = Vente::create([
                 'code' => 'V-' . strtoupper(Str::random(8)),

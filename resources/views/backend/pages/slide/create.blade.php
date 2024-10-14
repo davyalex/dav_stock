@@ -24,7 +24,7 @@
                                         <li>Carrousel : <strong>1920 * 685</strong></li>
                                         <li>grande-banniere : <strong>1170 * 489</strong></li>
                                         <li>petite-banniere : <strong>535 * 290</strong></li>
-                                        <li>banniere-best-seller : <strong>324 * 463</strong></li>
+                                        <li>banniere-meilleur-vente : <strong>324 * 463</strong></li>
 
 
                                     </ol>

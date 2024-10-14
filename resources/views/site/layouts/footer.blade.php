@@ -6,17 +6,16 @@
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="footer-about mb-40">
                             <div class="footer-logo">
-                                <a href="index.html">
-                                    <img src="assets/img/logo/footer-logo.png" alt="">
+                                <a href="#">
+                                    <img src="{{ $setting->getFirstMediaUrl('logo_footer') ?? 'assets/img/logo/footer-logo.png' }}" width="50" alt="">
                                 </a>
                             </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidi ut
-                                labore et dolore magna aliqua. Ut enim ad minim veniam,</p>
-                            <div class="payment-img">
+                            <p> {{ $setting->projet_description ?? 'Bienvenue chez restaurant Jeanne!' }} </p>
+                            {{-- <div class="payment-img">
                                 <a href="#">
                                     <img src="assets/img/icon-img/payment.png" alt="">
                                 </a>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="col-lg-2 col-md-6 col-sm-6">
@@ -26,12 +25,12 @@
                             </div>
                             <div class="footer-content">
                                 <ul>
-                                    <li><a href="about-us.html">About Us</a></li>
-                                    <li><a href="#">Delivery Information</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
-                                    <li><a href="#">Terms & Conditions</a></li>
-                                    <li><a href="#">Customer Service</a></li>
-                                    <li><a href="#">Return Policy</a></li>
+                                    <li><a href="about-us.html">À propos de nous</a></li>
+                                    <li><a href="#">Informations de livraison</a></li>
+                                    <li><a href="#">Politique de confidentialité</a></li>
+                                    <li><a href="#">Conditions générales</a></li>
+                                    <li><a href="#">Service client</a></li>
+                                    <li><a href="#">Politique de retour</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -39,16 +38,14 @@
                     <div class="col-lg-2 col-md-6 col-sm-6">
                         <div class="footer-widget mb-40">
                             <div class="footer-title mb-22">
-                                <h4>My Account</h4>
+                                <h4>Nos catégories</h4>
                             </div>
                             <div class="footer-content">
                                 <ul>
-                                    <li><a href="my-account.html">My Account</a></li>
-                                    <li><a href="#">Order History</a></li>
-                                    <li><a href="wishlist.html">Wish List</a></li>
-                                    <li><a href="#">Newsletter</a></li>
-                                    <li><a href="#">Order History</a></li>
-                                    <li><a href="#">International Orders</a></li>
+                                    <li><a href="#">Nos plats</a></li>
+                                    <li><a href="#">Nos boissons</a></li>
+                                    <li><a href="#">Notre carte menu</a></li>
+                                 
                                 </ul>
                             </div>
                         </div>
@@ -56,22 +53,22 @@
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="footer-widget mb-40">
                             <div class="footer-title mb-22">
-                                <h4>Get in touch</h4>
+                                <h4>Contactez-nous</h4>
                             </div>
                             <div class="footer-contact">
                                 <ul>
-                                    <li>Address: 123 Main Your address goes here.</li>
-                                    <li>Telephone Enquiry: (012) 800 456 789-987 </li>
-                                    <li>Email: <a href="#">Info@example.com</a></li>
+                                    <li>Localisation: {{ $setting->localisation ?? '123 Main Your address goes here.' }}</li>
+                                    <li>Telephone : {{ $setting->phone1 ?? '(012) 800 456 789-987' }}</li>
+                                    <li>Email: <a href="#">{{ $setting->email1 ?? 'Info@example.com' }}</a></li>
                                 </ul>
                             </div>
                             <div class="mt-35 footer-title mb-22">
-                                <h4>Get in touch</h4>
+                                <h4>Horaires d'ouverture</h4>
                             </div>
                             <div class="footer-time">
                                 <ul>
-                                    <li>Open: <span>8:00 AM</span> - Close: <span>18:00 PM</span></li>
-                                    <li>Saturday - Sunday: <span>Close</span></li>
+                                    <li>Ouverture: <span>{{ $setting->horaire_ouverture ?? '8:00 AM' }}</span> - Close: <span>{{ $setting->horaire_fermeture ?? '18:00 PM' }}</span></li>
+                                    <li>Lundi - Dimanche: <span>{{ $setting->horaire_weekend ?? 'Close' }}</span></li>
                                 </ul>
                             </div>
                         </div>
@@ -84,8 +81,8 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-7">
                         <div class="copyright">
-                            <p>&copy; 2022 <strong> Billy </strong> Made with <i class="fa fa-heart text-danger"></i>
-                                by <a href="https://hasthemes.com/" target="_blank"><strong>HasThemes</strong></a>
+                            <p>&copy; {{ date('Y') }} <strong> {{ $setting->projet_title ?? 'Restaurant Jeanne' }} </strong> Made with <i class="fa fa-heart text-danger"></i>
+                                by <a href="https://ticafrique.com/" target="_blank"><strong>Ticafrique</strong></a>
                             </p>
                         </div>
                     </div>

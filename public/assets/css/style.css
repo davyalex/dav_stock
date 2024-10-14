@@ -2028,7 +2028,7 @@ textarea:focus {
 }
 .transparent-bar.stick {
     animation: 700ms ease-in-out 0s normal none 1 running fadeInDown;
-    background-color: #fff;
+    background-color: #c21b1b; /* Couleur du fond du logo */
     border-bottom: 0 solid #4a90e2;
     box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.04);
     position: fixed;
@@ -2036,19 +2036,28 @@ textarea:focus {
     width: 100%;
     z-index: 9999;
 }
-.stick .main-menu ul li a {
+.stick .main-menu ul li a,
+.stick .logo,
+.stick .header-cart {
     line-height: 60px;
+    margin: 0;
+    padding: 0;
+    transition: all .3s ease 0s;
+    color: #ffffff; /* Ajout de la couleur blanche */
 }
 .stick .logo {
-    margin: 27px 0 0;
-    transition: all .3s ease 0s;
+    display: flex;
+    align-items: center;
 }
 .stick .header-cart {
-    padding: 22px 0 0 63px;
-    transition: all .3s ease 0s;
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    color: #ffffff; /* Ajout de la couleur blanche */
 }
 .stick .main-menu ul li ul li a {
     line-height: 32px;
+    color: #ffffff; /* Ajout de la couleur blanche */
 }
 
 /* slider style */

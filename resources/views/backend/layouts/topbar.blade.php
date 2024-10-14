@@ -255,7 +255,7 @@
                 </div>
 
                 <!-- ========== Start notifications ========== -->
-                <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
+                {{-- <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
                     <button type="button"
                         class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle"
                         id="page-header-notifications-dropdown" data-bs-toggle="dropdown"
@@ -357,13 +357,11 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="tab-pane fade p-4" id="alerts-tab" role="tabpanel"
-                                aria-labelledby="alerts-tab"></div> --}}
-
+                           
                           
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <!-- ========== End notifications ========== -->
 
                 <!-- ========== Start profil ========== -->
