@@ -226,7 +226,7 @@
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sideBarVente" data-bs-toggle="collapse" role="button"
                             aria-controls="sideBarVente">
-                            <i class="ri ri-file-list-line"></i> <span>GESTION DESVENTES</span>
+                            <i class="ri ri-file-list-line"></i> <span>GESTION DES VENTES</span>
                         </a>
                         <div class="collapse menu-dropdown {{ Route::is('vente.*') || Route::is('commande.*') || Route::is('client.*') ? 'show' : '' }}"
                             id="sideBarVente">
@@ -239,8 +239,13 @@
 
 
                                 <li class="nav-item active">
+                                    <a href="{{ route('vente.create') }}"
+                                        class="nav-link {{ Route::is('vente.*') ? 'active' : '' }}">Faire une Vente</a>
+                                </li>
+
+                                <li class="nav-item active">
                                     <a href="{{ route('vente.index') }}"
-                                        class="nav-link {{ Route::is('vente.*') ? 'active' : '' }}">Ventes</a>
+                                        class="nav-link {{ Route::is('vente.*') ? 'active' : '' }}">Liste des Ventes</a>
                                 </li>
 
                                 <li class="nav-item active">

@@ -43,8 +43,16 @@ class AdminController extends Controller
     //logout admin
     public function logout(Request $request)
     {
-
         $user = Auth::user();
+
+        //on verifie si l'utilisateur a une caisse non cloturer si oui la cloturer avant de se deconnecter
+        $ventes = $user->ventes->where('user_id', $user->id)->where('caisse_id', $user->caisse_id)->where('statut_cloture', false)->first();
+        if ($ventes) {
+            Alert::success('Vous devez cloturer la caisse avant de vous deconnecter', 'warning Message');
+
+            return Redirect()->route('vente.index');
+        }
+
 
         // Si l'utilisateur a une caisse active, la désactiver
         if ($user->caisse_id) {

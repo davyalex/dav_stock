@@ -15,28 +15,38 @@ return new class extends Migration
             $table->id();
             $table->string('code')->unique()->nullable();
             $table->dateTime('date_vente')->nullable();
+
+            $table->double('montant_recu')->nullable();
+            $table->double('montant_rendu')->nullable();
+            $table->string('mode_paiement')->nullable();
+            $table->integer('numero_table')->nullable();
+            $table->integer('nombre_couverts')->nullable();
+            $table->double('montant_avant_remise')->nullable();
+            $table->string('type_remise')->nullable();
+            $table->double('valeur_remise')->nullable();
+            $table->double('montant_remise')->nullable();
             $table->double('montant_total')->nullable();
-          
+
             $table->foreignId('client_id')  // client qui a fait la vente
-            ->nullable()
-            ->constrained('users')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
+                ->nullable()
+                ->constrained('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
 
             $table->foreignId('caisse_id')
-            ->nullable()
-            ->constrained('caisses')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
+                ->nullable()
+                ->constrained('caisses')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
             $table->foreignId('user_id')  // utilisateur qui a fait la vente
-            ->nullable()
-            ->constrained('users')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
+                ->nullable()
+                ->constrained('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
-            $table->enum('statut' , ['en attente' ,'confirmée' , 'livrée' , 'annulée'])->nullable();
+            $table->enum('statut', ['en attente', 'confirmée', 'livrée', 'annulée'])->nullable();
 
             $table->boolean('statut_cloture')->default(false);
 

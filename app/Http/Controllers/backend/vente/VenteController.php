@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\backend\vente;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Vente;
 use App\Models\Produit;
@@ -18,6 +19,7 @@ class VenteController extends Controller
     public function index(Request $request)
     {
         try {
+
             // $data_vente = Vente::with('produits')
             //     ->where('caisse_id', auth()->user()->caisse_id)
             //     ->where('user_id', auth()->user()->id)
@@ -41,7 +43,7 @@ class VenteController extends Controller
             } elseif ($request->filled('date_fin')) {
                 $query->whereDate('created_at', '<=', $request->date_fin);
             }
-            
+
             // Filtre par caisse
             if ($request->filled('caisse')) {
                 $query->where('caisse_id', $request->caisse);
@@ -55,7 +57,7 @@ class VenteController extends Controller
 
             $data_vente = $query->get();
             // dd($data_vente->toArray());
-            return view('backend.pages.vente.index', compact('data_vente' ,'caisses'));
+            return view('backend.pages.vente.index', compact('data_vente', 'caisses'));
         } catch (\Exception $e) {
             Alert::error('Erreur', 'Une erreur est survenue lors du chargement des ventes : ' . $e->getMessage());
             return back();
@@ -91,7 +93,7 @@ class VenteController extends Controller
                 $query->where('name', 'client');
             })->get();
 
-            return view('backend.pages.vente.create', compact('data_produit', 'data_client'));
+            return view('backend.pages.vente.create2', compact('data_produit', 'data_client'));
         } catch (\Exception $e) {
             // Gestion des erreurs
             return back()->with('error', 'Une erreur est survenue lors du chargement du formulaire de création : ' . $e->getMessage());
@@ -103,18 +105,32 @@ class VenteController extends Controller
     {
         try {
             // Validation des données
-            $request->validate([
-                // 'client_id' => 'required|exists:users,id',
-                // 'date_vente' => 'required|date',
-                'produit_id' => 'required|array',
-                'produit_id.*' => 'exists:produits,id',
-                'quantite' => 'required|array',
-                'quantite.*' => 'numeric|min:1',
-                'prix_unitaire' => 'required|array',
-                'prix_unitaire.*' => 'numeric|min:0',
-                'sous_total' => 'required|array',
-                'sous_total.*' => 'numeric|min:0',
-            ]);
+            // $request->validate([
+            //     // 'client_id' => 'required|exists:users,id',
+            //     // 'date_vente' => 'required|date',
+            //     'produit_id' => 'required|array',
+            //     'produit_id.*' => 'exists:produits,id',
+            //     'quantite' => 'required|array',
+            //     'quantite.*' => 'numeric|min:1',
+            //     'prix_unitaire' => 'required|array',
+            //     'prix_unitaire.*' => 'numeric|min:0',
+            //     'sous_total' => 'required|array',
+            //     'sous_total.*' => 'numeric|min:0',
+            // ]);
+
+
+            //recuperation des informations depuis ajax
+            $cart = $request->input('cart');
+            $montantAvantRemise = $request->input('montantAvantRemise');
+            $montantApresRemise = $request->input('montantApresRemise');
+            $montantRemise = $request->input('montantRemise');
+            $typeRemise = $request->input('typeRemise');
+            $valeurRemise = $request->input('valeurRemise');
+            $modePaiement = $request->input('modePaiement');
+            $montantRecu = $request->input('montantRecu');
+            $montantRendu = $request->input('montantRendu');
+            $numeroDeTable = $request->input('numeroDeTable');
+            $nombreDeCouverts = $request->input('nombreDeCouverts');
 
 
             // Création de la vente
@@ -134,26 +150,33 @@ class VenteController extends Controller
                 // 'client_id' => $request->client_id,
                 'caisse_id' => auth()->user()->caisse_id, // la caisse qui fait la vente
                 'user_id' => auth()->user()->id, // l'admin qui a fait la vente
-                'date_vente' => $request->date_vente,
-                'montant_total' => $request->montant_total,
+                'date_vente' => Carbon::now(),
+                'montant_total' => $montantApresRemise,
+                'montant_avant_remise' => $montantAvantRemise,
+                'montant_remise' => $montantRemise,
+                'type_remise' => $typeRemise,
+                'valeur_remise' => $valeurRemise,
+                'mode_paiement' => $modePaiement,
+                'montant_recu' => $montantRecu,
+                'montant_rendu' => $montantRendu,
+                'numero_table' => $numeroDeTable,
+                'nombre_couverts' => $nombreDeCouverts,
                 'statut' => 'confirmée',
             ]);
 
             // Préparation des données pour la table pivot
 
-            foreach ($request->produit_id as $index => $produitId) {
+            foreach ($cart as $item) {
                 // Attachement des produits à la vente
-                $vente->produits()->attach(
-                    $produitId,
-                    [
-                        'quantite' => $request->quantite[$index],
-                        'prix_unitaire' => $request->prix_unitaire[$index],
-                        'total' => $request->sous_total[$index],
-                    ]
-                );
+                $vente->produits()->attach($item['id'], [
+                    'quantite' => $item['quantity'],
+                    'prix_unitaire' => $item['price'],
+                    'total' => $item['price'] * $item['quantity']
+                ]);
+
                 // Mise à jour du stock du produit
-                $produit = Produit::find($produitId);
-                $quantiteVendue = $request->quantite[$index];
+                $produit = Produit::find($item['id']);
+                $quantiteVendue = $item['quantity'];
 
                 if ($produit->categorie->famille == 'bar') {
                     // Mise à jour du stock du produit
@@ -173,10 +196,11 @@ class VenteController extends Controller
             // retur response
             return response()->json([
                 'message' => 'Vente enregistrée avec succès.',
-                'statut' => 'success',
+                'status' => 'success',
             ], 200);
         } catch (\Throwable $th) {
-            Alert::error('Erreur', 'Une erreur est survenue lors de la création de la vente : ' . $th->getMessage());
+            return $th->getMessage();
+            // Alert::error('Erreur', 'Une erreur est survenue lors de la création de la vente : ' . $th->getMessage());
             return back();
         }
     }

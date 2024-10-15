@@ -25,10 +25,10 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Liste des ventes </strong></h5>
-                    @if (auth()->user()->hasRole('caisse'))
+                    {{-- @if (auth()->user()->hasRole('caisse'))
                         <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">Effectuer
                             une nouvelle vente</a>
-                    @endif
+                    @endif --}}
 
                     @if (!auth()->user()->hasRole('caisse'))
                     <form action="{{ route('vente.index') }}" method="GET">

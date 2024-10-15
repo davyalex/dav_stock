@@ -169,10 +169,10 @@
                                     <div class="product-wrapper">
                                         <div class="product-img">
                                             <a href="{{ route('produit.detail', $produit->slug) }}">
-                                                <div style="width: 100%; height: 200px; overflow: hidden;">
+                                                <div >
                                                     <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
                                                         alt="{{ $produit->nom }}"
-                                                        style="width: 100%; height: 100%; object-fit: cover;">
+                                                        >
                                                 </div>
                                             </a>
                                         </div>

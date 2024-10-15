@@ -12,16 +12,22 @@ class Vente extends Model
     protected $fillable = [
         'code',
         'date_vente',
-        'montant_total',
-        // 'remise',
-        // 'montant_paye',
-        // 'montant_restant',
+        'montant_avant_remise', //montant ht avant remise',
+        'montant_total', // montant ttc
+        'type_remise',
+        'valeur_remise',
+        'montant_remise',
+        'montant_recu', // montant donne par le client
+        'montant_rendu', // montant rendu par le caissier
         // 'statut_paiement',
-        // 'mode_paiement',
+        'mode_paiement',
         'user_id',
         'client_id',
         'caisse_id',
         'statut', // confirmée , en attente , livrée , annulée  
+
+        'numero_table',
+        'nombre_couverts',
         'statut_cloture', // boolean true ou false
     ];
 

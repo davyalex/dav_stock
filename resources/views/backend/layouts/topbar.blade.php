@@ -245,7 +245,7 @@
                 <!-- ========== End language ========== -->
 
 
-               
+
 
                 <div class="ms-1 header-item d-none d-sm-flex">
                     <button type="button"
@@ -376,35 +376,43 @@
                             <span class="text-start ms-xl-2">
                                 <span
                                     class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ Auth::user()->first_name }}</span>
-                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">{{ Auth::user()->roles[0]->name ?? '' }}</span>
+                                <span
+                                    class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">{{ Auth::user()->roles[0]->name ?? '' }}</span>
                             </span>
                         </span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
                         <h6 class="dropdown-header">Bienvenue {{ Auth::user()->first_name }} !</h6>
-                        <a class="dropdown-item" href="{{route('admin-register.profil' , Auth::user()->id)}}"><i
+                        <a class="dropdown-item" href="{{ route('admin-register.profil', Auth::user()->id) }}"><i
                                 class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Profil</span></a>
-                       
-                      
+
+
                         <a class="dropdown-item" href="pages-faqs"><i
                                 class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Aide</span></a>
                         <div class="dropdown-divider"></div>
-                       
+
                         {{-- <a class="dropdown-item" href="pages-profile-settings"><i
                                 class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Parametre</span></a> --}}
-                    
-                        <a class="dropdown-item " href="javascript:void();"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
-                                class="bx bx-power-off font-size-16 align-middle me-1"></i> <span
-                                key="t-logout">@lang('translation.logout')</span></a>
-                        <form id="logout-form" action="{{ route('admin.logout') }}" method="POST"
-                            style="display: none;">
-                            @csrf
-                        </form>
+
+                        @if(Auth::user()->role == 'caisse')
+                            <a class="dropdown-item " href="javascript:void();"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
+                                    class="bx bx-power-off font-size-16 align-middle me-1"></i> <span
+                                    key="t-logout">@lang('translation.logout')</span></a>
+                            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST"
+                                style="display: none;">
+                                @csrf
+                            </form>
+                        @else
+                            <a class="dropdown-item " href="javascript:void();"
+                                onclick="alert('Vous ne pouvez pas vous déconnecter tant que la vente n\'est pas clôturée.');"><i
+                                    class="bx bx-power-off font-size-16 align-middle me-1"></i> <span
+                                    key="t-logout">@lang('translation.logout')</span></a>
+                        @endif
                     </div>
                 </div>
                 <!-- ========== End profil ========== -->
