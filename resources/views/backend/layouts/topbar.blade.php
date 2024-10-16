@@ -398,7 +398,7 @@
                                 class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Parametre</span></a> --}}
 
-                        @if(Auth::user()->role == 'caisse')
+                        @if (Auth::user())
                             <a class="dropdown-item " href="javascript:void();"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
                                     class="bx bx-power-off font-size-16 align-middle me-1"></i> <span
@@ -407,11 +407,6 @@
                                 style="display: none;">
                                 @csrf
                             </form>
-                        @else
-                            <a class="dropdown-item " href="javascript:void();"
-                                onclick="alert('Vous ne pouvez pas vous déconnecter tant que la vente n\'est pas clôturée.');"><i
-                                    class="bx bx-power-off font-size-16 align-middle me-1"></i> <span
-                                    key="t-logout">@lang('translation.logout')</span></a>
                         @endif
                     </div>
                 </div>

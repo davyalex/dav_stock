@@ -5,6 +5,7 @@ namespace App\Http\Controllers\backend\vente;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Vente;
+use App\Models\Caisse;
 use App\Models\Produit;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class VenteController extends Controller
             //     ->where('statut_cloture', false)
             //     ->orderBy('created_at', 'desc')
             //     ->get();
-            $caisses = \App\Models\Caisse::all();
+            $caisses = Caisse::all();
 
 
             $query = Vente::with('produits')
@@ -57,6 +58,7 @@ class VenteController extends Controller
 
             $data_vente = $query->get();
             // dd($data_vente->toArray());
+
             return view('backend.pages.vente.index', compact('data_vente', 'caisses'));
         } catch (\Exception $e) {
             Alert::error('Erreur', 'Une erreur est survenue lors du chargement des ventes : ' . $e->getMessage());
