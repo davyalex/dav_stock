@@ -251,47 +251,48 @@
 
                             <div class="card-body">
                                 <div class="table-responsive table-card">
-                                    <table class="table table-hover table-centered align-middle table-nowrap mb-0">
+                                    <table class="table table-borderless table-centered align-middle table-nowrap mb-0">
+                                        <thead class="text-muted table-light">
+                                            <tr>
+                                                <th scope="col">Code</th>
+                                                <th scope="col">Produit</th>
+                                                <th scope="col">Categorie</th>
+                                                <th scope="col">Nombre de ventes</th>
+                                                <th scope="col">Total vente</th>
+                                            </tr>
+                                        </thead>
                                         <tbody>
-                                            {{-- <tr>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                            <img src="{{ URL::asset('build/images/products/img-1.png') }}"
-                                                                alt="" class="img-fluid d-block" />
-                                                        </div>
-                                                        <div>
-                                                            <h5 class="fs-14 my-1"><a
-                                                                    href="apps-ecommerce-product-details"
-                                                                    class="text-reset">Branded T-Shirts</a></h5>
-                                                            <span class="text-muted">24 Apr 2021</span>
-                                                        </div>
+                                        @foreach ($produitsLesPlusVendus as $item)
+                                        <tr>
+                                            <td>
+                                                <a href="apps-ecommerce-order-details"
+                                                    class="fw-medium link-primary">#{{$item->code}} </a>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0 me-2">
+                                                        {{$item->nom}}
+                                                        <img src="{{ URL::asset($item->getFirstMediaUrl('ProduitImage')) }}"
+                                                            alt=" {{$item->nom}} "
+                                                            class="avatar-xs rounded-circle material-shadow" />
                                                     </div>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">$29.00</h5>
-                                                    <span class="text-muted">Price</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">62</h5>
-                                                    <span class="text-muted">Orders</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">510</h5>
-                                                    <span class="text-muted">Stock</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">$1,798</h5>
-                                                    <span class="text-muted">Amount</span>
-                                                </td>
-                                            </tr> --}}
+                                                </div>
+                                            </td>
+                                         
+                                            <td>
+                                                <span class="text-success">{{ $item->categorie->famille == 'bar' ? 'BAR' : 'Restaurant' }} </span>
+                                            </td>
+                                            <td> {{$item->ventes_count}}  </td>
+                                            <td>
+                                                <span > {{$item->total_ventes}} </span>
+                                            </td>
                                           
-                                        </tbody>
-                                    </table>
+                                        </tr><!-- end tr -->
+                                        @endforeach
+                                           
+                                        </tbody><!-- end tbody -->
+                                    </table><!-- end table -->
                                 </div>
-
-                              
-
                             </div>
                         </div>
                     </div>

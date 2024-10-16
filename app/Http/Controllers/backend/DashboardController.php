@@ -41,25 +41,31 @@ class DashboardController extends Controller
             return redirect()->route('vente.index');
         }
         
-         // statistique
-       ## Liste des commandes en attente
+         ## statistique Liste des ventes
+           // Liste des commandes en attente
         $commandesEnAttente = Commande::where('statut', 'en attente')
             ->orderBy('created_at', 'desc')
             ->take(10)
             ->get();
 
 
-            ##Liste des produit les plus vendus
+            //Liste des produit les plus vendus
         $produitsLesPlusVendus = Produit::withCount('ventes')
+            ->withSum('ventes','produit_vente.prix_unitaire')
             ->orderBy('ventes_count', 'desc')
             ->having('ventes_count', '>', 0)
             ->take(10)
-            ->get();
+            ->get()
+            ->map(function ($produit) {
+                // Renommer l'attribut calculé dans la collection
+                $produit->total_ventes = $produit->ventes_sum_produit_venteprix_unitaire;
+                return $produit;
+            });
 
 
             
       
-        // dd($commandesEnAttente);
+        // dd($produitsLesPlusVendus->toArray());
         return view('backend.pages.index', compact('commandesEnAttente', 'produitsLesPlusVendus'));
     }
 }
