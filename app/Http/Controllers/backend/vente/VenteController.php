@@ -135,18 +135,19 @@ class VenteController extends Controller
 
             // Création de la vente
             // Obtenir les deux premières lettres du nom de la caissière
-            $initialesCaissiere = substr(auth()->user()->name, 0, 2);
+            $initialesCaissiere = substr(auth()->user()->first_name, 0, 2);
 
             // Obtenir le numéro d'ordre de la vente pour aujourd'hui
-            $numeroOrdre = Vente::whereDate('created_at', today())->count() + 1;
+            $nombreVentes = Vente::count();
+            $numeroOrdre = $nombreVentes + 1;
 
             // Obtenir la date et l'heure actuelles
-            $dateHeure = now()->format('dmYHis');
+            $dateHeure = now()->format('dmYHi');
 
             // Générer le code de vente
-            $codeVente = strtoupper($initialesCaissiere) . str_pad($numeroOrdre, 4, '0', STR_PAD_LEFT) . $dateHeure;
+            $codeVente = strtoupper($initialesCaissiere) . '-' . $numeroOrdre . $dateHeure;
             $vente = Vente::create([
-                'code' => 'V-' . $codeVente,
+                'code' => $codeVente,
                 // 'client_id' => $request->client_id,
                 'caisse_id' => auth()->user()->caisse_id, // la caisse qui fait la vente
                 'user_id' => auth()->user()->id, // l'admin qui a fait la vente
@@ -162,6 +163,7 @@ class VenteController extends Controller
                 'numero_table' => $numeroDeTable,
                 'nombre_couverts' => $nombreDeCouverts,
                 'statut' => 'confirmée',
+                'type_vente' => 'normale'
             ]);
 
             // Préparation des données pour la table pivot

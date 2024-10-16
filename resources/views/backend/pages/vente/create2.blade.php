@@ -286,9 +286,9 @@
 
 
             $('#validate-sale').click(function(e) {
-                let montantAvantRemise = parseFloat($('#grand-amount').text() || 0);
+                let montantAvantRemise = parseFloat($('#grand-total').text() || 0);
                 let montantApresRemise = parseFloat($('#total-after-discount').text() || 0);
-                let montantRemise = parseFloat($('#discount-amount').text());
+                let montantRemise = parseFloat($('#discount-amount').text() || 0);
                 let typeRemise = $('#discount-type').val();
                 let valeurRemise = $('#total-discount').val();
 

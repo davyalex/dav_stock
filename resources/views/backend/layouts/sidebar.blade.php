@@ -243,10 +243,10 @@
                                         class="nav-link {{ Route::is('vente.*') ? 'active' : '' }}">Faire une Vente</a>
                                 </li>
 
-                                <li class="nav-item active">
+                                {{-- <li class="nav-item active">
                                     <a href="{{ route('vente.index') }}"
                                         class="nav-link {{ Route::is('vente.*') ? 'active' : '' }}">Liste des Ventes</a>
-                                </li>
+                                </li> --}}
 
                                 <li class="nav-item active">
                                     <a href="{{ route('commande.index') }}"

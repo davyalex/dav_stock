@@ -23,35 +23,60 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
+
+                <div class=" p-3  mb-3">
+                    <h6 class="text-muted">Détails de la commande</h6>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p><strong>N° commande :</strong> #{{ $commande->code }}</p>
+                            <p><strong>Date :</strong> {{ $commande->created_at->format('d/m/Y à H:i') }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><strong>Client :</strong> {{ $commande->client->first_name }}
+                                {{ $commande->client->last_name }}</p>
+                            <p><strong>Téléphone :</strong> {{ $commande->client->phone }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><strong>Mode de livraison :</strong> {{ $commande->mode_livraison }}</p>
+                            <p><strong>Adresse de livraison :</strong> {{ $commande->adresse_livraison }}</p>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Produits de la commande
-                        <strong>#{{ $commande->code }} du {{ $commande->date_commande }} </strong>
-                    </h5>
+                    <h5 class="card-title mb-0">Produits de la commande</h5>
+                   
+                   
                     <div class="d-flex justify-content-end mt-3">
                         {{-- <a href="{{ route('commande.index') }}" type="button" class="btn btn-primary">Retour aux commandes</a> --}}
-
-                        <button type="button" class="btn btn-info me-2" onclick="imprimerFacture()">
+    
+                        <button type="button" class="btn btn-info me-2 btnImprimerTicket" onclick="imprimerFacture()">
                             <i class="ri-printer-line align-bottom me-1"></i> Imprimer la facture
                         </button>
-                        <select class="form-select w-auto" data-commande="{{ $commande->id }}" 
-                            onchange="changerStatut(this)"
-                            {{ $commande->statut == 'livrée' ? 'disabled' : '' }}>
+                        <select class="form-select w-auto" data-commande="{{ $commande->id }}"
+                            onchange="changerStatut(this)" {{ $commande->statut == 'livrée' ? 'disabled' : '' }}>
                             <option value="">Changer le statut</option>
-                            @if($commande->statut == 'annulée' || ($commande->statut != 'confirmée' && $commande->statut != 'livrée'))
-                                <option value="en attente" {{ $commande->statut == 'en attente' ? 'selected' : '' }}>En attente</option>
-                                <option value="confirmée" {{ $commande->statut == 'confirmée' ? 'selected' : '' }}>Confirmée</option>
-                                <option value="livrée" {{ $commande->statut == 'livrée' ? 'selected' : '' }}>Livrée</option>
-                                <option value="annulée" {{ $commande->statut == 'annulée' ? 'selected' : '' }}>Annulée</option>
+                            @if ($commande->statut == 'annulée' || ($commande->statut != 'confirmée' && $commande->statut != 'livrée'))
+                                <option value="en attente" {{ $commande->statut == 'en attente' ? 'selected' : '' }}>En
+                                    attente</option>
+                                <option value="confirmée" {{ $commande->statut == 'confirmée' ? 'selected' : '' }}>
+                                    Confirmée</option>
+                                <option value="livrée" {{ $commande->statut == 'livrée' ? 'selected' : '' }}>Livrée
+                                </option>
+                                <option value="annulée" {{ $commande->statut == 'annulée' ? 'selected' : '' }}>Annulée
+                                </option>
                             @elseif($commande->statut == 'confirmée' || $commande->statut == 'livrée')
-                                <option value="livrée" {{ $commande->statut == 'livrée' ? 'selected' : '' }}>Livrée</option>
-                                <option value="annulée" {{ $commande->statut == 'annulée' ? 'selected' : '' }}>Annulée</option>
+                                <option value="livrée" {{ $commande->statut == 'livrée' ? 'selected' : '' }}>Livrée
+                                </option>
+                                <option value="annulée" {{ $commande->statut == 'annulée' ? 'selected' : '' }}>Annulée
+                                </option>
                             @endif
                         </select>
-
+    
                     </div>
 
-
                 </div>
+
+             
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
@@ -92,6 +117,106 @@
                     </div>
                 </div>
             </div>
+
+
+             <!-- ========== Start facture generé ========== -->
+
+             
+             <div class="ticket-container col-8 m-auto" style="font-family: 'Courier New', monospace; font-size: 12px; width: 350px;">
+                <div class="ticket-header" style="text-align: center;">
+                    <h3>CHEZ JEANNE</h3>
+                    <h4>RESTAURANT LOUNGE</h4>
+                    <h5>AFRICAIN ET EUROPEEN</h5>
+                    <p>-------------------------------</p>
+                    <div style="display: flex; justify-content: space-between; padding: 0 10px;">
+                        <span><strong>Commande:</strong> #{{ $commande->code }}</span>
+                        <span><strong>Date:</strong> {{ $commande->created_at->format('d/m/Y à H:i') }}</span>
+                    </div>
+                </div>
+                <div class="ticket-info" style="padding: 0 10px;">
+
+                   
+                    <div style="display: flex; justify-content: space-between;">
+                        <span><strong>Caisse:</strong> {{ Auth::user()->caisse->libelle ?? 'Non définie' }}</span>
+                        <span><strong>Caissier:</strong> {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span>
+                    </div>
+                </div>
+                <p style="text-align: center;">-------------------------------</p>
+                <div class="ticket-products">
+                    <table style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Designation</th>
+                                <th>Qté</th>
+                                <th>P.U.</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($commande->produits as $produit)
+                                <tr>
+                                    <td>{{ $produit->nom }}</td>
+                                    <td>{{ $produit->pivot->quantite }}</td>
+                                    <td>{{ number_format($produit->pivot->prix_unitaire, 0, ',', ' ') }}</td>
+                                    <td>{{ number_format($produit->pivot->quantite * $produit->pivot->prix_unitaire, 0, ',', ' ') }}
+                                    </td>
+                                </tr>
+                            
+                            @endforeach
+                            <tfoot>
+                                <tr>
+                                    <th colspan="3" style="text-align: right;">Total:</th>
+                                    <th>{{ number_format($commande->montant_total, 0, ',', ' ') }} FCFA</th>
+                                </tr>
+                            </tfoot>
+                        </tbody>
+                    </table>
+                </div>
+               
+
+                <p style="text-align: center;">-------------------------------</p>
+
+                {{-- <div class="reglement col-md-8 m-auto" style="text-align: justify;">
+                    <span><strong>Réglement:</strong> {{ $commande->created_at->format('d/m/Y à H:i:s') }}</span><br>
+                    <span><strong class="text-capitalize">{{ $commande->mode_paiement }}:</strong>
+                        {{ number_format($commande->montant_recu, 0, ',', ' ') }} FCFA</span><br>
+                    <span><strong>Rendu:</strong> {{ number_format($commande->montant_rendu, 0, ',', ' ') }} FCFA</span>
+                </div> --}}
+
+                <div class="col-md-12 m-auto">
+                    <span><strong>Nom du client:</strong> {{ $commande->client->first_name }} {{ $commande->client->last_name }}</span><br>
+                    <span><strong>Contact du client:</strong> {{ $commande->client->phone }}</span><br>
+                    <span><strong>mode de livraison:</strong> {{ $commande->mode_livraison }}</span><br>
+                    <span><strong>Adresse de livraison:</strong> {{ $commande->adresse_livraison ?? 'Au restaurant' }}</span>
+
+                </div>
+
+                <p style="text-align: center;">-------------------------------</p>
+
+                <div class="ticket-footer" style="text-align: center;">
+                    <p>MERCI DE VOTRE VISITE</p>
+                    <p>AU REVOIR ET A BIENTÔT</p>
+                    <p>RESERVATIONS: 07-49-88-95-18</p>
+                    <p>A BIENTÔT</p>
+                </div>
+            </div>
+
+
+            <script>
+
+                function imprimerFacture(){
+                    var ticketContent = document.querySelector('.ticket-container').innerHTML;
+                    var win = window.open('', '', 'height=700,width=700');
+                    win.document.write('<html><head><title>Facture de commande</title></head><body>');
+                    win.document.write(ticketContent);
+                    win.document.write('</body></html>');
+                    win.document.close();
+                    win.print();
+                }
+                
+            </script>
+            <!-- ========== End facture generé ========== -->
+
         </div>
     </div>
 @endsection

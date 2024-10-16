@@ -50,14 +50,26 @@ class CommandeController extends Controller
 
             if ($nouveauStatut == 'confirmée') {
                 // Mise à jour de la table vente
+                ##Generer le code vente
+                // Obtenir les deux premières lettres du nom de la caissière
+                $initialesCaissiere = substr(auth()->user()->first_name, 0, 2);
+                // Obtenir le numéro d'ordre de la vente pour aujourd'hui
+                $nombreVentes = Vente::count();
+                $numeroOrdre = $nombreVentes + 1;
+                // Obtenir la date et l'heure actuelles
+                $dateHeure = now()->format('dmYHi');
+                // Générer le code de vente
+                $codeVente = strtoupper($initialesCaissiere) . '-' . $numeroOrdre . $dateHeure;
                 $vente = new Vente();
-                $vente->code = 'V-' . strtoupper(Str::random(8));
+                $vente->code = $codeVente;
                 $vente->date_vente = now();
                 $vente->montant_total = $commande->montant_total;
                 $vente->user_id = auth()->id();
                 $vente->caisse_id = auth()->user()->caisse_id;
                 $vente->client_id = $commande->client_id;
                 $vente->statut = 'confirmée';
+                $vente->type_vente = 'commande';
+                $vente->commande_id = $commande->id;
 
                 $vente->save();
 

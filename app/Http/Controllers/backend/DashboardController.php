@@ -56,6 +56,8 @@ class DashboardController extends Controller
             ->take(10)
             ->get();
 
+
+            
       
         // dd($commandesEnAttente);
         return view('backend.pages.index', compact('commandesEnAttente', 'produitsLesPlusVendus'));

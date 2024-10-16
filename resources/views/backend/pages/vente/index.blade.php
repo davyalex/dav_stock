@@ -25,10 +25,10 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Liste des ventes </strong></h5>
-                    {{-- @if (auth()->user()->hasRole('caisse'))
-                        <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">Effectuer
-                            une nouvelle vente</a>
-                    @endif --}}
+                    @if (auth()->user()->hasRole('caisse'))
+                        <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">
+                            Nouvelle vente</a>
+                    @endif
 
                     @if (!auth()->user()->hasRole('caisse'))
                     <form action="{{ route('vente.index') }}" method="GET">
@@ -102,6 +102,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>N° de vente</th>
+                                    <th>Type de vente</th>
                                     <th>Date</th>
                                     <th>Montant</th>
                                     <th>Vendu par</th>
@@ -114,7 +115,8 @@
                                         <td> {{ $loop->iteration }} </td>
                                         <td> <a class="fw-bold"
                                                 href="{{ route('vente.show', $item->id) }}">#{{ $item['code'] }}</a> </td>
-                                        <td> {{ $item['created_at']->format('d/m/Y') }} </td>
+                                        <td> {{ $item['type_vente'] }} </td>
+                                        <td> {{ $item['created_at']->format('d/m/Y à H:i') }} </td>
                                         <td> {{ number_format($item['montant_total'], 0, ',', ' ') }} FCFA </td>
                                         <td> {{ $item['user']['first_name'] }} {{ $item['user']['last_name'] }} </td>
                                         <td> {{ $item['caisse']['libelle'] ?? '' }} </td>

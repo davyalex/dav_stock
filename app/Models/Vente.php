@@ -29,6 +29,8 @@ class Vente extends Model
         'numero_table',
         'nombre_couverts',
         'statut_cloture', // boolean true ou false
+        'type_vente', // vente normale , commande , 
+        'commande_id',
     ];
 
     public $incrementing = false;
@@ -42,6 +44,15 @@ class Vente extends Model
         });
     }
 
+    public function commande()
+    {
+        return $this->belongsTo(Commande::class, 'commande_id');
+    }
+
+
+
+
+    
 
     public function user()
     {

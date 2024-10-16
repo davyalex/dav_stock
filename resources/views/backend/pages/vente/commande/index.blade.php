@@ -63,7 +63,7 @@
                                         </td>
                                         <td>
                                             <a href="{{route('commande.show', $item->id)}}" class="btn btn-sm btn-info">Détails</a>
-                                            <a href="#" class="btn btn-sm btn-primary">Imprimer</a>
+                                            {{-- <a href="#" class="btn btn-sm btn-primary">Imprimer</a> --}}
                                         </td>
                                     </tr>
                                 @empty
