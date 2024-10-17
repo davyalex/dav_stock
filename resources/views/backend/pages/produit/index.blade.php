@@ -74,13 +74,13 @@
                                                     <li><a href="{{route('produit.edit' ,  $item['id'])}}" type="button" class="dropdown-item edit-item-btn"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             Modifier</a></li>
-                                                    {{-- <li>
+                                                    <li>
                                                         <a href="#" class="dropdown-item remove-item-btn delete"
                                                             data-id={{ $item['id'] }}>
                                                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Delete
+                                                            Supprimer
                                                         </a>
-                                                    </li> --}}
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </td>

@@ -49,7 +49,7 @@
                                     <th>PU vente</th>
                                     <th>Crée par</th>
                                     <th>Date achat</th>
-                                    <th class="d-none">Actions</th>
+                                    <th class="d-block">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -78,7 +78,7 @@
                                         <td> {{ $item['prix_vente_unitaire'] ?? 'N/D'}} </td>
                                         <td> {{ $item['user']['first_name'] }} </td>
                                         <td> {{ $item['date_achat'] }} </td>
-                                        <td class="d-none">
+                                        <td class="d-block">
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
                                                     data-bs-toggle="dropdown" aria-expanded="false">

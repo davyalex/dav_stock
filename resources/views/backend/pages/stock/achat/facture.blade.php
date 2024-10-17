@@ -40,7 +40,7 @@
                                     <th>Montant</th>
                                     <th>Date</th>
                                     <th>Crée par</th>
-                                    <th class="d-none">Actions</th>
+                                    <th class="d-block">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -53,31 +53,31 @@
                                         <td> {{ $item['montant'] }} </td>
                                         <td> {{ $item['date_facture'] }} </td>
                                         <td> {{ $item['user']['first_name'] }} </td>
-                                        <td class="d-none">
+                                        <td class="d-block">
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
                                                     data-bs-toggle="dropdown" aria-expanded="false">
                                                     <i class="ri-more-fill align-middle"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a href="{{ route('ajustement.create', $item['id']) }}"
+                                                    {{-- <li><a href="{{ route('ajustement.create', $item['id']) }}"
                                                             class="dropdown-item"><i
                                                                 class=" ri-exchange-fill align-bottom me-2 text-muted"></i>
                                                             Ajustement</a>
-                                                    </li>
-                                                    <li><a href="#!" class="dropdown-item"><i
+                                                    </li> --}}
+                                                    <li><a href="{{route('achat.index' , $item->id)}}" class="dropdown-item"><i
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            View</a>
+                                                            Details</a>
                                                     </li>
-                                                    <li><a href="{{ route('achat.edit', $item['id']) }}" type="button"
+                                                    {{-- <li><a href="{{ route('achat.edit', $item['id']) }}" type="button"
                                                             class="dropdown-item edit-item-btn"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Edit</a></li>
+                                                            Edit</a></li> --}}
                                                     <li>
                                                         <a href="#" class="dropdown-item remove-item-btn delete"
                                                             data-id={{ $item['id'] }}>
                                                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Delete
+                                                            Supprimer
                                                         </a>
                                                     </li>
                                                 </ul>
@@ -117,7 +117,7 @@
 
     <script>
         $(document).ready(function() {
-            var route = "depense"
+            var route = "achat"
             delete_row(route);
         })
     </script>

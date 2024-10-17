@@ -51,11 +51,11 @@ return new class extends Migration
             $table->boolean('statut_cloture')->default(false);
             $table->enum('type_vente', ['normale', 'commande'])->nullable();
 
-            $table->foreignId('commande_id')  // commande qui a fait la vente
-                ->nullable()
-                ->constrained('commandes')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            // $table->foreignId('commande_id')  // commande qui a fait la vente
+            //     ->nullable()
+            //     ->constrained('commandes')
+            //     ->onUpdate('cascade')
+            //     ->onDelete('cascade');
 
             $table->softDeletes();
 

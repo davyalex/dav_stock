@@ -358,4 +358,13 @@ class AchatController extends Controller
             return $e->getMessage();
         }
     }
+
+
+    public function delete($id)
+    {
+        Facture::find($id)->forceDelete();
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
 }

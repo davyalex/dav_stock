@@ -25,12 +25,12 @@
                                     <div class="card-body">
                                         <div class="mb-3 row">
 
-                                            <div class="mb-3 col-md-5">
+                                            <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="product-title-input">Sélectionner une
                                                     categorie <span class="text-danger">*</span>
                                                 </label>
                                                 <select id="categorie" class="form-control js-example-basic-single"
-                                                    name="categorie" required>
+                                                    name="categorie_id" required>
                                                     <option value="" disabled selected>Selectionner</option>
 
                                                     @foreach ($data_categorie as $categorie)
@@ -42,7 +42,7 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-md-5">
+                                            <div class="col-md-6">
                                                 <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
@@ -50,52 +50,87 @@
                                                     class="form-control" id="nomProduit" required>
                                             </div>
 
-                                            {{-- <div class="col-md-3 mb-3">
-                                                <label class="form-label" for="meta-title-input">Magasin
-                                                </label>
-                                                <select class="form-control js-example-basic-single" name="magasin">
-                                                    <option value="" disabled selected>Choisir</option>
-                                                    @foreach ($data_magasin as $magasin)
-                                                        <option value="{{ $magasin->id }}"
-                                                            {{ $magasin->id == $data_produit->magasin_id ? 'selected' : '' }}>
-                                                            {{ $magasin->libelle }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div> --}}
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label" for="meta-title-input">valeur de l'unité
+                                                    <i class="ri ri-information-line fs-5  text-warning p-1 rounded fw-bold"
+                                                        data-bs-toggle="popover" data-bs-trigger="hover focus"
+                                                        title="Information"
+                                                        data-bs-content="exemple 1.5 L , utiliser un . ou , exemple 1,5"></i>
 
-{{-- 
-                                            <div class="col-md-4 mb-3">
-                                                <label class="form-label" for="meta-title-input">Qté mesure<span
-                                                        class="text-danger">*</span>
                                                 </label>
-                                                <input type="number" name="quantite_unite"
-                                                    value="{{ $data_produit->quantite_unite }}" class="form-control"
-                                                    id="quantiteUnite" required>
-                                            </div> --}}
 
-                                            {{-- <div class="col-md-4 mb-3">
-                                                <label class="form-label" for="meta-title-input">Unite mesure<span
-                                                        class="text-danger">*</span>
+                                                <input type="number" name="valeur_unite"
+                                                    class="form-control customNumberInput" id="quantiteUnite" step="0.01"
+                                                    value="{{ $data_produit->valeur_unite }}">
+                                            </div>
+
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label" for="meta-title-input">Unité
                                                 </label>
-                                                <select id="uniteMesure" class="form-control js-example-basic-single"
-                                                    name="unite_mesure" required>
-                                                    <option value="" disabled selected>Choisir</option>
+                                                <select id="uniteProduit" class="form-control js-example-basic-single"
+                                                    name="unite_id">
+                                                    <option value="" selected>Choisir</option>
                                                     @foreach ($data_unite as $unite)
-                                                        <option value="{{ $unite->id }}"
-                                                            {{ $unite->id == $data_produit->unite_id ? 'selected' : '' }}>
+                                                        <option value="{{ $unite->id }}" @selected($data_produit->unite_id == $unite->id)>
                                                             {{ $unite->libelle }}
                                                             ({{ $unite->abreviation }})
                                                         </option>
                                                     @endforeach
                                                 </select>
-                                            </div> --}}
+                                            </div>
 
-                                            <div class="col-md-2 mb-3">
-                                                <label class="form-label" for="meta-title-input">Stock alerte <span
-                                                        class="text-danger">*</span>
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label" for="meta-title-input">Format
                                                 </label>
-                                                <input type="number" value="{{ $data_produit->stock_alerte }}"
-                                                    name="stock_alerte" class="form-control" id="stockAlerte" required>
+                                                <select id="formatProduit" class="form-control js-example-basic-single"
+                                                    name="format_id">
+                                                    <option value=""  selected>Choisir</option>
+                                                    @foreach ($data_format as $format)
+                                                        <option value="{{ $format->id }}" @selected($data_produit->format_id == $format->id)>
+                                                            {{ $format->libelle }}
+                                                            ({{ $format->abreviation }})
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label" for="meta-title-input">valeur du format
+                                                    <i class="ri ri-information-line fs-5  text-warning p-1 rounded fw-bold"
+                                                        data-bs-toggle="popover" data-bs-trigger="hover focus"
+                                                        title="Information"
+                                                        data-bs-content="exemple pack de 6 bouteilles , 6"></i>
+                                                </label>
+
+                                                <input type="number" name="valeur_format"
+                                                    class="form-control customNumberInput" id="quantiteUnite" step="0.01"
+                                                    value="{{ $data_produit->valeur_format }}">
+                                            </div>
+
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label" for="meta-title-input">Unité de sortie ou vente
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <select id="uniteSortie" class="form-control js-example-basic-single"
+                                                    name="unite_sortie_id" required>
+                                                    <option value="" disabled selected>Choisir</option>
+                                                    @foreach ($data_unite as $unite)
+                                                        <option value="{{ $unite->id }}" @selected($data_produit->unite_sortie_id == $unite->id)>
+                                                            {{ $unite->libelle }}
+                                                            ({{ $unite->abreviation }})
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+
+                                            <div class="col-md-4 mb-3 prixVente">
+                                                <label class="form-label" for="meta-title-input">Prix de vente
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="number" name="prix" class="form-control prixVente"
+                                                    value="{{ $data_produit->prix }}">
                                             </div>
 
 
@@ -103,6 +138,18 @@
                                         <div>
                                             <label>Description</label>
                                             <textarea name="description" id="ckeditor-classic"></textarea>
+                                        </div>
+
+                                        <div class="col-md-12 mt-3">
+                                            <label class="form-check-label" for="customAff">Statut du produit </label>
+
+                                            <div class="form-check form-switch form-switch-lg col-md-2" dir="ltr">
+                                                <input type="checkbox" name="statut" class="form-check-input"
+                                                    id="customAff" {{ $data_produit['statut'] == 'active' ? 'checked' : '' }}>
+                                            </div>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -116,8 +163,17 @@
 
                                     <div class="card-body">
 
+                                        <div class="col-md-12 mb-3">
+                                            <label class="form-label" for="meta-title-input">Stock alerte <span
+                                                    class="text-danger">*</span>
+                                            </label>
+                                            <input type="number" value="{{ $data_produit->stock_alerte }}"
+                                                name="stock_alerte" class="form-control" id="stockAlerte" required>
+                                        </div>
+
                                         <div class="mb-4">
-                                            <h5 class="fs-14 mb-1">Image principale <span class="text-danger">*</span></h5>
+                                            <h5 class="fs-14 mb-1">Image principale <span class="text-danger">*</span>
+                                            </h5>
                                             <div class="text-center">
                                                 <div class="position-relative d-inline-block">
                                                     <div class="position-absolute top-100 start-100 translate-middle">
@@ -197,47 +253,72 @@
         <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
         <script>
-            //Afficher les champs en fonction de la categorie selectionné
-            var categorieData = {{ Js::from($categorieAll) }} // from product controller
+            //recuperer la valeur de la categorie par defaut
+            var defaultCategorie = @json($data_produit->categorie->famille);
 
-            //si quantiteUnite & uniteMesure est vide on disabled=true
-            // if ($('#quantiteUnite').val() == '' && $('#uniteMesure').val() == null) {
-            //     $('#quantiteUnite').prop('disabled', true);
-            //     $('#uniteMesure').prop('disabled', true);
+            if (defaultCategorie == 'restaurant') {
+                $('.prixVente').prop('required', false)
+                $('.prixVente').hide();
+                $('.prixVente').val('')
+            } else {
 
-            //     $('#quantiteUnite').prop('required', false)
-            //     $('#quantiteUnite').prop('required', true)
+                $('.prixVente').prop('required', true)
+                $('.prixVente').show();
 
-            // }
+
+            }
+
+
+            // Afficher les champs en fonction de la categorie selectionné
+            let categoryFamille;
+            var categorieData = @json($categorieAll) // from product controller
+
+
 
 
             //recuperer la categorie selectionné
-            // $('#categorie').change(function(e) {
-            //     e.preventDefault();
-            //     var categorieSelect = $(this).val()
+            $('#categorie').change(function(e) {
+                e.preventDefault();
 
-            //     //filtrer pour recuperer la categorie selectionnée
-            //     var categorieFilter = categorieData.filter(function(item) {
-            //         return item.id == categorieSelect
-            //     })
+                var categorieSelect = $(this).val()
 
-            //     // si categorieFilter = restaurant , required false
-            //     if (categorieFilter[0].famille == 'restaurant') {
-            //         $('#quantiteUnite').prop('required', false)
-            //         $('#quantiteUnite').prop('disabled', true)
+                //filtrer pour recuperer la categorie selectionnée
+                var categorieFilter = categorieData.filter(function(item) {
+                    return item.id == categorieSelect
+                })
 
-            //         $('#uniteMesure').prop('required', false)
-            //         $('#uniteMesure').prop('disabled', true)
-            //     } else {
-            //         $('#quantiteUnite').prop('required', true)
-            //         $('#quantiteUnite').prop('disabled', false)
 
-            //         $('#uniteMesure').prop('required', true)
-            //         $('#uniteMesure').prop('disabled', false)
+                // si categorieFilter = restaurant , required false
+                if (categorieFilter[0].famille == 'restaurant') {
+                    $('.prixVente').prop('required', false)
+                    $('.prixVente').hide();
+                    $('.prixVente').val('')
 
-            //     }
+                    // $('#quantiteUnite').prop('required', false)
+                    // $('#quantiteUnite').prop('disabled', true)
+                    // $('#quantiteUnite').val('')
 
-            // });
+                    // $('#uniteMesure').prop('required', false)
+                    // $('#uniteMesure').prop('disabled', true)
+                    // $('#uniteMesure').val('')
+                } else {
+
+                    $('.prixVente').prop('required', true)
+                    $('.prixVente').show();
+
+                    // $('#quantiteUnite').prop('required', true)
+                    // $('#quantiteUnite').prop('disabled', false)
+
+                    // $('#uniteMesure').prop('required', true)
+                    // $('#uniteMesure').prop('disabled', false)
+
+                }
+
+                // recuperer la famille de la categorie
+                categoryFamille = categorieFilter[0];
+
+
+            });
 
 
 

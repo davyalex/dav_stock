@@ -43,17 +43,20 @@ class Produit extends Model implements HasMedia
         'nom', // libellé produit
         'slug',
         'description',
-        'prix',
+        'prix', // prix de vente
         'stock_initial',
         'stock', //quantité
         'stock_alerte', // stock de securite
         'categorie_id',
         'type_id', // type produit
-        'statut', // oui , non
+        'statut', // active , desactive
         'user_id',
-        'magasin_id',
-        'quantite_unite', // qté unite de mesure
-        'unite_id',
+        // 'magasin_id',
+        'valeur_unite', // qté unite de mesure
+        'unite_id', // unite du produit
+        'format_id', // format du produit
+        'valeur_format', // valeur du format
+        'unite_sortie_id', // unite de sortie ou vente
     ];
 
 
@@ -97,6 +100,11 @@ class Produit extends Model implements HasMedia
     public function unite() 
     {
         return $this->belongsTo(Unite::class, 'unite_id');
+    }
+
+    public function uniteSortie() 
+    {
+        return $this->belongsTo(Unite::class, 'unite_sortie_id');
     }
 
     public function magasin()

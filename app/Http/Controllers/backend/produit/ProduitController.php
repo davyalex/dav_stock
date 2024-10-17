@@ -36,12 +36,13 @@ class ProduitController extends Controller
             $categorieAll = Categorie::all();
 
             $data_unite = Unite::all();
+            $data_format = Format::all();
             $data_magasin = Magasin::all();
 
 
             // dd($data_produit->toArray());
 
-            return view('backend.pages.produit.create', compact('data_categorie', 'categorieAll', 'data_unite', 'data_magasin'));
+            return view('backend.pages.produit.create', compact('data_categorie', 'categorieAll', 'data_unite', 'data_magasin', 'data_format'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -53,25 +54,34 @@ class ProduitController extends Controller
         try {
 
             //get principal category of categorie request
-            $categorie = Categorie::find($request['categorie']);
+            $categorie = Categorie::find($request['categorie_id']);
             $principaCat =  $categorie->getPrincipalCategory();
 
             //request validation
             $request->validate([
                 'nom' => 'required',
                 'description' => '',
-                'categorie' => 'required',
+                'categorie_id' => 'required',
                 'stock' => '',
                 'stock_alerte' => 'required',
                 'statut' => '',
-                // 'quantite_unite' => $categorie->famille == 'bar' ? 'required' : '',
-                // 'unite_mesure' => $categorie->famille == 'bar' ? 'required' : '',
+                'prix' => $categorie->famille == 'bar' ? 'required' : '',
+
+                'valeur_unite' => '',
+                'unite_id' => '',
+                'format_id' => '',
+                'valeur_format' => '',
+                'unite_sortie_id' => 'required',
+
                 'imagePrincipale' => $categorie->famille == 'bar' ? 'required' : '',
             ]);
 
             // Vérifier si le produit existe déjà
             $existingProduct = Produit::where('nom', $request['nom'])
-                ->where('quantite_unite', $request['quantite_unite'])
+                ->where('valeur_unite', $request['valeur_unite'])
+                ->where('unite_id', $request['unite'])
+                ->where('format_id', $request['format'])
+                ->where('valeur_format', $request['valeur_format'])
                 ->exists();
 
             if ($existingProduct) {
@@ -87,11 +97,17 @@ class ProduitController extends Controller
                 'nom' => $request['nom'],
                 'code' =>  $sku,
                 'description' => $request['description'],
-                'categorie_id' => $request['categorie'],
+                'categorie_id' => $request['categorie_id'],
                 'stock_alerte' => $request['stock_alerte'],
                 'type_id' =>   $principaCat['id'], // type produit
-                // 'quantite_unite' => $request['quantite_unite'],
-                // 'unite_id' => $request['unite_mesure'],
+                'prix' => $request['prix'],
+                // 'stock' => $request['stock'],
+                'valeur_unite' => $request['valeur_unite'],
+                'unite_id' => $request['unite_id'],
+                'format_id' => $request['format_id'],
+                'valeur_format' => $request['valeur_format'],
+                'unite_sortie_id' => $request['unite_sortie_id'],
+                'statut' => 'active',
                 'user_id' => Auth::id(),
             ]);
 
@@ -151,9 +167,11 @@ class ProduitController extends Controller
 
             $data_produit = Produit::find($id);
 
+
             $categorieAll = Categorie::all();
 
             $data_unite = Unite::all();
+            $data_format = Format::all();
             $data_magasin = Magasin::all();
 
 
@@ -172,7 +190,7 @@ class ProduitController extends Controller
             // dd($galleryProduit);
 
             $id = $id;
-            return view('backend.pages.produit.edit', compact('data_produit', 'data_categorie', 'categorieAll', 'data_unite', 'data_magasin', 'galleryProduit', 'id'));
+            return view('backend.pages.produit.edit', compact('data_produit', 'data_categorie', 'categorieAll', 'data_unite', 'data_magasin', 'galleryProduit', 'id', 'data_format'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -183,34 +201,50 @@ class ProduitController extends Controller
         try {
 
             //get principal category of categorie request
-            $categorie = Categorie::find($request['categorie']);
+            $categorie = Categorie::find($request['categorie_id']);
             $principaCat =  $categorie->getPrincipalCategory();
 
             //request validation
             $request->validate([
                 'nom' => 'required',
                 'description' => '',
-                'categorie' => 'required',
+                'categorie_id' => 'required',
                 'stock' => '',
                 'stock_alerte' => 'required',
+                'prix' => $categorie->famille == 'bar' ? 'required' : '',
+
                 // 'magasin' => '',
-                // 'quantite_unite' => $categorie->famille == 'bar' ? 'required' : '',
-                // 'unite_mesure' => $categorie->famille == 'bar' ? 'required' : '',
+
+                'valeur_unite' => '',
+                'unite_id' => '',
+                'format_id' => '',
+                'valeur_format' => '',
+                'unite_sortie_id' => 'required',
                 'imagePrincipale' => '',
             ]);
 
+            // active  :  desactive le produit
+            $statut = '';
+            if ($request['statut'] == 'on') {
+                $statut = 'active';
+            } else {
+                $statut = 'desactive';
+            }
 
 
             $data_produit = tap(Produit::find($id))->update([
                 'nom' => $request['nom'],
                 'description' => $request['description'],
-                'categorie_id' => $request['categorie'],
+                'categorie_id' => $request['categorie_id'],
                 'stock_alerte' => $request['stock_alerte'],
                 'type_id' =>   $principaCat['id'], // type produit
-
-                // 'quantite_unite' => $request['quantite_unite'],
-                // 'unite_id' => $request['unite_mesure'],
-                // 'magasin_id' => $request['magasin'],
+                'prix' => $request['prix'],
+                'valeur_unite' => $request['valeur_unite'],
+                'unite_id' => $request['unite_id'],
+                'format_id' => $request['format_id'],
+                'valeur_format' => $request['valeur_format'],
+                'unite_sortie_id' => $request['unite_sortie_id'],
+                'statut' => $statut,
                 'user_id' => Auth::id(),
             ]);
 
@@ -220,7 +254,6 @@ class ProduitController extends Controller
                 $media = $data_produit->addMediaFromRequest('imagePrincipale')->toMediaCollection('ProduitImage');
                 \Spatie\ImageOptimizer\OptimizerChainFactory::create()->optimize($media->getPath());
             }
-
 
 
 
