@@ -79,7 +79,7 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-md-3 mb-3">
+                                            {{-- <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="meta-title-input">Format
                                                 </label>
                                                 <select id="formatProduit" class="form-control js-example-basic-single"
@@ -106,9 +106,9 @@
                                                 <input type="number" name="valeur_format"
                                                     class="form-control customNumberInput" id="quantiteUnite" step="0.01"
                                                     value="{{ $data_produit->valeur_format }}">
-                                            </div>
+                                            </div> --}}
 
-                                            <div class="col-md-4 mb-3">
+                                            <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="meta-title-input">Unité de sortie ou vente
                                                     <span class="text-danger">*</span>
                                                 </label>
@@ -125,7 +125,7 @@
                                             </div>
 
 
-                                            <div class="col-md-4 mb-3 prixVente">
+                                            <div class="col-md-3 mb-3 prixVente">
                                                 <label class="form-label" for="meta-title-input">Prix de vente
                                                     <span class="text-danger">*</span>
                                                 </label>
@@ -165,7 +165,7 @@
 
                                         <div class="col-md-12 mb-3">
                                             <label class="form-label" for="meta-title-input">Stock alerte <span
-                                                    class="text-danger">*</span>
+                                                    class="text-danger">*</span> (en unité de sortie ou vente)
                                             </label>
                                             <input type="number" value="{{ $data_produit->stock_alerte }}"
                                                 name="stock_alerte" class="form-control" id="stockAlerte" required>

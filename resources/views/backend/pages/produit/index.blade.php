@@ -36,10 +36,11 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Code</th>
                                     <th>Image</th>
                                     <th>Nom</th>
-                                    <th>Categorie</th>
-                                    <th>Type de produit</th>
+                                    <th>Categorie (Famille)</th>
+                                    {{-- <th>Type de produit</th> --}}
                                     <th>Stock</th>
                                     <th>Stock alerte</th>
                                     <th>Date creation</th>
@@ -50,15 +51,25 @@
                                 @foreach ($data_produit as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
+                                        <td>{{ $item['code'] }}
+                                            <span class="badge{{$item->statut == 'desactive' ? ' bg-danger' : ' bg-success'}}">{{ $item['statut'] }}</span>
+                                        </td>
                                         <td>
-                                            <img class="rounded-circle" src="{{ $item->getFirstMediaUrl('ProduitImage') }}"
+                                            <img class="rounded-circle" src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
                                                 width="50px" alt="">
                                         </td>
-                                        <td>{{ $item['nom'] }} <br> {{$item['quantite_unite']}} {{$item['unite']['libelle'] ?? ''}}</td>
-                                        <td>{{ $item['categorie']['name'] ?? ''}}</td>
-                                        <td>{{ $item['typeProduit']['name'] }}  </td>
-                                        <td>{{ $item['stock'] }}</td>
-                                        <td>{{ $item['stock_alerte'] }}</td>
+                                        <td>{{ $item['nom'] }}
+                                            <p> {{ $item['valeur_unite'] ?? '' }}
+                                                {{ $item['unite']['libelle'] ?? '' }}</p>
+
+                                            {{-- <p>{{ $item['format']['libelle'] ?? '' }} de
+                                                {{ $item['valeur_format'] ?? '' }}</p> --}}
+
+                                        </td>
+                                        <td>{{ $item['categorie']['famille'] ?? '' }}({{ $item['categorie']['name'] ?? '' }})</td>
+                                        {{-- <td>{{ $item['typeProduit']['name'] }}  </td> --}}
+                                        <td>{{ $item['stock'] }} {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
+                                        <td>{{ $item['stock_alerte'] }} {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
                                         <td> {{ $item['created_at'] }} </td>
                                         <td>
                                             <div class="dropdown d-inline-block">
@@ -67,11 +78,13 @@
                                                     <i class="ri-more-fill align-middle"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a href="{{route('produit.show' , $item['id'])}}" class="dropdown-item"><i
+                                                    <li><a href="{{ route('produit.show', $item['id']) }}"
+                                                            class="dropdown-item"><i
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                             Detail</a>
                                                     </li>
-                                                    <li><a href="{{route('produit.edit' ,  $item['id'])}}" type="button" class="dropdown-item edit-item-btn"><i
+                                                    <li><a href="{{ route('produit.edit', $item['id']) }}" type="button"
+                                                            class="dropdown-item edit-item-btn"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             Modifier</a></li>
                                                     <li>
@@ -118,10 +131,10 @@
     {{-- <script src="{{URL::asset('myJs/js/delete_row.js')}}"></script> --}}
 
     <script>
-       $(document).ready(function(){
-        var route = "produit"
-        delete_row(route);
-       })
+        $(document).ready(function() {
+            var route = "produit"
+            delete_row(route);
+        })
     </script>
     {{-- <script>
         $(document).ready(function() {

@@ -282,8 +282,8 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
 
     // stock -achat
     Route::prefix('achat')->controller(AchatController::class)->group(function () {
-        route::get('facture', 'facture')->name('achat.facture');  // liste des facture
-        route::get('facture/{id}', 'index')->name('achat.index');
+        route::get('index', 'index')->name('achat.index');  // liste des facture
+        route::get('show/{id}', 'show')->name('achat.show');
         route::get('create', 'create')->name('achat.create');
         route::post('store', 'store')->name('achat.store');
         route::get('edit/{id}', 'edit')->name('achat.edit');

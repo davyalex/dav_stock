@@ -109,7 +109,7 @@
                                         <label class="form-label" for="meta-title-input">Date <span
                                                 class="text-danger">*</span>
                                         </label>
-                                        <input type="datetime-local" id="currentDate" value="<?php echo date('Y-m-d H:i:s'); ?>" name="date_achat"
+                                        <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>" name="date_achat"
                                             class="form-control" required>
                                     </div>
 
@@ -133,7 +133,7 @@
                                     plus <i class="ri ri-add-circle-line"></i></button>
                             </div>
 
-                            <div class="fw-bold">Total Dépensé: <span id="total_depense">0</span></div>
+                            <div>Total Dépensé: <span id="total_depense">0</span></div>
 
 
 
@@ -168,9 +168,8 @@
                             <option disabled selected value>Selectionner un produit
                             </option>
                             @foreach ($data_produit as $produit)
-                                <option value="{{ $produit->id }}">{{ $produit->nom }} 
-                                    {{ $produit->valeur_unite ?? '' }} {{ $produit->unite->libelle ?? '' }} {{ $produit->unite ? '('. $produit->unite->abreviation . ')' : '' }}
-                                   
+                                <option value="{{ $produit->id }}">{{ $produit->nom }} {{ $produit->quantite_unite }}
+                                    {{ $produit->unite->libelle ?? '' }}
                                 </option>
                             @endforeach
                         </select>
@@ -199,7 +198,7 @@
                         <input type="number" name="quantite_format[]" class="form-control qteAcquise" required>
                     </div>
 
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label" for="product-title-input">Format
                             <span class="text-danger">*</span>
                         </label>
@@ -230,13 +229,6 @@
                         <input type="number" name="quantite_stocke[]" class="form-control qteStockable" readonly>
                     </div>
 
-
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label" for="stocks-input">Unité de sortie ou vente
-                        </label>
-                        <input type="text" name="unite_sortie[]" class="form-control uniteSortie" readonly>
-                    </div>
-
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="stocks-input">Prix
                             unitaire du format
@@ -257,13 +249,13 @@
                     </div>
 
 
-                    {{-- <div class="col-md-3 mb-3">
+                    <div class="col-md-3 mb-3">
                         <label class="form-label" for="meta-title-input">Unité de
                             sortie
                             <span class="text-danger">*</span>
                         </label>
                         <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
-                        <select class="form-control selectView uniteSortie" name="unite_sortie[]" required>
+                        <select class="form-control selectView " name="unite_sortie[]" required>
                             <option value disabled selected>Choisir</option>
                             @foreach ($data_unite as $unite)
                                 <option value="{{ $unite->id }}">
@@ -271,11 +263,7 @@
                                 </option>
                             @endforeach
                         </select>
-                    </div> --}}
-
-                  
-
-
+                    </div>
 
                     <div class="col-md-3 mb-3 prixAchatUniteDiv">
                         <label class="form-label" for="stocks-input">Coût achat de
@@ -294,7 +282,7 @@
                             <span class="text-danger">*</span>
                         </label>
                         <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
-                        <input type="number" name="prix_vente_unitaire[]" class="form-control prixVente" readonly>
+                        <input type="number" name="prix_vente_unitaire[]" class="form-control prixVente">
                     </div>
 
                     {{-- <div class="col-md-6">
@@ -882,6 +870,7 @@
 
                     var dataProduct = {{ Js::from($data_produit) }}; // Données du contrôleur
 
+                    console.log(dataProduct);
 
                 }
 
@@ -947,7 +936,7 @@
 
 
                 // Fonction pour cacher les champs en fonction du type de produit selectionné
-                function productAddField(form) {
+                function addProductSelectListener(form) {
                     var dataProduct = {{ Js::from($data_produit) }}; // Données du contrôleur
                     var dataCategory = {{ Js::from($data_categorie) }}; // Données du contrôleur
 
@@ -974,30 +963,15 @@
                         form.find('.prixVente').prop('required', true)
                         form.find('.prixAchatUnite').prop('required', true)
 
-
-
                     }
 
+
                 }
 
-
-                //recuperer les informations du produit pour les attribuers au formulaire
-                function getProductInfo(form) {
-                    var dataProduct = @json($data_produit);
-                    var productSelected = form.find('.productSelected').val(); // Récupère la valeur du select actuel
-                    var filteredProduct = dataProduct.filter(function(item) {
-                        return item.id == productSelected;
-                    })
-
-                    form.find('.prixVente').val(filteredProduct[0].prix)
-                    form.find('.uniteSortie').val(filteredProduct[0].unite_sortie.libelle)                 
-                }
 
                 $(document).on('change', '.productSelected', function() {
                     var form = $(this).closest('.row');
-                    productAddField(form);
-                    getProductInfo(
-                        form);
+                    addProductSelectListener(form);
                 });
 
 

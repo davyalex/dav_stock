@@ -18,7 +18,7 @@ class SortieController extends Controller
     public function index()
     {
         try {
-            $data_sortie = Sortie::with('produits')->get();
+            $data_sortie = Sortie::with('produits')->orderBy('created_at', 'desc')->get();
 
             return view('backend.pages.stock.sortie.index', compact('data_sortie'));
         } catch (\Throwable $e) {
@@ -49,8 +49,9 @@ class SortieController extends Controller
             $data_produit = Produit::whereHas('categorie', function ($q) {
                 $q->where('famille', 'restaurant');
             })->where('stock', '>', 0)
-                ->with('achats.unite')->get();
-
+                ->where('statut', 'active')
+                ->with(['unite', 'uniteSortie'])
+                ->get();
 
             $data_unite = Unite::all();
 
@@ -67,12 +68,13 @@ class SortieController extends Controller
 
         try {
 
+
             // dd($request->all());
-            $request->validate([
-                'produit_id.*' => 'required',
-                'quantite_utilise.*' => 'required|numeric',
-                'unite_id.*' => 'required',
-            ]);
+            // $request->validate([
+            //     'produit_id.*' => 'required',
+            //     'quantite_utilise.*' => 'required|numeric',
+            //     'unite_id.*' => 'required',
+            // ]);
 
             // enregistrer la sortie
             $sortie = new Sortie();
@@ -81,29 +83,44 @@ class SortieController extends Controller
             $sortie->user_id = Auth::id();
             $sortie->save();
 
-            // enregistrer les produits de la sortie
-            foreach ($request->produit_id as $key => $produit_id) {
-                // Trouver l'unité correspondante pour ce produit
-                $produit = Produit::find($produit_id);
+            $cart = $request->input('cart');
 
-                // Attacher le produit à la sortie avec les informations associées
-                $sortie->produits()->attach($produit_id, [
-                    'quantite_utilise' => $request->quantite_utilise[$key],
-                    'quantite_existant' => $produit->stock,
-                    'unite_id' => $request->unite_id[$key],
-                    'unite_sortie' => $request->unite_libelle[$key],
+            foreach ($cart as $item) {
+                // Attachement des produits à la vente
+                $sortie->produits()->attach($item['id'], [
+                    'quantite_utilise' => $item['quantity'],
+                    'quantite_existant' => $item['stock'],
                 ]);
 
-                // Retirer la quantité utilisée dans le stock de chaque produit
-                $produit->stock -= $request->quantite_utilise[$key];
+                // mettre la quantité utilisée dans le stock de chaque produit
+                $produit = Produit::find($item['id']);
+                $produit->stock -= $item['quantity'];
                 $produit->save();
             }
+
+            // // enregistrer les produits de la sortie
+            // foreach ($request->produit_id as $key => $produit_id) {
+            //     // Trouver l'unité correspondante pour ce produit
+            //     $produit = Produit::find($produit_id);
+
+            //     // Attacher le produit à la sortie avec les informations associées
+            //     $sortie->produits()->attach($produit_id, [
+            //         'quantite_utilise' => $request->quantite_utilise[$key],
+            //         'quantite_existant' => $produit->stock,
+            //         'unite_id' => $request->unite_id[$key],
+            //         'unite_sortie' => $request->unite_libelle[$key],
+            //     ]);
+
+            //     // Retirer la quantité utilisée dans le stock de chaque produit
+            //     $produit->stock -= $request->quantite_utilise[$key];
+            //     $produit->save();
+            // }
 
 
             // retur response
             return response()->json([
                 'message' => 'Sortie de stock enregistré avec succès.',
-                'statut' => 'success',
+                'status' => 'success',
             ], 200);
         } catch (\Throwable $e) {
 

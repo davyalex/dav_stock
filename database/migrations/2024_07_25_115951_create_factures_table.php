@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('type')->nullable();
             $table->string('numero_facture')->nullable();
-            $table->date('date_facture')->nullable();
+            $table->dateTime('date_facture')->nullable();
 
             $table->foreignId('fournisseur_id')
                 ->nullable()

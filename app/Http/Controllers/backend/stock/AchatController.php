@@ -25,24 +25,24 @@ class AchatController extends Controller
     //
 
 
-    public function facture()
+    public function index()
     {
         try {
             $data_facture = Facture::with('achats')->get();
             // dd($data_facture->toArray());
-            return view('backend.pages.stock.achat.facture', compact('data_facture'));
+            return view('backend.pages.stock.achat.index', compact('data_facture'));
         } catch (\Throwable $e) {
             return  $e->getMessage();
         }
     }
 
-    public function index($id)
+    public function show($id)
     {
         try {
             $facture = Facture::whereId($id)->first();
             $data_achat = Achat::where('facture_id', $id)->get();
             // dd($data_facture->toArray());
-            return view('backend.pages.stock.achat.index', compact('data_achat', 'facture'));
+            return view('backend.pages.stock.achat.show', compact('data_achat', 'facture'));
         } catch (\Throwable $e) {
             return  $e->getMessage();
         }
@@ -53,9 +53,11 @@ class AchatController extends Controller
 
         try {
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')->OrderBy('position', 'ASC')->get();
-            $data_produit = Produit::whereHas('categorie', function($query) {
+            $data_produit = Produit::whereHas('categorie', function ($query) {
                 $query->whereIn('famille', ['bar', 'restaurant']);
-            })->with(['categorie.ancestors', 'media'])->get();
+            })->with(['categorie.ancestors', 'media', 'unite', 'uniteSortie'])
+                ->whereStatut('active')
+                ->orderBy('nom', 'ASC')->get();
             $type_produit = Categorie::whereNull('parent_id')->whereIn('type', ['bar', 'restaurant'])->get();
 
             $data_format = Format::all();
@@ -157,7 +159,7 @@ class AchatController extends Controller
                         // Ces champs ne sont pas requis pour le restaurant
                         'prix_achat_unitaire.*' => 'nullable',
                         'prix_vente_unitaire.*' => 'nullable',
-                        'unite_sortie.*' => 'required',
+                        // 'unite_sortie.*' => 'required',
                     ]);
                 } elseif ($type_produit == 'bar') {
                     // Validation pour un produit de type "bar"
@@ -178,7 +180,7 @@ class AchatController extends Controller
                         // Ces champs sont requis pour le bar
                         'prix_achat_unitaire.*' => 'required',
                         'prix_vente_unitaire.*' => 'required',
-                        'unite_sortie.*' => 'required|exists:unites,id',
+                        // 'unite_sortie.*' => 'required|exists:unites,id',
                     ]);
                 }
             }
@@ -191,7 +193,7 @@ class AchatController extends Controller
             //enregistrer la facture 
             $facture = new Facture();
             $facture->type = $request->type;
-            $facture->numero_facture = $request->type == 'facture' ? 'FAC.' . $request->numero_facture : 'BC.' . $request->numero_facture;
+            $facture->numero_facture = $request->type == 'facture' ? 'FAC-' . $request->numero_facture : 'BC-' . $request->numero_facture;
             $facture->date_facture = $request->date_achat;
             $facture->fournisseur_id = $request->fournisseur_id;
             $facture->montant = $request->montant;
@@ -232,7 +234,7 @@ class AchatController extends Controller
                     'prix_total_format' => $request->prix_total_format[$index],
                     'prix_achat_unitaire' => $type_produit == 'bar' ? $request->prix_achat_unitaire[$index] : null,
                     'prix_vente_unitaire' =>  $type_produit == 'bar' ? $request->prix_vente_unitaire[$index] : null,
-                    'unite_id' => $request->unite_sortie[$index],
+                    // 'unite_id' => $request->unite_sortie[$index],
                     'magasin_id' => $request->magasin_id,
                     'statut' => 'active',
                     'user_id' => Auth::id(),

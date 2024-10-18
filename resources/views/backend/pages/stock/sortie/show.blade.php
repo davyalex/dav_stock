@@ -50,16 +50,15 @@
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
                                         <td>
-                                            <img class="rounded-circle" src="{{ $item->getFirstMediaUrl('ProduitImage') }}"
+                                            <img class="rounded-circle"
+                                                src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
                                                 width="50px" alt="">
                                         </td>
-                                        <td>{{ $item['nom'] }} </td>
-                                        <td>{{ $item['pivot']['quantite_existant'] }}</td>
-                                        <td>{{ $item['pivot']['quantite_utilise'] }}
-                                            {{ $item['pivot']['unite_sortie'] }}
-                                        </td>
-                                        <td>{{ $item['stock'] }}</td>
-                                        <td>{{ $item['stock_alerte'] }}</td>
+                                        <td>{{ $item['nom'] }} {{ $item['valeur_unite'] ?? ''}} {{ $item['unite']['libelle'] ?? '' }}  </td>
+                                        <td>{{ $item['pivot']['quantite_existant'] }} {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
+                                        <td>{{ $item['pivot']['quantite_utilise'] }} {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
+                                        <td>{{ $item['stock'] }} {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
+                                        <td>{{ $item['stock_alerte'] }} {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
 
                                     </tr>
                                 @endforeach

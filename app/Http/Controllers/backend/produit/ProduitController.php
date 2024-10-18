@@ -20,7 +20,7 @@ class ProduitController extends Controller
     {
         $categorie = Categorie::whereIn('type', ['restaurant', 'bar'])->get();
 
-        $data_produit = Produit::withWhereHas('typeProduit', fn($q) => $q->whereIn('type', ['restaurant', 'bar']))->get();
+        $data_produit = Produit::withWhereHas('typeProduit', fn($q) => $q->whereIn('type', ['restaurant', 'bar']))->orderBy('created_at', 'DESC')->get();
         // dd(  $data_produit->toArray());
         return view('backend.pages.produit.index', compact('data_produit'));
     }
@@ -69,8 +69,8 @@ class ProduitController extends Controller
 
                 'valeur_unite' => '',
                 'unite_id' => '',
-                'format_id' => '',
-                'valeur_format' => '',
+                // 'format_id' => '',
+                // 'valeur_format' => '',
                 'unite_sortie_id' => 'required',
 
                 'imagePrincipale' => $categorie->famille == 'bar' ? 'required' : '',
@@ -79,9 +79,9 @@ class ProduitController extends Controller
             // Vérifier si le produit existe déjà
             $existingProduct = Produit::where('nom', $request['nom'])
                 ->where('valeur_unite', $request['valeur_unite'])
-                ->where('unite_id', $request['unite'])
-                ->where('format_id', $request['format'])
-                ->where('valeur_format', $request['valeur_format'])
+                ->where('unite_id', $request['unite_id'])
+                // ->where('format_id', $request['format_id'])
+                // ->where('valeur_format', $request['valeur_format'])
                 ->exists();
 
             if ($existingProduct) {
@@ -104,8 +104,8 @@ class ProduitController extends Controller
                 // 'stock' => $request['stock'],
                 'valeur_unite' => $request['valeur_unite'],
                 'unite_id' => $request['unite_id'],
-                'format_id' => $request['format_id'],
-                'valeur_format' => $request['valeur_format'],
+                // 'format_id' => $request['format_id'],
+                // 'valeur_format' => $request['valeur_format'],
                 'unite_sortie_id' => $request['unite_sortie_id'],
                 'statut' => 'active',
                 'user_id' => Auth::id(),
@@ -217,8 +217,8 @@ class ProduitController extends Controller
 
                 'valeur_unite' => '',
                 'unite_id' => '',
-                'format_id' => '',
-                'valeur_format' => '',
+                // 'format_id' => '',
+                // 'valeur_format' => '',
                 'unite_sortie_id' => 'required',
                 'imagePrincipale' => '',
             ]);
@@ -241,8 +241,8 @@ class ProduitController extends Controller
                 'prix' => $request['prix'],
                 'valeur_unite' => $request['valeur_unite'],
                 'unite_id' => $request['unite_id'],
-                'format_id' => $request['format_id'],
-                'valeur_format' => $request['valeur_format'],
+                // 'format_id' => $request['format_id'],
+                // 'valeur_format' => $request['valeur_format'],
                 'unite_sortie_id' => $request['unite_sortie_id'],
                 'statut' => $statut,
                 'user_id' => Auth::id(),

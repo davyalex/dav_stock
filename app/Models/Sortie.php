@@ -29,7 +29,7 @@ class Sortie extends Model
     }
 
     public function produits() {
-        return $this->belongsToMany(Produit::class)->withPivot(['quantite_existant','quantite_utilise','unite_id' ,'unite_sortie'])->withTimestamps();
+        return $this->belongsToMany(Produit::class)->withPivot(['quantite_existant','quantite_utilise'])->withTimestamps();
     }
 
     public function user()

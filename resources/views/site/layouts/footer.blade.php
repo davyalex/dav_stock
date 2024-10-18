@@ -7,7 +7,7 @@
                         <div class="footer-about mb-40">
                             <div class="footer-logo">
                                 <a href="#">
-                                    <img src="{{ $setting->getFirstMediaUrl('logo_footer') ?? 'assets/img/logo/footer-logo.png' }}" width="50" alt="">
+                                    <img src="{{ $setting!=null ? $setting->getFirstMediaUrl('logo_footer'):  '' }}" width="50" alt="">
                                 </a>
                             </div>
                             <p> {{ $setting->projet_description ?? 'Bienvenue chez restaurant Jeanne!' }} </p>

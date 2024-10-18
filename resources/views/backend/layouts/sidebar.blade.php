@@ -162,7 +162,7 @@
                             <ul class="nav nav-sm flex-column">
 
                                 <li class="nav-item active">
-                                    <a href="{{ route('achat.facture') }}"
+                                    <a href="{{ route('achat.index') }}"
                                         class="nav-link {{ Route::is('achat.*') ? 'active' : '' }}">Reception de stock</a>
                                 </li>
 

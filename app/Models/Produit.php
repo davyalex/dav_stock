@@ -102,6 +102,11 @@ class Produit extends Model implements HasMedia
         return $this->belongsTo(Unite::class, 'unite_id');
     }
 
+    public function format() 
+    {
+        return $this->belongsTo(Format::class, 'format_id');
+    }
+
     public function uniteSortie() 
     {
         return $this->belongsTo(Unite::class, 'unite_sortie_id');
@@ -129,7 +134,7 @@ class Produit extends Model implements HasMedia
     }
 
     public function sorties() { // sortie de stock
-        return $this->belongsToMany(Sortie::class)->withPivot(['quantite_existant','quantite_utilise','unite_id', 'unite_sortie'])->withTimestamps();
+        return $this->belongsToMany(Sortie::class)->withPivot(['quantite_existant','quantite_utilise'])->withTimestamps();
     }
 
     public function inventaires() {

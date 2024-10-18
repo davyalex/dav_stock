@@ -54,11 +54,11 @@ return new class extends Migration
 
 
 
-            $table->foreignId('unite_id')  // unite de sortie(vente)
-                ->nullable()
-                ->constrained('unites')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            // $table->foreignId('unite_id')  // unite de sortie(vente)
+            //     ->nullable()
+            //     ->constrained('unites')
+            //     ->onUpdate('cascade')
+            //     ->onDelete('cascade');
 
 
 

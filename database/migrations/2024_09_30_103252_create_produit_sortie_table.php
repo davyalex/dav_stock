@@ -30,14 +30,6 @@ return new class extends Migration
             $table->double('quantite_existant')->nullable();
             $table->double('quantite_utilise')->nullable();
 
-            $table->foreignId('unite_id')  // unite de sortie
-                ->nullable()
-                ->constrained('unites')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
-            $table->string('unite_sortie')->nullable();
-
             $table->timestamps();
         });
     }
