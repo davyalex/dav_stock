@@ -19,7 +19,7 @@
                     <form class="row g-3 needs-validation" method="post" action="{{route('categorie.add-subCat-store')}}" novalidate>
                         @csrf
                         <div class="col-md-12">
-                            <h5>Categorie selectionée : <strong>{{$data_categorie_parent['name']}}</strong></h5>
+                            <h5>Categorie selectionée : <strong class="text-primary">{{$data_categorie_parent['name']}}</strong></h5>
                             <input readonly type="text" name="categorie_parent" value="{{$data_categorie_parent['id']}}" class="form-control" id="validationCustom01"
                                 placeholder="categorie1" hidden>
                             <div class="valid-feedback">
@@ -27,7 +27,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-8">
                             <label for="validationCustom01" class="form-label">Nom de la sous categorie</label>
                             <input type="text" name="name" class="form-control" id="validationCustom01"
                                 required>
@@ -36,14 +36,14 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <label for="validationCustom01" class="form-label">Url</label>
                             <input type="text" name="url" class="form-control" id="validationCustom01"
                                 placeholder="">
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
-                        </div>
+                        </div> --}}
                         {{-- 
                         <div class="col-md-6">
                             <label for="validationCustom01" class="form-label">Position</label>

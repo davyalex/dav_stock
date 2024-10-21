@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>@yield('title') |Restaurant Chez Jeanne</title>
+    <title>@yield('title') | {{config('app.name')}} </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Tableau de bord d'administration pour le restaurant Chez Jeanne" name="description" />
     <meta content="Ticafrique" name="author" />

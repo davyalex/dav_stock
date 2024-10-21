@@ -393,7 +393,7 @@ class RapportController extends Controller
     }
 
 
-   
+
     public function vente(Request $request)
     {
         try {
@@ -446,10 +446,9 @@ class RapportController extends Controller
             $famille = Categorie::whereNull('parent_id')->whereIn('type', ['bar', 'menu'])->get();
 
 
-            return view('backend.pages.rapport.vente', compact('produitsVendus', 'caisses', 'dateDebut', 'dateFin', 'caisseId', 'categorieFamille' , 'famille'));
+            return view('backend.pages.rapport.vente', compact('produitsVendus', 'caisses', 'dateDebut', 'dateFin', 'caisseId', 'categorieFamille', 'famille'));
         } catch (\Exception $e) {
             return back()->with('error', 'Une erreur s\'est produite : ' . $e->getMessage());
         }
     }
-   
 }

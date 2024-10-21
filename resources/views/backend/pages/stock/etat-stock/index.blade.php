@@ -6,7 +6,8 @@
     <!--datatable css-->
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
     <!--datatable responsive css-->
-    <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet"
+        type="text/css" />
     <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
@@ -44,12 +45,18 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>
-                                            <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}" alt="{{ $produit->nom }}" class="rounded avatar-sm">
+                                         
+                                                <img class="rounded avatar-sm"
+                                                src="{{ $produit->hasMedia('ProduitImage') ? $produit->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
+                                                width="50px" alt="{{ $produit['nom'] }}">
                                         </td>
-                                        <td>{{ $produit->nom }}</td>
+                                        <td>{{ $produit->nom }}
+                                            <p> {{ $produit['valeur_unite'] ?? '' }}
+                                                {{ $produit['unite']['libelle'] ?? '' }}  {{ $produit->unite ? '('. $produit['unite']['abreviation'] .')' : '' }}   </p>
+                                        </td>
                                         <td>{{ $produit->categorie->name }}</td>
-                                        <td>{{ $produit->stock }}</td>
-                                        <td>{{ $produit->stock_alerte }}</td>
+                                        <td>{{ $produit->stock }}     {{ $produit['uniteSortie']['libelle'] ?? '' }}  {{ $produit->unite ? '('. $produit['uniteSortie']['abreviation'] .')' : '' }} </td>
+                                        <td>{{ $produit->stock_alerte }} {{ $produit['uniteSortie']['libelle'] ?? '' }}  {{ $produit->unite ? '('. $produit['uniteSortie']['abreviation'] .')' : '' }} </td>
                                         <td>
                                             @if ($produit->stock <= $produit->stock_alerte)
                                                 <span class="badge bg-danger">Alerte</span>
@@ -68,7 +75,8 @@
     </div>
 @endsection
 @section('script')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>

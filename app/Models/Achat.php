@@ -63,7 +63,7 @@ class Achat extends Model
 
     public function produit()
     {
-        return $this->belongsTo(Produit::class, 'produit_id')->where('statut', 'active');
+        return $this->belongsTo(Produit::class, 'produit_id');
     }
     public function fournisseur()
     {

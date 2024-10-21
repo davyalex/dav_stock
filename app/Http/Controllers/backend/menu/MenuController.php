@@ -28,9 +28,12 @@ class MenuController extends Controller
     {
         try {
 
-            $data_categorie_produit = Categorie::withWhereHas('children')
-            ->whereIn('famille', ['menu' , 'bar'])->get();
-            // dd( $data_categorie_produit->toArray());
+            $data_categorie_produit = Categorie::with('children')
+                ->whereNull('parent_id')
+                ->whereIn('famille', ['menu', 'bar'])
+                ->get();
+
+            // dd($data_categorie_produit->toArray());
 
             return view('backend.pages.menu.create', compact('data_categorie_produit'));
         } catch (\Throwable $e) {
@@ -44,10 +47,21 @@ class MenuController extends Controller
         try {
             $request->validate([
                 'date_menu' => 'required|unique:menus',
+            ], [
+                'date_menu.required' => 'La date du menu est requise.',
+                'date_menu.unique' => 'Un menu a déjà été crée pour cette date men, Vous pouvez la modifier.',
             ]);
 
-            $libelle = $request['libelle'] ? $request['libelle'] : 'Menu du ' . $request->date_menu;
 
+            // $dateExistante = Menu::where('date_menu', $request->date_menu)->exists();
+            // if ($dateExistante) {
+            //     Alert::error('Une erreur s\'est produite', 'Une date de menu existe déjà pour cette date.');
+            //     return back();
+            // }
+
+            
+
+            $libelle = $request['libelle'] ? $request['libelle'] : 'Menu du ' . $request->date_menu;
 
             $data_menu = Menu::firstOrCreate([
                 'date_menu' => $request->date_menu,
@@ -62,22 +76,23 @@ class MenuController extends Controller
             return back();
         } catch (\Throwable $e) {
             // return $e->getMessage();
-            if ($e->getMessage() == 'The date menu has already been taken.') {
-                Alert::error('Un menu est déjà crée pour cette date', 'Une erreur s\'est produite');
-                return back();
-            } else {
-                Alert::error($e->getMessage(),  'Une erreur s\'est produite');
-                return back();
-            }
+            Alert::error($e->getMessage(),  'Une erreur s\'est produite');
+            return back();
         }
     }
 
     public function edit($id)
     {
         try {
-            $data_categorie_produit = Categorie::withWhereHas('children')->whereIn('famille', ['menu' , 'bar'])->get();
+            $data_categorie_produit = Categorie::with('children')
+                ->whereNull('parent_id')
+                ->whereIn('famille', ['menu', 'bar'])
+                ->get();
 
-            $data_menu = Menu::find($id);
+            $data_menu = Menu::findOrFail($id);
+            if (!$data_menu) {
+                return redirect()->route('menu.index');
+            }
 
             //    dd($data_produit->produit_menu->toArray());
 

@@ -1,5 +1,5 @@
 @foreach ($data_categorie_produit as $categorie)
-    <div class="col-md-12">
+    <div class="col-md-6">
         @php
             //style manipulation
             $dNone =
@@ -7,7 +7,7 @@
                     ? 'd-none'
                     : '';
             $textUpper = in_array($categorie->type, ['menu', 'bar'])
-                ? 'text-uppercase alert alert-primary alert-border-left fs-4 mt-4'
+                ? 'text-uppercase alert alert-success alert-border-left fs-4 mt-4'
                 : 'text-capitalize fw-bold';
 
             //get produit_menu for checked default store

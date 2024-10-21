@@ -52,9 +52,9 @@ class CategoriesTableSeeder extends Seeder
             2 => 
             array (
                 'id' => 20671449961,
-                'name' => 'Menu',
-                'slug' => 'menu',
-                'url' => 'menu',
+                'name' => 'Cuisine interne',
+                'slug' => 'cuisine-interne',
+                'url' => 'cuisine-interne',
                 'status' => 'active',
                 'position' => '3',
                 'parent_id' => NULL,

@@ -52,11 +52,13 @@
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
                                         <td>{{ $item['code'] }}
-                                            <span class="badge{{$item->statut == 'desactive' ? ' bg-danger' : ' bg-success'}}">{{ $item['statut'] }}</span>
+                                            <span
+                                                class="badge{{ $item->statut == 'desactive' ? ' bg-danger' : ' bg-success' }}">{{ $item['statut'] }}</span>
                                         </td>
                                         <td>
-                                            <img class="rounded-circle" src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
-                                                width="50px" alt="">
+                                            <img class="rounded avatar-sm"
+                                                src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
+                                                width="50px" alt="{{ $item['nom'] }}">
                                         </td>
                                         <td>{{ $item['nom'] }}
                                             <p> {{ $item['valeur_unite'] ?? '' }}
@@ -66,7 +68,8 @@
                                                 {{ $item['valeur_format'] ?? '' }}</p> --}}
 
                                         </td>
-                                        <td>{{ $item['categorie']['famille'] ?? '' }}({{ $item['categorie']['name'] ?? '' }})</td>
+                                        <td>{{ $item['categorie']['famille'] ?? '' }}({{ $item['categorie']['name'] ?? '' }})
+                                        </td>
                                         {{-- <td>{{ $item['typeProduit']['name'] }}  </td> --}}
                                         <td>{{ $item['stock'] }} {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
                                         <td>{{ $item['stock_alerte'] }} {{ $item['uniteSortie']['libelle'] ?? '' }}</td>

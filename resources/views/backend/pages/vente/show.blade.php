@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-    @lang('translation.datatables')
+    Vente
 @endsection
 @section('css')
     <!--datatable css-->
@@ -53,9 +53,9 @@
                             <p><strong>N° vente :</strong> #{{ $vente->code }}</p>
                             <p><strong>Date :</strong> {{ $vente->created_at->format('d/m/Y à H:i') }}</p>
                             @if ($vente->type_vente == 'commande')
-                            <p><strong>Type vente :</strong> <a href="{{ route('commande.show', $vente->commande->id) }}"> {{ $vente->type_vente }}; #{{ $vente->commande->code }} </a></p>
+                            <p><strong>Type de vente :</strong> <a href="{{ route('commande.show', $vente->commande->id) }}"> {{ $vente->type_vente }}; #{{ $vente->commande->code }} </a></p>
                             @else
-                            <p><strong>Type :</strong> {{ $vente->type_vente }}</p>
+                            <p><strong>Type de vente :</strong> {{ $vente->type_vente }}</p>
                             @endif
                         </div>
                         <div class="col-md-4">
@@ -100,8 +100,8 @@
                                     <tr id="row_{{ $item['id'] }}">
                                         <td>{{ ++$key }}</td>
                                         <td>
-                                            <img class="rounded-circle" src="{{ $item->getFirstMediaUrl('ProduitImage') }}"
-                                                width="50px" alt="">
+                                            <img class="rounded avatar-sm" src="{{ $item->getFirstMediaUrl('ProduitImage') }}"
+                                                width="50px" alt="{{$item['nom']}}">
                                         </td>
                                         <td>{{ $item['nom'] }}</td>
                                         <td>{{ $item['pivot']['quantite'] }}</td>

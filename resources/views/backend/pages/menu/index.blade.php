@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-    @lang('translation.datatables')
+    Menu
 @endsection
 @section('css')
     <!--datatable css-->
@@ -26,7 +26,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des produits</h5>
+                    <h5 class="card-title mb-0">Liste des menus</h5>
                     <a href="{{ route('menu.create') }}" type="button" class="btn btn-primary ">Créer
                         un menu</a>
                 </div>
@@ -46,7 +46,7 @@
                             <tbody>
                                 @foreach ($data_menu as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
-                                        <td> {{ ++$key }} </td>                                       
+                                        <td> {{ ++$key }} </td>
                                         <td>{{ $item['libelle'] }}</td>
                                         <td>{{ $item['date_menu'] }}</td>
                                         <td>{{ $item['user']['first_name'] }}</td>
@@ -62,14 +62,15 @@
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                             View</a>
                                                     </li> --}}
-                                                    <li><a href="{{route('menu.edit' ,  $item['id'])}}" type="button" class="dropdown-item edit-item-btn"><i
+                                                    <li><a href="{{ route('menu.edit', $item['id']) }}" type="button"
+                                                            class="dropdown-item edit-item-btn"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            detail</a></li>
+                                                            Modifier</a></li>
                                                     <li>
                                                         <a href="#" class="dropdown-item remove-item-btn delete"
                                                             data-id={{ $item['id'] }}>
                                                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Delete
+                                                            Supprimer
                                                         </a>
                                                     </li>
                                                 </ul>
@@ -109,10 +110,9 @@
     {{-- <script src="{{URL::asset('myJs/js/delete_row.js')}}"></script> --}}
 
     <script>
-       $(document).ready(function(){
-        var route = "menu"
-        delete_row(route);
-       })
+        $(document).ready(function() {
+            var route = "menu"
+            delete_row(route);
+        })
     </script>
-   
 @endsection

@@ -13,10 +13,10 @@
 @section('content')
     @component('backend.components.breadcrumb')
         @slot('li_1')
-            Liste des produits
+            Liste des plats
         @endslot
         @slot('title')
-            produit
+            Plats
         @endslot
     @endcomponent
 
@@ -73,12 +73,12 @@
                                                     </li> --}}
                                                     <li><a href="{{route('plat.edit' ,  $item['id'])}}" type="button" class="dropdown-item edit-item-btn"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Edit</a></li>
+                                                            Modifier</a></li>
                                                     <li>
                                                         <a href="#" class="dropdown-item remove-item-btn delete"
                                                             data-id={{ $item['id'] }}>
                                                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Delete
+                                                            Supprimer
                                                         </a>
                                                     </li>
                                                 </ul>

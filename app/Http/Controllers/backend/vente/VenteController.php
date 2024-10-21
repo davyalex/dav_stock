@@ -69,25 +69,25 @@ class VenteController extends Controller
     public function create()
     {
         try {
-            $data_produit = Produit::whereHas('categorie', function ($query) {
+            $data_produit = Produit::active()->whereHas('categorie', function ($query) {
                 $query->whereIn('famille', ['bar', 'menu']);
-            })
-                ->where(function ($query) {
-                    $query->whereHas('categorie', function ($subQuery) {
-                        $subQuery->where('famille', 'menu');
-                    })
-                        ->orWhere(function ($subQuery) {
-                            $subQuery->whereHas('categorie', function ($subSubQuery) {
-                                $subSubQuery->where('famille', 'bar');
-                            })->whereHas('achats', function ($achatsQuery) {
-                                $achatsQuery->where('statut', 'active');
-                            });
-                        });
-                })
-                ->with(['categorie', 'achats' => function ($query) {
-                    $query->where('statut', 'active')->orderBy('created_at', 'asc');
-                }])
-                ->get();
+            })  ->get();
+                // ->where(function ($query) {
+                //     $query->whereHas('categorie', function ($subQuery) {
+                //         $subQuery->where('famille', 'menu');
+                //     })
+                //         ->orWhere(function ($subQuery) {
+                //             $subQuery->whereHas('categorie', function ($subSubQuery) {
+                //                 $subSubQuery->where('famille', 'bar');
+                //             })->whereHas('achats', function ($achatsQuery) {
+                //                 $achatsQuery->where('statut', 'active');
+                //             });
+                //         });
+                // })
+                // ->with(['categorie', 'achats' => function ($query) {
+                //     $query->where('statut', 'active')->orderBy('created_at', 'asc');
+                // }])
+              
 
             // dd($data_produit->toArray());
 
@@ -95,7 +95,7 @@ class VenteController extends Controller
                 $query->where('name', 'client');
             })->get();
 
-            return view('backend.pages.vente.create2', compact('data_produit', 'data_client'));
+            return view('backend.pages.vente.create', compact('data_produit', 'data_client'));
         } catch (\Exception $e) {
             // Gestion des erreurs
             return back()->with('error', 'Une erreur est survenue lors du chargement du formulaire de création : ' . $e->getMessage());
@@ -138,6 +138,7 @@ class VenteController extends Controller
             // Création de la vente
             // Obtenir les deux premières lettres du nom de la caissière
             $initialesCaissiere = substr(auth()->user()->first_name, 0, 2);
+            $initialesCaisse = substr(auth()->user()->caisse->libelle, 0, 2);
 
             // Obtenir le numéro d'ordre de la vente pour aujourd'hui
             $nombreVentes = Vente::count();
@@ -147,7 +148,7 @@ class VenteController extends Controller
             $dateHeure = now()->format('dmYHi');
 
             // Générer le code de vente
-            $codeVente = strtoupper($initialesCaissiere) . '-' . $numeroOrdre . $dateHeure;
+            $codeVente = strtoupper($initialesCaissiere) . '-' .strtoupper($initialesCaisse) . $numeroOrdre . $dateHeure;
             $vente = Vente::create([
                 'code' => $codeVente,
                 // 'client_id' => $request->client_id,
@@ -195,12 +196,14 @@ class VenteController extends Controller
                     }
                 }
             }
-
+            $idVente = $vente->id;
 
             // retur response
             return response()->json([
                 'message' => 'Vente enregistrée avec succès.',
                 'status' => 'success',
+                'idVente' => $idVente,
+
             ], 200);
         } catch (\Throwable $th) {
             return $th->getMessage();

@@ -59,11 +59,11 @@
                                         <td>{{ $item['code'] }}</td>
 
                                         <td>
-                                            <img class="rounded-circle"
-                                                src="{{ $item->produit->getFirstMediaUrl('ProduitImage') }}" width="50px"
-                                                alt="">
+                                            <img class="rounded avatar-sm mb-2"
+                                                src="{{ $item->produit->hasMedia('ProduitImage') ? $item->produit->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
+                                                width="50px" alt="">
 
-                                            {{ $item['produit']['nom'] }} {{ $item['produit']['valeur_unite'] ?? ''}} {{ $item['produit']['unite']['libelle'] ?? '' }} 
+                                           <br> {{ $item['produit']['nom'] }} {{ $item['produit']['valeur_unite'] ?? ''}} {{ $item['produit']['unite']['libelle'] ?? '' }} 
                                         </td>
                                         <td>{{ $item['magasin']['libelle'] ?? 'N/D' }}</td>
                                         <td>{{ $item['fournisseur']['nom'] ?? 'N/D' }}</td>

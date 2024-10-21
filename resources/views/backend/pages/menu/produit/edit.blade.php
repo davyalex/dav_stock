@@ -1,14 +1,16 @@
 @extends('backend.layouts.master')
-
+@section('title')
+    Menu
+@endsection
 @section('content')
     @component('backend.components.breadcrumb')
         <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 
         @slot('li_1')
-            Produit
+            Plat
         @endslot
         @slot('title')
-            Modifier un nouveau produit
+            Modifier un plat
         @endslot
     @endcomponent
 

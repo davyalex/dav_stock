@@ -97,17 +97,17 @@ class Produit extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
-    public function unite() 
+    public function unite()
     {
         return $this->belongsTo(Unite::class, 'unite_id');
     }
 
-    public function format() 
+    public function format()
     {
         return $this->belongsTo(Format::class, 'format_id');
     }
 
-    public function uniteSortie() 
+    public function uniteSortie()
     {
         return $this->belongsTo(Unite::class, 'unite_sortie_id');
     }
@@ -133,12 +133,14 @@ class Produit extends Model implements HasMedia
         return $this->belongsToMany(Commande::class)->withPivot(['quantite', 'prix_unitaire', 'total'])->withTimestamps();
     }
 
-    public function sorties() { // sortie de stock
-        return $this->belongsToMany(Sortie::class)->withPivot(['quantite_existant','quantite_utilise'])->withTimestamps();
+    public function sorties()
+    { // sortie de stock
+        return $this->belongsToMany(Sortie::class)->withPivot(['quantite_existant', 'quantite_utilise'])->withTimestamps();
     }
 
-    public function inventaires() {
-        return $this->belongsToMany(Produit::class)->withPivot(['stock_initial','stock_theorique','stock_physique','ecart' ,'etat' , 'observation'])->withTimestamps();
+    public function inventaires()
+    {
+        return $this->belongsToMany(Produit::class)->withPivot(['stock_initial', 'stock_theorique', 'stock_physique', 'ecart', 'etat', 'observation'])->withTimestamps();
     }
 
     public function ventes()
@@ -146,5 +148,19 @@ class Produit extends Model implements HasMedia
         return $this->belongsToMany(Vente::class, 'produit_vente')
             ->withPivot('quantite', 'prix_unitaire', 'total')
             ->withTimestamps();
+    }
+
+
+    // ScopeActive produits
+
+    /**
+     * Scope to retrieve only active products.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('statut', 'active');
     }
 }

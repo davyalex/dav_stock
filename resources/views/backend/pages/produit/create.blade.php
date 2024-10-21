@@ -84,7 +84,7 @@
                                                 </label>
                                                 <select id="uniteProduit" class="form-control js-example-basic-single"
                                                     name="unite_id">
-                                                    <option value=""  selected>Choisir</option>
+                                                    <option value="" selected>Choisir</option>
                                                     @foreach ($data_unite as $unite)
                                                         <option value="{{ $unite->id }}">{{ $unite->libelle }}
                                                             ({{ $unite->abreviation }})
@@ -127,7 +127,7 @@
                                                 </label>
                                                 <select id="uniteSortie" class="form-control js-example-basic-single"
                                                     name="unite_sortie_id" required>
-                                                    <option value=""  selected>Choisir</option>
+                                                    <option value="" selected>Choisir</option>
                                                     @foreach ($data_unite as $unite)
                                                         <option value="{{ $unite->id }}">{{ $unite->libelle }}
                                                             ({{ $unite->abreviation }})
@@ -162,8 +162,8 @@
                                             <label class="form-label" for="meta-title-input">Stock alerte <span
                                                     class="text-danger">*</span> (en unité de sortie ou vente)
                                             </label>
-                                            <input type="number" name="stock_alerte" class="form-control"
-                                                id="stockAlerte" required>
+                                            <input type="number" name="stock_alerte" class="form-control" id="stockAlerte"
+                                                required>
                                         </div>
                                         <div class="mb-4">
                                             <h5 class="fs-14 mb-1">Image principale <span class="text-danger">*</span>
@@ -182,8 +182,7 @@
                                                             </div>
                                                         </label>
                                                         <input class="form-control d-none" id="product-image-input"
-                                                            type="file" name="imagePrincipale" accept="image/*"
-                                                            required>
+                                                            type="file" name="imagePrincipale" accept="image/*" required>
                                                         <div class="invalid-feedback">Ajouter une image</div>
                                                     </div>
                                                     <div class="avatar-lg">
@@ -336,8 +335,22 @@
 
             $('#formSend').on('submit', function(e) {
                 e.preventDefault();
+                // Vérifier si un champ avec required est vide
+                // var requiredFields = document.querySelectorAll('[required]');
+                // for (var i = 0; i < requiredFields.length; i++) {
+                //     var field = requiredFields[i];
+
+                //     if (field.value === '') {
+                //         var label = document.querySelector('label[for="' + field.id + '"]');
+                //         var fieldName = label ? label.textContent.trim() : field.getAttribute('name');
+
+                //         alert('Le champ "' + fieldName + '" est requis.');
+                //         return;
+                //     }
+                // }
                 // on verifie si une image principale à éte inseré
                 if ($('#product-image-input').val() === '' && categoryFamille === 'bar') {
+
                     e.preventDefault();
                 } else {
                     var formData = new FormData(this);
