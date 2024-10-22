@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use RealRashid\SweetAlert\Facades\Alert;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class ModuleController extends Controller
 {
@@ -52,6 +53,10 @@ class ModuleController extends Controller
                 'guard_name' => 'web',
             ]);
         }
+
+        // // Attribuer les permissions au rôle développeur par défaut
+        // $role = Role::where('name', 'developpeur')->first();
+        // $role->syncPermissions($permissions);
 
         Alert::success('Operation réussi', 'Success Message');
 

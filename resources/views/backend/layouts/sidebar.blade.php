@@ -151,7 +151,7 @@
 
 
 
-                @can('voir-gestion de stock')
+                @can('voir-stock')
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarStock" data-bs-toggle="collapse" role="button"
                             aria-controls="sidebarStock">
@@ -286,33 +286,35 @@
 
 
 
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarSite" data-bs-toggle="collapse" role="button"
-                        aria-controls="sidebarSite">
-                        <i class="ri ri-global-fill"></i> <span>SITE</span>
-                    </a>
-                    <div class="collapse menu-dropdown {{ Route::is('menu.*') || Route::is('plat.*')  || Route::is('slide.*') ? 'show' : '' }}" id="sidebarSite">
-                        <ul class="nav nav-sm flex-column">
+             @can('voir-site')
+             <li class="nav-item">
+                <a class="nav-link menu-link" href="#sidebarSite" data-bs-toggle="collapse" role="button"
+                    aria-controls="sidebarSite">
+                    <i class="ri ri-global-fill"></i> <span>SITE</span>
+                </a>
+                <div class="collapse menu-dropdown {{ Route::is('menu.*') || Route::is('plat.*')  || Route::is('slide.*') ? 'show' : '' }}" id="sidebarSite">
+                    <ul class="nav nav-sm flex-column">
 
-                            <li class="nav-item active">
-                                <a href="{{ route('plat.index') }}"
-                                    class="nav-link {{ Route::is('plat.*') ? 'active' : '' }}">Produit menu</a>
-                            </li>
+                        <li class="nav-item active">
+                            <a href="{{ route('plat.index') }}"
+                                class="nav-link {{ Route::is('plat.*') ? 'active' : '' }}">Produit menu</a>
+                        </li>
 
-                            <li class="nav-item active">
-                                <a href="{{ route('menu.index') }}"
-                                    class="nav-link {{ Route::is('menu.*') ? 'active' : '' }}">Menu</a>
-                            </li>
+                        <li class="nav-item active">
+                            <a href="{{ route('menu.index') }}"
+                                class="nav-link {{ Route::is('menu.*') ? 'active' : '' }}">Menu</a>
+                        </li>
 
-                            <li class="nav-item active">
-                                <a href="{{ route('slide.index') }}"
-                                    class="nav-link {{ Route::is('slide.*') ? 'active' : '' }}">Slides</a>
-                            </li>
+                        <li class="nav-item active">
+                            <a href="{{ route('slide.index') }}"
+                                class="nav-link {{ Route::is('slide.*') ? 'active' : '' }}">Slides</a>
+                        </li>
 
-                        </ul>
-                    </div>
-                </li>
+                    </ul>
+                </div>
+            </li>
 
+             @endcan
                 @can('voir-rapport')
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sideBarRapport" data-bs-toggle="collapse" role="button"
