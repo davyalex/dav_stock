@@ -27,8 +27,8 @@ class CategorieDepensesTableSeeder extends Seeder
                 'statut' => 'active',
                 'position' => '2',
                 'deleted_at' => NULL,
-                'created_at' => '2024-09-23 08:51:45',
-                'updated_at' => '2024-09-23 08:51:45',
+                'created_at' => '2024-09-23 03:21:45',
+                'updated_at' => '2024-09-23 03:21:45',
             ),
             1 => 
             array (
@@ -38,8 +38,8 @@ class CategorieDepensesTableSeeder extends Seeder
                 'statut' => 'active',
                 'position' => '1',
                 'deleted_at' => NULL,
-                'created_at' => '2024-09-23 08:51:21',
-                'updated_at' => '2024-09-23 08:53:32',
+                'created_at' => '2024-09-23 03:21:21',
+                'updated_at' => '2024-09-23 03:23:32',
             ),
             2 => 
             array (
@@ -49,8 +49,8 @@ class CategorieDepensesTableSeeder extends Seeder
                 'statut' => 'active',
                 'position' => '5',
                 'deleted_at' => NULL,
-                'created_at' => '2024-09-23 08:53:19',
-                'updated_at' => '2024-09-23 08:53:19',
+                'created_at' => '2024-09-23 03:23:19',
+                'updated_at' => '2024-09-23 03:23:19',
             ),
             3 => 
             array (
@@ -60,8 +60,8 @@ class CategorieDepensesTableSeeder extends Seeder
                 'statut' => 'active',
                 'position' => '3',
                 'deleted_at' => NULL,
-                'created_at' => '2024-09-23 08:52:17',
-                'updated_at' => '2024-09-23 08:52:17',
+                'created_at' => '2024-09-23 03:22:17',
+                'updated_at' => '2024-09-23 03:22:17',
             ),
             4 => 
             array (
@@ -71,8 +71,8 @@ class CategorieDepensesTableSeeder extends Seeder
                 'statut' => 'active',
                 'position' => '4',
                 'deleted_at' => NULL,
-                'created_at' => '2024-09-23 08:52:45',
-                'updated_at' => '2024-09-23 08:52:45',
+                'created_at' => '2024-09-23 03:22:45',
+                'updated_at' => '2024-09-23 03:22:45',
             ),
         ));
         
