@@ -127,6 +127,150 @@ class PermissionsTableSeeder extends Seeder
                 'updated_at' => '2024-10-05 21:58:45',
                 'module_id' => 8757645503,
             ),
+            12 => 
+            array (
+                'id' => 57,
+                'name' => 'creer-stock',
+                'guard_name' => 'web',
+                'created_at' => '2024-10-17 13:21:13',
+                'updated_at' => '2024-10-22 16:07:14',
+                'module_id' => 2938914474,
+            ),
+            13 => 
+            array (
+                'id' => 58,
+                'name' => 'voir-stock',
+                'guard_name' => 'web',
+                'created_at' => '2024-10-17 13:21:13',
+                'updated_at' => '2024-10-22 16:07:14',
+                'module_id' => 2938914474,
+            ),
+            14 => 
+            array (
+                'id' => 59,
+                'name' => 'modifier-stock',
+                'guard_name' => 'web',
+                'created_at' => '2024-10-17 13:21:13',
+                'updated_at' => '2024-10-22 16:07:14',
+                'module_id' => 2938914474,
+            ),
+            15 => 
+            array (
+                'id' => 60,
+                'name' => 'supprimer-stock',
+                'guard_name' => 'web',
+                'created_at' => '2024-10-17 13:21:13',
+                'updated_at' => '2024-10-22 16:07:14',
+                'module_id' => 2938914474,
+            ),
+            16 => 
+            array (
+                'id' => 61,
+                'name' => 'creer-rapport',
+                'guard_name' => 'web',
+                'created_at' => '2024-10-21 10:15:40',
+                'updated_at' => '2024-10-21 10:15:40',
+                'module_id' => 15360697021,
+            ),
+            17 => 
+            array (
+                'id' => 62,
+                'name' => 'voir-rapport',
+                'guard_name' => 'web',
+                'created_at' => '2024-10-21 10:15:40',
+                'updated_at' => '2024-10-21 10:15:40',
+                'module_id' => 15360697021,
+            ),
+            18 => 
+            array (
+                'id' => 63,
+                'name' => 'modifier-rapport',
+                'guard_name' => 'web',
+                'created_at' => '2024-10-21 10:15:40',
+                'updated_at' => '2024-10-21 10:15:40',
+                'module_id' => 15360697021,
+            ),
+            19 => 
+            array (
+                'id' => 64,
+                'name' => 'supprimer-rapport',
+                'guard_name' => 'web',
+                'created_at' => '2024-10-21 10:15:40',
+                'updated_at' => '2024-10-21 10:15:40',
+                'module_id' => 15360697021,
+            ),
+            20 => 
+            array (
+                'id' => 65,
+                'name' => 'creer-depense',
+                'guard_name' => 'web',
+                'created_at' => '2024-10-22 15:46:15',
+                'updated_at' => '2024-10-22 15:46:15',
+                'module_id' => 18498597731,
+            ),
+            21 => 
+            array (
+                'id' => 66,
+                'name' => 'voir-depense',
+                'guard_name' => 'web',
+                'created_at' => '2024-10-22 15:46:15',
+                'updated_at' => '2024-10-22 15:46:15',
+                'module_id' => 18498597731,
+            ),
+            22 => 
+            array (
+                'id' => 67,
+                'name' => 'modifier-depense',
+                'guard_name' => 'web',
+                'created_at' => '2024-10-22 15:46:15',
+                'updated_at' => '2024-10-22 15:46:15',
+                'module_id' => 18498597731,
+            ),
+            23 => 
+            array (
+                'id' => 68,
+                'name' => 'supprimer-depense',
+                'guard_name' => 'web',
+                'created_at' => '2024-10-22 15:46:15',
+                'updated_at' => '2024-10-22 15:46:15',
+                'module_id' => 18498597731,
+            ),
+            24 => 
+            array (
+                'id' => 69,
+                'name' => 'creer-site',
+                'guard_name' => 'web',
+                'created_at' => '2024-10-22 15:59:54',
+                'updated_at' => '2024-10-22 16:07:03',
+                'module_id' => 4696292394,
+            ),
+            25 => 
+            array (
+                'id' => 70,
+                'name' => 'voir-site',
+                'guard_name' => 'web',
+                'created_at' => '2024-10-22 15:59:54',
+                'updated_at' => '2024-10-22 16:07:03',
+                'module_id' => 4696292394,
+            ),
+            26 => 
+            array (
+                'id' => 71,
+                'name' => 'modifier-site',
+                'guard_name' => 'web',
+                'created_at' => '2024-10-22 15:59:54',
+                'updated_at' => '2024-10-22 16:07:03',
+                'module_id' => 4696292394,
+            ),
+            27 => 
+            array (
+                'id' => 72,
+                'name' => 'supprimer-site',
+                'guard_name' => 'web',
+                'created_at' => '2024-10-22 15:59:54',
+                'updated_at' => '2024-10-22 16:07:03',
+                'module_id' => 4696292394,
+            ),
         ));
         
         
