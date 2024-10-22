@@ -260,6 +260,7 @@ class AchatController extends Controller
                 'libelle_depense_id' => $libelle_depense->id,
                 'montant' => $request->montant,
                 'date_depense' => $request->date_achat,
+                'facture_id' => $facture->id,
                 'user_id' => Auth::id()
             ]);
 

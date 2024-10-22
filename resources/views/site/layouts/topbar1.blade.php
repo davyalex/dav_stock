@@ -1,13 +1,13 @@
-<div class="header-top bg-danger">
+<div class="header-top bg-danger d-none d-lg-block">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-12 col-sm-12">
                 <div class="welcome-area">
-                    <p class="d-flex justify-content-between">
-                        <i class="ion-ios-restaurant"> {{ $setting->projet_description ?? 'Bienvenue chez restaurant Jeanne!' }}</i> 
-                        <i class="ion-ios-telephone"> {{ $setting->phone1 ?? '' }}</i> 
-                        <i class="ion-ios-email"> {{ $setting->email1 ?? '' }}</i> 
-                        <i class="ion-ios-location"> {{ $setting->localisation ?? '' }}</i>
+                    <p class="d-flex justify-content-around">
+                     <span>   <i class="ion-ios-restaurant"> </i>  {{ $setting->projet_description ?? 'Bienvenue chez restaurant Jeanne!' }}</span>
+                      <span>  <i class="ion-ios-telephone"> </i>  {{ $setting->phone1 ?? '' }}</span>
+                       <span> <i class="ion-ios-email"> </i>  {{ $setting->email1 ?? '' }}</span>
+                        <span> <i class="ion-ios-location"> </i> {{ $setting->localisation ?? '' }}</span>
                     </p>
                 </div>
             </div>

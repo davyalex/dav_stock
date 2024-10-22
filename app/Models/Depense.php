@@ -21,6 +21,7 @@ class Depense extends Model
         'categorie_depense_id',
         'libelle_depense_id',
         'user_id',
+        'facture_id',
 
     ];
 
