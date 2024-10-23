@@ -12,6 +12,7 @@
 
 <script>
     // go to back
+
     document.getElementById('goBack').addEventListener('click', function() {
         window.history.back();
         setTimeout(function() {
