@@ -65,7 +65,7 @@ class ProduitController extends Controller
                 'stock' => '',
                 'stock_alerte' => 'required',
                 'statut' => '',
-                'prix' => 'required',
+                'prix' => $categorie->famille == 'bar' ? 'required' : '',
                 'valeur_unite' => '',
                 'unite_id' => '',
                 'unite_sortie_id' => 'required',
@@ -229,7 +229,7 @@ class ProduitController extends Controller
                 // 'format_id' => '',
                 // 'valeur_format' => '',
                 'unite_sortie_id' => 'required',
-                'imagePrincipale' => '',
+                'imagePrincipale' => $categorie->famille == 'bar' ? 'required' : '',
             ]);
 
             // active  :  desactive le produit
