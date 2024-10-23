@@ -229,7 +229,7 @@ class ProduitController extends Controller
                 // 'format_id' => '',
                 // 'valeur_format' => '',
                 'unite_sortie_id' => 'required',
-                'imagePrincipale' => $categorie->famille == 'bar' ? 'required' : '',
+                'imagePrincipale' => '',
             ]);
 
             // active  :  desactive le produit
