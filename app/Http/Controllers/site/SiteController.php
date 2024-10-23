@@ -21,21 +21,21 @@ class SiteController extends Controller
             $data_slide = Slide::with('media')->orderBy('id', 'DESC')->get();
 
             // Récupérer les produits de type bar
-            $produitsBar = Produit::whereHas('categorie', function($query) {
+            $produitsBar = Produit::active()->whereHas('categorie', function ($query) {
                 $query->where('famille', 'bar');
             })
-            ->whereHas('achats', function($query) {
-                $query->where('statut', 'active');
-            })
-            ->where('statut', 'active')
-            ->get();
+                // ->whereHas('achats', function($query) {
+                //     $query->where('statut', 'active');
+                // })
+
+                ->get();
 
             // Récupérer les produits de type menu
-            $produitsMenu = Produit::whereHas('categorie', function($query) {
+            $produitsMenu = Produit::active()->whereHas('categorie', function ($query) {
                 $query->where('famille', 'menu');
             })
-            ->where('statut', 'active')
-            ->get();
+
+                ->get();
 
             // dd($produitsMenu->toArray());
 
@@ -45,19 +45,19 @@ class SiteController extends Controller
 
 
             // Récupérer les produits les plus commandés
-            $produitsLesPlusCommandes = Produit::whereHas('categorie', function($query) {
-                    $query->whereIn('famille', ['bar', 'menu']);
-                })
+            $produitsLesPlusCommandes = Produit::active()->whereHas('categorie', function ($query) {
+                $query->whereIn('famille', ['bar', 'menu']);
+            })
                 ->withCount('commandes')
                 ->havingRaw('commandes_count > 1')
                 ->orderBy('commandes_count', 'desc')
                 ->get();
 
-                // dd($produitsLesPlusCommandes->toArray());
+            // dd($produitsLesPlusCommandes->toArray());
             return view('site.pages.accueil', compact(
                 'data_slide',
                 'produitsBar',
-                'produitsMenu', 
+                'produitsMenu',
                 'produits',
                 'produitsLesPlusCommandes'
             ));
@@ -65,7 +65,7 @@ class SiteController extends Controller
             return view('site.pages.accueil', compact(
                 'data_slide',
                 'produitsBar',
-                'produitsMenu', 
+                'produitsMenu',
                 'produits',
             ));
         } catch (\Throwable $e) {
@@ -87,28 +87,34 @@ class SiteController extends Controller
             if (!$categorieSelect) {
                 return redirect()->route('accueil');
             }
-            // retourner les achats du produits si type=bar
-            if ($categorieSelect->type == 'bar') {
-                $produits = Produit::where('type_id', $categorieSelect->id)
-                    ->withWhereHas('achats', fn($q) => $q->whereStatut('active'))
-                    ->whereStatut('active')
-                    ->paginate(10);  
-
-            } elseif ($categorieSelect->type == 'menu') {
-                $produits = Produit::where('type_id', $categorieSelect->id)
-                    ->whereStatut('active')
+            if ($categorieSelect->type) {
+                $produits = Produit::active()->where('type_id', $categorieSelect->id)
                     ->paginate(10);
-            } elseif ($categorieSelect->famille == 'bar') {
-                $produits = Produit::where('categorie_id', $categorieSelect->id)
-                    ->withWhereHas('achats', fn($q) => $q->whereStatut('active'))
-                    ->whereStatut('active')
-                    ->paginate(10);
-            }elseif ($categorieSelect->famille == 'menu') {
-                $produits = Produit::where('categorie_id', $categorieSelect->id)
-                    // ->withWhereHas('achats', fn($q) => $q->whereStatut('active'))
-                    ->whereStatut('active')
+            }else{
+                $produits = Produit::active()->where('categorie_id', $categorieSelect->id)
                     ->paginate(10);
             }
+            // // retourner les achats du produits si type=bar
+            // if ($categorieSelect->type == 'bar') {
+            //     $produits = Produit::where('type_id', $categorieSelect->id)
+            //         ->withWhereHas('achats', fn($q) => $q->whereStatut('active'))
+            //         ->whereStatut('active')
+            //         ->paginate(10);
+            // } elseif ($categorieSelect->type == 'menu') {
+            //     $produits = Produit::where('type_id', $categorieSelect->id)
+            //         ->whereStatut('active')
+            //         ->paginate(10);
+            // } elseif ($categorieSelect->famille == 'bar') {
+            //     $produits = Produit::where('categorie_id', $categorieSelect->id)
+            //         ->withWhereHas('achats', fn($q) => $q->whereStatut('active'))
+            //         ->whereStatut('active')
+            //         ->paginate(10);
+            // } elseif ($categorieSelect->famille == 'menu') {
+            //     $produits = Produit::where('categorie_id', $categorieSelect->id)
+            //         // ->withWhereHas('achats', fn($q) => $q->whereStatut('active'))
+            //         ->whereStatut('active')
+            //         ->paginate(10);
+            // }
 
             // dd($produits->toArray());
             // $produits  =   $produits->achats;
@@ -119,7 +125,7 @@ class SiteController extends Controller
             $categories = Categorie::whereNull('parent_id')
                 ->with('children')
                 ->whereIn('type', ['menu', 'bar'])
-                ->orderBy('position', 'ASC')
+                ->orderBy('position', 'DESC')
                 ->get();
             // dd($categorie->toArray());
 
@@ -182,7 +188,7 @@ class SiteController extends Controller
                 // Si aucun menu n'est trouvé pour aujourd'hui
                 $produitsFiltres = collect();
                 $categories = [];
-                
+
 
                 return view('site.pages.menu', compact('menu', 'produitsFiltres', 'categories'));
             }
@@ -193,14 +199,15 @@ class SiteController extends Controller
 
 
 
-    public function produitDetail($slug) {
+    public function produitDetail($slug)
+    {
 
         try {
             $produit = Produit::where('slug', $slug)->first();
             $produit = Produit::find($produit->id);
             // dd($produit->categorie->toArray());
-            
-           return view('site.pages.produit-detail' , compact('produit'));
+
+            return view('site.pages.produit-detail', compact('produit'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }

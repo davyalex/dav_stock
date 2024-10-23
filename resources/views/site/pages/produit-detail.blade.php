@@ -4,6 +4,30 @@
 
 @section('content')
 
+    <style>
+        .addCart {
+            display: flex;
+            /* Pour aligner l'icône et le texte horizontalement */
+            align-items: center;
+            font-size: 16px;
+            color: #333;
+            /* Ajuste la couleur selon tes préférences */
+            text-decoration: none;
+        }
+
+        .addCart i {
+            margin-right: 8px;
+            /* Espace entre l'icône et le texte */
+            font-size: 20px;
+            /* Taille de l'icône */
+        }
+
+        .addCart:hover {
+            color: #ff0000;
+            /* Couleur au survol */
+        }
+    </style>
+
     <div class="product-details pt-100 pb-90">
         <div class="container">
 
@@ -37,39 +61,42 @@
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="product-details-content">
-                        <h4>{{ $produit->nom }} </h4>
+                        <h4 class="text-uppercase">{{ $produit->nom }} </h4>
 
-                        <span id="price"
-                            data-price={{ $produit->achats->isNotEmpty() ? $produit->achats[0]->prix_vente_unitaire : $produit->prix }}>
-                            {{ $produit->achats->isNotEmpty() ? $produit->achats[0]->prix_vente_unitaire : $produit->prix }}
+                        <span id="price" data-price={{ $produit->prix }}>
+                            {{ $produit->prix }}
                             FCFA </span>
 
-                        @if ($produit->achats->isNotEmpty())
+                        {{-- @if ($produit->achats->isNotEmpty())
                             <div class="in-stock">
                                 <p>En stock: <span>
                                         {{ $produit->achats->isNotEmpty() ? $produit->achats[0]->quantite_stocke : '' }}
                                     </span></p>
                             </div>
-                        @endif
+                        @endif --}}
 
                         <p> {!! $produit->description !!} </p>
 
-                        <div class="pro-details-cart-wrap d-flex">
-
+                        @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                        <span class="text-danger fw-bold">Rupture de stock</span>
+                           @else
+                           <div class="pro-details-cart-wrap d-flex">
                             <div class="product-quantity">
                                 <div class="cart-plus-minus">
                                     <input id="quantity" class="cart-plus-minus-box" type="text" name="quantity"
                                         value="1" readonly>
                                 </div>
                             </div>
-                            <div class="shop-list-cart-wishlist mx-3">
-                                <a title="Ajouter au panier" href="#" class="addCart" data-id="{{ $produit->id }}">
-                                    <i class="ion-android-cart"></i>
-                                </a>
 
+                            <div class="mx-3">
+                                <button type="button" class="btn btn-danger addCart text-white"
+                                    data-id="{{ $produit->id }}"
+                                    style="padding-top:18px; padding-bottom:20px ; border-radius: 10px">
+                                    Ajouter au panier
+                                </button>
                             </div>
-
                         </div>
+                        @endif
                         <div class="pro-dec-categories">
                             <ul>
                                 <li class="categories-title">Categories:</li>
@@ -351,7 +378,7 @@
             var $input = $button.parent().find("input");
             var oldValue = parseFloat($input.val());
             var maxQuantity =
-            {{ $produit->achats->isNotEmpty() ? $produit->stock : 0 }}; // S'assurer que maxQuantity est bien défini
+                {{ $produit->achats->isNotEmpty() ? $produit->stock : 0 }}; // S'assurer que maxQuantity est bien défini
 
             // Incrémentation
             if ($button.text() === "+") {

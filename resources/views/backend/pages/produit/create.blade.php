@@ -122,7 +122,7 @@
                                             </div> --}}
 
                                             <div class="col-md-3 mb-3">
-                                                <label class="form-label" for="meta-title-input">Unité de sortie ou vente
+                                                <label class="form-label" for="meta-title-input">Unité en sortie ou vente
                                                     <span class="text-danger">*</span>
                                                 </label>
                                                 <select id="uniteSortie" class="form-control js-example-basic-single"

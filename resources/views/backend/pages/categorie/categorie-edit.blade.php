@@ -20,7 +20,7 @@
                     <form class="row g-3 needs-validation" method="post"
                         action="{{ route('categorie.update', $data_categorie_edit['id']) }}" novalidate>
                         @csrf
-                        <div class="col-md-10">
+                        <div class="col-md-6">
                             <label for="validationCustom01" class="form-label">Modifier une categorie </label>
                             <input type="text" name="name" value="{{ $data_categorie_edit['name'] }}"
                                 class="form-control" id="validationCustom01" placeholder="categorie1" required>
@@ -42,14 +42,14 @@
                         </div>
 
 
-                        <div class="col-md-8">
+                        {{-- <div class="col-md-8">
                             <label for="validationCustom01" class="form-label">Url</label>
                             <input type="text" name="url" class="form-control" id="validationCustom01"
                                 value="{{ $data_categorie_edit['url'] }}">
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
-                        </div>
+                        </div> --}}
                         {{-- 
                         <div class="col-md-6">
                             <label for="validationCustom01" class="form-label">Position</label>
@@ -60,7 +60,7 @@
                             </div>
                         </div> --}}
 
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <label for="validationCustom01" class="form-label">Statut</label>
                             <select name="status" class="form-control">
                                 <option value="active" {{ $data_categorie_edit['status'] == 'active' ? 'selected' : '' }}>
@@ -76,12 +76,12 @@
                             </div>
                         </div>
 
-
+                        <div class="col-md-2 pt-4">
+                            <button type="submit" class="btn btn-primary w-100 ">Modifier</button>
+                        </div>
 
                 </div>
-                <div class="">
-                    <button type="submit" class="btn btn-primary w-100 ">Modifier</button>
-                </div>
+               
                 </form>
             </div>
         </div><!-- end row -->

@@ -8,7 +8,42 @@
     <!-- ========== Start slider carousel ========== -->
     @include('site.sections.slider')
     <!-- ========== End slider carousel ========== -->
+    <style>
+        .produit-image-container {
+            position: relative;
+            display: inline-block;
+        }
 
+        .produit-image-container img {
+            width: 100%;
+            /* Ajuste la taille selon tes besoins */
+        }
+
+        .rupture-stock-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 0, 0, 0.7);
+            /* Fond rouge avec opacité */
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .product-content {
+            text-align: center;
+            text-transform: uppercase; 
+        }
+
+        .product-price-wrapper span{
+            font-weight: bold;
+            color: rgba(255, 0, 0, 0.641)
+        }
+    </style>
 
     <!-- ========== Start product with category ========== -->
     <div class="product-area pt-95 pb-70">
@@ -18,14 +53,14 @@
                     <a class="active" href="#tab1" data-bs-toggle="tab">
                         <h4>Tous</h4>
                     </a>
-                    <a href="#tab2" data-bs-toggle="tab">
-                        <h4>Nos boissons</h4>
-                    </a>
                     <a href="#tab3" data-bs-toggle="tab">
                         <h4>Nos plats</h4>
                     </a>
+                    <a href="#tab2" data-bs-toggle="tab">
+                        <h4>Nos boissons</h4>
+                    </a>
                 </div>
-                <p>Découvrez notre sélection de produits pour le bar et les plats.</p>
+                <p>Découvrez notre sélection de produits pour les boissons et les plats.</p>
             </div>
             <div class="tab-content jump yellow-color">
                 <div id="tab1" class="tab-pane active">
@@ -35,22 +70,30 @@
                                 <div class="product-wrapper">
                                     <div class="product-img">
                                         <a href="{{ route('produit.detail', $produit->slug) }}">
-                                            <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                                                alt="{{ $produit->nom }}"
-                                              >
+                                            <div class="produit-image-container">
+                                                <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
+                                                    alt="{{ $produit->nom }}">
+
+                                                @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                                                    <div class="rupture-stock-overlay">Rupture de stock</div>
+                                                @endif
+                                            </div>
                                         </a>
+
                                     </div>
                                     <div class="product-content">
                                         <h4>
                                             <a href="{{ route('produit.detail', $produit->slug) }}">{{ $produit->nom }}</a>
+
                                         </h4>
                                         <div class="product-price-wrapper">
                                             <span>
-                                                @if ($produit->categorie->famille == 'bar' && $produit->achats->isNotEmpty())
+                                                {{-- @if ($produit->categorie->famille == 'bar' && $produit->achats->isNotEmpty())
                                                     {{ $produit->achats->first()->prix_vente_unitaire }}
                                                 @else
-                                                    {{ $produit->prix }}
-                                                @endif
+                                                   
+                                                @endif --}}
+                                                {{ number_format($produit->prix, 0, ',', ' ') }}
                                                 FCFA
                                             </span>
                                         </div>
@@ -67,22 +110,28 @@
                                 <div class="product-wrapper">
                                     <div class="product-img">
                                         <a href="{{ route('produit.detail', $produit->slug) }}">
-                                            <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                                                alt="{{ $produit->nom }}">
+                                            <div class="produit-image-container">
+                                                <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
+                                                    alt="{{ $produit->nom }}">
+
+                                                @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                                                    <div class="rupture-stock-overlay">Rupture de stock</div>
+                                                @endif
+                                            </div>
                                         </a>
                                     </div>
                                     <div class="product-content">
                                         <h4>
-                                            <a
-                                                href="{{ route('produit.detail', $produit->slug) }}">{{ $produit->nom }}</a>
+                                            <a href="{{ route('produit.detail', $produit->slug) }}">{{ $produit->nom }}</a>
                                         </h4>
                                         <div class="product-price-wrapper">
                                             <span>
-                                                @if ($produit->achats->isNotEmpty())
+                                                {{-- @if ($produit->achats->isNotEmpty())
                                                     {{ $produit->achats->first()->prix_vente_unitaire }}
                                                 @else
-                                                    {{ $produit->prix }}
-                                                @endif
+                                                   
+                                                @endif --}}
+                                                {{ number_format($produit->prix, 0, ',', ' ') }}
                                                 FCFA
                                             </span>
                                         </div>
@@ -99,8 +148,14 @@
                                 <div class="product-wrapper">
                                     <div class="product-img">
                                         <a href="{{ route('produit.detail', $produit->slug) }}">
-                                            <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                                                alt="{{ $produit->nom }}">
+                                            <div class="produit-image-container">
+                                                <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
+                                                    alt="{{ $produit->nom }}">
+
+                                                @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                                                    <div class="rupture-stock-overlay">Rupture de stock</div>
+                                                @endif
+                                            </div>
                                         </a>
                                     </div>
                                     <div class="product-content">
@@ -109,7 +164,7 @@
                                                 href="{{ route('produit.detail', $produit->slug) }}">{{ $produit->nom }}</a>
                                         </h4>
                                         <div class="product-price-wrapper">
-                                            <span>{{ $produit->prix }} FCFA</span>
+                                            <span> {{ number_format($produit->prix, 0, ',', ' ') }} FCFA</span>
                                         </div>
                                     </div>
                                 </div>
@@ -169,10 +224,9 @@
                                     <div class="product-wrapper">
                                         <div class="product-img">
                                             <a href="{{ route('produit.detail', $produit->slug) }}">
-                                                <div >
+                                                <div>
                                                     <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                                                        alt="{{ $produit->nom }}"
-                                                        >
+                                                        alt="{{ $produit->nom }}">
                                                 </div>
                                             </a>
                                         </div>
@@ -182,11 +236,12 @@
                                                     href="{{ route('produit.detail', $produit->slug) }}">{{ $produit->nom }}</a>
                                             </h4>
                                             <div class="product-price-wrapper">
-                                                @if ($produit->categorie->famille == 'bar' && $produit->achats->isNotEmpty())
+                                                {{-- @if ($produit->categorie->famille == 'bar' && $produit->achats->isNotEmpty())
                                                     <span>{{ $produit->achats->first()->prix_vente_unitaire }} FCFA</span>
                                                 @else
-                                                    <span>{{ $produit->prix }} FCFA</span>
-                                                @endif
+                                                  
+                                                @endif --}}
+                                                <span>{{ number_format($produit->prix, 0, ',', ' ') }} FCFA</span>
                                             </div>
                                         </div>
                                     </div>

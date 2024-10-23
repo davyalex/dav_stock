@@ -28,6 +28,42 @@
             border-radius: 5px;
             z-index: 10;
         }
+
+
+        .produit-image-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .produit-image-container img {
+            width: 100%;
+            /* Ajuste la taille selon tes besoins */
+        }
+
+        .rupture-stock-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 0, 0, 0.7);
+            /* Fond rouge avec opacité */
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .product-content {
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .product-price-wrapper span {
+            font-weight: bold;
+            color: rgba(255, 0, 0, 0.641)
+        }
     </style>
     <div class="shop-page-area pt-10 pb-100">
         <div class="container">
@@ -58,74 +94,38 @@
                     <div class="grid-list-product-wrapper">
                         <div class="product-grid product-view pb-20">
                             <div class="row">
-                                <!-- start si type categorie == bar-->
-                                @if ($categorieSelect->famille == 'bar')
-                                    @foreach ($produits as $produit)
-                                        @foreach ($produit->achats as $item)
-                                            <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
-                                                <div class="product-wrapper">
-                                                    <div class="product-img position-relative">
-                                                        <a href="{{ route('produit.detail', $produit->slug) }}">
-                                                            <div class="image-container"
-                                                                style="width: 326px; height: 326px; overflow: hidden;">
-                                                                <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                                                                    alt="{{ $produit->nom }}"
-                                                                    style="width: 100%; height: 100%; object-fit: contain;">
-                                                            </div>
-                                                        </a>
-                                                        <span
-                                                            class="category-sticker">{{ $produit->categorie->name }}</span>
+
+                                @foreach ($produits as $produit)
+                                    <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
+                                        <div class="product-wrapper">
+                                            <div class="product-img position-relative">
+                                                <a href="{{ route('produit.detail', $produit->slug) }}">
+                                                    <div class="produit-image-container">
+                                                        <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
+                                                            alt="{{ $produit->nom }}">
+        
+                                                        @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                                                            <div class="rupture-stock-overlay">Rupture de stock</div>
+                                                        @endif
                                                     </div>
-                                                    <div class="product-content">
-                                                        <h4>
-                                                            <a href="#"> {{ $produit->nom }} </a>
-                                                        </h4>
-                                                        <div class="product-price-wrapper">
-                                                            <span>{{ $item->prix_vente_unitaire }} FCFA</span>
-                                                            {{-- <span class="product-price-old">$120.00 </span> --}}
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                </a>
+                                                <!-- Sticker de catégorie -->
+                                                <span class="category-sticker">{{ $produit->categorie->name }}</span>
+
                                             </div>
-                                        @endforeach
-                                    @endforeach
-                                @endif
-                                <!-- end si type categorie == bar-->
-
-
-
-                                <!-- start si type categorie != bar-->
-                                @if ($categorieSelect->famille != 'bar')
-                                    @foreach ($produits as $produit)
-                                        <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
-                                            <div class="product-wrapper">
-                                                <div class="product-img position-relative">
-                                                    <a href="{{ route('produit.detail', $produit->slug) }}">
-                                                        <div class="image-container"
-                                                            style="width: 326px; height: 326px; overflow: hidden;">
-                                                            <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                                                                alt="{{ $produit->nom }}"
-                                                                style="width: 100%; height: 100%; object-fit: contain;">
-                                                        </div>
-                                                    </a>
-                                                    <!-- Sticker de catégorie -->
-                                                    <span class="category-sticker">{{ $produit->categorie->name }}</span>
-
-                                                </div>
-                                                <div class="product-content">
-                                                    <h4>
-                                                        <a href="#"> {{ $produit->nom }} </a>
-                                                    </h4>
-                                                    <div class="product-price-wrapper">
-                                                        <span>{{ $produit->prix }} FCFA</span>
-                                                        {{-- <span class="product-price-old">$120.00 </span> --}}
-                                                    </div>
+                                            <div class="product-content">
+                                                <h4>
+                                                    <a href="#"> {{ $produit->nom }} </a>
+                                                </h4>
+                                                <div class="product-price-wrapper">
+                                                    <span>{{ $produit->prix }} FCFA</span>
+                                                    {{-- <span class="product-price-old">$120.00 </span> --}}
                                                 </div>
                                             </div>
                                         </div>
-                                    @endforeach
-                                @endif
-                                <!-- end si type categorie != bar-->
+                                    </div>
+                                @endforeach
+
                             </div>
                         </div>
                         <div class="pagination-total-pages">

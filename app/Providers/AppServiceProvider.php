@@ -76,7 +76,7 @@ class AppServiceProvider extends ServiceProvider
         //get categorie data
         $menu_link = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
             ->whereIn('type', ['menu', 'bar'])
-            ->OrderBy('position', 'ASC')->get();
+            ->OrderBy('position', 'DESC')->get();
         // dd($data_setting);
         view()->share([
             'setting' => $data_setting,

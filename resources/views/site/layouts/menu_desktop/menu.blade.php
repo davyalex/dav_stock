@@ -57,8 +57,8 @@
                     <div class="header-cart">
                         <a href="{{ route('panier') }}">
                             <i class="icon-handbag icons text-white"></i>
-                            <span class="count-style totalQuantity text-white">{{ session('cart') ? Session::get('totalQuantity') : '0' }}</span>
-                            <span class="cart-digit-bold totalPrice text-white">{{ session('cart') ? Session::get('totalPrice') : '0' }} FCFA</span>
+                            <span style="position: absolute; top: -15px; right: 80px;" class="count-style totalQuantity text-white">{{ session('cart') ? Session::get('totalQuantity') : '0' }}</span>
+                            <span style="margin-left: 10px" class="cart-digit-bold totalPrice text-white ">{{ session('cart') ? Session::get('totalPrice') : '0' }} FCFA</span>
                         </a>
                     </div>
                 </div>
