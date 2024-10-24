@@ -27,7 +27,6 @@ class SiteController extends Controller
                 // ->whereHas('achats', function($query) {
                 //     $query->where('statut', 'active');
                 // })
-
                 ->get();
 
             // Récupérer les produits de type menu
@@ -40,9 +39,8 @@ class SiteController extends Controller
             // dd($produitsMenu->toArray());
 
             // Combiner les produits bar et menu
-            $produits = $produitsBar->concat($produitsMenu);
+            $produits = $produitsMenu->concat($produitsBar);
             // dd($produits->toArray());
-
 
             // Récupérer les produits les plus commandés
             $produitsLesPlusCommandes = Produit::active()->whereHas('categorie', function ($query) {
