@@ -86,10 +86,10 @@ class SiteController extends Controller
             }
             if ($categorieSelect->type) {
                 $produits = Produit::active()->where('type_id', $categorieSelect->id)
-                    ->paginate(10);
+                    ->paginate(8);
             }else{
                 $produits = Produit::active()->where('categorie_id', $categorieSelect->id)
-                    ->paginate(10);
+                    ->paginate(8);
             }
             // // retourner les achats du produits si type=bar
             // if ($categorieSelect->type == 'bar') {

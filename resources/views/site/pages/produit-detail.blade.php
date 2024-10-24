@@ -120,9 +120,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-12 col-12 m-auto">
-                    <div class="product-details-content col-12">
-                        <h4 class="text-uppercase col-12 m-auto">{{ $produit->nom }} </h4>
+                <div class="col-lg-6 col-md-12">
+                    <div class="product-details-content">
+                        <h4 class="text-uppercase">{{ $produit->nom }} </h4>
 
                         <span id="price" data-price={{ $produit->prix }}>
                             {{ $produit->prix }}
