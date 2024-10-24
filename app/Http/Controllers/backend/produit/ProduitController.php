@@ -56,7 +56,7 @@ class ProduitController extends Controller
             // Récupérer la catégorie principale de la catégorie demandée
             $categorie = Categorie::find($request['categorie_id']);
             $principaCat = $categorie->getPrincipalCategory();
-        
+
             // Validation des données de la requête
             $validator = Validator::make($request->all(), [
                 'nom' => 'required',
@@ -71,7 +71,7 @@ class ProduitController extends Controller
                 'unite_sortie_id' => 'required',
                 'imagePrincipale' => $categorie->famille == 'bar' ? 'required' : '',
             ]);
-        
+
             // Vérifier si la validation échoue
             if ($validator->fails()) {
                 return response()->json([
@@ -79,23 +79,23 @@ class ProduitController extends Controller
                     'errors' => $validator->errors()
                 ], 422); // 422 Unprocessable Entity
             }
-        
+
             // Vérifier si le produit existe déjà
             $existingProduct = Produit::where('nom', $request['nom'])
                 ->where('valeur_unite', $request['valeur_unite'])
                 ->where('unite_id', $request['unite_id'])
                 ->exists();
-        
+
             if ($existingProduct) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Ce produit existe déjà',
                 ], 409); // 409 Conflict
             }
-        
+
             // Générer un SKU unique
             $sku = 'PROD-' . strtoupper(Str::random(8));
-        
+
             // Créer le produit
             $data_produit = Produit::create([
                 'nom' => $request['nom'],
@@ -111,14 +111,14 @@ class ProduitController extends Controller
                 'statut' => 'active',
                 'user_id' => Auth::id(),
             ]);
-        
+
             // Si une image principale est présente, l'ajouter
             if ($request->hasFile('imagePrincipale')) {
                 $media = $data_produit->addMediaFromRequest('imagePrincipale')->toMediaCollection('ProduitImage');
                 // Optimiser l'image après l'ajout
                 \Spatie\ImageOptimizer\OptimizerChainFactory::create()->optimize($media->getPath());
             }
-        
+
             // Ajouter d'autres images si elles sont présentes
             if ($request->images) {
                 foreach ($request->input('images') as $fileData) {
@@ -126,19 +126,19 @@ class ProduitController extends Controller
                     $fileData = explode(',', $fileData);
                     $fileExtension = explode('/', explode(';', $fileData[0])[0])[1];
                     $decodedFile = base64_decode($fileData[1]);
-        
+
                     // Créer un fichier temporaire
                     $tempFilePath = sys_get_temp_dir() . '/' . uniqid() . '.' . $fileExtension;
                     file_put_contents($tempFilePath, $decodedFile);
-        
+
                     // Ajouter l'image à la collection de médias
                     $media = $data_produit->addMedia($tempFilePath)->toMediaCollection('galleryProduit');
-        
+
                     // Optimiser l'image après l'ajout
                     \Spatie\ImageOptimizer\OptimizerChainFactory::create()->optimize($media->getPath());
                 }
             }
-        
+
             // Réponse en cas de succès
             return response()->json([
                 'success' => true,
@@ -152,7 +152,6 @@ class ProduitController extends Controller
                 'message' => $e->getMessage(),
             ], 500); // 500 Internal Server Error
         }
-        
     }
 
 

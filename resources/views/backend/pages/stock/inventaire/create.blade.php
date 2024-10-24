@@ -114,7 +114,7 @@
                         <button type="button" class="btn btn-danger remove-form btn-custom-size"> <i
                                 class="ri ri-delete-bin-fill fs-5 remove-form"></i> </button>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label" for="product-title-input">Produits
                             <span class="text-danger">*</span>
                         </label>
@@ -123,8 +123,10 @@
                             <option disabled selected value>Selectionner un produit
                             </option>
                             @foreach ($data_produit as $produit)
-                                <option value="{{ $produit->id }}">{{ $produit->nom }} {{ $produit->quantite_unite }}
-                                    {{ $produit->unite->libelle ?? '' }}
+                                <option value="{{ $produit->id }}">{{ $produit->nom }}
+                                    {{ $produit->valeur_unite ?? '' }} {{ $produit->unite->libelle ?? '' }}
+                                    {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
+
                                 </option>
                             @endforeach
                         </select>
@@ -136,6 +138,13 @@
                             <span class="text-danger">*</span>
                         </label>
                         <input type="number" name="stock_initial[]" class="form-control stockInitial" readonly>
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label" for="stocks-input">Stock vendu
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="number" name="stock_vendu[]" class="form-control stockVendu" readonly>
                     </div>
 
 
@@ -440,12 +449,44 @@
 
 
                 // Fonction pour verifier si un produit est selectionner 2 fois
-                function validateProductSelection() {
+                // function validateProductSelection() {
+                //     let selectedProducts = [];
+
+                //     $('.productSelected').each(function(index, element) {
+                //         let produitId = $(element).val();
+                //         let form = $(element).closest('.row');
+                //         // Vérifier si le produit a déjà été sélectionné
+                //         if (selectedProducts.includes(produitId)) {
+                //             Swal.fire({
+                //                 title: 'Erreur',
+                //                 text: 'Ce produit a déjà été sélectionné.',
+                //                 icon: 'error',
+                //                 confirmButtonText: 'OK',
+                //             });
+
+
+                //             // Réinitialiser le champ select pour éviter la sélection en double
+                //             $(element).val(null).trigger('change.select2');
+
+                //         } else {
+                //             selectedProducts.push(produitId);
+
+                //         }
+                //     });
+                // }
+
+                 // Fonction pour verifier si un produit est sélectionné 2 fois
+                 function validateProductSelection() {
                     let selectedProducts = [];
 
                     $('.productSelected').each(function(index, element) {
                         let produitId = $(element).val();
-                        let form = $(element).closest('.row');
+
+                        // Ignorer les champs qui n'ont pas encore de produit sélectionné
+                        if (produitId === null || produitId === '') {
+                            return; // Continuer à la prochaine itération sans valider ce champ
+                        }
+
                         // Vérifier si le produit a déjà été sélectionné
                         if (selectedProducts.includes(produitId)) {
                             Swal.fire({
@@ -455,13 +496,10 @@
                                 confirmButtonText: 'OK',
                             });
 
-
                             // Réinitialiser le champ select pour éviter la sélection en double
                             $(element).val(null).trigger('change.select2');
-
                         } else {
                             selectedProducts.push(produitId);
-
                         }
                     });
                 }
@@ -475,8 +513,11 @@
                     var product = dataProduct.find(function(item) {
                         return item.id == productId;
                     });
+                    var stockTheorique = product.stock_initial-product.ventes_count;
                     form.find('.stockInitial').val(product.stock_initial); // stock globale
-                    form.find('.stockTheorique').val(product.stock); // stock restante
+                    form.find('.stockTheorique').val(stockTheorique); // stock restante
+
+                    form.find('.stockVendu').val(product.ventes_count); // stock vendu
 
                 }
 

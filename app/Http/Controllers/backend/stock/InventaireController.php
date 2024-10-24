@@ -35,11 +35,29 @@ class InventaireController extends Controller
     {
 
         try {
+
+          
+
+            // Récupérer la date du dernier inventaire
+            $date_dernier_inventaire = Inventaire::select('created_at')
+                ->orderBy('created_at', 'desc')
+                ->first();
+            $date_dernier_inventaire = $date_dernier_inventaire ? $date_dernier_inventaire->created_at : Carbon::now()->startOfDay();
+            
+            // Date du jour
+            $date_jour = Carbon::now();
+            
+            // Récupérer les produits avec le nombre de ventes entre la date du dernier inventaire et la date du jour
             $data_produit = Produit::whereHas('categorie', function ($q) {
                 $q->whereIn('famille', ['restaurant', 'bar']);
-            })->get();
-
-
+            })
+            ->withCount(['ventes' => function ($query) use ($date_dernier_inventaire, $date_jour) {
+                // Préciser la table 'ventes' pour éviter l'ambiguïté sur la colonne 'created_at'
+                $query->whereBetween('ventes.created_at', [$date_dernier_inventaire, $date_jour]);
+            }])
+            ->get();
+            
+            
 
             // dd($data_produit->toArray());
             return view('backend.pages.stock.inventaire.create', compact('data_produit'));
@@ -89,6 +107,8 @@ class InventaireController extends Controller
 
                 // remplacer le stock  par le stock physique
                 $produit->stock = $request->stock_physique[$key];
+                $produit->stock_initial = 0;
+
                 $produit->save();
             }
 

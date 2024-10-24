@@ -28,6 +28,7 @@ return new class extends Migration
 
             // $table->double('stock_global')->nullable(); // stock net
             $table->double('stock_initial')->nullable();
+            $table->double('stock_vendu')->nullable();
             $table->double('stock_theorique')->nullable(); //stock theorique
             $table->double('stock_physique')->nullable(); // stock disponible
             $table->double('ecart')->nullable();

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('inventaires', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique()->nullable();
-            $table->date('date_inventaire')->nullable();
+            $table->dateTime('date_inventaire')->nullable();
 
             $table->foreignId('user_id')
                 ->nullable()
