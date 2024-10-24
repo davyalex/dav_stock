@@ -122,9 +122,7 @@ class RapportController extends Controller
 
 
 
-            $query = Produit::with(['categorie', 'ventes', 'achats' => function ($query) {
-                $query->where('statut', 'active')->orderBy('created_at', 'asc');
-            }])
+            $query = Produit::with(['categorie', 'ventes', 'achats'])
                 ->has('ventes')  // Précise les produits avec au moins une vente
                 ->withCount('ventes')
                 ->withSum('ventes as quantite_vendue', 'produit_vente.quantite')
@@ -155,14 +153,14 @@ class RapportController extends Controller
                 });
             }
 
-            $produits = $query->get();
+            $produits = $query->orderBy();
 
             // dd($produits->toArray());
             // Récupération des catégories pour le filtre
 
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
                 ->whereIn('type', ['bar', 'menu'])
-                ->OrderBy('position', 'ASC')->get();
+                ->OrderBy('position', 'DESC')->get();
 
             $categorie_famille = Categorie::whereNull('parent_id')->whereIn('type', ['bar', 'menu'])->get();
 
@@ -302,6 +300,7 @@ class RapportController extends Controller
             //   dd($dataParFamille);
 
 
+
             return view('backend.pages.rapport.exploitation', compact('totalVentes', 'totalDepenses', 'benefice', 'ratio', 'categories_depense', 'depensesParCategorie', 'dataParFamille', 'categories'));
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -433,7 +432,7 @@ class RapportController extends Controller
                     'stock' => $produit->stock,
                     'designation' => $produit->nom,
                     'categorie' => $produit->categorie->name,
-                    'famille' => $produit->categorie->famille,
+                    'famille' => $produit->categorie->famille->orderBy('name', 'DESC'),
                     'quantite_vendue' => $groupe->sum('pivot.quantite'),
                     'prix_vente' => $groupe->first()->pivot->prix_unitaire,
                     'montant_total' => $groupe->sum(function ($item) {
@@ -443,7 +442,7 @@ class RapportController extends Controller
             })->filter()->values();
 
             $caisses = Caisse::all();
-            $famille = Categorie::whereNull('parent_id')->whereIn('type', ['bar', 'menu'])->get();
+            $famille = Categorie::whereNull('parent_id')->whereIn('type', ['bar', 'menu'])->orderBy('name', 'DESC')->get();
 
 
             return view('backend.pages.rapport.vente', compact('produitsVendus', 'caisses', 'dateDebut', 'dateFin', 'caisseId', 'categorieFamille', 'famille'));

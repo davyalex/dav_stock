@@ -37,7 +37,8 @@
                                     <select class="form-select" id="caisse_id" name="caisse_id">
                                         <option value="">Toutes les caisses</option>
                                         @foreach ($caisses as $caisse)
-                                            <option value="{{ $caisse->id }}" {{ request('caisse_id') == $caisse->id ? 'selected' : '' }}>
+                                            <option value="{{ $caisse->id }}"
+                                                {{ request('caisse_id') == $caisse->id ? 'selected' : '' }}>
                                                 {{ $caisse->libelle }}
                                             </option>
                                         @endforeach
@@ -49,13 +50,14 @@
                                 <select class="form-select" id="categorie" name="categorie_famille">
                                     <option value="">Toutes les catégories</option>
                                     @foreach ($famille as $item)
-                                        <option value="{{$item->famille}}" {{request('categorie_famille') == $item->famille ? 'selected' : ''}}>
-                                            @if($item->famille == 'bar')
-                                                Boissons
-                                            @elseif($item->famille == 'menu') 
+                                        <option value="{{ $item->famille }}"
+                                            {{ request('categorie_famille') == $item->famille ? 'selected' : '' }}>
+                                            @if ($item->famille == 'menu')
                                                 Cuisine interne
+                                            @elseif($item->famille == 'bar')
+                                                Boissons
                                             @else
-                                                {{$item->famille}}
+                                                {{ $item->famille }}
                                             @endif
                                         </option>
                                     @endforeach
@@ -90,12 +92,12 @@
             <div class="card divPrint">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
-                        Rapport des ventes 
-                        @if(request('caisse_id'))
+                        Rapport des ventes
+                        @if (request('caisse_id'))
                             <strong> {{ $caisses->find(request('caisse_id'))->libelle }}</strong>
                         @endif
-                        @if(request('categorie_famille'))
-                            @if(request('categorie_famille') == 'bar')
+                        @if (request('categorie_famille'))
+                            @if (request('categorie_famille') == 'bar')
                                 pour les Boissons
                             @elseif(request('categorie_famille') == 'menu')
                                 pour la Cuisine interne
@@ -103,27 +105,28 @@
                                 pour {{ request('categorie_famille') }}
                             @endif
                         @endif
-                        @if(request('date_debut') || request('date_fin'))
-                            du 
-                            @if(request('date_debut'))
+                        @if (request('date_debut') || request('date_fin'))
+                            du
+                            @if (request('date_debut'))
                                 {{ \Carbon\Carbon::parse(request('date_debut'))->format('d/m/Y') }}
                             @endif
-                            @if(request('date_fin'))
+                            @if (request('date_fin'))
                                 au {{ \Carbon\Carbon::parse(request('date_fin'))->format('d/m/Y') }}
                             @endif
                         @endif
                     </h5>
                 </div>
                 <div class="card-body">
-                    @foreach($produitsVendus->groupBy('famille') as $famille => $produits)
+                    @foreach ($produitsVendus->groupBy('famille') as $famille => $produits)
                         <h3>
-                            @if($famille == 'bar')
-                            Boissons
-                        @elseif($famille == 'menu') 
-                            Cuisine interne
-                        @else
-                            {{$famille}}
-                        @endif</h3>
+                            @if ($famille == 'menu')
+                                Cuisine interne
+                            @elseif($famille == 'bar')
+                                Boissons
+                            @else
+                                {{ $famille }}
+                            @endif
+                        </h3>
                         <div class="table-responsive mb-4">
                             <table class="table table-bordered">
                                 <thead>
@@ -138,7 +141,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($produits as $produit)
+                                    @foreach ($produits as $produit)
                                         <tr>
                                             <td>{{ $produit['code'] }}</td>
                                             <td>{{ $produit['designation'] }}</td>
@@ -156,7 +159,9 @@
                                             <div class="text-end">
                                                 {{-- <div>Total pour {{ $famille }}</div> --}}
                                                 <div>Nombre d'articles : {{ $produits->sum('quantite_vendue') }}</div>
-                                                <div>Montant total : {{ number_format($produits->sum('montant_total'), 0, ',', ' ') }} FCFA</div>
+                                                <div>Montant total :
+                                                    {{ number_format($produits->sum('montant_total'), 0, ',', ' ') }} FCFA
+                                                </div>
                                             </div>
                                         </th>
                                     </tr>
@@ -164,16 +169,17 @@
                             </table>
                         </div>
                     @endforeach
-                    
+
                     <div class="mt-4">
                         <h3>Résumé global</h3>
                         <p>Nombre total de produits vendus : {{ $produitsVendus->sum('quantite_vendue') }}</p>
-                        <p>Montant total des ventes : {{ number_format($produitsVendus->sum('montant_total'), 0, ',', ' ') }} FCFA</p>
+                        <p>Montant total des ventes :
+                            {{ number_format($produitsVendus->sum('montant_total'), 0, ',', ' ') }} FCFA</p>
                     </div>
                 </div>
             </div>
 
-            <button id="btnImprimer" class="w-100" ><i class="ri ri-printer-fill"></i></button>
+            <button id="btnImprimer" class="w-100"><i class="ri ri-printer-fill"></i></button>
 
         </div>
     </div>
@@ -204,7 +210,7 @@
             function imprimerRapport() {
                 // Créer une nouvelle fenêtre pour l'impression
                 var fenetreImpression = window.open('', '_blank');
-                
+
                 // Contenu à imprimer
                 var contenuImprimer = `
                     <html>
@@ -226,13 +232,13 @@
                         </body>
                     </html>
                 `;
-                
+
                 // Écrire le contenu dans la nouvelle fenêtre
                 fenetreImpression.document.write(contenuImprimer);
-                
+
                 // Fermer le document
                 fenetreImpression.document.close();
-                
+
                 // Imprimer la fenêtre
                 fenetreImpression.print();
             }
@@ -242,7 +248,7 @@
                 .text('Imprimer le Rapport')
                 .addClass('btn btn-primary mt-3')
                 .on('click', imprimerRapport);
-                // .appendTo('.divPrint');
+            // .appendTo('.divPrint');
         });
     </script>
 @endsection

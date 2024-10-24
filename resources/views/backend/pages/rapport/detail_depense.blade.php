@@ -44,7 +44,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Libellé</th>
-                                    <th>Date de dépense</th>
+                                    {{-- <th>Date de dépense</th> --}}
                                     <th>Montant</th>
                                 </tr>
                             </thead>
