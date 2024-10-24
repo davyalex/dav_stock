@@ -36,10 +36,10 @@
 
         .product-content {
             text-align: center;
-            text-transform: uppercase; 
+            text-transform: uppercase;
         }
 
-        .product-price-wrapper span{
+        .product-price-wrapper span {
             font-weight: bold;
             color: rgba(255, 0, 0, 0.641)
         }
@@ -50,10 +50,10 @@
         <div class="custom-container">
             <div class="product-tab-list-wrap text-center mb-40 yellow-color">
                 <div class="product-tab-list nav">
-                    <a class="active" href="#tab1" data-bs-toggle="tab">
+                    {{-- <a class="active" href="#tab1" data-bs-toggle="tab">
                         <h4>Tous</h4>
-                    </a>
-                    <a href="#tab3" data-bs-toggle="tab">
+                    </a> --}}
+                    <a class="active" href="#tab3" data-bs-toggle="tab">
                         <h4>Nos plats</h4>
                     </a>
                     <a href="#tab2" data-bs-toggle="tab">
@@ -63,7 +63,7 @@
                 <p>Découvrez notre sélection de produits pour les boissons et les plats.</p>
             </div>
             <div class="tab-content jump yellow-color">
-                <div id="tab1" class="tab-pane active">
+                <div id="tab1" class="tab-pane">
                     <div class="row">
                         @foreach ($produitsMenu->concat($produitsBar) as $produit)
                             <div class="custom-col-5 mb-4">
@@ -106,7 +106,7 @@
                 <div id="tab2" class="tab-pane">
                     <div class="row">
                         @foreach ($produitsBar as $produit)
-                            <div class="custom-col-5">
+                            <div class="col-lg-3 col-md-3 col-6 ">
                                 <div class="product-wrapper">
                                     <div class="product-img">
                                         <a href="{{ route('produit.detail', $produit->slug) }}">
@@ -138,13 +138,24 @@
                                     </div>
                                 </div>
                             </div>
+
+                            
                         @endforeach
+                       
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-5">
+                        <a href="{{ route('produit' , 'bar') }}" class="btn btn-danger w-auto text-white fw-bolder" style=" border-radius: 10px ; ">
+                            Affichez plus de boissons <i class="fa fa-caret-right"></i>
+                        </a>
+    
                     </div>
                 </div>
-                <div id="tab3" class="tab-pane">
+
+               
+                <div id="tab3" class="tab-pane active">
                     <div class="row">
                         @foreach ($produitsMenu as $produit)
-                            <div class="custom-col-5">
+                            <div class="col-lg-3 col-md-3 col-6">
                                 <div class="product-wrapper">
                                     <div class="product-img">
                                         <a href="{{ route('produit.detail', $produit->slug) }}">
@@ -169,8 +180,17 @@
                                     </div>
                                 </div>
                             </div>
+                          
+                            
                         @endforeach
                     </div>
+
+                    <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-4">
+                        <a href="{{ route('produit', 'cuisine-interne') }}" class="btn btn-danger w-auto text-white fw-bolder" style="border-radius: 10px;">
+                            Affichez plus de Plats <i class="fa fa-caret-right"></i>
+                        </a>
+                    </div>
+
                 </div>
             </div>
         </div>

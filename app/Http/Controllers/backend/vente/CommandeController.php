@@ -48,7 +48,7 @@ class CommandeController extends Controller
                 $commande->caisse_id = auth()->user()->caisse_id;
             }
 
-            if ($nouveauStatut == 'confirmée') {
+            if ($nouveauStatut == 'confirmée' || $nouveauStatut == 'livrée') {
                 // Mise à jour de la table vente
                 ##Generer le code vente
                 // Obtenir les deux premières lettres du nom de la caissière

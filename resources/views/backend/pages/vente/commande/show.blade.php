@@ -46,33 +46,35 @@
                     <h5 class="card-title mb-0">Produits de la commande</h5>
                    
                    
-                    <div class="d-flex justify-content-end mt-3">
-                        {{-- <a href="{{ route('commande.index') }}" type="button" class="btn btn-primary">Retour aux commandes</a> --}}
-    
-                        <button type="button" class="btn btn-info me-2 btnImprimerTicket" onclick="imprimerFacture()">
-                            <i class="ri-printer-line align-bottom me-1"></i> Imprimer la facture
-                        </button>
-                        <select class="form-select w-auto" data-commande="{{ $commande->id }}"
-                            onchange="changerStatut(this)" {{ $commande->statut == 'livrée' ? 'disabled' : '' }}>
-                            <option value="">Changer le statut</option>
-                            @if ($commande->statut == 'annulée' || ($commande->statut != 'confirmée' && $commande->statut != 'livrée'))
-                                <option value="en attente" {{ $commande->statut == 'en attente' ? 'selected' : '' }}>En
-                                    attente</option>
-                                <option value="confirmée" {{ $commande->statut == 'confirmée' ? 'selected' : '' }}>
-                                    Confirmée</option>
-                                <option value="livrée" {{ $commande->statut == 'livrée' ? 'selected' : '' }}>Livrée
-                                </option>
-                                <option value="annulée" {{ $commande->statut == 'annulée' ? 'selected' : '' }}>Annulée
-                                </option>
-                            @elseif($commande->statut == 'confirmée' || $commande->statut == 'livrée')
-                                <option value="livrée" {{ $commande->statut == 'livrée' ? 'selected' : '' }}>Livrée
-                                </option>
-                                <option value="annulée" {{ $commande->statut == 'annulée' ? 'selected' : '' }}>Annulée
-                                </option>
-                            @endif
-                        </select>
-    
-                    </div>
+                 @if (auth()->user()->hasRole('caisse'))
+                 <div class="d-flex justify-content-end mt-3">
+                    {{-- <a href="{{ route('commande.index') }}" type="button" class="btn btn-primary">Retour aux commandes</a> --}}
+
+                    <button type="button" class="btn btn-info me-2 btnImprimerTicket" onclick="imprimerFacture()">
+                        <i class="ri-printer-line align-bottom me-1"></i> Imprimer la facture
+                    </button>
+                    <select class="form-select w-auto" data-commande="{{ $commande->id }}"
+                        onchange="changerStatut(this)" {{ $commande->statut == 'livrée' ? 'disabled' : '' }}>
+                        <option value="">Changer le statut</option>
+                        @if ($commande->statut == 'annulée' || ($commande->statut != 'confirmée' && $commande->statut != 'livrée'))
+                            <option value="en attente" {{ $commande->statut == 'en attente' ? 'selected' : '' }}>En
+                                attente</option>
+                            <option value="confirmée" {{ $commande->statut == 'confirmée' ? 'selected' : '' }}>
+                                Confirmée</option>
+                            <option value="livrée" {{ $commande->statut == 'livrée' ? 'selected' : '' }}>Livrée
+                            </option>
+                            <option value="annulée" {{ $commande->statut == 'annulée' ? 'selected' : '' }}>Annulée
+                            </option>
+                        @elseif($commande->statut == 'confirmée' || $commande->statut == 'livrée')
+                            <option value="livrée" {{ $commande->statut == 'livrée' ? 'selected' : '' }}>Livrée
+                            </option>
+                            <option value="annulée" {{ $commande->statut == 'annulée' ? 'selected' : '' }}>Annulée
+                            </option>
+                        @endif
+                    </select>
+
+                </div>
+                 @endif
 
                 </div>
 

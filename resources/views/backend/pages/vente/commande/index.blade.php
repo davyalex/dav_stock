@@ -39,7 +39,9 @@
                                     <th>Montant</th>
                                     <th>Client</th>
                                     <th>Statut</th>
-                                    <th>Actions</th>
+                                   @if (Auth::user()->hasRole('caisse'))
+                                   <th>Actions</th>
+                                   @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -61,10 +63,12 @@
                                                 <span class="badge bg-danger">Annulée</span>
                                             @endif
                                         </td>
-                                        <td>
-                                            <a href="{{route('commande.show', $item->id)}}" class="btn btn-sm btn-info">Détails</a>
-                                            {{-- <a href="#" class="btn btn-sm btn-primary">Imprimer</a> --}}
-                                        </td>
+                                       @if (Auth::user()->hasRole('caisse'))
+                                       <td>
+                                        <a href="{{route('commande.show', $item->id)}}" class="btn btn-sm btn-info">Détails</a>
+                                        {{-- <a href="#" class="btn btn-sm btn-primary">Imprimer</a> --}}
+                                    </td>
+                                       @endif
                                     </tr>
                                 @empty
                                     <tr>

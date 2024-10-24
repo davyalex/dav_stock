@@ -26,6 +26,67 @@
             color: #ff0000;
             /* Couleur au survol */
         }
+
+
+        .product-img img {
+            width: 100%;
+            /* Adapter à la largeur du conteneur */
+            height: 250px;
+            /* Fixer une hauteur spécifique */
+            object-fit: contain;
+            /* Maintenir les proportions tout en remplissant la zone */
+        }
+
+        .category-sticker {
+            position: absolute;
+            top: 10px;
+            /* Ajuster la position verticale */
+            left: 10px;
+            /* Ajuster la position horizontale */
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Fond semi-transparent */
+            color: white;
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 5px;
+            z-index: 10;
+        }
+
+
+        .produit-image-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .produit-image-container img {
+            width: 100%;
+            /* Ajuste la taille selon tes besoins */
+        }
+
+        .rupture-stock-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 0, 0, 0.7);
+            /* Fond rouge avec opacité */
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .product-content {
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .product-price-wrapper span {
+            font-weight: bold;
+            color: rgba(255, 0, 0, 0.641)
+        }
     </style>
 
     <div class="product-details pt-100 pb-90">
@@ -59,9 +120,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-12">
-                    <div class="product-details-content">
-                        <h4 class="text-uppercase">{{ $produit->nom }} </h4>
+                <div class="col-lg-6 col-md-12 col-12 m-auto">
+                    <div class="product-details-content col-12">
+                        <h4 class="text-uppercase col-12 m-auto">{{ $produit->nom }} </h4>
 
                         <span id="price" data-price={{ $produit->prix }}>
                             {{ $produit->prix }}
@@ -78,24 +139,24 @@
                         <p> {!! $produit->description !!} </p>
 
                         @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
-                        <span class="text-danger fw-bold">Rupture de stock</span>
-                           @else
-                           <div class="pro-details-cart-wrap d-flex">
-                            <div class="product-quantity">
-                                <div class="cart-plus-minus">
-                                    <input id="quantity" class="cart-plus-minus-box" type="text" name="quantity"
-                                        value="1" readonly>
+                            <span class="text-danger fw-bold">Rupture de stock</span>
+                        @else
+                            <div class="pro-details-cart-wrap d-flex">
+                                <div class="product-quantity">
+                                    <div class="cart-plus-minus">
+                                        <input id="quantity" class="cart-plus-minus-box" type="text" name="quantity"
+                                            value="1" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="mx-3">
+                                    <button type="button" class="btn btn-danger addCart text-white"
+                                        data-id="{{ $produit->id }}"
+                                        style="padding-top:18px; padding-bottom:20px ; border-radius: 10px">
+                                        Ajouter au panier
+                                    </button>
                                 </div>
                             </div>
-
-                            <div class="mx-3">
-                                <button type="button" class="btn btn-danger addCart text-white"
-                                    data-id="{{ $produit->id }}"
-                                    style="padding-top:18px; padding-bottom:20px ; border-radius: 10px">
-                                    Ajouter au panier
-                                </button>
-                            </div>
-                        </div>
                         @endif
                         <div class="pro-dec-categories">
                             <ul>
@@ -112,6 +173,9 @@
             </div>
         </div>
     </div>
+
+
+    @if ($produit->description)
     <div class="description-review-area pb-100">
         <div class="container">
             <div class="description-review-wrapper">
@@ -226,140 +290,50 @@
             </div>
         </div>
     </div>
-    {{-- <div class="product-area pb-95">
+    @endif
+    
+    <div class="product-area pb-95">
+        @if ($produitsRelateds->count() > 0)
+
             <div class="container">
                 <div class="product-top-bar section-border mb-25">
                     <div class="section-title-wrap">
-                        <h3 class="section-title section-bg-white">Related Products</h3>
+                        <h3 class="section-title section-bg-white">Produits similaires</h3>
                     </div>
                 </div>
                 <div class="related-product-active owl-carousel product-nav">
-                    <div class="product-wrapper">
-                        <div class="product-img">
-                            <a href="product-details.html">
-                                <img src="assets/img/product/product-1.jpg" alt="">
-                            </a>
-                            <div class="product-action">
-                                <div class="pro-action-left">
-                                    <a title="Add Tto Cart" href="#"><i class="ion-android-cart"></i> Add Tto Cart</a>
-                                </div>
-                                <div class="pro-action-right">
-                                    <a title="Wishlist" href="wishlist.html"><i class="ion-ios-heart-outline"></i></a>
-                                    <a title="Quick View" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#"><i class="ion-android-open"></i></a>
-                                </div>
+                  @foreach ($produitsRelateds as $produit)
+                  <div class="product-wrapper">
+                    <div class="product-img">
+                        <a href="{{ route('produit.detail', $produit->slug) }}">
+                            <div class="produit-image-container">
+                                <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
+                                    alt="{{ $produit->nom }}">
+
+                                @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                                    <div class="rupture-stock-overlay">Rupture de stock</div>
+                                @endif
                             </div>
-                        </div>
-                        <div class="product-content">
-                            <h4>
-                                <a href="product-details.html">PRODUCTS NAME HERE </a>
-                            </h4>
-                            <div class="product-price-wrapper">
-                                <span>$100.00</span>
-                                <span class="product-price-old">$120.00 </span>
-                            </div>
-                        </div>
+                        </a>
+
                     </div>
-                    <div class="product-wrapper">
-                        <div class="product-img">
-                            <a href="product-details.html">
-                                <img src="assets/img/product/product-2.jpg" alt="">
-                            </a>
-                            <div class="product-action">
-                                <div class="pro-action-left">
-                                    <a title="Add Tto Cart" href="#"><i class="ion-android-cart"></i> Add Tto Cart</a>
-                                </div>
-                                <div class="pro-action-right">
-                                    <a title="Wishlist" href="wishlist.html"><i class="ion-ios-heart-outline"></i></a>
-                                    <a title="Quick View" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#"><i class="ion-android-open"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <h4>
-                                <a href="product-details.html">PRODUCTS NAME HERE </a>
-                            </h4>
-                            <div class="product-price-wrapper">
-                                <span>$200.00</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-wrapper">
-                        <div class="product-img">
-                            <a href="product-details.html">
-                                <img src="assets/img/product/product-3.jpg" alt="">
-                            </a>
-                            <div class="product-action">
-                                <div class="pro-action-left">
-                                    <a title="Add Tto Cart" href="#"><i class="ion-android-cart"></i> Add Tto Cart</a>
-                                </div>
-                                <div class="pro-action-right">
-                                    <a title="Wishlist" href="wishlist.html"><i class="ion-ios-heart-outline"></i></a>
-                                    <a title="Quick View" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#"><i class="ion-android-open"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <h4>
-                                <a href="product-details.html">PRODUCTS NAME HERE </a>
-                            </h4>
-                            <div class="product-price-wrapper">
-                                <span>$90.00</span>
-                                <span class="product-price-old">$100.00 </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-wrapper">
-                        <div class="product-img">
-                            <a href="product-details.html">
-                                <img src="assets/img/product/product-4.jpg" alt="">
-                            </a>
-                            <div class="product-action">
-                                <div class="pro-action-left">
-                                    <a title="Add Tto Cart" href="#"><i class="ion-android-cart"></i> Add Tto Cart</a>
-                                </div>
-                                <div class="pro-action-right">
-                                    <a title="Wishlist" href="wishlist.html"><i class="ion-ios-heart-outline"></i></a>
-                                    <a title="Quick View" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#"><i class="ion-android-open"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <h4>
-                                <a href="product-details.html">PRODUCTS NAME HERE </a>
-                            </h4>
-                            <div class="product-price-wrapper">
-                                <span>$50.00</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-wrapper">
-                        <div class="product-img">
-                            <a href="product-details.html">
-                                <img src="assets/img/product/product-7.jpg" alt="">
-                            </a>
-                            <div class="product-action">
-                                <div class="pro-action-left">
-                                    <a title="Add Tto Cart" href="#"><i class="ion-android-cart"></i> Add Tto Cart</a>
-                                </div>
-                                <div class="pro-action-right">
-                                    <a title="Wishlist" href="wishlist.html"><i class="ion-ios-heart-outline"></i></a>
-                                    <a title="Quick View" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#"><i class="ion-android-open"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <h4>
-                                <a href="product-details.html">PRODUCTS NAME HERE </a>
-                            </h4>
-                            <div class="product-price-wrapper">
-                                <span>$100.00</span>
-                                <span class="product-price-old">$120.00 </span>
-                            </div>
+                    <div class="product-content">
+                        <h4>
+                            <a href="#"> {{ $produit->nom }} </a>
+                        </h4>
+                        <div class="product-price-wrapper">
+                            <span>{{ $produit->prix }} FCFA</span>
+                            {{-- <span class="product-price-old">$120.00 </span> --}}
                         </div>
                     </div>
                 </div>
+                  @endforeach
+
+                </div>
             </div>
-        </div> --}}
+        @endif
+
+    </div>
 
 
 

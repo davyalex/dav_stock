@@ -96,7 +96,7 @@
                             <div class="row">
 
                                 @foreach ($produits as $produit)
-                                    <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
+                                    <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-6 mb-30">
                                         <div class="product-wrapper">
                                             <div class="product-img position-relative">
                                                 <a href="{{ route('produit.detail', $produit->slug) }}">

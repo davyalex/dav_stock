@@ -111,17 +111,17 @@
                         <div class="col-md-6">
                             <label for="received-amount">Montant réçu</label>
                             <input type="number" name="montant_recu" id="received-amount" class="form-control"
-                                value="0" min="0" required>
+                                 min="0" required>
                         </div>
                     </div>
 
                     <div class="text-end mt-3">
-                        <h4>Montant rendu : <span id="change-amount">0</span> FCFA</h4>
+                        <h4>Monnaie rendu : <span id="change-amount">0</span> FCFA</h4>
                     </div>
 
                     <!-- Bouton de validation -->
                     <div class="mt-3">
-                        <button type="button" id="validate-sale" class="btn btn-primary">Valider la vente</button>
+                        <button type="button" id="validate-sale" class="btn btn-primary w-100">Valider la vente</button>
                     </div>
 
                 </div>
@@ -241,11 +241,42 @@
                 $('#change-amount').text(changeAmount < 0 ? 0 : changeAmount);
             }
 
+
+            // verifier la quantité pour voir si elle ne depasse pas la quantité du stock
+            function verifyQty() {
+                var dataProduct = @json($data_produit); // Données du contrôleur
+
+                cart.forEach((item, index) => {
+                    // Trouver le produit dans dataProduct basé sur l'ID du produit dans le panier
+                    var product = dataProduct.find(function(dataItem) {
+                        return dataItem.id == item.id;
+                    });
+
+                    if (product.categorie.famille == 'bar' && item.quantity > product.stock) {
+                        //swalfire
+                        Swal.fire({
+                            title: 'Erreur',
+                            text: 'La quantité entrée dépasse la quantité en stock pour le produit "' +
+                                item.name + '"',
+                            icon: 'error',
+                        });
+
+                        //mettre le button save en disabled
+                        $('#validate-sale').prop('disabled', true);
+                    } else {
+                        //mettre le button save en enable
+                        $('#validate-sale').prop('disabled', false);
+                    }
+                });
+            }
+
+
             $(document).on('click', '.increase-qty', function() {
                 let index = $(this).data('index');
                 cart[index].quantity += 1;
                 updateCartTable();
                 updateGrandTotal();
+                verifyQty();
             });
 
             $(document).on('click', '.decrease-qty', function() {
@@ -254,6 +285,7 @@
                     cart[index].quantity -= 1;
                     updateCartTable();
                     updateGrandTotal();
+                    verifyQty();
                 }
             });
 

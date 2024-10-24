@@ -10,9 +10,12 @@ use App\Models\Produit;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ClotureCaisse;
+use App\Models\HistoriqueCaisse;
+use Illuminate\Routing\RouteAction;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Http\Controllers\backend\user\AdminController;
 
 class VenteController extends Controller
 {
@@ -71,23 +74,25 @@ class VenteController extends Controller
         try {
             $data_produit = Produit::active()->whereHas('categorie', function ($query) {
                 $query->whereIn('famille', ['bar', 'menu']);
-            })  ->get();
-                // ->where(function ($query) {
-                //     $query->whereHas('categorie', function ($subQuery) {
-                //         $subQuery->where('famille', 'menu');
-                //     })
-                //         ->orWhere(function ($subQuery) {
-                //             $subQuery->whereHas('categorie', function ($subSubQuery) {
-                //                 $subSubQuery->where('famille', 'bar');
-                //             })->whereHas('achats', function ($achatsQuery) {
-                //                 $achatsQuery->where('statut', 'active');
-                //             });
-                //         });
-                // })
-                // ->with(['categorie', 'achats' => function ($query) {
-                //     $query->where('statut', 'active')->orderBy('created_at', 'asc');
-                // }])
-              
+            })
+                ->with('categorie')
+                ->get();
+            // ->where(function ($query) {
+            //     $query->whereHas('categorie', function ($subQuery) {
+            //         $subQuery->where('famille', 'menu');
+            //     })
+            //         ->orWhere(function ($subQuery) {
+            //             $subQuery->whereHas('categorie', function ($subSubQuery) {
+            //                 $subSubQuery->where('famille', 'bar');
+            //             })->whereHas('achats', function ($achatsQuery) {
+            //                 $achatsQuery->where('statut', 'active');
+            //             });
+            //         });
+            // })
+            // ->with(['categorie', 'achats' => function ($query) {
+            //     $query->where('statut', 'active')->orderBy('created_at', 'asc');
+            // }])
+
 
             // dd($data_produit->toArray());
 
@@ -148,7 +153,7 @@ class VenteController extends Controller
             $dateHeure = now()->format('dmYHi');
 
             // Générer le code de vente
-            $codeVente = strtoupper($initialesCaissiere) . '-' .strtoupper($initialesCaisse) . $numeroOrdre . $dateHeure;
+            $codeVente = strtoupper($initialesCaissiere) . '-' . strtoupper($initialesCaisse) . $numeroOrdre . $dateHeure;
             $vente = Vente::create([
                 'code' => $codeVente,
                 // 'client_id' => $request->client_id,
@@ -251,8 +256,34 @@ class VenteController extends Controller
                 'statut_cloture' => true,
             ]);
 
+            //deconnecter l'utilisateur et enregistrer l'historique caisse
+            // Si l'utilisateur a une caisse active, la désactiver
+            if ($user->caisse_id) {
+
+                // niveau caisse
+                $caisse = Caisse::find($user->caisse_id);
+                $caisse->statut = 'desactive';
+                $caisse->save();
+                // mettre caisse_id a null
+                User::whereId($user->id)->update([
+                    'caisse_id' => null,
+                ]);
+
+                //mise a jour dans historiquecaisse pour fermeture de caisse
+                HistoriqueCaisse::where('user_id', $user->id)
+                    ->where('caisse_id', $user->caisse_id)
+                    ->whereNull('date_fermeture')
+                    ->update([
+                        'date_fermeture' => now(),
+                    ]);
+            }
+
+
+            Auth::logout();
             Alert::success('Succès', 'Caisse cloturée avec succès');
-            return back();
+            return redirect()->route('admin.login');
+
+
         } catch (\Exception $e) {
             Alert::error('Erreur', 'Une erreur est survenue lors de la cloture de la caisse : ' . $e->getMessage());
             return back();

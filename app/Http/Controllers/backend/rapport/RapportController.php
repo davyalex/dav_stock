@@ -285,16 +285,17 @@ class RapportController extends Controller
 
             // 11. Préparation des données pour la vue
             $dataParFamille = [
+               
+                'Menu' => [
+                    'ventes' => $venteMenu,
+                    'benefice' => $beneficeMenu,
+                    'ratio' => $ratioMenu
+                ],
                 'Bar' => [
                     'ventes' => $venteBar,
                     'benefice' => $beneficeBar,
                     'ratio' => $ratioBar
                 ],
-                'Menu' => [
-                    'ventes' => $venteMenu,
-                    'benefice' => $beneficeMenu,
-                    'ratio' => $ratioMenu
-                ]
             ];
 
             //   dd($dataParFamille);
@@ -440,6 +441,7 @@ class RapportController extends Controller
                     }),
                 ];
             })->filter()->values();
+            
 
             $caisses = Caisse::all();
             $famille = Categorie::whereNull('parent_id')->whereIn('type', ['bar', 'menu'])->orderBy('name', 'DESC')->get();

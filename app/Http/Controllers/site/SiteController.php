@@ -27,6 +27,7 @@ class SiteController extends Controller
                 // ->whereHas('achats', function($query) {
                 //     $query->where('statut', 'active');
                 // })
+                ->take(10)
                 ->get();
 
             // Récupérer les produits de type menu
@@ -34,6 +35,7 @@ class SiteController extends Controller
                 $query->where('famille', 'menu');
             })
 
+                ->take(10)
                 ->get();
 
             // dd($produitsMenu->toArray());
@@ -46,9 +48,11 @@ class SiteController extends Controller
             $produitsLesPlusCommandes = Produit::active()->whereHas('categorie', function ($query) {
                 $query->whereIn('famille', ['bar', 'menu']);
             })
-                ->withCount('commandes')
-                ->havingRaw('commandes_count > 1')
-                ->orderBy('commandes_count', 'desc')
+                // ->withCount('commandes')
+                ->withCount('ventes')
+                // ->havingRaw('commandes_count > 1')
+                ->havingRaw('ventes_count > 1')
+                ->orderBy('ventes_count', 'desc')
                 ->get();
 
             // dd($produitsLesPlusCommandes->toArray());
@@ -60,12 +64,7 @@ class SiteController extends Controller
                 'produitsLesPlusCommandes'
             ));
 
-            return view('site.pages.accueil', compact(
-                'data_slide',
-                'produitsBar',
-                'produitsMenu',
-                'produits',
-            ));
+         
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -205,7 +204,10 @@ class SiteController extends Controller
             $produit = Produit::find($produit->id);
             // dd($produit->categorie->toArray());
 
-            return view('site.pages.produit-detail', compact('produit'));
+            $produitsRelateds = Produit::where('categorie_id', $produit->categorie_id)->where('id', '!=', $produit->id)->get();
+            // dd($produitsRelateds->toArray());
+
+            return view('site.pages.produit-detail', compact('produit', 'produitsRelateds'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }

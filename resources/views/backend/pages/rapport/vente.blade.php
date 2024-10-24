@@ -117,7 +117,28 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    @foreach ($produitsVendus->groupBy('famille') as $famille => $produits)
+
+                    @php
+                        // Ordre personnalisé pour trier les familles
+                        $ordreFamilles = [
+                            'menu' => 1, // Cuisine interne en premier
+                            'bar' => 2, // Boissons en deuxième
+                            // Ajoute d'autres familles si nécessaire avec des numéros plus grands
+];
+
+// Trier les familles en fonction de l'ordre personnalisé
+                        $produitsVendus = $produitsVendus
+                            ->groupBy('famille')
+                            ->sortBy(function ($produits, $famille) use ($ordreFamilles) {
+                                return $ordreFamilles[$famille] ?? 999; // Si la famille n'est pas définie dans l'ordre, elle sera mise à la fin
+                            });
+
+                        // Groupe les produits par famille
+                        $produitsVendus = $produitsVendus->map(function ($produits, $famille) {
+                            return $produits;
+                        });
+                    @endphp
+                    @foreach ($produitsVendus as $famille => $produits)
                         <h3>
                             @if ($famille == 'menu')
                                 Cuisine interne

@@ -54,6 +54,8 @@ class AdminController extends Controller
         }
 
 
+        
+
         // Si l'utilisateur a une caisse active, la désactiver
         if ($user->caisse_id) {
 

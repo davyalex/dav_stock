@@ -91,6 +91,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('delete/{id}', 'delete')->name('client.delete');
         route::get('profil/{id}', 'profil')->name('client.profil');
         route::post('change-password', 'changePassword')->name('client.new-password');
+        
     });
 
 
@@ -102,6 +103,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('delete/{id}', 'delete')->name('admin-register.delete');
         route::get('profil/{id}', 'profil')->name('admin-register.profil');
         route::post('change-password', 'changePassword')->name('admin-register.new-password');
+
     });
 
     //role
