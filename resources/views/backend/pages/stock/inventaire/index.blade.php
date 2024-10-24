@@ -25,8 +25,8 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Liste des inventaires</h5>
-                    <a href="{{ route('inventaire.create') }}" type="button" class="btn btn-primary ">Effectuer
-                        un nouvel inventaire</a>
+                    <a href="{{ route('inventaire.create') }}" type="button" class="btn btn-primary ">
+                        Nouvel inventaire</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

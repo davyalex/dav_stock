@@ -475,8 +475,8 @@
                 //     });
                 // }
 
-                 // Fonction pour verifier si un produit est sélectionné 2 fois
-                 function validateProductSelection() {
+                // Fonction pour verifier si un produit est sélectionné 2 fois
+                function validateProductSelection() {
                     let selectedProducts = [];
 
                     $('.productSelected').each(function(index, element) {
@@ -507,6 +507,14 @@
 
                 //fonction pour remplir les champs stock initial et stock restante
                 function getProductInfo(form) {
+
+                    // vider les champs par defaut
+                    form.find('.stockPhysique').val('');
+                    form.find('.ecart').val('');
+                    form.find('.etatStock').val('');
+                    form.find('.observation').val('');
+
+
                     //recuperer les infos de produit
                     var dataProduct = @json($data_produit); // Données du contrôleur
                     var productId = form.find('.productSelected').val();
@@ -515,14 +523,14 @@
                     });
                     var stockTheorique;
                     if (product.categorie.famille == 'bar') {
-                        var stockTheorique = product.stock_initial-product.quantite_vendue;
+                        var stockTheorique = product.stock_initial - product.quantite_vendue;
                     } else {
-                        var stockTheorique = product.stock_initial-product.quantite_utilisee;
+                        var stockTheorique = product.stock_initial - product.quantite_utilisee;
                     }
-                    
-                  
-                    form.find('.stockInitial').val(product.stock_initial); // stock globale
-                    form.find('.stockTheorique').val(stockTheorique); // stock restante
+
+
+                    form.find('.stockInitial').val(product.stock_initial) || 0; // stock globale
+                    form.find('.stockTheorique').val(stockTheorique) || 0; // stock restante
 
 
                     var stockVendu;
@@ -531,7 +539,7 @@
                     } else {
                         var stockVendu = product.quantite_utilisee;
                     }
-                    form.find('.stockVendu').val(stockVendu); // stock vendu
+                    form.find('.stockVendu').val(stockVendu) || 0; // stock vendu
 
                 }
 
@@ -549,13 +557,14 @@
                     var stock_theorique = form.find('.stockTheorique').val() || 0;
                     var ecart = stock_physique - stock_theorique;
                     form.find('.ecart').val(ecart);
-                    gestionEtatStock(form);
                 }
 
                 // Attacher l'événement de changement aux champs select des produits
-                $(document).on('input change', '.stockPhysique , .productSelected', function() {
+                $(document).on('input change', '.stockPhysique ', function() {
                     var form = $(this).closest('.row');
                     calculEcart(form);
+                    gestionEtatStock(form);
+
                 });
 
 
