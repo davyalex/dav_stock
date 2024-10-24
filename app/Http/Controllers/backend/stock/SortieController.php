@@ -49,7 +49,6 @@ class SortieController extends Controller
             $data_produit = Produit::whereHas('categorie', function ($q) {
                 $q->where('famille', 'restaurant');
             })->where('stock', '>', 0)
-                ->where('statut', 'active')
                 ->with(['unite', 'uniteSortie'])
                 ->get();
 

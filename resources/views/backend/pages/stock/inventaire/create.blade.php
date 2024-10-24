@@ -141,7 +141,7 @@
                     </div>
 
                     <div class="col-md-2 mb-3">
-                        <label class="form-label" for="stocks-input">Stock vendu
+                        <label class="form-label" for="stocks-input">Stock vendu ou utilisé
                             <span class="text-danger">*</span>
                         </label>
                         <input type="number" name="stock_vendu[]" class="form-control stockVendu" readonly>
@@ -513,11 +513,25 @@
                     var product = dataProduct.find(function(item) {
                         return item.id == productId;
                     });
-                    var stockTheorique = product.stock_initial-product.ventes_count;
+                    var stockTheorique;
+                    if (product.categorie.famille == 'bar') {
+                        var stockTheorique = product.stock_initial-product.quantite_vendue;
+                    } else {
+                        var stockTheorique = product.stock_initial-product.quantite_utilisee;
+                    }
+                    
+                  
                     form.find('.stockInitial').val(product.stock_initial); // stock globale
                     form.find('.stockTheorique').val(stockTheorique); // stock restante
 
-                    form.find('.stockVendu').val(product.ventes_count); // stock vendu
+
+                    var stockVendu;
+                    if (product.categorie.famille == 'bar') {
+                        var stockVendu = product.quantite_vendue;
+                    } else {
+                        var stockVendu = product.quantite_utilisee;
+                    }
+                    form.find('.stockVendu').val(stockVendu); // stock vendu
 
                 }
 

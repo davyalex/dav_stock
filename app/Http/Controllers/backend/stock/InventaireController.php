@@ -8,6 +8,7 @@ use App\Models\Produit;
 use App\Models\Inventaire;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -51,10 +52,23 @@ class InventaireController extends Controller
             $data_produit = Produit::whereHas('categorie', function ($q) {
                 $q->whereIn('famille', ['restaurant', 'bar']);
             })
-            ->withCount(['ventes' => function ($query) use ($date_dernier_inventaire, $date_jour) {
-                // Préciser la table 'ventes' pour éviter l'ambiguïté sur la colonne 'created_at'
+            ->withSum(['ventes as quantite_vendue' => function ($query) use ($date_dernier_inventaire, $date_jour) {
+                // Filtrer les ventes entre la date du dernier inventaire et la date du jour
                 $query->whereBetween('ventes.created_at', [$date_dernier_inventaire, $date_jour]);
-            }])
+            }], 'produit_vente.quantite') // Somme de la quantité vendue dans le pivot produit_vente
+           
+
+            ->withSum(['sorties as quantite_utilisee' => function ($query) use ($date_dernier_inventaire, $date_jour) {
+                // Filtrer les sorties entre la date du dernier inventaire et la date du jour
+                $query->whereBetween('sorties.created_at', [$date_dernier_inventaire, $date_jour]);
+            }], 'produit_sortie.quantite_utilise') // Somme de la quantité utilisée dans le pivot produit_sortie
+           
+            // ->withCount(['sorties as total_quantite_utilisee' => function ($query) use ($date_dernier_inventaire, $date_jour) {
+            //     // Somme des quantités utilisées dans le pivot `produit_sortie`
+            //     $query->whereBetween('sorties.created_at', [$date_dernier_inventaire, $date_jour])
+            //           ->select(DB::raw('SUM(produit_sortie.quantite_utilise)'));
+            // }])
+            ->with('categorie')
             ->get();
             
             
