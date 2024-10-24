@@ -65,7 +65,7 @@
             <div class="tab-content jump yellow-color">
                 <div id="tab1" class="tab-pane active">
                     <div class="row">
-                        @foreach ($produitsBar->concat($produitsMenu) as $produit)
+                        @foreach ($produitsMenu->concat($produitsBar) as $produit)
                             <div class="custom-col-5 mb-4">
                                 <div class="product-wrapper">
                                     <div class="product-img">
