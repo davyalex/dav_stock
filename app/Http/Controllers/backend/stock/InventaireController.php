@@ -100,6 +100,7 @@ class InventaireController extends Controller
                     'stock_initial' => $request->stock_initial[$key],
                     'stock_theorique' => $request->stock_theorique[$key],
                     'stock_physique' => $request->stock_physique[$key],
+                    'stock_vendu' => $request->stock_vendu[$key],
                     'ecart' => $request->ecart[$key],
                     'etat' => $request->etat[$key],
                     'observation' => $request->observation[$key],
