@@ -432,7 +432,7 @@ class RapportController extends Controller
                     'stock' => $produit->stock,
                     'designation' => $produit->nom,
                     'categorie' => $produit->categorie->name,
-                    'famille' => $produit->categorie->famille->orderBy('name', 'DESC'),
+                    'famille' => $produit->categorie->famille,
                     'quantite_vendue' => $groupe->sum('pivot.quantite'),
                     'prix_vente' => $groupe->first()->pivot->prix_unitaire,
                     'montant_total' => $groupe->sum(function ($item) {
