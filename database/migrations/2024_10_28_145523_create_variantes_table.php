@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('inventaire_produit', function (Blueprint $table) {
-            //
-            $table->double('stock_vendu')->nullable();
-
+        Schema::create('variantes', function (Blueprint $table) {
+            $table->id();
+            $table->string('slug');
+            $table->string('libelle');
+            
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -23,8 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('inventaire_produit', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('variantes');
     }
 };

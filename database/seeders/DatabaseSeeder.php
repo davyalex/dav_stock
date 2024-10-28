@@ -31,5 +31,6 @@ class DatabaseSeeder extends Seeder
         $this->call(LibelleDepensesTableSeeder::class);
         $this->call(MagasinsTableSeeder::class);
         $this->call(CaissesTableSeeder::class);
+        $this->call(VarianteSeeder::class);
     }
 }
