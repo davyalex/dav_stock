@@ -18,139 +18,168 @@
         @slot('title')
             Produit
         @endslot
-        
     @endcomponent
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body border border-primary border-dashed">
-                        <div class="mb-4 d-flex justify-content-around">
+            <div class="row">
+                <div class="col-lg-10">
+                    <div class="card">
+                        <div class="card-body border border-primary border-dashed">
+                            <div class="mb-4 d-flex justify-content-around">
 
-                            <p>Sku : <span class="fw-bold" id="sku">{{ $data_produit['code'] }} </span></p>
-                            <p>Nom : <span class="fw-bold" id="sku">{{ $data_produit['nom'] }} </span></p>
-                            <p>Stock actuel : <span class="fw-bold" id="stock">{{ $data_produit['stock'] }}</span></p>
-                            <p>Stock alerte : <span class="fw-bold text-danger"
-                                    id="stockAlerte">{{ $data_produit['stock_alerte'] }}</span>
-                            </p>
-                            <p>Categorie : <span class="fw-bold"
-                                    id="categorie">{{ $data_produit['categorie']['name'] }}</span>
-                            </p>
+                                <p>Sku : <span class="fw-bold" id="sku">{{ $data_produit['code'] }} </span></p>
+                                <p>Nom : <span class="fw-bold" id="sku">{{ $data_produit['nom'] }}
+                                        {{ $data_produit['valeur_unite'] ?? '' }}
+                                        {{ $data_produit['unite']['libelle'] ?? '' }} </span></p>
+                                <p>Stock actuel : <span class="fw-bold" id="stock">{{ $data_produit['stock'] }}</span>
+                                </p>
+                                <p>Stock alerte : <span class="fw-bold text-danger"
+                                        id="stockAlerte">{{ $data_produit['stock_alerte'] }}</span>
+                                </p>
+                                <p>Categorie : <span class="fw-bold"
+                                        id="categorie">{{ $data_produit['categorie']['name'] }}</span>
+                                </p>
+                                <p>Prix : <span class="fw-bold" id="prix">{{ $data_produit['prix'] ?? 0 }}</span>
+                                </p>
 
-                            <div class="text-center">
-                                <div class="position-relative d-inline-block">
-                                    <div class="avatar-lg">
-                                        <div class="avatar-title bg-light rounded" id="product-img">
-                                            <img src="{{ asset($data_produit->getFirstMediaUrl('ProduitImage')) }}"
-                                                id="product-img" class="avatar-md h-auto" />
-                                        </div>
-                                    </div>
+
+                            </div>
+                        </div>
+
+
+                       @if (count($data_produit->variantes) > 0) 
+                       <div class="card-body border border-primary border-dashed">
+                        <h5>Variantes des prix</h5>
+                       <div class="d-flex justify-content-around">
+                        @foreach ($data_produit->variantes as $key => $value)
+                        <p>{{ ++$key }} : <span class="fw-bold" id="stock">{{ $value->libelle }}</span>
+                         => <span class="fw-bold" id="prix">{{ $value->pivot->prix }}</span> FCFA
+                        </p>
+                       
+                    @endforeach
+                       </div>
+                       
+                    </div>
+                       @endif
+                    </div>
+                    <!-- end card -->
+
+                   
+
+                </div>
+
+
+                <div class="text-center col-lg-2">
+                    <div class="text-center">
+                        <div class="position-relative d-inline-block">
+                            <div class="avatar-lg">
+                                <div class="avatar-title bg-light rounded" id="product-img">
+                                    <img src="{{ asset($data_produit->getFirstMediaUrl('ProduitImage')) }}" id="product-img"
+                                        class="avatar-md h-auto" />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- end card -->
-
-
-            </div>
-            <div class="card d-none">
-                <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des achats</h5>
-                    {{-- <a href="{{ route('achat.create') }}" type="button" class="btn btn-primary ">Faire
+                <div class="card d-none">
+                    <div class="card-header d-flex justify-content-between">
+                        <h5 class="card-title mb-0">Liste des achats</h5>
+                        {{-- <a href="{{ route('achat.create') }}" type="button" class="btn btn-primary ">Faire
                         un achat</a> --}}
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Statut</th>
-                                    <th>Produit</th>
-                                    <th>code</th>
-                                    <th>Magasin</th>
-                                    <th>N°Facture</th>
-                                    <th>fournisseur</th>
-                                    <th>Format</th>
-                                    <th>Qté format</th>
-                                    <th>Qté dans format</th>
-                                    <th>PU format</th>
-                                    <th>Total depensé</th>
-                                    <th>Qté stockée</th>
-                                    <th>PU achat</th>
-                                    <th>PU vente</th>
-                                    <th>Unite de vente</th>
-                                    <th>Crée par</th>
-                                    <th>Date achat</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($data_produit['achats'] as $key => $item)
-                                    <tr id="row_{{ $item['id'] }}">
-                                        <td> {{ ++$key }} </td>
-                                        <td>{{ $item['statut'] }}</td>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Statut</th>
+                                        <th>Produit</th>
+                                        <th>code</th>
+                                        <th>Magasin</th>
+                                        <th>N°Facture</th>
+                                        <th>fournisseur</th>
+                                        <th>Format</th>
+                                        <th>Qté format</th>
+                                        <th>Qté dans format</th>
+                                        <th>PU format</th>
+                                        <th>Total depensé</th>
+                                        <th>Qté stockée</th>
+                                        <th>PU achat</th>
+                                        <th>PU vente</th>
+                                        <th>Unite de vente</th>
+                                        <th>Crée par</th>
+                                        <th>Date achat</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($data_produit['achats'] as $key => $item)
+                                        <tr id="row_{{ $item['id'] }}">
+                                            <td> {{ ++$key }} </td>
+                                            <td>{{ $item['statut'] }}</td>
 
-                                        <td>
-                                            {{-- <img class="rounded-circle"
+                                            <td>
+                                                {{-- <img class="rounded-circle"
                                                 src="{{ $item->produit->getFirstMediaUrl('ProduitImage') }}" width="50px"
                                                 alt=""> --}}
 
-                                            {{ $item['produit']['nom'] }}
-                                        </td>
-                                        <td>{{ $item['code'] }}</td>
-                                        <td>{{ $item['magasin']['libelle'] ?? 'N/A' }}</td>
-                                        <td>{{ $item['numero_facture'] ?? 'N/A' }}</td>
-                                        <td>{{ $item['fournisseur']['nom'] ?? 'N/A' }}</td>
-                                        <td>{{ $item['format']['libelle'] ?? 'N/A' }}</td>
-                                        <td> {{ $item['quantite_format'] }} </td>
-                                        <td> {{ $item['quantite_in_format'] }} </td>
-                                        <td> {{ $item['prix_unitaire_format'] }} </td>
-                                        <td> {{ $item['prix_total_format'] }} </td>
-                                        <td> {{ $item['quantite_stocke'] }} </td>
-                                        <td> {{ $item['prix_achat_unitaire'] }} </td>
-                                        <td> {{ $item['prix_vente_unitaire'] }} </td>
-                                        <td> {{ $item['unite']['libelle'] ?? 'N/A' }} </td>
-                                        <td> {{ $item['user']['first_name'] }} </td>
-                                        <td> {{ $item['date_achat'] }} </td>
+                                                {{ $item['produit']['nom'] }}
+                                            </td>
+                                            <td>{{ $item['code'] }}</td>
+                                            <td>{{ $item['magasin']['libelle'] ?? 'N/A' }}</td>
+                                            <td>{{ $item['numero_facture'] ?? 'N/A' }}</td>
+                                            <td>{{ $item['fournisseur']['nom'] ?? 'N/A' }}</td>
+                                            <td>{{ $item['format']['libelle'] ?? 'N/A' }}</td>
+                                            <td> {{ $item['quantite_format'] }} </td>
+                                            <td> {{ $item['quantite_in_format'] }} </td>
+                                            <td> {{ $item['prix_unitaire_format'] }} </td>
+                                            <td> {{ $item['prix_total_format'] }} </td>
+                                            <td> {{ $item['quantite_stocke'] }} </td>
+                                            <td> {{ $item['prix_achat_unitaire'] }} </td>
+                                            <td> {{ $item['prix_vente_unitaire'] }} </td>
+                                            <td> {{ $item['unite']['libelle'] ?? 'N/A' }} </td>
+                                            <td> {{ $item['user']['first_name'] }} </td>
+                                            <td> {{ $item['date_achat'] }} </td>
 
-                                        <td>
-                                            <div class="dropdown d-inline-block">
-                                                <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
-                                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="ri-more-fill align-middle"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a href="{{ route('ajustement.create', $item['id']) }}"
-                                                            class="dropdown-item"><i
-                                                                class=" ri-exchange-fill align-bottom me-2 text-muted"></i>
-                                                            Ajustement</a>
-                                                    </li>
-                                                    {{-- <li><a href="#!" class="dropdown-item"><i
+                                            <td>
+                                                <div class="dropdown d-inline-block">
+                                                    <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="ri-more-fill align-middle"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end">
+                                                        <li><a href="{{ route('ajustement.create', $item['id']) }}"
+                                                                class="dropdown-item"><i
+                                                                    class=" ri-exchange-fill align-bottom me-2 text-muted"></i>
+                                                                Ajustement</a>
+                                                        </li>
+                                                        {{-- <li><a href="#!" class="dropdown-item"><i
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                             View</a>
                                                     </li> --}}
-                                                    {{-- <li><a href="{{ route('produit.edit', $item['id']) }}" type="button"
+                                                        {{-- <li><a href="{{ route('produit.edit', $item['id']) }}" type="button"
                                                             class="dropdown-item edit-item-btn"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             Edit</a></li> --}}
-                                                    <li>
-                                                        <a href="#" class="dropdown-item remove-item-btn delete"
-                                                            data-id={{ $item['id'] }}>
-                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Delete
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {{-- @include('backend.pages.produit.edit') --}}
-                                @endforeach
-                            </tbody>
-                        </table>
+                                                        <li>
+                                                            <a href="#" class="dropdown-item remove-item-btn delete"
+                                                                data-id={{ $item['id'] }}>
+                                                                <i
+                                                                    class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                                Delete
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {{-- @include('backend.pages.produit.edit') --}}
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

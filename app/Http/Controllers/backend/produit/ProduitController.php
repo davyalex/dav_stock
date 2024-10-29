@@ -6,12 +6,14 @@ use App\Models\Unite;
 use App\Models\Format;
 use App\Models\Magasin;
 use App\Models\Produit;
+use App\Models\Variante;
 use App\Models\Categorie;
 use App\Models\Fournisseur;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ProduitController extends Controller
@@ -21,8 +23,8 @@ class ProduitController extends Controller
     {
         $categorie = Categorie::whereIn('type', ['restaurant', 'bar'])->get();
 
-        $data_produit = Produit::withWhereHas('typeProduit', fn($q) => $q->whereIn('type', ['restaurant', 'bar']))->orderBy('created_at', 'DESC')->get();
-        // dd(  $data_produit->toArray());
+        $data_produit = Produit::withWhereHas('typeProduit', fn($q) => $q->whereIn('type', ['restaurant', 'bar']))
+            ->orderBy('created_at', 'DESC')->get();
         return view('backend.pages.produit.index', compact('data_produit'));
     }
 
@@ -39,11 +41,12 @@ class ProduitController extends Controller
             $data_unite = Unite::all();
             $data_format = Format::all();
             $data_magasin = Magasin::all();
+            $data_variante = Variante::all();
 
 
             // dd($data_produit->toArray());
 
-            return view('backend.pages.produit.create', compact('data_categorie', 'categorieAll', 'data_unite', 'data_magasin', 'data_format'));
+            return view('backend.pages.produit.create', compact('data_categorie', 'categorieAll', 'data_unite', 'data_magasin', 'data_format', 'data_variante'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -70,8 +73,15 @@ class ProduitController extends Controller
                 'unite_id' => '',
                 'unite_sortie_id' => 'required',
                 'imagePrincipale' => $categorie->famille == 'bar' ? 'required' : '',
+
+                // gestion des variantes
+                'variantes.*.libelle' => $categorie->famille == 'bar' ? 'required' : '',
+                'variantes.*.prix' => $categorie->famille == 'bar' ? 'required' : '',
+                'variantes.*.quantite' => $categorie->famille == 'bar' ? 'required' : '',
+
             ]);
 
+            // dd($request->all());
             // Vérifier si la validation échoue
             if ($validator->fails()) {
                 return response()->json([
@@ -111,6 +121,21 @@ class ProduitController extends Controller
                 'statut' => 'active',
                 'user_id' => Auth::id(),
             ]);
+
+
+            // Erengistrer les variantes dans la table pivot
+            if ($request->variantes) {
+                foreach ($request->variantes as  $variante) {
+                    $data_produit->variantes()->attach(
+                        $variante['libelle'],
+                        [
+                            'quantite' => $variante['quantite'],
+                            'prix' => $variante['prix'],
+                            'total' => $variante['quantite'] * $variante['prix']
+                        ]
+                    );
+                }
+            }
 
             // Si une image principale est présente, l'ajouter
             if ($request->hasFile('imagePrincipale')) {
@@ -175,12 +200,19 @@ class ProduitController extends Controller
 
             $data_produit = Produit::find($id);
 
+            // dd($data_produit->toArray());
+            //recuperer les variante
+
 
             $categorieAll = Categorie::all();
 
             $data_unite = Unite::all();
             $data_format = Format::all();
             $data_magasin = Magasin::all();
+            $data_variante = Variante::all();
+
+
+
 
 
             //get Image from database
@@ -198,7 +230,7 @@ class ProduitController extends Controller
             // dd($galleryProduit);
 
             $id = $id;
-            return view('backend.pages.produit.edit', compact('data_produit', 'data_categorie', 'categorieAll', 'data_unite', 'data_magasin', 'galleryProduit', 'id', 'data_format'));
+            return view('backend.pages.produit.edit', compact('data_produit', 'data_categorie', 'categorieAll', 'data_unite', 'data_magasin', 'galleryProduit', 'id', 'data_format', 'data_variante'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -212,6 +244,8 @@ class ProduitController extends Controller
             $categorie = Categorie::find($request['categorie_id']);
             $principaCat =  $categorie->getPrincipalCategory();
 
+
+            // dd($request->all());
             //request validation
             $request->validate([
                 'nom' => 'required',
@@ -219,7 +253,7 @@ class ProduitController extends Controller
                 'categorie_id' => 'required',
                 'stock' => '',
                 'stock_alerte' => 'required',
-                'prix' => $categorie->famille == 'bar' ? 'required' : '',
+                // 'prix' => $categorie->famille == 'bar' ? 'required' : '',
 
                 // 'magasin' => '',
 
@@ -229,6 +263,11 @@ class ProduitController extends Controller
                 // 'valeur_format' => '',
                 'unite_sortie_id' => 'required',
                 'imagePrincipale' => '',
+
+                // gestion des variantes
+                'variantes.*.libelle' => $categorie->famille == 'bar' ? 'required' : '',
+                'variantes.*.prix' => $categorie->famille == 'bar' ? 'required' : '',
+                'variantes.*.quantite' => $categorie->famille == 'bar' ? 'required' : '',
             ]);
 
             // active  :  desactive le produit
@@ -255,6 +294,30 @@ class ProduitController extends Controller
                 'statut' => $statut,
                 'user_id' => Auth::id(),
             ]);
+
+            //supprimer les element pivot lié au produit
+            DB::table('produit_variante')->where('produit_id', $id)->delete();
+
+            // Erengistrer les variantes dans la table pivot
+            if ($request->variantes) {
+                foreach ($request->variantes as  $variante) {
+                    $data_produit->variantes()->attach(
+                        $variante['libelle'],
+                        [
+                            'quantite' => $variante['quantite'],
+                            'prix' => $variante['prix'],
+                            'total' => $variante['quantite'] * $variante['prix']
+                        ]
+                    );
+                }
+            }
+
+            // recuperer le prix du produit de la variante bouteille dans la table pivot
+            $variante = Variante::where('slug', 'bouteille')->first();
+            $prix_bouteille = DB::table('produit_variante')->where('produit_id', $id)->where('variante_id', $variante->id)->first();
+            // modifier le prix du produit recuperer par la variante bouteille
+            Produit::where('id', $id)->update(['prix' => $prix_bouteille->prix]);
+
 
 
             if (request()->hasFile('imagePrincipale')) {

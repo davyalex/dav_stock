@@ -158,9 +158,19 @@ class Produit extends Model implements HasMedia
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
+     *
+     * @throws \Exception
      */
     public function scopeActive($query)
     {
+        // Retrieve only products with statut equal to 'active'
         return $query->where('statut', 'active');
+    }
+
+
+
+    public function variantes(): BelongsToMany
+    {
+        return $this->belongsToMany(Variante::class ,'produit_variante')->withPivot(['quantite', 'prix', 'total'])->withTimestamps();
     }
 }

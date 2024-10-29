@@ -67,7 +67,7 @@
 
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="meta-title-input">valeur de l'unité
-                                                    <i class="ri ri-information-line fs-5  text-warning p-1 rounded fw-bold"
+                                                    <i class="ri ri-information-line fs-6  text-warning p-1 rounded fw-bold"
                                                         data-bs-toggle="popover" data-bs-trigger="hover focus"
                                                         title="Information"
                                                         data-bs-content="exemple 1.5 L , utiliser un . ou , exemple 1,5"></i>
@@ -137,13 +137,69 @@
                                             </div>
 
 
-                                            <div class="col-md-3 mb-3 prixVente">
+                                            <div class="col-md-3 mb-3 d-none">
                                                 <label class="form-label" for="meta-title-input">Prix de vente
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="number" name="prix" class="form-control prixVente">
+                                                <input type="number" name="prix" class="form-control "
+                                                    id="prixVenteHide">
+                                            </div>
+
+
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label" for="meta-title-input">Stock alerte <span
+                                                        class="text-danger">*</span>
+                                                </label>
+                                                <input type="number" name="stock_alerte" class="form-control"
+                                                    id="stockAlerte" required>
                                             </div>
                                         </div>
+
+
+                                        <!-- ========== Start Variante ========== -->
+                                        <div class="container my-4 divVariante">
+
+                                            <div class="col-12 d-flex justify-content-center">
+                                                <p>-------------------------------</p> <span class="fw-bold">Gestion des
+                                                    prix et
+                                                    variantes</span>
+                                                <p> -----------------------------</p>
+                                            </div>
+
+                                            <div id="variantes-container">
+                                                <div class="row variante-row mb-4">
+                                                    <div class="col-2">
+                                                        <label for="prix">Quantité :</label>
+                                                        <input type="number" class="form-control"
+                                                            name="variantes[0][quantite]" value="1" readonly>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="variante">Nom de la Variante :</label>
+                                                        <select name="variantes[0][libelle]" class="form-control"
+                                                            @readonly(true)>
+                                                            @foreach ($data_variante as $variante)
+                                                                @if ($variante->slug == 'bouteille')
+                                                                    <option value="{{ $variante->id }}">
+                                                                        {{ $variante->libelle }}</option>
+                                                                @endif
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <label for="prix">Prix unitaire de vente :</label>
+                                                        <input type="number" step="0.01" class="form-control prixVente"
+                                                            name="variantes[0][prix]" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-primary mb-3" id="add-variante">Ajouter
+                                                une Variante</button>
+
+                                        </div>
+
+                                        <!-- ========== End Variante ========== -->
+
+
                                         <div>
                                             <label>Description</label>
                                             <textarea name="description" id="ckeditor-classic"></textarea>
@@ -158,13 +214,7 @@
                                 <div class="card">
                                     <div class="card-body">
 
-                                        <div class="col-md-12 mb-3">
-                                            <label class="form-label" for="meta-title-input">Stock alerte <span
-                                                    class="text-danger">*</span> (en unité de sortie ou vente)
-                                            </label>
-                                            <input type="number" name="stock_alerte" class="form-control" id="stockAlerte"
-                                                required>
-                                        </div>
+
                                         <div class="mb-4">
                                             <h5 class="fs-14 mb-1">Image principale <span class="text-danger">*</span>
                                             </h5>
@@ -182,7 +232,8 @@
                                                             </div>
                                                         </label>
                                                         <input class="form-control d-none" id="product-image-input"
-                                                            type="file" name="imagePrincipale" accept="image/*" required>
+                                                            type="file" name="imagePrincipale" accept="image/*"
+                                                            required>
                                                         <div class="invalid-feedback">Ajouter une image</div>
                                                     </div>
                                                     <div class="avatar-lg">
@@ -245,6 +296,50 @@
         <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
         <script>
+            //gestion des variantes
+            let varianteIndex = 1;
+
+            document.getElementById('add-variante').addEventListener('click', function() {
+                const container = document.getElementById('variantes-container');
+                const newRow = document.createElement('div');
+                newRow.classList.add('row', 'variante-row', 'mb-4');
+                newRow.innerHTML = `
+                  <div class="col-2">
+                    <label for="prix">Quantité :</label>
+                        <input type="number" name="variantes[${varianteIndex}][quantite]" class="form-control"  required >
+                        </div>
+        <div class="col-4">
+            <label for="variante">Nom de la Variante :</label>
+            <select class="form-control" name="variantes[${varianteIndex}][libelle]" required>
+                <option value="" selected>Choisir</option>
+                @foreach ($data_variante as $variante)
+                    <option value="{{ $variante->id }}">{{ $variante->libelle }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-4">
+            <label for="prix">Prix unitaire par quantite :</label>
+            <input type="number" step="0.01" class="form-control" name="variantes[${varianteIndex}][prix]" required>
+        </div>
+        <div class="col-2 mt-2">
+            <button type="button" class="btn btn-danger remove-variante mt-3"> <i class="mdi mdi-delete remove-variante"></i></button>
+        </div>
+    `;
+                container.appendChild(newRow);
+                varianteIndex++;
+            });
+
+            document.getElementById('variantes-container').addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-variante')) {
+                    e.target.closest('.variante-row').remove();
+                }
+            });
+
+
+
+
+
+
             // Afficher les champs en fonction de la categorie selectionné
             let categoryFamille;
             var categorieData = @json($categorieAll) // from product controller
@@ -264,7 +359,7 @@
                 // si categorieFilter = restaurant , required false
                 if (categorieFilter[0].famille == 'restaurant') {
                     $('.prixVente').prop('required', false)
-                    $('.prixVente').hide();
+                    $('.divVariante').hide();
                     $('.prixVente').val('')
 
                     // $('#quantiteUnite').prop('required', false)
@@ -277,7 +372,7 @@
                 } else {
 
                     $('.prixVente').prop('required', true)
-                    $('.prixVente').show();
+                    $('.divVariante').show();
 
                     // $('#quantiteUnite').prop('required', true)
                     // $('#quantiteUnite').prop('disabled', false)
@@ -335,6 +430,13 @@
 
             $('#formSend').on('submit', function(e) {
                 e.preventDefault();
+
+
+                var prixVente = parseFloat($('.prixVente').val());
+                var prixVenteHide = $('#prixVenteHide').val(prixVente);
+
+
+
                 // Vérifier si un champ avec required est vide
                 // var requiredFields = document.querySelectorAll('[required]');
                 // for (var i = 0; i < requiredFields.length; i++) {

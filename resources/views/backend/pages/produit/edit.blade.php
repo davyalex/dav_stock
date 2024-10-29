@@ -12,6 +12,17 @@
         @endslot
     @endcomponent
 
+    <style>
+        .non-selectable {
+            pointer-events: none;
+            /* Empêche l’interaction utilisateur */
+            background-color: #e9ecef;
+            /* Style visuel de champ en lecture seule */
+            color: #6c757d;
+            /* Couleur du texte en lecture seule */
+        }
+    </style>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
@@ -52,7 +63,7 @@
 
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label" for="meta-title-input">valeur de l'unité
-                                                    <i class="ri ri-information-line fs-5  text-warning p-1 rounded fw-bold"
+                                                    <i class="ri ri-information-line fs-6  text-warning p-1 rounded fw-bold"
                                                         data-bs-toggle="popover" data-bs-trigger="hover focus"
                                                         title="Information"
                                                         data-bs-content="exemple 1.5 L , utiliser un . ou , exemple 1,5"></i>
@@ -125,13 +136,68 @@
                                             </div>
 
 
-                                            <div class="col-md-3 mb-3 prixVente">
+                                            <div class="col-md-3 mb-3 d-none ">
                                                 <label class="form-label" for="meta-title-input">Prix de vente
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="number" name="prix" class="form-control prixVente"
-                                                    value="{{ $data_produit->prix }}">
+                                                <input type="number" name="prix" value="{{ $data_produit->prix }}"
+                                                    class="form-control " id="prixVenteHide">
                                             </div>
+
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label" for="meta-title-input">Stock alerte <span
+                                                        class="text-danger">*</span>
+                                                </label>
+                                                <input type="number" name="stock_alerte" class="form-control"
+                                                    id="stockAlerte" value="{{ $data_produit->stock_alerte }}" required>
+                                            </div>
+
+                                            <!-- ========== Start Variante ========== -->
+                                            <div class="container my-4 divVariante">
+
+                                                <div class="col-12 d-flex justify-content-center">
+                                                    <p>-------------------------------</p> <span class="fw-bold">Gestion des
+                                                        prix et
+                                                        variantes</span>
+                                                    <p> -----------------------------</p>
+                                                </div>
+
+                                                <div id="variantes-container">
+                                                    {{-- <div class="row variante-row mb-4">
+                                                        <div class="col-2">
+                                                            <label for="prix">Quantité :</label>
+                                                            <input type="number" class="form-control"
+                                                                name="variantes[0][quantite]" value="1" readonly>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label for="variante">Nom de la Variante :</label>
+                                                            <select name="variantes[0][libelle]" class="form-control"
+                                                                @readonly(true)>
+                                                                @foreach ($data_variante as $variante)
+                                                                    @if ($variante->slug == 'bouteille')
+                                                                        <option value="{{ $variante->id }}">
+                                                                            {{ $variante->libelle }}</option>
+                                                                    @endif
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <label for="prix">Prix unitaire de vente :</label>
+                                                            <input type="number" step="0.01"
+                                                                class="form-control prixVente" name="variantes[0][prix]"
+                                                                required>
+                                                        </div>
+                                                    </div> --}}
+                                                </div>
+                                                <button type="button" class="btn btn-primary mb-3"
+                                                    id="add-variante">Ajouter
+                                                    une Variante</button>
+
+                                            </div>
+
+                                            <!-- ========== End Variante ========== -->
+
+
 
 
                                         </div>
@@ -145,7 +211,8 @@
 
                                             <div class="form-check form-switch form-switch-lg col-md-2" dir="ltr">
                                                 <input type="checkbox" name="statut" class="form-check-input"
-                                                    id="customAff" {{ $data_produit['statut'] == 'active' ? 'checked' : '' }}>
+                                                    id="customAff"
+                                                    {{ $data_produit['statut'] == 'active' ? 'checked' : '' }}>
                                             </div>
                                             <div class="valid-feedback">
                                                 Looks good!
@@ -159,17 +226,7 @@
 
                             <div class="col-lg-4">
                                 <div class="card">
-
-
                                     <div class="card-body">
-
-                                        <div class="col-md-12 mb-3">
-                                            <label class="form-label" for="meta-title-input">Stock alerte <span
-                                                    class="text-danger">*</span> (en unité de sortie ou vente)
-                                            </label>
-                                            <input type="number" value="{{ $data_produit->stock_alerte }}"
-                                                name="stock_alerte" class="form-control" id="stockAlerte" required>
-                                        </div>
 
                                         <div class="mb-4">
                                             <h5 class="fs-14 mb-1">Image principale <span class="text-danger">*</span>
@@ -253,19 +310,120 @@
         <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
         <script>
+            //gestion des variante dejà enregister
+
+            let dataVariante = @json($data_produit->variantes);
+            let idVariante = dataVariante.map(variante => variante.id); // Récupérer les IDs des variantes
+
+            let nombreVariantes = dataVariante.length;
+            for (let i = 0; i < nombreVariantes; i++) {
+                const container = document.getElementById('variantes-container');
+                const newRow = document.createElement('div');
+                newRow.classList.add('row', 'variante-row', 'mb-4');
+                newRow.innerHTML = `
+                        <div class="col-2">
+                            <label for="quantite">Quantité :</label>
+                            <input type="number" name="variantes[${i}][quantite]" class="form-control" required value="${dataVariante[i].pivot.quantite}">
+                        </div>
+                        <div class="col-4">
+                            <label for="libelle">Nom de la Variante :</label>
+                            <select class="form-control" name="variantes[${i}][libelle]" required>
+                                <option value="" selected>Choisir</option>
+                                @foreach ($data_variante as $item)
+                                    <option value="{{ $item->id }}">{{ $item->libelle }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label for="prix">Prix unitaire par quantité :</label>
+                            <input type="number" step="0.01" class="form-control" name="variantes[${i}][prix]" required value="${dataVariante[i].pivot.prix}">
+                        </div>
+                        <div class="col-2 mt-2">
+                            <button type="button" class="btn btn-danger remove-variante mt-3"> <i class="mdi mdi-delete remove-variante"></i></button>
+                        </div>
+                    `;
+
+                container.appendChild(newRow);
+
+                // Sélectionner automatiquement la bonne option dans le select
+                const selectElement = newRow.querySelector(`select[name="variantes[${i}][libelle]"]`);
+                const optionToSelect = selectElement.querySelector(`option[value="${dataVariante[i].id}"]`);
+                if (optionToSelect) {
+                    optionToSelect.selected = true;
+                    if (dataVariante[i].libelle === 'Bouteille') {
+                        newRow.querySelector('.remove-variante').style.display = 'none';
+                        newRow.querySelector(`input[name="variantes[${i}][quantite]"]`).readOnly = true;
+                        newRow.querySelector(`input[name="variantes[${i}][quantite]"]`).style.backgroundColor = '#eff2f7';
+                        selectElement.classList.add('non-selectable');
+
+                        // Empêcher le changement de valeur via JavaScript
+                        selectElement.addEventListener('mousedown', (e) => {
+                            e.preventDefault();
+                        });
+                    }
+                }
+
+
+            }
+
+
+
+
+            //gestion des variantes
+            let varianteIndex = parseInt(dataVariante.length);
+
+            document.getElementById('add-variante').addEventListener('click', function() {
+                const container = document.getElementById('variantes-container');
+                const newRow = document.createElement('div');
+                newRow.classList.add('row', 'variante-row', 'mb-4');
+                newRow.innerHTML = `
+                        <div class="col-2">
+                            <label for="prix">Quantité :</label>
+                                <input type="number" name="variantes[${varianteIndex}][quantite]" class="form-control"  required >
+                                </div>
+                    <div class="col-4">
+                    <label for="variante">Nom de la Variante :</label>
+                    <select class="form-control" name="variantes[${varianteIndex}][libelle]" required>
+                        <option value="" selected>Choisir</option>
+                        @foreach ($data_variante as $variante)
+                            <option value="{{ $variante->id }}">{{ $variante->libelle }}</option>
+                        @endforeach
+                    </select>
+                    </div>
+                    <div class="col-4">
+                    <label for="prix">Prix unitaire par quantite :</label>
+                    <input type="number" step="0.01" class="form-control" name="variantes[${varianteIndex}][prix]" required>
+                    </div>
+                    <div class="col-2 mt-2">
+                    <button type="button" class="btn btn-danger remove-variante mt-3"> <i class="mdi mdi-delete remove-variante"></i></button>
+                    </div>
+                    `;
+                container.appendChild(newRow);
+                varianteIndex++;
+            });
+
+            document.getElementById('variantes-container').addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-variante')) {
+                    e.target.closest('.variante-row').remove();
+                }
+            });
+
+
+
+
+
+
             //recuperer la valeur de la categorie par defaut
             var defaultCategorie = @json($data_produit->categorie->famille);
 
             if (defaultCategorie == 'restaurant') {
                 $('.prixVente').prop('required', false)
-                $('.prixVente').hide();
+                $('.divVariante').hide();
                 $('.prixVente').val('')
             } else {
 
                 $('.prixVente').prop('required', true)
-                $('.prixVente').show();
-
-
+                $('.divVariante').show();
             }
 
 
@@ -291,7 +449,7 @@
                 // si categorieFilter = restaurant , required false
                 if (categorieFilter[0].famille == 'restaurant') {
                     $('.prixVente').prop('required', false)
-                    $('.prixVente').hide();
+                    $('.divVariante').hide();
                     $('.prixVente').val('')
 
                     // $('#quantiteUnite').prop('required', false)
@@ -304,8 +462,7 @@
                 } else {
 
                     $('.prixVente').prop('required', true)
-                    $('.prixVente').show();
-
+                    $('.divVariante').show();
                     // $('#quantiteUnite').prop('required', true)
                     // $('#quantiteUnite').prop('disabled', false)
 
@@ -374,6 +531,12 @@
             $('#formSend').on('submit', function(e) {
 
                 e.preventDefault();
+
+
+                // var variantes = document.querySelector('select[name="variantes[0][libelle]"] option[value="Bouteille"]');
+                // var prixVariante = variantes[0].value;
+                // var prixVenteHide = $('#prixVenteHide').val(prixVariante);
+
                 var productId = {{ Js::from($id) }} // product Id
                 var formData = new FormData(this);
 
