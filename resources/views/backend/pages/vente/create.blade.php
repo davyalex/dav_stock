@@ -16,14 +16,27 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title mb-4">Sélection des produits</h4>
-                    <select id="product-select" name="produit_id" class="form-select js-example-basic-single">
+                    <select name="produit_id" class="form-select js-example-basic-single product-select">
                         <option value="">Sélectionnez un produit</option>
                         @foreach ($data_produit as $produit)
-                            <option value="{{ $produit->id }}" data-price="{{ $produit->prix }}">
-                                {{ $produit->nom }} {{ $produit->valeur_unite ?? '' }} {{ $produit->unite->libelle ?? '' }}
-                                {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
-                                ({{ $produit->prix }} FCFA)
-                            </option>
+                            @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                                <option value="{{ $produit->id }}" data-price="{{ $produit->prix }}"
+                                    data-stock="{{ $produit->stock }}" disabled>
+                                    {{ $produit->nom }} {{ $produit->valeur_unite ?? '' }}
+                                    {{ $produit->unite->libelle ?? '' }}
+                                    {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
+                                    ({{ $produit->prix }} FCFA)
+                                    -(Stock 0)
+                                </option>
+                            @else
+                                <option value="{{ $produit->id }}" data-price="{{ $produit->prix }}"
+                                    data-stock="{{ $produit->stock }}">
+                                    {{ $produit->nom }} {{ $produit->valeur_unite ?? '' }}
+                                    {{ $produit->unite->libelle ?? '' }}
+                                    {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
+                                    ({{ $produit->prix }} FCFA)
+                                </option>
+                            @endif
                         @endforeach
                     </select>
                 </div>
@@ -39,6 +52,7 @@
                             <thead>
                                 <tr>
                                     <th>Produit</th>
+                                    <th>Mode de vente</th>
                                     <th>Prix unitaire</th>
                                     <th>Quantité</th>
                                     {{-- <th>Remise (%)</th> --}}
@@ -111,7 +125,7 @@
                         <div class="col-md-6">
                             <label for="received-amount">Montant réçu</label>
                             <input type="number" name="montant_recu" id="received-amount" class="form-control"
-                                 min="0" required>
+                                min="0" required>
                         </div>
                     </div>
 
@@ -137,14 +151,20 @@
             let totalDiscountType = 'percentage';
             let totalDiscountValue = 0;
             let grandTotal = 0;
+            var dataProduct = @json($data_produit); // Données récupérées depuis le contrôleur
 
-            $('#product-select').change(function() {
+            $('.product-select').change(function() {
                 let productId = $(this).val();
                 let productName = $(this).find('option:selected').text();
                 let productPrice = $(this).find('option:selected').data('price');
+                let productStock = $(this).find('option:selected').data('stock');
+                // let productVariante = $(this).find('option:selected').val();
+
+                // console.log('id:', productId, 'nom:', productName, 'prix:', productPrice, 'stock:',
+                //     productStock, 'variante:', productVariante);
 
                 if (productId) {
-                    addToCart(productId, productName, productPrice);
+                    addToCart(productId, productName, productPrice, productStock);
                     updateCartTable();
                     updateGrandTotal();
                 }
@@ -164,75 +184,118 @@
                 updateChangeAmount();
             });
 
-            function addToCart(id, name, price) {
+            function addToCart(id, name, price, stock, variante) {
                 let existingItem = cart.find(item => item.id === id);
                 if (existingItem) {
                     existingItem.quantity += 1;
+                    existingItem.selectedVariante = variante; // garde la variante sélectionnée
                 } else {
                     cart.push({
                         id: id,
                         name: name,
                         price: price,
+                        stock: stock,
+                        selectedVariante: variante, // ajoute la variante choisie
                         quantity: 1,
                         discount: 0
                     });
                 }
             }
 
+            console.log(cart);
+            
+
             function updateCartTable() {
                 let tbody = $('#cart-table tbody');
                 tbody.empty();
                 cart.forEach((item, index) => {
+                    let selectedProduct = dataProduct.find(dataItem => dataItem.id == item.id);
+                    let variantesOptions = '';
+                    let varianteSelectHtml = '';
+
+                    if (selectedProduct && selectedProduct.variantes) {
+                        selectedProduct.variantes.forEach(variante => {
+                            let isSelected = item.selectedVariante === variante.id ? 'selected' :
+                            '';
+                            variantesOptions += `
+                            <option value="${variante.id}" data-price="${variante.pivot.prix}" ${isSelected}>
+                                ${variante.libelle} (${variante.pivot.prix} FCFA)
+                            </option>`;
+                        });
+                    }
+
+                    if (selectedProduct && selectedProduct.categorie && selectedProduct.categorie
+                        .famille === 'bar') {
+                        varianteSelectHtml = `
+                        <select class="form-select form-control variante-select" data-index="${index}">
+                            <option disabled value="" ${!item.selectedVariante ? 'selected' : ''}>Sélectionnez une variante</option>
+                            ${variantesOptions}
+                        </select>`;
+                    } else {
+                        varianteSelectHtml = `<p>Plat entier</p>`;
+                    }
+
                     tbody.append(`
-                        <tr>
-                            <td>${item.name}</td>
-                            <td>${item.price} FCFA</td>
-                            <td>
-                                <button class="btn btn-secondary btn-sm decrease-qty" data-index="${index}">-</button>
-                                <input readonly type="number" class="form-control quantity-input d-inline-block text-center" value="${item.quantity}" min="1" style="width: 60px;" data-index="${index}">
-                                <button class="btn btn-secondary btn-sm increase-qty" data-index="${index}">+</button>
-                            </td>
-                            <td class="d-none">
-                                <input type="number" class="form-control discount-input" value="${item.discount}" min="0" max="100" data-index="${index}">
-                            </td>
-                            <td>${calculateTotal(item)} FCFA</td>
-                            <td><button class="btn btn-danger btn-sm remove-item" data-index="${index}">Supprimer</button></td>
-                        </tr>
-                    `);
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${varianteSelectHtml}</td>
+                        <td class="price-cell">${item.price} FCFA</td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm decrease-qty" data-index="${index}">-</button>
+                            <input readonly type="number" class="form-control quantity-input d-inline-block text-center" value="${item.quantity}" min="1" style="width: 60px;" data-index="${index}">
+                            <button class="btn btn-secondary btn-sm increase-qty" data-index="${index}">+</button>
+                        </td>
+                        <td class="d-none">
+                            <input type="number" class="form-control discount-input" value="${item.discount}" min="0" max="100" data-index="${index}">
+                        </td>
+                        <td class="total-cell">${calculateTotal(item)} FCFA</td>
+                        <td><button class="btn btn-danger btn-sm remove-item" data-index="${index}">Supprimer</button></td>
+                    </tr>
+                `);
+                });
+
+                $('.variante-select').change(function() {
+                    let index = $(this).data('index');
+                    let variantePrice = $(this).find('option:selected').data('price');
+                    let selectedVarianteId = $(this).val();
+
+                    if (variantePrice) {
+                        cart[index].price = variantePrice;
+                        cart[index].selectedVariante = selectedVarianteId;
+
+                        $(this).closest('tr').find('.price-cell').text(variantePrice + ' FCFA');
+                        $(this).closest('tr').find('.total-cell').text(calculateTotal(cart[index]) +
+                            ' FCFA');
+                        updateGrandTotal();
+                    }
                 });
             }
-            // Calculate total au niveau ligne produit (prix * quantité - remise)
+
             function calculateTotal(item) {
                 let discountAmount = (item.price * item.quantity) * (item.discount / 100);
                 return (item.price * item.quantity) - discountAmount;
             }
 
-
-            //calculate grand total
             function updateGrandTotal() {
                 grandTotal = cart.reduce((sum, item) => sum + calculateTotal(item), 0);
                 let discountAmount = 0;
-                libellePourcentage = ''; // libelle FCFA OU Pourcentage
+
                 if (totalDiscountType === 'percentage') {
                     discountAmount = (grandTotal * totalDiscountValue) / 100;
-                    // libellePourcentage = '%';
                 } else if (totalDiscountType === 'amount') {
                     discountAmount = totalDiscountValue;
-                    // libellePourcentage = 'FCFA';
                 }
 
-                //total apres la remise
                 let totalAfterDiscount = grandTotal - discountAmount;
                 totalAfterDiscount = totalAfterDiscount < 0 ? 0 : totalAfterDiscount;
 
-                $('#grand-total').text(grandTotal); // total avant la remise
-                $('#discount-amount').text(discountAmount); // remise
-                $('#total-after-discount').text(totalAfterDiscount); // total apres la remise
+                $('#grand-total').text(grandTotal);
+                $('#discount-amount').text(discountAmount);
+                $('#total-after-discount').text(totalAfterDiscount);
 
-                updateChangeAmount(); // pour la monnaie rendu
+                updateChangeAmount();
             }
 
-            // calcul pour la monnaie rendu
             function updateChangeAmount() {
                 let receivedAmount = parseFloat($('#received-amount').val() || 0);
                 let totalAfterDiscount = parseFloat($('#total-after-discount').text());
@@ -241,19 +304,13 @@
                 $('#change-amount').text(changeAmount < 0 ? 0 : changeAmount);
             }
 
-
-            // verifier la quantité pour voir si elle ne depasse pas la quantité du stock
             function verifyQty() {
-                var dataProduct = @json($data_produit); // Données du contrôleur
+                var dataProduct = @json($data_produit);
 
                 cart.forEach((item, index) => {
-                    // Trouver le produit dans dataProduct basé sur l'ID du produit dans le panier
-                    var product = dataProduct.find(function(dataItem) {
-                        return dataItem.id == item.id;
-                    });
+                    var product = dataProduct.find(dataItem => dataItem.id == item.id);
 
-                    if (product.categorie.famille == 'bar' && item.quantity > product.stock) {
-                        //swalfire
+                    if (product.categorie.famille === 'bar' && item.quantity > product.stock) {
                         Swal.fire({
                             title: 'Erreur',
                             text: 'La quantité entrée dépasse la quantité en stock pour le produit "' +
@@ -261,18 +318,16 @@
                             icon: 'error',
                         });
 
-                        //mettre le button save en disabled
                         $('#validate-sale').prop('disabled', true);
                     } else {
-                        //mettre le button save en enable
                         $('#validate-sale').prop('disabled', false);
                     }
                 });
             }
 
-
             $(document).on('click', '.increase-qty', function() {
                 let index = $(this).data('index');
+                let stock = cart[index].stock;
                 cart[index].quantity += 1;
                 updateCartTable();
                 updateGrandTotal();
@@ -299,7 +354,6 @@
                 }
             });
 
-            // remise sur la ligne produit
             $(document).on('change', '.discount-input', function() {
                 let index = $(this).data('index');
                 let newDiscount = parseInt($(this).val());
@@ -315,43 +369,40 @@
                 updateGrandTotal();
             });
 
-
             $('#validate-sale').click(function(e) {
                 let montantAvantRemise = parseFloat($('#grand-total').text() || 0);
                 let montantApresRemise = parseFloat($('#total-after-discount').text() || 0);
                 let montantRemise = parseFloat($('#discount-amount').text() || 0);
                 let typeRemise = $('#discount-type').val();
                 let valeurRemise = $('#total-discount').val();
-
-                let modePaiement = $('#payment-method').val(); // mode de paiement²
-                let montantRecu = parseFloat($('#received-amount').val() || 0); // montant recu
+                let modePaiement = $('#payment-method').val();
+                let montantRecu = parseFloat($('#received-amount').val() || 0);
                 let montantRendu = parseFloat($('#change-amount').text() || 0);
-
                 let numeroDeTable = $('#table-number').val();
                 let nombreDeCouverts = $('#number-covers').val();
 
-
-
                 if (cart.length === 0) {
-
                     Swal.fire({
                         title: 'Erreur',
-                        text: 'Aucun produit n\'a été ajouté au panier',
+                        text: 'Vous devez ajouter au moins un produit au panier.',
                         icon: 'error',
-                        confirmButtonText: 'OK'
                     });
+                    return;
+                }
 
-                } else if (montantRecu === 0 || montantRecu < montantApresRemise) {
-
+                if (montantRecu < montantApresRemise) {
                     Swal.fire({
                         title: 'Erreur',
-                        text: 'Veuillez verifier le montant reçu',
+                        text: 'Le montant reçu est inférieur au montant à payer.',
                         icon: 'error',
-                        confirmButtonText: 'OK'
                     });
-                } else {
-                    // Données à envoyer au contrôleur
-                    let data = {
+                    return;
+                }
+
+                $.ajax({
+                    url: '{{ route('vente.store') }}',
+                    type: 'POST',
+                    data: {
                         cart: cart,
                         montantAvantRemise: montantAvantRemise,
                         montantApresRemise: montantApresRemise,
@@ -363,51 +414,31 @@
                         montantRendu: montantRendu,
                         numeroDeTable: numeroDeTable,
                         nombreDeCouverts: nombreDeCouverts,
-
-                        _token: '{{ csrf_token() }}' // N'oubliez pas d'ajouter le token CSRF
-                    };
-
-                    // Envoi des données au contrôleur via AJAX
-                    $.ajax({
-                        url: '{{ route('vente.store') }}', // Remplacez par votre route
-                        method: 'POST',
-                        data: data,
-                        success: function(response) {
-                            if (response.status == 'success') {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Succès',
-                                    text: 'Vente validée avec succès !',
-                                });
-
-
-                                cart = []; // Réinitialiser le panier après validation
-                                updateCartTable();
-                                updateGrandTotal();
-                                $('#received-amount').val(0); // Réinitialiser les champs
-                                $('#table-number').val('');
-                                $('#number-covers').val(1);
-
-                                window.location.href = '{{ route('vente.show', ':idVente') }}'
-                                    .replace(':idVente', response.idVente);
-
-                            }
-
-
-                        },
-                        error: function(xhr, status, error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Erreur lors de la validation de la vente. Veuillez réessayer.',
-                            });
-                        }
-                    });
-                }
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            title: 'Vente réussie',
+                            text: response.message,
+                            icon: 'success',
+                        }).then(() => {
+                            // Réinitialiser le panier après la vente réussie
+                            cart = [];
+                            updateCartTable();
+                            updateGrandTotal();
+                            $('#received-amount').val('');
+                        });
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            title: 'Erreur',
+                            text: xhr.responseJSON.message ||
+                                'Une erreur s\'est produite lors de la validation de la vente.',
+                            icon: 'error',
+                        });
+                    }
+                });
             });
-
-
-
         });
     </script>
 @endsection

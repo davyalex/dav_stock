@@ -75,7 +75,7 @@ class VenteController extends Controller
             $data_produit = Produit::active()->whereHas('categorie', function ($query) {
                 $query->whereIn('famille', ['bar', 'menu']);
             })
-                ->with('categorie')
+                ->with(['categorie' ,'variantes'])
                 ->get();
             // ->where(function ($query) {
             //     $query->whereHas('categorie', function ($subQuery) {
