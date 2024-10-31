@@ -35,6 +35,7 @@
                                     {{ $produit->unite->libelle ?? '' }}
                                     {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
                                     ({{ $produit->prix }} FCFA)
+                                    -(Stock 0)
                                 </option>
                             @endif
                         @endforeach
