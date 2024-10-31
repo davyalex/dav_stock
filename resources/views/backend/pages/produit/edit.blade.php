@@ -119,11 +119,11 @@
                                                     value="{{ $data_produit->valeur_format }}">
                                             </div> --}}
 
-                                            <div class="col-md-3 mb-3">
+                                            <div class="col-md-3 mb-3 divUniteSortie">
                                                 <label class="form-label" for="meta-title-input">Unité de sortie ou vente
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <select id="uniteSortie" class="form-control js-example-basic-single"
+                                                <select class="form-control js-example-basic-single uniteSortie"
                                                     name="unite_sortie_id" required>
                                                     <option value="" disabled selected>Choisir</option>
                                                     @foreach ($data_unite as $unite)
@@ -329,7 +329,7 @@
                             <label for="libelle">Nom de la Variante :</label>
                             <select class="form-control" name="variantes[${i}][libelle]" required>
                                 <option value="" selected>Choisir</option>
-                                @foreach ($data_variante as $item)
+                                @foreach ($data_unite as $item)
                                     <option value="{{ $item->id }}">{{ $item->libelle }}</option>
                                 @endforeach
                             </select>
@@ -350,16 +350,20 @@
                 const optionToSelect = selectElement.querySelector(`option[value="${dataVariante[i].id}"]`);
                 if (optionToSelect) {
                     optionToSelect.selected = true;
-                    if (dataVariante[i].libelle === 'Bouteille') {
-                        newRow.querySelector('.remove-variante').style.display = 'none';
-                        newRow.querySelector(`input[name="variantes[${i}][quantite]"]`).readOnly = true;
-                        newRow.querySelector(`input[name="variantes[${i}][quantite]"]`).style.backgroundColor = '#eff2f7';
-                        selectElement.classList.add('non-selectable');
+                    // if (dataVariante[i].libelle === 'Bouteille') {
+                    //     newRow.querySelector('.remove-variante').style.display = 'none';
+                    //     newRow.querySelector(`input[name="variantes[${i}][quantite]"]`).readOnly = true;
+                    //     newRow.querySelector(`input[name="variantes[${i}][quantite]"]`).style.backgroundColor = '#eff2f7';
+                    //     selectElement.classList.add('non-selectable');
 
-                        // Empêcher le changement de valeur via JavaScript
-                        selectElement.addEventListener('mousedown', (e) => {
-                            e.preventDefault();
-                        });
+                    //     // Empêcher le changement de valeur via JavaScript
+                    //     selectElement.addEventListener('mousedown', (e) => {
+                    //         e.preventDefault();
+                    //     });
+                    // }
+
+                    if (i === 0) {
+                        newRow.querySelector('.remove-variante').style.display = 'none';
                     }
                 }
 
@@ -385,7 +389,7 @@
                     <label for="variante">Nom de la Variante :</label>
                     <select class="form-control" name="variantes[${varianteIndex}][libelle]" required>
                         <option value="" selected>Choisir</option>
-                        @foreach ($data_variante as $variante)
+                        @foreach ($data_unite as $variante)
                             <option value="{{ $variante->id }}">{{ $variante->libelle }}</option>
                         @endforeach
                     </select>
@@ -411,7 +415,9 @@
 
 
 
-
+            // Par defaut cacher la div de unite de sortie et required a false
+            $('.divUniteSortie').hide();
+            $('.uniteSortie').prop('required', false);
 
             //recuperer la valeur de la categorie par defaut
             var defaultCategorie = @json($data_produit->categorie->famille);
@@ -420,10 +426,21 @@
                 $('.prixVente').prop('required', false)
                 $('.divVariante').hide();
                 $('.prixVente').val('')
+
+
+
+                $('.divUniteSortie').show();
+                $('.uniteSortie').prop('required', true);
+
+
+
             } else {
 
                 $('.prixVente').prop('required', true)
                 $('.divVariante').show();
+
+                $('.divUniteSortie').hide();
+                $('.uniteSortie').prop('required', false);
             }
 
 
@@ -452,6 +469,12 @@
                     $('.divVariante').hide();
                     $('.prixVente').val('')
 
+
+                    $('.divUniteSortie').show();
+                    $('.uniteSortie').prop('required', true);
+
+
+
                     // $('#quantiteUnite').prop('required', false)
                     // $('#quantiteUnite').prop('disabled', true)
                     // $('#quantiteUnite').val('')
@@ -463,6 +486,9 @@
 
                     $('.prixVente').prop('required', true)
                     $('.divVariante').show();
+
+                    $('.divUniteSortie').hide();
+                    $('.uniteSortie').prop('required', false);
                     // $('#quantiteUnite').prop('required', true)
                     // $('#quantiteUnite').prop('disabled', false)
 
@@ -531,7 +557,6 @@
             $('#formSend').on('submit', function(e) {
 
                 e.preventDefault();
-
 
                 // var variantes = document.querySelector('select[name="variantes[0][libelle]"] option[value="Bouteille"]');
                 // var prixVariante = variantes[0].value;

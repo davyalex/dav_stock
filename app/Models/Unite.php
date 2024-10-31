@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Unite extends Model
 {
@@ -27,6 +28,12 @@ class Unite extends Model
             $model->id = IdGenerator::generate(['table' => 'unites', 'length' => 10, 'prefix' =>
             mt_rand()]);
         });
+    }
+
+
+    public function produits(): BelongsToMany
+    {
+        return $this->belongsToMany(Produit::class ,'produit_unite')->withPivot(['quantite', 'prix', 'total'])->withTimestamps();
     }
 
    

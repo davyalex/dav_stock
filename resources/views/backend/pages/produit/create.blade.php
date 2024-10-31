@@ -80,7 +80,7 @@
                                             </div>
 
                                             <div class="col-md-3 mb-3">
-                                                <label class="form-label" for="meta-title-input">Unité
+                                                <label class="form-label" for="meta-title-input">Unité du produit
                                                 </label>
                                                 <select id="uniteProduit" class="form-control js-example-basic-single"
                                                     name="unite_id">
@@ -121,11 +121,11 @@
                                                     step="0.01">
                                             </div> --}}
 
-                                            <div class="col-md-3 mb-3">
+                                            <div class="col-md-3 mb-3 divUniteSortie ">
                                                 <label class="form-label" for="meta-title-input">Unité en sortie ou vente
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <select id="uniteSortie" class="form-control js-example-basic-single"
+                                                <select class="form-control js-example-basic-single uniteSortie"
                                                     name="unite_sortie_id" required>
                                                     <option value="" selected>Choisir</option>
                                                     @foreach ($data_unite as $unite)
@@ -173,15 +173,13 @@
                                                         <input type="number" class="form-control"
                                                             name="variantes[0][quantite]" value="1" readonly>
                                                     </div>
-                                                    <div class="col-6">
-                                                        <label for="variante">Nom de la Variante :</label>
-                                                        <select name="variantes[0][libelle]" class="form-control"
-                                                            @readonly(true)>
-                                                            @foreach ($data_variante as $variante)
-                                                                @if ($variante->slug == 'bouteille')
-                                                                    <option value="{{ $variante->id }}">
-                                                                        {{ $variante->libelle }}</option>
-                                                                @endif
+                                                    <div class="col-4">
+                                                        <label for="variante">Unite de vente :</label>
+                                                        <select name="variantes[0][libelle]" class="form-control"required>
+                                                            <option value="" selected> Selectionner</option>
+                                                            @foreach ($data_unite as $variante)
+                                                                <option value="{{ $variante->id }}">
+                                                                    {{ $variante->libelle }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -296,6 +294,8 @@
         <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
         <script>
+            //cacher la div variante par defaut
+            $('.divVariante').hide();
             //gestion des variantes
             let varianteIndex = 1;
 
@@ -312,7 +312,7 @@
             <label for="variante">Nom de la Variante :</label>
             <select class="form-control" name="variantes[${varianteIndex}][libelle]" required>
                 <option value="" selected>Choisir</option>
-                @foreach ($data_variante as $variante)
+                @foreach ($data_unite as $variante)
                     <option value="{{ $variante->id }}">{{ $variante->libelle }}</option>
                 @endforeach
             </select>
@@ -337,7 +337,9 @@
 
 
 
-
+            // Par defaut cacher la div de unite de sortie et required a false
+            $('.divUniteSortie').hide();
+            $('.uniteSortie').prop('required', false);
 
 
             // Afficher les champs en fonction de la categorie selectionné
@@ -362,6 +364,9 @@
                     $('.divVariante').hide();
                     $('.prixVente').val('')
 
+                    $('.divUniteSortie').show();
+                    $('.uniteSortie').prop('required', true);
+
                     // $('#quantiteUnite').prop('required', false)
                     // $('#quantiteUnite').prop('disabled', true)
                     // $('#quantiteUnite').val('')
@@ -373,6 +378,10 @@
 
                     $('.prixVente').prop('required', true)
                     $('.divVariante').show();
+
+                    $('.divUniteSortie').hide();
+                    $('.uniteSortie').prop('required', false);
+
 
                     // $('#quantiteUnite').prop('required', true)
                     // $('#quantiteUnite').prop('disabled', false)
@@ -390,12 +399,11 @@
 
 
 
-
-
             //script for to send data 
 
+
             // product image
-            document.querySelector("#product-image-input").addEventListener("change", function() {
+            document.querySelector("#product-image-input").addEventListener("change", function(event) {
                 var preview = document.querySelector("#product-img");
                 var file = document.querySelector("#product-image-input").files[0];
                 var reader = new FileReader();
@@ -430,6 +438,8 @@
 
             $('#formSend').on('submit', function(e) {
                 e.preventDefault();
+
+               
 
 
                 var prixVente = parseFloat($('.prixVente').val());
@@ -470,7 +480,7 @@
                         processData: false,
                         success: function(response) {
                             if (response.success === true) {
-                                $('#imageTableBody').empty();
+                                // $('#imageTableBody').empty();
 
                                 Swal.fire({
                                     title: 'Produit ajouté avec succès !',

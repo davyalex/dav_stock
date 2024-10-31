@@ -41,12 +41,12 @@ class ProduitController extends Controller
             $data_unite = Unite::all();
             $data_format = Format::all();
             $data_magasin = Magasin::all();
-            $data_variante = Variante::all();
+            // $data_variante = Variante::all();
 
 
             // dd($data_produit->toArray());
 
-            return view('backend.pages.produit.create', compact('data_categorie', 'categorieAll', 'data_unite', 'data_magasin', 'data_format', 'data_variante'));
+            return view('backend.pages.produit.create', compact('data_categorie', 'categorieAll', 'data_unite', 'data_magasin', 'data_format'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -71,7 +71,7 @@ class ProduitController extends Controller
                 'prix' => $categorie->famille == 'bar' ? 'required' : '',
                 'valeur_unite' => '',
                 'unite_id' => '',
-                'unite_sortie_id' => 'required',
+                'unite_sortie_id' => $categorie->famille == 'restaurant' ? 'required' : '',
                 'imagePrincipale' => $categorie->famille == 'bar' ? 'required' : '',
 
                 // gestion des variantes
@@ -117,13 +117,13 @@ class ProduitController extends Controller
                 'prix' => $request['prix'],
                 'valeur_unite' => $request['valeur_unite'],
                 'unite_id' => $request['unite_id'],
-                'unite_sortie_id' => $request['unite_sortie_id'],
+                'unite_sortie_id' => $categorie->famille == 'restaurant'  ? $request['unite_sortie_id'] :   $request->variantes[0]['libelle'],
                 'statut' => 'active',
                 'user_id' => Auth::id(),
             ]);
 
 
-            // Erengistrer les variantes dans la table pivot
+            // Erengistrer les variantes dans la table pivot  ------*variantes represente les unite de vente associer au produit
             if ($request->variantes) {
                 foreach ($request->variantes as  $variante) {
                     $data_produit->variantes()->attach(
@@ -203,14 +203,12 @@ class ProduitController extends Controller
             // dd($data_produit->toArray());
             //recuperer les variante
 
-
             $categorieAll = Categorie::all();
 
             $data_unite = Unite::all();
             $data_format = Format::all();
             $data_magasin = Magasin::all();
             $data_variante = Variante::all();
-
 
 
 
@@ -230,7 +228,7 @@ class ProduitController extends Controller
             // dd($galleryProduit);
 
             $id = $id;
-            return view('backend.pages.produit.edit', compact('data_produit', 'data_categorie', 'categorieAll', 'data_unite', 'data_magasin', 'galleryProduit', 'id', 'data_format', 'data_variante'));
+            return view('backend.pages.produit.edit', compact('data_produit', 'data_categorie', 'categorieAll', 'data_unite', 'data_magasin', 'galleryProduit', 'id', 'data_format'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -261,7 +259,7 @@ class ProduitController extends Controller
                 'unite_id' => '',
                 // 'format_id' => '',
                 // 'valeur_format' => '',
-                'unite_sortie_id' => 'required',
+                'unite_sortie_id' => $categorie->famille == 'restaurant' ? 'required' : '',
                 'imagePrincipale' => '',
 
                 // gestion des variantes
@@ -285,18 +283,18 @@ class ProduitController extends Controller
                 'categorie_id' => $request['categorie_id'],
                 'stock_alerte' => $request['stock_alerte'],
                 'type_id' =>   $principaCat['id'], // type produit
-                'prix' => $request['prix'],
+                'prix' => $categorie->famille == 'bar'  ? $request->variantes[0]['prix'] :   null,
                 'valeur_unite' => $request['valeur_unite'],
                 'unite_id' => $request['unite_id'],
                 // 'format_id' => $request['format_id'],
                 // 'valeur_format' => $request['valeur_format'],
-                'unite_sortie_id' => $request['unite_sortie_id'],
+                'unite_sortie_id' => $categorie->famille == 'restaurant'  ? $request['unite_sortie_id'] : $request->variantes[0]['libelle'],
                 'statut' => $statut,
                 'user_id' => Auth::id(),
             ]);
 
             //supprimer les element pivot lié au produit
-            DB::table('produit_variante')->where('produit_id', $id)->delete();
+            DB::table('produit_unite')->where('produit_id', $id)->delete();
 
             // Erengistrer les variantes dans la table pivot
             if ($request->variantes) {
@@ -313,10 +311,10 @@ class ProduitController extends Controller
             }
 
             // recuperer le prix du produit de la variante bouteille dans la table pivot
-            $variante = Variante::where('slug', 'bouteille')->first();
-            $prix_bouteille = DB::table('produit_variante')->where('produit_id', $id)->where('variante_id', $variante->id)->first();
+            // $variante = Variante::where('slug', 'bouteille')->first();
+            // $prix_bouteille = DB::table('produit_unite')->where('produit_id', $id)->where('variante_id', $variante->id)->first();
             // modifier le prix du produit recuperer par la variante bouteille
-            Produit::where('id', $id)->update(['prix' => $prix_bouteille->prix]);
+            // Produit::where('id', $id)->update(['prix' => $prix_bouteille->prix]);
 
 
 

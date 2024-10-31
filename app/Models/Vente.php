@@ -71,7 +71,7 @@ class Vente extends Model
     public function produits()
     {
         return $this->belongsToMany(Produit::class, 'produit_vente')
-            ->withPivot('quantite', 'prix_unitaire', 'total')
+            ->withPivot('quantite', 'prix_unitaire', 'total' , 'unite_vente_id')
             ->withTimestamps();
     }
 }

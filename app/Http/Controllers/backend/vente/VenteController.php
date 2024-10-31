@@ -181,7 +181,8 @@ class VenteController extends Controller
                 $vente->produits()->attach($item['id'], [
                     'quantite' => $item['quantity'],
                     'prix_unitaire' => $item['price'],
-                    'total' => $item['price'] * $item['quantity']
+                    'total' => $item['price'] * $item['quantity'],
+                    'unite_vente_id' => $item['selectedVariante'] ?? null,
                 ]);
 
                 // Mise à jour du stock du produit

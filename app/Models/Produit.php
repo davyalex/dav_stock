@@ -146,7 +146,7 @@ class Produit extends Model implements HasMedia
     public function ventes()
     {
         return $this->belongsToMany(Vente::class, 'produit_vente')
-            ->withPivot('quantite', 'prix_unitaire', 'total')
+            ->withPivot('quantite', 'prix_unitaire', 'total' , 'unite_vente_id')
             ->withTimestamps();
     }
 
@@ -171,6 +171,6 @@ class Produit extends Model implements HasMedia
 
     public function variantes(): BelongsToMany
     {
-        return $this->belongsToMany(Variante::class ,'produit_variante')->withPivot(['quantite', 'prix', 'total'])->withTimestamps();
+        return $this->belongsToMany(Unite::class ,'produit_unite')->withPivot(['quantite', 'prix', 'total'])->withTimestamps();
     }
 }

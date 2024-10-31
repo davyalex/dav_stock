@@ -202,12 +202,13 @@
                 }
             }
 
-            console.log(cart);
-            
+
+
 
             function updateCartTable() {
                 let tbody = $('#cart-table tbody');
                 tbody.empty();
+
                 cart.forEach((item, index) => {
                     let selectedProduct = dataProduct.find(dataItem => dataItem.id == item.id);
                     let variantesOptions = '';
@@ -215,54 +216,63 @@
 
                     if (selectedProduct && selectedProduct.variantes) {
                         selectedProduct.variantes.forEach(variante => {
+                            // Garde la sélection de la variante dans le tableau affiché
                             let isSelected = item.selectedVariante === variante.id ? 'selected' :
-                            '';
+                                '';
                             variantesOptions += `
-                            <option value="${variante.id}" data-price="${variante.pivot.prix}" ${isSelected}>
-                                ${variante.libelle} (${variante.pivot.prix} FCFA)
-                            </option>`;
+                <option value="${variante.id}" data-price="${variante.pivot.prix}" ${isSelected}>
+                    ${variante.libelle} (${variante.pivot.prix} FCFA)
+                </option>`;
+
                         });
+
+
                     }
 
+                    // Affichage du champ select pour les variantes ou texte 'Plat entier'
                     if (selectedProduct && selectedProduct.categorie && selectedProduct.categorie
                         .famille === 'bar') {
                         varianteSelectHtml = `
-                        <select class="form-select form-control variante-select" data-index="${index}">
-                            <option disabled value="" ${!item.selectedVariante ? 'selected' : ''}>Sélectionnez une variante</option>
-                            ${variantesOptions}
-                        </select>`;
+            <select  class="form-select form-control variante-select" data-index="${index}">
+                <option disabled value="" ${!item.selectedVariante ? 'selected' : ''}>Sélectionnez une variante</option>
+                ${variantesOptions}
+            </select>`;
                     } else {
                         varianteSelectHtml = `<p>Plat entier</p>`;
                     }
 
+                    // Ajoute une ligne pour chaque produit dans le tableau
                     tbody.append(`
-                    <tr>
-                        <td>${item.name}</td>
-                        <td>${varianteSelectHtml}</td>
-                        <td class="price-cell">${item.price} FCFA</td>
-                        <td>
-                            <button class="btn btn-secondary btn-sm decrease-qty" data-index="${index}">-</button>
-                            <input readonly type="number" class="form-control quantity-input d-inline-block text-center" value="${item.quantity}" min="1" style="width: 60px;" data-index="${index}">
-                            <button class="btn btn-secondary btn-sm increase-qty" data-index="${index}">+</button>
-                        </td>
-                        <td class="d-none">
-                            <input type="number" class="form-control discount-input" value="${item.discount}" min="0" max="100" data-index="${index}">
-                        </td>
-                        <td class="total-cell">${calculateTotal(item)} FCFA</td>
-                        <td><button class="btn btn-danger btn-sm remove-item" data-index="${index}">Supprimer</button></td>
-                    </tr>
-                `);
+        <tr>
+            <td>${item.name}</td>
+            <td>${varianteSelectHtml}</td>
+            <td class="price-cell">${item.price} FCFA</td>
+            <td>
+                <button class="btn btn-secondary btn-sm decrease-qty" data-index="${index}">-</button>
+                <input readonly type="number" class="form-control quantity-input d-inline-block text-center" value="${item.quantity}" min="1" style="width: 60px;" data-index="${index}">
+                <button class="btn btn-secondary btn-sm increase-qty" data-index="${index}">+</button>
+            </td>
+            <td class="d-none">
+                <input type="number" class="form-control discount-input" value="${item.discount}" min="0" max="100" data-index="${index}">
+            </td>
+            <td class="total-cell">${calculateTotal(item)} FCFA</td>
+            <td><button class="btn btn-danger btn-sm remove-item" data-index="${index}">Supprimer</button></td>
+        </tr>
+    `);
                 });
 
-                $('.variante-select').change(function() {
+                // Ajoute un événement de changement sur chaque select de variante pour mettre à jour la sélection
+                tbody.find('.variante-select').change(function() {
                     let index = $(this).data('index');
                     let variantePrice = $(this).find('option:selected').data('price');
                     let selectedVarianteId = $(this).val();
 
                     if (variantePrice) {
+                        // Met à jour le prix et la variante sélectionnée dans le panier
                         cart[index].price = variantePrice;
                         cart[index].selectedVariante = selectedVarianteId;
 
+                        // Met à jour l'affichage des prix dans la ligne
                         $(this).closest('tr').find('.price-cell').text(variantePrice + ' FCFA');
                         $(this).closest('tr').find('.total-cell').text(calculateTotal(cart[index]) +
                             ' FCFA');
@@ -270,6 +280,7 @@
                     }
                 });
             }
+
 
             function calculateTotal(item) {
                 let discountAmount = (item.price * item.quantity) * (item.discount / 100);
@@ -418,15 +429,20 @@
                     },
                     success: function(response) {
                         Swal.fire({
-                            title: 'Vente réussie',
+                            title: 'Vente validée avec succès !',
                             text: response.message,
                             icon: 'success',
                         }).then(() => {
                             // Réinitialiser le panier après la vente réussie
-                            cart = [];
-                            updateCartTable();
-                            updateGrandTotal();
-                            $('#received-amount').val('');
+                            cart = []; // Réinitialiser le panier après validation
+                                updateCartTable();
+                                updateGrandTotal();
+                                $('#received-amount').val(0); // Réinitialiser les champs
+                                $('#table-number').val('');
+                                $('#number-covers').val(1);
+
+                                window.location.href = '{{ route('vente.show', ':idVente') }}'
+                                    .replace(':idVente', response.idVente);
                         });
                     },
                     error: function(xhr) {

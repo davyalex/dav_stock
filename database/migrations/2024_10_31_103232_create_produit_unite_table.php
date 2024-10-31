@@ -11,31 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('produit_vente', function (Blueprint $table) {
+        Schema::create('produit_unite', function (Blueprint $table) {
             $table->id();
-            $table->integer('quantite')->nullable(); // quantite du produit
-            $table->double('prix_unitaire')->nullable(); //prix  unitaire
-            $table->double('total')->nullable(); // total quantite * prix unitaire
+            $table->double('quantite')->nullable();
+            $table->double('prix')->nullable();
+            $table->double('total')->nullable();
 
-
-
-            $table->foreignId('vente_id')
-                ->nullable()
-                ->constrained('ventes')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
 
             $table->foreignId('produit_id')
                 ->nullable()
                 ->constrained('produits')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('cascade ');
 
-                $table->foreignId('unite_vente_id')
+            $table->foreignId('unite_id')
                 ->nullable()
                 ->constrained('unites')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('cascade ');
 
             $table->timestamps();
         });
@@ -46,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('produit_vente');
+        Schema::dropIfExists('produit_unite');
     }
 };

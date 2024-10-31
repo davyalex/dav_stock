@@ -3,7 +3,9 @@
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
             <h4 class="mb-sm-0 font-size-18">
-                <button class="btn btn-primary" id="goBack"> <i class="ri ri-arrow-left-fill"></i> Retour</button>
+               @if ($previousUrl = url()->previous() )
+               <a href="{{ $previousUrl }}" class="btn btn-primary" id="goBack"> <i class="ri ri-arrow-left-fill"></i> Retour</a>
+               @endif
                 {{ $title }}
             </h4>
 
