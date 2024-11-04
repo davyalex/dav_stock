@@ -26,7 +26,7 @@
                                     {{ $produit->unite->libelle ?? '' }}
                                     {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
                                     ({{ $produit->prix }} FCFA)
-                                    -(Stock 0)
+                                    - 
                                 </option>
                             @else
                                 <option value="{{ $produit->id }}" data-price="{{ $produit->prix }}"
@@ -35,7 +35,8 @@
                                     {{ $produit->unite->libelle ?? '' }}
                                     {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
                                     ({{ $produit->prix }} FCFA)
-                                    -(Stock 0)
+                                    -<span class="text-primary">($produit->stock)</span>
+
                                 </option>
                             @endif
                         @endforeach
