@@ -14,6 +14,7 @@ use App\Models\HistoriqueCaisse;
 use Illuminate\Routing\RouteAction;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\backend\user\AdminController;
 
@@ -94,7 +95,9 @@ class VenteController extends Controller
             // }])
 
 
-            // dd($data_produit->toArray());
+
+
+            // dd(Session::get('session_date'));
 
             $data_client = User::whereHas('roles', function ($query) {
                 $query->where('name', 'client');
@@ -154,12 +157,16 @@ class VenteController extends Controller
 
             // Générer le code de vente
             $codeVente = strtoupper($initialesCaissiere) . '-' . strtoupper($initialesCaisse) . $numeroOrdre . $dateHeure;
+
+            //session de la date manuelle
+            $sessionDate = Session::get('session_date', now()->toDateString()); 
+
             $vente = Vente::create([
                 'code' => $codeVente,
                 // 'client_id' => $request->client_id,
                 'caisse_id' => auth()->user()->caisse_id, // la caisse qui fait la vente
                 'user_id' => auth()->user()->id, // l'admin qui a fait la vente
-                'date_vente' => Carbon::now(),
+                'date_vente' =>  Carbon::parse($sessionDate),
                 'montant_total' => $montantApresRemise,
                 'montant_avant_remise' => $montantAvantRemise,
                 'montant_remise' => $montantRemise,
@@ -289,5 +296,25 @@ class VenteController extends Controller
             Alert::error('Erreur', 'Une erreur est survenue lors de la cloture de la caisse : ' . $e->getMessage());
             return back();
         }
+    }
+
+
+
+    public function sessionDate(Request $request){
+
+       try {
+        $request->validate([
+            'session_date' => 'required|date',
+        ]);
+
+        // Stocker la date dans la session 
+        Session::put('session_date', $request->session_date);
+
+        alert()->success('Succès', 'Date de session vente modifiée avec succès');
+        return back();
+       } catch (\Throwable $th) {
+        Alert::error('Erreur', 'Une erreur est survenue lors de la création de la session : ' . $th->getMessage());
+        return back();
+       }
     }
 }

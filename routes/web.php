@@ -328,6 +328,8 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('create', 'create')->name('vente.create');
         route::post('store', 'store')->name('vente.store');
         route::get('cloture-caisse', 'clotureCaisse')->name('vente.cloture-caisse');
+        route::post('session-date-vente', 'sessionDate')->name('vente.session-date');  // definir manuellement une session date pour la vente
+
     });
 
     // Commande

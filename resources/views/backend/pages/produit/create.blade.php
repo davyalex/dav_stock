@@ -16,7 +16,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form id="formSend" autocomplete="off" class="needs-validation" novalidate enctype="multipart/form-data">
+                    <form id="formSend" autocomplete="off" class="needs-validation" novalidate enctype="multipart/form-data" novalidate>
                         @csrf
                         <div class="row">
                             <div class="col-lg-8">

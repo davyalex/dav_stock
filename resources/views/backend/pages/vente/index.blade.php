@@ -20,42 +20,71 @@
         @endslot
     @endcomponent
 
+
+
     <div class="row">
         <div class="col-lg-12">
+
+            <div class="alert alert-info alert-dismissible fade show d-flex justify-content-center align-items-center"
+                role="alert">
+                <div class="me-3">
+                    <h5 class="card-title mb-0">Date de vente actuelle : <span id="heureActuelle">{{ Session::get('session_date') !=null
+                        ? \Carbon\Carbon::parse(Session::get('session_date'))->format('d-m-Y')
+                        : 'non defini'}}</span>
+                    </h5>
+                </div>
+
+                <button type="button" class="btn btn-info ms-3" data-bs-toggle="modal"
+                    data-bs-target="#dateSessionVenteModal">
+                    {{Session::get('session_date') !=null ? 'Modifier la date de la session de vente' : ' Choisir une date pour la session vente' }}
+                   
+                </button>
+
+                <button type="button" class="btn-close ms-3" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Liste des ventes </strong></h5>
                     @if (auth()->user()->hasRole('caisse'))
-                        <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">
-                            Nouvelle vente</a>
+                        @if (Session::get('session_date') !=null)
+                            <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">
+                                Nouvelle vente</a>
+                        @else
+                            <button type="button" class="btn btn-info ms-3 btnChoiceDate">
+                                Nouvelle vente
+                            </button>
+                        @endif
                     @endif
 
-                    @if (!auth()->user()->hasRole('caisse'))
-                    <form action="{{ route('vente.index') }}" method="GET">
-                        <div class="row mb-3">
-                            <div class="col-md-3">
-                                <label for="date_debut" class="form-label">Date de début</label>
-                                <input type="date" class="form-control" id="date_debut" name="date_debut">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="date_fin" class="form-label">Date de fin</label>
-                                <input type="date" class="form-control" id="date_fin" name="date_fin">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="caisse" class="form-label">Caisse</label>
-                                <select class="form-select" id="caisse" name="caisse">
-                                    <option value="">Toutes les caisses</option>
-                                    @foreach ($caisses as $caisse)
-                                        <option value="{{ $caisse->id }}">{{ $caisse->libelle }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
 
-                            <div class="col-md-3 mt-4">
-                                <button type="submit" class="btn btn-primary">Filtrer</button>
+
+                    @if (!auth()->user()->hasRole('caisse'))
+                        <form action="{{ route('vente.index') }}" method="GET">
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <label for="date_debut" class="form-label">Date de début</label>
+                                    <input type="date" class="form-control" id="date_debut" name="date_debut">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="date_fin" class="form-label">Date de fin</label>
+                                    <input type="date" class="form-control" id="date_fin" name="date_fin">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="caisse" class="form-label">Caisse</label>
+                                    <select class="form-select" id="caisse" name="caisse">
+                                        <option value="">Toutes les caisses</option>
+                                        @foreach ($caisses as $caisse)
+                                            <option value="{{ $caisse->id }}">{{ $caisse->libelle }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3 mt-4">
+                                    <button type="submit" class="btn btn-primary">Filtrer</button>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
                     @endif
 
                 </div>
@@ -82,7 +111,8 @@
 
 
                                         @if ($data_vente->sum('montant_total') > 0)
-                                            <a href="{{ route('vente.cloture-caisse') }}" class="btn btn-danger btnCloturer">Clôturer
+                                            <a href="{{ route('vente.cloture-caisse') }}"
+                                                class="btn btn-danger btnCloturer">Clôturer
                                                 la caisse</a>
                                         @else
                                             <button class="btn btn-danger" disabled>Clôturer la caisse</button>
@@ -103,8 +133,9 @@
                                     <th>#</th>
                                     <th>N° de vente</th>
                                     <th>Type de vente</th>
-                                    <th>Date</th>
+                                    <th>Session vente</th>
                                     <th>Montant</th>
+                                    <th>Vendu le</th>
                                     <th>Vendu par</th>
                                     <th>Caisse</th>
                                 </tr>
@@ -116,8 +147,10 @@
                                         <td> <a class="fw-bold"
                                                 href="{{ route('vente.show', $item->id) }}">#{{ $item['code'] }}</a> </td>
                                         <td> {{ $item['type_vente'] }} </td>
-                                        <td> {{ $item['created_at']->format('d/m/Y à H:i') }} </td>
+                                        <td> {{ \Carbon\Carbon::parse($item['date_vente'])->format('d-m-Y') }}
+                                            {{ $item['created_at']->format('à H:i') }} </td>
                                         <td> {{ number_format($item['montant_total'], 0, ',', ' ') }} FCFA </td>
+                                        <td> {{ $item['created_at']->format('d-m-Y à H:i') }} </td>
                                         <td> {{ $item['user']['first_name'] }} {{ $item['user']['last_name'] }} </td>
                                         <td> {{ $item['caisse']['libelle'] ?? '' }} </td>
                                     </tr>
@@ -134,6 +167,8 @@
         </div>
     </div>
     <!--end row-->
+
+    @include('backend.pages.vente.dateSessionVente')
 @endsection
 @section('script')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -156,38 +191,54 @@
 
     <script>
         $(document).ready(function() {
-            $('.btnCloturer').click(function (e) { 
+            $('.btnChoiceDate').click(function() {
+                Swal.fire({
+                    title: 'Veuillez choisir une date de session de vente avant d\'effectuer une vente',
+                    // text: "Vous êtes sur le point de clôturer la caisse. Cette action est irréversible.",
+                    icon: 'warning',
+                    // showCancelButton: true,
+                    // confirmButtonColor: '#3085d6',
+                    // cancelButtonColor: '#d33',
+                    // confirmButtonText: 'Oui, clôturer la caisse',
+                    // cancelButtonText: 'Annuler'
+                })
+            })
+
+
+            $('.btnCloturer').click(function(e) {
                 e.preventDefault();
-            Swal.fire({
-                title: 'Confirmer la clôture de la caisse',
-                text: "Vous êtes sur le point de clôturer la caisse. Cette action est irréversible.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Oui, clôturer la caisse',
-                cancelButtonText: 'Annuler'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: 'Caisse cloturée avec succès',
-                        text: 'Déconnexion automatique.',
-                        icon: 'success',
-                        timer: 2000,
-                        timerProgressBar: true,
-                        didOpen: () => {
-                            Swal.showLoading()
-                        },
-                        willClose: () => {
-                            window.location.href = '{{ route('vente.cloture-caisse') }}';
-                        }
-                    }).then((result) => {
-                        if (result.dismiss === Swal.DismissReason.timer) {
-                            console.log('Redirection automatique vers la page de connexion');
-                        }
-                    });
-                }
-            });
+                Swal.fire({
+                    title: 'Confirmer la clôture de la caisse',
+                    text: "Vous êtes sur le point de clôturer la caisse. Cette action est irréversible.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Oui, clôturer la caisse',
+                    cancelButtonText: 'Annuler'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Caisse cloturée avec succès',
+                            text: 'Déconnexion automatique.',
+                            icon: 'success',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didOpen: () => {
+                                Swal.showLoading()
+                            },
+                            willClose: () => {
+                                window.location.href =
+                                    '{{ route('vente.cloture-caisse') }}';
+                            }
+                        }).then((result) => {
+                            if (result.dismiss === Swal.DismissReason.timer) {
+                                console.log(
+                                    'Redirection automatique vers la page de connexion');
+                            }
+                        });
+                    }
+                });
             });
         })
     </script>
