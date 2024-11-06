@@ -150,17 +150,41 @@
             // });
 
             // verifier la quantité pour voir si elle ne depasse pas la quantité du stock
-            function verifyQty() {
-                var dataProduct = @json($data_produit); // Données du contrôleur
+            // function verifyQty() {
+            //     var dataProduct = @json($data_produit); // Données du contrôleur
 
-                cart.forEach((item, index) => {
-                    // Trouver le produit dans dataProduct basé sur l'ID du produit dans le panier
-                    var product = dataProduct.find(function(dataItem) {
-                        return dataItem.id == item.id;
-                    });
+            //     cart.forEach((item, index) => {
+            //         // Trouver le produit dans dataProduct basé sur l'ID du produit dans le panier
+            //         var product = dataProduct.find(function(dataItem) {
+            //             return dataItem.id == item.id;
+            //         });
+
+            //         if (item.quantity > product.stock) {
+            //             //swalfire
+            //             Swal.fire({
+            //                 title: 'Erreur',
+            //                 text: 'La quantité entrée dépasse la quantité en stock pour le produit "' +
+            //                     item.name + '"',
+            //                 icon: 'error',
+            //             });
+
+            //             //mettre le button save en disabled
+            //             $('#validate').prop('disabled', true);
+            //         } else {
+            //             //mettre le button save en enable
+            //             $('#validate').prop('disabled', false);
+            //         }
+            //     });
+            // }
+
+            function verifyQty() {
+                var dataProduct = @json($data_produit);
+                var allQuantitiesValid = true; // Pour suivre si toutes les quantités sont valides
+
+                cart.forEach((item) => {
+                    var product = dataProduct.find(dataItem => dataItem.id == item.id);
 
                     if (item.quantity > product.stock) {
-                        //swalfire
                         Swal.fire({
                             title: 'Erreur',
                             text: 'La quantité entrée dépasse la quantité en stock pour le produit "' +
@@ -168,13 +192,13 @@
                             icon: 'error',
                         });
 
-                        //mettre le button save en disabled
-                        $('#validate').prop('disabled', true);
-                    } else {
-                        //mettre le button save en enable
-                        $('#validate').prop('disabled', false);
+                        allQuantitiesValid =
+                        false; // Marquer comme invalide si une quantité dépasse le stock
                     }
                 });
+
+                // Activer ou désactiver le bouton selon la validité des quantités
+                $('#validate').prop('disabled', !allQuantitiesValid);
             }
 
 
@@ -207,7 +231,7 @@
                         url: '{{ route('sortie.store') }}', // Remplacez par votre route
                         method: 'POST',
                         data: data,
-                      
+
                         success: function(response) {
                             if (response.status == 'success') {
                                 Swal.fire({

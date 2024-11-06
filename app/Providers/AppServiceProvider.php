@@ -33,7 +33,16 @@ class AppServiceProvider extends ServiceProvider
         //
         Schema::defaultStringLength(191);
 
-
+//fonction qui récupère tous les produits de catégorie famille menu et met le stock à 100
+        $this->app->booted(function () {
+            \App\Models\Produit::whereHas('categorie', function ($query) {
+                $query->where('famille', 'menu');
+            })->chunk(100, function ($produits) {
+                foreach ($produits as $produit) {
+                    $produit->update(['stock' => 100]);
+                }
+            });
+});
 
         // Fonction pour vérifier la quantité stockée des achats
         // $this->app->singleton('verifierQuantiteStockee', function ($app) {

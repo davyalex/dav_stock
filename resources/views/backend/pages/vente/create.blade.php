@@ -156,6 +156,7 @@
             var dataProduct = @json($data_produit); // Données récupérées depuis le contrôleur
 
             $('.product-select').change(function() {
+                
                 let productId = $(this).val();
                 let productName = $(this).find('option:selected').text();
                 let productPrice = $(this).find('option:selected').data('price');
@@ -317,26 +318,51 @@
                 $('#change-amount').text(changeAmount < 0 ? 0 : changeAmount);
             }
 
+            // function verifyQty() {
+            //     var dataProduct = @json($data_produit);
+
+            //     cart.forEach((item, index) => {
+            //         var product = dataProduct.find(dataItem => dataItem.id == item.id);
+
+            //         if (product.categorie.famille === 'bar' && item.quantity > product.stock) {
+            //             Swal.fire({
+            //                 title: 'Erreur',
+            //                 text: 'La quantité entrée dépasse la quantité en stock pour le produit "' +
+            //                     item.name + '"',
+            //                 icon: 'error',
+            //             });
+
+            //             $('#validate-sale').prop('disabled', true);
+            //         } else {
+            //             $('#validate-sale').prop('disabled', false);
+            //         }
+            //     });
+            // }
+
+            
+
             function verifyQty() {
-                var dataProduct = @json($data_produit);
+            var dataProduct = @json($data_produit);
+            var allQuantitiesValid = true; // Pour suivre si toutes les quantités sont valides
 
-                cart.forEach((item, index) => {
-                    var product = dataProduct.find(dataItem => dataItem.id == item.id);
+            cart.forEach((item) => {
+                var product = dataProduct.find(dataItem => dataItem.id == item.id);
 
-                    if (product.categorie.famille === 'bar' && item.quantity > product.stock) {
-                        Swal.fire({
-                            title: 'Erreur',
-                            text: 'La quantité entrée dépasse la quantité en stock pour le produit "' +
-                                item.name + '"',
-                            icon: 'error',
-                        });
+                if (item.quantity > product.stock) {
+                    Swal.fire({
+                        title: 'Erreur',
+                        text: 'La quantité entrée dépasse la quantité en stock pour le produit "' +
+                            item.name + '"',
+                        icon: 'error',
+                    });
 
-                        $('#validate-sale').prop('disabled', true);
-                    } else {
-                        $('#validate-sale').prop('disabled', false);
-                    }
-                });
-            }
+                    allQuantitiesValid = false; // Marquer comme invalide si une quantité dépasse le stock
+                }
+            });
+
+            // Activer ou désactiver le bouton selon la validité des quantités
+            $('#validate-sale').prop('disabled', !allQuantitiesValid);
+        }
 
             $(document).on('click', '.increase-qty', function() {
                 let index = $(this).data('index');
