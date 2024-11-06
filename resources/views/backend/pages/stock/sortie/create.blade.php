@@ -32,6 +32,9 @@
                 <div class="card-body">
                     <h4 class="card-title mb-4">Listes des produits </h4>
                     <div class="table-responsive">
+                        <div class="alert alert-danger d-none" role="alert">
+                            <span id="errorMessage"></span>
+                        </div>
                         <table class="table table-bordered" id="cart-table">
                             <thead>
                                 <tr>
@@ -185,27 +188,33 @@
                     var product = dataProduct.find(dataItem => dataItem.id == item.id);
 
                     if (item.quantity > product.stock) {
-                        Swal.fire({
-                            title: 'Erreur',
-                            text: 'La quantité entrée dépasse la quantité en stock pour le produit "' +
-                                item.name + '"',
-                            icon: 'error',
-                        });
+                        $('#errorMessage').text(
+                            'La quantité entrée dépasse la quantité en stock pour le produit "' + item
+                            .name + '"'
+                        );
+                        $('.alert').removeClass('d-none');
 
                         allQuantitiesValid =
-                        false; // Marquer comme invalide si une quantité dépasse le stock
+                            false; // Marquer comme invalide si une quantité dépasse le stock
                     }
                 });
+
+                // Si toutes les quantités sont valides, masquer l'alerte
+                if (allQuantitiesValid) {
+                    $('.alert').addClass('d-none');
+                }
 
                 // Activer ou désactiver le bouton selon la validité des quantités
                 $('#validate').prop('disabled', !allQuantitiesValid);
             }
 
 
+
             $(document).on('click', '.remove-item', function() {
                 let index = $(this).data('index');
                 cart.splice(index, 1);
                 updateCartTable();
+                verifyQty()
             });
 
 
