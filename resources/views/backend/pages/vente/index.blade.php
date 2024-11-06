@@ -146,7 +146,12 @@
                                         <td> {{ $loop->iteration }} </td>
                                         <td> <a class="fw-bold"
                                                 href="{{ route('vente.show', $item->id) }}">#{{ $item['code'] }}</a> </td>
-                                        <td> {{ $item['type_vente'] }} </td>
+                                        <td> {{ $item['type_vente'] }} 
+
+                                            @if($item['type_vente'] == 'commande')
+                                              <br>  <a href="{{ route('commande.show', $item['commande_id']) }}" class="text-primary fw-bold">#{!! $item['commande']['code'] !!}</a>
+                                            @endif
+                                        </td>
                                         <td> {{ \Carbon\Carbon::parse($item['date_vente'])->format('d-m-Y') }}
                                             {{ $item['created_at']->format('à H:i') }} </td>
                                         <td> {{ number_format($item['montant_total'], 0, ',', ' ') }} FCFA </td>

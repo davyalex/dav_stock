@@ -20,6 +20,8 @@ return new class extends Migration
             $table->longText('adresse_livraison')->nullable();
             $table->double('montant_total')->nullable();
             $table->dateTime('date_commande')->nullable();
+            $table->string('mode_paiement')->nullable();
+
 
 
             $table->foreignId('client_id') // user qui passe la commande

@@ -86,6 +86,30 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-lg-12">
+                                                <div class="checkout-register">
+                                                    <div class="title-wrap mb-3">
+                                                        <h4 class="cart-bottom-title section-bg-white">Mode de paiement
+                                                        </h4>
+                                                    </div>
+                                                    <div class="billing-select">
+                                                        <select  name="payment_mode" id="paymentMode">
+                                                            <option selected disabled value="">Selectionner</option>
+                                                            <option value="orange money">Orange Money</option>
+                                                            <option value="moov money">Moov Money</option>
+                                                            <option value="mtn money">MTN Money</option>
+                                                            <option value="wave">Wave</option>
+                                                            <option value="visa">Visa</option>
+                                                            <option value="mastercard">MasterCard</option>
+                                                            <option value="espece">Espèce</option>
+                                                        </select>
+                                                    </div>
+
+                                                 
+
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -213,6 +237,9 @@
 
         $('#btnSend').click(function(e) {
             e.preventDefault();
+
+            // on verifie un mode de paiement à éte selectionné
+            var paiementMode = $('#paymentMode').val();
             //on verifie si une option de livraison à éte selectionné
             var livraisonValue = $('input[name="optionLivraison"]:checked').val();
             var yangoValue = $('#adresseLivraison').val(); // adresse de livraison yango
@@ -231,7 +258,16 @@
                     icon: 'error',
                     confirmButtonText: 'OK',
                 });
-            } else {
+            } else if (paiementMode == null || paiementMode == '') {
+                Swal.fire({
+                    title: 'Ouff',
+                    text: 'Veuillez selectionner un mode de paiement',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
+            }
+            
+            else {
                 //on envoi les informations au controller pour enregistrer la commande
                 $.ajax({
                     url: "{{ route('cart.save-order') }}",
@@ -239,7 +275,8 @@
                     data: {
                         _token: "{{ csrf_token() }}",
                         optionLivraison: livraisonValue, //option livraison
-                        adresseLivraison: yangoValue
+                        adresseLivraison: yangoValue,
+                        paiementMode: paiementMode
                     },
                     success: function(response) {
                         if (response.status == 'success') {
@@ -253,9 +290,10 @@
                             }).then(() => {
                                 // Redirection après la fermeture de l'alerte
                                 setTimeout(function() {
-                                    window.location.href = "{{ route('accueil') }}";
-                                },
-                                300); // On ajoute un léger délai pour garantir la redirection après la fermeture
+                                        window.location.href = "{{ route('accueil') }}";
+                                    },
+                                    300
+                                    ); // On ajoute un léger délai pour garantir la redirection après la fermeture
                             });;
                         }
                     },

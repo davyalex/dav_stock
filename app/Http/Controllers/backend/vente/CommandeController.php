@@ -70,6 +70,8 @@ class CommandeController extends Controller
                 $vente->statut = 'confirmée';
                 $vente->type_vente = 'commande';
                 $vente->commande_id = $commande->id;
+                $vente->mode_paiement = $commande->mode_paiement;
+
 
                 $vente->save();
 

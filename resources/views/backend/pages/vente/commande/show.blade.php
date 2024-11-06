@@ -38,7 +38,9 @@
                         </div>
                         <div class="col-md-4">
                             <p><strong>Mode de livraison :</strong> {{ $commande->mode_livraison }}</p>
-                            <p><strong>Adresse de livraison :</strong> {{ $commande->adresse_livraison }}</p>
+                            <p><strong>Adresse de livraison :</strong> {{ $commande->adresse_livraison ?? 'Chez jeanne' }}</p>
+                            <p><strong>Mode de paiement :</strong> {{ $commande->mode_paiement }}</p>
+
                         </div>
                     </div>
                 </div>

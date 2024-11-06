@@ -193,6 +193,7 @@ class PanierController extends Controller
                     'nombre_produit' => $nombreProduit,
                     'mode_livraison' => $request->optionLivraison,
                     'adresse_livraison' => $request->adresseLivraison,
+                    'mode_paiement' => $request->paiementMode,
                     'date_commande' => Carbon::now()->format('Y-m-d'),
                     'statut' => 'en attente',
                 ]);

@@ -20,15 +20,13 @@ class Commande extends Model
         'nombre_produit', 
         'statut',
         'mode_livraison',
+        'mode_paiement',
         'adresse_livraison',
         'montant_total',
         'date_commande', 
         'client_id',
         'user_id',
         'caisse_id',
-
-
-
     ];
 
 
