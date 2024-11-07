@@ -248,6 +248,13 @@
 
 
                 <div class="ms-1 header-item d-none d-sm-flex">
+                    <a href="{{route('accueil')}}"  target="_blank"
+                        class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle ">
+                        <i class='bx bx-globe fs-22'></i>
+                    </a>
+                </div>
+
+                <div class="ms-1 header-item d-none d-sm-flex">
                     <button type="button"
                         class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle light-dark-mode">
                         <i class='bx bx-moon fs-22'></i>
