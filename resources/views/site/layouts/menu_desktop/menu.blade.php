@@ -16,7 +16,7 @@
                         <ul class="d-flex justify-content-center">
                             <li><a href="{{ route('accueil') }}">Accueil</a></li>
                             @foreach ($menu_link as $menu)
-                                <li><a href="{{ route('produit', $menu->slug) }}">
+                                <li><a href="{{ route('produit', $menu->id) }}">
                                     @if ($menu->slug === 'bar')
                                         Nos boissons
                                     @elseif($menu->slug === 'menu')

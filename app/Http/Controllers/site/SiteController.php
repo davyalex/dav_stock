@@ -74,22 +74,22 @@ class SiteController extends Controller
 
     /**Liste des produit en fonction de la categorie
      * 
-     * @param{slug-categorie}
+     * @param{id-categorie}
      */
-    public function produit(Request $request, $slug)
+    public function produit(Request $request, $id)
     {
         try {
-            $categorieSelect = Categorie::whereSlug($slug)->first(); // recuperer les infos de la categorie a partir du slug
+            $categorieSelect = Categorie::whereId($id)->first(); // recuperer les infos de la categorie a partir du slug
 
             if (!$categorieSelect) {
                 return redirect()->route('accueil');
             }
             if ($categorieSelect->type) {
                 $produits = Produit::active()->where('type_id', $categorieSelect->id)
-                    ->paginate(8);
+                    ->paginate(9);
             }else{
                 $produits = Produit::active()->where('categorie_id', $categorieSelect->id)
-                    ->paginate(8);
+                    ->paginate(9);
             }
             // // retourner les achats du produits si type=bar
             // if ($categorieSelect->type == 'bar') {
@@ -124,7 +124,7 @@ class SiteController extends Controller
                 ->whereIn('type', ['menu', 'bar'])
                 ->orderBy('position', 'DESC')
                 ->get();
-            // dd($categorie->toArray());
+            // dd($categorieSelect->id);
 
             return view('site.pages.produit', compact(
                 'produits',
@@ -204,10 +204,19 @@ class SiteController extends Controller
             $produit = Produit::find($produit->id);
             // dd($produit->categorie->toArray());
 
+            $categories = Categorie::whereNull('parent_id')
+            ->with('children')
+            ->whereIn('type', ['menu', 'bar'])
+            ->orderBy('position', 'DESC')
+            ->get();
+
+            $categorieSelect = Categorie::whereId($produit->categorie_id)->first(); // recuperer les infos de la categorie a partir du slug
+
+
             $produitsRelateds = Produit::where('categorie_id', $produit->categorie_id)->where('id', '!=', $produit->id)->get();
             // dd($produitsRelateds->toArray());
 
-            return view('site.pages.produit-detail', compact('produit', 'produitsRelateds'));
+            return view('site.pages.produit-detail', compact('produit', 'produitsRelateds', 'categories' , 'categorieSelect'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }

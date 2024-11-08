@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
         //
         Schema::defaultStringLength(191);
 
-//fonction qui récupère tous les produits de catégorie famille menu et met le stock à 100
+        //fonction qui récupère tous les produits de catégorie famille menu et met le stock à 100
         $this->app->booted(function () {
             \App\Models\Produit::whereHas('categorie', function ($query) {
                 $query->where('famille', 'menu');
@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
                     $produit->update(['stock' => 100]);
                 }
             });
-});
+        });
 
         // Fonction pour vérifier la quantité stockée des achats
         // $this->app->singleton('verifierQuantiteStockee', function ($app) {
@@ -87,9 +87,17 @@ class AppServiceProvider extends ServiceProvider
             ->whereIn('type', ['menu', 'bar'])
             ->OrderBy('position', 'DESC')->get();
         // dd($data_setting);
+
+        // get all categories parent with children
+        $categories = Categorie::whereNull('parent_id')
+            ->with('children')
+            ->whereIn('type', ['menu', 'bar'])
+            ->orderBy('position', 'DESC')
+            ->get();
         view()->share([
             'setting' => $data_setting,
-            'menu_link' => $menu_link
+            'menu_link' => $menu_link,
+            'categories' => $categories
         ]);
     }
 }

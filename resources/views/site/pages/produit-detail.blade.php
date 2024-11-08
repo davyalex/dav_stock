@@ -89,12 +89,26 @@
         }
     </style>
 
-    <div class="product-details pt-100 pb-90">
+    <div class="product-details pt-50 pb-90">
         <div class="container">
-
-
             <div class="row">
-                <div class="col-lg-6 col-md-12">
+                <div class="col-lg-3">
+                    <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
+                        <div class="shop-widget">
+                            <h4 class="shop-sidebar-title">MENU <i class="fa fa-angle-right"></i> <small>{{ $categorieSelect->name }} </small></h4>
+                            <div class="shop-catigory">
+                                {{-- @include('site.sections.categorie.categoriechild', [
+                                    'categories' => $categories,
+                                    'categorieSelect' => $categorieSelect,
+                                ]) --}}
+
+                                @include('site.sections.categorie.categorieproduit')
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-12">
                     <div class="product-images-slider position-relative">
                         <div class="main-image-container ratio ratio-4x3">
                             <img id="mainImage" src="{{ $produit->getFirstMediaUrl('ProduitImage') }}" alt="Image principale"
@@ -120,7 +134,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-12">
+                <div class="col-lg-4 col-md-12">
                     <div class="product-details-content">
                         <h4 class="text-uppercase">{{ $produit->nom }} </h4>
 
@@ -166,8 +180,6 @@
 
                             </ul>
                         </div>
-
-
                     </div>
                 </div>
             </div>

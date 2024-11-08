@@ -5,6 +5,7 @@ namespace App\Http\Controllers\site;
 use Carbon\Carbon;
 use App\Models\Produit;
 use App\Models\Commande;
+use App\Models\Categorie;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -18,7 +19,25 @@ class PanierController extends Controller
     public function index()
     {
         $cart = session()->get('cart', []);
-        return view('site.pages.panier', compact('cart'));
+        
+        // si le panier n'est pas vide
+        $categorieSelect = null;
+
+        $categories = null;
+        if (!empty($cart)) {
+            $produits = Produit::whereIn('id', array_keys($cart))->first(); // premier elément du panier
+
+        $categories = Categorie::whereNull('parent_id')
+        ->with('children')
+        ->whereIn('type', ['menu', 'bar'])
+        ->orderBy('position', 'DESC')
+        ->get();
+
+        $categorieSelect = Categorie::whereId($produits->categorie_id)->first(); // recuperer les infos de la categorie a partir du slug
+
+        }
+        // dd($categorieSelect);
+        return view('site.pages.panier', compact('cart', 'categories', 'categorieSelect'));
         // return response()->json($cart);
     }
 
@@ -165,6 +184,8 @@ class PanierController extends Controller
     public function checkout(Request $request)
     {
         if (session('cart')) {
+
+            
             return view('site.pages.caisse');
         }else{
             return redirect()->route('accueil');

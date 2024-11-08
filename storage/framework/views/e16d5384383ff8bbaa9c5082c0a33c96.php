@@ -1,7 +1,7 @@
 <!-- mobile-menu-area-start -->
 <li>
     <?php if($menu->children->isNotEmpty()): ?>
-        <a href="<?php echo e(route('produit', $menu->slug)); ?>">
+        <a href="<?php echo e(route('produit', $menu->id)); ?>">
             <?php if($menu->slug === 'bar'): ?>
                 Nos boissons
             <?php elseif($menu->slug === 'menu'): ?>
@@ -11,7 +11,7 @@
 
             <?php endif; ?>
         </a>
-        </a>
+       
         <ul>
             <?php $__currentLoopData = $menu->children; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <?php echo $__env->make('site.layouts.menu_mobile.menuchild', ['menu' => $child], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>

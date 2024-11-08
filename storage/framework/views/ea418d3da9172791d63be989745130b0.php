@@ -72,7 +72,9 @@
                 <div class="col-lg-3">
                     <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
                         <div class="shop-widget">
-                            <h4 class="shop-sidebar-title">Nos <?php echo e($categorieSelect->name); ?> </h4>
+                            <h4 class="shop-sidebar-title">MENU <i class="fa fa-angle-right"></i>
+                                <small><?php echo e($categorieSelect->name); ?> </small>
+                            </h4>
                             <div class="shop-catigory">
                                 
 
@@ -92,7 +94,7 @@
                         <div class="product-grid product-view pb-20">
                             <div class="row">
 
-                                <?php $__currentLoopData = $produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__empty_1 = true; $__currentLoopData = $produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                     <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-6 mb-30">
                                         <div class="product-wrapper">
                                             <div class="product-img position-relative">
@@ -100,7 +102,7 @@
                                                     <div class="produit-image-container">
                                                         <img src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>"
                                                             alt="<?php echo e($produit->nom); ?>">
-        
+
                                                         <?php if($produit->stock == 0 && $produit->categorie->famille == 'bar'): ?>
                                                             <div class="rupture-stock-overlay">Rupture de stock</div>
                                                         <?php endif; ?>
@@ -118,10 +120,21 @@
                                                     <span><?php echo e($produit->prix); ?> FCFA</span>
                                                     
                                                 </div>
+
+                                                <div class="mt-3">
+                                                    <button type="button" class="btn btn-danger addCart text-white"
+                                                        data-id="<?php echo e($produit->id); ?>"
+                                                        style="border-radius: 10px">
+                                                        Ajouter au panier
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                    <h3 class="text-center">Aucun produit <marquee behavior="scroll" direction="">
+                                            <?php echo e($categorieSelect->name); ?></marquee> disponible</h3>
+                                <?php endif; ?>
 
                             </div>
                         </div>
@@ -149,6 +162,9 @@
             </div>
         </div>
     </div>
+
+    <?php echo $__env->make('site.components.ajouter-au-panier', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('site.layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/site/pages/produit.blade.php ENDPATH**/ ?>

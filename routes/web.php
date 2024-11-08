@@ -328,6 +328,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('create', 'create')->name('vente.create');
         route::post('store', 'store')->name('vente.store');
         route::get('cloture-caisse', 'clotureCaisse')->name('vente.cloture-caisse');
+        route::get('billeterie-caisse', 'billeterieCaisse')->name('vente.billeterie-caisse');
         route::post('session-date-vente', 'sessionDate')->name('vente.session-date');  // definir manuellement une session date pour la vente
 
     });
@@ -416,7 +417,7 @@ Route::controller(AuthUserController::class)->group(function () {
 //site
 Route::controller(SiteController::class)->group(function () {
     route::get('', 'accueil')->name('accueil');
-    route::get('/categorie/{slug}', 'produit')->name('produit'); // get product of categorie selected
+    route::get('/categorie/{id}', 'produit')->name('produit'); // get product of categorie selected
     route::get('/menu', 'menu')->name('menu');
     route::get('/produit/detail/{slug}', 'produitDetail')->name('produit.detail');
 });

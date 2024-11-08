@@ -16,7 +16,7 @@
                         <ul class="d-flex justify-content-center">
                             <li><a href="<?php echo e(route('accueil')); ?>">Accueil</a></li>
                             <?php $__currentLoopData = $menu_link; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $menu): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <li><a href="<?php echo e(route('produit', $menu->slug)); ?>">
+                                <li><a href="<?php echo e(route('produit', $menu->id)); ?>">
                                     <?php if($menu->slug === 'bar'): ?>
                                         Nos boissons
                                     <?php elseif($menu->slug === 'menu'): ?>

@@ -1,7 +1,7 @@
 <!-- mobile-menu-area-start -->
 <li>
     @if ($menu->children->isNotEmpty())
-        <a href="{{ route('produit', $menu->slug) }}">
+        <a href="{{ route('produit', $menu->id) }}">
             @if ($menu->slug === 'bar')
                 Nos boissons
             @elseif ($menu->slug === 'menu')
@@ -10,7 +10,7 @@
                 {{ $menu['name'] }}
             @endif
         </a>
-        </a>
+       
         <ul>
             @foreach ($menu->children as $child)
                 @include('site.layouts.menu_mobile.menuchild', ['menu' => $child])

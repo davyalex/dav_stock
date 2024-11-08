@@ -89,12 +89,23 @@
         }
     </style>
 
-    <div class="product-details pt-100 pb-90">
+    <div class="product-details pt-50 pb-90">
         <div class="container">
-
-
             <div class="row">
-                <div class="col-lg-6 col-md-12">
+                <div class="col-lg-3">
+                    <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
+                        <div class="shop-widget">
+                            <h4 class="shop-sidebar-title">MENU <i class="fa fa-angle-right"></i> <small><?php echo e($categorieSelect->name); ?> </small></h4>
+                            <div class="shop-catigory">
+                                
+
+                                <?php echo $__env->make('site.sections.categorie.categorieproduit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-12">
                     <div class="product-images-slider position-relative">
                         <div class="main-image-container ratio ratio-4x3">
                             <img id="mainImage" src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>" alt="Image principale"
@@ -120,7 +131,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-12">
+                <div class="col-lg-4 col-md-12">
                     <div class="product-details-content">
                         <h4 class="text-uppercase"><?php echo e($produit->nom); ?> </h4>
 
@@ -161,8 +172,6 @@
 
                             </ul>
                         </div>
-
-
                     </div>
                 </div>
             </div>

@@ -4,18 +4,18 @@
             <?php if($categorie->children->isNotEmpty()): ?>
                 <a data-bs-toggle="collapse" data-bs-parent="#faq" 
                    href="#shop-categorie-<?php echo e($categorie->id); ?>" 
-                   class=" text-danger<?php echo e($categorieSelect->id == $categorie->id ? '' : 'collapsed'); ?>" 
-                   aria-expanded="<?php echo e($categorieSelect->id == $categorie->id ? 'true' : 'false'); ?>">
-                    <?php echo e($categorie->name); ?> <i class="ion-ios-arrow-down"></i>
+                   class="text-danger <?php echo e($categorie->famille == $categorieSelect->famille ? 'show' : 'collapsed'); ?>" 
+                   aria-expanded="<?php echo e($categorie->famille == $categorieSelect->famille ? 'true' : 'false'); ?>">
+                    <strong class="fs-6"><?php echo e($categorie->name); ?></strong> <i class="ion-ios-arrow-down"></i>
                 </a>
                 <ul id="shop-categorie-<?php echo e($categorie->id); ?>" 
-                    class="panel-collapse collapse show">
+                    class="panel-collapse collapse <?php echo e($categorie->famille == $categorieSelect->famille ? 'show' : ''); ?>">
                     <?php $__currentLoopData = $categorie->children; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <?php echo $__env->make('site.sections.categorie.categorieproduit', ['categories' => [$child], 'categorieSelect' => $categorieSelect], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </ul>
             <?php else: ?>
-                <a href="<?php echo e(route('produit' , $categorie->slug)); ?>"><?php echo e($categorie->name); ?></a>
+                <a href="<?php echo e(route('produit' , $categorie->id)); ?>" class="<?php echo e($categorie->id == $categorieSelect->id ? 'fw-bold' : ''); ?>"><?php echo e($categorie->name); ?></a>
             <?php endif; ?>
         </li>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

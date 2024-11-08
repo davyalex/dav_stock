@@ -76,7 +76,7 @@ class VenteController extends Controller
             $data_produit = Produit::active()->whereHas('categorie', function ($query) {
                 $query->whereIn('famille', ['bar', 'menu']);
             })
-                ->with(['categorie' ,'variantes'])
+                ->with(['categorie', 'variantes'])
                 ->get();
             // ->where(function ($query) {
             //     $query->whereHas('categorie', function ($subQuery) {
@@ -159,7 +159,7 @@ class VenteController extends Controller
             $codeVente = strtoupper($initialesCaissiere) . '-' . strtoupper($initialesCaisse) . $numeroOrdre . $dateHeure;
 
             //session de la date manuelle
-            $sessionDate = Session::get('session_date', now()->toDateString()); 
+            $sessionDate = Session::get('session_date', now()->toDateString());
 
             $vente = Vente::create([
                 'code' => $codeVente,
@@ -290,8 +290,6 @@ class VenteController extends Controller
             Auth::logout();
             Alert::success('Succès', 'Caisse cloturée avec succès');
             return redirect()->route('admin.login');
-
-
         } catch (\Exception $e) {
             Alert::error('Erreur', 'Une erreur est survenue lors de la cloture de la caisse : ' . $e->getMessage());
             return back();
@@ -299,22 +297,61 @@ class VenteController extends Controller
     }
 
 
+    public function billeterieCaisse()
+    {
+        try {
 
-    public function sessionDate(Request $request){
+            $type_monnaies = [
+                0 => 'Billets',
+                1 => 'Pièces',
+            ];
 
-       try {
-        $request->validate([
-            'session_date' => 'required|date',
-        ]);
+            $billets = [
+                0 => 500,
+                1 => 1000,
+                2 => 2000,
+                3 => 5000,
+                4 => 10000,
+            ];
 
-        // Stocker la date dans la session 
-        Session::put('session_date', $request->session_date);
 
-        alert()->success('Succès', 'Date de session vente modifiée avec succès');
-        return back();
-       } catch (\Throwable $th) {
-        Alert::error('Erreur', 'Une erreur est survenue lors de la création de la session : ' . $th->getMessage());
-        return back();
-       }
+            $pieces = [
+                0 => 5,
+                1 => 10,
+                2 => 20,
+                3 => 50,
+                4 => 100,
+                5 => 200,
+                6 => 500,
+            ];
+
+            // dd($type_monnaies , $billets, $pieces);
+
+            return view('backend.pages.vente.billeterie.create', compact('type_monnaies' , 'billets', 'pieces'));
+        } catch (\Throwable $th) {
+
+            return $th->getMessage();
+        }
+    }
+
+
+
+    public function sessionDate(Request $request)
+    {
+
+        try {
+            $request->validate([
+                'session_date' => 'required|date',
+            ]);
+
+            // Stocker la date dans la session 
+            Session::put('session_date', $request->session_date);
+
+            alert()->success('Succès', 'Date de session vente modifiée avec succès');
+            return back();
+        } catch (\Throwable $th) {
+            Alert::error('Erreur', 'Une erreur est survenue lors de la création de la session : ' . $th->getMessage());
+            return back();
+        }
     }
 }

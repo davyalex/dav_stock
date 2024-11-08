@@ -7,17 +7,32 @@
     <!-- shopping-cart-area start -->
     <div class="cart-main-area pt-35 pb-100">
         <?php if(session('cart')): ?>
-            <div class="container">
+            <div class="container-fluid px-5">
                 <h3 class="page-title">Mon panier
                     <span class="quantityProduct">(<?php echo e(count((array) session('cart'))); ?> produits)</span>
                 </h3>
                 <?php $sousTotal = 0 ?>
                 </h3>
                 <div class="row">
-                    <!-- ========== Start panier items ========== -->
-                    <div class="col-12 col-md-12 col-lg-8 col-sm-12">
-                        <div class="row">
 
+                    <?php if(count(session('cart')) > 0): ?>
+                        <div class="col-12 col-md-12 col-sm-12 col-lg-3">
+                            <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
+                                <div class="shop-widget">
+                                    <h4 class="shop-sidebar-title">MENU </small></h4>
+                                    <div class="shop-catigory">
+                                        
+        
+                                        <?php echo $__env->make('site.sections.categorie.categorieproduit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    <!-- ========== Start panier items ========== -->
+                    <div class="col-12 col-md-12 col-lg-6 col-sm-12">
+                        <div class="row">
                             <?php $__currentLoopData = session('cart'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $details): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="col-12 col-lg-6 mb-4" id="productDiv_<?php echo e($id); ?>">
                                     <div class="card h-100 p-3">
@@ -75,7 +90,7 @@
 
                     <!-- ========== End panier items ========== -->
 
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-4">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-3">
                         <div class="col-lg-12 col-md-12">
                             <div class="grand-totall">
                                 <div class="title-wrap">
@@ -106,7 +121,7 @@
                     <div class="col-lg-12">
                         <div class="cart-shiping-update-wrapper">
                             <div class="cart-shiping-update">
-                                <a href="<?php echo e(route('accueil')); ?>">Continue mes achats</a>
+                                <a href="<?php echo e(route('accueil')); ?>">Continuer mes achats</a>
                             </div>
                             
                         </div>

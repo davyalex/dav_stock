@@ -72,7 +72,9 @@
                 <div class="col-lg-3">
                     <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
                         <div class="shop-widget">
-                            <h4 class="shop-sidebar-title">Nos {{ $categorieSelect->name }} </h4>
+                            <h4 class="shop-sidebar-title">MENU <i class="fa fa-angle-right"></i>
+                                <small>{{ $categorieSelect->name }} </small>
+                            </h4>
                             <div class="shop-catigory">
                                 {{-- @include('site.sections.categorie.categoriechild', [
                                     'categories' => $categories,
@@ -95,7 +97,7 @@
                         <div class="product-grid product-view pb-20">
                             <div class="row">
 
-                                @foreach ($produits as $produit)
+                                @forelse ($produits as $produit)
                                     <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-6 mb-30">
                                         <div class="product-wrapper">
                                             <div class="product-img position-relative">
@@ -103,7 +105,7 @@
                                                     <div class="produit-image-container">
                                                         <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
                                                             alt="{{ $produit->nom }}">
-        
+
                                                         @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
                                                             <div class="rupture-stock-overlay">Rupture de stock</div>
                                                         @endif
@@ -121,10 +123,21 @@
                                                     <span>{{ $produit->prix }} FCFA</span>
                                                     {{-- <span class="product-price-old">$120.00 </span> --}}
                                                 </div>
+
+                                                <div class="mt-3">
+                                                    <button type="button" class="btn btn-danger addCart text-white"
+                                                        data-id="{{ $produit->id }}"
+                                                        style="border-radius: 10px">
+                                                        Ajouter au panier
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
+                                @empty
+                                    <h3 class="text-center">Aucun produit <marquee behavior="scroll" direction="">
+                                            {{ $categorieSelect->name }}</marquee> disponible</h3>
+                                @endforelse
 
                             </div>
                         </div>
@@ -151,4 +164,7 @@
             </div>
         </div>
     </div>
+
+    @include('site.components.ajouter-au-panier')
+
 @endsection

@@ -8,6 +8,7 @@
     <div class="checkout-area pb-80 pt-100">
         <div class="container">
             <div class="row">
+                
                 <div class="col-lg-8 m-auto">
                     <div class="checkout-wrapper">
                         <div id="faq" class="panel-group">
