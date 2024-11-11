@@ -19,8 +19,8 @@
                                 <li><a href="<?php echo e(route('produit', $menu->id)); ?>">
                                     <?php if($menu->slug === 'bar'): ?>
                                         Nos boissons
-                                    <?php elseif($menu->slug === 'menu'): ?>
-                                        Nos plats
+                                    <?php elseif($menu->slug === 'cuisine-interne'): ?>
+                                        Restaurant
                                     <?php else: ?>
                                         <?php echo e($menu->name); ?>
 

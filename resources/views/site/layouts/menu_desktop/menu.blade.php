@@ -19,8 +19,8 @@
                                 <li><a href="{{ route('produit', $menu->id) }}">
                                     @if ($menu->slug === 'bar')
                                         Nos boissons
-                                    @elseif($menu->slug === 'menu')
-                                        Nos plats
+                                    @elseif($menu->slug === 'cuisine-interne')
+                                        Restaurant
                                     @else
                                         {{ $menu->name }}
                                     @endif

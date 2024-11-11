@@ -128,7 +128,7 @@
                                                     <button type="button" class="btn btn-danger addCart text-white"
                                                         data-id="{{ $produit->id }}"
                                                         style="border-radius: 10px">
-                                                        Ajouter au panier
+                                                       <i class="fa fa-shopping-cart"></i>  Commander
                                                     </button>
                                                 </div>
                                             </div>
