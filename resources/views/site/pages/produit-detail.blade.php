@@ -139,7 +139,7 @@
                         <h4 class="text-uppercase">{{ $produit->nom }} </h4>
 
                         <span id="price" data-price={{ $produit->prix }}>
-                            {{ $produit->prix }}
+                            {{ number_format($produit->prix, 0, ',', ' ') }}
                             FCFA </span>
 
                         {{-- @if ($produit->achats->isNotEmpty())
@@ -334,7 +334,7 @@
                             <a href="#"> {{ $produit->nom }} </a>
                         </h4>
                         <div class="product-price-wrapper">
-                            <span>{{ $produit->prix }} FCFA</span>
+                            <span>{{number_format($produit->prix, 0, ',', ' ') }} FCFA</span>
                             {{-- <span class="product-price-old">$120.00 </span> --}}
                         </div>
                     </div>

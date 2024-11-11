@@ -190,8 +190,11 @@
                                 @endif
                             </div>
 
-                            <div class="billing-btn">
-                                <button id="btnSend">Valider ma commande</button>
+                            <div class="billing-btn d-flex justify-content-between">
+                                @if ($urlPrevious = url()->previous())
+                                <a href="{{ $urlPrevious }}">Retour à la page précédente</a>
+                                @endif
+                                <button id="btnSend" style="background-color:#015701d6 ; color:white">Valider ma commande</button>
                             </div>
                         </div>
                     </div>

@@ -11,8 +11,16 @@
                     @endif
                 </div>
             </div>
+            <div class="col-lg-5 col-md-5 col-12 col-sm-5">
+                <div class="search-box" style="border-radius: 2px; border: 1px solid rgb(237, 47, 47); display: flex; align-items: center;">
+                    <input type="text" placeholder="Rechercher..." style="border: none; flex: 1; background-color: white;">
+                    <button type="submit" class="p-3 " style="border: none; margin-left: 10px; background-color: rgb(242, 60, 60); color: white; height: 100%;">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
             
-            <div class="col-lg-9 col-md-8 col-12 col-sm-8">
+            <div class="col-lg-4 col-md-8 col-12 col-sm-8 mt-2">
                 <div class="header-middle-right f-right">
                     <div class="header-login px-3">
                         @auth
@@ -23,8 +31,8 @@
                                         <i class="icon-user icons"></i>
                                     </div>
                                     <div class="login-text-content">
-                                        <p>{{ Auth::user()->name }} <br> <span>Mon compte</span></p>
-                                        <p> {{Auth::user()->first_name}} </p>
+                                        <p>Mon compte</p>
+                                        <p class="text-danger"> {{Auth::user()->first_name}} </p>
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu">

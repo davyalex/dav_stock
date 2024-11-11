@@ -117,7 +117,7 @@
                                                     <a href="#"> <?php echo e($produit->nom); ?> </a>
                                                 </h4>
                                                 <div class="product-price-wrapper">
-                                                    <span><?php echo e($produit->prix); ?> FCFA</span>
+                                                    <span><?php echo e(number_format($produit->prix, 0, ',', ' ')); ?> FCFA</span>
                                                     
                                                 </div>
 

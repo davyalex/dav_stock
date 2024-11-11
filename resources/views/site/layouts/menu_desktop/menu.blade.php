@@ -1,7 +1,7 @@
 <div class="header-bottom transparent-bar black-bg">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-2 col-md-2 col-sm-2">
+            {{-- <div class="col-lg-2 col-md-2 col-sm-2">
                 <div class="logo">
                     @if ($setting != null)
                         <a href="{{ route('accueil') }}">
@@ -9,8 +9,8 @@
                         </a>
                     @endif
                 </div>
-            </div>
-            <div class="col-lg-7 col-md-7 col-sm-7">
+            </div> --}}
+            <div class="col-lg-7 col-md-7 col-sm-7 m-auto">
                 <div class="main-menu">
                     <nav>
                         <ul class="d-flex justify-content-center">
@@ -31,7 +31,7 @@
                     </nav>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-3">
+            {{-- <div class="col-lg-3 col-md-3 col-sm-3">
                 <div class="header-middle-right d-flex justify-content-end">
                     <div class="header-login px-3 header-cart">
                         @auth
@@ -62,7 +62,7 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>

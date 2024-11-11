@@ -136,7 +136,7 @@
                         <h4 class="text-uppercase"><?php echo e($produit->nom); ?> </h4>
 
                         <span id="price" data-price=<?php echo e($produit->prix); ?>>
-                            <?php echo e($produit->prix); ?>
+                            <?php echo e(number_format($produit->prix, 0, ',', ' ')); ?>
 
                             FCFA </span>
 
@@ -326,7 +326,7 @@
                             <a href="#"> <?php echo e($produit->nom); ?> </a>
                         </h4>
                         <div class="product-price-wrapper">
-                            <span><?php echo e($produit->prix); ?> FCFA</span>
+                            <span><?php echo e(number_format($produit->prix, 0, ',', ' ')); ?> FCFA</span>
                             
                         </div>
                     </div>
