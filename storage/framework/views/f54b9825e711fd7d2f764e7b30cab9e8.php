@@ -114,11 +114,11 @@
 
 
                                         <?php if($data_vente->sum('montant_total') > 0): ?>
-                                            <a href="<?php echo e(route('vente.cloture-caisse')); ?>"
-                                                class="btn btn-danger btnCloturer">Clôturer
+                                            <a href="<?php echo e(route('vente.billeterie-caisse')); ?>"
+                                                class="btn btn-danger ">Procéder a la Clóturer
                                                 la caisse</a>
                                         <?php else: ?>
-                                            <button class="btn btn-danger" disabled>Clôturer la caisse</button>
+                                            <button class="btn btn-danger" disabled>Procéder a la Clóturer la caisse</button>
                                         <?php endif; ?>
                                     </p>
 
@@ -214,41 +214,41 @@
             })
 
 
-            $('.btnCloturer').click(function(e) {
-                e.preventDefault();
-                Swal.fire({
-                    title: 'Confirmer la clôture de la caisse',
-                    text: "Vous êtes sur le point de clôturer la caisse. Cette action est irréversible.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Oui, clôturer la caisse',
-                    cancelButtonText: 'Annuler'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire({
-                            title: 'Caisse cloturée avec succès',
-                            text: 'Déconnexion automatique.',
-                            icon: 'success',
-                            timer: 2000,
-                            timerProgressBar: true,
-                            didOpen: () => {
-                                Swal.showLoading()
-                            },
-                            willClose: () => {
-                                window.location.href =
-                                    '<?php echo e(route('vente.cloture-caisse')); ?>';
-                            }
-                        }).then((result) => {
-                            if (result.dismiss === Swal.DismissReason.timer) {
-                                console.log(
-                                    'Redirection automatique vers la page de connexion');
-                            }
-                        });
-                    }
-                });
-            });
+            // $('.btnCloturer').click(function(e) {
+            //     e.preventDefault();
+            //     Swal.fire({
+            //         title: 'Confirmer la clôture de la caisse',
+            //         text: "Vous êtes sur le point de clôturer la caisse. Cette action est irréversible.",
+            //         icon: 'warning',
+            //         showCancelButton: true,
+            //         confirmButtonColor: '#3085d6',
+            //         cancelButtonColor: '#d33',
+            //         confirmButtonText: 'Oui, clôturer la caisse',
+            //         cancelButtonText: 'Annuler'
+            //     }).then((result) => {
+            //         if (result.isConfirmed) {
+            //             Swal.fire({
+            //                 title: 'Caisse cloturée avec succès',
+            //                 text: 'Déconnexion automatique.',
+            //                 icon: 'success',
+            //                 timer: 2000,
+            //                 timerProgressBar: true,
+            //                 didOpen: () => {
+            //                     Swal.showLoading()
+            //                 },
+            //                 willClose: () => {
+            //                     window.location.href =
+            //                         '<?php echo e(route('vente.cloture-caisse')); ?>';
+            //                 }
+            //             }).then((result) => {
+            //                 if (result.dismiss === Swal.DismissReason.timer) {
+            //                     console.log(
+            //                         'Redirection automatique vers la page de connexion');
+            //                 }
+            //             });
+            //         }
+            //     });
+            // });
         })
     </script>
 <?php $__env->stopSection(); ?>

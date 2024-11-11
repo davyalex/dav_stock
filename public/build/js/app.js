@@ -21,7 +21,7 @@ File: Main Js File
     // mettre une couleur de fond pour tous les champs avec la proprite  readonly
     var inputs = document.querySelectorAll("input[readonly]");
     inputs.forEach(function (input) {
-        input.style.backgroundColor = "#f0f0f0";
+        input.style.backgroundColor = "#f1f4f7";
     });
     // mettre une couleur de fond pour tous les champs avec la proprite  readonly
     var selects = document.querySelectorAll("select[readonly]");

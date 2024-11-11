@@ -297,7 +297,7 @@ class VenteController extends Controller
     }
 
 
-    public function billeterieCaisse()
+    public function billeterieCaisse(Request $request)
     {
         try {
 
@@ -325,9 +325,16 @@ class VenteController extends Controller
                 6 => 500,
             ];
 
-            // dd($type_monnaies , $billets, $pieces);
 
-            return view('backend.pages.vente.billeterie.create', compact('type_monnaies' , 'billets', 'pieces'));
+            if ($request->user()->hasRole('caisse')) {
+               $totalVente = Vente::where('caisse_id', auth()->user()->caisse_id)
+                    ->where('user_id', auth()->user()->id)
+                    ->where('statut_cloture', false)->sum('montant_total');
+            }
+
+            // dd($type_monnaies , $billets, $pieces, $totalVente);
+
+            return view('backend.pages.vente.billeterie.create', compact('type_monnaies' , 'billets', 'pieces' , 'totalVente'));
         } catch (\Throwable $th) {
 
             return $th->getMessage();
