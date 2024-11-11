@@ -95,7 +95,8 @@
                 <div class="col-lg-3">
                     <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
                         <div class="shop-widget">
-                            <h4 class="shop-sidebar-title">MENU <i class="fa fa-angle-right"></i> <small><?php echo e($categorieSelect->name); ?> </small></h4>
+                            <h4 class="shop-sidebar-title">MENU <i class="fa fa-angle-right"></i>
+                                <small><?php echo e($categorieSelect->name); ?> </small></h4>
                             <div class="shop-catigory">
                                 
 
@@ -108,8 +109,8 @@
                 <div class="col-lg-5 col-md-12">
                     <div class="product-images-slider position-relative">
                         <div class="main-image-container ratio ratio-4x3">
-                            <img id="mainImage" src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>" alt="Image principale"
-                                class="product-image img-fluid w-100 h-100 object-fit-cover">
+                            <img id="mainImage" src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>"
+                                alt="Image principale" class="product-image img-fluid w-100 h-100 object-fit-cover">
                         </div>
 
                         <div class="thumbnail-slider mt-3">
@@ -169,7 +170,6 @@
                                 <li class="categories-title">Categories:</li>
                                 <li><a href="#"><?php echo e($produit->categorie->getPrincipalCategory()->name); ?> ,</a></li>
                                 <li><a href="#"> <?php echo e($produit->categorie->name); ?> </a></li>
-
                             </ul>
                         </div>
                     </div>
@@ -180,122 +180,126 @@
 
 
     <?php if($produit->description): ?>
-    <div class="description-review-area pb-100">
-        <div class="container">
-            <div class="description-review-wrapper">
-                <div class="description-review-topbar nav text-center">
-                    <a class="active" data-bs-toggle="tab" href="#des-details1">Description</a>
-                    
-                </div>
-                <div class="tab-content description-review-bottom">
-                    <div id="des-details1" class="tab-pane active">
-                        <div class="product-description-wrapper">
-                            <?php echo $produit->description; ?>
+        <div class="description-review-area pb-100">
+            <div class="container">
+                <div class="description-review-wrapper">
+                    <div class="description-review-topbar nav text-center">
+                        <a class="active" data-bs-toggle="tab" href="#des-details1">Description</a>
+                        
+                    </div>
+                    <div class="tab-content description-review-bottom">
+                        <div id="des-details1" class="tab-pane active">
+                            <div class="product-description-wrapper">
+                                <?php echo $produit->description; ?>
 
-                        </div>
-                    </div>
-                    <div id="des-details2" class="tab-pane">
-                        <div class="product-anotherinfo-wrapper">
-                            <ul>
-                                <li><span>Tags:</span></li>
-                                <li><a href="#"> All,</a></li>
-                                <li><a href="#"> Cheesy,</a></li>
-                                <li><a href="#"> Fast Food,</a></li>
-                                <li><a href="#"> French Fries,</a></li>
-                                <li><a href="#"> Hamburger,</a></li>
-                                <li><a href="#"> Pizza</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div id="des-details3" class="tab-pane">
-                        <div class="rattings-wrapper">
-                            <div class="sin-rattings">
-                                <div class="star-author-all">
-                                    <div class="ratting-star f-left">
-                                        <i class="ion-star theme-color"></i>
-                                        <i class="ion-star theme-color"></i>
-                                        <i class="ion-star theme-color"></i>
-                                        <i class="ion-star theme-color"></i>
-                                        <i class="ion-star theme-color"></i>
-                                        <span>(5)</span>
-                                    </div>
-                                    <div class="ratting-author f-right">
-                                        <h3>tayeb rayed</h3>
-                                        <span>12:24</span>
-                                        <span>9 March 2022</span>
-                                    </div>
-                                </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam, quis nost rud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor
-                                    sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                    dolore magna aliqua. Utenim ad minim veniam, quis nost.</p>
-                            </div>
-                            <div class="sin-rattings">
-                                <div class="star-author-all">
-                                    <div class="ratting-star f-left">
-                                        <i class="ion-star theme-color"></i>
-                                        <i class="ion-star theme-color"></i>
-                                        <i class="ion-star theme-color"></i>
-                                        <i class="ion-star theme-color"></i>
-                                        <i class="ion-star theme-color"></i>
-                                        <span>(5)</span>
-                                    </div>
-                                    <div class="ratting-author f-right">
-                                        <h3>farhana shuvo</h3>
-                                        <span>12:24</span>
-                                        <span>9 March 2022</span>
-                                    </div>
-                                </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam, quis nost rud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor
-                                    sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                    dolore magna aliqua. Utenim ad minim veniam, quis nost.</p>
                             </div>
                         </div>
-                        <div class="ratting-form-wrapper">
-                            <h3>Add your Comments :</h3>
-                            <div class="ratting-form">
-                                <form action="#">
-                                    <div class="star-box">
-                                        <h2>Rating:</h2>
-                                        <div class="ratting-star">
+                        <div id="des-details2" class="tab-pane">
+                            <div class="product-anotherinfo-wrapper">
+                                <ul>
+                                    <li><span>Tags:</span></li>
+                                    <li><a href="#"> All,</a></li>
+                                    <li><a href="#"> Cheesy,</a></li>
+                                    <li><a href="#"> Fast Food,</a></li>
+                                    <li><a href="#"> French Fries,</a></li>
+                                    <li><a href="#"> Hamburger,</a></li>
+                                    <li><a href="#"> Pizza</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="des-details3" class="tab-pane">
+                            <div class="rattings-wrapper">
+                                <div class="sin-rattings">
+                                    <div class="star-author-all">
+                                        <div class="ratting-star f-left">
                                             <i class="ion-star theme-color"></i>
                                             <i class="ion-star theme-color"></i>
                                             <i class="ion-star theme-color"></i>
                                             <i class="ion-star theme-color"></i>
-                                            <i class="ion-star"></i>
+                                            <i class="ion-star theme-color"></i>
+                                            <span>(5)</span>
+                                        </div>
+                                        <div class="ratting-author f-right">
+                                            <h3>tayeb rayed</h3>
+                                            <span>12:24</span>
+                                            <span>9 March 2022</span>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="rating-form-style mb-20">
-                                                <input placeholder="Name" type="text">
-                                            </div>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                        incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam, quis nost rud
+                                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum
+                                        dolor
+                                        sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                                        et
+                                        dolore magna aliqua. Utenim ad minim veniam, quis nost.</p>
+                                </div>
+                                <div class="sin-rattings">
+                                    <div class="star-author-all">
+                                        <div class="ratting-star f-left">
+                                            <i class="ion-star theme-color"></i>
+                                            <i class="ion-star theme-color"></i>
+                                            <i class="ion-star theme-color"></i>
+                                            <i class="ion-star theme-color"></i>
+                                            <i class="ion-star theme-color"></i>
+                                            <span>(5)</span>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="rating-form-style mb-20">
-                                                <input placeholder="Email" type="text">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="rating-form-style form-submit">
-                                                <textarea name="message" placeholder="Message"></textarea>
-                                                <input type="submit" value="add review">
-                                            </div>
+                                        <div class="ratting-author f-right">
+                                            <h3>farhana shuvo</h3>
+                                            <span>12:24</span>
+                                            <span>9 March 2022</span>
                                         </div>
                                     </div>
-                                </form>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                        incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam, quis nost rud
+                                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum
+                                        dolor
+                                        sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                                        et
+                                        dolore magna aliqua. Utenim ad minim veniam, quis nost.</p>
+                                </div>
+                            </div>
+                            <div class="ratting-form-wrapper">
+                                <h3>Add your Comments :</h3>
+                                <div class="ratting-form">
+                                    <form action="#">
+                                        <div class="star-box">
+                                            <h2>Rating:</h2>
+                                            <div class="ratting-star">
+                                                <i class="ion-star theme-color"></i>
+                                                <i class="ion-star theme-color"></i>
+                                                <i class="ion-star theme-color"></i>
+                                                <i class="ion-star theme-color"></i>
+                                                <i class="ion-star"></i>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="rating-form-style mb-20">
+                                                    <input placeholder="Name" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="rating-form-style mb-20">
+                                                    <input placeholder="Email" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="rating-form-style form-submit">
+                                                    <textarea name="message" placeholder="Message"></textarea>
+                                                    <input type="submit" value="add review">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     <?php endif; ?>
-    
+
     <div class="product-area pb-95">
         <?php if($produitsRelateds->count() > 0): ?>
 
@@ -306,32 +310,43 @@
                     </div>
                 </div>
                 <div class="related-product-active owl-carousel product-nav">
-                  <?php $__currentLoopData = $produitsRelateds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                  <div class="product-wrapper">
-                    <div class="product-img">
-                        <a href="<?php echo e(route('produit.detail', $produit->slug)); ?>">
-                            <div class="produit-image-container">
-                                <img src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>"
-                                    alt="<?php echo e($produit->nom); ?>">
+                    <?php $__currentLoopData = $produitsRelateds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="product-wrapper">
+                            <div class="product-img">
+                                <a href="<?php echo e(route('produit.detail', $produit->slug)); ?>">
+                                    <div class="produit-image-container">
+                                        <img src="<?php echo e($produit->getFirstMediaUrl('ProduitImage')); ?>"
+                                            alt="<?php echo e($produit->nom); ?>">
+
+                                        <?php if($produit->stock == 0 && $produit->categorie->famille == 'bar'): ?>
+                                            <div class="rupture-stock-overlay">Rupture de stock</div>
+                                        <?php endif; ?>
+                                    </div>
+                                </a>
+
+                            </div>
+                            <div class="product-content text-center">
+                                <h4>
+                                    <a href="#"> <?php echo e($produit->nom); ?> </a>
+                                </h4>
+                                <div class="product-price-wrapper">
+                                    <span><?php echo e(number_format($produit->prix, 0, ',', ' ')); ?> FCFA</span>
+                                    
+                                </div>
 
                                 <?php if($produit->stock == 0 && $produit->categorie->famille == 'bar'): ?>
-                                    <div class="rupture-stock-overlay">Rupture de stock</div>
+                                    <span><span style="color: red" class="text-danger">Produit en rupture</span>
+                                    <?php else: ?>
+                                        <div class="mt-3 text-center" style="display: flex; justify-content: center">
+                                            <button type="button" class="btn btn-danger addCart text-white"
+                                                data-id="<?php echo e($produit->id); ?>" style="border-radius: 10px">
+                                                <i class="fa fa-shopping-cart"></i> Commander
+                                            </button>
+                                        </div>
                                 <?php endif; ?>
                             </div>
-                        </a>
-
-                    </div>
-                    <div class="product-content">
-                        <h4>
-                            <a href="#"> <?php echo e($produit->nom); ?> </a>
-                        </h4>
-                        <div class="product-price-wrapper">
-                            <span><?php echo e(number_format($produit->prix, 0, ',', ' ')); ?> FCFA</span>
-                            
                         </div>
-                    </div>
-                </div>
-                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                 </div>
             </div>

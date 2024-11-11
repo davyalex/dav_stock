@@ -15,7 +15,7 @@
                 </h3>
                 <div class="row">
 
-                    @if(count(session('cart')) > 0)
+                    @if (count(session('cart')) > 0)
                         <div class="col-12 col-md-12 col-sm-12 col-lg-3">
                             <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
                                 <div class="shop-widget">
@@ -25,9 +25,9 @@
                                             'categories' => $categories,
                                             'categorieSelect' => $categorieSelect,
                                         ]) --}}
-        
+
                                         @include('site.sections.categorie.categorieproduit')
-        
+
                                     </div>
                                 </div>
                             </div>
@@ -43,7 +43,9 @@
                                             <!-- Image du produit -->
                                             <div class="product-image me-3">
                                                 <div style="width: 150px; height: 150px; overflow: hidden;">
-                                                    <img src="{{ $details['image'] }}" class="img-fluid" style="object-fit: cover; width: 100%; height: 100%;" alt="Produit 2">
+                                                    <img src="{{ $details['image'] }}" class="img-fluid"
+                                                        style="object-fit: cover; width: 100%; height: 100%;"
+                                                        alt="Produit 2">
                                                 </div>
                                             </div>
                                             <!-- Détails du produit -->
@@ -105,15 +107,22 @@
                                 <h5>Montant du panier <span class="totalPrice">
                                         {{ number_format(session('totalPrice'), 0, ',', ' ') }} FCFA </span></h5>
 
-                              
+
                                 <h4 class="grand-totall-title">Total: <span class="totalPrice">
                                         {{ number_format(session('totalPrice'), 0, ',', ' ') }} FCFA </span></h4>
+
+
+                                <div class="cart-shiping-update mb-3">
+                                    <a href="{{ route('accueil') }}">Continuer mes achats</a>
+                                </div>
+
+
                                 @auth
                                     <a href="{{ route('cart.checkout') }}" id="btnnext">Finaliser ma commande</a>
                                 @endauth
 
                                 @guest
-                                    <a href="{{route('user.login')}}">Connectez vous pour finaliser la commande</a>
+                                    <a href="{{ route('user.login') }}">Connectez vous pour finaliser la commande</a>
                                 @endguest
                             </div>
                         </div>
@@ -123,7 +132,9 @@
                     <div class="col-lg-12">
                         <div class="cart-shiping-update-wrapper">
                             <div class="cart-shiping-update">
-                                <a href="{{route('accueil')}}">Continuer mes achats</a>
+                             @if ($urlBack = url()->previous())
+                             <a href="{{ $urlBack }}">Retour à la page précédente</a>
+                             @endif
                             </div>
                             {{-- <div class="cart-clear">
                             <button>Update Shopping Cart</button>

@@ -135,23 +135,33 @@
                                                 FCFA
                                             </span>
                                         </div>
+
+                                        @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                                        <span><span style="color: red" class="text-danger">Produit en rupture</span>
+                                        @else
+                                            <div class="mt-3">
+                                                <button type="button" class="btn btn-danger addCart text-white"
+                                                    data-id="{{ $produit->id }}" style="border-radius: 10px">
+                                                    <i class="fa fa-shopping-cart"></i> Commander
+                                                </button>
+                                            </div>
+                                    @endif
                                     </div>
                                 </div>
                             </div>
-
-                            
                         @endforeach
-                       
+
                     </div>
                     <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-5">
-                        <a href="{{ route('produit' , 'bar') }}" class="btn btn-danger w-auto text-white fw-bolder" style=" border-radius: 10px ; ">
+                        <a href="{{ route('produit', 'bar') }}" class="btn btn-danger w-auto text-white fw-bolder"
+                            style=" border-radius: 10px ; ">
                             Affichez plus de boissons <i class="fa fa-caret-right"></i>
                         </a>
-    
+
                     </div>
                 </div>
 
-               
+
                 <div id="tab3" class="tab-pane active">
                     <div class="row">
                         @foreach ($produitsMenu as $produit)
@@ -177,16 +187,26 @@
                                         <div class="product-price-wrapper">
                                             <span> {{ number_format($produit->prix, 0, ',', ' ') }} FCFA</span>
                                         </div>
+
+                                        @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                                        <span><span style="color: red" class="text-danger">Produit en rupture</span>
+                                        @else
+                                            <div class="mt-3">
+                                                <button type="button" class="btn btn-danger addCart text-white"
+                                                    data-id="{{ $produit->id }}" style="border-radius: 10px">
+                                                    <i class="fa fa-shopping-cart"></i> Commander
+                                                </button>
+                                            </div>
+                                    @endif
                                     </div>
                                 </div>
                             </div>
-                          
-                            
                         @endforeach
                     </div>
 
                     <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-4">
-                        <a href="{{ route('produit', 'cuisine-interne') }}" class="btn btn-danger w-auto text-white fw-bolder" style="border-radius: 10px;">
+                        <a href="{{ route('produit', 'cuisine-interne') }}"
+                            class="btn btn-danger w-auto text-white fw-bolder" style="border-radius: 10px;">
                             Affichez plus de Plats <i class="fa fa-caret-right"></i>
                         </a>
                     </div>
@@ -263,6 +283,18 @@
                                                 @endif --}}
                                                 <span>{{ number_format($produit->prix, 0, ',', ' ') }} FCFA</span>
                                             </div>
+
+                                            @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                                                <span><span style="color: red" class="text-danger">Produit en rupture</span>
+                                                @else
+                                                    <div class="mt-3">
+                                                        <button type="button" class="btn btn-danger addCart text-white"
+                                                            data-id="{{ $produit->id }}" style="border-radius: 10px">
+                                                            <i class="fa fa-shopping-cart"></i> Commander
+                                                        </button>
+                                                    </div>
+                                            @endif
+
                                         </div>
                                     </div>
                                 @endforeach

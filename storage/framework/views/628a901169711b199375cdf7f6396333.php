@@ -127,23 +127,33 @@
                                                 FCFA
                                             </span>
                                         </div>
+
+                                        <?php if($produit->stock == 0 && $produit->categorie->famille == 'bar'): ?>
+                                        <span><span style="color: red" class="text-danger">Produit en rupture</span>
+                                        <?php else: ?>
+                                            <div class="mt-3">
+                                                <button type="button" class="btn btn-danger addCart text-white"
+                                                    data-id="<?php echo e($produit->id); ?>" style="border-radius: 10px">
+                                                    <i class="fa fa-shopping-cart"></i> Commander
+                                                </button>
+                                            </div>
+                                    <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
-
-                            
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                       
+
                     </div>
                     <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-5">
-                        <a href="<?php echo e(route('produit' , 'bar')); ?>" class="btn btn-danger w-auto text-white fw-bolder" style=" border-radius: 10px ; ">
+                        <a href="<?php echo e(route('produit', 'bar')); ?>" class="btn btn-danger w-auto text-white fw-bolder"
+                            style=" border-radius: 10px ; ">
                             Affichez plus de boissons <i class="fa fa-caret-right"></i>
                         </a>
-    
+
                     </div>
                 </div>
 
-               
+
                 <div id="tab3" class="tab-pane active">
                     <div class="row">
                         <?php $__currentLoopData = $produitsMenu; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -169,16 +179,26 @@
                                         <div class="product-price-wrapper">
                                             <span> <?php echo e(number_format($produit->prix, 0, ',', ' ')); ?> FCFA</span>
                                         </div>
+
+                                        <?php if($produit->stock == 0 && $produit->categorie->famille == 'bar'): ?>
+                                        <span><span style="color: red" class="text-danger">Produit en rupture</span>
+                                        <?php else: ?>
+                                            <div class="mt-3">
+                                                <button type="button" class="btn btn-danger addCart text-white"
+                                                    data-id="<?php echo e($produit->id); ?>" style="border-radius: 10px">
+                                                    <i class="fa fa-shopping-cart"></i> Commander
+                                                </button>
+                                            </div>
+                                    <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
-                          
-                            
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
 
                     <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-4">
-                        <a href="<?php echo e(route('produit', 'cuisine-interne')); ?>" class="btn btn-danger w-auto text-white fw-bolder" style="border-radius: 10px;">
+                        <a href="<?php echo e(route('produit', 'cuisine-interne')); ?>"
+                            class="btn btn-danger w-auto text-white fw-bolder" style="border-radius: 10px;">
                             Affichez plus de Plats <i class="fa fa-caret-right"></i>
                         </a>
                     </div>
@@ -245,6 +265,18 @@
                                                 
                                                 <span><?php echo e(number_format($produit->prix, 0, ',', ' ')); ?> FCFA</span>
                                             </div>
+
+                                            <?php if($produit->stock == 0 && $produit->categorie->famille == 'bar'): ?>
+                                                <span><span style="color: red" class="text-danger">Produit en rupture</span>
+                                                <?php else: ?>
+                                                    <div class="mt-3">
+                                                        <button type="button" class="btn btn-danger addCart text-white"
+                                                            data-id="<?php echo e($produit->id); ?>" style="border-radius: 10px">
+                                                            <i class="fa fa-shopping-cart"></i> Commander
+                                                        </button>
+                                                    </div>
+                                            <?php endif; ?>
+
                                         </div>
                                     </div>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

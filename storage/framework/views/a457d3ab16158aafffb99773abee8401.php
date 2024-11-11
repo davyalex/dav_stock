@@ -22,9 +22,9 @@
                                     <h4 class="shop-sidebar-title">MENU </small></h4>
                                     <div class="shop-catigory">
                                         
-        
+
                                         <?php echo $__env->make('site.sections.categorie.categorieproduit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-        
+
                                     </div>
                                 </div>
                             </div>
@@ -40,7 +40,9 @@
                                             <!-- Image du produit -->
                                             <div class="product-image me-3">
                                                 <div style="width: 150px; height: 150px; overflow: hidden;">
-                                                    <img src="<?php echo e($details['image']); ?>" class="img-fluid" style="object-fit: cover; width: 100%; height: 100%;" alt="Produit 2">
+                                                    <img src="<?php echo e($details['image']); ?>" class="img-fluid"
+                                                        style="object-fit: cover; width: 100%; height: 100%;"
+                                                        alt="Produit 2">
                                                 </div>
                                             </div>
                                             <!-- Détails du produit -->
@@ -103,9 +105,16 @@
                                 <h5>Montant du panier <span class="totalPrice">
                                         <?php echo e(number_format(session('totalPrice'), 0, ',', ' ')); ?> FCFA </span></h5>
 
-                              
+
                                 <h4 class="grand-totall-title">Total: <span class="totalPrice">
                                         <?php echo e(number_format(session('totalPrice'), 0, ',', ' ')); ?> FCFA </span></h4>
+
+
+                                <div class="cart-shiping-update mb-3">
+                                    <a href="<?php echo e(route('accueil')); ?>">Continuer mes achats</a>
+                                </div>
+
+
                                 <?php if(auth()->guard()->check()): ?>
                                     <a href="<?php echo e(route('cart.checkout')); ?>" id="btnnext">Finaliser ma commande</a>
                                 <?php endif; ?>
@@ -121,7 +130,9 @@
                     <div class="col-lg-12">
                         <div class="cart-shiping-update-wrapper">
                             <div class="cart-shiping-update">
-                                <a href="<?php echo e(route('accueil')); ?>">Continuer mes achats</a>
+                             <?php if($urlBack = url()->previous()): ?>
+                             <a href="<?php echo e($urlBack); ?>">Retour à la page precedente</a>
+                             <?php endif; ?>
                             </div>
                             
                         </div>

@@ -120,17 +120,21 @@
                                                     <a href="#"> {{ $produit->nom }} </a>
                                                 </h4>
                                                 <div class="product-price-wrapper">
-                                                    <span>{{number_format($produit->prix, 0, ',', ' ') }} FCFA</span>
+                                                    <span>{{ number_format($produit->prix, 0, ',', ' ') }} FCFA</span>
                                                     {{-- <span class="product-price-old">$120.00 </span> --}}
                                                 </div>
 
-                                                <div class="mt-3">
-                                                    <button type="button" class="btn btn-danger addCart text-white"
-                                                        data-id="{{ $produit->id }}"
-                                                        style="border-radius: 10px">
-                                                       <i class="fa fa-shopping-cart"></i>  Commander
-                                                    </button>
-                                                </div>
+                                                @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                                                <span>Produit en rupture de stock</span>
+                                                @else
+                                                    <div class="mt-3">
+                                                        <button type="button" class="btn btn-danger addCart text-white"
+                                                            data-id="{{ $produit->id }}" style="border-radius: 10px">
+                                                            <i class="fa fa-shopping-cart"></i> Commander
+                                                        </button>
+                                                    </div>
+                                                @endif
+
                                             </div>
                                         </div>
                                     </div>
