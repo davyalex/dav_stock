@@ -287,7 +287,7 @@
                                             @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
                                                 <span><span style="color: red" class="text-danger">Produit en rupture</span>
                                                 @else
-                                                    <div class="mt-3">
+                                                    <div class="my-2">
                                                         <button type="button" class="btn btn-danger addCart text-white"
                                                             data-id="{{ $produit->id }}" style="border-radius: 10px">
                                                             <i class="fa fa-shopping-cart"></i> Commander

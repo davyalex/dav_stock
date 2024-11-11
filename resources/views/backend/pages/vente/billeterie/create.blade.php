@@ -24,7 +24,7 @@
                                 <div class="card">
 
 
-                                    <!-- ========== Start Variante ========== -->
+                                    <!-- ========== Start Monnaie ========== -->
                                     <div class="container my-4 divVariante">
 
                                         <div class="col-12 d-flex justify-content-center">
@@ -81,12 +81,12 @@
 
                                             </div>
                                         </div>
-                                        <button type="button" class="btn btn-primary mb-3" id="add-variante">Ajouter
+                                        <button type="button" class="btn btn-primary mb-3" id="add-monnaie">Ajouter
                                         </button>
 
                                     </div>
 
-                                    <!-- ========== End Variante ========== -->
+                                    <!-- ========== End Monnaie ========== -->
 
 
                                 </div>
@@ -94,14 +94,14 @@
                             <!-- end card -->
                         </div>
                         <!-- end col -->
-
+                        <div class="text-end mb-3">
+                            <button type="submit" class="btn btn-success w-lg">Enregistrer</button>
+                        </div>
+                    </form>
                 </div>
                 <!-- end row -->
                 <!-- end card -->
-                <div class="text-end mb-3">
-                    <button type="submit" class="btn btn-success w-lg">Enregistrer</button>
-                </div>
-                </form>
+
             </div>
         </div><!-- end row -->
     </div><!-- end col -->
@@ -122,12 +122,19 @@
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
     <script>
-        //cacher la div variante par defaut
-        // $('.divVariante').hide();
+        // recuperer les donnees depuis le controller
+        var typeMonnaieData = @json($type_monnaies);
+        var billetData = @json($billets);
+        var pieceData = @json($pieces);
+
+        console.log(typeMonnaieData, billetData, pieceData);
+
+
+
         //gestion des variantes
         let varianteIndex = 1;
 
-        document.getElementById('add-variante').addEventListener('click', function() {
+        document.getElementById('add-monnaie').addEventListener('click', function() {
             const container = document.getElementById('variantes-container');
             const newRow = document.createElement('div');
             newRow.classList.add('row', 'variante-row', 'mb-4');
@@ -233,4 +240,7 @@
         });
     </script>
 @endsection
+
+
+
 @endsection
