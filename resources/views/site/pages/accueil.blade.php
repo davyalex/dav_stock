@@ -153,7 +153,7 @@
 
                     </div>
                     <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-5">
-                        <a href="{{ route('produit', 'bar') }}" class="btn btn-danger w-auto text-white fw-bolder"
+                        <a href="{{ route('produit', 'bar') }}" class="btn btn-dark w-auto text-white fw-bolder"
                             style=" border-radius: 10px ; ">
                             Affichez plus de boissons <i class="fa fa-caret-right"></i>
                         </a>
@@ -206,7 +206,7 @@
 
                     <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-4">
                         <a href="{{ route('produit', 'cuisine-interne') }}"
-                            class="btn btn-danger w-auto text-white fw-bolder" style="border-radius: 10px;">
+                            class="btn btn-dark w-auto text-white fw-bolder" style="border-radius: 10px;">
                             Affichez plus de Plats <i class="fa fa-caret-right"></i>
                         </a>
                     </div>
