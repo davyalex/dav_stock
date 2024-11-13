@@ -135,13 +135,22 @@
     {{-- <script src="{{URL::asset('myJs/js/delete_row.js')}}"></script> --}}
 
     <script>
-        var table = $('#buttons-datatables').DataTable();
-        // Callback après chaque redessin de la table (pagination, filtrage, tri, etc.)
-        table.on('draw', function() {
-            $(document).ready(function() {
-                var route = "produit"
+        $(document).ready(function() {
+
+            // Vérifiez si la DataTable est déjà initialisée
+            if ($.fn.dataTable.isDataTable('#buttons-datatables')) {
+                // Si déjà initialisée, détruisez l'instance existante
+                $('#buttons-datatables').DataTable().destroy();
+            }
+
+            // Initialisez la DataTable
+            var table = $('#buttons-datatables').DataTable();
+
+            // Callback après chaque redessin de la table (pagination, filtrage, tri, etc.)
+            table.on('draw', function() {
+                var route = "produit";
                 delete_row(route);
-            })
+            });
         });
     </script>
     {{-- <script>
