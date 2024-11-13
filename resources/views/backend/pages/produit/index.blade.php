@@ -117,7 +117,7 @@
 @section('script')
     {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> --}}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
 
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
@@ -135,10 +135,14 @@
     {{-- <script src="{{URL::asset('myJs/js/delete_row.js')}}"></script> --}}
 
     <script>
-        $(document).ready(function() {
-            var route = "produit"
-            delete_row(route);
-        })
+        var table = $('#buttons-datatables').DataTable();
+        // Callback après chaque redessin de la table (pagination, filtrage, tri, etc.)
+        table.on('draw', function() {
+            $(document).ready(function() {
+                var route = "produit"
+                delete_row(route);
+            })
+        });
     </script>
     {{-- <script>
         $(document).ready(function() {
