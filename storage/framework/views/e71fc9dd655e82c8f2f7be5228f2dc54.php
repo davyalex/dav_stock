@@ -118,7 +118,7 @@
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>
     
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
 
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
@@ -137,9 +137,44 @@
 
     <script>
         $(document).ready(function() {
-            var route = "produit"
-            delete_row(route);
-        })
+
+            // Vérifiez si la DataTable est déjà initialisée
+            if ($.fn.DataTable.isDataTable('#buttons-datatables')) {
+                // Si déjà initialisée, détruisez l'instance existante
+                $('#buttons-datatables').DataTable().destroy();
+            }
+
+            // Initialisez la DataTable avec les options et le callback
+            var table = $('#buttons-datatables').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+
+                // Utilisez drawCallback pour exécuter delete_row après chaque redessin
+                drawCallback: function(settings) {
+                    var route = "produit";
+                    delete_row(route);
+                }
+            });
+
+
+
+            // // Vérifiez si la DataTable est déjà initialisée
+            // if ($.fn.dataTable.isDataTable('#buttons-datatables')) {
+            //     // Si déjà initialisée, détruisez l'instance existante
+            //     $('#buttons-datatables').DataTable().destroy();
+            // }
+
+            // // Initialisez la DataTable
+            // var table = $('#buttons-datatables').DataTable();
+
+            // // Callback après chaque redessin de la table (pagination, filtrage, tri, etc.)
+            // table.on('draw', function() {
+            //     var route = "produit";
+            //     delete_row(route);
+            // });
+        });
     </script>
     
 <?php $__env->stopSection(); ?>

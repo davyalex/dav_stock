@@ -138,19 +138,41 @@
         $(document).ready(function() {
 
             // Vérifiez si la DataTable est déjà initialisée
-            if ($.fn.dataTable.isDataTable('#buttons-datatables')) {
+            if ($.fn.DataTable.isDataTable('#buttons-datatables')) {
                 // Si déjà initialisée, détruisez l'instance existante
                 $('#buttons-datatables').DataTable().destroy();
             }
 
-            // Initialisez la DataTable
-            var table = $('#buttons-datatables').DataTable();
+            // Initialisez la DataTable avec les options et le callback
+            var table = $('#buttons-datatables').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
 
-            // Callback après chaque redessin de la table (pagination, filtrage, tri, etc.)
-            table.on('draw', function() {
-                var route = "produit";
-                delete_row(route);
+                // Utilisez drawCallback pour exécuter delete_row après chaque redessin
+                drawCallback: function(settings) {
+                    var route = "produit";
+                    delete_row(route);
+                }
             });
+
+
+
+            // // Vérifiez si la DataTable est déjà initialisée
+            // if ($.fn.dataTable.isDataTable('#buttons-datatables')) {
+            //     // Si déjà initialisée, détruisez l'instance existante
+            //     $('#buttons-datatables').DataTable().destroy();
+            // }
+
+            // // Initialisez la DataTable
+            // var table = $('#buttons-datatables').DataTable();
+
+            // // Callback après chaque redessin de la table (pagination, filtrage, tri, etc.)
+            // table.on('draw', function() {
+            //     var route = "produit";
+            //     delete_row(route);
+            // });
         });
     </script>
     {{-- <script>

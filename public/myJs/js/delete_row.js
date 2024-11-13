@@ -1,4 +1,4 @@
-function delete_row(route ) {
+function delete_row(route){
     $('.delete').on("click", function(e) {
         e.preventDefault();
         var Id = $(this).attr('data-id');
