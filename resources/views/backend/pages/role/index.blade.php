@@ -107,8 +107,28 @@
 
     <script>
         $(document).ready(function(){
-         var route = "role"
-         delete_row(route);
+         // Vérifiez si la DataTable est déjà initialisée
+         if ($.fn.DataTable.isDataTable('#buttons-datatables')) {
+                // Si déjà initialisée, détruisez l'instance existante
+                $('#buttons-datatables').DataTable().destroy();
+            }
+
+            // Initialisez la DataTable avec les options et le callback
+            var table = $('#buttons-datatables').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+
+                // Utilisez drawCallback pour exécuter delete_row après chaque redessin
+                drawCallback: function(settings) {
+                    var route = "role"
+                    delete_row(route);
+                }
+            });
+
+
+
         })
      </script>
 @endsection
