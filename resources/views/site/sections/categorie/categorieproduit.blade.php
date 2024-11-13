@@ -36,9 +36,6 @@
                     @endif
                 </a>
             @endif
-
-            
-
         
         </li>
     @endforeach

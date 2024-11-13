@@ -129,7 +129,7 @@
                                 <option value="wave">Wave</option>
                                 <option value="visa">Visa</option>
                                 <option value="mastercard">MasterCard</option>
-                                <option value="espece">Espèce</option>
+                                <option value="espece" selected>Espèce</option>
                             </select>
                         </div>
 

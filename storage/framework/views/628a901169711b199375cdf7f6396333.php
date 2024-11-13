@@ -145,7 +145,7 @@
 
                     </div>
                     <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-5">
-                        <a href="<?php echo e(route('produit', 'bar')); ?>" class="btn btn-danger w-auto text-white fw-bolder"
+                        <a href="<?php echo e(route('produit', 'bar')); ?>" class="btn btn-dark w-auto text-white fw-bolder"
                             style=" border-radius: 10px ; ">
                             Affichez plus de boissons <i class="fa fa-caret-right"></i>
                         </a>
@@ -183,7 +183,7 @@
                                         <?php if($produit->stock == 0 && $produit->categorie->famille == 'bar'): ?>
                                         <span><span style="color: red" class="text-danger">Produit en rupture</span>
                                         <?php else: ?>
-                                            <div class="mt-3">
+                                            <div class="mt-2 mb-3">
                                                 <button type="button" class="btn btn-danger addCart text-white"
                                                     data-id="<?php echo e($produit->id); ?>" style="border-radius: 10px">
                                                     <i class="fa fa-shopping-cart"></i> Commander
@@ -198,7 +198,7 @@
 
                     <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-4">
                         <a href="<?php echo e(route('produit', 'cuisine-interne')); ?>"
-                            class="btn btn-danger w-auto text-white fw-bolder" style="border-radius: 10px;">
+                            class="btn btn-dark w-auto text-white fw-bolder" style="border-radius: 10px;">
                             Affichez plus de Plats <i class="fa fa-caret-right"></i>
                         </a>
                     </div>
