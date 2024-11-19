@@ -88,13 +88,13 @@
                             aria-controls="sidebarConfiguration">
                             <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
                         </a>
-                        <div class="collapse menu-dropdown <?php echo e(Route::is('categorie.*') || Route::is('produit.*') || Route::is('fournisseur.*') || Route::is('admin-register.*') || Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*')  ? 'show' : ''); ?>"
+                        <div class="collapse menu-dropdown <?php echo e(Route::is('categorie.*') || Route::is('produit.*') || Route::is('fournisseur.*') || Route::is('admin-register.*') || Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*') ? 'show' : ''); ?>"
                             id="sidebarConfiguration">
                             <ul class="nav nav-sm flex-column">
 
 
 
-                             
+
 
 
                                 <li class="nav-item active">
@@ -252,35 +252,35 @@
 
 
 
-             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-site')): ?>
-             <li class="nav-item">
-                <a class="nav-link menu-link" href="#sidebarSite" data-bs-toggle="collapse" role="button"
-                    aria-controls="sidebarSite">
-                    <i class="ri ri-global-fill"></i> <span>SITE</span>
-                </a>
-                <div class="collapse menu-dropdown <?php echo e(Route::is('menu.*') || Route::is('plat.*')  || Route::is('slide.*') ? 'show' : ''); ?>" id="sidebarSite">
-                    <ul class="nav nav-sm flex-column">
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-site')): ?>
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sidebarSite" data-bs-toggle="collapse" role="button"
+                            aria-controls="sidebarSite">
+                            <i class="ri ri-global-fill"></i> <span>SITE</span>
+                        </a>
+                        <div class="collapse menu-dropdown <?php echo e(Route::is('menu.*') || Route::is('plat.*') || Route::is('slide.*') ? 'show' : ''); ?>"
+                            id="sidebarSite">
+                            <ul class="nav nav-sm flex-column">
 
-                        <li class="nav-item active">
-                            <a href="<?php echo e(route('plat.index')); ?>"
-                                class="nav-link <?php echo e(Route::is('plat.*') ? 'active' : ''); ?>">Produit menu</a>
-                        </li>
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('plat.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('plat.*') ? 'active' : ''); ?>">Produit menu</a>
+                                </li>
 
-                        <li class="nav-item active">
-                            <a href="<?php echo e(route('menu.index')); ?>"
-                                class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Menu</a>
-                        </li>
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('menu.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Menu</a>
+                                </li>
 
-                        <li class="nav-item active">
-                            <a href="<?php echo e(route('slide.index')); ?>"
-                                class="nav-link <?php echo e(Route::is('slide.*') ? 'active' : ''); ?>">Slides</a>
-                        </li>
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('slide.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('slide.*') ? 'active' : ''); ?>">Slides</a>
+                                </li>
 
-                    </ul>
-                </div>
-            </li>
-
-             <?php endif; ?>
+                            </ul>
+                        </div>
+                    </li>
+                <?php endif; ?>
                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-rapport')): ?>
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sideBarRapport" data-bs-toggle="collapse" role="button"
@@ -307,6 +307,30 @@
                         </div>
                     </li>
                 <?php endif; ?>
+
+
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-rapport')): ?>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sideBarMenu" data-bs-toggle="collapse" role="button"
+                        aria-controls="sideBarMenu">
+                        <i class="ri ri-file-list-line"></i> <span>GESTION DES MENUS</span>
+                    </a>
+                    <div class="collapse menu-dropdown <?php echo e(Route::is('rapport.*') || Route::is('categorie-menu.*')  ? 'show' : ''); ?>"
+                        id="sideBarMenu">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('categorie-menu.index')); ?>"
+                                    class="nav-link <?php echo e(Route::is('categorie-menu') ? 'active' : ''); ?>">
+                                    Categories</a>
+                            </li>
+                            <li class="nav-item active">
+                                <a href="<?php echo e(route('rapport.exploitation')); ?>"
+                                    class="nav-link <?php echo e(Route::is('rapport.exploitation') ? 'active' : ''); ?>">Exploitation</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            <?php endif; ?>
 
                 <?php if(Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur' || Auth::user()->can('voir-permission')): ?>
                     <li class="nav-item">

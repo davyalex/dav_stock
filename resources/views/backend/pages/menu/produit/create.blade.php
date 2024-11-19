@@ -52,8 +52,7 @@
                                                 <label class="form-label" for="meta-title-input">prix <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="number" name="prix" class="form-control" id="prix"
-                                                    required>
+                                                <input type="number" name="prix" class="form-control" id="prix">
                                             </div>
 
 
@@ -99,7 +98,7 @@
                                                             </div>
                                                         </label>
                                                         <input class="form-control d-none" id="product-image-input"
-                                                            type="file" name="imagePrincipale" accept="image/*" required>
+                                                            type="file" name="imagePrincipale" accept="image/*">
                                                         <div class="invalid-feedback">Ajouter une image</div>
                                                     </div>
                                                     <div class="avatar-lg">
@@ -203,9 +202,10 @@
             $('#formSend').on('submit', function(e) {
 
                 // on verifie si une image principale à éte inseré
-                if ($('#product-image-input').val() === '') {
-                    e.preventDefault();
-                } else {
+                // if ($('#product-image-input').val() === '') {
+                //     e.preventDefault();
+                // } else {
+                
                     e.preventDefault();
                     var formData = new FormData(this);
 
@@ -255,7 +255,7 @@
                         },
 
                     });
-                }
+                // }
 
 
             });

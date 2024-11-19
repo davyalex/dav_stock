@@ -128,6 +128,16 @@ class Produit extends Model implements HasMedia
         return $this->belongsToMany(Menu::class, 'menu_produit')->withTimestamps();
     }
 
+
+     // Relation avec les compléments
+     public function complements()
+     {
+         return $this->belongsToMany(Produit::class, 'produit_complement', 'produit_id', 'complement_id')
+         ->withPivot('menu_id')
+         ->withTimestamps();
+     }
+ 
+
     public function commandes(): BelongsToMany
     {
         return $this->belongsToMany(Commande::class)->withPivot(['quantite', 'prix_unitaire', 'total'])->withTimestamps();

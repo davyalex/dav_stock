@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\backend\menu;
 
 use App\Models\Menu;
+use App\Models\Produit;
 use App\Models\Categorie;
 use App\Models\ProduitMenu;
 use Illuminate\Http\Request;
@@ -28,14 +29,18 @@ class MenuController extends Controller
     {
         try {
 
-            $data_categorie_produit = Categorie::with('children')
-                ->whereNull('parent_id')
-                ->whereIn('famille', ['menu', 'bar'])
+            $data_categorie_menu = Categorie::with(['children', 'produits'])
+                ->whereNotNull('parent_id')
+                ->whereIn('famille', ['menu'])
+                ->whereNotIn('slug', ['complements'])
+                ->orderBy('position', 'ASC')
                 ->get();
 
-            // dd($data_categorie_produit->toArray());
+            $categorie_complements = Categorie::with('produits')->where('slug', 'complements')->first();
 
-            return view('backend.pages.menu.create', compact('data_categorie_produit'));
+            // dd($categorie_complements->toArray());
+
+            return view('backend.pages.menu.create', compact('data_categorie_menu', 'categorie_complements'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -45,12 +50,24 @@ class MenuController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+
+
+            // dd($request->toArray());
+
+            // Valider les données
+
+
+            $validatedData = $request->validate([
                 'date_menu' => 'required|unique:menus',
+                'produits' => 'required|array',
+                'produits.*.selected' => 'boolean',
+                'produits.*.complements' => 'nullable|array',
             ], [
                 'date_menu.required' => 'La date du menu est requise.',
                 'date_menu.unique' => 'Un menu a déjà été crée pour cette date men, Vous pouvez la modifier.',
             ]);
+
+
 
 
             // $dateExistante = Menu::where('date_menu', $request->date_menu)->exists();
@@ -59,18 +76,53 @@ class MenuController extends Controller
             //     return back();
             // }
 
-            
+
 
             $libelle = $request['libelle'] ? $request['libelle'] : 'Menu du ' . $request->date_menu;
 
-            $data_menu = Menu::firstOrCreate([
+            $menu = Menu::firstOrCreate([
                 'date_menu' => $request->date_menu,
                 'libelle' => $libelle,
                 'user_id' => Auth::id(),
             ]);
 
             //method attach product with menu 
-            $data_menu->produits()->sync($request['produits']);
+            // $menu->produits()->sync($validatedData['produits']);
+
+            // Parcourir les produits et enregistrer leur composition
+            // foreach ($validatedData['produits'] as $produitId => $produitData) {
+            //     if (isset($produitData['selected']) && $produitData['selected']) {
+            //         // Ajouter le produit au menu
+            //         $menu->produits()->attach($produitId);
+
+            //         // Si des compléments sont sélectionnés, les enregistrer
+            //         if (!empty($produitData['complements'])) {
+            //             $produit = Produit::find($produitId);
+            //             $produit->complements()->syncWithoutDetaching($produitData['complements'], ['menu_id' => $menu->id]);
+            //         }
+            //     }
+            // }
+
+
+            foreach ($validatedData['produits'] as $produitId => $produitData) {
+                if (isset($produitData['selected']) && $produitData['selected']) {
+                    // Ajouter le produit au menu
+                    $menu->produits()->sync($produitId);
+
+                    // Si des compléments sont sélectionnés, les enregistrer
+                    if (!empty($produitData['complements'])) {
+                        $complements = [];
+                        foreach ($produitData['complements'] as $complementId) {
+                            $complements[$complementId] = ['menu_id' => $menu->id];
+                        }
+
+                        // Ajouter les compléments avec les données supplémentaires
+                        $produit = Produit::find($produitId);
+                        $produit->complements()->sync($complements);
+                    }
+                }
+            }
+
 
             Alert::success('Operation réussi', 'Success Message');
             return back();
@@ -84,10 +136,19 @@ class MenuController extends Controller
     public function edit($id)
     {
         try {
-            $data_categorie_produit = Categorie::with('children')
-                ->whereNull('parent_id')
-                ->whereIn('famille', ['menu', 'bar'])
+            // $data_categorie_menu = Categorie::with('children')
+            //     ->whereNull('parent_id')
+            //     ->whereIn('famille', ['menu', 'bar'])
+            //     ->get();
+
+            $data_categorie_menu = Categorie::with(['children', 'produits'])
+                ->whereNotNull('parent_id')
+                ->whereIn('famille', ['menu'])
+                ->whereNotIn('slug', ['complements'])
+                ->orderBy('position', 'ASC')
                 ->get();
+
+            $categorie_complements = Categorie::with('produits')->where('slug', 'complements')->first();
 
             $data_menu = Menu::findOrFail($id);
             if (!$data_menu) {
@@ -96,7 +157,7 @@ class MenuController extends Controller
 
             //    dd($data_produit->produit_menu->toArray());
 
-            return view('backend.pages.menu.edit', compact('data_categorie_produit', 'data_menu'));
+            return view('backend.pages.menu.edit', compact('data_categorie_menu', 'data_menu', 'categorie_complements'));
         } catch (\Throwable $e) {
             Alert::error($e->getMessage(),  'Une erreur s\'est produite');
             return back();

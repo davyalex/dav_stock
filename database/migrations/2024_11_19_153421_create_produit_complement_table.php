@@ -11,27 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('menu_produit', function (Blueprint $table) {
+        Schema::create('produit_complement', function (Blueprint $table) {
             $table->id();
-
-            //foreign table
-            $table->foreignId('menu_id')
-                ->nullable()
-                ->constrained('menus')
-                ->onUpdate('cascade')
-                ->onDelete('cascade ');
-
-            //foreign table
             $table->foreignId('produit_id')
                 ->nullable()
                 ->constrained('produits')
                 ->onUpdate('cascade')
-                ->onDelete('cascade ');
+                ->onDelete('cascade');
 
 
+            $table->foreignId('complement_id')
+                ->nullable()
+                ->constrained('produits') // Un complément est aussi un produit.
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
-                $table->softDeletes();
-
+            $table->foreignId('menu_id')
+                ->nullable()
+                ->constrained('menus')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -41,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('menu_produit');
+        Schema::dropIfExists('produit_complement');
     }
 };

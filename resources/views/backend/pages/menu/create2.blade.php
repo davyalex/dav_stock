@@ -88,7 +88,7 @@
                         }
                     }
 
-                    //disabled and enable button save 
+                    //disabled and enable button 
                     if (checkedItems.length > 0) {
                         $('#btnSubmit').prop('disabled', false);
                     } else {

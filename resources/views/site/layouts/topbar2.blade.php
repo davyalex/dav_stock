@@ -87,7 +87,7 @@
                             <div class="cart-text">
                                 <span class="digit">Mon panier</span>
                                 <span
-                                    class="cart-digit-bold totalPrice">{{ session('cart') ? Session::get('totalPrice') : '0' }}
+                                    class="cart-digit-bold totalPrice">{{ number_format(session('cart') ? Session::get('totalPrice') : '0', 0, ',', ' ') }}
                                     FCFA</span>
                             </div>
                         </a>

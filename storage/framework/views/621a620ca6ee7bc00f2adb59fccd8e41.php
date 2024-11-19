@@ -80,7 +80,7 @@
 
     <script>
         $(document).ready(function() {
-            var route = "depense"
+            var route = "sortie";
             delete_row(route);
         })
     </script>

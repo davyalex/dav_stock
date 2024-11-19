@@ -30,6 +30,7 @@ use App\Http\Controllers\backend\stock\EtatStockController;
 use App\Http\Controllers\backend\stock\AjustementController;
 use App\Http\Controllers\backend\stock\InventaireController;
 use App\Http\Controllers\backend\parametre\SettingController;
+use App\Http\Controllers\backend\menu\CategorieMenuController;
 use App\Http\Controllers\backend\categorie\CategorieController;
 use App\Http\Controllers\backend\configuration\CaisseController;
 use App\Http\Controllers\backend\configuration\FormatController;
@@ -393,6 +394,15 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::post('update/{id}', 'update')->name('menu.update');
         route::get('delete/{id}', 'delete')->name('menu.delete');
     });
+
+    // categorie menu
+    Route::prefix('categorie-menu')->controller(CategorieMenuController::class)->group(function () {
+        route::get('', 'index')->name('categorie-menu.index');
+        route::post('store', 'store')->name('categorie-menu.store');
+        route::post('update/{id}', 'update')->name('categorie-menu.update');
+        route::get('delete/{id}', 'delete')->name('categorie-menu.delete');
+    });
+
 });
 
 ######################      END BACKEND ROUTE         ###########################################################

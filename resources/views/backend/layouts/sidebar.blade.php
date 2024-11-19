@@ -97,13 +97,13 @@
                             aria-controls="sidebarConfiguration">
                             <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
                         </a>
-                        <div class="collapse menu-dropdown {{ Route::is('categorie.*') || Route::is('produit.*') || Route::is('fournisseur.*') || Route::is('admin-register.*') || Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*')  ? 'show' : '' }}"
+                        <div class="collapse menu-dropdown {{ Route::is('categorie.*') || Route::is('produit.*') || Route::is('fournisseur.*') || Route::is('admin-register.*') || Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*') ? 'show' : '' }}"
                             id="sidebarConfiguration">
                             <ul class="nav nav-sm flex-column">
 
 
 
-                             
+
 
 
                                 <li class="nav-item active">
@@ -286,42 +286,42 @@
 
 
 
-             @can('voir-site')
-             <li class="nav-item">
-                <a class="nav-link menu-link" href="#sidebarSite" data-bs-toggle="collapse" role="button"
-                    aria-controls="sidebarSite">
-                    <i class="ri ri-global-fill"></i> <span>SITE</span>
-                </a>
-                <div class="collapse menu-dropdown {{ Route::is('menu.*') || Route::is('plat.*')  || Route::is('slide.*') ? 'show' : '' }}" id="sidebarSite">
-                    <ul class="nav nav-sm flex-column">
+                @can('voir-site')
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sidebarSite" data-bs-toggle="collapse" role="button"
+                            aria-controls="sidebarSite">
+                            <i class="ri ri-global-fill"></i> <span>SITE</span>
+                        </a>
+                        <div class="collapse menu-dropdown {{ Route::is('menu.*') || Route::is('plat.*') || Route::is('slide.*') ? 'show' : '' }}"
+                            id="sidebarSite">
+                            <ul class="nav nav-sm flex-column">
 
-                        <li class="nav-item active">
-                            <a href="{{ route('plat.index') }}"
-                                class="nav-link {{ Route::is('plat.*') ? 'active' : '' }}">Produit menu</a>
-                        </li>
+                                <li class="nav-item active">
+                                    <a href="{{ route('plat.index') }}"
+                                        class="nav-link {{ Route::is('plat.*') ? 'active' : '' }}">Produit menu</a>
+                                </li>
 
-                        <li class="nav-item active">
-                            <a href="{{ route('menu.index') }}"
-                                class="nav-link {{ Route::is('menu.*') ? 'active' : '' }}">Menu</a>
-                        </li>
+                                <li class="nav-item active">
+                                    <a href="{{ route('menu.index') }}"
+                                        class="nav-link {{ Route::is('menu.*') ? 'active' : '' }}">Menu</a>
+                                </li>
 
-                        <li class="nav-item active">
-                            <a href="{{ route('slide.index') }}"
-                                class="nav-link {{ Route::is('slide.*') ? 'active' : '' }}">Slides</a>
-                        </li>
+                                <li class="nav-item active">
+                                    <a href="{{ route('slide.index') }}"
+                                        class="nav-link {{ Route::is('slide.*') ? 'active' : '' }}">Slides</a>
+                                </li>
 
-                    </ul>
-                </div>
-            </li>
-
-             @endcan
+                            </ul>
+                        </div>
+                    </li>
+                @endcan
                 @can('voir-rapport')
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sideBarRapport" data-bs-toggle="collapse" role="button"
                             aria-controls="sideBarRapport">
                             <i class="ri ri-file-list-line"></i> <span>RAPPORTS</span>
                         </a>
-                        <div class="collapse menu-dropdown {{Route::is('rapport.*') ? 'show' : '' }}"
+                        <div class="collapse menu-dropdown {{ Route::is('rapport.*') ? 'show' : '' }}"
                             id="sideBarRapport">
                             <ul class="nav nav-sm flex-column">
 
@@ -351,6 +351,30 @@
                         </div>
                     </li>
                 @endcan
+
+
+                @can('voir-rapport')
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sideBarMenu" data-bs-toggle="collapse" role="button"
+                        aria-controls="sideBarMenu">
+                        <i class="ri ri-file-list-line"></i> <span>GESTION DES MENUS</span>
+                    </a>
+                    <div class="collapse menu-dropdown {{ Route::is('rapport.*') || Route::is('categorie-menu.*')  ? 'show' : '' }}"
+                        id="sideBarMenu">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item active">
+                                <a href="{{ route('categorie-menu.index') }}"
+                                    class="nav-link {{ Route::is('categorie-menu') ? 'active' : '' }}">
+                                    Categories</a>
+                            </li>
+                            <li class="nav-item active">
+                                <a href="{{ route('rapport.exploitation') }}"
+                                    class="nav-link {{ Route::is('rapport.exploitation') ? 'active' : '' }}">Exploitation</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            @endcan
 
                 @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur' || Auth::user()->can('voir-permission'))
                     <li class="nav-item">

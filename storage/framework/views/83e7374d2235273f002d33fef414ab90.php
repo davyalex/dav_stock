@@ -37,6 +37,7 @@
                     <?php endif; ?>
                 </a>
             <?php endif; ?>
+        
         </li>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 </ul>

@@ -52,7 +52,7 @@ class PlatController extends Controller
                 'nom' => 'required|unique:produits',
                 'description' => '',
                 'categorie' => 'required',
-                'prix' => 'required',
+                'prix' => '',
                 'statut' => '',
             ]);
 

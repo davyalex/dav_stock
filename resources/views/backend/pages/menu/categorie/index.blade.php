@@ -16,7 +16,7 @@
             Liste
         @endslot
         @slot('title')
-            Modules
+            Categorie
         @endslot
     @endcomponent
 
@@ -25,9 +25,9 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des modules</h5>
+                    <h5 class="card-title mb-0">Liste des categories</h5>
                     <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#myModal">Créer
-                        un module</button>
+                        une categorie</button>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -35,16 +35,18 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Statut</th>
                                     <th>Nom du module</th>
                                     <th>Date creation</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data_module as $key => $item)
+                                @foreach ($data_CategorieMenu as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
-                                        <td>{{ $item['name'] }}</td>
+                                        <td> {{ $item['statut'] }} </td>
+                                        <td>{{ $item['nom'] }}</td>
                                         <td> {{ $item['created_at'] }} </td>
                                         <td>
                                             <div class="dropdown d-inline-block">
@@ -73,9 +75,9 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    @include('backend.pages.module.edit')
-                                    @endforeach
-                                </tbody>
+                                    @include('backend.pages.menu.categorie.edit')
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -84,7 +86,7 @@
     </div>
     <!--end row-->
 
-    @include('backend.pages.module.create')
+    @include('backend.pages.menu.categorie.create')
 @endsection
 @section('script')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -104,10 +106,10 @@
 
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
-   <script>
-       $(document).ready(function(){
-        var route = "module"
-        delete_row(route);
-       })
+    <script>
+        $(document).ready(function() {
+            var route = "categorie-menu"
+            delete_row(route);
+        })
     </script>
 @endsection
