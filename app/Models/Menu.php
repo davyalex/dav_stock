@@ -33,6 +33,7 @@ class Menu extends Model
     {
         return $this->belongsToMany(Produit::class, 'menu_produit')
         ->where('statut' , 'active')
+        ->withPivot('categorie_menu_id')
         ->withTimestamps();
     }
 

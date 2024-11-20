@@ -102,7 +102,8 @@ class MenuController extends Controller
             foreach ($validatedData['produits'] as $produitId => $produitData) {
                 if (isset($produitData['selected']) && $produitData['selected']) {
                     // Ajouter le produit au menu
-                    $menu->produits()->attach($produitId);
+                    $plat = Produit::find($produitId);
+                    $menu->produits()->attach($produitId, ['categorie_menu_id' =>  $plat->categorie_menu_id]);
 
                     // Si des compléments sont sélectionnés, les enregistrer
                     if (!empty($produitData['complements'])) {

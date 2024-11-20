@@ -46,7 +46,7 @@
                                                 </label>
                                                 <select class="form-control js-example-basic-single"
                                                     name="categorie_menu_id">
-                                                    <option value="" disabled selected>Selectionner</option>
+                                                    <option value=""  selected>Selectionner</option>
 
                                                     @foreach ($data_categorie_menu as $categorie_menu)
                                                         <option value="{{ $categorie_menu->id }}">{{ $categorie_menu->nom }}

@@ -129,7 +129,9 @@ class Produit extends Model implements HasMedia
 
     public function menus()
     {
-        return $this->belongsToMany(Menu::class, 'menu_produit')->withTimestamps();
+        return $this->belongsToMany(Menu::class, 'menu_produit')
+        ->withPivot('categorie_menu_id')
+        ->withTimestamps();
     }
 
 

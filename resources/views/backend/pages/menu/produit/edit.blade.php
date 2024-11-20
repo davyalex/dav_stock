@@ -46,8 +46,8 @@
                                             <div class="mb-3 col-md-4">
                                                 <label class="form-label" for="categorie-menu-input">Categorie menu <span class="text-danger">*</span>
                                                 </label>
-                                                <select class="form-control js-example-basic-single" name="categorie_menu_id" required>
-                                                    <option value="" disabled selected>Selectionner</option>
+                                                <select class="form-control js-example-basic-single" name="categorie_menu_id" >
+                                                    <option value=""  selected>Selectionner</option>
 
                                                     @foreach ($data_categorie_menu as $categorie_menu)
                                                         <option value="{{ $categorie_menu->id }}" {{ $data_plat->categorie_menu_id == $categorie_menu->id ? 'selected' : '' }}>
