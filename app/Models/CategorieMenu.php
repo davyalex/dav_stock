@@ -18,6 +18,7 @@ class CategorieMenu extends Model
         'nom', // unique
         'slug',
         'statut',
+        'position'
     ];
 
     public static function boot()
@@ -41,6 +42,13 @@ class CategorieMenu extends Model
     public function plats()  // produit  plat du menu
     {
         return $this->hasMany(Produit::class )->where('statut' , 'active');
+    }
+
+
+    public function scopeActive($query)
+    {
+        // Retrieve only categories with statut equal to 'active'
+        return $query->where('statut', 'active');
     }
 
 }

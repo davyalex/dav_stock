@@ -39,7 +39,8 @@
                                     <th>statut</th>
                                     <th>Image</th>
                                     <th>Nom</th>
-                                    <th>Categorie</th>
+                                    <th>Categorie principale</th>
+                                    <th>Categorie Menu</th>
                                     <th>prix</th>
                                     <th>crée par</th>
                                     <th>Date creation</th>
@@ -50,13 +51,18 @@
                                 @foreach ($data_plat as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
-                                        <td> {{ $item['statut'] }} </td>
+                                        <td> {{ $item['statut'] }} 
+
+                                            <br>{!! $item['categorieMenu'] ? '<span class="badge bg-success">En menu</span>' : 'Pas en menu' !!}
+
+                                        </td>
                                         <td>
                                             <img class="rounded-circle" src="{{ $item->getFirstMediaUrl('ProduitImage') }}"
                                                 width="50px" alt="">
                                         </td>
                                         <td>{{ $item['nom'] }}</td>
                                         <td>{{ $item['categorie']['name'] ?? '' }}</td>
+                                        <td>{{ $item['categorieMenu']['nom'] ?? 'Pas en menu' }}</td>
                                         <td>{{ $item['prix'] }}</td>
                                         <td>{{ $item['user']['first_name'] }}</td>
                                         <td> {{ $item['created_at'] }} </td>

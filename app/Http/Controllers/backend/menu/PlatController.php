@@ -10,6 +10,7 @@ use App\Models\Fournisseur;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\CategorieMenu;
 use Illuminate\Support\Facades\Auth;
 
 class PlatController extends Controller
@@ -35,10 +36,12 @@ class PlatController extends Controller
                 ->whereIn('famille', ['menu'])
                 ->OrderBy('position', 'ASC')->get();
 
+            $data_categorie_menu = CategorieMenu::get();
 
-            // dd($plat->toArray());
 
-            return view('backend.pages.menu.produit.create', compact('data_categorie'));
+            // dd($data_categorie_menu->toArray());
+
+            return view('backend.pages.menu.produit.create', compact('data_categorie', 'data_categorie_menu'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -53,6 +56,7 @@ class PlatController extends Controller
                 'nom' => 'required|unique:produits',
                 'description' => '',
                 'categorie' => 'required',
+                'categorie_menu_id' => '',
                 'prix' => '',
                 'statut' => '',
             ]);
@@ -75,6 +79,7 @@ class PlatController extends Controller
                 'code' =>  $sku,
                 'description' => $request['description'],
                 'categorie_id' => $request['categorie'],
+                'categorie_menu_id' => $request['categorie_menu_id'],
                 'prix' => $request['prix'],
                 'type_id' =>   $principaCat['id'], // type produit
                 'statut' => $statut,
@@ -134,6 +139,9 @@ class PlatController extends Controller
                 ->whereIn('famille', ['menu'])
                 ->OrderBy('position', 'ASC')->get();
 
+            $data_categorie_menu = CategorieMenu::get();
+
+
             $data_plat = Produit::find($id);
 
             //get Image from database
@@ -151,7 +159,7 @@ class PlatController extends Controller
             // dd($galleryProduit);
 
             $id = $id;
-            return view('backend.pages.menu.produit.edit', compact('data_plat', 'data_categorie', 'galleryProduit', 'id'));
+            return view('backend.pages.menu.produit.edit', compact('data_plat', 'data_categorie', 'galleryProduit', 'id', 'data_categorie_menu'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -167,6 +175,8 @@ class PlatController extends Controller
                 'nom' => 'required',
                 'description' => '',
                 'categorie' => 'required',
+                'categorie_menu_id' => '',
+                
                 'prix' => 'required',
                 'statut' => '',
             ]);
@@ -187,6 +197,7 @@ class PlatController extends Controller
                 'nom' => $request['nom'],
                 'description' => $request['description'],
                 'categorie_id' => $request['categorie'],
+                'categorie_menu_id' => $request['categorie_menu_id'],
                 'prix' => $request['prix'],
                 'type_id' =>   $principaCat['id'], // type produit
                 'statut' => $statut,

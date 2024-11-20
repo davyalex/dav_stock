@@ -24,9 +24,9 @@
                                     <div class="card-body">
                                         <div class="mb-3 row">
 
-                                            <div class="mb-3 col-md-12">
-                                                <label class="form-label" for="product-title-input">Sélectionner une
-                                                    categorie <span class="text-danger">*</span>
+                                            <div class="mb-3 col-md-8">
+                                                <label class="form-label" for="product-title-input">Categorie
+                                                    principale<span class="text-danger">*</span>
                                                 </label>
                                                 <select class="form-control js-example-basic-single" name="categorie"
                                                     required>
@@ -37,6 +37,20 @@
                                                             'backend.pages.menu.produit.partials.subCategorieOption',
                                                             ['category' => $categorie]
                                                         )
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3 col-md-4">
+                                                <label class="form-label" for="categorie-menu-input">Categorie menu
+                                                </label>
+                                                <select class="form-control js-example-basic-single"
+                                                    name="categorie_menu_id">
+                                                    <option value="" disabled selected>Selectionner</option>
+
+                                                    @foreach ($data_categorie_menu as $categorie_menu)
+                                                        <option value="{{ $categorie_menu->id }}">{{ $categorie_menu->nom }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -52,7 +66,7 @@
                                                 <label class="form-label" for="meta-title-input">prix <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="number" name="prix" class="form-control" id="prix">
+                                                <input type="number" name="prix" class="form-control" id="prix" required>
                                             </div>
 
 
@@ -202,10 +216,9 @@
             $('#formSend').on('submit', function(e) {
 
                 // on verifie si une image principale à éte inseré
-                // if ($('#product-image-input').val() === '') {
-                //     e.preventDefault();
-                // } else {
-                
+                if ($('#product-image-input').val() === '') {
+                    e.preventDefault();
+                } else {
                     e.preventDefault();
                     var formData = new FormData(this);
 
@@ -255,7 +268,7 @@
                         },
 
                     });
-                // }
+                }
 
 
             });

@@ -45,18 +45,18 @@
 
 
 <div class="row">
-    @foreach ($data_categorie_menu as $categorie)
+    @foreach ($categorie_menu as $categorie)
         <div class="col-md-6">
             <!-- Carte de catégorie -->
             <div class="card mb-4 shadow-sm">
                 <div class="card-body">
                     <!-- Titre de la catégorie -->
-                    <h5 class="card-title text-uppercase fw-bold">{{ $categorie->name }}</h5>
+                    <h5 class="card-title text-uppercase fw-bold">{{ $categorie->nom }}</h5>
 
                     <!-- Liste des produits -->
-                    @if ($categorie->produits->isNotEmpty())
+                    @if ($categorie->plats->isNotEmpty())
                         <ul class="list-group list-group-flush">
-                            @foreach ($categorie->produits as $produit)
+                            @foreach ($categorie->plats as $produit)
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <div>
                                         <input class="form-check-input me-2 produit" value="1"
@@ -78,10 +78,10 @@
                                 </li>
                                 <!-- Section des compléments masquée par défaut -->
                                 <li id="complements-{{ $produit->id }}" class="list-group-item d-none">
-                                    @if ($categorie_complements && $categorie_complements->produits->isNotEmpty())
+                                    @if ($categorie_complements && $categorie_complements->plats->isNotEmpty())
                                         <strong>Compléments disponibles :</strong>
                                         <ul class="mt-2">
-                                            @foreach ($categorie_complements->produits as $key => $complement)
+                                            @foreach ($categorie_complements->plats as $key => $complement)
                                                 <li>
                                                     <input class="form-check-input me-2" value="{{ $complement->id }}"
                                                         name="produits[{{ $produit->id }}][complements][]"

@@ -48,6 +48,7 @@ class Produit extends Model implements HasMedia
         'stock', //quantité
         'stock_alerte', // stock de securite
         'categorie_id',
+        'categorie_menu_id',
         'type_id', // type produit
         'statut', // active , desactive
         'user_id',
@@ -85,7 +86,7 @@ class Produit extends Model implements HasMedia
     {
         return $this->belongsTo(Categorie::class, 'categorie_id');
     }
-    public function categorieMenu()
+    public function categorieMenu() // categorie du menu
     {
         return $this->belongsTo(CategorieMenu::class, 'categorie_menu_id');
     }

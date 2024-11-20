@@ -27,9 +27,8 @@
                                     <div class="card-body">
                                         <div class="mb-3 row">
 
-                                            <div class="mb-3 col-md-12">
-                                                <label class="form-label" for="product-title-input">Sélectionner une
-                                                    categorie <span class="text-danger">*</span>
+                                            <div class="mb-3 col-md-8">
+                                                <label class="form-label" for="product-title-input">Categorie principale <span class="text-danger">*</span>
                                                 </label>
                                                 <select class="form-control js-example-basic-single" name="categorie"
                                                     required>
@@ -40,6 +39,20 @@
                                                             'backend.pages.menu.produit.partials.subCategorieOptionEdit',
                                                             ['category' => $categorie]
                                                         )
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3 col-md-4">
+                                                <label class="form-label" for="categorie-menu-input">Categorie menu <span class="text-danger">*</span>
+                                                </label>
+                                                <select class="form-control js-example-basic-single" name="categorie_menu_id" required>
+                                                    <option value="" disabled selected>Selectionner</option>
+
+                                                    @foreach ($data_categorie_menu as $categorie_menu)
+                                                        <option value="{{ $categorie_menu->id }}" {{ $data_plat->categorie_menu_id == $categorie_menu->id ? 'selected' : '' }}>
+                                                            {{ $categorie_menu->nom }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
