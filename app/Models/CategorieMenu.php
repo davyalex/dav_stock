@@ -38,4 +38,9 @@ class CategorieMenu extends Model
         ];
     }
 
+    public function plats()  // produit  plat du menu
+    {
+        return $this->hasMany(Produit::class )->where('statut' , 'active');
+    }
+
 }

@@ -85,7 +85,10 @@ class Produit extends Model implements HasMedia
     {
         return $this->belongsTo(Categorie::class, 'categorie_id');
     }
-
+    public function categorieMenu()
+    {
+        return $this->belongsTo(CategorieMenu::class, 'categorie_menu_id');
+    }
 
     public function typeProduit()
     {

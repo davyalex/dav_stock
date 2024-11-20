@@ -35,6 +35,7 @@ class PlatController extends Controller
                 ->whereIn('famille', ['menu'])
                 ->OrderBy('position', 'ASC')->get();
 
+
             // dd($plat->toArray());
 
             return view('backend.pages.menu.produit.create', compact('data_categorie'));

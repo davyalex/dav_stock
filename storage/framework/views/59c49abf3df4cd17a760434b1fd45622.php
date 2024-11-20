@@ -7,7 +7,7 @@
                      <span>   <i class="ion-ios-restaurant"> </i>  <?php echo e($setting->projet_description ?? 'Bienvenue chez Jeanne restaurant !!'); ?></span>
                       <span>  <i class="ion-ios-telephone"> </i>  <?php echo e($setting->phone1 ?? ''); ?></span>
                        <span> <i class="ion-ios-email"> </i>  <?php echo e($setting->email1 ?? ''); ?></span>
-                        <span> <i class="ion-ios-location"> </i> <?php echo e($setting->localisation ?? ''); ?></span>
+                        <span> <a href="<?php echo e($setting->google_maps ?? ''); ?>" target="_blank" rel="noopener noreferrer" class="text-white"><i class="ion-ios-location"> </i> <?php echo e($setting->localisation ?? ''); ?></a></span>
                     </p>
                 </div>
             </div>

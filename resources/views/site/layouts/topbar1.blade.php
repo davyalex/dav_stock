@@ -7,7 +7,7 @@
                      <span>   <i class="ion-ios-restaurant"> </i>  {{ $setting->projet_description ?? 'Bienvenue chez Jeanne restaurant !!' }}</span>
                       <span>  <i class="ion-ios-telephone"> </i>  {{ $setting->phone1 ?? '' }}</span>
                        <span> <i class="ion-ios-email"> </i>  {{ $setting->email1 ?? '' }}</span>
-                        <span> <i class="ion-ios-location"> </i> {{ $setting->localisation ?? '' }}</span>
+                        <span> <a href="{{ $setting->google_maps ?? '' }}" target="_blank" rel="noopener noreferrer" class="text-white"><i class="ion-ios-location"> </i> {{ $setting->localisation ?? '' }}</a></span>
                     </p>
                 </div>
             </div>
