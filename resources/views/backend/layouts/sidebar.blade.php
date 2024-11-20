@@ -292,20 +292,8 @@
                             aria-controls="sidebarSite">
                             <i class="ri ri-global-fill"></i> <span>SITE</span>
                         </a>
-                        <div class="collapse menu-dropdown {{ Route::is('menu.*') || Route::is('plat.*') || Route::is('slide.*') ? 'show' : '' }}"
-                            id="sidebarSite">
+                        <div class="collapse menu-dropdown {{ Route::is('slide.*') ? 'show' : '' }}" id="sidebarSite">
                             <ul class="nav nav-sm flex-column">
-
-                                <li class="nav-item active">
-                                    <a href="{{ route('plat.index') }}"
-                                        class="nav-link {{ Route::is('plat.*') ? 'active' : '' }}">Produit menu</a>
-                                </li>
-
-                                <li class="nav-item active">
-                                    <a href="{{ route('menu.index') }}"
-                                        class="nav-link {{ Route::is('menu.*') ? 'active' : '' }}">Menu</a>
-                                </li>
-
                                 <li class="nav-item active">
                                     <a href="{{ route('slide.index') }}"
                                         class="nav-link {{ Route::is('slide.*') ? 'active' : '' }}">Slides</a>
@@ -353,28 +341,33 @@
                 @endcan
 
 
-                @can('voir-rapport')
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sideBarMenu" data-bs-toggle="collapse" role="button"
-                        aria-controls="sideBarMenu">
-                        <i class="ri ri-file-list-line"></i> <span>GESTION DES MENUS</span>
-                    </a>
-                    <div class="collapse menu-dropdown {{ Route::is('rapport.*') || Route::is('categorie-menu.*')  ? 'show' : '' }}"
-                        id="sideBarMenu">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item active">
-                                <a href="{{ route('categorie-menu.index') }}"
-                                    class="nav-link {{ Route::is('categorie-menu') ? 'active' : '' }}">
-                                    Categories</a>
-                            </li>
-                            <li class="nav-item active">
-                                <a href="{{ route('rapport.exploitation') }}"
-                                    class="nav-link {{ Route::is('rapport.exploitation') ? 'active' : '' }}">Exploitation</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-            @endcan
+                @can('voir-menu')
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sideBarMenu" data-bs-toggle="collapse" role="button"
+                            aria-controls="sideBarMenu">
+                            <i class="ri ri-file-list-line"></i> <span>GESTION DES MENUS</span>
+                        </a>
+                        <div class="collapse menu-dropdown {{ Route::is('menu.*') || Route::is('plat.*') || Route::is('categorie-menu.*') ? 'show' : '' }}"
+                            id="sideBarMenu">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item active">
+                                    <a href="{{ route('categorie-menu.index') }}"
+                                        class="nav-link {{ Route::is('categorie-menu') ? 'active' : '' }}">
+                                        Categories</a>
+                                </li>
+                                <li class="nav-item active">
+                                    <a href="{{ route('plat.index') }}"
+                                        class="nav-link {{ Route::is('plat.*') ? 'active' : '' }}">Plats</a>
+                                </li>
+
+                                <li class="nav-item active">
+                                    <a href="{{ route('menu.index') }}"
+                                        class="nav-link {{ Route::is('menu.*') ? 'active' : '' }}">Menu</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                @endcan
 
                 @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur' || Auth::user()->can('voir-permission'))
                     <li class="nav-item">
