@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\backend\menu;
 
 use App\Models\Menu;
+use App\Models\Plat;
 use App\Models\Produit;
 use App\Models\Categorie;
 use App\Models\ProduitMenu;
 use Illuminate\Http\Request;
+use App\Models\CategorieMenu;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\CategorieMenu;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -29,23 +30,29 @@ class MenuController extends Controller
     public function create(Request $request)
     {
         try {
+            //toutes les categorie menu
+            $categorieAll = CategorieMenu::orderBy('position', 'ASC')->get();
 
-            $data_categorie_menu = Categorie::with(['children', 'produits'])
-                ->whereNotNull('parent_id')
-                ->whereIn('famille', ['menu'])
-                ->whereNotIn('slug', ['complements'])
-                ->orderBy('position', 'ASC')
-                ->get();
 
+            // categorie menu sauf complement
             $categorie_menu = CategorieMenu::active()->with('plats')
                 ->whereNotIn('slug', ['complements'])
-                ->get();
+                ->orderBy('position', 'ASC')->get();
 
+            //uniquement categorie menu complements
             $categorie_complements = CategorieMenu::with('plats')->where('slug', 'complements')->first();
 
-            // dd($categorie_menu->toArray());
+            // recuperer les plats
+            $plats = Plat::active()->get();
 
-            return view('backend.pages.menu.create', compact('data_categorie_menu', 'categorie_complements', 'categorie_menu'));
+            //recuperer les plats complement
+            $plats_complements = Plat::active()->whereHas('categorieMenu', function ($query) {
+                $query->where('slug', 'complements');
+            })->get();
+
+            // dd($plats_complements->toArray());
+
+            return view('backend.pages.menu.create', compact('categorieAll', 'categorie_complements', 'categorie_menu', 'plats' , 'plats_complements'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }

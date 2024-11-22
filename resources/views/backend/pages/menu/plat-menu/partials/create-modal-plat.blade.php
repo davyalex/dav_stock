@@ -1,8 +1,6 @@
 <div class="row">
     <div class="col-xxl-6">
         <div class="card">
-
-
             <div class="modal fade" id="createPlatModal" tabindex="-1" aria-labelledby="createPlatModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-xl">
@@ -163,7 +161,7 @@
                                                 <!-- end card -->
                                                 <div class="text-end mb-3">
                                                     <button type="submit"
-                                                        class="btn btn-success w-lg">Enregistrer</button>
+                                                        class="btn btn-success w-lg btn-addPlat">Enregistrer</button>
                                                 </div>
                                             </div>
                                         </div><!-- end row -->
@@ -174,9 +172,58 @@
                     </div>
                 </div>
             </div>
-
-
-
         </div>
     </div>
 </div>
+
+{{-- 
+<script>
+    $('#formSend').on('submit', function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+            url: "{{ route('plat-menu.store') }}", // Adjust the route as needed
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                $('#imageTableBody').empty();
+
+                if (response.message == 'operation reussi') {
+                    Swal.fire({
+                        title: 'plat ajouté avec success!',
+                        // text: 'You clicked the button!',
+                        icon: 'success',
+                        showCancelButton: false,
+                        customClass: {
+                            confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                            cancelButton: 'btn btn-danger w-xs mt-2',
+                        },
+                        buttonsStyling: false,
+                        showCloseButton: true
+                    })
+                    var url = "{{ route('plat-menu.index') }}" // redirect route stock
+
+                    window.location.replace(url);
+                } else if (response == 'The nom has already been taken.') {
+                    Swal.fire({
+                        title: 'Ce plat existe déjà ?',
+                        text: $('#nom').val(),
+                        icon: 'warning',
+                        customClass: {
+                            confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                            cancelButton: 'btn btn-danger w-xs mt-2',
+                        },
+                        buttonsStyling: false,
+                        showCloseButton: true
+                    })
+                }
+
+            },
+
+        });
+
+
+    });
+</script> --}}

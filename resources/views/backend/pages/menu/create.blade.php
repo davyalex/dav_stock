@@ -58,16 +58,16 @@
                                             <div id="variantes-container">
                                                 <div class="row variante-row mb-4">
 
-                                                    <div class="col-4">
+                                                    <div class="col-3">
                                                         <label for="variante">Categorie</label>
                                                         <div class="d-flex">
                                                             <select name="variantes[0][libelle]"
-                                                                class="form-control"required>
+                                                                class="form-control js-example-basic-single categorie"required>
                                                                 <option value="" selected> Selectionner</option>
-                                                                {{-- @foreach ($data_unite as $variante)
-                                                                <option value="{{ $variante->id }}">
-                                                                    {{ $variante->libelle }}</option>
-                                                            @endforeach --}}
+                                                                @foreach ($categorie_menu as $categorie)
+                                                                    <option value="{{ $categorie->id }}">
+                                                                        {{ $categorie->nom }}</option>
+                                                                @endforeach
                                                             </select>
                                                         </div>
                                                     </div>
@@ -75,32 +75,34 @@
                                                     <div class="col-4">
                                                         <label for="variante">Plats :</label>
                                                         <div class="d-flex">
-                                                            <select name="variantes[0][libelle]"
-                                                                class="form-control"required>
+                                                            <select name="variantes[0][nom]"
+                                                                class="form-control js-example-basic-single categorie"required>
                                                                 <option value="" selected> Selectionner</option>
-                                                                {{-- @foreach ($data_unite as $variante)
-                                                                <option value="{{ $variante->id }}">
-                                                                    {{ $variante->libelle }}</option>
-                                                            @endforeach --}}
+                                                                @foreach ($plats as $plat)
+                                                                    <option value="{{ $plat->id }}">
+                                                                        {{ $plat->nom }}</option>
+                                                                @endforeach
                                                             </select>
-                                                            <button type="button" class="btn btn-primary ml-2"
+                                                            <button type="button" class="btn btn-primary ml-2 btn-sm"
                                                                 data-bs-toggle="modal" data-bs-target="#createPlatModal"> <i
                                                                     class="mdi mdi-plus"></i> </button>
                                                         </div>
 
                                                     </div>
+
                                                     <div class="col-4">
                                                         <label for="variante">Complements :</label>
                                                         <div class="d-flex">
-                                                            <select name="variantes[0][libelle]"
-                                                                class="form-control"required>
+                                                            <select name="variantes[0][complement]"
+                                                                class="form-control js-example-basic-single categorie"
+                                                                multiple>
                                                                 <option value="" selected> Selectionner</option>
-                                                                {{-- @foreach ($data_unite as $variante)
-                                                                    <option value="{{ $variante->id }}">
-                                                                        {{ $variante->libelle }}</option>
-                                                                @endforeach --}}
+                                                                @foreach ($plats_complements as $complement)
+                                                                    <option value="{{ $complement->id }}">
+                                                                        {{ $complement->nom }}</option>
+                                                                @endforeach
                                                             </select>
-                                                            <button type="button" class="btn btn-primary ml-2"
+                                                            <button type="button" class="btn btn-primary ml-2 btn-sm"
                                                                 data-bs-toggle="modal" data-bs-target="#createPlatModal"> <i
                                                                     class="mdi mdi-plus"></i> </button>
                                                         </div>
@@ -113,7 +115,7 @@
 
                                         </div>
 
-                                        @include('backend.pages.menu.plat-menu.partials.create-modal-plat' , ['data_categorie' => $categorie_menu])
+
 
                                     </div>
 
@@ -130,6 +132,10 @@
                             <button type="submit" id="btnSubmit" class="btn btn-success w-lg">Enregistrer</button>
                         </div>
                     </form>
+
+                    @include('backend.pages.menu.plat-menu.partials.create-modal-plat', [
+                        'data_categorie' => $categorieAll,
+                    ])
                 </div>
             </div><!-- end row -->
         </div><!-- end col -->
@@ -137,6 +143,16 @@
 
         <!--end row-->
     @section('script')
+        <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
+        <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
+        <script src="{{ URL::asset('build/js/pages/modal.init.js') }}"></script>
+        {{-- <script src="{{ URL::asset('build/js/pages/form-editor.init.js') }}"></script> --}}
+        <script src="{{ URL::asset('build/tinymce/tinymce.min.js') }}"></script>
+        <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
+
+        <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
+        <script src="{{ URL::asset('build/js/pages/ecommerce-product-create.init.js') }}"></script>
+        <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
         <script>
             $(function() {
@@ -159,6 +175,204 @@
                         $('#btnSubmit').prop('disabled', true);
                     }
                 });
+
+
+                /////////////////////////////////////////////////################################################//////////////////////////////
+                // Gestion des variantes
+
+                // liste des plats from controller
+                var plats = @json($plats)
+
+                // initialisation a 1
+                let varianteIndex = 1;
+
+                document.getElementById('add-variante').addEventListener('click', function() {
+                    const container = document.getElementById('variantes-container');
+                    const newRow = document.createElement('div');
+                    newRow.classList.add('row', 'variante-row', 'mb-4');
+
+                    newRow.innerHTML = `
+        <div class="col-3">
+            <label for="variante">Categorie</label>
+            <div class="d-flex">
+                <select name="variantes[${varianteIndex}][quantite]" class="form-control js-example-basic-single categorie" required>
+                    <option value="" selected> Selectionner</option>
+                    @foreach ($categorie_menu as $categorie)
+                        <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        <div class="col-4">
+            <label for="variante">Plats :</label>
+            <div class="d-flex">
+                <select name="variantes[${varianteIndex}][nom]" class="form-control js-example-basic-single categorie" required>
+                    <option value="" selected> Selectionner</option>
+                    @foreach ($plats as $plat)
+                        <option value="{{ $plat->id }}">{{ $plat->nom }}</option>
+                    @endforeach
+                </select>
+                <button type="button" class="btn btn-primary ml-2 btn-sm" data-bs-toggle="modal" data-bs-target="#createPlatModal">
+                    <i class="mdi mdi-plus"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="col-4">
+            <label for="variante">Complements :</label>
+            <div class="d-flex">
+                <select name="variantes[${varianteIndex}][complement]" class="form-control js-example-basic-single categorie" multiple>
+                    <option value="" selected> Selectionner</option>
+                    @foreach ($plats_complements as $complement)
+                        <option value="{{ $complement->id }}">{{ $complement->nom }}</option>
+                    @endforeach
+                </select>
+                <button type="button" class="btn btn-primary ml-2 btn-sm" data-bs-toggle="modal" data-bs-target="#createPlatModal">
+                    <i class="mdi mdi-plus"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="col-1 mt-2">
+            <button type="button" class="btn btn-danger remove-variante mt-3">
+                <i class="mdi mdi-delete remove-variante"></i>
+            </button>
+        </div>
+    `;
+
+                    container.appendChild(newRow);
+
+                    // Réinitialiser et appliquer Select2 sur les nouveaux champs ajoutés
+                    $(newRow).find('.js-example-basic-single').select2();
+
+                    varianteIndex++;
+                });
+
+
+                document.getElementById('variantes-container').addEventListener('click', function(e) {
+                    if (e.target.classList.contains('remove-variante')) {
+                        e.target.closest('.variante-row').remove();
+                    }
+                });
+
+
+                /////////////////////////////////########################################///////////////////////////////////////////
+
+
+                document.querySelector("#product-image-input").addEventListener("change", function() {
+                    var preview = document.querySelector("#product-img");
+                    var file = document.querySelector("#product-image-input").files[0];
+                    var reader = new FileReader();
+                    reader.addEventListener("load", function() {
+                        preview.src = reader.result;
+                    }, false);
+                    if (file) {
+                        reader.readAsDataURL(file);
+                    }
+                });
+
+
+                $('#imageInput').on('change', function(e) {
+                    var files = e.target.files;
+                    for (var i = 0; i < files.length; i++) {
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+
+                            var image = ` <div class="col-12 d-flex justify-content-between border border-secondary rounded"><img src="${e.target.result}" class="img-thumbnail rounded float-start" width="50" height="100">
+                                   <button type="button" class="btn btn-danger my-2 remove-image">Delete</button>
+                                    </div>  `;
+
+                            $('#imageTableBody').append(image);
+                        }
+                        reader.readAsDataURL(files[i]);
+                    }
+                });
+
+                $(document).on('click', '.remove-image', function() {
+                    $(this).closest('div').remove();
+                });
+
+                //enregistrer le formulaire ==> nouveau plat entran
+                $('#formSend').on('submit', function(e) {
+
+                    e.preventDefault();
+
+                    // on verifie si une image principale à éte inseré
+                    // if ($('#product-image-input').val() === '') {
+                    //     e.preventDefault();
+                    // } else {
+                    //     e.preventDefault();
+
+                    // }
+
+                    // var categorie = $('select[name="categorie"] option:selected').text();
+                    // console.log(categorie);
+
+
+                    var formData = new FormData(this);
+
+                    $('#imageTableBody div').each(function() {
+                        var imageFile = $(this).find('img').attr('src');
+                        formData.append('images[]', imageFile)
+                    });
+
+                    $.ajax({
+                        url: "{{ route('plat-menu.store') }}", // Adjust the route as needed
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            $('#imageTableBody').empty();
+
+                            if (response.message == 'operation reussi') {
+                                Swal.fire({
+                                    title: 'plat ajouté avec success!',
+                                    // text: 'You clicked the button!',
+                                    icon: 'success',
+                                    showCancelButton: false,
+                                    customClass: {
+                                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                                        cancelButton: 'btn btn-danger w-xs mt-2',
+                                    },
+                                    buttonsStyling: false,
+                                    showCloseButton: true
+                                })
+
+                                // Ajouter la nouvelle valeur dans dans la liste
+                                let newOption = new Option(response.plat.nom, response.plat.id,
+                                    false, false);
+                                $('.js-example-basic-single').append(newOption).trigger('change');
+
+                                //
+                                $('#formSend')[0].reset();
+                                // $('.js-example-basic-single').val(null).trigger('change');
+                                $('#createPlatModal').modal('hide'); // Fermer la modale
+
+                            } else if (response == 'The nom has already been taken.') {
+                                Swal.fire({
+                                    title: 'Ce plat existe déjà ?',
+                                    text: $('#nom').val(),
+                                    icon: 'warning',
+                                    customClass: {
+                                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                                        cancelButton: 'btn btn-danger w-xs mt-2',
+                                    },
+                                    buttonsStyling: false,
+                                    showCloseButton: true
+                                })
+                            }
+
+                        },
+
+                    });
+
+
+                });
+
+
+
             });
         </script>
     @endsection

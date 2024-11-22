@@ -66,4 +66,12 @@ class Plat extends Model implements HasMedia
     // {
     //     return $this->belongsToMany(Menu::class, 'menu_produit_menu')->withTimestamps();;
     // }
+
+//scope pour recuperer les plates active
+    public function scopeActive($query)
+    {
+        // Retrieve only products with statut equal to 'active'
+        return $query->where('statut', 'active');
+    }
+
 }

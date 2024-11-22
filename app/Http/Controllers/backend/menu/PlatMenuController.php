@@ -108,7 +108,9 @@ class PlatMenuController extends Controller
             }
 
             return response([
-                'message' => 'operation reussi'
+                'message' => 'operation reussi',
+                'plat' => $plat
+
             ]);
         } catch (\Throwable $e) {
             return response([
