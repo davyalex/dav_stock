@@ -338,7 +338,7 @@
                                     <a href="#"> {{ $produit->nom }} </a>
                                 </h4>
                                 <div class="product-price-wrapper">
-                                    <span>{{ number_format($produit->prix, 0, ',', ' ') }} FCFA</span>
+                                    <span id="price" data-price={{ $produit->prix }}>{{ number_format($produit->prix, 0, ',', ' ') }} FCFA</span>
                                     {{-- <span class="product-price-old">$120.00 </span> --}}
                                 </div>
 

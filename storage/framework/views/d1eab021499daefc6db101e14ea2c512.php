@@ -265,6 +265,7 @@
                                         class="nav-link <?php echo e(Route::is('slide.*') ? 'active' : ''); ?>">Slides</a>
                                 </li>
 
+                               
                             </ul>
                         </div>
                     </li>
@@ -297,13 +298,13 @@
                 <?php endif; ?>
 
 
-                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-menu1')): ?>
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-menu')): ?>
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sideBarMenu" data-bs-toggle="collapse" role="button"
                             aria-controls="sideBarMenu">
-                            <i class="ri ri-file-list-line"></i> <span>GESTION DES MENUS</span>
+                            <i class="ri ri-file-list-line"></i> <span>PLATS & MENU</span>
                         </a>
-                        <div class="collapse menu-dropdown <?php echo e(Route::is('menu.*') || Route::is('plat.*') || Route::is('categorie-menu.*') ? 'show' : ''); ?>"
+                        <div class="collapse menu-dropdown <?php echo e(Route::is('menu.*') || Route::is('plat.*') || Route::is('plat-menu.*') || Route::is('categorie-menu.*') ? 'show' : ''); ?>"
                             id="sideBarMenu">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item active">
@@ -312,13 +313,20 @@
                                         Categories</a>
                                 </li>
                                 <li class="nav-item active">
-                                    <a href="<?php echo e(route('plat.index')); ?>"
-                                        class="nav-link <?php echo e(Route::is('plat.*') ? 'active' : ''); ?>">Plats</a>
+                                    <a href="<?php echo e(route('plat-menu.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('plat-menu.*') ? 'active' : ''); ?>">Plats Menu </a>
                                 </li>
 
                                 <li class="nav-item active">
+                                    <a href="<?php echo e(route('plat.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('plat.*') ? 'active' : ''); ?>">Plats Quotidiens</a>
+                                </li>
+
+
+
+                                <li class="nav-item active">
                                     <a href="<?php echo e(route('menu.index')); ?>"
-                                        class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Menu</a>
+                                        class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Menu du jour</a>
                                 </li>
                             </ul>
                         </div>

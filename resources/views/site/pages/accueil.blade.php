@@ -87,7 +87,7 @@
 
                                         </h4>
                                         <div class="product-price-wrapper">
-                                            <span>
+                                            <span id="price" data-price={{ $produit->prix }}>
                                                 {{-- @if ($produit->categorie->famille == 'bar' && $produit->achats->isNotEmpty())
                                                     {{ $produit->achats->first()->prix_vente_unitaire }}
                                                 @else
@@ -125,7 +125,7 @@
                                             <a href="{{ route('produit.detail', $produit->slug) }}">{{ $produit->nom }}</a>
                                         </h4>
                                         <div class="product-price-wrapper">
-                                            <span>
+                                            <span id="price" data-price={{ $produit->prix }}>
                                                 {{-- @if ($produit->achats->isNotEmpty())
                                                     {{ $produit->achats->first()->prix_vente_unitaire }}
                                                 @else
@@ -185,7 +185,7 @@
                                                 href="{{ route('produit.detail', $produit->slug) }}">{{ $produit->nom }}</a>
                                         </h4>
                                         <div class="product-price-wrapper">
-                                            <span> {{ number_format($produit->prix, 0, ',', ' ') }} FCFA</span>
+                                            <span id="price" data-price={{ $produit->prix }}> {{ number_format($produit->prix, 0, ',', ' ') }} FCFA</span>
                                         </div>
 
                                         @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
@@ -281,7 +281,7 @@
                                                 @else
                                                   
                                                 @endif --}}
-                                                <span>{{ number_format($produit->prix, 0, ',', ' ') }} FCFA</span>
+                                                <span id="price" data-price={{ $produit->prix }}>{{ number_format($produit->prix, 0, ',', ' ') }} FCFA</span>
                                             </div>
 
                                             @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')

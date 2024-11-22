@@ -197,12 +197,31 @@ class SiteController extends Controller
         try {
             // $today = Carbon::today();
             // recuperer le menu du jour
+            // $menu = Menu::where('date_menu', Carbon::today()->toDateString())
+            //     ->with([
+            //         'produits' => function ($query) {
+            //             $query->with('categorieMenu', 'complements');
+            //         },
+            //     ])->first();
+
+
             $menu = Menu::where('date_menu', Carbon::today()->toDateString())
                 ->with([
                     'produits' => function ($query) {
-                        $query->with('categorieMenu', 'complements');
+                        $query->with([
+                            'categorieMenu',
+                            'complements' => function ($query) {
+                                $query->wherePivot('menu_id', function ($subQuery) {
+                                    $subQuery->select('id')
+                                        ->from('menus')
+                                        ->where('date_menu', Carbon::today()->toDateString());
+                                });
+                            },
+                        ]);
                     },
                 ])->first();
+            
+
 
             // Vérifier s'il y a un menu
             if (!$menu) {

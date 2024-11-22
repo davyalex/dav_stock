@@ -1,0 +1,182 @@
+<div class="row">
+    <div class="col-xxl-6">
+        <div class="card">
+
+
+            <div class="modal fade" id="createPlatModal" tabindex="-1" aria-labelledby="createPlatModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="createPlatModalLabel">Créer un plat</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formSend" autocomplete="off" class="needs-validation" novalidate
+                                enctype="multipart/form-data">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-lg-8">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="mb-3 row">
+                                                                    <div class="mb-3 col-md-4">
+                                                                        <label class="form-label"
+                                                                            for="categorie-menu-input">Categorie menu
+                                                                            <span class="text-danger">*</span>
+                                                                        </label>
+                                                                        <select
+                                                                            class="form-control js-example-basic-single categorie"
+                                                                            name="categorie">
+                                                                            <option value="" selected>Selectionner
+                                                                            </option>
+
+                                                                            @foreach ($data_categorie as $categorie)
+                                                                                <option value="{{ $categorie->id }}">
+                                                                                    {{ $categorie->nom }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label"
+                                                                            for="meta-title-input">Libellé <span
+                                                                                class="text-danger">*</span>
+                                                                        </label>
+                                                                        <input type="text" name="nom"
+                                                                            class="form-control" id="nom"
+                                                                            required>
+                                                                    </div>
+
+                                                                    <div class="col-md-2 mb-3">
+                                                                        <label class="form-label"
+                                                                            for="meta-title-input">prix <span
+                                                                                class="text-danger">*</span>
+                                                                        </label>
+                                                                        <input type="number" name="prix"
+                                                                            class="form-control" id="prix"
+                                                                            required>
+                                                                    </div>
+
+
+                                                                </div>
+                                                                <div>
+                                                                    <label>Description</label>
+                                                                    <textarea name="description" id="ckeditor-classic"></textarea>
+                                                                </div>
+                                                                <div class="col-md-12 mt-3">
+                                                                    <label class="form-check-label"
+                                                                        for="customAff">Visible <span>(activé par defaut
+                                                                            )</span> </label>
+
+                                                                    <div class="form-check form-switch form-switch-lg col-md-2"
+                                                                        dir="ltr">
+                                                                        <input type="checkbox" name="statut"
+                                                                            class="form-check-input" id="customAff"
+                                                                            checked>
+                                                                    </div>
+                                                                    <div class="valid-feedback">
+                                                                        Looks good!
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- end card -->
+                                                    </div>
+                                                    <!-- end col -->
+
+                                                    <div class="col-lg-4">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="mb-4">
+                                                                    <h5 class="fs-14 mb-1">Image principale </h5>
+                                                                    <div class="text-center">
+                                                                        <div class="position-relative d-inline-block">
+                                                                            <div
+                                                                                class="position-absolute top-100 start-100 translate-middle">
+                                                                                <label for="product-image-input"
+                                                                                    class="mb-0"
+                                                                                    data-bs-toggle="tooltip"
+                                                                                    data-bs-placement="right"
+                                                                                    title="Select Image">
+                                                                                    <div class="avatar-xs">
+                                                                                        <div
+                                                                                            class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
+                                                                                            <i
+                                                                                                class="ri-image-fill"></i>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input class="form-control d-none"
+                                                                                    id="product-image-input"
+                                                                                    type="file"
+                                                                                    name="imagePrincipale"
+                                                                                    accept="image/*">
+                                                                                <div class="invalid-feedback">Ajouter
+                                                                                    une image</div>
+                                                                            </div>
+                                                                            <div class="avatar-lg">
+                                                                                <div
+                                                                                    class="avatar-title bg-light rounded">
+                                                                                    <img src="" id="product-img"
+                                                                                        class="avatar-md h-auto" />
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+
+                                                                <div class="col-md-12 mt-3">
+                                                                    <label for="imageInput" class="form-label col-12">
+                                                                        <div class="col-md-12 border border-dark rounded border-dashed text-center px-5 mt-4"
+                                                                            style=" cursor: pointer;">
+                                                                            <i class="ri ri-image-add-fill fs-1 "></i>
+                                                                            <h5>Ajouter des images</h5>
+                                                                        </div>
+                                                                    </label>
+                                                                    <input type="file" id="imageInput"
+                                                                        accept="image/*" class="form-control d-none"
+                                                                        multiple>
+
+                                                                    <div class="row" id="imageTableBody"></div>
+
+                                                                    <div class="valid-feedback">
+                                                                        Success!
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <!-- end card -->
+
+
+                                                    </div>
+                                                </div>
+                                                <!-- end row -->
+                                                <!-- end card -->
+                                                <div class="text-end mb-3">
+                                                    <button type="submit"
+                                                        class="btn btn-success w-lg">Enregistrer</button>
+                                                </div>
+                                            </div>
+                                        </div><!-- end row -->
+                                    </div><!-- end col -->
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

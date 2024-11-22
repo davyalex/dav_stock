@@ -11,6 +11,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\site\SiteController;
 use App\Http\Controllers\site\PanierController;
 use App\Http\Controllers\site\AuthUserController;
+use App\Http\Controllers\site\PanierMenuController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\menu\MenuController;
 use App\Http\Controllers\backend\menu\PlatController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\backend\stock\AchatController;
 use App\Http\Controllers\backend\user\ClientController;
 use App\Http\Controllers\backend\vente\VenteController;
 use App\Http\Controllers\backend\stock\SortieController;
+use App\Http\Controllers\backend\menu\PlatMenuController;
 use App\Http\Controllers\backend\module\ModuleController;
 use App\Http\Controllers\backend\vente\CommandeController;
 use App\Http\Controllers\backend\depense\DepenseController;
@@ -372,7 +374,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     });
 
 
-    // produit menu
+    // produit restaurant
     Route::prefix('plat')->controller(PlatController::class)->group(function () {
         route::get('', 'index')->name('plat.index');
         route::get('create', 'create')->name('plat.create');
@@ -381,6 +383,18 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('edit/{id}', 'edit')->name('plat.edit');
         route::post('update/{id}', 'update')->name('plat.update');
         route::get('delete/{id}', 'delete')->name('plat.delete');
+    });
+
+
+
+    Route::prefix('plat-menu')->controller(PlatMenuController::class)->group(function () {
+        route::get('', 'index')->name('plat-menu.index');
+        route::get('create', 'create')->name('plat-menu.create');
+        route::post('store', 'store')->name('plat-menu.store');
+        route::get('show/{id}', 'show')->name('plat-menu.show');
+        route::get('edit/{id}', 'edit')->name('plat-menu.edit');
+        route::post('update/{id}', 'update')->name('plat-menu.update');
+        route::get('delete/{id}', 'delete')->name('plat-menu.delete');
     });
 
 
@@ -441,6 +455,14 @@ Route::controller(PanierController::class)->group(function () {
     route::get('caisse', 'checkout')->name('cart.checkout')->middleware('auth'); // caisse infos commande
     route::post('order', 'saveOrder')->name('cart.save-order')->middleware('auth'); // enregistrer la commande
     // route::get('clear', 'clear')->name('cart.clear');
+});
+
+// pânier Menu
+Route::controller(PanierMenuController::class)->group(function () {
+    // route::get('panier', 'index')->name('panier');
+    route::get('add-menu/{id}', 'add')->name('cart.add-menu');
+    // route::post('update-menu', 'update')->name('cart.update-menu');
+    // route::post('remove-menu', 'remove')->name('cart.remove-menu');
 });
 
 

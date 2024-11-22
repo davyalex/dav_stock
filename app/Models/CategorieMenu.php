@@ -39,9 +39,9 @@ class CategorieMenu extends Model
         ];
     }
 
-    public function plats()  // produit  plat du menu
+    public function plats() // plat du menu
     {
-        return $this->hasMany(Produit::class )->where('statut' , 'active');
+        return $this->hasMany(Plat::class);
     }
 
 
@@ -50,5 +50,4 @@ class CategorieMenu extends Model
         // Retrieve only categories with statut equal to 'active'
         return $query->where('statut', 'active');
     }
-
 }

@@ -37,7 +37,7 @@ class MenuController extends Controller
                 ->orderBy('position', 'ASC')
                 ->get();
 
-                $categorie_menu = CategorieMenu::active()->with('plats')
+            $categorie_menu = CategorieMenu::active()->with('plats')
                 ->whereNotIn('slug', ['complements'])
                 ->get();
 
@@ -45,7 +45,7 @@ class MenuController extends Controller
 
             // dd($categorie_menu->toArray());
 
-            return view('backend.pages.menu.create', compact('data_categorie_menu', 'categorie_complements' , 'categorie_menu'));
+            return view('backend.pages.menu.create', compact('data_categorie_menu', 'categorie_complements', 'categorie_menu'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
