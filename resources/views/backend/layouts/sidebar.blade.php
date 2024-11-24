@@ -299,7 +299,7 @@
                                         class="nav-link {{ Route::is('slide.*') ? 'active' : '' }}">Slides</a>
                                 </li>
 
-                               
+
                             </ul>
                         </div>
                     </li>

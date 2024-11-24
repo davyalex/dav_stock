@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('categorie_menus', function (Blueprint $table) {
             $table->id();
-            $table->string('nom');
-            $table->string('slug');
-            $table->string('statut');
+            $table->string('nom')->nullable();
+            $table->string('slug')->nullable();
+            $table->string('statut')->nullable();
+            $table->integer('position')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

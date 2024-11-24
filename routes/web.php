@@ -54,6 +54,9 @@ use App\Http\Controllers\backend\configuration\UniteMesureController;
 |
 */
 
+Route::fallback(function () {
+  return view('backend.utility.auth-404-basic');
+});
 
 Auth::routes();
 //Language Translation

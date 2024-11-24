@@ -28,7 +28,8 @@ class CategorieMenuController extends Controller
             'nom' => 'required',
             'statut' => 'required'
         ]);
-        CategorieMenu::firstOrCreate($data);
+       
+        CategorieMenu::firstOrCreate($data , ['position'=>CategorieMenu::count() +1]);
 
         Alert::success('Operation réussi', 'Success Message');
 

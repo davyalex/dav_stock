@@ -1,7 +1,7 @@
-@extends('layouts.master-without-nav')
+@extends('backend.layouts.master-without-nav')
 
 @section('title')
-    @lang('translation.404')
+ Page non trouvé
 @endsection
 
 @section('body')
@@ -33,10 +33,10 @@
                                 </div>
                                 <div class="mt-n4">
                                     <h1 class="display-1 fw-medium">404</h1>
-                                    <h3 class="text-uppercase">Sorry, Page not Found 😭</h3>
-                                    <p class="text-muted mb-4">The page you are looking for not available!</p>
-                                    <a href="index" class="btn btn-success"><i class="mdi mdi-home me-1"></i>Back to
-                                        home</a>
+                                    <h3 class="text-uppercase">Désolé, Page non Trouvée 😭</h3>
+                                    <p class="text-muted mb-4">La page que vous cherchez n'est pas disponible !</p>
+                                    <a href="{{route('accueil')}}" class="btn btn-success"><i class="mdi mdi-home me-1"></i>Retour à
+                                        l'accueil</a>
                                 </div>
                             </div>
                         </div>
@@ -57,8 +57,8 @@
                                 <p class="mb-0 text-muted">&copy;
                                     <script>
                                         document.write(new Date().getFullYear())
-                                    </script> Velzon. Crafted with <i class="mdi mdi-heart text-danger"></i>
-                                    by Themesbrand
+                                    </script> {{config('app.name')}}. Crafted with <i class="mdi mdi-heart text-danger"></i>
+                                    by TicAfrique
                                 </p>
                             </div>
                         </div>

@@ -29,11 +29,11 @@ return new class extends Migration
                 ->onDelete('cascade ');
 
 
-                $table->foreignId('categorie_menu_id')
-                ->nullable()
-                ->constrained('categorie_menus')
-                ->onUpdate('cascade')
-                ->onDelete('cascade ');
+                // $table->foreignId('categorie_menu_id')
+                // ->nullable()
+                // ->constrained('categorie_menus')
+                // ->onUpdate('cascade')
+                // ->onDelete('cascade ');
 
 
                 $table->softDeletes();
