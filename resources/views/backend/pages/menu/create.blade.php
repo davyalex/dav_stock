@@ -83,7 +83,7 @@
                                                         <label for="variante">Plats :</label>
                                                         <div class="d-flex">
                                                             <select id="plats-select" name="variantes[0][nom]"
-                                                                class="form-control js-example-basic-single categorie"required>
+                                                                class="form-control js-example-basic-single plats"required>
                                                                 {{-- <option value="" selected> Selectionner</option>
 
                                                                 @foreach ($plats as $plat)
@@ -102,7 +102,8 @@
                                                         <label for="variante">Complements :</label>
                                                         <div class="d-flex">
                                                             <select id="complements-select" name="variantes[0][complement]"
-                                                                class="form-control js-example-basic-single " multiple>
+                                                                class="form-control js-example-basic-single complements"
+                                                                multiple>
                                                                 {{-- <option value=""> Selectionner</option>
 
                                                                 @foreach ($plats_complements as $complement)
@@ -121,7 +122,8 @@
                                                         <label for="variante">Garnitures :</label>
                                                         <div class="d-flex">
                                                             <select id="garnitures-select" name="variantes[0][garniture]"
-                                                                class="form-control js-example-basic-single" multiple>
+                                                                class="form-control js-example-basic-single garnitures"
+                                                                multiple>
                                                                 {{-- <option value=""> Selectionner</option>
                                                                 @foreach ($plats_garnitures as $garniture)
                                                                     <option value="{{ $garniture->id }}">
@@ -265,7 +267,7 @@
                 // });
 
 
-                function loadAllOptions() {
+                function loadAllOptions(row) {
                     $.ajax({
                         url: "{{ route('menu.options') }}", // URL pour récupérer les données
                         method: "GET",
@@ -275,7 +277,7 @@
                             response.plats.forEach(item => {
                                 platsOptions += `<option value="${item.id}">${item.nom}</option>`;
                             });
-                            $('#plats-select').html(platsOptions);
+                            $(row).find('.plats').html(platsOptions);
 
                             // Charger les compléments
                             let complementsOptions = `<option value="">Sélectionner un complément</option>`;
@@ -283,7 +285,7 @@
                                 complementsOptions +=
                                     `<option value="${item.id}">${item.nom}</option>`;
                             });
-                            $('#complements-select').html(complementsOptions);
+                             $(row).find('.complements').html(complementsOptions);
 
                             // Charger les garnitures
                             let garnituresOptions = `<option value="">Sélectionner une garniture</option>`;
@@ -291,7 +293,7 @@
                                 garnituresOptions +=
                                     `<option value="${item.id}">${item.nom}</option>`;
                             });
-                            $('#garnitures-select').html(garnituresOptions);
+                              $(row).find('.garnitures').html(garnituresOptions);
                         },
                         error: function() {
                             alert("Erreur lors du chargement des données.");
@@ -309,6 +311,8 @@
                 let varianteIndex = 1;
 
                 document.getElementById('add-variante').addEventListener('click', function() {
+                
+
                     const container = document.getElementById('variantes-container');
                     const newRow = document.createElement('div');
                     newRow.classList.add('row', 'variante-row', 'mb-4');
@@ -329,11 +333,9 @@
         <div class="col-3">
             <label for="variante">Plats :</label>
             <div class="d-flex">
-                <select name="variantes[${varianteIndex}][nom]" class="form-control js-example-basic-single categorie" required>
-                    <option value="" selected> Selectionner</option>
-                    @foreach ($plats as $plat)
-                        <option value="{{ $plat->id }}">{{ $plat->nom }}</option>
-                    @endforeach
+                <select name="variantes[${varianteIndex}][nom]" class="form-control js-example-basic-single plats" required>
+                  
+                 
                 </select>
                 <button type="button" class="btn btn-primary ml-2 btn-sm" data-bs-toggle="modal" data-bs-target="#createPlatModal">
                     <i class="mdi mdi-plus"></i>
@@ -344,11 +346,8 @@
         <div class="col-3">
             <label for="variante">Complements :</label>
             <div class="d-flex">
-                <select name="variantes[${varianteIndex}][complement]" class="form-control js-example-basic-single categorie" multiple>
-                    <option value="" > Selectionner</option>
-                    @foreach ($plats_complements as $complement)
-                        <option value="{{ $complement->id }}">{{ $complement->nom }}</option>
-                    @endforeach
+                <select name="variantes[${varianteIndex}][complement]" class="form-control js-example-basic-single complements" multiple>
+                  
                 </select>
                 <button type="button" class="btn btn-primary ml-2 btn-sm" data-bs-toggle="modal" data-bs-target="#createComplementModal">
                     <i class="mdi mdi-plus"></i>
@@ -359,11 +358,8 @@
          <div class="col-3">
             <label for="variante">Garnitures :</label>
             <div class="d-flex">
-                <select name="variantes[${varianteIndex}][complement]" class="form-control js-example-basic-single categorie" multiple>
-                    <option value="" > Selectionner</option>
-                    @foreach ($plats_complements as $complement)
-                        <option value="{{ $complement->id }}">{{ $complement->nom }}</option>
-                    @endforeach
+                <select name="variantes[${varianteIndex}][garniture]" class="form-control js-example-basic-single garnitures" multiple>
+                 
                 </select>
                 <button type="button" class="btn btn-primary ml-2 btn-sm" data-bs-toggle="modal" data-bs-target="#createGarnitureModal">
                     <i class="mdi mdi-plus"></i>
@@ -384,6 +380,7 @@
                     $(newRow).find('.js-example-basic-single').select2();
 
                     varianteIndex++;
+                        loadAllOptions(newRow);
                 });
 
 
@@ -392,6 +389,7 @@
                         e.target.closest('.variante-row').remove();
                     }
                 });
+
 
 
                 /////////////////////////////////############### Ajouter les nouveaux enregistrement #########################///////////////////////////////////////////
@@ -483,7 +481,7 @@
                                 // $('.js-example-basic-single').append(newOption).trigger('change');
 
                                 $('.formSend')[0].reset();
-                                loadAllOptions();
+                                loadAllOptions(row);
                                 $('#createPlatModal').modal('hide'); // Fermer la modale
                                 $('#createGarnitureModal').modal('hide'); // Fermer la modale
                                 $('#createComplementModal').modal('hide'); // Fermer la modale
