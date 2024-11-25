@@ -54,7 +54,7 @@ class PlatMenuController extends Controller
                 'nom' => 'required|unique:plats',
                 'description' => '',
                 'categorie' => 'required',
-                'prix' => 'required',
+                'prix' => '',
                 'statut' => '',
             ]);
 
@@ -135,7 +135,7 @@ class PlatMenuController extends Controller
     {
         try {
 
-          
+
 
             $data_categorie = CategorieMenu::orderBy('position', 'ASC')->get();
 
@@ -173,14 +173,14 @@ class PlatMenuController extends Controller
                 'nom' => 'required',
                 'description' => '',
                 'categorie' => 'required',
-                'prix' => 'required',
+                'prix' => '',
                 'statut' => '',
             ]);
 
             //statut stock libelle active ? desactive
             $statut = $request['statut'] == 'on' ? 'active' : 'desactive';
-           
-         
+
+
 
             $plat = tap(Plat::find($id))->update([
                 'nom' => $request['nom'],

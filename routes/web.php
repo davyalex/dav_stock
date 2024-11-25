@@ -405,6 +405,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     Route::prefix('menu')->controller(MenuController::class)->group(function () {
         route::get('', 'index')->name('menu.index');
         route::get('create', 'create')->name('menu.create');
+        route::get('getOptions', 'getOptions')->name('menu.options'); // recuperer en temps reel les nouvel enregistrements plat , complemet .....
         route::post('store', 'store')->name('menu.store');
         route::get('show/{id}', 'show')->name('menu.show');
         route::get('edit/{id}', 'edit')->name('menu.edit');

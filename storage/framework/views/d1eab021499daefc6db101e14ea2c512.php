@@ -265,7 +265,7 @@
                                         class="nav-link <?php echo e(Route::is('slide.*') ? 'active' : ''); ?>">Slides</a>
                                 </li>
 
-                               
+
                             </ul>
                         </div>
                     </li>

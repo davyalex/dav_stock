@@ -1,12 +1,12 @@
 <div class="row">
     <div class="col-xxl-6">
         <div class="card">
-            <div class="modal fade" id="createPlatModal" tabindex="-1" aria-labelledby="createPlatModalLabel"
+            <div class="modal fade" id="createGarnitureModal" tabindex="-1" aria-labelledby="createGarnitureModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="createPlatModalLabel">Créer un plat</h5>
+                            <h5 class="modal-title" id="createGarnitureModalLabel">Créer un plat</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
@@ -19,7 +19,7 @@
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="row">
-                                                    <div class="col-lg-8">
+                                                    <div class="col-lg-12">
                                                         <div class="card">
                                                             <div class="card-body">
                                                                 <div class="mb-3 row">
@@ -28,17 +28,16 @@
                                                                             for="categorie-menu-input">Categorie menu
                                                                             <span class="text-danger">*</span>
                                                                         </label>
-                                                                        <select
-                                                                            class="form-control js-example-basic-single categorie"
-                                                                            name="categorie">
-                                                                            <option value="" selected>Selectionner
+                                                                        <select class="form-control " name="categorie">
+                                                                            @php
+                                                                                $data_categorie = app\Models\CategorieMenu::whereSlug(
+                                                                                    'garnitures',
+                                                                                )->first();
+                                                                            @endphp
+                                                                            <option selected 
+                                                                                value="{{ $data_categorie->id }}">
+                                                                                {{ $data_categorie->nom }}
                                                                             </option>
-
-                                                                            @foreach ($data_categorie as $categorie)
-                                                                                <option value="{{ $categorie->id }}">
-                                                                                    {{ $categorie->nom }}
-                                                                                </option>
-                                                                            @endforeach
                                                                         </select>
                                                                     </div>
 
@@ -52,7 +51,7 @@
                                                                             required>
                                                                     </div>
 
-                                                                    <div class="col-md-2 mb-3">
+                                                                    {{-- <div class="col-md-2 mb-3">
                                                                         <label class="form-label"
                                                                             for="meta-title-input">prix <span
                                                                                 class="text-danger">*</span>
@@ -60,36 +59,36 @@
                                                                         <input type="number" name="prix"
                                                                             class="form-control" id="prix"
                                                                             required>
+                                                                    </div> --}}
+                                                                    <div class="col-md-2">
+                                                                        <label class="form-check-label"
+                                                                            for="customAff">Visible <span>(activé par defaut
+                                                                                )</span> </label>
+    
+                                                                        <div class="form-check form-switch form-switch-lg col-md-2"
+                                                                            dir="ltr">
+                                                                            <input type="checkbox" name="statut"
+                                                                                class="form-check-input" id="customAff"
+                                                                                checked>
+                                                                        </div>
+                                                                        <div class="valid-feedback">
+                                                                            Looks good!
+                                                                        </div>
                                                                     </div>
 
-
                                                                 </div>
-                                                                <div>
+                                                                {{-- <div>
                                                                     <label>Description</label>
                                                                     <textarea name="description" id="ckeditor-classic"></textarea>
-                                                                </div>
-                                                                <div class="col-md-12 mt-3">
-                                                                    <label class="form-check-label"
-                                                                        for="customAff">Visible <span>(activé par defaut
-                                                                            )</span> </label>
-
-                                                                    <div class="form-check form-switch form-switch-lg col-md-2"
-                                                                        dir="ltr">
-                                                                        <input type="checkbox" name="statut"
-                                                                            class="form-check-input" id="customAff"
-                                                                            checked>
-                                                                    </div>
-                                                                    <div class="valid-feedback">
-                                                                        Looks good!
-                                                                    </div>
-                                                                </div>
+                                                                </div> --}}
+                                                                
                                                             </div>
                                                         </div>
                                                         <!-- end card -->
                                                     </div>
                                                     <!-- end col -->
 
-                                                    <div class="col-lg-4">
+                                                    {{-- <div class="col-lg-4">
                                                         <div class="card">
                                                             <div class="card-body">
                                                                 <div class="mb-4">
@@ -155,7 +154,7 @@
                                                         <!-- end card -->
 
 
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
                                                 <!-- end row -->
                                                 <!-- end card -->

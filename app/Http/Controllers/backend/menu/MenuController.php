@@ -30,33 +30,65 @@ class MenuController extends Controller
     public function create(Request $request)
     {
         try {
-            //toutes les categorie menu
-            $categorieAll = CategorieMenu::orderBy('position', 'ASC')->get();
+            //toutes les categorie menu sauf  complement et garniture
+            $categorie_complement_garniture = CategorieMenu::orderBy('position', 'ASC')
+                ->whereIn('slug', ['complements', 'garnitures'])
+                ->get();
 
 
-            // categorie menu sauf complement
+            // toutes les categorie menu  sauf complement et garniture
             $categorie_menu = CategorieMenu::active()->with('plats')
-                ->whereNotIn('slug', ['complements'])
+                ->whereNotIn('slug', ['complements', 'garnitures'])
                 ->orderBy('position', 'ASC')->get();
 
             //uniquement categorie menu complements
             $categorie_complements = CategorieMenu::with('plats')->where('slug', 'complements')->first();
 
             // recuperer les plats
-            $plats = Plat::active()->get();
+            $plats = Plat::active()->whereDoesntHave('categorieMenu', function ($query) {
+                $query->whereIn('slug', ['complements', 'garnitures']);
+            })->get();
 
             //recuperer les plats complement
             $plats_complements = Plat::active()->whereHas('categorieMenu', function ($query) {
                 $query->where('slug', 'complements');
             })->get();
 
+
+            //recuperer les plats garnitures
+            $plats_garnitures = Plat::active()->whereHas('categorieMenu', function ($query) {
+                $query->where('slug', 'garnitures');
+            })->get();
             // dd($plats_complements->toArray());
 
-            return view('backend.pages.menu.create', compact('categorieAll', 'categorie_complements', 'categorie_menu', 'plats' , 'plats_complements'));
+            return view('backend.pages.menu.create', compact('categorie_complement_garniture', 'categorie_complements', 'categorie_menu', 'plats', 'plats_complements', 'plats_garnitures'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
     }
+
+
+    public function getOptions()
+    {
+        // Récupérer les données
+        $plats = Plat::active()->whereDoesntHave('categorieMenu', function ($query) {
+            $query->whereIn('slug', ['complements', 'garnitures']);
+        })->get();
+        $platsComplements = Plat::active()->whereHas('categorieMenu', function ($query) {
+            $query->where('slug', 'complements');
+        })->get();
+        $platsGarnitures = Plat::active()->whereHas('categorieMenu', function ($query) {
+            $query->where('slug', 'garnitures');
+        })->get();
+
+        // Retourner les données en JSON
+        return response()->json([
+            'plats' => $plats,
+            'plats_complements' => $platsComplements,
+            'plats_garnitures' => $platsGarnitures,
+        ]);
+    }
+
 
 
     public function store(Request $request)

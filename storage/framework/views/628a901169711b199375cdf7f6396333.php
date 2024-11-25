@@ -144,8 +144,11 @@
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                     </div>
+                    <?php
+                        $idCatBoisson = app\Models\Categorie::whereSlug('bar')->first();
+                    ?>
                     <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-5">
-                        <a href="<?php echo e(route('produit', 'bar')); ?>" class="btn btn-dark w-auto text-white fw-bolder"
+                        <a href="<?php echo e(route('produit', $idCatBoisson->id)); ?>" class="btn btn-dark w-auto text-white fw-bolder"
                             style=" border-radius: 10px ; ">
                             Affichez plus de boissons <i class="fa fa-caret-right"></i>
                         </a>
@@ -195,9 +198,11 @@
                             </div>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
-
+                    <?php
+                    $idCatPlat= app\Models\Categorie::whereSlug('bar')->first();
+                ?>
                     <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-4">
-                        <a href="<?php echo e(route('produit', 'cuisine-interne')); ?>"
+                        <a href="<?php echo e(route('produit', $idCatPlat->id)); ?>"
                             class="btn btn-dark w-auto text-white fw-bolder" style="border-radius: 10px;">
                             Affichez plus de Plats <i class="fa fa-caret-right"></i>
                         </a>
