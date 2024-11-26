@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\site;
 
+use App\Models\Plat;
 use App\Models\Produit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -19,8 +20,8 @@ class PanierMenuController extends Controller
         $price = $request->input('price');
         $quantity = $request->input('quantity', 1);
 
-        $produit = Produit::findOrFail($id); // recuperer le produit
-        $complement = Produit::findOrFail($complement); // recuperer le complement associé au produit
+        $produit = Plat::findOrFail($id); // recuperer le produit
+        $complement = Plat::findOrFail($complement); // recuperer le complement associé au produit
 
         $cartMenu = session()->get('cartMenu', []);
 

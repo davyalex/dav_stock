@@ -14,6 +14,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
+use function Deployer\desc;
+
 class MenuController extends Controller
 {
     //
@@ -73,13 +75,13 @@ class MenuController extends Controller
         // Récupérer les données
         $plats = Plat::active()->whereDoesntHave('categorieMenu', function ($query) {
             $query->whereIn('slug', ['complements', 'garnitures']);
-        })->get();
+        })->orderBy('created_at', 'desc')->get();
         $platsComplements = Plat::active()->whereHas('categorieMenu', function ($query) {
             $query->where('slug', 'complements');
-        })->get();
+        })->orderBy('created_at', 'desc')->get();
         $platsGarnitures = Plat::active()->whereHas('categorieMenu', function ($query) {
             $query->where('slug', 'garnitures');
-        })->get();
+        })->orderBy('created_at', 'desc')->get();
 
         // Retourner les données en JSON
         return response()->json([
@@ -95,65 +97,48 @@ class MenuController extends Controller
     {
         try {
 
-
             // dd($request->toArray());
-
             // Valider les données
-
-
             $validatedData = $request->validate([
                 'date_menu' => 'required|unique:menus',
-                'produits' => 'required|array',
-                'produits.*.selected' => 'boolean',
-                'produits.*.complements' => 'nullable|array',
+                'plats' => 'required|array',
+                'plats.*.categorie_id' => 'required|exists:categorie_menus,id',
+                'plats.*.plat_selected' => 'required|exists:plats,id',
+                'plats.*.complements' => 'nullable|array',
+                'plats.*.complements.*' => 'exists:plats,id',
+                'plats.*.garnitures' => 'nullable|array',
+                'plats.*.garnitures.*' => 'exists:plats,id',
             ], [
                 'date_menu.required' => 'La date du menu est requise.',
-                'date_menu.unique' => 'Un menu a déjà été crée pour cette date men, Vous pouvez la modifier.',
+                'date_menu.unique' => 'Un menu a déjà été créé pour cette date, Vous pouvez la modifier.',
             ]);
 
-
+            // Créer ou récupérer le menu
             $libelle = $request['libelle'] ? $request['libelle'] : 'Menu du ' . $request->date_menu;
-
             $menu = Menu::firstOrCreate([
                 'date_menu' => $request->date_menu,
                 'libelle' => $libelle,
                 'user_id' => Auth::id(),
             ]);
 
-            //method attach product with menu 
-            // $menu->produits()->sync($validatedData['produits']);
+            // Parcourir les plats
+            foreach ($validatedData['plats'] as $platData) {
+                $plat = Plat::find($platData['plat_selected']);
 
-            // Parcourir les produits et enregistrer leur composition
-            // foreach ($validatedData['produits'] as $produitId => $produitData) {
-            //     if (isset($produitData['selected']) && $produitData['selected']) {
-            //         // Ajouter le produit au menu
-            //         $menu->produits()->attach($produitId);
+                // Ajouter le plat au menu
+                $menu->plats()->attach($plat->id, ['categorie_menu_id' => $plat->categorie_menu_id]);
 
-            //         // Si des compléments sont sélectionnés, les enregistrer
-            //         if (!empty($produitData['complements'])) {
-            //             $produit = Produit::find($produitId);
-            //             $produit->complements()->syncWithoutDetaching($produitData['complements'], ['menu_id' => $menu->id]);
-            //         }
-            //     }
-            // }
+                // Ajouter les compléments
+                if (!empty($platData['complements'])) {
+                    foreach ($platData['complements'] as $complementId) {
+                        $plat->complements()->attach($complementId, ['menu_id' => $menu->id]);
+                    }
+                }
 
-
-            foreach ($validatedData['produits'] as $produitId => $produitData) {
-                if (isset($produitData['selected']) && $produitData['selected']) {
-                    // Ajouter le produit au menu
-                    $plat = Produit::find($produitId);
-                    $menu->produits()->attach($produitId, ['categorie_menu_id' =>  $plat->categorie_menu_id]);
-
-                    // Si des compléments sont sélectionnés, les enregistrer
-                    if (!empty($produitData['complements'])) {
-                        $complements = [];
-                        foreach ($produitData['complements'] as $complementId) {
-                            $complements[$complementId] = ['menu_id' => $menu->id];
-                        }
-
-                        // Ajouter les compléments avec les données supplémentaires
-                        $produit = Produit::find($produitId);
-                        $produit->complements()->attach($complements);
+                // Ajouter les garnitures
+                if (!empty($platData['garnitures'])) {
+                    foreach ($platData['garnitures'] as $garnitureId) {
+                        $plat->garnitures()->attach($garnitureId, ['menu_id' => $menu->id]);
                     }
                 }
             }
@@ -162,9 +147,9 @@ class MenuController extends Controller
             Alert::success('Operation réussi', 'Success Message');
             return back();
         } catch (\Throwable $e) {
-            // return $e->getMessage();
-            Alert::error($e->getMessage(),  'Une erreur s\'est produite');
-            return back();
+            return $e->getMessage();
+            // Alert::error($e->getMessage(),  'Une erreur s\'est produite');
+            // return back();
         }
     }
 

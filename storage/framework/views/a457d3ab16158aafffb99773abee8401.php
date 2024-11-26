@@ -130,9 +130,9 @@
                     <div class="col-lg-12">
                         <div class="cart-shiping-update-wrapper">
                             <div class="cart-shiping-update">
-                             <?php if($urlBack = url()->previous()): ?>
-                             <a href="<?php echo e($urlBack); ?>">Retour à la page précédente</a>
-                             <?php endif; ?>
+                                <?php if($urlBack = url()->previous()): ?>
+                                    <a href="<?php echo e($urlBack); ?>">Retour à la page précédente</a>
+                                <?php endif; ?>
                             </div>
                             
                         </div>

@@ -50,24 +50,35 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
 
         // Récupérer les informations du produit et du complément
         var getId = $(this).data('id'); // ID du produit
-        var getQuantity = $('#quantity').val() || 1; // Quantité (par défaut 1 si non précisé)
-        var getPrice = $(this).closest('.card-footer').find('#price').data('price'); // Prix du produit
-        var getComplement = $(this).closest('.card').find('#complement').val(); // Complément sélectionné
+        var getQuantity = $(this).closest('.card').find('#quantity').val() ||1; // Quantité (par défaut 1 si non précisé)
+        var getPrice =  $(this).data('price'); // Prix du produit
+        var getComplement = $(this).closest('.card').find('#complement').val() ||
+        null; // Complément sélectionné (null si non sélectionné)
+        var getGarniture = $(this).closest('.card').find('#garniture').val() ||
+        null; // Garniture sélectionnée (null si non sélectionné)
 
-        // Vérifier si le produit a des compléments obligatoires
+        // Vérifier si le produit a des compléments ou des garnitures obligatoires
         var hasComplements = $(this).closest('.card').find('#complement').length > 0;
+        var hasGarnitures = $(this).closest('.card').find('#garniture').length > 0;
 
-        // Validation : Si des compléments sont nécessaires mais non sélectionnés
-        if (hasComplements && !getComplement) {
+        // Validation : Si des compléments ou des garnitures sont nécessaires mais non sélectionnés
+        if ((hasComplements && !getComplement) || (hasGarnitures && !getGarniture)) {
             Swal.fire({
-                title: 'Complément manquant',
-                text: 'Veuillez sélectionner un complément pour ce produit avant de l\'ajouter au panier.',
+                title: 'Informations manquantes',
+                text: 'Veuillez sélectionner un complément et garniture avant d\'ajouter au panier.',
                 icon: 'warning',
                 confirmButtonText: 'OK'
             });
-            return; // Arrêter l'exécution si un complément n'est pas sélectionné
+            return; // Arrêter l'exécution si un complément ou une garniture n'est pas sélectionné
         }
 
+        console.log("ID du produit:", getId);
+        console.log("Quantité:", getQuantity);
+        console.log("Prix du produit:", getPrice);
+        console.log("Complément sélectionné:", getComplement);
+        console.log("Garniture sélectionnée:", getGarniture);
+        console.log("Le produit a des compléments obligatoires:", hasComplements);
+        console.log("Le produit a des garnitures obligatoires:", hasGarnitures);
         // Requête AJAX pour ajouter le produit et le complément au panier
         $.ajax({
             type: "GET",
@@ -75,6 +86,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
             data: {
                 id: getId,
                 complement_id: getComplement,
+                garniture_id: getGarniture,
                 quantity: getQuantity,
                 price: getPrice
             },

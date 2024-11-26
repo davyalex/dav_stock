@@ -13,7 +13,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Plat extends Model implements HasMedia
 {
 
-    use HasFactory, SoftDeletes, InteractsWithMedia , sluggable;
+    use HasFactory, SoftDeletes, InteractsWithMedia, sluggable;
 
     public $incrementing = false;
 
@@ -50,7 +50,7 @@ class Plat extends Model implements HasMedia
 
 
 
-    public function categorieMenu()
+    public function categorieMenu()  // categorie pour les menus 
     {
         return $this->belongsTo(CategorieMenu::class);
     }
@@ -62,16 +62,35 @@ class Plat extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
-    // public function menu()
-    // {
-    //     return $this->belongsToMany(Menu::class, 'menu_produit_menu')->withTimestamps();;
-    // }
+    public function menu()
+    {
+        return $this->belongsToMany(Menu::class, 'menu_plat')
+            ->withPivot('categorie_menu_id')
+            ->withTimestamps();
+    }
 
-//scope pour recuperer les plates active
+    //MENU
+
+    // Relation pour les compléments d'un plat
+    public function complements()
+    {
+        return $this->belongsToMany(Plat::class, 'plat_complement', 'plat_id', 'complement_id')
+            ->withPivot('menu_id')
+            ->withTimestamps();
+    }
+
+    // Relation pour les garnitures d'un plat
+    public function garnitures()
+    {
+        return $this->belongsToMany(Plat::class, 'plat_garniture', 'plat_id', 'garniture_id')
+            ->withPivot('menu_id')
+            ->withTimestamps();
+    }
+
+    //scope pour recuperer les plates active
     public function scopeActive($query)
     {
         // Retrieve only products with statut equal to 'active'
         return $query->where('statut', 'active');
     }
-
 }

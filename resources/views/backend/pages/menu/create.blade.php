@@ -20,7 +20,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('menu.store') }}" autocomplete="off" class="needs-validation"
+                    <form method="POST" action="{{ route('menu.store') }}" autocomplete="off" id="formSave" class="needs-validation"
                         novalidate enctype="multipart/form-data">
                         @csrf
                         <div class="row">
@@ -68,7 +68,7 @@
                                                     <div class="col-2">
                                                         <label for="variante">Categorie</label>
                                                         <div class="d-flex">
-                                                            <select name="variantes[0][libelle]"
+                                                            <select name="plats[0][categorie_id]"
                                                                 class="form-control js-example-basic-single categorie"required>
                                                                 <option value="" selected> Selectionner</option>
                                                                 @foreach ($categorie_menu as $categorie)
@@ -80,10 +80,10 @@
                                                     </div>
 
                                                     <div class="col-3">
-                                                        <label for="variante">Plats :</label>
+                                                        <label for="variante">LIbelle :</label>
                                                         <div class="d-flex">
-                                                            <select id="plats-select" name="variantes[0][nom]"
-                                                                class="form-control js-example-basic-single plats"required>
+                                                            <select name="plats[0][plat_selected]"
+                                                                class="form-control js-example-basic-single plats-select"required>
                                                                 {{-- <option value="" selected> Selectionner</option>
 
                                                                 @foreach ($plats as $plat)
@@ -101,8 +101,8 @@
                                                     <div class="col-3">
                                                         <label for="variante">Complements :</label>
                                                         <div class="d-flex">
-                                                            <select id="complements-select" name="variantes[0][complement]"
-                                                                class="form-control js-example-basic-single complements"
+                                                            <select name="plats[0][complements][]"
+                                                                class="form-control js-example-basic-single complements-select "
                                                                 multiple>
                                                                 {{-- <option value=""> Selectionner</option>
 
@@ -121,8 +121,8 @@
                                                     <div class="col-3">
                                                         <label for="variante">Garnitures :</label>
                                                         <div class="d-flex">
-                                                            <select id="garnitures-select" name="variantes[0][garniture]"
-                                                                class="form-control js-example-basic-single garnitures"
+                                                            <select name="plats[0][garnitures][]"
+                                                                class="form-control js-example-basic-single garnitures-select"
                                                                 multiple>
                                                                 {{-- <option value=""> Selectionner</option>
                                                                 @foreach ($plats_garnitures as $garniture)
@@ -267,7 +267,59 @@
                 // });
 
 
-                function loadAllOptions(row) {
+                // function loadAllOptions() {
+                //     $.ajax({
+                //         url: "{{ route('menu.options') }}", // URL pour récupérer les données
+                //         method: "GET",
+                //         success: function(response) {
+                //             // Charger les plats
+                //             let platsOptions = `<option value="">Sélectionner un plat</option>`;
+                //             response.plats.forEach(item => {
+                //                 platsOptions += `<option value="${item.id}">${item.nom}</option>`;
+                //             });
+                //             $('.plats-select').html(platsOptions);
+
+                //             // Charger les compléments
+                //             let complementsOptions = `<option value="">Sélectionner un complément</option>`;
+                //             response.plats_complements.forEach(item => {
+                //                 complementsOptions +=
+                //                     `<option value="${item.id}">${item.nom}</option>`;
+                //             });
+                //             $('.complements-select').html(complementsOptions);
+
+                //             // Charger les garnitures
+                //             let garnituresOptions = `<option value="">Sélectionner une garniture</option>`;
+                //             response.plats_garnitures.forEach(item => {
+                //                 garnituresOptions +=
+                //                     `<option value="${item.id}">${item.nom}</option>`;
+                //             });
+                //             $('.garnitures-select').html(garnituresOptions);
+                //         },
+                //         error: function() {
+                //             alert("Erreur lors du chargement des données.");
+                //         }
+                //     });
+                // }
+
+
+                function loadAllOptions() {
+                    // Sauvegarder les sélections actuelles
+                    let platsSelected = [];
+                    let complementsSelected = [];
+                    let garnituresSelected = [];
+
+                    $('.plats-select').each(function() {
+                        platsSelected.push($(this).val());
+                    });
+
+                    $('.complements-select').each(function() {
+                        complementsSelected.push($(this).val());
+                    });
+
+                    $('.garnitures-select').each(function() {
+                        garnituresSelected.push($(this).val());
+                    });
+
                     $.ajax({
                         url: "{{ route('menu.options') }}", // URL pour récupérer les données
                         method: "GET",
@@ -277,7 +329,7 @@
                             response.plats.forEach(item => {
                                 platsOptions += `<option value="${item.id}">${item.nom}</option>`;
                             });
-                            $(row).find('.plats').html(platsOptions);
+                            $('.plats-select').html(platsOptions);
 
                             // Charger les compléments
                             let complementsOptions = `<option value="">Sélectionner un complément</option>`;
@@ -285,7 +337,7 @@
                                 complementsOptions +=
                                     `<option value="${item.id}">${item.nom}</option>`;
                             });
-                             $(row).find('.complements').html(complementsOptions);
+                            $('.complements-select').html(complementsOptions);
 
                             // Charger les garnitures
                             let garnituresOptions = `<option value="">Sélectionner une garniture</option>`;
@@ -293,13 +345,27 @@
                                 garnituresOptions +=
                                     `<option value="${item.id}">${item.nom}</option>`;
                             });
-                              $(row).find('.garnitures').html(garnituresOptions);
+                            $('.garnitures-select').html(garnituresOptions);
+
+                            // Réappliquer les sélections
+                            $('.plats-select').each(function(index) {
+                                $(this).val(platsSelected[index]).trigger('change');
+                            });
+
+                            $('.complements-select').each(function(index) {
+                                $(this).val(complementsSelected[index]).trigger('change');
+                            });
+
+                            $('.garnitures-select').each(function(index) {
+                                $(this).val(garnituresSelected[index]).trigger('change');
+                            });
                         },
                         error: function() {
                             alert("Erreur lors du chargement des données.");
                         }
                     });
                 }
+
                 // // Initialiser au chargement de la page
                 $(document).ready(function() {
                     loadAllOptions();
@@ -311,67 +377,74 @@
                 let varianteIndex = 1;
 
                 document.getElementById('add-variante').addEventListener('click', function() {
-                
-
                     const container = document.getElementById('variantes-container');
                     const newRow = document.createElement('div');
                     newRow.classList.add('row', 'variante-row', 'mb-4');
 
                     newRow.innerHTML = `
-        <div class="col-2">
-            <label for="variante">Categorie</label>
-            <div class="d-flex">
-                <select name="variantes[${varianteIndex}][quantite]" class="form-control js-example-basic-single categorie" required>
-                    <option value="" selected> Selectionner</option>
-                    @foreach ($categorie_menu as $categorie)
-                        <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
+       <div class="col-2">
+    <label for="variante">Catégorie :</label>
+    <div class="d-flex">
+        <select name="plats[${varianteIndex}][categorie_id]" class="form-control js-example-basic-single categorie" required>
+            <option value="" selected>Sélectionner</option>
+            @foreach ($categorie_menu as $categorie)
+                <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
 
-        <div class="col-3">
-            <label for="variante">Plats :</label>
-            <div class="d-flex">
-                <select name="variantes[${varianteIndex}][nom]" class="form-control js-example-basic-single plats" required>
-                  
-                 
-                </select>
-                <button type="button" class="btn btn-primary ml-2 btn-sm" data-bs-toggle="modal" data-bs-target="#createPlatModal">
-                    <i class="mdi mdi-plus"></i>
-                </button>
-            </div>
-        </div>
+<div class="col-3">
+    <label for="variante">Libellé :</label>
+    <div class="d-flex">
+        <select name="plats[${varianteIndex}][plat_selected]" class="form-control js-example-basic-single plats-select" required>
+            <option value="" selected> Sélectionner</option>
+            @foreach ($plats as $plat)
+                <option value="{{ $plat->id }}">{{ $plat->nom }}</option>
+            @endforeach
+        </select>
+        <button type="button" class="btn btn-primary ml-2 btn-sm" data-bs-toggle="modal" data-bs-target="#createPlatModal">
+            <i class="mdi mdi-plus"></i>
+        </button>
+    </div>
+</div>
 
-        <div class="col-3">
-            <label for="variante">Complements :</label>
-            <div class="d-flex">
-                <select name="variantes[${varianteIndex}][complement]" class="form-control js-example-basic-single complements" multiple>
-                  
-                </select>
-                <button type="button" class="btn btn-primary ml-2 btn-sm" data-bs-toggle="modal" data-bs-target="#createComplementModal">
-                    <i class="mdi mdi-plus"></i>
-                </button>
-            </div>
-        </div>
+<div class="col-3">
+    <label for="variante">Compléments :</label>
+    <div class="d-flex">
+        <select name="plats[${varianteIndex}][complements][]" class="form-control js-example-basic-single complements-select" multiple>
+            <option value=""> Sélectionner</option>
+            @foreach ($plats_complements as $complement)
+                <option value="{{ $complement->id }}">{{ $complement->nom }}</option>
+            @endforeach
+        </select>
+        <button type="button" class="btn btn-primary ml-2 btn-sm" data-bs-toggle="modal" data-bs-target="#createComplementModal">
+            <i class="mdi mdi-plus"></i>
+        </button>
+    </div>
+</div>
 
-         <div class="col-3">
-            <label for="variante">Garnitures :</label>
-            <div class="d-flex">
-                <select name="variantes[${varianteIndex}][garniture]" class="form-control js-example-basic-single garnitures" multiple>
-                 
-                </select>
-                <button type="button" class="btn btn-primary ml-2 btn-sm" data-bs-toggle="modal" data-bs-target="#createGarnitureModal">
-                    <i class="mdi mdi-plus"></i>
-                </button>
-            </div>
-        </div>
+<div class="col-3">
+    <label for="variante">Garnitures :</label>
+    <div class="d-flex">
+        <select name="plats[${varianteIndex}][garnitures][]" class="form-control js-example-basic-single garnitures-select" multiple>
+            <option value=""> Sélectionner</option>
+            @foreach ($plats_garnitures as $garniture)
+                <option value="{{ $garniture->id }}">{{ $garniture->nom }}</option>
+            @endforeach
+        </select>
+        <button type="button" class="btn btn-primary ml-2 btn-sm" data-bs-toggle="modal" data-bs-target="#createGarnitureModal">
+            <i class="mdi mdi-plus"></i>
+        </button>
+    </div>
+</div>
 
-        <div class="col-1 mt-2">
-            <button type="button" class="btn btn-danger remove-variante mt-3">
-                <i class="mdi mdi-delete remove-variante"></i>
-            </button>
-        </div>
+<div class="col-1 mt-2">
+    <button type="button" class="btn btn-danger remove-variante mt-3">
+        <i class="mdi mdi-delete remove-variante"></i>
+    </button>
+</div>
+
     `;
 
                     container.appendChild(newRow);
@@ -380,7 +453,6 @@
                     $(newRow).find('.js-example-basic-single').select2();
 
                     varianteIndex++;
-                        loadAllOptions(newRow);
                 });
 
 
@@ -389,6 +461,74 @@
                         e.target.closest('.variante-row').remove();
                     }
                 });
+
+
+
+                //////////////////////////////////Envoyer le menu au controller ///////////////////////////////////////////////
+                // $('#formSave').on('submit', function(e) {
+                //     e.preventDefault(); // Empêche l'envoi standard du formulaire
+
+                //     // Récupérer les données du formulaire
+                //     var formData = new FormData(this);
+
+                //     // Collecter les plats, compléments, et garnitures sélectionnés
+                //     var variantes = [];
+                //     $('#variantes-container .variante-row').each(function() {
+                //         var platId = $(this).find('.plats-select').val();
+                //         var complements = $(this).find('.complements-select').val() || [];
+                //         var garnitures = $(this).find('.garnitures-select').val() || [];
+
+                //         if (platId) {
+                //             variantes.push({
+                //                 plat_id: platId,
+                //                 complements: complements,
+                //                 garnitures: garnitures,
+                //             });
+                //         }
+                //     });
+
+                //     // Ajouter les variantes à formData
+                //     formData.append('variantes', JSON.stringify(variantes));
+
+                //     // Envoyer la requête AJAX
+                //     $.ajax({
+                //         url: "{{ route('plat-menu.store') }}",
+                //         type: 'POST',
+                //         data: formData,
+                //         contentType: false,
+                //         processData: false,
+                //         success: function(response) {
+                //             // Gérer le succès
+                //             if (response.message == 'operation reussi') {
+                //                 Swal.fire({
+                //                     title: 'Plat ajouté avec succès !',
+                //                     icon: 'success',
+                //                     buttonsStyling: false,
+                //                 });
+
+                //                 $('.formSend')[0].reset();
+                //                 loadAllOptions(); // Recharger les options
+                //                 $('#createPlatModal').modal('hide'); // Fermer les modales
+                //             } else {
+                //                 Swal.fire({
+                //                     title: 'Erreur',
+                //                     text: response.message,
+                //                     icon: 'error',
+                //                     buttonsStyling: false,
+                //                 });
+                //             }
+                //         },
+                //         error: function() {
+                //             // Gérer l'erreur
+                //             Swal.fire({
+                //                 title: 'Erreur',
+                //                 text: 'Une erreur est survenue lors de l’enregistrement.',
+                //                 icon: 'error',
+                //                 buttonsStyling: false,
+                //             });
+                //         },
+                //     });
+                // });
 
 
 
@@ -481,7 +621,7 @@
                                 // $('.js-example-basic-single').append(newOption).trigger('change');
 
                                 $('.formSend')[0].reset();
-                                loadAllOptions(row);
+                                loadAllOptions();
                                 $('#createPlatModal').modal('hide'); // Fermer la modale
                                 $('#createGarnitureModal').modal('hide'); // Fermer la modale
                                 $('#createComplementModal').modal('hide'); // Fermer la modale

@@ -40,6 +40,34 @@
             accent-color: red;
             /* Couleur rouge lorsqu'il est coché */
         }
+
+
+
+        /*  Style for increment decrement*/
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        button.btn {
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button.btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
     </style>
     <div class="shop-page-area pt-10 pb-100">
 
@@ -53,7 +81,7 @@
                 </h1>
 
                 <div class="row mt-4">
-                    @foreach ($categories as $categorie => $produits)
+                    @foreach ($categories as $categorie => $plats)
                         <div class="col-12 mb-4">
                             <div class="card shadow">
                                 <div class="card-header bg-danger text-white">
@@ -61,28 +89,44 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
-                                        @foreach ($produits as $produit)
+                                        @foreach ($plats as $plat)
                                             <div class="col-md-4 mb-3">
                                                 <div class="card h-100">
                                                     <div class="card-body">
                                                         <div class="d-flex justify-content-between">
-                                                            <h5 class="card-title text-capitalize">{{ $produit->nom }}</h5>
-                                                            <strong id="price" data-price={{ $produit->prix }}
-                                                                class="text-danger">{{ number_format($produit->prix, 0, ',', ' ') }}
+                                                            <h5 class="card-title text-capitalize">{{ $plat->nom }}</h5>
+                                                            <strong id="price" 
+                                                                class="text-danger">{{ number_format($plat->prix, 0, ',', ' ') }}
                                                                 FCFA</strong>
                                                         </div>
                                                         <!-- Compléments -->
-                                                        @if ($produit->complements->isNotEmpty())
+                                                        @if ($plat->complements->isNotEmpty())
                                                             <p class="card-text fw-bold">Choisissez un complément :</p>
                                                             <form class="complement-form">
                                                                 <select id="complement"
-                                                                    name="complement_{{ $produit->id }}"
+                                                                    name="complement_{{ $plat->id }}"
                                                                     class="form-select">
                                                                     <option selected disabled value="">Choisir
                                                                     </option>
-                                                                    @foreach ($produit->complements as $complement)
+                                                                    @foreach ($plat->complements as $complement)
                                                                         <option value="{{ $complement->id }}">
                                                                             {{ $complement->nom }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </form>
+                                                        @endif
+
+
+                                                        @if ($plat->garnitures->isNotEmpty())
+                                                            <p class="card-text fw-bold">Choisissez une garniture :</p>
+                                                            <form class="garniture-form">
+                                                                <select id="garniture" name="garniture_{{ $plat->id }}"
+                                                                    class="form-select">
+                                                                    <option selected disabled value="">Choisir
+                                                                    </option>
+                                                                    @foreach ($plat->garnitures as $garniture)
+                                                                        <option value="{{ $garniture->id }}">
+                                                                            {{ $garniture->nom }}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </form>
@@ -95,18 +139,20 @@
 
                                                             <!-- Gestion de la quantité -->
 
-                                                            <button class="btn btn-secondary btn-sm decrease-qty"
-                                                                data-index="${index}">-</button>
-                                                            <input readonly type="number"
-                                                                class="form-control quantity-input d-inline-block text-center"
-                                                                value="${item.quantity}" min="1" style="width: 60px;"
-                                                                data-index="${index}">
-                                                            <button class="btn btn-secondary btn-sm increase-qty"
-                                                                data-index="${index}">+</button>
-
+                                                            <div class="product-quantity" data-product-id="1">
+                                                                <div class="cart-plus-minus">
+                                                                    <div class="dec qtybutton"
+                                                                        onclick="decreaseValue(this)">-</div>
+                                                                    <input id="quantity" class="cart-plus-minus-box" type="text"
+                                                                        name="quantity" value="1" min="1"
+                                                                        readonly>
+                                                                    <div class="inc qtybutton"
+                                                                        onclick="increaseValue(this)">+</div>
+                                                                </div>
+                                                            </div>
 
                                                             <button type="button" class="btn btn-danger addCart text-white"
-                                                                data-id="{{ $produit->id }}" style="border-radius: 10px">
+                                                                data-id="{{ $plat->id }}" data-price={{ $plat->prix }} style="border-radius: 10px">
                                                                 <i class="fa fa-shopping-cart"></i> Commander
                                                             </button>
 
@@ -126,59 +172,26 @@
 
         @include('site.components.ajouter-au-panier-menu')
 
-    @endsection
 
-    @section('scripts')
         <script>
-            $('.quantity-btn').click(function(e) {
-                e.preventDefault();
+            function increaseValue(button) {
+                // Récupérer le parent le plus proche contenant le champ input
+                const input = button.parentElement.querySelector(".cart-plus-minus-box");
+                let currentValue = parseInt(input.value);
+                input.value = currentValue + 1;
+            }
 
-                var input = $(this).siblings('.quantity-input');
-                var currentQuantity = parseInt(input.val());
-                var action = $(this).data('action');
-
-                if (action === 'decrement' && currentQuantity > 1) {
-                    input.val(currentQuantity - 1);
-                } else if (action === 'increment') {
-                    input.val(currentQuantity + 1);
+            function decreaseValue(button) {
+                // Récupérer le parent le plus proche contenant le champ input
+                const input = button.parentElement.querySelector(".cart-plus-minus-box");
+                let currentValue = parseInt(input.value);
+                if (currentValue > 1) {
+                    input.value = currentValue - 1;
                 }
-            });
-            // document.addEventListener('DOMContentLoaded', function() {
-            //     // Gérer le clic sur les boutons "Commander"
-            //     document.querySelectorAll('.commander-btn').forEach(button => {
-            //         button.addEventListener('click', function() {
-            //             const produitId = this.dataset.produitId;
-            //             const hasComplement = this.dataset.hasComplement === '1';
-
-            //             // Vérifier si un complément est sélectionné si nécessaire
-            //             if (hasComplement) {
-            //                 const selectedComplement = document.querySelector(
-            //                     `input[name="complement_${produitId}"]:checked`);
-            //                 if (!selectedComplement) {
-            //                     alert("Veuillez choisir un complément avant de commander ce plat.");
-            //                     return;
-            //                 }
-            //                 const complementId = selectedComplement.value;
-
-            //                 // Ajouter au panier avec le complément
-            //                 addToCart(produitId, complementId);
-            //             } else {
-            //                 // Ajouter au panier sans complément
-            //                 addToCart(produitId, null);
-            //             }
-            //         });
-            //     });
-
-            //     // Fonction pour ajouter au panier
-            //     function addToCart(produitId, complementId) {
-            //         console.log(`Produit ajouté : ${produitId}, Complément : ${complementId || 'Aucun'}`);
-            //         alert('Produit ajouté au panier avec succès !');
-            //         // TODO: Envoyer la requête au serveur via AJAX
-            //     }
-            // });
+            }
         </script>
-    @endsection
 
 
-</div>
+
+    </div>
 @endsection

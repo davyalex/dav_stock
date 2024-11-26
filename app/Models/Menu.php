@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Menu extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory, SoftDeletes;
     public $incrementing = false;
 
     protected $fillable = [
@@ -28,13 +28,12 @@ class Menu extends Model
         });
     }
 
- 
-    public function produits()
+    //MENU
+    public function plats()
     {
-        return $this->belongsToMany(Produit::class, 'menu_produit')
-        ->where('statut' , 'active')
-        ->withPivot('categorie_menu_id')
-        ->withTimestamps();
+        return $this->belongsToMany(Plat::class, 'menu_plat')
+            ->withPivot('categorie_menu_id')
+            ->withTimestamps();
     }
 
     public function user()
@@ -42,5 +41,9 @@ class Menu extends Model
         return $this->belongsTo(User::class);
     }
 
-    
+
+    // MENU
+
+
+
 }

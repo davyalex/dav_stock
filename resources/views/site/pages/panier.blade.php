@@ -132,9 +132,9 @@
                     <div class="col-lg-12">
                         <div class="cart-shiping-update-wrapper">
                             <div class="cart-shiping-update">
-                             @if ($urlBack = url()->previous())
-                             <a href="{{ $urlBack }}">Retour à la page précédente</a>
-                             @endif
+                                @if ($urlBack = url()->previous())
+                                    <a href="{{ $urlBack }}">Retour à la page précédente</a>
+                                @endif
                             </div>
                             {{-- <div class="cart-clear">
                             <button>Update Shopping Cart</button>

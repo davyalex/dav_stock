@@ -204,12 +204,12 @@ class SiteController extends Controller
             //         },
             //     ])->first();
 
-
+            // Récupérer le menu du jour avec les produits, compléments et garnitures
             $menu = Menu::where('date_menu', Carbon::today()->toDateString())
                 ->with([
-                    'produits' => function ($query) {
+                    'plats' => function ($query) {
                         $query->with([
-                            'categorieMenu',
+                            'categorieMenu',  // Relation vers la catégorie de produit
                             'complements' => function ($query) {
                                 $query->wherePivot('menu_id', function ($subQuery) {
                                     $subQuery->select('id')
@@ -217,11 +217,16 @@ class SiteController extends Controller
                                         ->where('date_menu', Carbon::today()->toDateString());
                                 });
                             },
+                            'garnitures' => function ($query) {
+                                $query->wherePivot('menu_id', function ($subQuery) {
+                                    $subQuery->select('id')
+                                        ->from('menus')
+                                        ->where('date_menu', Carbon::today()->toDateString());
+                                });
+                            }
                         ]);
                     },
                 ])->first();
-            
-
 
             // Vérifier s'il y a un menu
             if (!$menu) {
@@ -229,15 +234,16 @@ class SiteController extends Controller
             }
 
             // Grouper les produits par nom de catégorie et trier par position de catégorie
-            $categories = $menu->produits
-                ->groupBy(function ($produit) {
-                    return $produit->categorieMenu->nom; // Regrouper par le nom de la catégorie
+            $categories = $menu->plats
+                ->groupBy(function ($plat) {
+                    return $plat->categorieMenu->nom; // Grouper par le nom de la catégorie
                 })
                 ->sortBy(function ($group, $key) {
                     // Trier les groupes par la position des catégories
                     $categorie = $group->first()->categorieMenu;
                     return $categorie ? $categorie->position : 0; // Si une catégorie n'a pas de position, utiliser 0
                 });
+
 
 
             // dd($categories->toArray());
