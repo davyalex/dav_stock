@@ -72,13 +72,13 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
             return; // Arrêter l'exécution si un complément ou une garniture n'est pas sélectionné
         }
 
-        console.log("ID du produit:", getId);
-        console.log("Quantité:", getQuantity);
-        console.log("Prix du produit:", getPrice);
-        console.log("Complément sélectionné:", getComplement);
-        console.log("Garniture sélectionnée:", getGarniture);
-        console.log("Le produit a des compléments obligatoires:", hasComplements);
-        console.log("Le produit a des garnitures obligatoires:", hasGarnitures);
+        // console.log("ID du produit:", getId);
+        // console.log("Quantité:", getQuantity);
+        // console.log("Prix du produit:", getPrice);
+        // console.log("Complément sélectionné:", getComplement);
+        // console.log("Garniture sélectionnée:", getGarniture);
+        // console.log("Le produit a des compléments obligatoires:", hasComplements);
+        // console.log("Le produit a des garnitures obligatoires:", hasGarnitures);
         // Requête AJAX pour ajouter le produit et le complément au panier
         $.ajax({
             type: "GET",
@@ -92,6 +92,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
             },
             dataType: "json",
             success: function(response) {
+
+                console.log(response);
+                
                 // Mise à jour des totaux du panier
                 $('.totalQuantity').html(response.totalQte);
                 $('.totalPrice').html(response.totalPrice + ' FCFA');

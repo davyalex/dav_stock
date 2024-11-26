@@ -18,8 +18,12 @@ class PanierController extends Controller
     //  // Afficher le contenu du panier
     public function index()
     {
+        // session()->forget(['cartMenu' , 'cart']);
+        // panier des plats quotidiens
         $cart = session()->get('cart', []);
-        
+        //panier menu
+        $cartMenu = session()->get('cartMenu', []);
+
         // si le panier n'est pas vide
         $categorieSelect = null;
 
@@ -27,16 +31,16 @@ class PanierController extends Controller
         if (!empty($cart)) {
             $produits = Produit::whereIn('id', array_keys($cart))->first(); // premier elément du panier
 
-        $categories = Categorie::whereNull('parent_id')
-        ->with('children')
-        ->whereIn('type', ['menu', 'bar'])
-        ->orderBy('position', 'DESC')
-        ->get();
+            $categories = Categorie::whereNull('parent_id')
+                ->with('children')
+                ->whereIn('type', ['menu', 'bar'])
+                ->orderBy('position', 'DESC')
+                ->get();
 
-        $categorieSelect = Categorie::whereId($produits->categorie_id)->first(); // recuperer les infos de la categorie a partir du slug
+            $categorieSelect = Categorie::whereId($produits->categorie_id)->first(); // recuperer les infos de la categorie a partir du slug
 
         }
-        // dd($categorieSelect);
+        dd($cartMenu, $cart);
         return view('site.pages.panier', compact('cart', 'categories', 'categorieSelect'));
         // return response()->json($cart);
     }
@@ -185,12 +189,11 @@ class PanierController extends Controller
     {
         if (session('cart')) {
 
-            
+
             return view('site.pages.caisse');
-        }else{
+        } else {
             return redirect()->route('accueil');
         }
-       
     }
 
 
