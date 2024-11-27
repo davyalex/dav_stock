@@ -40,8 +40,8 @@ class PanierController extends Controller
             $categorieSelect = Categorie::whereId($produits->categorie_id)->first(); // recuperer les infos de la categorie a partir du slug
 
         }
-        dd($cartMenu, $cart);
-        return view('site.pages.panier', compact('cart', 'categories', 'categorieSelect'));
+        // dd($cartMenu, $cart);
+        return view('site.pages.panier', compact('cart', 'categories', 'categorieSelect' ,'cartMenu'));
         // return response()->json($cart);
     }
 

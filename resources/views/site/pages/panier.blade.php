@@ -6,7 +6,7 @@
 
     <!-- shopping-cart-area start -->
     <div class="cart-main-area pt-35 pb-100">
-        @if (session('cart'))
+        @if (session('cart') || session('cartMenu'))
             <div class="container-fluid px-5">
                 <h3 class="page-title">Mon panier
                     <span class="quantityProduct">({{ count((array) session('cart')) }} produits)</span>
@@ -15,84 +15,102 @@
                 </h3>
                 <div class="row">
 
-                    @if (count(session('cart')) > 0)
+                    {{-- @if (session()->has('cart') || session()->has('cartMenu'))
                         <div class="col-12 col-md-12 col-sm-12 col-lg-3">
                             <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
                                 <div class="shop-widget">
-                                    <h4 class="shop-sidebar-title">MENU </small></h4>
+                                    <h4 class="shop-sidebar-title">MENU</h4>
                                     <div class="shop-catigory">
-                                        {{-- @include('site.sections.categorie.categoriechild', [
-                                            'categories' => $categories,
-                                            'categorieSelect' => $categorieSelect,
-                                        ]) --}}
-
                                         @include('site.sections.categorie.categorieproduit')
-
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    @endif --}}
+
                     <!-- ========== Start panier items ========== -->
-                    <div class="col-12 col-md-12 col-lg-6 col-sm-12">
+                    <div class="col-12 col-md-12 col-lg-9 col-sm-12">
                         <div class="row">
-                            @foreach (session('cart') as $id => $details)
-                                <div class="col-12 col-lg-6 mb-4" id="productDiv_{{ $id }}">
-                                    <div class="card h-100 p-3">
-                                        <div class="d-flex align-items-center">
-                                            <!-- Image du produit -->
-                                            <div class="product-image me-3">
-                                                <div style="width: 150px; height: 150px; overflow: hidden;">
-                                                    <img src="{{ $details['image'] }}" class="img-fluid"
-                                                        style="object-fit: cover; width: 100%; height: 100%;"
-                                                        alt="Produit 2">
-                                                </div>
-                                            </div>
-                                            <!-- Détails du produit -->
-                                            <div class="product-info flex-grow-1">
-                                                <h6 class="card-title text-uppercase"> {{ $details['title'] }} </h6>
-                                                {{-- <p class="card-text">Description rapide du produit.</p> --}}
-                                                <!-- Prix et quantité -->
-                                                <div class="d-flex justify-content-between col-sm-12">
-                                                    <div>
-                                                        <p class="font-weight-bold text-danger">Prix :
-                                                            {{ number_format($details['price'], 0, ',', ' ') }} FCFA</p>
-                                                        <p>
-                                                        <div class="product-quantity">
-                                                            <div class="cart-plus-minus">
-                                                                <div class="dec qtybutton"
-                                                                    onclick="decreaseValue({{ $id }})">-</div>
-                                                                <input data-id="{{ $id }}"
-                                                                    id="quantity-{{ $id }}"
-                                                                    class="cart-plus-minus-box" type="text"
-                                                                    name="quantity" value="{{ $details['quantity'] }}"
-                                                                    min="1" readonly>
-                                                                <div class="inc qtybutton"
-                                                                    onclick="increaseValue({{ $id }})">+</div>
+                            <div class="col-lg-12">
+                                @if (session()->has('cart'))
+                                    <div class="row">
+                                        @foreach (session('cart') as $id => $details)
+                                            <div class="col-12 col-lg-4 mb-4" id="productDiv_{{ $id }}">
+                                                <div class="card h-100 p-3">
+                                                    <div class="d-flex align-items-center">
+                                                        <!-- Image du produit -->
+                                                        <div class="product-image me-3">
+                                                            <div style="width: 150px; height: 150px; overflow: hidden;">
+                                                                @if ($details['image'])
+                                                                    <img src="{{ $details['image'] }}" class="img-fluid"
+                                                                        style="object-fit: cover; width: 100%; height: 100%;"
+                                                                        alt="Produit 2">
+                                                                @endif
                                                             </div>
                                                         </div>
+                                                        <!-- Détails du produit -->
+                                                        <div class="product-info flex-grow-1">
+                                                            <h6 class="card-title text-uppercase"> {{ $details['title'] }}
+                                                            </h6>
+                                                            {{-- <p class="card-text">Description rapide du produit.</p> --}}
+                                                            <!-- Prix et quantité -->
+                                                            <div class="d-flex justify-content-between col-sm-12">
+                                                                <div>
+                                                                    <p class="font-weight-bold text-danger">Prix :
+                                                                        {{ number_format($details['price'], 0, ',', ' ') }}
+                                                                        FCFA
+                                                                    </p>
+                                                                    <p>
+                                                                    <div class="product-quantity">
+                                                                        <div class="cart-plus-minus">
+                                                                            <div class="dec qtybutton"
+                                                                                onclick="decreaseValue({{ $id }})">
+                                                                                -
+                                                                            </div>
+                                                                            <input data-id="{{ $id }}"
+                                                                                id="quantity-{{ $id }}"
+                                                                                class="cart-plus-minus-box" type="text"
+                                                                                name="quantity"
+                                                                                value="{{ $details['quantity'] }}"
+                                                                                min="1" readonly>
+                                                                            <div class="inc qtybutton"
+                                                                                onclick="increaseValue({{ $id }})">
+                                                                                +
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
 
-                                                        </p>
-                                                        <p class="font-weight-bold text-danger">Total :
-                                                            <span
-                                                                class="totalPriceQty-{{ $id }}">{{ number_format($details['price'] * $details['quantity'], 0, ',', ' ') }}
-                                                                FCFA</span>
-                                                        </p>
+                                                                    </p>
+                                                                    <p class="font-weight-bold text-danger">Total :
+                                                                        <span
+                                                                            class="totalPriceQty-{{ $id }}">{{ number_format($details['price'] * $details['quantity'], 0, ',', ' ') }}
+                                                                            FCFA</span>
+                                                                    </p>
 
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
+                                                    <button data-id="{{ $id }}"
+                                                        class="btn btn-danger btn-sm me-2 remove">Supprimer</button>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <button data-id="{{ $id }}"
-                                            class="btn btn-danger btn-sm me-2 remove">Supprimer</button>
+                                        @endforeach
                                     </div>
-                                </div>
-                            @endforeach
+                                @endif
+                            </div>
 
+                            <div class="col-lg-12">
+
+                                <h3 class="text-center">Plats du Menu</h3>
+
+                                @include('site.pages.panier-menu')
+                            </div>
                         </div>
                     </div>
 
                     <!-- ========== End panier items ========== -->
+
 
                     <div class="col-12 col-sm-12 col-md-12 col-lg-3">
                         <div class="col-lg-12 col-md-12">
