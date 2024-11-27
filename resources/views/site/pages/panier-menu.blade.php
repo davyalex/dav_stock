@@ -1,7 +1,7 @@
 @if (session()->has('cartMenu'))
     <div class="row">
         @foreach (session('cartMenu') as $cartKey => $detailsMenu)
-            <div class="col-12 col-lg-6 mb-4" id="productDiv_{{ $cartKey }}">
+            <div class="col-12 col-lg-6 mb-4" id="platDiv_{{ $cartKey }}">
                 <div class="card h-100 p-3">
                     <div class="d-flex align-items-center">
                         <!-- Image du produit -->
@@ -60,7 +60,7 @@
                             </div>
                         </div>
                     </div>
-                    <button data-id="{{ $cartKey }}" class="btn btn-danger btn-sm me-2 remove"
+                    <button data-id="{{ $cartKey }}" class="btn btn-danger btn-sm me-2"
                         onclick="removeProductFromCart({{ $cartKey }})">Supprimer</button>
                 </div>
             </div>
@@ -119,9 +119,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
                     // Mettre à jour l'input de quantité
                     $(`#quantityMenu-${cartKey}`).val(newQuantity);
                     // Mettre à jour la quantité totale dans l'icône du panier
-                    $('.totalQuantity').html(response.totalQte);
+                    $('.totalQuantityMenu').html(response.totalQte);
                     // Mettre à jour le montant total du panier
-                    $('.totalPrice').html(response.totalPrice.toLocaleString("fr-FR") + ' FCFA');
+                    $('.totalPriceMenu').html(response.totalPrice.toLocaleString("fr-FR") + ' FCFA');
                     // Mettre à jour le montant total de ce produit
                     $(`.totalPriceQty-${cartKey}`).html(response.totalPriceQty.toLocaleString("fr-FR") +
                         ' FCFA');
@@ -165,64 +165,54 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
 
 
     //Fonction pour supprimer un produit du panier
-    $(".remove").click(function(e) {
-        e.preventDefault();
+    function removeProductFromCart(cartKey) {
+    // Demande de confirmation avant suppression
+    Swal.fire({
+        title: 'Êtes-vous sûr ?',
+        text: "Voulez-vous supprimer ce produit du panier ?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Oui, supprimer !',
+        cancelButtonText: 'Annuler'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "{{ route('cart.remove-menu') }}", // Route Laravel pour supprimer un produit
+                method: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    cart_key: cartKey // Identifiant unique du produit dans le panier
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // Supprimer le produit de l'interface
+                        $(`#platDiv_${cartKey}`).remove();
+                        // Mettre à jour la quantité totale
+                        $('.totalQuantityMenu').html(response.totalQte);
+                        // Mettre à jour le prix total
+                        $('.totalPriceMenu').html(response.totalPrice.toLocaleString("fr-FR") + ' FCFA');
 
-        var IdProduct = $(this).attr('data-id');
-        // console.log(productId);
-
-        Swal.fire({
-            title: 'Retirer du panier',
-            text: "Vous ne pourrez pas annuler cela !",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Oui, supprimer !',
-            cancelButtonText: 'Annuler'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '{{ route('cart.remove') }}',
-                    method: "POST",
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        id: IdProduct
-                    },
-
-                    success: function(response) {
-                        if (response.status == 'success') {
-                            $('.totalQuantity').html(response
-                                .totalQte) //MAJ quantité total panier icone
-                            $('.totalPrice').html(response.totalPrice.toLocaleString(
-                                    "fr-FR") +
-                                ' FCFA') // MAJ montant total panier 
-                            $('.countProductCart').html(response
-                                .countProductCart) //MAJ quantité total panier icone
-
-                            Swal.fire({
-                                title: 'Produit supprimé',
-                                text: 'Le produit a été supprimé du panier avec succès.',
-                                icon: 'success',
-                                showConfirmButton: false, // Masquer le bouton de confirmation
-                                timer: 1000, // L'alerte disparaît après delai ms (en secondes)
-                                timerProgressBar: true // Affiche une barre de progression pour le timer
-                            });
-                            $('#productDiv_' + IdProduct).remove(); // supprimer le produit 
-
-                            //rafraichir la page si panier vide
-                            if (response.countProductCart == 0) {
-                                window.location.href = "{{ route('panier') }}";
-                            }
-                        }
-
+                        // Alerte de succès
+                        Swal.fire({
+                            title: 'Supprimé !',
+                            text: 'Le produit a été retiré du panier.',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 1000,
+                            timerProgressBar: true
+                        });
+                    } else {
+                        alert("Erreur lors de la suppression du produit.");
                     }
-                });
-
-
-            }
-        })
-
-
+                },
+                error: function() {
+                    alert("Une erreur s'est produite lors de la suppression.");
+                }
+            });
+        }
     });
+}
+
 </script>

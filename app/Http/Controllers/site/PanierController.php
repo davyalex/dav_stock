@@ -41,7 +41,7 @@ class PanierController extends Controller
 
         }
         // dd($cartMenu, $cart);
-        return view('site.pages.panier', compact('cart', 'categories', 'categorieSelect' ,'cartMenu'));
+        return view('site.pages.panier', compact('cart', 'categories', 'categorieSelect', 'cartMenu'));
         // return response()->json($cart);
     }
 

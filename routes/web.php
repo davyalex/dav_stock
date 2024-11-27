@@ -466,7 +466,7 @@ Route::controller(PanierMenuController::class)->group(function () {
     // route::get('panier', 'index')->name('panier');
     route::get('add-menu/{id}', 'add')->name('cart.add-menu');
     route::post('update-menu', 'update')->name('cart.update-menu');
-    // route::post('remove-menu', 'remove')->name('cart.remove-menu');
+    route::post('remove-menu', 'remove')->name('cart.remove-menu');
 });
 
 

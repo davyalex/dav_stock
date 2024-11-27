@@ -325,6 +325,11 @@ class PanierMenuController extends Controller
                 return $item['price'] * $item['quantity'];
             }, $cartMenu));
 
+            // session()->put([
+            //     'totalQuantityMenu' => $totalQuantity,
+            //     'totalPriceMenu' => $totalPrice,
+            // ]);
+
             return response()->json([
                 'totalQte' => $totalQuantity,
                 'totalPrice' => $totalPrice,
@@ -397,25 +402,30 @@ class PanierMenuController extends Controller
             'cart_key' => 'required|string',
             'quantityMenu' => 'required|integer|min:1',
         ]);
-    
+
         try {
             // Récupérer le panier actuel
             $cartMenu = session()->get('cartMenu', []);
-    
+
             // Vérifier si la clé existe dans le panier
             if (isset($cartMenu[$validated['cart_key']])) {
                 // Mettre à jour la quantité
                 $cartMenu[$validated['cart_key']]['quantity'] = $validated['quantityMenu'];
-    
+
                 // Sauvegarder les changements dans la session
                 session()->put('cartMenu', $cartMenu);
-    
+
                 // Recalculer les totaux
                 $totalQuantity = array_sum(array_column($cartMenu, 'quantity'));
                 $totalPrice = array_sum(array_map(function ($item) {
                     return $item['price'] * $item['quantity'];
                 }, $cartMenu));
-    
+
+                // session()->put([
+                //     'totalQuantityMenu' => $totalQuantity,
+                //     'totalPriceMenu' => $totalPrice,
+                // ]);
+
                 return response()->json([
                     'status' => 'success',
                     'totalQte' => $totalQuantity,
@@ -429,5 +439,38 @@ class PanierMenuController extends Controller
             return response()->json(['error' => 'Une erreur est survenue lors de la mise à jour du panier.'], 500);
         }
     }
-    
+
+
+    public function remove(Request $request)
+    {
+        $cartKey = $request->input('cart_key');
+
+        // Vérifier si le panier existe dans la session
+        if (session()->has('cartMenu')) {
+            $cartMenu = session('cartMenu');
+
+            // Vérifier si l'élément existe dans le panier
+            if (isset($cartMenu[$cartKey])) {
+                unset($cartMenu[$cartKey]); // Supprimer l'élément du panier
+                session(['cartMenu' => $cartMenu]); // Mettre à jour la session
+
+                // Calculer les nouvelles valeurs
+                $totalQte = array_sum(array_column($cartMenu, 'quantity'));
+                $totalPrice = array_reduce($cartMenu, function ($total, $item) {
+                    return $total + ($item['price'] * $item['quantity']);
+                }, 0);
+
+                return response()->json([
+                    'status' => 'success',
+                    'totalQte' => $totalQte,
+                    'totalPrice' => $totalPrice
+                ]);
+            }
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Produit introuvable dans le panier.'
+        ]);
+    }
 }

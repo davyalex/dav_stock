@@ -100,12 +100,15 @@
                                 @endif
                             </div>
 
+                            <!-- ========== Start panier menu ========== -->
                             <div class="col-lg-12">
 
                                 <h3 class="text-center">Plats du Menu</h3>
 
                                 @include('site.pages.panier-menu')
                             </div>
+                            <!-- ========== End panier menu ========== -->
+
                         </div>
                     </div>
 
@@ -120,14 +123,26 @@
                                 </div>
                                 {{-- <h5>Nombre de produits <span class="countProductCart">{{ count((array) session('cart')) }}
                                     </span></h5> --}}
-                                <h5>Nombre de produits <span class="totalQuantity">{{ session('totalQuantity') }}
+                                <h5>Qté ordinaire <span class="totalQuantity">{{ session('totalQuantity') }}
                                     </span></h5>
-                                <h5>Montant du panier <span class="totalPrice">
+
+                                <h5>Qté Menu <span class="totalQuantityMenu">{{ session('totalQuantityMenu') }}
+                                    </span></h5>
+
+
+                                <h5 class="grand-totall-title">Total ordinaire: <span class="totalPrice">
                                         {{ number_format(session('totalPrice'), 0, ',', ' ') }} FCFA </span></h5>
 
 
-                                <h4 class="grand-totall-title">Total: <span class="totalPrice">
-                                        {{ number_format(session('totalPrice'), 0, ',', ' ') }} FCFA </span></h4>
+                                <h5 class="grand-totall-title">Total menu: <span class="totalPriceMenu">
+                                       </span></h5>
+                                @php
+                                    $totalNet = (int) session('totalPriceMenu', 0) + (int) session('totalPrice', 0);
+                                @endphp
+
+                                <h4 class="text-danger">Grand Total :  <span class="grand-totall-title totalNet ">
+                                        {{ number_format($totalNet, 0, ',', ' ') }} FCFA </span></h4>
+
 
 
                                 <div class="cart-shiping-update mb-3">
