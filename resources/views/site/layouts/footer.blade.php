@@ -10,7 +10,7 @@
                                        width="50" alt="">
                                </a>
                            </div>
-                           <p> {{ $setting->projet_description ?? 'Bienvenue chez restaurant Jeanne!' }} </p>
+                           <p> {{ $setting->projet_description ?? 'Bienvenue au restaurant CHEZ JEANNE!' }} </p>
                            {{-- <div class="payment-img">
                                 <a href="#">
                                     <img src="assets/img/icon-img/payment.png" alt="">
@@ -22,15 +22,16 @@
                        <div class="footer-widget mb-40">
                            <div class="footer-title mb-22">
                                <h4>Information</h4>
+                              
                            </div>
                            <div class="footer-content">
                                <ul>
                                    <li><a href="about-us.html">À propos de nous</a></li>
-                                   <li><a href="#">Informations de livraison</a></li>
+                                   {{-- <li><a href="#">Informations de livraison</a></li>
                                    <li><a href="#">Politique de confidentialité</a></li>
                                    <li><a href="#">Conditions générales</a></li>
                                    <li><a href="#">Service client</a></li>
-                                   <li><a href="#">Politique de retour</a></li>
+                                   <li><a href="#">Politique de retour</a></li> --}}
                                </ul>
                            </div>
                        </div>
