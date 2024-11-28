@@ -197,12 +197,7 @@
                         </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                    <div class="mt-4">
-                        <h3>Résumé global</h3>
-                        <p>Nombre total de produits vendus : <?php echo e($produitsVendus->sum('quantite_vendue')); ?></p>
-                        <p>Montant total des ventes :
-                            <?php echo e(number_format($produitsVendus->sum('montant_total'), 0, ',', ' ')); ?> FCFA</p>
-                    </div>
+                    
                 </div>
             </div>
 

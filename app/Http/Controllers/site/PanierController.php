@@ -98,6 +98,8 @@ class PanierController extends Controller
             'cart' => $cart,
             'totalQte' => $totalQuantity,
             'totalPrice' => $totalPrice,
+            'totalQteMenu' => Session::get('totalQteMenu'),
+
         ]);
     }
 

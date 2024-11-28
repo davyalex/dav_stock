@@ -191,12 +191,12 @@
                         </div>
                     @endforeach
 
-                    <div class="mt-4">
+                    {{-- <div class="mt-4">
                         <h3>Résumé global</h3>
                         <p>Nombre total de produits vendus : {{ $produitsVendus->sum('quantite_vendue') }}</p>
                         <p>Montant total des ventes :
                             {{ number_format($produitsVendus->sum('montant_total'), 0, ',', ' ') }} FCFA</p>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
 

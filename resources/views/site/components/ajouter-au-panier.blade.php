@@ -24,8 +24,15 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
             },
             dataType: "json",
             success: function(response) {
-                $('.totalQuantity').html(response.totalQte)
-                $('.totalPrice').html(response.totalPrice + ' FCFA')
+                var totalQteMenu = Number(
+                `{{ Session::get('totalQuantityMenu', 0) }}`); // depuis le panier menu
+                var totalPrice = Number(
+                `{{ Session::get('totalPriceMenu', 0) }}`); // depuis le panier menu
+
+                // console.log(totalPrice);
+
+                $('.totalQuantity').html(response.totalQte + totalQteMenu)
+                $('.totalPrice').html(response.totalPrice + totalPrice + ' FCFA')
                 //   $('.pro-quantity').html(response.qte)
                 //   $('.cart-price').html(response.price)
                 //   $('.get-total').html(response.total)

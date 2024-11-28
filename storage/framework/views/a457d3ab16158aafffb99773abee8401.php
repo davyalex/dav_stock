@@ -9,7 +9,9 @@
         <?php if(session('cart') || session('cartMenu')): ?>
             <div class="container-fluid px-5">
                 <h3 class="page-title">Mon panier
-                    <span class="quantityProduct">(<?php echo e(count((array) session('cart'))); ?> produits)</span>
+                    <span class="quantityProduct">(<?php echo e(count((array) session('cart')) + count((array) session('cartMenu'))); ?>
+
+                        produits)</span>
                 </h3>
                 <?php $sousTotal = 0 ?>
                 </h3>
@@ -221,9 +223,16 @@
                 success: function(response) {
                     if (response.status === 'success') {
 
+
+                        var totalQteMenu = Number(
+                            `<?php echo e(Session::get('totalQuantityMenu', 0)); ?>`); // depuis le panier menu
+                        var totalPrice = Number(
+                            `<?php echo e(Session::get('totalPriceMenu', 0)); ?>`); // depuis le panier menu
+                        var totalPriceAndTotalMenu = response.totalPrice + totalPrice;
                         $(`#quantity-${id}`).val(newQuantity); // MAJ nouvelle quantité
-                        $('.totalQuantity').html(response.totalQte) //MAJ quantité total panier icone
-                        $('.totalPrice').html(response.totalPrice.toLocaleString("fr-FR") +
+                        $('.totalQuantity').html(response.totalQte +
+                            totalQteMenu) //MAJ quantité total panier icone
+                        $('.totalPrice').html(totalPriceAndTotalMenu.toLocaleString("fr-FR") +
                             ' FCFA') // MAJ montant total panier 
                         $('.totalPriceQty-' + id).html(response.totalPriceQty.toLocaleString("fr-FR") +
                             ' FCFA') // MAJ montant total du produit * sa quantite

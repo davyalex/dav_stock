@@ -108,6 +108,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
                     timer: 1000,
                     timerProgressBar: true
                 });
+
+                // Redirection vers la page panier
+                // window.location.href = "{{ route('panier') }}";
             },
             error: function() {
                 Swal.fire({
