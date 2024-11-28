@@ -15,7 +15,8 @@ class CommandeController extends Controller
     public function index()
     {
         try {
-            $commandes = Commande::with('client', 'produits')->orderBy('created_at', 'desc')->get();
+            $commandes = Commande::with('client', 'produits' ,'plats')->orderBy('created_at', 'desc')->get();
+            // dd( $commandes->toArray());
             return view('backend.pages.vente.commande.index', compact('commandes'));
         } catch (\Exception $e) {
             Alert::error('Erreur', 'Une erreur est survenue lors de la récupération des commandes : ' . $e->getMessage());
@@ -26,7 +27,7 @@ class CommandeController extends Controller
     public function show($id)
     {
         try {
-            $commande = Commande::with('client', 'produits')->findOrFail($id);
+            $commande = Commande::with('client', 'produits' , 'plats')->findOrFail($id);
             return view('backend.pages.vente.commande.show', compact('commande'));
         } catch (\Exception $e) {
             Alert::error('Erreur', 'Une erreur est survenue lors de la récupération des détails de la commande : ' . $e->getMessage());

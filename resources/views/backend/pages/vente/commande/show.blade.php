@@ -38,7 +38,8 @@
                         </div>
                         <div class="col-md-4">
                             <p><strong>Mode de livraison :</strong> {{ $commande->mode_livraison }}</p>
-                            <p><strong>Adresse de livraison :</strong> {{ $commande->adresse_livraison ?? 'Chez jeanne' }}</p>
+                            <p><strong>Adresse de livraison :</strong> {{ $commande->adresse_livraison ?? 'Chez jeanne' }}
+                            </p>
                             <p><strong>Mode de paiement :</strong> {{ $commande->mode_paiement }}</p>
 
                         </div>
@@ -46,41 +47,41 @@
                 </div>
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Produits de la commande</h5>
-                   
-                   
-                 @if (auth()->user()->hasRole('caisse'))
-                 <div class="d-flex justify-content-end mt-3">
-                    {{-- <a href="{{ route('commande.index') }}" type="button" class="btn btn-primary">Retour aux commandes</a> --}}
 
-                    <button type="button" class="btn btn-info me-2 btnImprimerTicket" onclick="imprimerFacture()">
-                        <i class="ri-printer-line align-bottom me-1"></i> Imprimer la facture
-                    </button>
-                    <select class="form-select w-auto" data-commande="{{ $commande->id }}"
-                        onchange="changerStatut(this)" {{ $commande->statut == 'livrée' ? 'disabled' : '' }}>
-                        <option value="">Changer le statut</option>
-                        @if ($commande->statut == 'annulée' || ($commande->statut != 'confirmée' && $commande->statut != 'livrée'))
-                            <option value="en attente" {{ $commande->statut == 'en attente' ? 'selected' : '' }}>En
-                                attente</option>
-                            <option value="confirmée" {{ $commande->statut == 'confirmée' ? 'selected' : '' }}>
-                                Confirmée</option>
-                            <option value="livrée" {{ $commande->statut == 'livrée' ? 'selected' : '' }}>Livrée
-                            </option>
-                            <option value="annulée" {{ $commande->statut == 'annulée' ? 'selected' : '' }}>Annulée
-                            </option>
-                        @elseif($commande->statut == 'confirmée' || $commande->statut == 'livrée')
-                            <option value="livrée" {{ $commande->statut == 'livrée' ? 'selected' : '' }}>Livrée
-                            </option>
-                            <option value="annulée" {{ $commande->statut == 'annulée' ? 'selected' : '' }}>Annulée
-                            </option>
-                        @endif
-                    </select>
+
+                    @if (auth()->user()->hasRole('caisse'))
+                        <div class="d-flex justify-content-end mt-3">
+                            {{-- <a href="{{ route('commande.index') }}" type="button" class="btn btn-primary">Retour aux commandes</a> --}}
+
+                            <button type="button" class="btn btn-info me-2 btnImprimerTicket" onclick="imprimerFacture()">
+                                <i class="ri-printer-line align-bottom me-1"></i> Imprimer la facture
+                            </button>
+                            <select class="form-select w-auto" data-commande="{{ $commande->id }}"
+                                onchange="changerStatut(this)" {{ $commande->statut == 'livrée' ? 'disabled' : '' }}>
+                                <option value="">Changer le statut</option>
+                                @if ($commande->statut == 'annulée' || ($commande->statut != 'confirmée' && $commande->statut != 'livrée'))
+                                    <option value="en attente" {{ $commande->statut == 'en attente' ? 'selected' : '' }}>En
+                                        attente</option>
+                                    <option value="confirmée" {{ $commande->statut == 'confirmée' ? 'selected' : '' }}>
+                                        Confirmée</option>
+                                    <option value="livrée" {{ $commande->statut == 'livrée' ? 'selected' : '' }}>Livrée
+                                    </option>
+                                    <option value="annulée" {{ $commande->statut == 'annulée' ? 'selected' : '' }}>Annulée
+                                    </option>
+                                @elseif($commande->statut == 'confirmée' || $commande->statut == 'livrée')
+                                    <option value="livrée" {{ $commande->statut == 'livrée' ? 'selected' : '' }}>Livrée
+                                    </option>
+                                    <option value="annulée" {{ $commande->statut == 'annulée' ? 'selected' : '' }}>Annulée
+                                    </option>
+                                @endif
+                            </select>
+
+                        </div>
+                    @endif
 
                 </div>
-                 @endif
 
-                </div>
 
-             
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
@@ -99,10 +100,41 @@
                                     <tr id="row_{{ $item['id'] }}">
                                         <td>{{ ++$key }}</td>
                                         <td>
-                                            <img class="rounded-circle" src="{{ $item->getFirstMediaUrl('ProduitImage') }}"
-                                                width="50px" alt="">
+                                            <img class="rounded avatar-sm"
+                                                src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
+                                                width="50px" alt="{{ $item['nom'] }}">
                                         </td>
                                         <td>{{ $item['nom'] }}</td>
+                                        <td>{{ $item['pivot']['quantite'] }}</td>
+                                        <td>{{ number_format($item['pivot']['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
+                                        <td>{{ number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ') }}
+                                            FCFA</td>
+                                    </tr>
+                                @endforeach
+
+                                @foreach ($commande->plats as $key => $item)
+                                    <tr id="row_{{ $item['id'] }}">
+                                        <td>
+                                            <span class="badge bg-primary">Commande depuis Menu</span>
+                                        </td>
+                                        <td>
+                                            <img class="rounded avatar-sm"
+                                                src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
+                                                width="50px" alt="{{ $item['nom'] }}">
+                                        </td>
+                                        <td> <b>{{ $item['nom'] }}</b>
+
+                                            @if ($item['pivot']['garniture'])
+                                                <ul>
+                                                    <li>Garniture: {{ $item['pivot']['garniture'] }}</li>
+                                                </ul>
+                                            @endif
+                                            @if ($item['pivot']['complement'])
+                                                <ul>
+                                                    <li>Complément: {{ $item['pivot']['complement'] }}</li>
+                                                </ul>
+                                            @endif
+                                        </td>
                                         <td>{{ $item['pivot']['quantite'] }}</td>
                                         <td>{{ number_format($item['pivot']['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
                                         <td>{{ number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ') }}
@@ -123,10 +155,11 @@
             </div>
 
 
-             <!-- ========== Start facture generé ========== -->
+            <!-- ========== Start facture generé ========== -->
 
-             
-             <div class="ticket-container col-8 m-auto" style="font-family: 'Courier New', monospace; font-size: 12px; width: 350px;">
+
+            <div class="ticket-container col-8 m-auto"
+                style="font-family: 'Courier New', monospace; font-size: 12px; width: 350px;">
                 <div class="ticket-header" style="text-align: center;">
                     <h3>CHEZ JEANNE</h3>
                     <h4>RESTAURANT LOUNGE</h4>
@@ -139,10 +172,11 @@
                 </div>
                 <div class="ticket-info" style="padding: 0 10px;">
 
-                   
+
                     <div style="display: flex; justify-content: space-between;">
                         <span><strong>Caisse:</strong> {{ Auth::user()->caisse->libelle ?? 'Non définie' }}</span>
-                        <span><strong>Caissier:</strong> {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span>
+                        <span><strong>Caissier:</strong> {{ Auth::user()->first_name }}
+                            {{ Auth::user()->last_name }}</span>
                     </div>
                 </div>
                 <p style="text-align: center;">-------------------------------</p>
@@ -165,18 +199,41 @@
                                     <td>{{ number_format($produit->pivot->quantite * $produit->pivot->prix_unitaire, 0, ',', ' ') }}
                                     </td>
                                 </tr>
-                            
                             @endforeach
-                            <tfoot>
+
+                            @foreach ($commande->plats as $plat)
                                 <tr>
-                                    <th colspan="3" style="text-align: right;">Total:</th>
-                                    <th>{{ number_format($commande->montant_total, 0, ',', ' ') }} FCFA</th>
+                                    <td>{{ $plat->nom }}
+                                     
+                                        <span>
+                                            @if ($plat['pivot']['garniture'])
+                                                <ul>
+                                                    <li>Garniture: {{ $plat['pivot']['garniture'] }}</li>
+                                                </ul>
+                                            @endif
+                                            @if ($plat['pivot']['complement'])
+                                                <ul>
+                                                    <li>Complément: {{ $plat['pivot']['complement'] }}</li>
+                                                </ul>
+                                            @endif
+                                        </span>
+                                    </td>
+                                    <td>{{ $plat->pivot->quantite }}</td>
+                                    <td>{{ number_format($plat->pivot->prix_unitaire, 0, ',', ' ') }}</td>
+                                    <td>{{ number_format($plat->pivot->quantite * $plat->pivot->prix_unitaire, 0, ',', ' ') }}
+                                    </td>
                                 </tr>
-                            </tfoot>
+                            @endforeach
+                        <tfoot>
+                            <tr>
+                                <th colspan="3" style="text-align: right;">Total:</th>
+                                <th>{{ number_format($commande->montant_total, 0, ',', ' ') }} FCFA</th>
+                            </tr>
+                        </tfoot>
                         </tbody>
                     </table>
                 </div>
-               
+
 
                 <p style="text-align: center;">-------------------------------</p>
 
@@ -188,10 +245,12 @@
                 </div> --}}
 
                 <div class="col-md-12 m-auto">
-                    <span><strong>Nom du client:</strong> {{ $commande->client->first_name }} {{ $commande->client->last_name }}</span><br>
+                    <span><strong>Nom du client:</strong> {{ $commande->client->first_name }}
+                        {{ $commande->client->last_name }}</span><br>
                     <span><strong>Contact du client:</strong> {{ $commande->client->phone }}</span><br>
                     <span><strong>mode de livraison:</strong> {{ $commande->mode_livraison }}</span><br>
-                    <span><strong>Adresse de livraison:</strong> {{ $commande->adresse_livraison ?? 'Au restaurant' }}</span>
+                    <span><strong>Adresse de livraison:</strong>
+                        {{ $commande->adresse_livraison ?? 'Au restaurant' }}</span>
 
                 </div>
 
@@ -207,8 +266,7 @@
 
 
             <script>
-
-                function imprimerFacture(){
+                function imprimerFacture() {
                     var ticketContent = document.querySelector('.ticket-container').innerHTML;
                     var win = window.open('', '', 'height=700,width=700');
                     win.document.write('<html><head><title>Facture de commande</title></head><body>');
@@ -217,7 +275,6 @@
                     win.document.close();
                     win.print();
                 }
-                
             </script>
             <!-- ========== End facture generé ========== -->
 

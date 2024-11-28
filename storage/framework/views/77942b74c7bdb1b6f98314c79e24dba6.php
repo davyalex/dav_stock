@@ -39,7 +39,9 @@
                         </div>
                         <div class="col-md-4">
                             <p><strong>Mode de livraison :</strong> <?php echo e($commande->mode_livraison); ?></p>
-                            <p><strong>Adresse de livraison :</strong> <?php echo e($commande->adresse_livraison ?? 'Chez jeanne'); ?></p>
+                            <p><strong>Adresse de livraison :</strong> <?php echo e($commande->adresse_livraison ?? 'Chez jeanne'); ?>
+
+                            </p>
                             <p><strong>Mode de paiement :</strong> <?php echo e($commande->mode_paiement); ?></p>
 
                         </div>
@@ -47,41 +49,41 @@
                 </div>
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Produits de la commande</h5>
-                   
-                   
-                 <?php if(auth()->user()->hasRole('caisse')): ?>
-                 <div class="d-flex justify-content-end mt-3">
-                    
 
-                    <button type="button" class="btn btn-info me-2 btnImprimerTicket" onclick="imprimerFacture()">
-                        <i class="ri-printer-line align-bottom me-1"></i> Imprimer la facture
-                    </button>
-                    <select class="form-select w-auto" data-commande="<?php echo e($commande->id); ?>"
-                        onchange="changerStatut(this)" <?php echo e($commande->statut == 'livrée' ? 'disabled' : ''); ?>>
-                        <option value="">Changer le statut</option>
-                        <?php if($commande->statut == 'annulée' || ($commande->statut != 'confirmée' && $commande->statut != 'livrée')): ?>
-                            <option value="en attente" <?php echo e($commande->statut == 'en attente' ? 'selected' : ''); ?>>En
-                                attente</option>
-                            <option value="confirmée" <?php echo e($commande->statut == 'confirmée' ? 'selected' : ''); ?>>
-                                Confirmée</option>
-                            <option value="livrée" <?php echo e($commande->statut == 'livrée' ? 'selected' : ''); ?>>Livrée
-                            </option>
-                            <option value="annulée" <?php echo e($commande->statut == 'annulée' ? 'selected' : ''); ?>>Annulée
-                            </option>
-                        <?php elseif($commande->statut == 'confirmée' || $commande->statut == 'livrée'): ?>
-                            <option value="livrée" <?php echo e($commande->statut == 'livrée' ? 'selected' : ''); ?>>Livrée
-                            </option>
-                            <option value="annulée" <?php echo e($commande->statut == 'annulée' ? 'selected' : ''); ?>>Annulée
-                            </option>
-                        <?php endif; ?>
-                    </select>
+
+                    <?php if(auth()->user()->hasRole('caisse')): ?>
+                        <div class="d-flex justify-content-end mt-3">
+                            
+
+                            <button type="button" class="btn btn-info me-2 btnImprimerTicket" onclick="imprimerFacture()">
+                                <i class="ri-printer-line align-bottom me-1"></i> Imprimer la facture
+                            </button>
+                            <select class="form-select w-auto" data-commande="<?php echo e($commande->id); ?>"
+                                onchange="changerStatut(this)" <?php echo e($commande->statut == 'livrée' ? 'disabled' : ''); ?>>
+                                <option value="">Changer le statut</option>
+                                <?php if($commande->statut == 'annulée' || ($commande->statut != 'confirmée' && $commande->statut != 'livrée')): ?>
+                                    <option value="en attente" <?php echo e($commande->statut == 'en attente' ? 'selected' : ''); ?>>En
+                                        attente</option>
+                                    <option value="confirmée" <?php echo e($commande->statut == 'confirmée' ? 'selected' : ''); ?>>
+                                        Confirmée</option>
+                                    <option value="livrée" <?php echo e($commande->statut == 'livrée' ? 'selected' : ''); ?>>Livrée
+                                    </option>
+                                    <option value="annulée" <?php echo e($commande->statut == 'annulée' ? 'selected' : ''); ?>>Annulée
+                                    </option>
+                                <?php elseif($commande->statut == 'confirmée' || $commande->statut == 'livrée'): ?>
+                                    <option value="livrée" <?php echo e($commande->statut == 'livrée' ? 'selected' : ''); ?>>Livrée
+                                    </option>
+                                    <option value="annulée" <?php echo e($commande->statut == 'annulée' ? 'selected' : ''); ?>>Annulée
+                                    </option>
+                                <?php endif; ?>
+                            </select>
+
+                        </div>
+                    <?php endif; ?>
 
                 </div>
-                 <?php endif; ?>
 
-                </div>
 
-             
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
@@ -100,10 +102,42 @@
                                     <tr id="row_<?php echo e($item['id']); ?>">
                                         <td><?php echo e(++$key); ?></td>
                                         <td>
-                                            <img class="rounded-circle" src="<?php echo e($item->getFirstMediaUrl('ProduitImage')); ?>"
-                                                width="50px" alt="">
+                                            <img class="rounded avatar-sm"
+                                                src="<?php echo e($item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg')); ?>"
+                                                width="50px" alt="<?php echo e($item['nom']); ?>">
                                         </td>
                                         <td><?php echo e($item['nom']); ?></td>
+                                        <td><?php echo e($item['pivot']['quantite']); ?></td>
+                                        <td><?php echo e(number_format($item['pivot']['prix_unitaire'], 0, ',', ' ')); ?> FCFA</td>
+                                        <td><?php echo e(number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ')); ?>
+
+                                            FCFA</td>
+                                    </tr>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                <?php $__currentLoopData = $commande->plats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <tr id="row_<?php echo e($item['id']); ?>">
+                                        <td>
+                                            <span class="badge bg-primary">Commande depuis Menu</span>
+                                        </td>
+                                        <td>
+                                            <img class="rounded avatar-sm"
+                                                src="<?php echo e($item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg')); ?>"
+                                                width="50px" alt="<?php echo e($item['nom']); ?>">
+                                        </td>
+                                        <td> <b><?php echo e($item['nom']); ?></b>
+
+                                            <?php if($item['pivot']['garniture']): ?>
+                                                <ul>
+                                                    <li>Garniture: <?php echo e($item['pivot']['garniture']); ?></li>
+                                                </ul>
+                                            <?php endif; ?>
+                                            <?php if($item['pivot']['complement']): ?>
+                                                <ul>
+                                                    <li>Complément: <?php echo e($item['pivot']['complement']); ?></li>
+                                                </ul>
+                                            <?php endif; ?>
+                                        </td>
                                         <td><?php echo e($item['pivot']['quantite']); ?></td>
                                         <td><?php echo e(number_format($item['pivot']['prix_unitaire'], 0, ',', ' ')); ?> FCFA</td>
                                         <td><?php echo e(number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ')); ?>
@@ -125,10 +159,11 @@
             </div>
 
 
-             <!-- ========== Start facture generé ========== -->
+            <!-- ========== Start facture generé ========== -->
 
-             
-             <div class="ticket-container col-8 m-auto" style="font-family: 'Courier New', monospace; font-size: 12px; width: 350px;">
+
+            <div class="ticket-container col-8 m-auto"
+                style="font-family: 'Courier New', monospace; font-size: 12px; width: 350px;">
                 <div class="ticket-header" style="text-align: center;">
                     <h3>CHEZ JEANNE</h3>
                     <h4>RESTAURANT LOUNGE</h4>
@@ -141,10 +176,12 @@
                 </div>
                 <div class="ticket-info" style="padding: 0 10px;">
 
-                   
+
                     <div style="display: flex; justify-content: space-between;">
                         <span><strong>Caisse:</strong> <?php echo e(Auth::user()->caisse->libelle ?? 'Non définie'); ?></span>
-                        <span><strong>Caissier:</strong> <?php echo e(Auth::user()->first_name); ?> <?php echo e(Auth::user()->last_name); ?></span>
+                        <span><strong>Caissier:</strong> <?php echo e(Auth::user()->first_name); ?>
+
+                            <?php echo e(Auth::user()->last_name); ?></span>
                     </div>
                 </div>
                 <p style="text-align: center;">-------------------------------</p>
@@ -168,28 +205,56 @@
 
                                     </td>
                                 </tr>
-                            
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            <tfoot>
+
+                            <?php $__currentLoopData = $commande->plats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $plat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
-                                    <th colspan="3" style="text-align: right;">Total:</th>
-                                    <th><?php echo e(number_format($commande->montant_total, 0, ',', ' ')); ?> FCFA</th>
+                                    <td><?php echo e($plat->nom); ?>
+
+                                     
+                                        <span>
+                                            <?php if($plat['pivot']['garniture']): ?>
+                                                <ul>
+                                                    <li>Garniture: <?php echo e($plat['pivot']['garniture']); ?></li>
+                                                </ul>
+                                            <?php endif; ?>
+                                            <?php if($plat['pivot']['complement']): ?>
+                                                <ul>
+                                                    <li>Complément: <?php echo e($plat['pivot']['complement']); ?></li>
+                                                </ul>
+                                            <?php endif; ?>
+                                        </span>
+                                    </td>
+                                    <td><?php echo e($plat->pivot->quantite); ?></td>
+                                    <td><?php echo e(number_format($plat->pivot->prix_unitaire, 0, ',', ' ')); ?></td>
+                                    <td><?php echo e(number_format($plat->pivot->quantite * $plat->pivot->prix_unitaire, 0, ',', ' ')); ?>
+
+                                    </td>
                                 </tr>
-                            </tfoot>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <tfoot>
+                            <tr>
+                                <th colspan="3" style="text-align: right;">Total:</th>
+                                <th><?php echo e(number_format($commande->montant_total, 0, ',', ' ')); ?> FCFA</th>
+                            </tr>
+                        </tfoot>
                         </tbody>
                     </table>
                 </div>
-               
+
 
                 <p style="text-align: center;">-------------------------------</p>
 
                 
 
                 <div class="col-md-12 m-auto">
-                    <span><strong>Nom du client:</strong> <?php echo e($commande->client->first_name); ?> <?php echo e($commande->client->last_name); ?></span><br>
+                    <span><strong>Nom du client:</strong> <?php echo e($commande->client->first_name); ?>
+
+                        <?php echo e($commande->client->last_name); ?></span><br>
                     <span><strong>Contact du client:</strong> <?php echo e($commande->client->phone); ?></span><br>
                     <span><strong>mode de livraison:</strong> <?php echo e($commande->mode_livraison); ?></span><br>
-                    <span><strong>Adresse de livraison:</strong> <?php echo e($commande->adresse_livraison ?? 'Au restaurant'); ?></span>
+                    <span><strong>Adresse de livraison:</strong>
+                        <?php echo e($commande->adresse_livraison ?? 'Au restaurant'); ?></span>
 
                 </div>
 
@@ -205,8 +270,7 @@
 
 
             <script>
-
-                function imprimerFacture(){
+                function imprimerFacture() {
                     var ticketContent = document.querySelector('.ticket-container').innerHTML;
                     var win = window.open('', '', 'height=700,width=700');
                     win.document.write('<html><head><title>Facture de commande</title></head><body>');
@@ -215,7 +279,6 @@
                     win.document.close();
                     win.print();
                 }
-                
             </script>
             <!-- ========== End facture generé ========== -->
 
