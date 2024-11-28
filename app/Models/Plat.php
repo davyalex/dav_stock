@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Plat extends Model implements HasMedia
 {
@@ -85,6 +86,12 @@ class Plat extends Model implements HasMedia
         return $this->belongsToMany(Plat::class, 'plat_garniture', 'plat_id', 'garniture_id')
             ->withPivot('menu_id')
             ->withTimestamps();
+    }
+
+
+    public function commandes(): BelongsToMany
+    {
+        return $this->belongsToMany(Commande::class)->withPivot(['quantite', 'prix_unitaire', 'total' , 'garniture' , 'complement'])->withTimestamps();
     }
 
     //scope pour recuperer les plates active

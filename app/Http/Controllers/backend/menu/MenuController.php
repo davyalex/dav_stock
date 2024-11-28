@@ -96,7 +96,6 @@ class MenuController extends Controller
     public function store(Request $request)
     {
         try {
-
             // dd($request->toArray());
             // Valider les données
             $validatedData = $request->validate([
@@ -141,6 +140,11 @@ class MenuController extends Controller
                         $plat->garnitures()->attach($garnitureId, ['menu_id' => $menu->id]);
                     }
                 }
+            }
+
+            // enregistrer image
+            if ($request->hasFile('image')) {
+                $menu->addMediaFromRequest('image')->toMediaCollection('images');
             }
 
 

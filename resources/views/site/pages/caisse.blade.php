@@ -8,7 +8,7 @@
     <div class="checkout-area pb-80 pt-100">
         <div class="container">
             <div class="row">
-                
+
                 <div class="col-lg-8 m-auto">
                     <div class="checkout-wrapper">
                         <div id="faq" class="panel-group">
@@ -94,7 +94,7 @@
                                                         </h4>
                                                     </div>
                                                     <div class="billing-select">
-                                                        <select  name="payment_mode" id="paymentMode">
+                                                        <select name="payment_mode" id="paymentMode">
                                                             <option selected disabled value="">Selectionner</option>
                                                             <option value="orange money">Orange Money</option>
                                                             <option value="moov money">Moov Money</option>
@@ -106,7 +106,7 @@
                                                         </select>
                                                     </div>
 
-                                                 
+
 
                                                 </div>
                                             </div>
@@ -121,6 +121,7 @@
                                             data-bs-target="#payment-6">Facture de la commande</a></h5>
                                 </div>
                                 @if (session('cart'))
+                                <h5 class="text-center">Produit Ordinaire</h5>
                                     <div id="payment-6" class="panel-collapse collapse show" data-bs-parent="#faq">
                                         <div class="panel-body">
                                             <div class="order-review-wrapper">
@@ -188,13 +189,96 @@
                                         </div>
                                     </div>
                                 @endif
+
+
+                                <!-- ========== Start commande Menu ========== -->
+
+                                @if (session('cartMenu'))
+                                <h5 class="text-center">Produit Menu</h5>
+                                    <div id="payment-6" class="panel-collapse collapse show" data-bs-parent="#faq">
+                                        <div class="panel-body">
+                                            <div class="order-review-wrapper">
+                                                <div class="order-review">
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead>
+
+                                                                <tr>
+                                                                    <th class="width-1">Nom </th>
+                                                                    <th class="width-2">Pu</th>
+                                                                    <th class="width-3">Qté</th>
+                                                                    <th class="width-4">sous-total</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (session('cartMenu') as $cartKey => $detailsMenu)
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div class="o-pro-dec">
+                                                                                <p class="fw-bold">{{ $detailsMenu['title_plat'] }}</p>
+
+                                                                            @if($detailsMenu['title_complement'])
+                                                                                <p>Complément: {{ $detailsMenu['title_complement'] }}</p>
+                                                                            @endif
+                                                                            @if($detailsMenu['title_garniture'])
+                                                                                <p>Garniture: {{ $detailsMenu['title_garniture'] }}</p>
+                                                                            @endif
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="o-pro-price">
+                                                                                <p>{{ $detailsMenu['price'] }}</p>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="o-pro-qty">
+                                                                                <p>{{ $detailsMenu['quantity'] }}</p>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="o-pro-subtotal">
+                                                                                <p>{{ number_format($detailsMenu['price'] * $detailsMenu['quantity'], 0, ',', ' ') }}
+                                                                                </p>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                            <tfoot>
+                                                                {{-- <tr>
+                                                                <td colspan="3">Subtotal </td>
+                                                                <td colspan="1">$4,001.00</td>
+                                                            </tr>
+                                                            <tr class="tr-f">
+                                                                <td colspan="3">Shipping & Handling (Flat Rate - Fixed
+                                                                </td>
+                                                                <td colspan="1">$45.00</td>
+                                                            </tr> --}}
+                                                                <tr>
+                                                                    <td colspan="3">Total</td>
+                                                                    <td colspan="1" class=" fw-bold">
+                                                                        {{ number_format(session('totalPriceMenu'), 0, ',', ' ') }}
+                                                                        FCFA</td>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                                <!-- ========== End commande Menu ========== -->
+
                             </div>
 
                             <div class="billing-btn d-flex justify-content-between">
                                 @if ($urlPrevious = url()->previous())
-                                <a href="{{ $urlPrevious }}">Retour à la page précédente</a>
+                                    <a href="{{ $urlPrevious }}">Retour à la page précédente</a>
                                 @endif
-                                <button id="btnSend" style="background-color:#015701d6 ; color:white">Valider ma commande</button>
+                                <button id="btnSend" style="background-color:#015701d6 ; color:white">Valider ma
+                                    commande</button>
                             </div>
                         </div>
                     </div>
@@ -269,9 +353,7 @@
                     icon: 'error',
                     confirmButtonText: 'OK',
                 });
-            }
-            
-            else {
+            } else {
                 //on envoi les informations au controller pour enregistrer la commande
                 $.ajax({
                     url: "{{ route('cart.save-order') }}",
@@ -297,7 +379,7 @@
                                         window.location.href = "{{ route('accueil') }}";
                                     },
                                     300
-                                    ); // On ajoute un léger délai pour garantir la redirection après la fermeture
+                                ); // On ajoute un léger délai pour garantir la redirection après la fermeture
                             });;
                         }
                     },

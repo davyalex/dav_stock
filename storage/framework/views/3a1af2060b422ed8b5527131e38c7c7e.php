@@ -8,7 +8,7 @@
     <div class="checkout-area pb-80 pt-100">
         <div class="container">
             <div class="row">
-                
+
                 <div class="col-lg-8 m-auto">
                     <div class="checkout-wrapper">
                         <div id="faq" class="panel-group">
@@ -94,7 +94,7 @@
                                                         </h4>
                                                     </div>
                                                     <div class="billing-select">
-                                                        <select  name="payment_mode" id="paymentMode">
+                                                        <select name="payment_mode" id="paymentMode">
                                                             <option selected disabled value="">Selectionner</option>
                                                             <option value="orange money">Orange Money</option>
                                                             <option value="moov money">Moov Money</option>
@@ -106,7 +106,7 @@
                                                         </select>
                                                     </div>
 
-                                                 
+
 
                                                 </div>
                                             </div>
@@ -121,6 +121,7 @@
                                             data-bs-target="#payment-6">Facture de la commande</a></h5>
                                 </div>
                                 <?php if(session('cart')): ?>
+                                <h5 class="text-center">Produit Ordinaire</h5>
                                     <div id="payment-6" class="panel-collapse collapse show" data-bs-parent="#faq">
                                         <div class="panel-body">
                                             <div class="order-review-wrapper">
@@ -182,13 +183,90 @@
                                         </div>
                                     </div>
                                 <?php endif; ?>
+
+
+                                <!-- ========== Start commande Menu ========== -->
+
+                                <?php if(session('cartMenu')): ?>
+                                <h5 class="text-center">Produit Menu</h5>
+                                    <div id="payment-6" class="panel-collapse collapse show" data-bs-parent="#faq">
+                                        <div class="panel-body">
+                                            <div class="order-review-wrapper">
+                                                <div class="order-review">
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead>
+
+                                                                <tr>
+                                                                    <th class="width-1">Nom </th>
+                                                                    <th class="width-2">Pu</th>
+                                                                    <th class="width-3">Qté</th>
+                                                                    <th class="width-4">sous-total</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php $__currentLoopData = session('cartMenu'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cartKey => $detailsMenu): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div class="o-pro-dec">
+                                                                                <p class="fw-bold"><?php echo e($detailsMenu['title_plat']); ?></p>
+
+                                                                            <?php if($detailsMenu['title_complement']): ?>
+                                                                                <p>Complément: <?php echo e($detailsMenu['title_complement']); ?></p>
+                                                                            <?php endif; ?>
+                                                                            <?php if($detailsMenu['title_garniture']): ?>
+                                                                                <p>Garniture: <?php echo e($detailsMenu['title_garniture']); ?></p>
+                                                                            <?php endif; ?>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="o-pro-price">
+                                                                                <p><?php echo e($detailsMenu['price']); ?></p>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="o-pro-qty">
+                                                                                <p><?php echo e($detailsMenu['quantity']); ?></p>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="o-pro-subtotal">
+                                                                                <p><?php echo e(number_format($detailsMenu['price'] * $detailsMenu['quantity'], 0, ',', ' ')); ?>
+
+                                                                                </p>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                            </tbody>
+                                                            <tfoot>
+                                                                
+                                                                <tr>
+                                                                    <td colspan="3">Total</td>
+                                                                    <td colspan="1" class=" fw-bold">
+                                                                        <?php echo e(number_format(session('totalPriceMenu'), 0, ',', ' ')); ?>
+
+                                                                        FCFA</td>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                                <!-- ========== End commande Menu ========== -->
+
                             </div>
 
                             <div class="billing-btn d-flex justify-content-between">
                                 <?php if($urlPrevious = url()->previous()): ?>
-                                <a href="<?php echo e($urlPrevious); ?>">Retour à la page précédente</a>
+                                    <a href="<?php echo e($urlPrevious); ?>">Retour à la page précédente</a>
                                 <?php endif; ?>
-                                <button id="btnSend" style="background-color:#015701d6 ; color:white">Valider ma commande</button>
+                                <button id="btnSend" style="background-color:#015701d6 ; color:white">Valider ma
+                                    commande</button>
                             </div>
                         </div>
                     </div>
@@ -253,9 +331,7 @@
                     icon: 'error',
                     confirmButtonText: 'OK',
                 });
-            }
-            
-            else {
+            } else {
                 //on envoi les informations au controller pour enregistrer la commande
                 $.ajax({
                     url: "<?php echo e(route('cart.save-order')); ?>",
@@ -281,7 +357,7 @@
                                         window.location.href = "<?php echo e(route('accueil')); ?>";
                                     },
                                     300
-                                    ); // On ajoute un léger délai pour garantir la redirection après la fermeture
+                                ); // On ajoute un léger délai pour garantir la redirection après la fermeture
                             });;
                         }
                     },

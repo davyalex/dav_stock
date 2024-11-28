@@ -66,4 +66,9 @@ class Commande extends Model
         return $this->belongsToMany(Produit::class)->withPivot(['quantite','prix_unitaire','total'])->withTimestamps();
     }
 
+    
+    public function plats():BelongsToMany {
+        return $this->belongsToMany(Plat::class)->withPivot(['quantite','prix_unitaire','total' , 'garniture', 'complement'])->withTimestamps();
+    }
+
 }

@@ -135,12 +135,12 @@
 
 
                                 <h5 class="grand-totall-title">Total menu: <span class="totalPriceMenu">
-                                       </span></h5>
+                                    </span></h5>
                                 @php
                                     $totalNet = (int) session('totalPriceMenu', 0) + (int) session('totalPrice', 0);
                                 @endphp
 
-                                <h4 class="text-danger">Grand Total :  <span class="grand-totall-title totalNet ">
+                                <h4 class="text-danger">Grand Total : <span class="grand-totall-title totalNet ">
                                         {{ number_format($totalNet, 0, ',', ' ') }} FCFA </span></h4>
 
 
@@ -308,7 +308,20 @@
                                 //rafraichir la page si panier vide
                                 if (response.countProductCart == 0) {
                                     window.location.href = "{{ route('panier') }}";
+                                    // // Mettre la quantité totale du panier à 0
+                                    // $('.totalQuantity').html(0);
+
+                                    // // Mettre le prix total du panier à 0 avec le format français et "FCFA"
+                                    // $('.totalPrice').html(
+                                    //     (0).toLocaleString('fr-FR', {
+                                    //         minimumFractionDigits: 0
+                                    //     }) + ' FCFA'
+                                    // );
+
+
                                 }
+
+                                // window.location.href = "{{ route('panier') }}";
                             }
 
                         }
@@ -320,6 +333,33 @@
 
 
         });
+
+
+
+        // recuperer les nfo
+        function updateCartInfo() {
+            $.ajax({
+                url: '{{ route('cart.getInfo-menu') }}',
+                method: 'GET',
+                success: function(data) {
+                    $('.totalQuantityMenu').text(data.totalQte);
+                    $('.totalPriceMenu').html(
+                        new Intl.NumberFormat('fr-FR', {
+                            minimumFractionDigits: 0
+                        }).format(data.totalPrice) + ' FCFA'
+                    );
+
+                    // Optionnel : Mettre à jour l'affichage des items du panier
+                    // updateCartItems(data.cartMenu);
+                },
+                error: function() {
+                    console.error('Erreur lors de la récupération des données du panier.');
+                }
+            });
+        }
+
+        // Appeler cette fonction lorsque nécessaire, par exemple après un ajout au panier
+        updateCartInfo();
     </script>
 
 

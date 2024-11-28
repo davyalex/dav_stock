@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\site;
 
 use Carbon\Carbon;
+use App\Models\Plat;
 use App\Models\Produit;
 use App\Models\Commande;
 use App\Models\Categorie;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -166,6 +168,12 @@ class PanierController extends Controller
                 $totalPrice += $value['price'] * $value['quantity']; // total panier
             }
             $countProductCart = count((array) session('cart')); // nombre de produit du panier
+
+
+            session()->put([
+                'totalQuantity' => $totalQuantity,
+                'totalPrice' => $totalPrice
+            ]);
         }
         return response()->json([
             'status' => 'success',
@@ -187,9 +195,7 @@ class PanierController extends Controller
     //la caisse infos panier
     public function checkout(Request $request)
     {
-        if (session('cart')) {
-
-
+        if (session('cart') || session('cartMenu')) {
             return view('site.pages.caisse');
         } else {
             return redirect()->route('accueil');
@@ -202,18 +208,26 @@ class PanierController extends Controller
     public function saveOrder(Request $request)
     {
         try {
-            $cart = session()->get('cart');
+            $cart = session()->get('cart'); // panier des produits quotidiens
+            $cartMenu = session()->get('cartMenu'); // panier des produits menu
 
-            if (session('cart') && Auth::check()) {
+
+            if ((session('cart') || session('cartMenu')) && Auth::check()) {
 
                 ##recuperer les infos du panier
                 $nombreProduit = session('totalQuantity'); //nombre total des produit du panier
                 $montantTotal = session('totalPrice'); //montant total
 
+                ## infos panier menu
+                $nombreProduitMenu = session('totalQuantityMenu'); //nombre total des produit du panier
+                $montantTotalMenu = session('totalPriceMenu'); //montant total
+
+
+
                 $commande = Commande::firstOrCreate([
                     'code' => 'CMD-' . strtoupper(Str::random(8)),
                     'client_id' => Auth::id(),
-                    'montant_total' => $montantTotal,
+                    'montant_total' => $montantTotal + $montantTotalMenu,
                     'nombre_produit' => $nombreProduit,
                     'mode_livraison' => $request->optionLivraison,
                     'adresse_livraison' => $request->adresseLivraison,
@@ -224,19 +238,53 @@ class PanierController extends Controller
 
 
                 // enregistrement des produits dans la table pivot
-                foreach (session('cart') as $key => $value) {
-                    $commande->produits()->attach($key, [
-                        'quantite' => $value['quantity'],
-                        'prix_unitaire' => $value['price'],
-                        'total' => $value['price'] * $value['quantity'],
-                    ]);
+                if (session()->has('cart')) {
+                    foreach (session('cart') as $key => $value) {
+                        $commande->produits()->attach($key, [
+                            'quantite' => $value['quantity'],
+                            'prix_unitaire' => $value['price'],
+                            'total' => $value['price'] * $value['quantity'],
+                        ]);
+                    }
                 }
+
+                // enregistrement des plats dans la table pivot
+                // if (session()->has('cartMenu')) {
+                //     foreach (session('cartMenu') as $key => $value) {
+                //         $commande->plats()->attach($key, [
+                //             'quantite' => $value['quantity'],
+                //             'prix_unitaire' => $value['price'],
+                //             'total' => $value['price'] * $value['quantity'],
+                //             'complement' => $value['title_complement'] ?? '',
+                //             'garniture' => $value['title_garniture'] ?? '',
+                //         ]);
+                //     }
+                // }
+
+                if (session()->has('cartMenu')) {
+                    foreach (session('cartMenu') as $key => $value) {
+                        // Vérifiez si le plat existe
+                        if (Plat::where('id', $value['plat_id'])->exists()) {
+                            $commande->plats()->attach($value['plat_id'], [
+                                'quantite' => $value['quantity'],
+                                'prix_unitaire' => $value['price'],
+                                'total' => $value['price'] * $value['quantity'],
+                                'complement' => $value['title_complement'] ?? '',
+                                'garniture' => $value['title_garniture'] ?? '',
+                            ]);
+                        } else {
+                            // Enregistrez ou loguez les erreurs si nécessaire
+                            Log::warning("Le plat avec l'ID {$key} n'existe pas.");
+                        }
+                    }
+                }
+                
 
 
                 // suppression de la session panier
-                Session::forget('cart');
-                Session::forget('totalQuantity');
-                Session::forget('totalPrice');
+                Session::forget(['cart', 'cartMenu']);
+                Session::forget(['totalQuantity', 'totalQuantityMenu']);
+                Session::forget(['totalPrice', 'totalPriceMenu']);
 
                 return response()->json([
                     'message' => 'commande enregistrée avec success',

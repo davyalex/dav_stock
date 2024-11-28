@@ -166,53 +166,86 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
 
     //Fonction pour supprimer un produit du panier
     function removeProductFromCart(cartKey) {
-    // Demande de confirmation avant suppression
-    Swal.fire({
-        title: 'Êtes-vous sûr ?',
-        text: "Voulez-vous supprimer ce produit du panier ?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Oui, supprimer !',
-        cancelButtonText: 'Annuler'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: "{{ route('cart.remove-menu') }}", // Route Laravel pour supprimer un produit
-                method: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    cart_key: cartKey // Identifiant unique du produit dans le panier
-                },
-                success: function(response) {
-                    if (response.status === 'success') {
-                        // Supprimer le produit de l'interface
-                        $(`#platDiv_${cartKey}`).remove();
-                        // Mettre à jour la quantité totale
-                        $('.totalQuantityMenu').html(response.totalQte);
-                        // Mettre à jour le prix total
-                        $('.totalPriceMenu').html(response.totalPrice.toLocaleString("fr-FR") + ' FCFA');
+        // Demande de confirmation avant suppression
+        Swal.fire({
+            title: 'Êtes-vous sûr ?',
+            text: "Voulez-vous supprimer ce produit du panier ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Oui, supprimer !',
+            cancelButtonText: 'Annuler'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "{{ route('cart.remove-menu') }}", // Route Laravel pour supprimer un produit
+                    method: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        cart_key: cartKey // Identifiant unique du produit dans le panier
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            // Supprimer le produit de l'interface
+                            $(`#platDiv_${cartKey}`).remove();
+                            // Mettre à jour la quantité totale
+                            $('.totalQuantityMenu').html(response.totalQte);
+                            // Mettre à jour le prix total
+                            $('.totalPriceMenu').html(response.totalPrice.toLocaleString("fr-FR") +
+                                ' FCFA');
 
-                        // Alerte de succès
-                        Swal.fire({
-                            title: 'Supprimé !',
-                            text: 'Le produit a été retiré du panier.',
-                            icon: 'success',
-                            showConfirmButton: false,
-                            timer: 1000,
-                            timerProgressBar: true
-                        });
-                    } else {
-                        alert("Erreur lors de la suppression du produit.");
+                            // Alerte de succès
+                            Swal.fire({
+                                title: 'Supprimé !',
+                                text: 'Le produit a été retiré du panier.',
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 1000,
+                                timerProgressBar: true
+                            });
+
+
+                             //rafraichir la page si panier vide
+                             if (response.totalQte == 0) {
+                                    window.location.href = "{{ route('panier') }}";
+                                }
+
+                        } else {
+                            alert("Erreur lors de la suppression du produit.");
+                        }
+                    },
+                    error: function() {
+                        alert("Une erreur s'est produite lors de la suppression.");
                     }
-                },
-                error: function() {
-                    alert("Une erreur s'est produite lors de la suppression.");
-                }
-            });
-        }
-    });
-}
+                });
+            }
+        });
+    }
 
+
+
+    // recuperer les nfos panier menu
+    function updateCartInfo() {
+        $.ajax({
+            url: '{{ route('cart.getInfo-menu') }}',
+            method: 'GET',
+            success: function(data) {
+                $('.totalQuantityMenu').text(data.totalQte);
+                $('.totalPriceMenu').html(
+                    new Intl.NumberFormat('fr-FR', {
+                        minimumFractionDigits: 0
+                    }).format(data.totalPrice) + ' FCFA'
+                );
+                // Optionnel : Mettre à jour l'affichage des items du panier
+                // updateCartItems(data.cartMenu);
+            },
+            error: function() {
+                console.error('Erreur lors de la récupération des données du panier.');
+            }
+        });
+    }
+
+    // Appeler cette fonction lorsque nécessaire, par exemple après un ajout au panier
+    updateCartInfo();
 </script>
