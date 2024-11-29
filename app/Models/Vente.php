@@ -52,7 +52,7 @@ class Vente extends Model
 
 
 
-    
+
 
     public function user()
     {
@@ -71,7 +71,14 @@ class Vente extends Model
     public function produits()
     {
         return $this->belongsToMany(Produit::class, 'produit_vente')
-            ->withPivot('quantite', 'prix_unitaire', 'total' , 'unite_vente_id')
+            ->withPivot('quantite', 'prix_unitaire', 'total', 'unite_vente_id')
+            ->withTimestamps();
+    }
+
+    public function plats()
+    {
+        return $this->belongsToMany(Plat::class, 'plat_vente')
+            ->withPivot('quantite', 'prix_unitaire', 'total', 'complement', 'garniture')
             ->withTimestamps();
     }
 }

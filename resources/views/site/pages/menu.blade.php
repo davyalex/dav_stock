@@ -73,19 +73,15 @@
 
     @section('content')
 
-        @if ($menu && $menu->hasMedia('images'))
-            <div class="container"
-                style="background-image: url('{{ asset($menu->getFirstMediaUrl('images')) }}'); background-size: cover;">
-            @else
-                <div class="container" style="background-color: #c8ccf6;">
-        @endif
-        @if (!$menu)
-            <p class="text-center">Aucun menu disponible pour aujourd'hui.</p>
-        @else
-            <h1 class="text-center my-4">Menu du <span>{{ \Carbon\carbon::parse($menu->date)->format('d/m/Y') }}</span>
-            </h1>
 
-            <div class="row mt-4">
+        <div class="container">
+            @if (!$menu)
+                <p class="text-center">Aucun menu disponible pour aujourd'hui.</p>
+            @else
+                <h1 class="text-center my-4">Menu du <span>{{ \Carbon\carbon::parse($menu->date)->format('d/m/Y') }}</span>
+                </h1>
+
+                {{-- <div class="row mt-4">
                 @foreach ($categories as $categorie => $plats)
                     <div class="col-12 mb-4">
                         <div class="card shadow">
@@ -171,30 +167,544 @@
                         </div>
                     </div>
                 @endforeach
-            </div>
-        @endif
-    </div>
+            </div> --}}
 
-    @include('site.components.ajouter-au-panier-menu')
+                {{-- <div class="row mt-4">
+                @foreach ($categories as $categorie => $plats)
+                    <div class="col-12 mb-4">
+                        <div class="card shadow">
+                            <div class="card-header bg-danger text-white">
+                                <h3 class="m-0 text-white">{{ $categorie }}</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    @foreach ($plats as $plat)
+                                        <div class="col-md-4 mb-3">
+                                            <div class="card h-100">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between">
+                                                        <h5 class="card-title text-capitalize">{{ $plat->nom }}</h5>
+                                                        <strong id="price" class="text-danger">
+                                                            {{ number_format($plat->prix, 0, ',', ' ') }} FCFA
+                                                        </strong>
+                                                    </div>
+            
+                                                    <!-- Compléments -->
+                                                    @if ($plat->complements->isNotEmpty())
+                                                        <p class="card-text fw-bold">Choisissez vos compléments :</p>
+                                                        <form class="complement-form">
+                                                            @foreach ($plat->complements as $complement)
+                                                                <div class="form-check">
+                                                                    <input type="checkbox" id="complement_{{ $complement->id }}"
+                                                                        name="complement_{{ $plat->id }}[]"
+                                                                        value="{{ $complement->id }}" class="form-check-input">
+                                                                    <label for="complement_{{ $complement->id }}"
+                                                                        class="form-check-label">
+                                                                        {{ $complement->nom }}
+                                                                    </label>
+                                                                </div>
+                                                            @endforeach
+                                                        </form>
+                                                    @endif
+            
+                                                    <!-- Garnitures -->
+                                                    @if ($plat->garnitures->isNotEmpty())
+                                                        <p class="card-text fw-bold">Choisissez vos garnitures :</p>
+                                                        <form class="garniture-form">
+                                                            @foreach ($plat->garnitures as $garniture)
+                                                                <div class="form-check">
+                                                                    <input type="checkbox" id="garniture_{{ $garniture->id }}"
+                                                                        name="garniture_{{ $plat->id }}[]"
+                                                                        value="{{ $garniture->id }}" class="form-check-input">
+                                                                    <label for="garniture_{{ $garniture->id }}"
+                                                                        class="form-check-label">
+                                                                        {{ $garniture->nom }}
+                                                                    </label>
+                                                                </div>
+                                                            @endforeach
+                                                        </form>
+                                                    @endif
+                                                </div>
+                                                <div class="card-footer text-end">
+                                                    <div class="d-flex justify-content-between align-items-center">
+            
+                                                        <!-- Gestion de la quantité -->
+                                                        <div class="product-quantity" data-product-id="{{ $plat->id }}">
+                                                            <div class="cart-plus-minus">
+                                                                <div class="dec qtybutton" onclick="decreaseValue(this)">-</div>
+                                                                <input id="quantity" class="cart-plus-minus-box"
+                                                                    type="text" name="quantity" value="1" min="1" readonly>
+                                                                <div class="inc qtybutton" onclick="increaseValue(this)">+</div>
+                                                            </div>
+                                                        </div>
+            
+                                                        <button type="button" class="btn btn-danger addCart text-white"
+                                                            data-id="{{ $plat->id }}" data-price="{{ $plat->prix }}"
+                                                            style="border-radius: 10px">
+                                                            <i class="fa fa-shopping-cart"></i> Commander
+                                                        </button>
+            
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div> --}}
 
 
-    <script>
-        function increaseValue(button) {
-            // Récupérer le parent le plus proche contenant le champ input
-            const input = button.parentElement.querySelector(".cart-plus-minus-box");
-            let currentValue = parseInt(input.value);
-            input.value = currentValue + 1;
-        }
+                {{-- <div class="row mt-4">
+                @foreach ($categories as $categorie => $plats)
+                    <div class="col-12 mb-4">
+                        <div class="card shadow">
+                            <div class="card-header bg-danger text-white">
+                                <h3 class="m-0 text-white">{{ $categorie }}</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    @foreach ($plats as $plat)
+                                        <div class="col-md-4 mb-3">
+                                            <div class="card h-100">
+                                                <div class="card-body">
+                                                    <!-- Case à cocher pour le plat -->
+                                                    <div class="form-check">
+                                                        <input type="checkbox" id="plat_{{ $plat->id }}"
+                                                            class="form-check-input plat-checkbox" name="plats[]"
+                                                            value="{{ $plat->id }}">
+                                                        <label for="plat_{{ $plat->id }}"
+                                                            class="form-check-label fw-bold">
+                                                            {{ $plat->nom }}
+                                                        </label>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mt-2">
+                                                        <strong id="price" class="text-danger">
+                                                            {{ number_format($plat->prix, 0, ',', ' ') }} FCFA
+                                                        </strong>
+                                                    </div>
 
-        function decreaseValue(button) {
-            // Récupérer le parent le plus proche contenant le champ input
-            const input = button.parentElement.querySelector(".cart-plus-minus-box");
-            let currentValue = parseInt(input.value);
-            if (currentValue > 1) {
-                input.value = currentValue - 1;
+                                                    <!-- Compléments -->
+                                                    @if ($plat->complements->isNotEmpty())
+                                                        <p class="card-text fw-bold mt-3">Choisissez vos compléments :</p>
+                                                        <form class="complement-form">
+                                                            @foreach ($plat->complements as $key => $complement)
+                                                                <div class="form-check">
+                                                                    <input type="checkbox"
+                                                                        id="complement_{{ $key.$complement->id }}"
+                                                                        name="complement_{{ $plat->id }}[]"
+                                                                        class="form-check-input complement-checkbox"
+                                                                        data-plat-id="{{ $plat->id }}"
+                                                                        value="{{ $complement->id }}">
+                                                                    <label for="complement_{{ $key.$complement->id }}"
+                                                                        class="form-check-label">
+                                                                        {{ $complement->nom }}
+                                                                    </label>
+                                                                </div>
+                                                            @endforeach
+                                                        </form>
+                                                    @endif
+
+                                                    <!-- Garnitures -->
+                                                    @if ($plat->garnitures->isNotEmpty())
+                                                        <p class="card-text fw-bold mt-3">Choisissez vos garnitures :</p>
+                                                        <form class="garniture-form">
+                                                            @foreach ($plat->garnitures as $key => $garniture)
+                                                                <div class="form-check">
+                                                                    <input type="checkbox"
+                                                                        id="garniture_{{ $key.$garniture->id }}"
+                                                                        name="garniture_{{ $plat->id }}[]"
+                                                                        class="form-check-input garniture-checkbox"
+                                                                        data-plat-id="{{ $plat->id }}"
+                                                                        value="{{ $garniture->id }}">
+                                                                    <label for="garniture_{{ $key.$garniture->id }}"
+                                                                        class="form-check-label">
+                                                                        {{ $garniture->nom }}
+                                                                    </label>
+                                                                </div>
+                                                            @endforeach
+                                                        </form>
+                                                    @endif
+                                                </div>
+                                                <div class="card-footer text-end">
+                                                    <div class="d-flex justify-content-between align-items-center">
+
+                                                        <!-- Gestion de la quantité -->
+                                                        <div class="product-quantity"
+                                                            data-product-id="{{ $plat->id }}">
+                                                            <div class="cart-plus-minus">
+                                                                <div class="dec qtybutton" onclick="decreaseValue(this)">-
+                                                                </div>
+                                                                <input id="quantity" class="cart-plus-minus-box"
+                                                                    type="text" name="quantity" value="1"
+                                                                    min="1" readonly>
+                                                                <div class="inc qtybutton" onclick="increaseValue(this)">+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <button type="button" class="btn btn-danger addCart text-white"
+                                                            data-id="{{ $plat->id }}" data-price="{{ $plat->prix }}"
+                                                            style="border-radius: 10px">
+                                                            <i class="fa fa-shopping-cart"></i> Commander
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div> --}}
+
+                <div class="row mt-4">
+                    @foreach ($categories as $categorie => $plats)
+                        <div class="col-sm-6 col-md-8 col-lg-8 col-xl-8 mb-4">
+                            <div class="card shadow">
+                                <div class="card-header bg-danger text-white">
+                                    <h5 class="m-0 text-white">{{ $categorie }}</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        @foreach ($plats as $platKey => $plat)
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card h-100">
+                                                    <div class="card-body">
+                                                        <!-- Case à cocher pour le plat -->
+
+                                                        <div class="d-flex justify-content-between mt-2">
+
+
+                                                            <div class="form-check ">
+                                                                <input type="checkbox" id="plat_{{ $plat->id }}"
+                                                                    class="form-check-input plat-checkbox" name="plats[]"
+                                                                    value="{{ $plat->id }}">
+                                                                <label for="plat_{{ $plat->id }}"
+                                                                    class="form-check-label fw-bold text-capitalize fs-6">
+                                                                    {{ $plat->nom }}
+                                                                </label>
+                                                            </div>
+
+                                                            <strong id="price" class="text-danger">
+                                                                {{ number_format($plat->prix, 0, ',', ' ') }} FCFA
+                                                            </strong>
+                                                        </div>
+
+
+                                                        <div class="row ">
+                                                            <div class="col-6">
+                                                                <!-- Compléments -->
+                                                                @if ($plat->complements->isNotEmpty())
+                                                                    <p class="card-text fw-bold mt-3">Choisir un complément
+                                                                        :
+                                                                    </p>
+                                                                    <form class="complement-form">
+                                                                        @foreach ($plat->complements as $complementKey => $complement)
+                                                                            <div class="form-check">
+                                                                                <input type="radio"
+                                                                                    id="complement_{{ $platKey }}_{{ $complementKey }}"
+                                                                                    name="complement_{{ $platKey }}"
+                                                                                    class="form-check-input complement-checkbox"
+                                                                                    data-plat-id="{{ $plat->id }}"
+                                                                                    value="{{ $complement->id }}">
+                                                                                <label
+                                                                                    for="complement_{{ $platKey }}_{{ $complementKey }}"
+                                                                                    class="form-check-label">
+                                                                                    {{ $complement->nom }}
+                                                                                </label>
+                                                                            </div>
+                                                                        @endforeach
+                                                                    </form>
+                                                                @endif
+
+                                                            </div>
+
+                                                            <div class="col-6">
+                                                                <!-- Garnitures -->
+                                                                @if ($plat->garnitures->isNotEmpty())
+                                                                    <p class="card-text fw-bold mt-3">Choisir une garniture
+                                                                        :
+                                                                    </p>
+                                                                    <form class="garniture-form">
+                                                                        @foreach ($plat->garnitures as $garnitureKey => $garniture)
+                                                                            <div class="form-check">
+                                                                                <input type="radio"
+                                                                                    id="garniture_{{ $platKey }}_{{ $garnitureKey }}"
+                                                                                    name="garniture_{{ $platKey }}"
+                                                                                    class="form-check-input garniture-checkbox"
+                                                                                    data-plat-id="{{ $plat->id }}"
+                                                                                    value="{{ $garniture->id }}">
+                                                                                <label
+                                                                                    for="garniture_{{ $platKey }}_{{ $garnitureKey }}"
+                                                                                    class="form-check-label">
+                                                                                    {{ $garniture->nom }}
+                                                                                </label>
+                                                                            </div>
+                                                                        @endforeach
+                                                                    </form>
+                                                                @endif
+                                                            </div>
+
+                                                            <style>
+                                                                .dec,
+                                                                .inc,
+                                                                .cart-plus-minus-box {
+                                                                    border: none;
+                                                                    background-color: rgb(255, 254, 254);
+
+                                                                }
+                                                            </style>
+
+
+
+                                                            <div class="product-quantity mb-0"
+                                                                data-product-id="{{ $plat->id }}">
+                                                                <div class="cart-plus-minus " style="float:right">
+                                                                    <div class="dec qtybutton"
+                                                                        onclick="decreaseValue(this)">-
+                                                                    </div>
+                                                                    <input id="quantity" class="cart-plus-minus-box"
+                                                                        type="text" name="quantity" value="1"
+                                                                        min="1" readonly>
+                                                                    <div class="inc qtybutton"
+                                                                        onclick="increaseValue(this)">+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-footer text-end d-none  py-0">
+                                                        <div class="d-flex justify-content-between align-items-center">
+
+                                                            <!-- Gestion de la quantité -->
+                                                            <div class="product-quantity py-4"
+                                                                data-product-id="{{ $plat->id }}">
+                                                                <div class="cart-plus-minus">
+                                                                    <div class="dec qtybutton"
+                                                                        onclick="decreaseValue(this)">-
+                                                                    </div>
+                                                                    <input id="quantity" class="cart-plus-minus-box"
+                                                                        type="text" name="quantity" value="1"
+                                                                        min="1" readonly>
+                                                                    <div class="inc qtybutton"
+                                                                        onclick="increaseValue(this)">+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            {{-- <div class="d-flex justify-content-between mt-2">
+                                                            <strong id="price" class="text-danger">
+                                                                {{ number_format($plat->prix, 0, ',', ' ') }} FCFA
+                                                            </strong>
+                                                        </div> --}}
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+
+                    <div class="col-4">
+                        @if ($menu && $menu->hasMedia('images'))
+                            <img src="{{ $menu->getFirstMediaUrl('images') }}" alt="Menu Image" class="img-fluid">
+                        @endif
+                    </div>
+
+
+                </div>
+
+                
+                    <button type="button" class="btn btn-secondary addCart text-white w-100" data-id="{{ $plat->id }}"
+                        data-price="{{ $plat->prix }}" style="border-radius: 5px; font-size: 20px;">
+                        <i class="fa fa-shopping-cart"></i> Ajouter au panier
+                    </button>
+
+               
+
+
+
+            @endif
+        </div>
+
+        @include('site.components.ajouter-au-panier-menu')
+
+
+        <script>
+            function increaseValue(button) {
+                // Récupérer le parent le plus proche contenant le champ input
+                const input = button.parentElement.querySelector(".cart-plus-minus-box");
+                let currentValue = parseInt(input.value);
+                input.value = currentValue + 1;
             }
-        }
-    </script>
+
+            function decreaseValue(button) {
+                // Récupérer le parent le plus proche contenant le champ input
+                const input = button.parentElement.querySelector(".cart-plus-minus-box");
+                let currentValue = parseInt(input.value);
+                if (currentValue > 1) {
+                    input.value = currentValue - 1;
+                }
+            }
+
+
+
+
+
+
+
+            // document.addEventListener("DOMContentLoaded", function() {
+            //     // Sélection des compléments et garnitures
+            //     const complementCheckboxes = document.querySelectorAll(".complement-checkbox");
+            //     const garnitureCheckboxes = document.querySelectorAll(".garniture-checkbox");
+
+            //     // Fonction pour cocher automatiquement le plat
+            //     // function checkPlat(checkbox) {
+            //     //     const platId = checkbox.getAttribute("data-plat-id"); // Récupérer l'ID du plat associé
+            //     //     const platCheckbox = document.querySelector(`#plat_${platId}`); // Cibler la case du plat
+            //     //     if (platCheckbox) {
+            //     //         platCheckbox.checked = true; // Cocher la case
+            //     //     }
+
+            //     //     console.log (platId ,platCheckbox );
+
+            //     // }
+
+
+            //     function checkPlat(checkbox) {
+            //         const platId = checkbox.getAttribute("data-plat-id");
+            //         console.log(`Plat ID : plat_${platId}`); // Vérifiez si l'ID est correct dans la console
+            //         const platCheckbox = document.getElementById(
+            //             `plat_${platId}`); // Utilisez getElementById pour une recherche plus fiable
+            //         if (platCheckbox) {
+            //             console.log(`Coche la case pour le plat ID : ${platId}`);
+            //             platCheckbox.checked = true;
+            //         } else {
+            //             console.log(`Case non trouvée pour le plat ID : ${platId}`);
+            //         }
+            //     }
+
+
+            //     // Ajout des écouteurs pour les compléments
+            //     complementCheckboxes.forEach((checkbox) => {
+            //         checkbox.addEventListener("change", function() {
+            //             checkPlat(this); // Coche le plat associé
+            //         });
+            //     });
+
+            //     // Ajout des écouteurs pour les garnitures
+            //     garnitureCheckboxes.forEach((checkbox) => {
+            //         checkbox.addEventListener("change", function() {
+            //             checkPlat(this); // Coche le plat associé
+            //         });
+            //     });
+            // });
+
+
+            // document.addEventListener('DOMContentLoaded', function() {
+            //     // Fonction pour cocher la case du plat
+            //     function checkPlat(checkbox) {
+            //         const platId = checkbox.getAttribute(
+            //         'data-plat-id'); // Récupère l'ID du plat depuis le data-plat-id
+            //         console.log(`Plat ID: ${platId}`);
+
+            //         // Recherche la case à cocher du plat en utilisant l'ID
+            //         const platCheckbox = document.getElementById(`plat_${platId}`);
+
+            //         if (platCheckbox) {
+            //             console.log(`Coche la case pour le plat ID : ${platId}`);
+            //             platCheckbox.checked = true; // Coche la case du plat
+            //         } else {
+            //             console.log(`Case non trouvée pour le plat ID : ${platId}`);
+            //         }
+            //     }
+
+            //     // Ajoute un événement de sélection aux compléments
+            //     const complementCheckboxes = document.querySelectorAll('.complement-checkbox');
+            //     complementCheckboxes.forEach(function(complementCheckbox) {
+            //         complementCheckbox.addEventListener('change', function() {
+            //             checkPlat(this); // Coche la case du plat lors de la sélection du complément
+            //         });
+            //     });
+
+            //     // Ajoute un événement de sélection aux garnitures
+            //     const garnitureCheckboxes = document.querySelectorAll('.garniture-checkbox');
+            //     garnitureCheckboxes.forEach(function(garnitureCheckbox) {
+            //         garnitureCheckbox.addEventListener('change', function() {
+            //             checkPlat(this); // Coche la case du plat lors de la sélection de la garniture
+            //         });
+            //     });
+            // });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // Fonction pour cocher la case du plat
+                function checkPlat(checkbox) {
+                    const platId = checkbox.getAttribute('data-plat-id');
+                    const platCheckbox = document.getElementById(`plat_${platId}`);
+
+                    if (platCheckbox) {
+                        platCheckbox.checked = true; // Coche la case du plat
+                    }
+                }
+
+                // Fonction pour décocher les garnitures et compléments associés
+                function uncheckPlatSelections(platId) {
+                    // Décoche tous les compléments associés à ce plat
+                    const complementCheckboxes = document.querySelectorAll(
+                        `.complement-checkbox[data-plat-id="${platId}"]`);
+                    complementCheckboxes.forEach(function(complementCheckbox) {
+                        complementCheckbox.checked = false;
+                    });
+
+                    // Décoche toutes les garnitures associées à ce plat
+                    const garnitureCheckboxes = document.querySelectorAll(
+                        `.garniture-checkbox[data-plat-id="${platId}"]`);
+                    garnitureCheckboxes.forEach(function(garnitureCheckbox) {
+                        garnitureCheckbox.checked = false;
+                    });
+                }
+
+                // Ajoute un événement de sélection aux compléments
+                const complementCheckboxes = document.querySelectorAll('.complement-checkbox');
+                complementCheckboxes.forEach(function(complementCheckbox) {
+                    complementCheckbox.addEventListener('change', function() {
+                        checkPlat(this); // Coche la case du plat lors de la sélection du complément
+                    });
+                });
+
+                // Ajoute un événement de sélection aux garnitures
+                const garnitureCheckboxes = document.querySelectorAll('.garniture-checkbox');
+                garnitureCheckboxes.forEach(function(garnitureCheckbox) {
+                    garnitureCheckbox.addEventListener('change', function() {
+                        checkPlat(this); // Coche la case du plat lors de la sélection de la garniture
+                    });
+                });
+
+                // Ajoute un événement de décochement à la case du plat
+                const platCheckboxes = document.querySelectorAll('.plat-checkbox');
+                platCheckboxes.forEach(function(platCheckbox) {
+                    platCheckbox.addEventListener('change', function() {
+                        const platId = platCheckbox.value; // Récupère l'ID du plat
+                        if (!platCheckbox.checked) {
+                            uncheckPlatSelections(
+                                platId
+                            ); // Si la case du plat est décochée, on décocher les garnitures et compléments associés
+                        }
+                    });
+                });
+            });
+        </script>
 
 
 

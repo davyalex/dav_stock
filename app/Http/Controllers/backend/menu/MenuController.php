@@ -151,9 +151,9 @@ class MenuController extends Controller
             Alert::success('Operation réussi', 'Success Message');
             return back();
         } catch (\Throwable $e) {
-            return $e->getMessage();
-            // Alert::error($e->getMessage(),  'Une erreur s\'est produite');
-            // return back();
+            // return $e->getMessage();
+            Alert::error($e->getMessage(),  'Une erreur s\'est produite');
+            return back();
         }
     }
 

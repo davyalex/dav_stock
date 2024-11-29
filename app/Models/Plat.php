@@ -91,7 +91,15 @@ class Plat extends Model implements HasMedia
 
     public function commandes(): BelongsToMany
     {
-        return $this->belongsToMany(Commande::class)->withPivot(['quantite', 'prix_unitaire', 'total' , 'garniture' , 'complement'])->withTimestamps();
+        return $this->belongsToMany(Commande::class)->withPivot(['quantite', 'prix_unitaire', 'total', 'garniture', 'complement'])->withTimestamps();
+    }
+
+
+    public function ventes()
+    {
+        return $this->belongsToMany(Vente::class, 'plat_vente')
+            ->withPivot('quantite', 'prix_unitaire', 'total', 'complement', 'garniture')
+            ->withTimestamps();
     }
 
     //scope pour recuperer les plates active

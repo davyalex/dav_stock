@@ -15,7 +15,7 @@ class CommandeController extends Controller
     public function index()
     {
         try {
-            $commandes = Commande::with('client', 'produits' ,'plats')->orderBy('created_at', 'desc')->get();
+            $commandes = Commande::with('client', 'produits', 'plats')->orderBy('created_at', 'desc')->get();
             // dd( $commandes->toArray());
             return view('backend.pages.vente.commande.index', compact('commandes'));
         } catch (\Exception $e) {
@@ -27,7 +27,7 @@ class CommandeController extends Controller
     public function show($id)
     {
         try {
-            $commande = Commande::with('client', 'produits' , 'plats')->findOrFail($id);
+            $commande = Commande::with('client', 'produits', 'plats')->findOrFail($id);
             return view('backend.pages.vente.commande.show', compact('commande'));
         } catch (\Exception $e) {
             Alert::error('Erreur', 'Une erreur est survenue lors de la récupération des détails de la commande : ' . $e->getMessage());
@@ -72,9 +72,9 @@ class CommandeController extends Controller
                 $vente->type_vente = 'commande';
                 $vente->commande_id = $commande->id;
                 $vente->mode_paiement = $commande->mode_paiement;
-
-
                 $vente->save();
+
+
 
                 // Associer les produits de la commande à la vente
                 foreach ($commande->produits as $produit) {
@@ -83,6 +83,17 @@ class CommandeController extends Controller
                         'prix_unitaire' => $produit->pivot->prix_unitaire,
                         'total' => $produit->pivot->total,
                     ]);
+
+
+                    foreach ($commande->plats as $plat) {
+                        $vente->plats()->attach($plat->id, [
+                            'quantite' => $plat->pivot->quantite,
+                            'prix_unitaire' => $plat->pivot->prix_unitaire,
+                            'total' => $plat->pivot->total,
+                            'garniture' => $plat->pivot->garniture ?? '',
+                            'complement' => $plat->pivot->complement ?? '',
+                        ]);
+                    }
 
 
                     // Mise à jour du stock pour les produits de la catégorie "bar"
@@ -139,4 +150,6 @@ class CommandeController extends Controller
             return response()->json(['success' => false, 'message' => 'Erreur lors de la mise à jour du statut'], 500);
         }
     }
+
+    
 }

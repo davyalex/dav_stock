@@ -2785,14 +2785,14 @@ product-quantity {
     text-align: center;
 }
 .product-quantity .dec.qtybutton {
-    border-right: 1px solid #e5e5e5;
+    /* border-right: 1px solid #e5e5e5; */
     height: 40px;
     left: 0;
     padding-top: 8px;
     top: 0;
 }
 .product-quantity .inc.qtybutton {
-    border-left: 1px solid #e5e5e5;
+    /* border-left: 1px solid #e5e5e5; */
     height: 40px;
     padding-top: 9px;
     right: 0;
@@ -2806,7 +2806,7 @@ product-quantity {
     margin: 0;
     width: 110px;
     background: transparent none repeat scroll 0 0;
-    border: 1px solid #e1e1e1;
+    /* border: 1px solid #e1e1e1; */
     padding: 0;
     text-align: center;
 }
