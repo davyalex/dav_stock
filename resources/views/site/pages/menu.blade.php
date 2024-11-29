@@ -517,21 +517,25 @@
                     @endforeach
 
                     <div class="col-4">
+                     <div>
                         @if ($menu && $menu->hasMedia('images'))
-                            <img src="{{ $menu->getFirstMediaUrl('images') }}" alt="Menu Image" class="img-fluid">
-                        @endif
+                        <img src="{{ $menu->getFirstMediaUrl('images') }}" alt="Menu Image" class="img-fluid " style="margin-top: -300px">
+                    @endif
+                     </div>
                     </div>
+                    
+                    
 
 
                 </div>
 
-                
-                    <button type="button" class="btn btn-secondary addCart text-white w-100" data-id="{{ $plat->id }}"
-                        data-price="{{ $plat->prix }}" style="border-radius: 5px; font-size: 20px;">
-                        <i class="fa fa-shopping-cart"></i> Ajouter au panier
-                    </button>
 
-               
+                <button type="button" class="btn btn-secondary addCart text-white w-100" data-id="{{ $plat->id }}"
+                    data-price="{{ $plat->prix }}" style="border-radius: 5px; font-size: 20px;">
+                    <i class="fa fa-shopping-cart"></i> Ajouter au panier
+                </button>
+
+
 
 
 
