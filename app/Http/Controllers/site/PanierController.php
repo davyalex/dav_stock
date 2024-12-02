@@ -29,7 +29,11 @@ class PanierController extends Controller
         // si le panier n'est pas vide
         // $categorieSelect = null;
 
-        $categories = null;
+        // $categories = Categorie::whereNull('parent_id')
+        //     ->with('children')
+        //     ->whereIn('type', ['menu', 'bar'])
+        //     ->orderBy('position', 'DESC')
+        //     ->get();
 
             $categorieSelect = Categorie::first(); // recuperer les infos de la categorie a partir du slug
 
@@ -45,7 +49,7 @@ class PanierController extends Controller
 
         }
         // dd($categorieSelect);
-        return view('site.pages.panier', compact('cart', 'categories', 'categorieSelect', 'cartMenu'));
+        return view('site.pages.panier', compact('cart', 'categorieSelect', 'cartMenu'));
         // return response()->json($cart);
     }
 
