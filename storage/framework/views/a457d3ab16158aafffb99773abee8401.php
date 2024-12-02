@@ -363,6 +363,7 @@
                         }).format(data.totalPrice) + ' FCFA'
                     );
 
+                    $('.totalQuantity').text(data.qteNet)
 
                      $('.totalNet').html(
                         new Intl.NumberFormat('fr-FR', {

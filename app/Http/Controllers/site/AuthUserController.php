@@ -83,7 +83,7 @@ class AuthUserController extends Controller
                     // Connecter l'utilisateur sans mot de passe
                     Auth::login($user);
 
-                    if (session('cart')) {
+                    if (session('cart') || session('cartMenu')) {
                         $url = 'caisse';  // si le panier n'est pas vide on redirige vers la page checkout
                     } else {
                         $url = '/';   // sinon on redirige vers l'accueil

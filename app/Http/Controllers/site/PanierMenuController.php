@@ -405,7 +405,7 @@ class PanierMenuController extends Controller
                         'image_plat' => $plat->media->isNotEmpty() ? $plat->media[0]->getUrl() : null,
                         'title_complement' => $complement ? $complement->nom : null,
                         'title_garniture' => $garniture ? $garniture->nom : null,
-                        'categorie_menu'=> $plat->categorieMenu->nom,
+                        'categorie_menu' => $plat->categorieMenu->nom,
                     ];
                 }
             }
@@ -551,6 +551,10 @@ class PanierMenuController extends Controller
                 'totalPrice' => $totalPrice, // Formaté avec deux décimales
                 'totalPriceQty' => $totalPriceQty, // Formaté avec deux décimales
                 'cartMenu' => $cartMenu, // Retourne le panier mis à jour
+
+                // total calculé cartMenu & cart
+                'qteNet' => session('totalQuantity', 0) + session('totalQuantityMenu', 0),
+                'priceNet' => session('totalPrice', 0) + session('totalPriceMenu', 0)
             ]);
         } catch (\Exception $e) {
             return response()->json([

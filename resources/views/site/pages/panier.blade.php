@@ -352,8 +352,7 @@
                 url: '{{ route('cart.getInfo-menu') }}',
                 method: 'GET',
                 success: function(data) {
-                    console.log(data);
-                    
+                    // console.log(data);
                     $('.totalQuantityMenu').text(data.totalQte);
                     $('.totalPriceMenu').html(
                         new Intl.NumberFormat('fr-FR', {
@@ -361,6 +360,7 @@
                         }).format(data.totalPrice) + ' FCFA'
                     );
 
+                    $('.totalQuantity').text(data.qteNet)
 
                      $('.totalNet').html(
                         new Intl.NumberFormat('fr-FR', {
