@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title><?php echo e(config('app.name')); ?> - <?php echo $__env->yieldContent('title'); ?> </title>
-    <meta name="description" content="Bienvenue chez Restaurant Chez Jeanne, votre destination culinaire pour une expérience gastronomique authentique et délicieuse. Découvrez notre menu varié, notre ambiance chaleureuse et notre service attentionné.">
+    <meta name="description" content="Bienvenue au restaurant Chez Jeanne, votre destination culinaire pour une expérience gastronomique authentique et délicieuse. Découvrez notre menu varié, notre ambiance chaleureuse et notre service attentionné.">
     <meta name="robots" content="noindex, follow" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->

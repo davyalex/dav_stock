@@ -69,7 +69,7 @@
         <div class="container">
             <div class="row flex-row">
                 <!-- start sidebar categorie-->
-                <div class="col-lg-3">
+                <div class="col-lg-3  d-none d-lg-block d-md-block">
                     <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
                         <div class="shop-widget">
                             <h4 class="shop-sidebar-title">MENU <i class="fa fa-angle-right"></i>

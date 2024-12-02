@@ -246,7 +246,7 @@
                 </div>
 
 
-                <button type="button" class="btn btn-secondary addCart text-white w-100" data-id="{{ $plat->id }}"
+                <button type="button" class="btn btn-danger addCart text-white w-100" data-id="{{ $plat->id }}"
                     data-price="{{ $plat->prix }}" style="border-radius: 5px; font-size: 20px;">
                     <i class="fa fa-shopping-cart"></i> Commander
                 </button>

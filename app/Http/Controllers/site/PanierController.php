@@ -27,9 +27,12 @@ class PanierController extends Controller
         $cartMenu = session()->get('cartMenu', []);
 
         // si le panier n'est pas vide
-        $categorieSelect = null;
+        // $categorieSelect = null;
 
         $categories = null;
+
+            $categorieSelect = Categorie::first(); // recuperer les infos de la categorie a partir du slug
+
         if (!empty($cart)) {
             $produits = Produit::whereIn('id', array_keys($cart))->first(); // premier elément du panier
 
@@ -39,10 +42,9 @@ class PanierController extends Controller
                 ->orderBy('position', 'DESC')
                 ->get();
 
-            $categorieSelect = Categorie::whereId($produits->categorie_id)->first(); // recuperer les infos de la categorie a partir du slug
 
         }
-        // dd($cartMenu, $cart);
+        // dd($categorieSelect);
         return view('site.pages.panier', compact('cart', 'categories', 'categorieSelect', 'cartMenu'));
         // return response()->json($cart);
     }

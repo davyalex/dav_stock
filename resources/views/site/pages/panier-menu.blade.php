@@ -10,8 +10,9 @@
                                 $plat = app\Models\Plat::whereId($detailsMenu['plat_id'])->first();
                                 $categorie = $plat->categorie->nom ?? null;
                             @endphp --}}
+                           
                             <div style="width: 150px; height: 150px; overflow: hidden;">
-                                {{-- <span> {{$categorie}}  </span> --}}
+                                <i class="text-italic text-danger fs-8"> {{ $detailsMenu['categorie_menu'] }} </i>
                                 @if ($detailsMenu['image_plat'])
                                     <img src="{{ $detailsMenu['image_plat'] }}" class="img-fluid"
                                         style="object-fit: cover; width: 100%; height: 100%;"
@@ -25,13 +26,14 @@
                         </div>
                         <!-- Détails du produit -->
                         <div class="product-info flex-grow-1">
-                            <h6 class="card-title text-uppercase"> {{ $detailsMenu['title_plat'] }} </h6>
+                            <h6 class="card-title text-uppercase"> {{ $detailsMenu['title_plat'] }}</h6> 
+
                             @if ($detailsMenu['title_complement'])
-                                <span class="card-title text-uppercase"> <small>Complement:</small>
+                                <span class="card-title text-capitalize"> <small>Complement:</small>
                                     {{ $detailsMenu['title_complement'] }} </span><br>
                             @endif
                             @if ($detailsMenu['title_garniture'])
-                                <span class="card-title text-uppercase">
+                                <span class="card-title text-capitalize">
                                     <small>Garniture:</small>{{ $detailsMenu['title_garniture'] }} </span>
                             @endif
 
@@ -211,10 +213,10 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
                             });
 
 
-                             //rafraichir la page si panier vide
-                             if (response.totalQte == 0) {
-                                    window.location.href = "{{ route('panier') }}";
-                                }
+                            //rafraichir la page si panier vide
+                            if (response.totalQte == 0) {
+                                window.location.href = "{{ route('panier') }}";
+                            }
 
                         } else {
                             alert("Erreur lors de la suppression du produit.");

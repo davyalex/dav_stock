@@ -48,18 +48,9 @@
 
     <div class="container ">
         <div class="row flex-row">
-            <div class="col-lg-3 pt-95 pb-70">
-                <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
-                    <div class="shop-widget">
-                        <h4 class="shop-sidebar-title">MENU</h4>
-                        <div class="shop-catigory">
-                            <?php echo $__env->make('site.sections.categorie.categorieproduit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
 
-            <div class="col-12 col-md-12 col-sm-12 col-lg-9">
+            <div class="col-12 col-md-12 col-sm-12 col-lg-12">
                 <!-- ========== Start product with category ========== -->
                 <div class="product-area pt-95 pb-70">
                     <div class="custom-container">
