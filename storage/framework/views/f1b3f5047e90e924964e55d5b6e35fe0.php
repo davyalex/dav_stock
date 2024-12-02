@@ -22,7 +22,7 @@
                            </div>
                            <div class="footer-content">
                                <ul>
-                                   <li><a href="about-us.html">À propos de nous</a></li>
+                                   <li><a href="#">À propos de nous</a></li>
                                    
                                </ul>
                            </div>

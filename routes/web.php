@@ -445,6 +445,8 @@ Route::controller(AuthUserController::class)->group(function () {
 //site
 Route::controller(SiteController::class)->group(function () {
     route::get('', 'accueil')->name('accueil');
+    route::get('nous-contacter', 'nousContacter')->name('nous-contactez');
+
     route::get('/categorie/{id}', 'produit')->name('produit'); // get product of categorie selected
     route::get('/menu', 'menu')->name('menu');
     route::get('/produit/detail/{slug}', 'produitDetail')->name('produit.detail');

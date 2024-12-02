@@ -41,8 +41,6 @@
             /* Couleur rouge lorsqu'il est coché */
         }
 
-
-
         /*  Style for increment decrement*/
 
         .quantity-control {

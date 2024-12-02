@@ -7,19 +7,20 @@
                     <nav>
                         <ul class="d-flex justify-content-center">
                             <li><a href="<?php echo e(route('accueil')); ?>">Accueil</a></li>
+                            <li><a href="<?php echo e(route('menu')); ?>">Menu du jour</a></li>
                             <?php $__currentLoopData = $menu_link; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $menu): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li><a href="<?php echo e(route('produit', $menu->id)); ?>">
-                                    <?php if($menu->slug === 'bar'): ?>
-                                        Nos boissons
-                                    <?php elseif($menu->slug === 'cuisine-interne'): ?>
-                                        Restaurant
-                                    <?php else: ?>
-                                        <?php echo e($menu->name); ?>
+                                        <?php if($menu->slug === 'bar'): ?>
+                                            Nos boissons
+                                        <?php elseif($menu->slug === 'cuisine-interne'): ?>
+                                            Restaurant
+                                        <?php else: ?>
+                                            <?php echo e($menu->name); ?>
 
-                                    <?php endif; ?>
-                                </a></li>
+                                        <?php endif; ?>
+                                    </a></li>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            <li><a href="<?php echo e(route('menu')); ?>">Menu du jour</a></li>
+                            <li><a href="<?php echo e(route('nous-contactez')); ?>">Nous contacter</a></li>
                         </ul>
                     </nav>
                 </div>

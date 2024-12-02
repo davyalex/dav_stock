@@ -68,6 +68,15 @@ class SiteController extends Controller
         }
     }
 
+    public function nousContacter()
+    {
+        try {
+            return view('site.pages.contact');
+        } catch (\Throwable $th) {
+            $th->getMessage();
+        }
+    }
+
 
 
     /**Liste des produit en fonction de la categorie

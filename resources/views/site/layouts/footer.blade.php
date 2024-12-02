@@ -26,7 +26,7 @@
                            </div>
                            <div class="footer-content">
                                <ul>
-                                   <li><a href="about-us.html">À propos de nous</a></li>
+                                   <li><a href="#">À propos de nous</a></li>
                                    {{-- <li><a href="#">Informations de livraison</a></li>
                                    <li><a href="#">Politique de confidentialité</a></li>
                                    <li><a href="#">Conditions générales</a></li>

@@ -15,18 +15,19 @@
                     <nav>
                         <ul class="d-flex justify-content-center">
                             <li><a href="{{ route('accueil') }}">Accueil</a></li>
+                            <li><a href="{{ route('menu') }}">Menu du jour</a></li>
                             @foreach ($menu_link as $menu)
                                 <li><a href="{{ route('produit', $menu->id) }}">
-                                    @if ($menu->slug === 'bar')
-                                        Nos boissons
-                                    @elseif($menu->slug === 'cuisine-interne')
-                                        Restaurant
-                                    @else
-                                        {{ $menu->name }}
-                                    @endif
-                                </a></li>
+                                        @if ($menu->slug === 'bar')
+                                            Nos boissons
+                                        @elseif($menu->slug === 'cuisine-interne')
+                                            Restaurant
+                                        @else
+                                            {{ $menu->name }}
+                                        @endif
+                                    </a></li>
                             @endforeach
-                            <li><a href="{{ route('menu') }}">Menu du jour</a></li>
+                            <li><a href="{{ route('nous-contactez') }}">Nous contacter</a></li>
                         </ul>
                     </nav>
                 </div>
