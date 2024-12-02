@@ -45,204 +45,231 @@
         }
     </style>
 
-    <!-- ========== Start product with category ========== -->
-    <div class="product-area pt-95 pb-70">
-        <div class="custom-container">
-            <div class="product-tab-list-wrap text-center mb-40 yellow-color">
-                <div class="product-tab-list nav">
-                    {{-- <a class="active" href="#tab1" data-bs-toggle="tab">
-                        <h4>Tous</h4>
-                    </a> --}}
-                    <a class="active" href="#tab3" data-bs-toggle="tab">
-                        <h4>Nos plats</h4>
-                    </a>
-                    <a href="#tab2" data-bs-toggle="tab">
-                        <h4>Nos boissons</h4>
-                    </a>
-                </div>
-                <p>Découvrez notre sélection de produits pour les boissons et les plats.</p>
-            </div>
-            <div class="tab-content jump yellow-color">
-                <div id="tab1" class="tab-pane">
-                    <div class="row">
-                        @foreach ($produitsMenu->concat($produitsBar) as $produit)
-                            <div class="custom-col-5 mb-4">
-                                <div class="product-wrapper">
-                                    <div class="product-img">
-                                        <a href="{{ route('produit.detail', $produit->slug) }}">
-                                            <div class="produit-image-container">
-                                                <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                                                    alt="{{ $produit->nom }}">
 
-                                                @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
-                                                    <div class="rupture-stock-overlay">Rupture de stock</div>
-                                                @endif
-                                            </div>
-                                        </a>
-
-                                    </div>
-                                    <div class="product-content">
-                                        <h4>
-                                            <a href="{{ route('produit.detail', $produit->slug) }}">{{ $produit->nom }}</a>
-
-                                        </h4>
-                                        <div class="product-price-wrapper">
-                                            <span id="price" data-price={{ $produit->prix }}>
-                                                {{-- @if ($produit->categorie->famille == 'bar' && $produit->achats->isNotEmpty())
-                                                    {{ $produit->achats->first()->prix_vente_unitaire }}
-                                                @else
-                                                   
-                                                @endif --}}
-                                                {{ number_format($produit->prix, 0, ',', ' ') }}
-                                                FCFA
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
+    <div class="container ">
+        <div class="row flex-row">
+            <div class="col-lg-3 pt-95 pb-70">
+                <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
+                    <div class="shop-widget">
+                        <h4 class="shop-sidebar-title">MENU</h4>
+                        <div class="shop-catigory">
+                            @include('site.sections.categorie.categorieproduit')
+                        </div>
                     </div>
-                </div>
-                <div id="tab2" class="tab-pane">
-                    <div class="row">
-                        @foreach ($produitsBar as $produit)
-                            <div class="col-lg-3 col-md-3 col-6 ">
-                                <div class="product-wrapper">
-                                    <div class="product-img">
-                                        <a href="{{ route('produit.detail', $produit->slug) }}">
-                                            <div class="produit-image-container">
-                                                <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                                                    alt="{{ $produit->nom }}">
-
-                                                @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
-                                                    <div class="rupture-stock-overlay">Rupture de stock</div>
-                                                @endif
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="product-content">
-                                        <h4>
-                                            <a href="{{ route('produit.detail', $produit->slug) }}">{{ $produit->nom }}</a>
-                                        </h4>
-                                        <div class="product-price-wrapper">
-                                            <span id="price" data-price={{ $produit->prix }}>
-                                                {{-- @if ($produit->achats->isNotEmpty())
-                                                    {{ $produit->achats->first()->prix_vente_unitaire }}
-                                                @else
-                                                   
-                                                @endif --}}
-                                                {{ number_format($produit->prix, 0, ',', ' ') }}
-                                                FCFA
-                                            </span>
-                                        </div>
-
-                                        @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
-                                        <span><span style="color: red" class="text-danger">Produit en rupture</span>
-                                        @else
-                                            <div class="mt-3">
-                                                <button type="button" class="btn btn-danger addCart text-white"
-                                                    data-id="{{ $produit->id }}" style="border-radius: 10px">
-                                                    <i class="fa fa-shopping-cart"></i> Commander
-                                                </button>
-                                            </div>
-                                    @endif
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-
-                    </div>
-                    @php
-                        $idCatBoisson = app\Models\Categorie::whereSlug('bar')->first();
-                    @endphp
-                    <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-5">
-                        <a href="{{ route('produit', $idCatBoisson->id) }}" class="btn btn-dark w-auto text-white fw-bolder"
-                            style=" border-radius: 10px ; ">
-                            Affichez plus de boissons <i class="fa fa-caret-right"></i>
-                        </a>
-
-                    </div>
-                </div>
-
-
-                <div id="tab3" class="tab-pane active">
-                    <div class="row">
-                        @foreach ($produitsMenu as $produit)
-                            <div class="col-lg-3 col-md-3 col-6">
-                                <div class="product-wrapper">
-                                    <div class="product-img">
-                                        <a href="{{ route('produit.detail', $produit->slug) }}">
-                                            <div class="produit-image-container">
-                                                <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
-                                                    alt="{{ $produit->nom }}">
-
-                                                @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
-                                                    <div class="rupture-stock-overlay">Rupture de stock</div>
-                                                @endif
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="product-content">
-                                        <h4>
-                                            <a
-                                                href="{{ route('produit.detail', $produit->slug) }}">{{ $produit->nom }}</a>
-                                        </h4>
-                                        <div class="product-price-wrapper">
-                                            <span id="price" data-price={{ $produit->prix }}> {{ number_format($produit->prix, 0, ',', ' ') }} FCFA</span>
-                                        </div>
-
-                                        @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
-                                        <span><span style="color: red" class="text-danger">Produit en rupture</span>
-                                        @else
-                                            <div class="mt-2 mb-3">
-                                                <button type="button" class="btn btn-danger addCart text-white"
-                                                    data-id="{{ $produit->id }}" style="border-radius: 10px">
-                                                    <i class="fa fa-shopping-cart"></i> Commander
-                                                </button>
-                                            </div>
-                                    @endif
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                    @php
-                    $idCatPlat= app\Models\Categorie::whereSlug('bar')->first();
-                @endphp
-                    <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-4">
-                        <a href="{{ route('produit', $idCatPlat->id) }}"
-                            class="btn btn-dark w-auto text-white fw-bolder" style="border-radius: 10px;">
-                            Affichez plus de Plats <i class="fa fa-caret-right"></i>
-                        </a>
-                    </div>
-
                 </div>
             </div>
-        </div>
-    </div>
-    <!-- ========== End product with category ========== -->
 
-
-
-    <!-- ========== Start banner card ========== -->
-    <div class="banner-area row-col-decrease pb-75 clearfix">
-        <div class="container">
-            <div class="row">
-                @foreach ($data_slide->where('type', 'petite-banniere') as $item)
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                        <div class="single-banner mb-30">
-                            <div class="hover-style">
-                                <a href="#">
-                                    <img src="{{ $item->getFirstMediaUrl('petite-banniere') }}" alt="bannière">
+            <div class="col-12 col-md-12 col-sm-12 col-lg-9">
+                <!-- ========== Start product with category ========== -->
+                <div class="product-area pt-95 pb-70">
+                    <div class="custom-container">
+                        <div class="product-tab-list-wrap text-center mb-40 yellow-color">
+                            <div class="product-tab-list nav">
+                                {{-- <a class="active" href="#tab1" data-bs-toggle="tab">
+                    <h4>Tous</h4>
+                </a> --}}
+                                <a class="active" href="#tab3" data-bs-toggle="tab">
+                                    <h4>Nos plats</h4>
                                 </a>
+                                <a href="#tab2" data-bs-toggle="tab">
+                                    <h4>Nos boissons</h4>
+                                </a>
+                            </div>
+                            <p>Découvrez notre sélection de produits pour les boissons et les plats.</p>
+                        </div>
+                        <div class="tab-content jump yellow-color">
+                            <div id="tab1" class="tab-pane">
+                                <div class="row">
+                                    @foreach ($produitsMenu->concat($produitsBar) as $produit)
+                                        <div class="custom-col-5 mb-4">
+                                            <div class="product-wrapper">
+                                                <div class="product-img">
+                                                    <a href="{{ route('produit.detail', $produit->slug) }}">
+                                                        <div class="produit-image-container">
+                                                            <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
+                                                                alt="{{ $produit->nom }}">
+
+                                                            @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                                                                <div class="rupture-stock-overlay">Rupture de stock</div>
+                                                            @endif
+                                                        </div>
+                                                    </a>
+
+                                                </div>
+                                                <div class="product-content">
+                                                    <h4>
+                                                        <a
+                                                            href="{{ route('produit.detail', $produit->slug) }}">{{ $produit->nom }}</a>
+
+                                                    </h4>
+                                                    <div class="product-price-wrapper">
+                                                        <span id="price" data-price={{ $produit->prix }}>
+                                                            {{-- @if ($produit->categorie->famille == 'bar' && $produit->achats->isNotEmpty())
+                                                {{ $produit->achats->first()->prix_vente_unitaire }}
+                                            @else
+                                               
+                                            @endif --}}
+                                                            {{ number_format($produit->prix, 0, ',', ' ') }}
+                                                            FCFA
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div id="tab2" class="tab-pane">
+                                <div class="row">
+                                    @foreach ($produitsBar as $produit)
+                                        <div class="col-lg-3 col-md-3 col-6 ">
+                                            <div class="product-wrapper">
+                                                <div class="product-img">
+                                                    <a href="{{ route('produit.detail', $produit->slug) }}">
+                                                        <div class="produit-image-container">
+                                                            <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
+                                                                alt="{{ $produit->nom }}">
+
+                                                            @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                                                                <div class="rupture-stock-overlay">Rupture de stock</div>
+                                                            @endif
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="product-content">
+                                                    <h4>
+                                                        <a
+                                                            href="{{ route('produit.detail', $produit->slug) }}">{{ $produit->nom }}</a>
+                                                    </h4>
+                                                    <div class="product-price-wrapper">
+                                                        <span id="price" data-price={{ $produit->prix }}>
+                                                            {{-- @if ($produit->achats->isNotEmpty())
+                                                {{ $produit->achats->first()->prix_vente_unitaire }}
+                                            @else
+                                               
+                                            @endif --}}
+                                                            {{ number_format($produit->prix, 0, ',', ' ') }}
+                                                            FCFA
+                                                        </span>
+                                                    </div>
+
+                                                    @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                                                        <span><span style="color: red" class="text-danger">Produit en
+                                                                rupture</span>
+                                                        @else
+                                                            <div class="mt-3">
+                                                                <button type="button"
+                                                                    class="btn btn-danger addCart text-white"
+                                                                    data-id="{{ $produit->id }}"
+                                                                    style="border-radius: 10px">
+                                                                    <i class="fa fa-shopping-cart"></i> Commander
+                                                                </button>
+                                                            </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+                                </div>
+                                @php
+                                    $idCatBoisson = app\Models\Categorie::whereSlug('bar')->first();
+                                @endphp
+                                <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-5">
+                                    <a href="{{ route('produit', $idCatBoisson->id) }}"
+                                        class="btn btn-dark w-auto text-white fw-bolder" style=" border-radius: 10px ; ">
+                                        Affichez plus de boissons <i class="fa fa-caret-right"></i>
+                                    </a>
+
+                                </div>
+                            </div>
+
+
+                            <div id="tab3" class="tab-pane active">
+                                <div class="row">
+                                    @foreach ($produitsMenu as $produit)
+                                        <div class="col-lg-3 col-md-3 col-6">
+                                            <div class="product-wrapper">
+                                                <div class="product-img">
+                                                    <a href="{{ route('produit.detail', $produit->slug) }}">
+                                                        <div class="produit-image-container">
+                                                            <img src="{{ $produit->getFirstMediaUrl('ProduitImage') }}"
+                                                                alt="{{ $produit->nom }}">
+
+                                                            @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                                                                <div class="rupture-stock-overlay">Rupture de stock</div>
+                                                            @endif
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="product-content">
+                                                    <h4>
+                                                        <a
+                                                            href="{{ route('produit.detail', $produit->slug) }}">{{ $produit->nom }}</a>
+                                                    </h4>
+                                                    <div class="product-price-wrapper">
+                                                        <span id="price" data-price={{ $produit->prix }}>
+                                                            {{ number_format($produit->prix, 0, ',', ' ') }} FCFA</span>
+                                                    </div>
+
+                                                    @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                                                        <span><span style="color: red" class="text-danger">Produit en
+                                                                rupture</span>
+                                                        @else
+                                                            <div class="mt-2 mb-3">
+                                                                <button type="button"
+                                                                    class="btn btn-danger addCart text-white"
+                                                                    data-id="{{ $produit->id }}"
+                                                                    style="border-radius: 10px">
+                                                                    <i class="fa fa-shopping-cart"></i> Commander
+                                                                </button>
+                                                            </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                @php
+                                    $idCatPlat = app\Models\Categorie::whereSlug('bar')->first();
+                                @endphp
+                                <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-4">
+                                    <a href="{{ route('produit', $idCatPlat->id) }}"
+                                        class="btn btn-dark w-auto text-white fw-bolder" style="border-radius: 10px;">
+                                        Affichez plus de Plats <i class="fa fa-caret-right"></i>
+                                    </a>
+                                </div>
+
                             </div>
                         </div>
                     </div>
-                @endforeach
+                </div>
+                <!-- ========== End product with category ========== -->
+
             </div>
         </div>
+
+
+        <!-- ========== Start banner card ========== -->
+        <div class="banner-area row-col-decrease pb-75 clearfix">
+            <div class="container">
+                <div class="row">
+                    @foreach ($data_slide->where('type', 'petite-banniere') as $item)
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="single-banner mb-30">
+                                <div class="hover-style">
+                                    <a href="#">
+                                        <img src="{{ $item->getFirstMediaUrl('petite-banniere') }}" alt="bannière">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        <!-- ========== End banner card ========== -->
     </div>
-    <!-- ========== End banner card ========== -->
 
 
     <!-- ========== Start best seller ========== -->
@@ -286,11 +313,14 @@
                                                 @else
                                                   
                                                 @endif --}}
-                                                <span id="price" data-price={{ $produit->prix }}>{{ number_format($produit->prix, 0, ',', ' ') }} FCFA</span>
+                                                <span id="price"
+                                                    data-price={{ $produit->prix }}>{{ number_format($produit->prix, 0, ',', ' ') }}
+                                                    FCFA</span>
                                             </div>
 
                                             @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
-                                                <span><span style="color: red" class="text-danger">Produit en rupture</span>
+                                                <span><span style="color: red" class="text-danger">Produit en
+                                                        rupture</span>
                                                 @else
                                                     <div class="my-2">
                                                         <button type="button" class="btn btn-danger addCart text-white"

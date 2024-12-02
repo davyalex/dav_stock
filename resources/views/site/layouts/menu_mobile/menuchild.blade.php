@@ -20,8 +20,8 @@
         <a href="{{ route('produit', $menu->slug) }}">
             @if ($menu->slug === 'bar')
                 Nos boissons
-            @elseif ($menu->slug === 'menu')
-                Nos plats
+            @elseif ($menu->slug === 'cuisine-interne')
+               Restaurants
             @else
                 {{ $menu['name'] }}
             @endif

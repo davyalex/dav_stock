@@ -17,16 +17,27 @@
                 </h3>
                 <div class="row">
 
-                    
+                    <?php if(session()->has('cart') || session()->has('cartMenu')): ?>
+                        <div class="col-3 col-md-12 col-sm-12 col-lg-3">
+                            <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
+                                <div class="shop-widget">
+                                    <h4 class="shop-sidebar-title">MENU</h4>
+                                    <div class="shop-catigory">
+                                        <?php echo $__env->make('site.sections.categorie.categorieproduit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
 
                     <!-- ========== Start panier items ========== -->
-                    <div class="col-12 col-md-12 col-lg-9 col-sm-12">
+                    <div class="col-12 col-md-12 col-lg-6 col-sm-12">
                         <div class="row">
                             <div class="col-lg-12">
                                 <?php if(session()->has('cart')): ?>
                                     <div class="row">
                                         <?php $__currentLoopData = session('cart'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $details): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <div class="col-12 col-lg-4 mb-4" id="productDiv_<?php echo e($id); ?>">
+                                            <div class="col-12 col-lg-12 mb-4" id="productDiv_<?php echo e($id); ?>">
                                                 <div class="card h-100 p-3">
                                                     <div class="d-flex align-items-center">
                                                         <!-- Image du produit -->
@@ -97,7 +108,9 @@
                             <!-- ========== Start panier menu ========== -->
                             <div class="col-lg-12">
 
-                                <h3 class="text-center">Plats du Menu</h3>
+                            <?php if(session('cartMenu')): ?>
+                            <h3 class="text-center">Plats du Menu</h3>
+                            <?php endif; ?>
 
                                 <?php echo $__env->make('site.pages.panier-menu', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                             </div>
@@ -341,11 +354,20 @@
                 url: '<?php echo e(route('cart.getInfo-menu')); ?>',
                 method: 'GET',
                 success: function(data) {
+                    console.log(data);
+                    
                     $('.totalQuantityMenu').text(data.totalQte);
                     $('.totalPriceMenu').html(
                         new Intl.NumberFormat('fr-FR', {
                             minimumFractionDigits: 0
                         }).format(data.totalPrice) + ' FCFA'
+                    );
+
+
+                     $('.totalNet').html(
+                        new Intl.NumberFormat('fr-FR', {
+                            minimumFractionDigits: 0
+                        }).format(data.priceNet) + ' FCFA'
                     );
 
                     // Optionnel : Mettre à jour l'affichage des items du panier

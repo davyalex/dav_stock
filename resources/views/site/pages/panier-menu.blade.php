@@ -6,7 +6,12 @@
                     <div class="d-flex align-items-center">
                         <!-- Image du produit -->
                         <div class="product-image me-3">
+                            {{-- @php
+                                $plat = app\Models\Plat::whereId($detailsMenu['plat_id'])->first();
+                                $categorie = $plat->categorie->nom ?? null;
+                            @endphp --}}
                             <div style="width: 150px; height: 150px; overflow: hidden;">
+                                {{-- <span> {{$categorie}}  </span> --}}
                                 @if ($detailsMenu['image_plat'])
                                     <img src="{{ $detailsMenu['image_plat'] }}" class="img-fluid"
                                         style="object-fit: cover; width: 100%; height: 100%;"

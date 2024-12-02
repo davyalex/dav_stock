@@ -405,6 +405,7 @@ class PanierMenuController extends Controller
                         'image_plat' => $plat->media->isNotEmpty() ? $plat->media[0]->getUrl() : null,
                         'title_complement' => $complement ? $complement->nom : null,
                         'title_garniture' => $garniture ? $garniture->nom : null,
+                        'categorie_menu'=> $plat->categorieMenu->nom,
                     ];
                 }
             }

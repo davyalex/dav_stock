@@ -13,7 +13,6 @@
                                 <?php echo $__env->make('site.layouts.menu_mobile.menuchild', ['menu' => $menu], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <li><a href="<?php echo e(route('nous-contactez')); ?>">Nous contacter</a></li>
-
                         </ul>
                     </nav>
                 </div>

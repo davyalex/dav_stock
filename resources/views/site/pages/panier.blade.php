@@ -16,8 +16,8 @@
                 </h3>
                 <div class="row">
 
-                    {{-- @if (session()->has('cart') || session()->has('cartMenu'))
-                        <div class="col-12 col-md-12 col-sm-12 col-lg-3">
+                    @if (session()->has('cart') || session()->has('cartMenu'))
+                        <div class="col-3 col-md-12 col-sm-12 col-lg-3">
                             <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
                                 <div class="shop-widget">
                                     <h4 class="shop-sidebar-title">MENU</h4>
@@ -27,16 +27,16 @@
                                 </div>
                             </div>
                         </div>
-                    @endif --}}
+                    @endif
 
                     <!-- ========== Start panier items ========== -->
-                    <div class="col-12 col-md-12 col-lg-9 col-sm-12">
+                    <div class="col-12 col-md-12 col-lg-6 col-sm-12">
                         <div class="row">
                             <div class="col-lg-12">
                                 @if (session()->has('cart'))
                                     <div class="row">
                                         @foreach (session('cart') as $id => $details)
-                                            <div class="col-12 col-lg-4 mb-4" id="productDiv_{{ $id }}">
+                                            <div class="col-12 col-lg-12 mb-4" id="productDiv_{{ $id }}">
                                                 <div class="card h-100 p-3">
                                                     <div class="d-flex align-items-center">
                                                         <!-- Image du produit -->
@@ -104,7 +104,9 @@
                             <!-- ========== Start panier menu ========== -->
                             <div class="col-lg-12">
 
-                                <h3 class="text-center">Plats du Menu</h3>
+                            @if (session('cartMenu'))
+                            <h3 class="text-center">Plats du Menu</h3>
+                            @endif
 
                                 @include('site.pages.panier-menu')
                             </div>

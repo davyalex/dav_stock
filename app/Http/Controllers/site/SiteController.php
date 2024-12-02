@@ -56,12 +56,15 @@ class SiteController extends Controller
                 ->get();
 
             // dd($produitsLesPlusCommandes->toArray());
+            $categorieSelect = Categorie::first(); // recuperer les infos de la categorie a partir du slug
+
             return view('site.pages.accueil', compact(
                 'data_slide',
                 'produitsBar',
                 'produitsMenu',
                 'produits',
-                'produitsLesPlusCommandes'
+                'produitsLesPlusCommandes',
+                'categorieSelect'
             ));
         } catch (\Throwable $e) {
             return $e->getMessage();

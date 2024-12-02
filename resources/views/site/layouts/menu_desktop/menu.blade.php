@@ -10,7 +10,7 @@
                     @endif
                 </div>
             </div> --}}
-            <div class="col-lg-7 col-md-7 col-sm-7 m-auto">
+            <div class="col-lg-12 col-md-12 col-sm-6 m-auto">
                 <div class="main-menu">
                     <nav>
                         <ul class="d-flex justify-content-center">

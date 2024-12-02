@@ -13,7 +13,6 @@
                                 @include('site.layouts.menu_mobile.menuchild', ['menu' => $menu])
                             @endforeach
                             <li><a href="{{ route('nous-contactez') }}">Nous contacter</a></li>
-
                         </ul>
                     </nav>
                 </div>
