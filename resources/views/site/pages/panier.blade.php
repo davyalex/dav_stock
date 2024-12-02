@@ -350,11 +350,20 @@
                 url: '{{ route('cart.getInfo-menu') }}',
                 method: 'GET',
                 success: function(data) {
+                    console.log(data);
+                    
                     $('.totalQuantityMenu').text(data.totalQte);
                     $('.totalPriceMenu').html(
                         new Intl.NumberFormat('fr-FR', {
                             minimumFractionDigits: 0
                         }).format(data.totalPrice) + ' FCFA'
+                    );
+
+
+                     $('.totalNet').html(
+                        new Intl.NumberFormat('fr-FR', {
+                            minimumFractionDigits: 0
+                        }).format(data.priceNet) + ' FCFA'
                     );
 
                     // Optionnel : Mettre à jour l'affichage des items du panier
