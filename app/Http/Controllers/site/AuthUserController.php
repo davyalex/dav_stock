@@ -92,7 +92,7 @@ class AuthUserController extends Controller
                     Alert::toast('Connexion réussi', 'success');
                     return redirect()->away($url);
                 } else {
-                    Alert::error('Identifiants(Contact) incorrects', 'Une erreur s\'est produite');
+                    Alert::error('Identifiants(Contact) incorrects');
                     return back();
                 }
             }

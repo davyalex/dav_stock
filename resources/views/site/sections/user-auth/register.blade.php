@@ -23,17 +23,19 @@
             <div class="col-lg-7 col-md-12 ml-auto mr-auto">
                 <div class="login-register-wrapper">
                     <div class="login-register-tab-list nav">
-                        <a href="{{route('user.login')}}">
+                        {{-- <a href="{{route('user.login')}}">
                             <h4> Connexion </h4>
-                        </a>
+                        </a> --}}
                         <a class="active" data-bs-toggle="tab" href="#lg2">
                             <h4> Inscription </h4>
                         </a>
                     </div>
                     <div class="tab-content">
                         <div id="lg2" class="tab-pane active">
+                          
                             <div class="login-form-container">
                                 <div class="login-register-form">
+                                    {{-- <h2 class="text-center mb-4">Inscription</h2> --}}
                                     <form action="{{route('user.register.post')}}" method="post">
                                         @csrf
                                         <input type="text" name="last_name" placeholder="votre nom" required>
@@ -41,7 +43,10 @@
                                         {{-- <input type="password" name="user-password" placeholder="Password"> --}}
                                         <input name="phone" placeholder="votre numero de telephone" type="number" required>
                                         <div class="button-box">
-                                            <button type="submit"><span>Valider</span></button>
+                                            <button class="w-100" type="submit"><span>Valider</span></button>
+                                        </div>
+                                        <div class="login-toggle-btn text-center">
+                                            <a href="{{route('user.login')}}">Déjà inscrit ? Connectez-vous maintenant !</a>
                                         </div>
                                     </form>
                                 </div>

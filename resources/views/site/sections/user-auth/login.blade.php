@@ -23,13 +23,14 @@
                         <a class="active" data-bs-toggle="tab" href="#lg1">
                             <h4> Connexion </h4>
                         </a>
-                        <a href="{{route('user.register')}}">
+                        {{-- <a href="{{route('user.register')}}">
                             <h4> Inscription </h4>
-                        </a>
+                        </a> --}}
                     </div>
                     <div class="tab-content">
                         <div id="lg1" class="tab-pane active">
                             <div class="login-form-container">
+                                {{-- <h2 class="text-center mb-4">Connexion</h2> --}}
                                 <div class="login-register-form">
                                     <form action="{{route('user.login.post')}}" method="post">
                                         @csrf
@@ -39,7 +40,10 @@
                                             {{-- <div class="login-toggle-btn">
                                                 <a href="#">Forgot Password?</a>
                                             </div> --}}
-                                            <button type="submit"><span>Valider</span></button>
+                                            <button type="submit" class="w-100"><span>Valider</span></button>
+                                        <div class="login-toggle-btn text-center">
+                                            <a href="{{route('user.register')}}">Pas encore inscrit ? Inscrivez-vous maintenant !</a>
+                                        </div>
                                         </div>
                                     </form>
                                 </div>
