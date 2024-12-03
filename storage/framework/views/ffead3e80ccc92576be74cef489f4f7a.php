@@ -61,8 +61,10 @@
                                                 <?php echo e($item->famille); ?>
 
                                             <?php endif; ?>
+
                                         </option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="plat_menu">Menu</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
@@ -128,6 +130,8 @@
                         $ordreFamilles = [
                             'menu' => 1, // Cuisine interne en premier
                             'bar' => 2, // Boissons en deuxième
+                            'plat_du_menu' => 3, // Plat du menu
+
                             // Ajoute d'autres familles si nécessaire avec des numéros plus grands
 ];
 

@@ -104,9 +104,9 @@
                             <!-- ========== Start panier menu ========== -->
                             <div class="col-lg-12">
 
-                            @if (session('cartMenu'))
-                            <h3 class="text-center">Plats du Menu</h3>
-                            @endif
+                                @if (session('cartMenu'))
+                                    <h3 class="text-center">Plats du Menu</h3>
+                                @endif
 
                                 @include('site.pages.panier-menu')
                             </div>
@@ -233,20 +233,27 @@
                 },
                 success: function(response) {
                     if (response.status === 'success') {
+                        console.log(response);
 
 
-                        var totalQteMenu = Number(
-                            `{{ Session::get('totalQuantityMenu', 0) }}`); // depuis le panier menu
-                        var totalPrice = Number(
-                            `{{ Session::get('totalPriceMenu', 0) }}`); // depuis le panier menu
-                        var totalPriceAndTotalMenu = response.totalPrice + totalPrice;
+
                         $(`#quantity-${id}`).val(newQuantity); // MAJ nouvelle quantité
-                        $('.totalQuantity').html(response.totalQte +
-                            totalQteMenu) //MAJ quantité total panier icone
-                        $('.totalPrice').html(totalPriceAndTotalMenu.toLocaleString("fr-FR") +
+                        $('.totalQuantity').html(response.totalQte) //MAJ quantité total panier icone
+                        $('.totalPrice').html(response.totalPrice.toLocaleString("fr-FR") +
                             ' FCFA') // MAJ montant total panier 
                         $('.totalPriceQty-' + id).html(response.totalPriceQty.toLocaleString("fr-FR") +
                             ' FCFA') // MAJ montant total du produit * sa quantite
+
+
+
+
+                        // // mise des infos du topBr 2
+                        $('.totalQuantityTop').html(response.qteNet);
+                        // Mettre à jour le montant total du panier
+                        $('.totalPriceTop').html(response.priceNet.toLocaleString("fr-FR") + ' FCFA');
+                        // Mise a jour total global
+                        $('.totalNet').html(response.priceNet.toLocaleString("fr-FR") + ' FCFA');
+
 
                         Swal.fire({
                             title: 'Mise à jour !',
@@ -305,6 +312,17 @@
                                 $('.countProductCart').html(response
                                     .countProductCart) //MAJ quantité total panier icone
 
+
+
+                                // // mise des infos du topBr 2
+                                $('.totalQuantityTop').html(response.qteNet);
+                                // Mettre à jour le montant total du panier
+                                $('.totalPriceTop').html(response.priceNet.toLocaleString(
+                                    "fr-FR") + ' FCFA');
+                                // Mise a jour total global
+                                $('.totalNet').html(response.priceNet.toLocaleString("fr-FR") +
+                                    ' FCFA');
+
                                 Swal.fire({
                                     title: 'Produit supprimé',
                                     text: 'Le produit a été supprimé du panier avec succès.',
@@ -318,17 +336,6 @@
                                 //rafraichir la page si panier vide
                                 if (response.countProductCart == 0) {
                                     window.location.href = "{{ route('panier') }}";
-                                    // // Mettre la quantité totale du panier à 0
-                                    // $('.totalQuantity').html(0);
-
-                                    // // Mettre le prix total du panier à 0 avec le format français et "FCFA"
-                                    // $('.totalPrice').html(
-                                    //     (0).toLocaleString('fr-FR', {
-                                    //         minimumFractionDigits: 0
-                                    //     }) + ' FCFA'
-                                    // );
-
-
                                 }
 
                                 // window.location.href = "{{ route('panier') }}";
@@ -360,9 +367,9 @@
                         }).format(data.totalPrice) + ' FCFA'
                     );
 
-                    $('.totalQuantity').text(data.qteNet)
+                    // $('.totalQuantity').text(data.qteNet)
 
-                     $('.totalNet').html(
+                    $('.totalNet').html(
                         new Intl.NumberFormat('fr-FR', {
                             minimumFractionDigits: 0
                         }).format(data.priceNet) + ' FCFA'

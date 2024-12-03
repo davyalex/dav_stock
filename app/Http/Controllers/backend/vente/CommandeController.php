@@ -85,6 +85,7 @@ class CommandeController extends Controller
                     ]);
 
 
+                    // Associer les plats a la commande
                     foreach ($commande->plats as $plat) {
                         $vente->plats()->attach($plat->id, [
                             'quantite' => $plat->pivot->quantite,
@@ -150,6 +151,4 @@ class CommandeController extends Controller
             return response()->json(['success' => false, 'message' => 'Erreur lors de la mise à jour du statut'], 500);
         }
     }
-
-    
 }

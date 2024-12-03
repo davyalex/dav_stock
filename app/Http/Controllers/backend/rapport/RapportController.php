@@ -401,25 +401,44 @@ class RapportController extends Controller
             $dateFin = $request->input('date_fin');
             $caisseId = $request->input('caisse_id');
             $categorieFamille = $request->input('categorie_famille');
+            $categorieMenu = $request->input('categorie_menu');
 
 
 
-            $query = Vente::with(['produits.categorie', 'caisse']);
+
+            $query = Vente::with(['produits.categorie', 'plats.categorieMenu', 'caisse']);
+
+            // pour la vente des plats menu
+            $queryMenu = Vente::with(['plats.categorieMenu', 'caisse']);
+
 
             if ($dateDebut && $dateFin) {
                 $query->whereBetween('date_vente', [$dateDebut, $dateFin]);
+                $queryMenu->whereBetween('date_vente', [$dateDebut, $dateFin]);
+
             } elseif ($dateDebut) {
                 $query->where('date_vente', '>=', $dateDebut);
+                $queryMenu->where('date_vente', '>=', $dateDebut);
+
             } elseif ($dateFin) {
                 $query->where('date_vente', '<=', $dateFin);
+                $queryMenu->where('date_vente', '<=', $dateFin);
+
             }
 
             if ($caisseId) {
                 $query->where('caisse_id', $caisseId);
+                $queryMenu->where('caisse_id', $caisseId);
+
             }
 
             $ventes = $query->get();
 
+            // pour la vente des plats menu
+            $ventesMenu = $queryMenu->get();
+
+
+            // pour les produits restaurant
             $produitsVendus = $ventes->flatMap(function ($vente) {
                 return $vente->produits;
             })->groupBy('id')->map(function ($groupe) use ($categorieFamille) {
@@ -442,12 +461,38 @@ class RapportController extends Controller
                 ];
             })->filter()->values();
 
+            //pour les plats menu
+            $platsVendus = $ventesMenu->flatMap(function ($vente) {
+                return $vente->plats;
+            })->groupBy('id')->map(function ($groupe) use ($categorieMenu) {
+                $plat = $groupe->first();
+                // if ($categorieMenu && $plat->categorie->famille !== $categorieMenu) {
+                //     return null;
+                // }
+                return [
+                    'id' => $plat->id,
+                    'code' => $plat->code,
+                    'stock' => 100,
+                    'designation' => $plat->nom,
+                    'categorie' => $plat->categorieMenu->nom,
+                    'famille' => 'Menu',
+                    'quantite_vendue' => $groupe->sum('pivot.quantite'),
+                    'prix_vente' => $groupe->first()->pivot->prix_unitaire,
+                    'montant_total' => $groupe->sum(function ($item) {
+                        return $item->pivot->quantite * $item->pivot->prix_unitaire;
+                    }),
+                ];
+            })->filter()->values();
+            $produitsVendus =  $produitsVendus->concat( $platsVendus);
+
+            // dd($produitsVendus->toArray());
+
 
             $caisses = Caisse::all();
             $famille = Categorie::whereNull('parent_id')->whereIn('type', ['bar', 'menu'])->orderBy('name', 'DESC')->get();
 
 
-            return view('backend.pages.rapport.vente', compact('produitsVendus', 'caisses', 'dateDebut', 'dateFin', 'caisseId', 'categorieFamille', 'famille'));
+            return view('backend.pages.rapport.vente', compact( 'platsVendus' ,'produitsVendus', 'caisses', 'dateDebut', 'dateFin', 'caisseId', 'categorieFamille', 'famille'));
         } catch (\Exception $e) {
             return back()->with('error', 'Une erreur s\'est produite : ' . $e->getMessage());
         }

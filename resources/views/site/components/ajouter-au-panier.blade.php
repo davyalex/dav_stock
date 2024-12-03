@@ -24,15 +24,19 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
             },
             dataType: "json",
             success: function(response) {
-                var totalQteMenu = Number(
-                `{{ Session::get('totalQuantityMenu', 0) }}`); // depuis le panier menu
-                var totalPrice = Number(
-                `{{ Session::get('totalPriceMenu', 0) }}`); // depuis le panier menu
 
                 // console.log(totalPrice);
 
-                $('.totalQuantity').html(response.totalQte + totalQteMenu)
-                $('.totalPrice').html(response.totalPrice + totalPrice + ' FCFA')
+                $('.totalQuantity').html(response.totalQte)
+                $('.totalPrice').html(response.totalPrice + ' FCFA')
+
+                // // mise des infos du topBr 2
+                $('.totalQuantityTop').html(response.qteNet);
+                // Mettre à jour le montant total du panier
+                $('.totalPriceTop').html(response.priceNet.toLocaleString("fr-FR") + ' FCFA');
+                // Mise a jour total global
+                $('.totalNet').html(response.priceNet.toLocaleString("fr-FR") + ' FCFA');   
+
                 //   $('.pro-quantity').html(response.qte)
                 //   $('.cart-price').html(response.price)
                 //   $('.get-total').html(response.total)
@@ -63,7 +67,6 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
 
             }
         });
-
 
 
     });

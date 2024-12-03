@@ -55,7 +55,7 @@ use App\Http\Controllers\backend\configuration\UniteMesureController;
 */
 
 Route::fallback(function () {
-  return view('backend.utility.auth-404-basic');
+    return view('backend.utility.auth-404-basic');
 });
 
 Auth::routes();
@@ -97,7 +97,6 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('delete/{id}', 'delete')->name('client.delete');
         route::get('profil/{id}', 'profil')->name('client.profil');
         route::post('change-password', 'changePassword')->name('client.new-password');
-        
     });
 
 
@@ -109,7 +108,6 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('delete/{id}', 'delete')->name('admin-register.delete');
         route::get('profil/{id}', 'profil')->name('admin-register.profil');
         route::post('change-password', 'changePassword')->name('admin-register.new-password');
-
     });
 
     //role
@@ -420,7 +418,6 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::post('update/{id}', 'update')->name('categorie-menu.update');
         route::get('delete/{id}', 'delete')->name('categorie-menu.delete');
     });
-
 });
 
 ######################      END BACKEND ROUTE         ###########################################################
@@ -470,7 +467,6 @@ Route::controller(PanierMenuController::class)->group(function () {
     route::post('update-menu', 'update')->name('cart.update-menu');
     route::post('remove-menu', 'remove')->name('cart.remove-menu');
     route::get('getInfoData', 'getCartDataMenu')->name('cart.getInfo-menu');
-
 });
 
 

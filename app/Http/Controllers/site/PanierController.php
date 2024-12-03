@@ -35,7 +35,7 @@ class PanierController extends Controller
         //     ->orderBy('position', 'DESC')
         //     ->get();
 
-            $categorieSelect = Categorie::first(); // recuperer les infos de la categorie a partir du slug
+        $categorieSelect = Categorie::first(); // recuperer les infos de la categorie a partir du slug
 
         if (!empty($cart)) {
             $produits = Produit::whereIn('id', array_keys($cart))->first(); // premier elément du panier
@@ -45,8 +45,6 @@ class PanierController extends Controller
                 ->whereIn('type', ['menu', 'bar'])
                 ->orderBy('position', 'DESC')
                 ->get();
-
-
         }
         // dd($categorieSelect);
         return view('site.pages.panier', compact('cart', 'categorieSelect', 'cartMenu'));
@@ -106,6 +104,10 @@ class PanierController extends Controller
             'totalPrice' => $totalPrice,
             'totalQteMenu' => Session::get('totalQteMenu'),
 
+            // total calculé cartMenu & cart
+            'qteNet' => session('totalQuantity', 0) + session('totalQuantityMenu', 0),
+            'priceNet' => session('totalPrice', 0) + session('totalPriceMenu', 0)
+
         ]);
     }
 
@@ -147,6 +149,10 @@ class PanierController extends Controller
                 'totalPrice' => $totalPrice, // total du panier
                 "sousTotal" => number_format($sousTotal), // sous total du panier
                 'totalPriceQty' => $totalPriceQty, // total du produit MAJ  * quantite
+
+                // total calculé cartMenu & cart
+                'qteNet' => session('totalQuantity', 0) + session('totalQuantityMenu', 0),
+                'priceNet' => session('totalPrice', 0) + session('totalPriceMenu', 0)
             ]);
         }
     }
@@ -189,6 +195,11 @@ class PanierController extends Controller
             'totalPrice' => $totalPrice, // total du panier
             // "sousTotal" => number_format($sousTotal), // sous total du panier
             'countProductCart' => $countProductCart, // nombre de produit du panier
+
+
+            // total calculé cartMenu & cart
+            'qteNet' => session('totalQuantity', 0) + session('totalQuantityMenu', 0),
+            'priceNet' => session('totalPrice', 0) + session('totalPriceMenu', 0)
         ]);
     }
 
@@ -286,7 +297,7 @@ class PanierController extends Controller
                         }
                     }
                 }
-                
+
 
 
                 // suppression de la session panier

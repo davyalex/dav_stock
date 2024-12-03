@@ -610,6 +610,11 @@ class PanierMenuController extends Controller
                 'totalQte' => $totalQuantity,
                 'totalPrice' => $totalPrice, // Formaté avec deux décimales
                 'cartMenu' => $cartMenu, // Retourne le panier mis à jour
+
+
+                // total calculé cartMenu & cart
+                'qteNet' => session('totalQuantity', 0) + session('totalQuantityMenu', 0),
+                'priceNet' => session('totalPrice', 0) + session('totalPriceMenu', 0)
             ]);
         } catch (\Exception $e) {
             return response()->json([

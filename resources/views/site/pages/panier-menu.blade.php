@@ -10,7 +10,7 @@
                                 $plat = app\Models\Plat::whereId($detailsMenu['plat_id'])->first();
                                 $categorie = $plat->categorie->nom ?? null;
                             @endphp --}}
-                           
+
                             <div style="width: 150px; height: 150px; overflow: hidden;">
                                 <i class="text-italic text-danger fs-8"> {{ $detailsMenu['categorie_menu'] }} </i>
                                 @if ($detailsMenu['image_plat'])
@@ -26,7 +26,7 @@
                         </div>
                         <!-- Détails du produit -->
                         <div class="product-info flex-grow-1">
-                            <h6 class="card-title text-uppercase"> {{ $detailsMenu['title_plat'] }}</h6> 
+                            <h6 class="card-title text-uppercase"> {{ $detailsMenu['title_plat'] }}</h6>
 
                             @if ($detailsMenu['title_complement'])
                                 <span class="card-title text-capitalize"> <small>Complement:</small>
@@ -123,6 +123,8 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
             },
             success: function(response) {
                 if (response.status === 'success') {
+                    console.log(response);
+
                     // Mettre à jour l'input de quantité
                     $(`#quantityMenu-${cartKey}`).val(newQuantity);
                     // Mettre à jour la quantité totale dans l'icône du panier
@@ -132,6 +134,17 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
                     // Mettre à jour le montant total de ce produit
                     $(`.totalPriceQty-${cartKey}`).html(response.totalPriceQty.toLocaleString("fr-FR") +
                         ' FCFA');
+
+
+                    // // mise des infos du topBr 2
+                    $('.totalQuantityTop').html(response.qteNet);
+                    // Mettre à jour le montant total du panier
+                    $('.totalPriceTop').html(response.priceNet.toLocaleString("fr-FR") + ' FCFA');
+
+
+                    // Mise a jour total global
+                    $('.totalNet').html(response.priceNet.toLocaleString("fr-FR") + ' FCFA');
+
 
                     // Alerte de succès
                     Swal.fire({
@@ -201,6 +214,16 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
                             // Mettre à jour le prix total
                             $('.totalPriceMenu').html(response.totalPrice.toLocaleString("fr-FR") +
                                 ' FCFA');
+
+
+                            // // mise des infos du topBr 2
+                            $('.totalQuantityTop').html(response.qteNet);
+                            // Mettre à jour le montant total du panier
+                            $('.totalPriceTop').html(response.priceNet.toLocaleString("fr-FR") +
+                                ' FCFA');
+                            // Mise a jour total global
+                            $('.totalNet').html(response.priceNet.toLocaleString("fr-FR") +
+                            ' FCFA');
 
                             // Alerte de succès
                             Swal.fire({

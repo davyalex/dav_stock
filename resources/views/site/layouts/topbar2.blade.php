@@ -82,12 +82,12 @@
                                 <i class="icon-handbag icons"></i>
 
                                 <span
-                                    class="count-style totalQuantity">{{ session('cart') || session('cartMenu') ? Session::get('totalQuantity') + Session::get('totalQuantityMenu') : '0' }}</span>
+                                    class="count-style totalQuantityTop">{{ session('cart') || session('cartMenu') ? Session::get('totalQuantity') + Session::get('totalQuantityMenu') : '0' }}</span>
                             </div>
                             <div class="cart-text">
                                 <span class="digit">Mon panier</span>
                                 <span
-                                    class="cart-digit-bold totalPrice">{{ number_format(session('cart') ||session('cartMenu') ? Session::get('totalPrice') + Session::get('totalPriceMenu') : '0', 0, ',', ' ') }}
+                                    class="cart-digit-bold totalPriceTop">{{ number_format(session('cart') ||session('cartMenu') ? Session::get('totalPrice') + Session::get('totalPriceMenu') : '0', 0, ',', ' ') }}
                                     FCFA</span>
                             </div>
                         </a>
