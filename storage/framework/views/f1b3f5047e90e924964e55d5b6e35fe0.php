@@ -58,10 +58,8 @@
                                    <li>Email: <a href="#"><?php echo e($setting->email1 ?? 'Info@example.com'); ?></a></li>
                                </ul>
                            </div>
-                           <div class="mt-35 footer-title mb-22">
-                               <h4>Horaires d'ouverture</h4>
-                           </div>
-                           <div class="footer-time">
+                           
+                           <div class="footer-time mt-3">
                                <ul>
                                    <li>Ouverture: <span><?php echo e($setting->horaire_ouverture ?? '11:00'); ?></span> - Fermeture:
                                        <span><?php echo e($setting->horaire_fermeture ?? '02:00'); ?></span>
@@ -81,8 +79,8 @@
                        <div class="copyright">
                            <p>&copy; <?php echo e(date('Y')); ?> <strong> <?php echo e($setting->projet_title ?? 'Restaurant Chez Jeanne'); ?>
 
-                               </strong> Conçu par <i class="fa fa-heart text-danger"></i>
-                               by <a href="https://ticafrique.com/" target="_blank"><strong>Ticafrique</strong></a>
+                               </strong> Conçu  <i class="fa fa-heart text-danger"></i>
+                               par <a href="https://ticafrique.com/" target="_blank"><strong>Ticafrique</strong></a>
                            </p>
                        </div>
                    </div>

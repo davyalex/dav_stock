@@ -79,10 +79,10 @@
                                    <li>Email: <a href="#">{{ $setting->email1 ?? 'Info@example.com' }}</a></li>
                                </ul>
                            </div>
-                           <div class="mt-35 footer-title mb-22">
+                           {{-- <div class="mt-35 footer-title mb-22">
                                <h4>Horaires d'ouverture</h4>
-                           </div>
-                           <div class="footer-time">
+                           </div> --}}
+                           <div class="footer-time mt-3">
                                <ul>
                                    <li>Ouverture: <span>{{ $setting->horaire_ouverture ?? '11:00' }}</span> - Fermeture:
                                        <span>{{ $setting->horaire_fermeture ?? '02:00' }}</span>
@@ -101,8 +101,8 @@
                    <div class="col-lg-6 col-md-6 col-sm-7">
                        <div class="copyright">
                            <p>&copy; {{ date('Y') }} <strong> {{ $setting->projet_title ?? 'Restaurant Chez Jeanne' }}
-                               </strong> Conçu par <i class="fa fa-heart text-danger"></i>
-                               by <a href="https://ticafrique.com/" target="_blank"><strong>Ticafrique</strong></a>
+                               </strong> Conçu  <i class="fa fa-heart text-danger"></i>
+                               par <a href="https://ticafrique.com/" target="_blank"><strong>Ticafrique</strong></a>
                            </p>
                        </div>
                    </div>

@@ -46,8 +46,8 @@
     </style>
 
 
-    <div class="container ">
-        <div class="row flex-row">
+    <div class="container-fluid ">
+        <div class="row">
             {{-- <div class="col-lg-3 pt-95 pb-70">
                 <div class="shop-sidebar-wrapper gray-bg-7 shop-sidebar-mrg">
                     <div class="shop-widget">
