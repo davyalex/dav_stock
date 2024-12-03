@@ -253,7 +253,7 @@ class RapportController extends Controller
             $depensesParCategorie = $depenses->groupBy('categorie_depense.libelle');
 
             // 7. Total des ventes
-            $totalVentes = $venteQuery->sum('montant_total');
+            // $totalVentes = $venteQuery->sum('montant_total');
 
             // 8. Calcul des ventes par famille (bar et menu) avec la table pivot
             $ventesParFamille = $venteQuery->with('produits.categorie')
@@ -267,8 +267,27 @@ class RapportController extends Controller
                 ->pluck('total_ventes', 'famille')
                 ->toArray();
 
+
+            // Calcul du montant total des plats vendus
+            $ventesMenu = $venteQuery->with('plats.categorieMenu')
+                ->select(DB::raw('SUM(plat_vente.quantite * plat_vente.prix_unitaire) as total_ventes'))
+                ->join('plat_vente', 'ventes.id', '=', 'plat_vente.vente_id')
+                ->join('plats', 'plat_vente.plat_id', '=', 'plats.id')
+                ->get()
+                ->mapWithKeys(function ($item) {
+                    return ['vente_menu' => $item->total_ventes]; // Remplacez 'alias_desire' par votre clé
+                })
+                ->toArray();
+
+            // montant des ventes realisés
             $venteBar = $ventesParFamille['bar'] ?? 0;
             $venteMenu = $ventesParFamille['menu'] ?? 0;
+            $ventePlatMenu = $ventesMenu['vente_menu'] ?? 0;
+
+            // total vente
+            $totalVentes = $venteBar + $venteMenu + $ventePlatMenu;
+
+
 
             // 9. Calcul des totaux et ratios
             $totalDepenses = $depenses->sum('total_montant');
@@ -276,7 +295,6 @@ class RapportController extends Controller
             $ratio = $totalVentes > 0 ? ($benefice / $totalVentes) * 100 : 0;
 
             // 10. Calcul benefice et du ratio pour chaque famille
-
             $beneficeBar = $venteBar - $totalDepenses;
             $beneficeMenu = $venteMenu - $totalDepenses;
 
@@ -285,20 +303,29 @@ class RapportController extends Controller
 
             // 11. Préparation des données pour la vue
             $dataParFamille = [
-
-                'Menu' => [
+                'Bar' => [
                     'ventes' => $venteMenu,
                     'benefice' => $beneficeMenu,
                     'ratio' => $ratioMenu
                 ],
-                'Bar' => [
+                'Restaurant' => [
                     'ventes' => $venteBar,
                     'benefice' => $beneficeBar,
                     'ratio' => $ratioBar
                 ],
-            ];
 
-            //   dd($dataParFamille);
+                'Menu' => [
+                    'ventes' => $ventePlatMenu,
+                    // 'benefice' => $beneficeBar,
+                    // 'ratio' => $ratioBar
+                ],
+            ];
+            // Concaténation des deux résultats
+            // $dataParFamille = array_merge($ventesParFamille, $ventesMenu);
+
+            // Résultat final
+            // return $resultatFinal;
+            // dd($totalVentes);
 
 
 
@@ -401,8 +428,7 @@ class RapportController extends Controller
             $dateFin = $request->input('date_fin');
             $caisseId = $request->input('caisse_id');
             $categorieFamille = $request->input('categorie_famille');
-            $categorieMenu = $request->input('categorie_menu');
-
+            // $categorieMenu = 'plat_menu';
 
 
 
@@ -415,21 +441,24 @@ class RapportController extends Controller
             if ($dateDebut && $dateFin) {
                 $query->whereBetween('date_vente', [$dateDebut, $dateFin]);
                 $queryMenu->whereBetween('date_vente', [$dateDebut, $dateFin]);
-
             } elseif ($dateDebut) {
                 $query->where('date_vente', '>=', $dateDebut);
                 $queryMenu->where('date_vente', '>=', $dateDebut);
-
             } elseif ($dateFin) {
                 $query->where('date_vente', '<=', $dateFin);
                 $queryMenu->where('date_vente', '<=', $dateFin);
-
             }
+
+            // if ($categorieFamille== 'plat_menu') {
+            //     $queryMenu = Vente::with(['plats.categorieMenu', 'caisse']);
+            // }elseif ($categorieFamille== 'bar' || $categorieFamille== 'menu') {
+            //     $query = Vente::with(['plats.categorieMenu', 'caisse']);
+
+            // }
 
             if ($caisseId) {
                 $query->where('caisse_id', $caisseId);
                 $queryMenu->where('caisse_id', $caisseId);
-
             }
 
             $ventes = $query->get();
@@ -464,7 +493,7 @@ class RapportController extends Controller
             //pour les plats menu
             $platsVendus = $ventesMenu->flatMap(function ($vente) {
                 return $vente->plats;
-            })->groupBy('id')->map(function ($groupe) use ($categorieMenu) {
+            })->groupBy('id')->map(function ($groupe) {
                 $plat = $groupe->first();
                 // if ($categorieMenu && $plat->categorie->famille !== $categorieMenu) {
                 //     return null;
@@ -483,7 +512,7 @@ class RapportController extends Controller
                     }),
                 ];
             })->filter()->values();
-            $produitsVendus =  $produitsVendus->concat( $platsVendus);
+            $produitsVendus =  $produitsVendus->concat($platsVendus);
 
             // dd($produitsVendus->toArray());
 
@@ -492,7 +521,7 @@ class RapportController extends Controller
             $famille = Categorie::whereNull('parent_id')->whereIn('type', ['bar', 'menu'])->orderBy('name', 'DESC')->get();
 
 
-            return view('backend.pages.rapport.vente', compact( 'platsVendus' ,'produitsVendus', 'caisses', 'dateDebut', 'dateFin', 'caisseId', 'categorieFamille', 'famille'));
+            return view('backend.pages.rapport.vente', compact('platsVendus', 'produitsVendus', 'caisses', 'dateDebut', 'dateFin', 'caisseId', 'categorieFamille', 'famille'));
         } catch (\Exception $e) {
             return back()->with('error', 'Une erreur s\'est produite : ' . $e->getMessage());
         }

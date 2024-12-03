@@ -64,7 +64,7 @@
 
                                         </option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="plat_menu">Menu</option>
+                                    <option value="plats du menu">Menu</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
