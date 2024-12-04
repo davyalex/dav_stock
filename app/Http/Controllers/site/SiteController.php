@@ -333,6 +333,27 @@ class SiteController extends Controller
 
 
 
+    //systeme de recherche
+    public function recherche(Request $request)
+    {
+
+
+        try {
+            $query = $request->input('query'); // Récupère la requête de recherche
+            $produits = Produit::active()->where('nom', 'LIKE', "%$query%")
+                ->orWhere('description', 'LIKE', "%$query%")
+                ->get();
+
+            $categorieSelect = Categorie::first(); // recuperer les infos de la categorie a partir du slug
+
+            return view('site.pages.produit-search', compact('produits', 'categorieSelect' , 'query'));
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
+    }
+
+
+
     // Controller
 
 

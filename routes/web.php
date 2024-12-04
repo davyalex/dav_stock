@@ -447,6 +447,9 @@ Route::controller(SiteController::class)->group(function () {
     route::get('/categorie/{id}', 'produit')->name('produit'); // get product of categorie selected
     route::get('/menu', 'menu')->name('menu');
     route::get('/produit/detail/{slug}', 'produitDetail')->name('produit.detail');
+
+    //search
+    route::get('/recherche', 'recherche')->name('recherche');
 });
 
 //panier
