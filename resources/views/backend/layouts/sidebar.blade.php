@@ -377,7 +377,7 @@
                     </li>
                 @endcan
 
-                @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur' || Auth::user()->can('voir-permission'))
+                @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur' || Auth::user()->can('voir-parametre'))
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
                             aria-controls="sidebarAuth">
@@ -387,25 +387,26 @@
                             id="sidebarAuth">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item active">
+                                    <a href="{{ route('setting.index') }}"
+                                        class="nav-link {{ Route::is('setting.*') ? 'active' : '' }}">Informations</a>
+                                </li>
+
+                                <li class="nav-item active">
                                     <a href="{{ route('admin-register.index') }}"
                                         class="nav-link {{ Route::is('admin-register.*') ? 'active' : '' }}">Administrateurs</a>
                                 </li>
 
-                                <li class="nav-item active">
-                                    <a href="{{ route('setting.index') }}"
-                                        class="nav-link {{ Route::is('setting.*') ? 'active' : '' }}">Informations</a>
-                                </li>
                                 <li class="nav-item">
                                     <a href="{{ route('module.index') }}"
                                         class="nav-link {{ Route::is('module.*') ? 'active' : '' }}">Modules</a>
                                 </li>
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     <a href="{{ route('role.index') }}"
                                         class="nav-link {{ Route::is('role.*') ? 'active' : '' }}">Roles</a>
-                                </li>
+                                </li> --}}
                                 <li class="nav-item">
                                     <a href="{{ route('permission.index') }}"
-                                        class="nav-link {{ Route::is('permission.*') ? 'active' : '' }}">Permissions</a>
+                                        class="nav-link {{ Route::is('permission.*') ? 'active' : '' }}">Permissions/ Roles</a>
                                 </li>
                             </ul>
                         </div>
