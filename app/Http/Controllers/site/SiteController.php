@@ -344,9 +344,9 @@ class SiteController extends Controller
                 ->orWhere('description', 'LIKE', "%$query%")
                 ->get();
 
-            $categorieSelect = Categorie::first(); // recuperer les infos de la categorie a partir du slug
+            // $categorieSelect = Categorie::first(); // recuperer les infos de la categorie a partir du slug
 
-            return view('site.pages.produit-search', compact('produits', 'categorieSelect' , 'query'));
+            return view('site.pages.produit-search', compact('produits', 'query'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }

@@ -35,7 +35,7 @@ class PanierController extends Controller
         //     ->orderBy('position', 'DESC')
         //     ->get();
 
-        $categorieSelect = Categorie::first(); // recuperer les infos de la categorie a partir du slug
+        // $categorieSelect = Categorie::first(); // recuperer les infos de la categorie a partir du slug
 
         if (!empty($cart)) {
             $produits = Produit::whereIn('id', array_keys($cart))->first(); // premier elément du panier
@@ -47,7 +47,7 @@ class PanierController extends Controller
                 ->get();
         }
         // dd($categorieSelect);
-        return view('site.pages.panier', compact('cart', 'categorieSelect', 'cartMenu'));
+        return view('site.pages.panier', compact('cart',  'cartMenu'));
         // return response()->json($cart);
     }
 
