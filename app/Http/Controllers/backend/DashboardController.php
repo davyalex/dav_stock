@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\backend;
 
 use App\Models\Vente;
+use App\Models\Depense;
 use App\Models\Produit;
 use App\Models\Commande;
 use Illuminate\Http\Request;
@@ -40,18 +41,18 @@ class DashboardController extends Controller
             // Rediriger vers la page de vente si une caisse est sélectionnée
             return redirect()->route('vente.index');
         }
-        
-         ## statistique Liste des ventes
-           // Liste des commandes en attente
+
+        ## statistique Liste des ventes
+        // Liste des commandes en attente
         $commandesEnAttente = Commande::where('statut', 'en attente')
             ->orderBy('created_at', 'desc')
             ->take(10)
             ->get();
 
 
-            //Liste des produit les plus vendus
+        //Liste des produit les plus vendus
         $produitsLesPlusVendus = Produit::withCount('ventes')
-            ->withSum('ventes','produit_vente.prix_unitaire')
+            ->withSum('ventes', 'produit_vente.prix_unitaire')
             ->orderBy('ventes_count', 'desc')
             ->having('ventes_count', '>', 0)
             ->take(10)
@@ -62,10 +63,30 @@ class DashboardController extends Controller
                 return $produit;
             });
 
+        // statistique chiffre pour card
+        // Nombre de commandes
+        $nombreCommandes = Commande::count();
 
-            
-      
+        // Montant total des ventes
+        $montantTotalVentes = Vente::sum('montant_total');
+
+        // Montant total des dépenses
+        $montantTotalDepenses = Depense::sum('montant');
+
+        // Produits en alerte
+        $produitsEnAlerte = Produit::where('stock', '=', 'stock_alerte')->get()->count();
+
+// dd($montantTotalVentes);
+
+
         // dd($produitsLesPlusVendus->toArray());
-        return view('backend.pages.index', compact('commandesEnAttente', 'produitsLesPlusVendus'));
+        return view('backend.pages.index', compact(
+            'commandesEnAttente',
+            'produitsLesPlusVendus',
+            'nombreCommandes',
+            'montantTotalVentes',
+            'montantTotalDepenses',
+            'produitsEnAlerte',
+        ));
     }
 }

@@ -77,8 +77,8 @@
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value"
-                                                data-target="559.25">0</span>k </h4>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
+                                                data-target="<?php echo e($montantTotalVentes); ?>"><?php echo e($montantTotalVentes); ?></span> FCFA </h4>
                                       
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
@@ -106,7 +106,7 @@
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
-                                                data-target="36894">0</span></h4>
+                                                data-target="<?php echo e($nombreCommandes); ?>"><?php echo e($nombreCommandes); ?></span></h4>
                                         
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
@@ -134,7 +134,7 @@
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
-                                                data-target="183.35">0</span>M </h4>
+                                                data-target="<?php echo e($produitsEnAlerte); ?>"><?php echo e($produitsEnAlerte); ?></span> </h4>
                                       
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
@@ -159,8 +159,8 @@
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value"
-                                                data-target="165.89">0</span>k </h4>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
+                                                data-target="<?php echo e($montantTotalDepenses); ?>"><?php echo e(number_format($montantTotalDepenses, 0, ',', ' ')); ?></span> FCFA </h4>
                                      
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
