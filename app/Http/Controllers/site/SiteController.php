@@ -337,7 +337,6 @@ class SiteController extends Controller
     public function recherche(Request $request)
     {
 
-
         try {
             $query = $request->input('query'); // Récupère la requête de recherche
             $produits = Produit::active()->where('nom', 'LIKE', "%$query%")

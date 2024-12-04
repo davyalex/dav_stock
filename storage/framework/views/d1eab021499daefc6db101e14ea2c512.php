@@ -333,7 +333,7 @@
                     </li>
                 <?php endif; ?>
 
-                <?php if(Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur' || Auth::user()->can('voir-permission')): ?>
+                <?php if(Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur' || Auth::user()->can('voir-parametre')): ?>
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
                             aria-controls="sidebarAuth">
@@ -343,25 +343,23 @@
                             id="sidebarAuth">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item active">
+                                    <a href="<?php echo e(route('setting.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('setting.*') ? 'active' : ''); ?>">Informations</a>
+                                </li>
+
+                                <li class="nav-item active">
                                     <a href="<?php echo e(route('admin-register.index')); ?>"
                                         class="nav-link <?php echo e(Route::is('admin-register.*') ? 'active' : ''); ?>">Administrateurs</a>
                                 </li>
 
-                                <li class="nav-item active">
-                                    <a href="<?php echo e(route('setting.index')); ?>"
-                                        class="nav-link <?php echo e(Route::is('setting.*') ? 'active' : ''); ?>">Informations</a>
-                                </li>
                                 <li class="nav-item">
                                     <a href="<?php echo e(route('module.index')); ?>"
                                         class="nav-link <?php echo e(Route::is('module.*') ? 'active' : ''); ?>">Modules</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="<?php echo e(route('role.index')); ?>"
-                                        class="nav-link <?php echo e(Route::is('role.*') ? 'active' : ''); ?>">Roles</a>
-                                </li>
+                                
                                 <li class="nav-item">
                                     <a href="<?php echo e(route('permission.index')); ?>"
-                                        class="nav-link <?php echo e(Route::is('permission.*') ? 'active' : ''); ?>">Permissions</a>
+                                        class="nav-link <?php echo e(Route::is('permission.*') ? 'active' : ''); ?>">Permissions/ Roles</a>
                                 </li>
                             </ul>
                         </div>

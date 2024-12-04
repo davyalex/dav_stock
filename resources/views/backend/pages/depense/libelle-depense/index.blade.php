@@ -59,7 +59,8 @@
                                                     data-bs-toggle="dropdown" aria-expanded="false">
                                                     <i class="ri-more-fill align-middle"></i>
                                                 </button>
-                                                <ul class="dropdown-menu dropdown-menu-end {{$item['slug']=='marchandises' ? 'd-none' :''}}" >
+                                                <ul
+                                                    class="dropdown-menu dropdown-menu-end {{ $item['slug'] == 'marchandises' ? 'd-none' : '' }}">
                                                     <li><a type="button" class="dropdown-item edit-item-btn"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#myModalEdit{{ $item['id'] }}"><i
@@ -109,8 +110,43 @@
 
     <script>
         $(document).ready(function() {
-            var route = "libelle-depense"
-            delete_row(route);
-        })
+
+            // Vérifiez si la DataTable est déjà initialisée
+            if ($.fn.DataTable.isDataTable('#buttons-datatables')) {
+                // Si déjà initialisée, détruisez l'instance existante
+                $('#buttons-datatables').DataTable().destroy();
+            }
+
+            // Initialisez la DataTable avec les options et le callback
+            var table = $('#buttons-datatables').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+
+                // Utilisez drawCallback pour exécuter delete_row après chaque redessin
+                drawCallback: function(settings) {
+                    var route = "libelle-depense"
+                    delete_row(route);
+                }
+            });
+
+
+
+            // // Vérifiez si la DataTable est déjà initialisée
+            // if ($.fn.dataTable.isDataTable('#buttons-datatables')) {
+            //     // Si déjà initialisée, détruisez l'instance existante
+            //     $('#buttons-datatables').DataTable().destroy();
+            // }
+
+            // // Initialisez la DataTable
+            // var table = $('#buttons-datatables').DataTable();
+
+            // // Callback après chaque redessin de la table (pagination, filtrage, tri, etc.)
+            // table.on('draw', function() {
+            //     var route = "produit";
+            //     delete_row(route);
+            // });
+        });
     </script>
 @endsection

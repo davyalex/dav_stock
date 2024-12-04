@@ -12,17 +12,18 @@
                 </div>
             </div>
             <div class="col-lg-5 col-md-5 col-12 col-sm-5">
-                <div class="search-box" style="border-radius: 2px; border: 1px solid rgb(237, 47, 47); display: flex; align-items: center; overflow: hidden;">
-                    <form action="{{route('recherche')}}" method="GET" style="display: flex; flex: 1;">
-                        <input type="text" name="query" placeholder="Rechercher un produit..." style="border: none; flex: 1; padding: 10px; background-color: white; outline: none;">
-                        <button type="submit" style="border: none; padding: 10px 15px; background-color: rgb(242, 60, 60); color: white; cursor: pointer;">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </form>
-                </div>
+                <form action="{{ route('recherche') }}" method="GET"
+                    style="display: flex; flex: 1; border: 1px solid #fb5353;" class="">
+                    <input type="text" name="query" placeholder="Rechercher un produit..."
+                        style="flex: 1; padding: 10px; background-color: white; outline: none; border: none;">
+                    <button type="submit"
+                        style="padding: 10px 15px; background-color: rgb(255, 255, 255); color: rgb(255, 0, 0); cursor: pointer; border: none;">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </form>
             </div>
-            
-            
+
+
             <div class="col-lg-4 col-md-8 col-12 col-sm-8 mt-2">
                 <div class="header-middle-right f-right">
                     <div class="header-login px-3">
@@ -35,7 +36,7 @@
                                     </div>
                                     <div class="login-text-content">
                                         <p>Mon compte</p>
-                                        <p class="text-danger"> {{Auth::user()->first_name}} </p>
+                                        <p class="text-danger"> {{ Auth::user()->first_name }} </p>
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu">
@@ -90,7 +91,7 @@
                             <div class="cart-text">
                                 <span class="digit">Mon panier</span>
                                 <span
-                                    class="cart-digit-bold totalPriceTop">{{ number_format(session('cart') ||session('cartMenu') ? Session::get('totalPrice') + Session::get('totalPriceMenu') : '0', 0, ',', ' ') }}
+                                    class="cart-digit-bold totalPriceTop">{{ number_format(session('cart') || session('cartMenu') ? Session::get('totalPrice') + Session::get('totalPriceMenu') : '0', 0, ',', ' ') }}
                                     FCFA</span>
                             </div>
                         </a>

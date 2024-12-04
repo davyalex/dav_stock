@@ -301,6 +301,18 @@ class VenteController extends Controller
     {
         try {
 
+            $modes = [
+                0 => 'Espèce',
+                1 => 'Mobile money',
+            ];
+
+            $type_mobile_money = [
+                0 => 'Wave',
+                1 => 'Moov money',
+                2 => 'Orange Money',
+                3 => 'MTN money',
+            ];
+
             $type_monnaies = [
                 0 => 'Billets',
                 1 => 'Pièces',
@@ -327,14 +339,14 @@ class VenteController extends Controller
 
 
             if ($request->user()->hasRole('caisse')) {
-               $totalVente = Vente::where('caisse_id', auth()->user()->caisse_id)
+                $totalVente = Vente::where('caisse_id', auth()->user()->caisse_id)
                     ->where('user_id', auth()->user()->id)
                     ->where('statut_cloture', false)->sum('montant_total');
             }
 
             // dd($type_monnaies , $billets, $pieces, $totalVente);
 
-            return view('backend.pages.vente.billeterie.create', compact('type_monnaies' , 'billets', 'pieces' , 'totalVente'));
+            return view('backend.pages.vente.billeterie.create', compact('modes', 'type_monnaies', 'billets', 'pieces', 'totalVente' , 'type_mobile_money'));
         } catch (\Throwable $th) {
 
             return $th->getMessage();

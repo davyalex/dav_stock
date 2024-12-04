@@ -61,8 +61,6 @@
                                                                             class="form-control" id="prix"
                                                                             required>
                                                                     </div>
-
-
                                                                 </div>
                                                                 <div>
                                                                     <label>Description</label>

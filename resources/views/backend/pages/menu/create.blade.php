@@ -20,8 +20,8 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('menu.store') }}" autocomplete="off" id="formSave" class="needs-validation"
-                        novalidate enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('menu.store') }}" autocomplete="off" id="formSave"
+                        class="needs-validation" novalidate enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="card">
@@ -193,15 +193,6 @@
         <script>
             $(function() {
 
-
-
-                // $('.js-example-basic-single').select2({
-                //     placeholder: "Sélectionnez des options",
-                //     allowClear: true,
-                //     width: '100%' // Ou 'resolve' pour une largeur auto
-                // });
-
-
                 // Vérifier si un plat est choisi ? bouton save active : disabled
                 var checkedItems = []
                 $('.produit').change(function() {
@@ -228,78 +219,6 @@
 
                 // liste des plats from controller
                 var plats = @json($plats)
-
-
-                // function loadAllOptions() {
-                //     // Récupérer les données depuis Blade
-                //     var plats = @json($plats);
-                //     var platsComplements = @json($plats_complements);
-                //     var platsGarnitures = @json($plats_garnitures);
-
-                //     // Vérifier les données dans la console
-                //     console.log(plats, platsComplements, platsGarnitures);
-
-                //     // Charger les plats
-                //     let platsOptions = `<option value="">Sélectionner un plat</option>`;
-                //     plats.forEach(item => {
-                //         platsOptions += `<option value="${item.id}">${item.nom}</option>`;
-                //     });
-                //     $('#plats-select').html(platsOptions);
-
-                //     // Charger les compléments
-                //     let complementsOptions = `<option value="">Sélectionner un complément</option>`;
-                //     platsComplements.forEach(item => {
-                //         complementsOptions += `<option value="${item.id}">${item.nom}</option>`;
-                //     });
-                //     $('#complements-select').html(complementsOptions);
-
-                //     // Charger les garnitures
-                //     let garnituresOptions = `<option value="">Sélectionner une garniture</option>`;
-                //     platsGarnitures.forEach(item => {
-                //         garnituresOptions += `<option value="${item.id}">${item.nom}</option>`;
-                //     });
-                //     $('#garnitures-select').html(garnituresOptions);
-                // }
-
-                // // Initialiser au chargement de la page
-                // $(document).ready(function() {
-                //     loadAllOptions();
-                // });
-
-
-                // function loadAllOptions() {
-                //     $.ajax({
-                //         url: "{{ route('menu.options') }}", // URL pour récupérer les données
-                //         method: "GET",
-                //         success: function(response) {
-                //             // Charger les plats
-                //             let platsOptions = `<option value="">Sélectionner un plat</option>`;
-                //             response.plats.forEach(item => {
-                //                 platsOptions += `<option value="${item.id}">${item.nom}</option>`;
-                //             });
-                //             $('.plats-select').html(platsOptions);
-
-                //             // Charger les compléments
-                //             let complementsOptions = `<option value="">Sélectionner un complément</option>`;
-                //             response.plats_complements.forEach(item => {
-                //                 complementsOptions +=
-                //                     `<option value="${item.id}">${item.nom}</option>`;
-                //             });
-                //             $('.complements-select').html(complementsOptions);
-
-                //             // Charger les garnitures
-                //             let garnituresOptions = `<option value="">Sélectionner une garniture</option>`;
-                //             response.plats_garnitures.forEach(item => {
-                //                 garnituresOptions +=
-                //                     `<option value="${item.id}">${item.nom}</option>`;
-                //             });
-                //             $('.garnitures-select').html(garnituresOptions);
-                //         },
-                //         error: function() {
-                //             alert("Erreur lors du chargement des données.");
-                //         }
-                //     });
-                // }
 
 
                 function loadAllOptions() {
@@ -370,7 +289,6 @@
                 $(document).ready(function() {
                     loadAllOptions();
                 });
-
 
 
                 // initialisation a 1
@@ -465,73 +383,7 @@
 
 
                 //////////////////////////////////Envoyer le menu au controller ///////////////////////////////////////////////
-                // $('#formSave').on('submit', function(e) {
-                //     e.preventDefault(); // Empêche l'envoi standard du formulaire
-
-                //     // Récupérer les données du formulaire
-                //     var formData = new FormData(this);
-
-                //     // Collecter les plats, compléments, et garnitures sélectionnés
-                //     var variantes = [];
-                //     $('#variantes-container .variante-row').each(function() {
-                //         var platId = $(this).find('.plats-select').val();
-                //         var complements = $(this).find('.complements-select').val() || [];
-                //         var garnitures = $(this).find('.garnitures-select').val() || [];
-
-                //         if (platId) {
-                //             variantes.push({
-                //                 plat_id: platId,
-                //                 complements: complements,
-                //                 garnitures: garnitures,
-                //             });
-                //         }
-                //     });
-
-                //     // Ajouter les variantes à formData
-                //     formData.append('variantes', JSON.stringify(variantes));
-
-                //     // Envoyer la requête AJAX
-                //     $.ajax({
-                //         url: "{{ route('plat-menu.store') }}",
-                //         type: 'POST',
-                //         data: formData,
-                //         contentType: false,
-                //         processData: false,
-                //         success: function(response) {
-                //             // Gérer le succès
-                //             if (response.message == 'operation reussi') {
-                //                 Swal.fire({
-                //                     title: 'Plat ajouté avec succès !',
-                //                     icon: 'success',
-                //                     buttonsStyling: false,
-                //                 });
-
-                //                 $('.formSend')[0].reset();
-                //                 loadAllOptions(); // Recharger les options
-                //                 $('#createPlatModal').modal('hide'); // Fermer les modales
-                //             } else {
-                //                 Swal.fire({
-                //                     title: 'Erreur',
-                //                     text: response.message,
-                //                     icon: 'error',
-                //                     buttonsStyling: false,
-                //                 });
-                //             }
-                //         },
-                //         error: function() {
-                //             // Gérer l'erreur
-                //             Swal.fire({
-                //                 title: 'Erreur',
-                //                 text: 'Une erreur est survenue lors de l’enregistrement.',
-                //                 icon: 'error',
-                //                 buttonsStyling: false,
-                //             });
-                //         },
-                //     });
-                // });
-
-
-
+              
                 /////////////////////////////////############### Ajouter les nouveaux enregistrement #########################///////////////////////////////////////////
 
 
@@ -654,5 +506,11 @@
             });
         </script>
     @endsection
+
+
+
+
+
+
 
 @endsection

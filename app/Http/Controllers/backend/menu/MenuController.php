@@ -32,7 +32,7 @@ class MenuController extends Controller
     public function create(Request $request)
     {
         try {
-            //toutes les categorie menu sauf  complement et garniture
+            //categorie  complement et garniture
             $categorie_complement_garniture = CategorieMenu::orderBy('position', 'ASC')
                 ->whereIn('slug', ['complements', 'garnitures'])
                 ->get();
@@ -160,60 +160,162 @@ class MenuController extends Controller
     public function edit($id)
     {
         try {
-            // $data_categorie_menu = Categorie::with('children')
-            //     ->whereNull('parent_id')
-            //     ->whereIn('famille', ['menu', 'bar'])
-            //     ->get();
-
-            $data_categorie_menu = Categorie::with(['children', 'produits'])
-                ->whereNotNull('parent_id')
-                ->whereIn('famille', ['menu'])
-                ->whereNotIn('slug', ['complements'])
-                ->orderBy('position', 'ASC')
+            //categorie  complement et garniture
+            $categorie_complement_garniture = CategorieMenu::orderBy('position', 'ASC')
+                ->whereIn('slug', ['complements', 'garnitures'])
                 ->get();
 
-            $categorie_complements = Categorie::with('produits')->where('slug', 'complements')->first();
 
-            $data_menu = Menu::findOrFail($id);
-            if (!$data_menu) {
-                return redirect()->route('menu.index');
+            // toutes les categorie menu  sauf complement et garniture
+            $categorie_menu = CategorieMenu::active()->with('plats')
+                ->whereNotIn('slug', ['complements', 'garnitures'])
+                ->orderBy('position', 'ASC')->get();
+
+            //uniquement categorie menu complements
+            $categorie_complements = CategorieMenu::with('plats')->where('slug', 'complements')->first();
+
+            // recuperer les plats
+            $plats = Plat::active()->whereDoesntHave('categorieMenu', function ($query) {
+                $query->whereIn('slug', ['complements', 'garnitures']);
+            })->get();
+
+            //recuperer les plats complement
+            $plats_complements = Plat::active()->whereHas('categorieMenu', function ($query) {
+                $query->where('slug', 'complements');
+            })->get();
+
+
+            //recuperer les plats garnitures
+            $plats_garnitures = Plat::active()->whereHas('categorieMenu', function ($query) {
+                $query->where('slug', 'garnitures');
+            })->get();
+
+
+
+            // recuperer le menu selectionné
+            // $menu = Menu::with(['plats.complements', 'plats.garnitures' , 'plats.categorieMenu'])->findOrFail($id);
+            $menu = Menu::with([
+                'plats' => function ($query) {
+                    $query->with(['complements', 'garnitures', 'categorieMenu']);
+                }
+            ])->findOrFail($id);
+
+
+            if (!$menu) {
+                abort(404);
             }
+            // dd($menu->toArray());
 
-            //    dd($data_produit->produit_menu->toArray());
-
-            return view('backend.pages.menu.edit', compact('data_categorie_menu', 'data_menu', 'categorie_complements'));
+            return view('backend.pages.menu.edit', compact('categorie_complement_garniture', 'categorie_complements', 'categorie_menu', 'plats', 'plats_complements', 'plats_garnitures', 'menu'));
         } catch (\Throwable $e) {
-            Alert::error($e->getMessage(),  'Une erreur s\'est produite');
-            return back();
+            return $e->getMessage();
         }
     }
 
+
+    // public function update(Request $request, $id)
+    // {
+    //     try {
+    //         $request->validate([
+    //             'date_menu' => 'required',
+    //             // required produit min:1
+    //             'produits' => 'required|array|min:1',
+    //         ]);
+
+    //         $libelle = $request['libelle'] ? $request['libelle'] : 'Menu du ' . $request->date_menu;
+    //         $data_menu = Menu::find($id);
+    //         $data_menu->update([
+    //             'date_menu' => $request->date_menu,
+    //             'libelle' => $libelle,
+    //             'user_id' => Auth::id(),
+    //         ]);
+    //         //method attach product with menu
+    //         $data_menu->produits()->sync($request['produits']);
+    //         Alert::success('Operation réussi', 'Success Message');
+    //         return back();
+    //     } catch (\Throwable $e) {
+    //         Alert::error($e->getMessage(),  'Une erreur s\'est produite');
+    //         return back();
+    //     }
+    // }
 
     public function update(Request $request, $id)
     {
         try {
-            $request->validate([
-                'date_menu' => 'required',
-                // required produit min:1
-                'produits' => 'required|array|min:1',
+            // Valider les données entrantes
+            $validatedData = $request->validate([
+                'date_menu' => 'required|unique:menus,date_menu,' . $id,
+                'plats' => 'required|array',
+                'plats.*.categorie_id' => 'required|exists:categorie_menus,id',
+                'plats.*.plat_selected' => 'required|exists:plats,id',
+                'plats.*.complements' => 'nullable|array',
+                'plats.*.complements.*' => 'exists:plats,id',
+                'plats.*.garnitures' => 'nullable|array',
+                'plats.*.garnitures.*' => 'exists:plats,id',
+            ], [
+                'date_menu.required' => 'La date du menu est requise.',
+                'date_menu.unique' => 'Un menu existe déjà pour cette date.',
             ]);
 
+            // Récupérer le menu à mettre à jour
+            $menu = Menu::findOrFail($id);
+
+            // Mettre à jour les informations du menu
             $libelle = $request['libelle'] ? $request['libelle'] : 'Menu du ' . $request->date_menu;
-            $data_menu = Menu::find($id);
-            $data_menu->update([
+            $menu->update([
                 'date_menu' => $request->date_menu,
                 'libelle' => $libelle,
                 'user_id' => Auth::id(),
             ]);
-            //method attach product with menu
-            $data_menu->produits()->sync($request['produits']);
-            Alert::success('Operation réussi', 'Success Message');
+
+            // Synchroniser les plats avec le menu
+            $platsSyncData = [];
+            foreach ($validatedData['plats'] as $platData) {
+                $platsSyncData[$platData['plat_selected']] = [
+                    'categorie_menu_id' => $platData['categorie_id']
+                ];
+            }
+            $menu->plats()->sync($platsSyncData);
+
+            // Gérer les compléments et garnitures pour chaque plat
+            foreach ($validatedData['plats'] as $platData) {
+                $plat = Plat::find($platData['plat_selected']);
+
+                // Synchroniser les compléments
+                if (!empty($platData['complements'])) {
+                    $plat->complements()->syncWithPivotValues(
+                        $platData['complements'],
+                        ['menu_id' => $menu->id]
+                    );
+                } else {
+                    $plat->complements()->detach();
+                }
+
+                // Synchroniser les garnitures
+                if (!empty($platData['garnitures'])) {
+                    $plat->garnitures()->syncWithPivotValues(
+                        $platData['garnitures'],
+                        ['menu_id' => $menu->id]
+                    );
+                } else {
+                    $plat->garnitures()->detach();
+                }
+            }
+
+            // Gérer l'image si elle est présente
+            if ($request->hasFile('image')) {
+                $menu->clearMediaCollection('images');
+                $menu->addMediaFromRequest('image')->toMediaCollection('images');
+            }
+
+            Alert::success('Mise à jour réussie', 'Le menu a été mis à jour avec succès.');
             return back();
         } catch (\Throwable $e) {
-            Alert::error($e->getMessage(),  'Une erreur s\'est produite');
+            Alert::error('Erreur', 'Une erreur s\'est produite : ' . $e->getMessage());
             return back();
         }
     }
+
 
 
 

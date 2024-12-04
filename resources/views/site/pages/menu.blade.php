@@ -72,7 +72,7 @@
     @section('content')
 
 
-        <div class="container">
+        <div class="container-fluid">
             @if (!$menu)
                 <p class="text-center">Aucun menu disponible pour aujourd'hui.</p>
             @else
