@@ -1,5 +1,7 @@
 @extends('backend.layouts.master')
-
+@section('title')
+   Sortie
+@endsection
 @section('content')
     @component('backend.components.breadcrumb')
         @slot('li_1')

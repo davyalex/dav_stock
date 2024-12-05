@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-    @lang('translation.tableaux_de_bord')
+   Tableau de bord
 @endsection
 @section('css')
     <link href="{{ URL::asset('build/libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />

@@ -1,7 +1,7 @@
 
 @extends('backend.layouts.master')
 @section('title')
-    @lang('translation.datatables')
+   Permission
 @endsection
 @section('css')
     <!--datatable css-->

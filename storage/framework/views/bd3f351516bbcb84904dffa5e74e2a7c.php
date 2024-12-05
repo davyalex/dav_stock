@@ -110,14 +110,14 @@
                         <table id="rapport-table" class="display table table-bordered" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Catégorie de dépense</th>
-                                    <th>Montant total</th>
+                                    <th class="text-uppercase">Catégorie de dépense</th>
+                                    <th class="text-uppercase">Montant total</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php $__currentLoopData = $categories_depense; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr class="table-secondary">
-                                        <td><strong><a
+                                        <td><strong><a class="text-capitalize"
                                                     href="<?php echo e(route('rapport.detail', ['categorie_depense' => $categorie->id, 'date_debut' => request('date_debut'), 'date_fin' => request('date_fin')])); ?>"
                                                     style="text-decoration: none; color: black;"><?php echo e($categorie->libelle); ?></a></strong>
                                         </td>
@@ -127,7 +127,7 @@
                                     </tr>
                                     <?php $__currentLoopData = $categorie->libelleDepenses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $libelle): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
-                                            <td style="padding-left: 20px;">- <a
+                                            <td style="padding-left: 20px;">- <a class="text-capitalize"
                                                     href="<?php echo e(route('rapport.detail', ['libelle_depense' => $libelle->id, 'categorie_depense' => $categorie->id, 'date_debut' => request('date_debut'), 'date_fin' => request('date_fin')])); ?>"
                                                     style="text-decoration: none; color: black;"><?php echo e($libelle->libelle); ?></a>
                                             </td>
@@ -144,12 +144,11 @@
                                     <td><strong><?php echo e(number_format($totalDepenses, 0, ',', ' ')); ?> FCFA</strong></td>
                                 </tr>
                                 <div class="row">
-                                    <tr class="table-info">
-                                        <td><strong>Total des ventes</strong></td>
-                                        <td><strong><?php echo e(number_format($totalVentes, 0, ',', ' ')); ?> FCFA</strong>
-                                        </td>
-                                    </tr>
-
+                                        <tr class="mt-4">
+                                            <th class="text-uppercase">Catégorie ventes</th>
+                                            <th class="text-uppercase">Montant total</th>
+                                        </tr>
+                                  
                                     <?php $__currentLoopData = $dataParFamille; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $famille => $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
                                             <td style="padding-left: 20px;">-
@@ -157,12 +156,21 @@
                                             <td><strong><?php echo e(number_format($data['ventes'], 0, ',', ' ')); ?> FCFA</strong>
                                             </td>
                                         </tr>
+
                                         
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                    <tr class="table-dark">
+                                        <td><strong>Total des ventes</strong></td>
+                                        <td><strong><?php echo e(number_format($totalVentes, 0, ',', ' ')); ?> FCFA</strong>
+                                        </td>
+                                    </tr>
                                     <tr class="<?php echo e($benefice >= 0 ? 'table-success' : 'table-danger'); ?>">
-                                        <td><strong>Resultats</strong></td>
+                                        <td><strong>Resultats  <span class="text-danger"> (dépense - vente) </span> </strong></td>
                                         <td><strong><?php echo e(number_format($benefice, 0, ',', ' ')); ?> FCFA</strong></td>
                                     </tr>
+
+
                                     
                                     
                                 </div>

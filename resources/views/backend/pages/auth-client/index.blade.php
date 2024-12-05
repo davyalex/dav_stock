@@ -1,7 +1,7 @@
 @extends('backend.layouts.master')
 @section('title')
     {{-- @lang('translation.datatables') --}}
-    Admin
+   Client
 @endsection
 @section('css')
     <!--datatable css-->

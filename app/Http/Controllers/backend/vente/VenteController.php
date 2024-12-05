@@ -346,7 +346,7 @@ class VenteController extends Controller
 
             // dd($type_monnaies , $billets, $pieces, $totalVente);
 
-            return view('backend.pages.vente.billeterie.create', compact('modes', 'type_monnaies', 'billets', 'pieces', 'totalVente' , 'type_mobile_money'));
+            return view('backend.pages.vente.billeterie.create', compact('modes', 'type_monnaies', 'billets', 'pieces', 'totalVente', 'type_mobile_money'));
         } catch (\Throwable $th) {
 
             return $th->getMessage();

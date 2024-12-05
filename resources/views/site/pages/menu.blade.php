@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <style>
+    {{-- <style>
         .product-img img {
             width: 100%;
             /* Adapter à la largeur du conteneur */
@@ -66,11 +66,23 @@
             cursor: not-allowed;
             opacity: 0.6;
         }
+    </style> --}}
+
+
+@section('content')
+    <style>
+       
+
+        .menu-image {
+            max-width: 100%;
+            /* Adapte l'image à la largeur de la colonne */
+            height: auto;
+            /* Garde les proportions */
+            border-radius: 8px;
+            /* Ajoute des coins arrondis (optionnel) */
+        }
     </style>
     <div class="shop-page-area pt-10 pb-100">
-
-    @section('content')
-
 
         <div class="container-fluid">
             @if (!$menu)
@@ -78,10 +90,11 @@
             @else
                 <h1 class="text-center my-4">Menu du <span>{{ \Carbon\carbon::parse($menu->date)->format('d/m/Y') }}</span>
                 </h1>
-                <div class="row mt-4">
-                    @foreach ($categories as $categorie => $plats)
-                        <div class="col-sm-6 col-md-8 col-lg-8 col-xl-8 mb-4">
-                            <div class="card shadow">
+                <div class="d-flex  mt-4 ol-sm-12 col-md-12 col-lg-12 col-xl-12 m-auto">
+                    <div>
+                        @foreach ($categories as $categorie => $plats)
+                            {{-- <div class="col-sm-6 col-md-8 col-lg-12 col-xl-8 mb-4"> --}}
+                            <div class="card shadow col-12">
                                 <div class="card-header bg-danger text-white">
                                     <h5 class="m-0 text-white">{{ $categorie }}</h5>
                                 </div>
@@ -94,8 +107,6 @@
                                                         <!-- Case à cocher pour le plat -->
 
                                                         <div class="d-flex justify-content-between mt-2">
-
-
                                                             <div class="form-check ">
                                                                 <input type="checkbox" id="plat_{{ $plat->id }}"
                                                                     class="form-check-input plat-checkbox" name="plats[]"
@@ -106,7 +117,8 @@
                                                                 </label>
                                                             </div>
 
-                                                            <strong class="price" data-price="{{$plat->prix}}" class="text-danger">
+                                                            <strong class="price" data-price="{{ $plat->prix }}"
+                                                                class="text-danger">
                                                                 {{ number_format($plat->prix, 0, ',', ' ') }} FCFA
                                                             </strong>
                                                         </div>
@@ -215,10 +227,10 @@
                                                             </div>
 
                                                             {{-- <div class="d-flex justify-content-between mt-2">
-                                                            <strong id="price" class="text-danger">
-                                                                {{ number_format($plat->prix, 0, ',', ' ') }} FCFA
-                                                            </strong>
-                                                        </div> --}}
+                                                        <strong id="price" class="text-danger">
+                                                            {{ number_format($plat->prix, 0, ',', ' ') }} FCFA
+                                                        </strong>
+                                                    </div> --}}
 
                                                         </div>
                                                     </div>
@@ -228,19 +240,21 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                            {{-- </div> --}}
+                        @endforeach
+                    </div>
 
-                    <div class="col-4">
-                        <div>
-                            @if ($menu && $menu->hasMedia('images'))
-                                <img src="{{ $menu->getFirstMediaUrl('images') }}" alt="Menu Image" class="img-fluid "
-                                    style="margin-top: -300px">
-                            @endif
-                        </div>
+                    <div class="image-container d-none d-lg-block d-md-block col-4">
+                        @if ($menu && $menu->hasMedia('images'))
+                            <img src="{{ $menu->getFirstMediaUrl('images') }}" alt="Menu Image"
+                                class="img-fluid menu-image">
+                        @endif
                     </div>
 
 
+                    {{-- <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                      
+                    </div> --}}
 
 
                 </div>
@@ -260,85 +274,82 @@
 
         @include('site.components.ajouter-au-panier-menu')
 
+    </div>
 
-        <script>
-            function increaseValue(button) {
-                // Récupérer le parent le plus proche contenant le champ input
-                const input = button.parentElement.querySelector(".cart-plus-minus-box");
-                let currentValue = parseInt(input.value);
-                input.value = currentValue + 1;
+    <script>
+        function increaseValue(button) {
+            // Récupérer le parent le plus proche contenant le champ input
+            const input = button.parentElement.querySelector(".cart-plus-minus-box");
+            let currentValue = parseInt(input.value);
+            input.value = currentValue + 1;
+        }
+
+        function decreaseValue(button) {
+            // Récupérer le parent le plus proche contenant le champ input
+            const input = button.parentElement.querySelector(".cart-plus-minus-box");
+            let currentValue = parseInt(input.value);
+            if (currentValue > 1) {
+                input.value = currentValue - 1;
+            }
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fonction pour cocher la case du plat
+            function checkPlat(checkbox) {
+                const platId = checkbox.getAttribute('data-plat-id');
+                const platCheckbox = document.getElementById(`plat_${platId}`);
+
+                if (platCheckbox) {
+                    platCheckbox.checked = true; // Coche la case du plat
+                }
             }
 
-            function decreaseValue(button) {
-                // Récupérer le parent le plus proche contenant le champ input
-                const input = button.parentElement.querySelector(".cart-plus-minus-box");
-                let currentValue = parseInt(input.value);
-                if (currentValue > 1) {
-                    input.value = currentValue - 1;
-                }
-            }
-
-
-            document.addEventListener('DOMContentLoaded', function() {
-                // Fonction pour cocher la case du plat
-                function checkPlat(checkbox) {
-                    const platId = checkbox.getAttribute('data-plat-id');
-                    const platCheckbox = document.getElementById(`plat_${platId}`);
-
-                    if (platCheckbox) {
-                        platCheckbox.checked = true; // Coche la case du plat
-                    }
-                }
-
-                // Fonction pour décocher les garnitures et compléments associés
-                function uncheckPlatSelections(platId) {
-                    // Décoche tous les compléments associés à ce plat
-                    const complementCheckboxes = document.querySelectorAll(
-                        `.complement-checkbox[data-plat-id="${platId}"]`);
-                    complementCheckboxes.forEach(function(complementCheckbox) {
-                        complementCheckbox.checked = false;
-                    });
-
-                    // Décoche toutes les garnitures associées à ce plat
-                    const garnitureCheckboxes = document.querySelectorAll(
-                        `.garniture-checkbox[data-plat-id="${platId}"]`);
-                    garnitureCheckboxes.forEach(function(garnitureCheckbox) {
-                        garnitureCheckbox.checked = false;
-                    });
-                }
-
-                // Ajoute un événement de sélection aux compléments
-                const complementCheckboxes = document.querySelectorAll('.complement-checkbox');
+            // Fonction pour décocher les garnitures et compléments associés
+            function uncheckPlatSelections(platId) {
+                // Décoche tous les compléments associés à ce plat
+                const complementCheckboxes = document.querySelectorAll(
+                    `.complement-checkbox[data-plat-id="${platId}"]`);
                 complementCheckboxes.forEach(function(complementCheckbox) {
-                    complementCheckbox.addEventListener('change', function() {
-                        checkPlat(this); // Coche la case du plat lors de la sélection du complément
-                    });
+                    complementCheckbox.checked = false;
                 });
 
-                // Ajoute un événement de sélection aux garnitures
-                const garnitureCheckboxes = document.querySelectorAll('.garniture-checkbox');
+                // Décoche toutes les garnitures associées à ce plat
+                const garnitureCheckboxes = document.querySelectorAll(
+                    `.garniture-checkbox[data-plat-id="${platId}"]`);
                 garnitureCheckboxes.forEach(function(garnitureCheckbox) {
-                    garnitureCheckbox.addEventListener('change', function() {
-                        checkPlat(this); // Coche la case du plat lors de la sélection de la garniture
-                    });
+                    garnitureCheckbox.checked = false;
                 });
+            }
 
-                // Ajoute un événement de décochement à la case du plat
-                const platCheckboxes = document.querySelectorAll('.plat-checkbox');
-                platCheckboxes.forEach(function(platCheckbox) {
-                    platCheckbox.addEventListener('change', function() {
-                        const platId = platCheckbox.value; // Récupère l'ID du plat
-                        if (!platCheckbox.checked) {
-                            uncheckPlatSelections(
-                                platId
-                            ); // Si la case du plat est décochée, on décocher les garnitures et compléments associés
-                        }
-                    });
+            // Ajoute un événement de sélection aux compléments
+            const complementCheckboxes = document.querySelectorAll('.complement-checkbox');
+            complementCheckboxes.forEach(function(complementCheckbox) {
+                complementCheckbox.addEventListener('change', function() {
+                    checkPlat(this); // Coche la case du plat lors de la sélection du complément
                 });
             });
-        </script>
 
+            // Ajoute un événement de sélection aux garnitures
+            const garnitureCheckboxes = document.querySelectorAll('.garniture-checkbox');
+            garnitureCheckboxes.forEach(function(garnitureCheckbox) {
+                garnitureCheckbox.addEventListener('change', function() {
+                    checkPlat(this); // Coche la case du plat lors de la sélection de la garniture
+                });
+            });
 
-
-    </div>
+            // Ajoute un événement de décochement à la case du plat
+            const platCheckboxes = document.querySelectorAll('.plat-checkbox');
+            platCheckboxes.forEach(function(platCheckbox) {
+                platCheckbox.addEventListener('change', function() {
+                    const platId = platCheckbox.value; // Récupère l'ID du plat
+                    if (!platCheckbox.checked) {
+                        uncheckPlatSelections(
+                            platId
+                        ); // Si la case du plat est décochée, on décocher les garnitures et compléments associés
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

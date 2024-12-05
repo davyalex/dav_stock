@@ -1,8 +1,8 @@
 @extends('backend.layouts.master')
-
+@section('title')
+   Stock
+@endsection
 @section('content')
-
-
     @component('backend.components.breadcrumb')
         <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 

@@ -1,6 +1,6 @@
 @extends('backend.layouts.master-without-nav')
 @section('title')
-    @lang('translation.signin')
+   Login
 @endsection
 @section('content')
     @if ($setting != null)

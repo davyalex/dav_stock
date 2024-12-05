@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-    @lang('translation.settings')
+   Parametre
 @endsection
 @section('content')
     {{-- <div class="position-relative mx-n4 mt-n4">

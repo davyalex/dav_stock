@@ -344,6 +344,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::post('statut', 'changerStatut')->name('commande.statut');
     });
 
+
     Route::prefix('categorie-depense')->controller(CategorieDepenseController::class)->group(function () {
         route::get('', 'index')->name('categorie-depense.index');
         route::get('create', 'create')->name('categorie-depense.create');

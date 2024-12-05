@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-    @lang('translation.datatables')
+  Sortie
 @endsection
 @section('css')
     <!--datatable css-->

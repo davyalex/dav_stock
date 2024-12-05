@@ -1,5 +1,7 @@
 @extends('backend.layouts.master')
-
+@section('title')
+   Inventaire
+@endsection
 @section('content')
 
 
