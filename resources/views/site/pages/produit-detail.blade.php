@@ -157,7 +157,7 @@
                             <span class="text-danger fw-bold">Rupture de stock</span>
                         @else
                             <div class="pro-details-cart-wrap d-flex">
-                                <div class="product-quantity">
+                                <div class="product-quantity" style="width: 100px">
                                     <div class="cart-plus-minus">
                                         <input id="quantity" class="cart-plus-minus-box" type="text" name="quantity"
                                             value="1" readonly>

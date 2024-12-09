@@ -305,7 +305,7 @@ textarea {
 
 input {
     background: #eceff8;
-    border: 2px solid #eceff8;
+    border: 2px solid #ffffff;
     height: 45px;
     box-shadow: none;
     padding-left: 10px;
@@ -2771,7 +2771,7 @@ product-quantity {
     height: 40px;
     padding: 0;
     position: relative;
-    width: 110px;
+    /* width: 110px; */
 }
 .product-quantity .qtybutton {
     color: #454545;
@@ -2804,7 +2804,7 @@ product-quantity {
     font-size: 14px;
     height: 40px;
     margin: 0;
-    width: 110px;
+    /* width: 110px; */
     background: transparent none repeat scroll 0 0;
     /* border: 1px solid #e1e1e1; */
     padding: 0;

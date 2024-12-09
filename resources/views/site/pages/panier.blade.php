@@ -62,7 +62,7 @@
                                                                         FCFA
                                                                     </p>
                                                                     <p>
-                                                                    <div class="product-quantity">
+                                                                    <div class="product-quantity" style="width: 100px">
                                                                         <div class="cart-plus-minus">
                                                                             <div class="dec qtybutton"
                                                                                 onclick="decreaseValue({{ $id }})">
