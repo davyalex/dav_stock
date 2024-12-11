@@ -230,7 +230,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
 
 
 
-{{-- 
+
 <script>
     document.querySelector('.addCart').addEventListener('click', function() {
         const plats = document.querySelectorAll('.plat-checkbox:checked');
@@ -391,10 +391,10 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
             });
         }
     });
-</script> --}}
+</script>
 
 
-
+{{-- 
 <script>
     document.querySelector('.addCart').addEventListener('click', function() {
         const plats = document.querySelectorAll('.plat-checkbox:checked');
@@ -518,7 +518,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
             });
         }
     });
-</script>
+</script> --}}
 
 <script src="
 https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js
