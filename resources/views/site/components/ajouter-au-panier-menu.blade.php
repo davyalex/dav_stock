@@ -125,7 +125,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
     });
 </script> --}}
 
-<script>
+{{-- <script>
     $('.addCart').click(function(e) {
         e.preventDefault();
 
@@ -206,9 +206,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
                     showConfirmButton: false,
                     timer: 1500
                 });
-                
 
-                
+
+
                 // Mise à jour du total du panier
                 $('.totalQuantityMenu').html(response.totalQte);
                 $('.totalPriceMenu').html(response.totalPrice + ' FCFA');
@@ -225,6 +225,298 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
                 });
             }
         });
+    });
+</script> --}}
+
+
+
+{{-- 
+<script>
+    document.querySelector('.addCart').addEventListener('click', function() {
+        const plats = document.querySelectorAll('.plat-checkbox:checked');
+        const panier = [];
+        let validationEchouee = false;
+
+        plats.forEach((plat) => {
+            const platId = plat.value;
+            const platNom = plat.nextElementSibling.textContent.trim();
+            const platQuantite = plat.closest('.form-check').querySelector('.quantityPlat').value;
+            const prixPlat = plat.getAttribute('data-price');
+
+
+            const complements = [];
+            const garnitures = [];
+            let complementManquant = false;
+            let garnitureManquante = false;
+
+            // Compléments
+            const complementCheckboxes = plat.closest('.card-body').querySelectorAll(
+                '.complement-checkbox');
+            complementCheckboxes.forEach((complement) => {
+                if (complement.checked) {
+                    complements.push({
+                        id: complement.value,
+                        nom: complement.nextElementSibling.textContent.trim(),
+                        quantity: complement.closest('.form-check').querySelector(
+                            '.quantityComplement').value,
+                    });
+                }
+            });
+
+            if (complementCheckboxes.length > 0 && complements.length === 0) {
+                complementManquant = true;
+            }
+
+            // Garnitures
+            const garnitureCheckboxes = plat.closest('.card-body').querySelectorAll(
+                '.garniture-checkbox');
+            garnitureCheckboxes.forEach((garniture) => {
+                if (garniture.checked) {
+                    garnitures.push({
+                        id: garniture.value,
+                        nom: garniture.nextElementSibling.textContent.trim(),
+                        quantity: garniture.closest('.form-check').querySelector(
+                            '.quantityGarniture').value,
+                    });
+                }
+            });
+
+            if (garnitureCheckboxes.length > 0 && garnitures.length === 0) {
+                garnitureManquante = true;
+            }
+
+            // Vérification des compléments et garnitures manquants
+            if (complementManquant || garnitureManquante) {
+                validationEchouee = true;
+                const message = complementManquant ?
+                    'Veuillez sélectionner au moins un complément pour le plat : ' + platNom :
+                    'Veuillez sélectionner au moins une garniture pour le plat : ' + platNom;
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation échouée',
+                    text: message,
+                });
+                return;
+            }
+
+            // Ajouter au panier
+            panier.push({
+                plat: {
+                    id: platId,
+                    nom: platNom,
+                    quantity: platQuantite,
+                    price: prixPlat
+                },
+                complements,
+                garnitures,
+            });
+        });
+
+        if (validationEchouee) {
+            return; // Stopper l'exécution si une validation échoue
+        }
+
+        if (panier.length > 0) {
+            console.log('Panier :', panier);
+
+            // // Envoyer les données au backend via AJAX
+            // $.ajax({
+            //     url: '/votre-url-backend', // Remplacez par votre URL
+            //     method: 'POST',
+            //     data: {
+            //         panier: panier,
+            //         _token: document.querySelector('meta[name="csrf-token"]').getAttribute(
+            //             'content'), // CSRF Token
+            //     },
+            //     success: function(response) {
+            //         Swal.fire({
+            //             icon: 'success',
+            //             title: 'Succès',
+            //             text: 'Les produits ont été ajoutés au panier avec succès !',
+            //         });
+            //     },
+            //     error: function(error) {
+            //         Swal.fire({
+            //             icon: 'error',
+            //             title: 'Erreur',
+            //             text: 'Une erreur est survenue lors de l\'ajout au panier.',
+            //         });
+            //     },
+            // });
+
+
+            // Envoyer les données au backend via AJAX
+            $.ajax({
+                type: "POST",
+                url: "{{ route('cart.add-menu') }}",
+                data: {
+                    items: panier,
+                    _token: "{{ csrf_token() }}" // Protection CSRF
+                },
+                dataType: "json",
+                success: function(response) {
+                    Swal.fire({
+                        title: 'Produits ajoutés !',
+                        text: 'Les produits sélectionnés ont été ajoutés à votre panier avec succès.',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    console.log(response);
+
+
+                    // Mise à jour du total du panier
+                    $('.totalQuantityMenu').html(response.totalQte);
+                    $('.totalPriceMenu').html(response.totalPrice + ' FCFA');
+
+                    // rediriger au panier
+                    window.location.href = "{{ route('panier') }}";
+                },
+                error: function() {
+                    Swal.fire({
+                        title: 'Erreur',
+                        text: 'Une erreur est survenue lors de l\'ajout au panier.',
+                        icon: 'error',
+                        confirmButtonText: 'Réessayer'
+                    });
+                }
+            });
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Panier Menu vide',
+                text: 'Aucun plat sélectionné pour le panier.',
+            });
+        }
+    });
+</script> --}}
+
+
+
+<script>
+    document.querySelector('.addCart').addEventListener('click', function() {
+        const plats = document.querySelectorAll('.plat-checkbox:checked');
+        const panier = [];
+        let validationEchouee = false;
+
+        plats.forEach((plat) => {
+            const platId = plat.value;
+            const platNom = plat.nextElementSibling.textContent.trim();
+            const platQuantite = plat.closest('.form-check').querySelector('.quantityPlat').value;
+            const prixPlat = plat.getAttribute('data-price');
+
+            const complements = [];
+            const garnitures = [];
+            let complementManquant = false;
+            let garnitureManquante = false;
+
+            // Compléments
+            const complementCheckboxes = plat.closest('.card-body').querySelectorAll(
+                '.complement-checkbox');
+            complementCheckboxes.forEach((complement) => {
+                if (complement.checked) {
+                    complements.push({
+                        id: complement.value
+                    });
+                }
+            });
+
+            if (complementCheckboxes.length > 0 && complements.length === 0) {
+                complementManquant = true;
+            }
+
+            // Garnitures
+            const garnitureCheckboxes = plat.closest('.card-body').querySelectorAll(
+                '.garniture-checkbox');
+            garnitureCheckboxes.forEach((garniture) => {
+                if (garniture.checked) {
+                    garnitures.push({
+                        id: garniture.value
+                    });
+                }
+            });
+
+            if (garnitureCheckboxes.length > 0 && garnitures.length === 0) {
+                garnitureManquante = true;
+            }
+
+            // Vérification des compléments et garnitures manquants
+            if (complementManquant || garnitureManquante) {
+                validationEchouee = true;
+                const message = complementManquant ?
+                    'Veuillez sélectionner au moins un complément pour le plat : ' + platNom :
+                    'Veuillez sélectionner au moins une garniture pour le plat : ' + platNom;
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation échouée',
+                    text: message,
+                });
+                return;
+            }
+
+            // Ajouter au panier
+            panier.push({
+                id: platId,
+                quantity: platQuantite,
+                price: prixPlat,
+                complement_id: complements.map(c => c.id),
+                garniture_id: garnitures.map(g => g.id),
+            });
+        });
+
+        if (validationEchouee) {
+            return; // Stopper l'exécution si une validation échoue
+        }
+
+        if (panier.length > 0) {
+            // Envoyer les données au backend via AJAX
+            console.log(panier);
+            
+            $.ajax({
+                type: "POST",
+                url: "{{ route('cart.add-menu') }}",
+                data: {
+                    items: panier,
+                    _token: "{{ csrf_token() }}" // Protection CSRF
+                },
+                dataType: "json",
+                success: function(response) {
+                    Swal.fire({
+                        title: 'Produits ajoutés !',
+                        text: 'Les produits sélectionnés ont été ajoutés à votre panier avec succès.',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    console.log(response);
+
+                    // Mise à jour du total du panier
+                    $('.totalQuantityMenu').html(response.totalQte);
+                    $('.totalPriceMenu').html(response.totalPrice + ' FCFA');
+
+                    // Rediriger au panier
+                    window.location.href = "{{ route('panier') }}";
+                },
+                error: function() {
+                    Swal.fire({
+                        title: 'Erreur',
+                        text: 'Une erreur est survenue lors de l\'ajout au panier.',
+                        icon: 'error',
+                        confirmButtonText: 'Réessayer'
+                    });
+                }
+            });
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Panier Menu vide',
+                text: 'Aucun plat sélectionné pour le panier.',
+            });
+        }
     });
 </script>
 

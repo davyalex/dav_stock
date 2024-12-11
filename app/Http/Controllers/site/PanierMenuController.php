@@ -340,6 +340,228 @@ class PanierMenuController extends Controller
     //     }
     // }
 
+    #### All -ADD 11/12/2024  ---- 16h54
+    // public function add(Request $request)
+    // {
+    //     // Valider les données reçues
+    //     $validated = $request->validate([
+    //         'items' => 'required|array',
+    //         'items.*.id' => 'required|exists:plats,id',
+    //         'items.*.quantity' => 'required|integer|min:1',
+    //         'items.*.complement_id' => 'nullable|exists:plats,id',
+    //         'items.*.garniture_id' => 'nullable|exists:plats,id',
+    //         'items.*.price' => 'required|numeric|min:0',
+    //     ]);
+
+    //     try {
+    //         $cartMenu = session()->get('cartMenu', []);
+
+    //         foreach ($validated['items'] as $item) {
+    //             // Récupérer les plats principaux, compléments et garnitures
+    //             $plats = Plat::whereIn('id', [
+    //                 $item['id'],
+    //                 $item['complement_id'] ?? null,
+    //                 $item['garniture_id'] ?? null,
+    //             ])->get()->keyBy('id');
+
+    //             $plat = $plats->get($item['id']);
+    //             $complement = $plats->get($item['complement_id']);
+    //             $garniture = $plats->get($item['garniture_id']);
+
+    //             if (!$plat) {
+    //                 return response()->json(['error' => 'Plat non trouvé.'], 404);
+    //             }
+
+    //             $platData = [
+    //                 'plat_id' => $plat->id,
+    //                 'complement_id' => $complement ? $complement->id : null,
+    //                 'garniture_id' => $garniture ? $garniture->id : null,
+    //                 'quantity' => $item['quantity'],
+    //                 'price' => $item['price'] +
+    //                     ($complement ? $complement->price : 0) +
+    //                     ($garniture ? $garniture->price : 0),
+    //             ];
+
+    //             // Vérifier si l'entrée existe déjà dans le panier
+    //             $existingKey = null;
+    //             foreach ($cartMenu as $key => $cartItem) {
+    //                 if (
+    //                     $cartItem['plat_id'] == $platData['plat_id'] &&
+    //                     $cartItem['complement_id'] == $platData['complement_id'] &&
+    //                     $cartItem['garniture_id'] == $platData['garniture_id']
+    //                 ) {
+    //                     $existingKey = $key;
+    //                     break;
+    //                 }
+    //             }
+
+    //             if ($existingKey !== null) {
+    //                 // Mettre à jour la quantité si l'entrée existe déjà
+    //                 $cartMenu[$existingKey]['quantity'] += $platData['quantity'];
+    //             } else {
+    //                 // Ajouter une nouvelle entrée au panier
+    //                 $cartMenu[] = $platData + [
+    //                     'title_plat' => $plat->nom,
+    //                     'image_plat' => $plat->media->isNotEmpty() ? $plat->media[0]->getUrl() : null,
+    //                     'title_complement' => $complement ? $complement->nom : null,
+    //                     'title_garniture' => $garniture ? $garniture->nom : null,
+    //                     'categorie_menu' => $plat->categorieMenu->nom,
+    //                 ];
+    //             }
+    //         }
+
+    //         // Calcul des totaux
+    //         $totalQuantity = array_sum(array_column($cartMenu, 'quantity'));
+    //         $totalPrice = array_sum(array_map(function ($item) {
+    //             return $item['price'] * $item['quantity'];
+    //         }, $cartMenu));
+
+    //         // Sauvegarder dans la session
+    //         session()->put('cartMenu', $cartMenu);
+    //         session()->put('totalQuantityMenu', $totalQuantity);
+    //         session()->put('totalPriceMenu', $totalPrice);
+
+    //         return response()->json([
+    //             'totalQte' => $totalQuantity,
+    //             'totalPrice' => $totalPrice,
+    //             'cartMenu' => $cartMenu,
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['error' => 'Une erreur est survenue lors de l\'ajout au panier.'], 500);
+    //     }
+    // }
+    #############END ##########
+
+
+    // public function add(Request $request)
+    // {
+    //     // Valider les données reçues
+    //     $validated = $request->validate([
+    //         'items' => 'required|array',
+    //         'items.*.id' => 'required|exists:plats,id',
+    //         'items.*.quantity' => 'required|integer|min:1',
+    //         'items.*.complements' => 'nullable|array',
+    //         'items.*.complements.*.id' => 'required|exists:plats,id',
+    //         'items.*.complements.*.quantity' => 'required|integer|min:1',
+    //         'items.*.garnitures' => 'nullable|array',
+    //         'items.*.garnitures.*.id' => 'required|exists:plats,id',
+    //         'items.*.garnitures.*.quantity' => 'required|integer|min:1',
+    //         'items.*.price' => 'required|numeric|min:0',
+    //     ]);
+
+    //     try {
+    //         // Récupérer le panier existant ou initialiser un nouveau
+    //         $cartMenu = session()->get('cartMenu', []);
+
+    //         foreach ($validated['items'] as $item) {
+    //             $platsIds = [$item['id']];
+
+    //             // Récupérer les ID des compléments et garnitures
+    //             $complements = $item['complements'] ?? [];
+    //             $garnitures = $item['garnitures'] ?? [];
+
+    //             foreach ($complements as $complement) {
+    //                 $platsIds[] = $complement['id'];
+    //             }
+    //             foreach ($garnitures as $garniture) {
+    //                 $platsIds[] = $garniture['id'];
+    //             }
+
+    //             // Récupérer les plats, compléments et garnitures depuis la base de données
+    //             $plats = Plat::whereIn('id', $platsIds)->get()->keyBy('id');
+    //             $plat = $plats->get($item['id']);
+    //             if (!$plat) {
+    //                 return response()->json(['error' => 'Plat non trouvé.'], 404);
+    //             }
+
+    //             // Calculer le prix total pour le plat, les compléments et garnitures
+    //             $complementDetails = [];
+    //             $garnitureDetails = [];
+    //             $priceTotal = $item['price'] * $item['quantity'];
+
+    //             foreach ($complements as $complement) {
+    //                 $complementPlat = $plats->get($complement['id']);
+    //                 if ($complementPlat) {
+    //                     $complementDetails[] = [
+    //                         'id' => $complementPlat->id,
+    //                         'nom' => $complementPlat->nom,
+    //                         'quantity' => $complement['quantity'],
+    //                         'price' => $complementPlat->price,
+    //                     ];
+    //                     $priceTotal += $complementPlat->price * $complement['quantity'];
+    //                 }
+    //             }
+
+    //             foreach ($garnitures as $garniture) {
+    //                 $garniturePlat = $plats->get($garniture['id']);
+    //                 if ($garniturePlat) {
+    //                     $garnitureDetails[] = [
+    //                         'id' => $garniturePlat->id,
+    //                         'nom' => $garniturePlat->nom,
+    //                         'quantity' => $garniture['quantity'],
+    //                         'price' => $garniturePlat->price,
+    //                     ];
+    //                     $priceTotal += $garniturePlat->price * $garniture['quantity'];
+    //                 }
+    //             }
+
+    //             // Préparer les données pour le panier
+    //             $platData = [
+    //                 'plat_id' => $plat->id,
+    //                 'quantity' => $item['quantity'],
+    //                 'price' => $priceTotal,
+    //                 'title_plat' => $plat->nom,
+    //                 'image_plat' => $plat->media->isNotEmpty() ? $plat->media[0]->getUrl() : null,
+    //                 'categorie_menu' => $plat->categorieMenu->nom,
+    //                 'complements' => $complementDetails,
+    //                 'garnitures' => $garnitureDetails,
+    //             ];
+
+    //             // Vérifier si une entrée similaire existe déjà dans le panier
+    //             $existingKey = null;
+    //             foreach ($cartMenu as $key => $cartItem) {
+    //                 if (
+    //                     $cartItem['plat_id'] == $platData['plat_id'] &&
+    //                     json_encode($cartItem['complements']) === json_encode($platData['complements']) &&
+    //                     json_encode($cartItem['garnitures']) === json_encode($platData['garnitures'])
+    //                 ) {
+    //                     $existingKey = $key;
+    //                     break;
+    //                 }
+    //             }
+
+    //             if ($existingKey !== null) {
+    //                 // Mettre à jour la quantité si une entrée similaire existe
+    //                 $cartMenu[$existingKey]['quantity'] += $platData['quantity'];
+    //                 $cartMenu[$existingKey]['price'] += $platData['price'];
+    //             } else {
+    //                 // Ajouter une nouvelle entrée
+    //                 $cartMenu[] = $platData;
+    //             }
+    //         }
+
+    //         // Calcul des totaux
+    //         $totalQuantity = array_sum(array_column($cartMenu, 'quantity'));
+    //         $totalPrice = array_sum(array_map(function ($item) {
+    //             return $item['price'];
+    //         }, $cartMenu));
+
+    //         // Sauvegarder dans la session
+    //         session()->put('cartMenu', $cartMenu);
+    //         session()->put('totalQuantityMenu', $totalQuantity);
+    //         session()->put('totalPriceMenu', $totalPrice);
+
+    //         return response()->json([
+    //             'totalQte' => $totalQuantity,
+    //             'totalPrice' => $totalPrice,
+    //             'cartMenu' => $cartMenu,
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['error' => 'Une erreur est survenue lors de l\'ajout au panier.'], 500);
+    //     }
+    // }
+
+
 
     public function add(Request $request)
     {
@@ -351,9 +573,15 @@ class PanierMenuController extends Controller
             'items.*.complement_id' => 'nullable|exists:plats,id',
             'items.*.garniture_id' => 'nullable|exists:plats,id',
             'items.*.price' => 'required|numeric|min:0',
+        ], [
+            'items.required' => 'Vous devez ajouter au moins un plat.',
+            'items.*.id.required' => 'Le champ id est obligatoire pour chaque plat.',
+            'items.*.quantity.required' => 'Le champ quantity est obligatoire pour chaque plat.',
+            'items.*.price.required' => 'Le champ price est obligatoire pour chaque plat.',
         ]);
 
         try {
+            // Récupérer ou initialiser le panier
             $cartMenu = session()->get('cartMenu', []);
 
             foreach ($validated['items'] as $item) {
@@ -368,10 +596,12 @@ class PanierMenuController extends Controller
                 $complement = $plats->get($item['complement_id']);
                 $garniture = $plats->get($item['garniture_id']);
 
+                // Vérifier que le plat principal existe
                 if (!$plat) {
-                    return response()->json(['error' => 'Plat non trouvé.'], 404);
+                    return response()->json(['error' => 'Le plat sélectionné n\'existe pas.'], 404);
                 }
 
+                // Calculer le prix total pour cet item
                 $platData = [
                     'plat_id' => $plat->id,
                     'complement_id' => $complement ? $complement->id : null,
@@ -427,9 +657,15 @@ class PanierMenuController extends Controller
                 'cartMenu' => $cartMenu,
             ]);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Une erreur est survenue lors de l\'ajout au panier.'], 500);
+            return response()->json([
+                'error' => 'Une erreur est survenue lors de l\'ajout au panier.',
+                'message'=> $e->getMessage()
+                
+                ]
+                , 500);
         }
     }
+
 
 
 
