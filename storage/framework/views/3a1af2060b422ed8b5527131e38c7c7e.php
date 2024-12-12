@@ -209,14 +209,23 @@
                                                                     <tr>
                                                                         <td>
                                                                             <div class="o-pro-dec">
-                                                                                <p class="fw-bold"><?php echo e($detailsMenu['title_plat']); ?></p>
-
-                                                                            <?php if($detailsMenu['title_complement']): ?>
-                                                                                <p>Complément: <?php echo e($detailsMenu['title_complement']); ?></p>
-                                                                            <?php endif; ?>
-                                                                            <?php if($detailsMenu['title_garniture']): ?>
-                                                                                <p>Garniture: <?php echo e($detailsMenu['title_garniture']); ?></p>
-                                                                            <?php endif; ?>
+                                                                                <p class="fw-bold text-capitalize"><?php echo e($detailsMenu['plat_name']); ?></p>
+                                                                                <?php if($detailsMenu['complements']): ?>
+                                                                                    <small class="fw-bold ms-2">Compléments:</small>
+                                                                                    <ul class="ms-3">
+                                                                                        <?php $__currentLoopData = $detailsMenu['complements']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $complement): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                            <li class="text-capitalize ms-3"><?php echo e($complement['nom']); ?> (Qté: <?php echo e($complement['quantity']); ?>)</li>
+                                                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                                    </ul>
+                                                                                <?php endif; ?>
+                                                                                <?php if($detailsMenu['garnitures']): ?>
+                                                                                    <small class="fw-bold">Garnitures:</small>
+                                                                                    <ul class="ms-3">
+                                                                                        <?php $__currentLoopData = $detailsMenu['garnitures']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $garniture): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                            <li class="text-capitalize ms-3"><?php echo e($garniture['nom']); ?> (Qté: <?php echo e($garniture['quantity']); ?>)</li>
+                                                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                                    </ul>
+                                                                                <?php endif; ?>
                                                                             </div>
                                                                         </td>
                                                                         <td>

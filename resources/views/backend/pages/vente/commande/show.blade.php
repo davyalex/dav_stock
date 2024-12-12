@@ -90,7 +90,7 @@
                                     <th>#</th>
                                     <th>Image</th>
                                     <th>Nom du produit</th>
-                                    <th>Quantité</th>
+                                    {{-- <th>Quantité</th> --}}
                                     <th>Prix unitaire</th>
                                     <th>Montant total</th>
                                 </tr>
@@ -104,8 +104,8 @@
                                                 src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
                                                 width="50px" alt="{{ $item['nom'] }}">
                                         </td>
-                                        <td>{{ $item['nom'] }}</td>
-                                        <td>{{ $item['pivot']['quantite'] }}</td>
+                                        <td>{{ $item['nom'] }} * <span class="text-danger">{{ $item['pivot']['quantite'] }}</span> </td>
+                                        {{-- <td>{{ $item['pivot']['quantite'] }}</td> --}}
                                         <td>{{ number_format($item['pivot']['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
                                         <td>{{ number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ') }}
                                             FCFA</td>
@@ -122,20 +122,33 @@
                                                 src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
                                                 width="50px" alt="{{ $item['nom'] }}">
                                         </td>
-                                        <td> <b>{{ $item['nom'] }}</b>
-
-                                            @if ($item['pivot']['garniture'])
-                                                <ul>
-                                                    <li>Garniture: {{ $item['pivot']['garniture'] }}</li>
-                                                </ul>
+                                        <td>
+                                            <p class="text-capitalize fw-bold ">{{ $item['nom'] }} * <span
+                                                    class="text-danger">{{ $item['pivot']['quantite'] }}</span></p>
+                                            @if (json_decode($item['pivot']['garniture']))
+                                                <div>
+                                                    <small class="ms-3 fw-bold">Garniture:</small>
+                                                    @foreach (json_decode($item['pivot']['garniture']) as $garniture)
+                                                        <div class="garniture ms-3">
+                                                            {{ $garniture->nom }} (Qté: {{ $garniture->quantity }})
+                                                        </div>
+                                                    @endforeach
+                                                </div>
                                             @endif
-                                            @if ($item['pivot']['complement'])
-                                                <ul>
-                                                    <li>Complément: {{ $item['pivot']['complement'] }}</li>
-                                                </ul>
+
+
+                                            @if (json_decode($item['pivot']['complement']))
+                                                <div class="mt-2">
+                                                    <small class="ms-3 fw-bold">Complément:</small>
+                                                    @foreach (json_decode($item['pivot']['complement']) as $complement)
+                                                        <div class="complement ms-3">
+                                                            {{ $complement->nom }} (Qté: {{ $complement->quantity }})
+                                                        </div>
+                                                    @endforeach
+                                                </div>
                                             @endif
                                         </td>
-                                        <td>{{ $item['pivot']['quantite'] }}</td>
+                                        {{-- <td>{{ $item['pivot']['quantite'] }}</td> --}}
                                         <td>{{ number_format($item['pivot']['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
                                         <td>{{ number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ') }}
                                             FCFA</td>
@@ -144,7 +157,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="5" class="text-end"><strong>Total de la commande:</strong></td>
+                                    <td colspan="4" class="text-end"><strong>Total de la commande:</strong></td>
                                     <td><strong>{{ number_format($commande->montant_total, 0, ',', ' ') }} FCFA</strong>
                                     </td>
                                 </tr>
@@ -158,111 +171,94 @@
             <!-- ========== Start facture generé ========== -->
 
 
-            <div class="ticket-container col-8 m-auto"
-                style="font-family: 'Courier New', monospace; font-size: 12px; width: 350px;">
-                <div class="ticket-header" style="text-align: center;">
-                    <h3>CHEZ JEANNE</h3>
-                    <h4>RESTAURANT LOUNGE</h4>
-                    <h5>AFRICAIN ET EUROPEEN</h5>
-                    <p>-------------------------------</p>
-                    <div style="display: flex; justify-content: space-between; padding: 0 10px;">
-                        <span><strong>Commande:</strong> #{{ $commande->code }}</span>
-                        <span><strong>Date:</strong> {{ $commande->created_at->format('d/m/Y à H:i') }}</span>
-                    </div>
+            <div class="ticket-container" style="font-family: 'Courier New', monospace; font-size: 12px; width: 300px; margin: 0 auto;">
+                <div class="ticket-header" style="text-align: center; margin-bottom: 10px;">
+                    <h3 style="margin: 0;">CHEZ JEANNE</h3>
+                    <h4 style="margin: 0;">RESTAURANT LOUNGE</h4>
+                    <h5 style="margin: 5px 0;">AFRICAIN ET EUROPEEN</h5>
+                    <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
+                    <p>
+                        <strong>Commande:</strong> #{{ $commande->code }}<br>
+                        <strong>Date:</strong> {{ $commande->created_at->format('d/m/Y à H:i') }}
+                    </p>
                 </div>
-                <div class="ticket-info" style="padding: 0 10px;">
-
-
-                    <div style="display: flex; justify-content: space-between;">
-                        <span><strong>Caisse:</strong> {{ Auth::user()->caisse->libelle ?? 'Non définie' }}</span>
-                        <span><strong>Caissier:</strong> {{ Auth::user()->first_name }}
-                            {{ Auth::user()->last_name }}</span>
-                    </div>
+            
+                <div class="ticket-info" style="margin-bottom: 10px;">
+                    <p>
+                        <strong>Caisse:</strong> {{ Auth::user()->caisse->libelle ?? 'Non définie' }}<br>
+                        <strong>Caissier:</strong> {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
+                    </p>
+                    <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
                 </div>
-                <p style="text-align: center;">-------------------------------</p>
+            
                 <div class="ticket-products">
-                    <table style="width: 100%;">
-                        <thead>
+                    <table style="width: 100%; font-size: 12px; border-collapse: collapse; margin-bottom: 10px;">
+                        <thead style="border-bottom: 1px dashed black;">
                             <tr>
-                                <th>Designation</th>
-                                <th>Qté</th>
-                                <th>P.U.</th>
-                                <th>Total</th>
+                                <th style="text-align: left;">Désignation</th>
+                                <th style="text-align: right;">P.U.</th>
+                                <th style="text-align: right;">Total</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($commande->produits as $produit)
                                 <tr>
-                                    <td>{{ $produit->nom }}</td>
-                                    <td>{{ $produit->pivot->quantite }}</td>
-                                    <td>{{ number_format($produit->pivot->prix_unitaire, 0, ',', ' ') }}</td>
-                                    <td>{{ number_format($produit->pivot->quantite * $produit->pivot->prix_unitaire, 0, ',', ' ') }}
-                                    </td>
+                                    <td>{{ $produit->nom }} x{{ $produit->pivot->quantite }}</td>
+                                    <td style="text-align: right;">{{ number_format($produit->pivot->prix_unitaire, 0, ',', ' ') }}</td>
+                                    <td style="text-align: right;">{{ number_format($produit->pivot->quantite * $produit->pivot->prix_unitaire, 0, ',', ' ') }}</td>
                                 </tr>
                             @endforeach
-
+            
                             @foreach ($commande->plats as $plat)
                                 <tr>
-                                    <td>{{ $plat->nom }}
-                                     
-                                        <span>
-                                            @if ($plat['pivot']['garniture'])
-                                                <ul>
-                                                    <li>Garniture: {{ $plat['pivot']['garniture'] }}</li>
-                                                </ul>
-                                            @endif
-                                            @if ($plat['pivot']['complement'])
-                                                <ul>
-                                                    <li>Complément: {{ $plat['pivot']['complement'] }}</li>
-                                                </ul>
-                                            @endif
-                                        </span>
+                                    <td>
+                                        {{ $plat->nom }} x{{ $plat->pivot->quantite }}
+                                        @if (json_decode($plat['pivot']['garniture']))
+                                            <small><br>- Garniture:
+                                                @foreach (json_decode($plat['pivot']['garniture']) as $garniture)
+                                                    {{ $garniture->nom }} (Qté: {{ $garniture->quantity }})
+                                                @endforeach
+                                            </small>
+                                        @endif
+                                        @if (json_decode($plat['pivot']['complement']))
+                                            <small><br>- Complément:
+                                                @foreach (json_decode($plat['pivot']['complement']) as $complement)
+                                                    {{ $complement->nom }} (Qté: {{ $complement->quantity }})
+                                                @endforeach
+                                            </small>
+                                        @endif
                                     </td>
-                                    <td>{{ $plat->pivot->quantite }}</td>
-                                    <td>{{ number_format($plat->pivot->prix_unitaire, 0, ',', ' ') }}</td>
-                                    <td>{{ number_format($plat->pivot->quantite * $plat->pivot->prix_unitaire, 0, ',', ' ') }}
-                                    </td>
+                                    <td style="text-align: right;">{{ number_format($plat->pivot->prix_unitaire, 0, ',', ' ') }}</td>
+                                    <td style="text-align: right;">{{ number_format($plat->pivot->quantite * $plat->pivot->prix_unitaire, 0, ',', ' ') }}</td>
                                 </tr>
                             @endforeach
-                        <tfoot>
-                            <tr>
-                                <th colspan="3" style="text-align: right;">Total:</th>
-                                <th>{{ number_format($commande->montant_total, 0, ',', ' ') }} FCFA</th>
-                            </tr>
-                        </tfoot>
                         </tbody>
                     </table>
+            
+                    <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
                 </div>
-
-
-                <p style="text-align: center;">-------------------------------</p>
-
-                {{-- <div class="reglement col-md-8 m-auto" style="text-align: justify;">
-                    <span><strong>Réglement:</strong> {{ $commande->created_at->format('d/m/Y à H:i:s') }}</span><br>
-                    <span><strong class="text-capitalize">{{ $commande->mode_paiement }}:</strong>
-                        {{ number_format($commande->montant_recu, 0, ',', ' ') }} FCFA</span><br>
-                    <span><strong>Rendu:</strong> {{ number_format($commande->montant_rendu, 0, ',', ' ') }} FCFA</span>
-                </div> --}}
-
-                <div class="col-md-12 m-auto">
-                    <span><strong>Nom du client:</strong> {{ $commande->client->first_name }}
-                        {{ $commande->client->last_name }}</span><br>
-                    <span><strong>Contact du client:</strong> {{ $commande->client->phone }}</span><br>
-                    <span><strong>mode de livraison:</strong> {{ $commande->mode_livraison }}</span><br>
-                    <span><strong>Adresse de livraison:</strong>
-                        {{ $commande->adresse_livraison ?? 'Au restaurant' }}</span>
-
+            
+                <div class="ticket-total" style="text-align: right; margin-bottom: 10px;">
+                    <strong>Total:</strong> {{ number_format($commande->montant_total, 0, ',', ' ') }} FCFA
                 </div>
-
-                <p style="text-align: center;">-------------------------------</p>
-
-                <div class="ticket-footer" style="text-align: center;">
+            
+                <div class="ticket-client" style="margin-bottom: 10px;">
+                    <p>
+                        <strong>Nom du client:</strong> {{ $commande->client->first_name }} {{ $commande->client->last_name }}<br>
+                        <strong>Contact:</strong> {{ $commande->client->phone }}<br>
+                        <strong>Mode de livraison:</strong> {{ $commande->mode_livraison }}<br>
+                        <strong>Adresse:</strong> {{ $commande->adresse_livraison ?? 'Au restaurant' }}
+                    </p>
+                    <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
+                </div>
+            
+                <div class="ticket-footer" style="text-align: center; font-size: 10px;">
                     <p>MERCI DE VOTRE VISITE</p>
-                    <p>AU REVOIR ET A BIENTÔT</p>
+                    <p>AU REVOIR ET À BIENTÔT</p>
                     <p>RESERVATIONS: 07-49-88-95-18</p>
-                    <p>A BIENTÔT</p>
                 </div>
             </div>
+            
 
 
             <script>

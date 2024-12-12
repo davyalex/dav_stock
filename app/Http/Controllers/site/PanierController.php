@@ -46,7 +46,7 @@ class PanierController extends Controller
                 ->orderBy('position', 'DESC')
                 ->get();
         }
-        // dd($categorieSelect);
+        // dd($cartMenu);
         return view('site.pages.panier', compact('cart',  'cartMenu'));
         // return response()->json($cart);
     }
@@ -288,8 +288,11 @@ class PanierController extends Controller
                                 'quantite' => $value['quantity'],
                                 'prix_unitaire' => $value['price'],
                                 'total' => $value['price'] * $value['quantity'],
-                                'complement' => $value['title_complement'] ?? '',
-                                'garniture' => $value['title_garniture'] ?? '',
+                                // 'complement' => $value['title_complement'] ?? '',
+                                // 'garniture' => $value['title_garniture'] ?? '',
+
+                                'garniture' => json_encode($value['garnitures'] ?? []), // Encodage des garnitures en JSON
+                                'complement' => json_encode($value['complements'] ?? []), // Encodage des compléments en JSON
                             ]);
                         } else {
                             // Enregistrez ou loguez les erreurs si nécessaire

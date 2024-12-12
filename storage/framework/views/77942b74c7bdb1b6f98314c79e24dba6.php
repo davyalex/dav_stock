@@ -92,7 +92,7 @@
                                     <th>#</th>
                                     <th>Image</th>
                                     <th>Nom du produit</th>
-                                    <th>Quantité</th>
+                                    
                                     <th>Prix unitaire</th>
                                     <th>Montant total</th>
                                 </tr>
@@ -106,8 +106,8 @@
                                                 src="<?php echo e($item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg')); ?>"
                                                 width="50px" alt="<?php echo e($item['nom']); ?>">
                                         </td>
-                                        <td><?php echo e($item['nom']); ?></td>
-                                        <td><?php echo e($item['pivot']['quantite']); ?></td>
+                                        <td><?php echo e($item['nom']); ?> * <span class="text-danger"><?php echo e($item['pivot']['quantite']); ?></span> </td>
+                                        
                                         <td><?php echo e(number_format($item['pivot']['prix_unitaire'], 0, ',', ' ')); ?> FCFA</td>
                                         <td><?php echo e(number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ')); ?>
 
@@ -125,20 +125,33 @@
                                                 src="<?php echo e($item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg')); ?>"
                                                 width="50px" alt="<?php echo e($item['nom']); ?>">
                                         </td>
-                                        <td> <b><?php echo e($item['nom']); ?></b>
-
-                                            <?php if($item['pivot']['garniture']): ?>
-                                                <ul>
-                                                    <li>Garniture: <?php echo e($item['pivot']['garniture']); ?></li>
-                                                </ul>
+                                        <td>
+                                            <p class="text-capitalize fw-bold "><?php echo e($item['nom']); ?> * <span
+                                                    class="text-danger"><?php echo e($item['pivot']['quantite']); ?></span></p>
+                                            <?php if(json_decode($item['pivot']['garniture'])): ?>
+                                                <div>
+                                                    <small class="ms-3 fw-bold">Garniture:</small>
+                                                    <?php $__currentLoopData = json_decode($item['pivot']['garniture']); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $garniture): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <div class="garniture ms-3">
+                                                            <?php echo e($garniture->nom); ?> (Qté: <?php echo e($garniture->quantity); ?>)
+                                                        </div>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                </div>
                                             <?php endif; ?>
-                                            <?php if($item['pivot']['complement']): ?>
-                                                <ul>
-                                                    <li>Complément: <?php echo e($item['pivot']['complement']); ?></li>
-                                                </ul>
+
+
+                                            <?php if(json_decode($item['pivot']['complement'])): ?>
+                                                <div class="mt-2">
+                                                    <small class="ms-3 fw-bold">Complément:</small>
+                                                    <?php $__currentLoopData = json_decode($item['pivot']['complement']); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $complement): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <div class="complement ms-3">
+                                                            <?php echo e($complement->nom); ?> (Qté: <?php echo e($complement->quantity); ?>)
+                                                        </div>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                </div>
                                             <?php endif; ?>
                                         </td>
-                                        <td><?php echo e($item['pivot']['quantite']); ?></td>
+                                        
                                         <td><?php echo e(number_format($item['pivot']['prix_unitaire'], 0, ',', ' ')); ?> FCFA</td>
                                         <td><?php echo e(number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ')); ?>
 
@@ -148,7 +161,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="5" class="text-end"><strong>Total de la commande:</strong></td>
+                                    <td colspan="4" class="text-end"><strong>Total de la commande:</strong></td>
                                     <td><strong><?php echo e(number_format($commande->montant_total, 0, ',', ' ')); ?> FCFA</strong>
                                     </td>
                                 </tr>
@@ -162,111 +175,98 @@
             <!-- ========== Start facture generé ========== -->
 
 
-            <div class="ticket-container col-8 m-auto"
-                style="font-family: 'Courier New', monospace; font-size: 12px; width: 350px;">
-                <div class="ticket-header" style="text-align: center;">
-                    <h3>CHEZ JEANNE</h3>
-                    <h4>RESTAURANT LOUNGE</h4>
-                    <h5>AFRICAIN ET EUROPEEN</h5>
-                    <p>-------------------------------</p>
-                    <div style="display: flex; justify-content: space-between; padding: 0 10px;">
-                        <span><strong>Commande:</strong> #<?php echo e($commande->code); ?></span>
-                        <span><strong>Date:</strong> <?php echo e($commande->created_at->format('d/m/Y à H:i')); ?></span>
-                    </div>
+            <div class="ticket-container" style="font-family: 'Courier New', monospace; font-size: 12px; width: 300px; margin: 0 auto;">
+                <div class="ticket-header" style="text-align: center; margin-bottom: 10px;">
+                    <h3 style="margin: 0;">CHEZ JEANNE</h3>
+                    <h4 style="margin: 0;">RESTAURANT LOUNGE</h4>
+                    <h5 style="margin: 5px 0;">AFRICAIN ET EUROPEEN</h5>
+                    <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
+                    <p>
+                        <strong>Commande:</strong> #<?php echo e($commande->code); ?><br>
+                        <strong>Date:</strong> <?php echo e($commande->created_at->format('d/m/Y à H:i')); ?>
+
+                    </p>
                 </div>
-                <div class="ticket-info" style="padding: 0 10px;">
+            
+                <div class="ticket-info" style="margin-bottom: 10px;">
+                    <p>
+                        <strong>Caisse:</strong> <?php echo e(Auth::user()->caisse->libelle ?? 'Non définie'); ?><br>
+                        <strong>Caissier:</strong> <?php echo e(Auth::user()->first_name); ?> <?php echo e(Auth::user()->last_name); ?>
 
-
-                    <div style="display: flex; justify-content: space-between;">
-                        <span><strong>Caisse:</strong> <?php echo e(Auth::user()->caisse->libelle ?? 'Non définie'); ?></span>
-                        <span><strong>Caissier:</strong> <?php echo e(Auth::user()->first_name); ?>
-
-                            <?php echo e(Auth::user()->last_name); ?></span>
-                    </div>
+                    </p>
+                    <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
                 </div>
-                <p style="text-align: center;">-------------------------------</p>
+            
                 <div class="ticket-products">
-                    <table style="width: 100%;">
-                        <thead>
+                    <table style="width: 100%; font-size: 12px; border-collapse: collapse; margin-bottom: 10px;">
+                        <thead style="border-bottom: 1px dashed black;">
                             <tr>
-                                <th>Designation</th>
-                                <th>Qté</th>
-                                <th>P.U.</th>
-                                <th>Total</th>
+                                <th style="text-align: left;">Désignation</th>
+                                <th style="text-align: right;">P.U.</th>
+                                <th style="text-align: right;">Total</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php $__currentLoopData = $commande->produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
-                                    <td><?php echo e($produit->nom); ?></td>
-                                    <td><?php echo e($produit->pivot->quantite); ?></td>
-                                    <td><?php echo e(number_format($produit->pivot->prix_unitaire, 0, ',', ' ')); ?></td>
-                                    <td><?php echo e(number_format($produit->pivot->quantite * $produit->pivot->prix_unitaire, 0, ',', ' ')); ?>
-
-                                    </td>
+                                    <td><?php echo e($produit->nom); ?> x<?php echo e($produit->pivot->quantite); ?></td>
+                                    <td style="text-align: right;"><?php echo e(number_format($produit->pivot->prix_unitaire, 0, ',', ' ')); ?></td>
+                                    <td style="text-align: right;"><?php echo e(number_format($produit->pivot->quantite * $produit->pivot->prix_unitaire, 0, ',', ' ')); ?></td>
                                 </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
+            
                             <?php $__currentLoopData = $commande->plats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $plat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
-                                    <td><?php echo e($plat->nom); ?>
+                                    <td>
+                                        <?php echo e($plat->nom); ?> x<?php echo e($plat->pivot->quantite); ?>
 
-                                     
-                                        <span>
-                                            <?php if($plat['pivot']['garniture']): ?>
-                                                <ul>
-                                                    <li>Garniture: <?php echo e($plat['pivot']['garniture']); ?></li>
-                                                </ul>
-                                            <?php endif; ?>
-                                            <?php if($plat['pivot']['complement']): ?>
-                                                <ul>
-                                                    <li>Complément: <?php echo e($plat['pivot']['complement']); ?></li>
-                                                </ul>
-                                            <?php endif; ?>
-                                        </span>
+                                        <?php if(json_decode($plat['pivot']['garniture'])): ?>
+                                            <small><br>- Garniture:
+                                                <?php $__currentLoopData = json_decode($plat['pivot']['garniture']); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $garniture): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <?php echo e($garniture->nom); ?> (Qté: <?php echo e($garniture->quantity); ?>)
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            </small>
+                                        <?php endif; ?>
+                                        <?php if(json_decode($plat['pivot']['complement'])): ?>
+                                            <small><br>- Complément:
+                                                <?php $__currentLoopData = json_decode($plat['pivot']['complement']); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $complement): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <?php echo e($complement->nom); ?> (Qté: <?php echo e($complement->quantity); ?>)
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            </small>
+                                        <?php endif; ?>
                                     </td>
-                                    <td><?php echo e($plat->pivot->quantite); ?></td>
-                                    <td><?php echo e(number_format($plat->pivot->prix_unitaire, 0, ',', ' ')); ?></td>
-                                    <td><?php echo e(number_format($plat->pivot->quantite * $plat->pivot->prix_unitaire, 0, ',', ' ')); ?>
-
-                                    </td>
+                                    <td style="text-align: right;"><?php echo e(number_format($plat->pivot->prix_unitaire, 0, ',', ' ')); ?></td>
+                                    <td style="text-align: right;"><?php echo e(number_format($plat->pivot->quantite * $plat->pivot->prix_unitaire, 0, ',', ' ')); ?></td>
                                 </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        <tfoot>
-                            <tr>
-                                <th colspan="3" style="text-align: right;">Total:</th>
-                                <th><?php echo e(number_format($commande->montant_total, 0, ',', ' ')); ?> FCFA</th>
-                            </tr>
-                        </tfoot>
                         </tbody>
                     </table>
+            
+                    <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
                 </div>
-
-
-                <p style="text-align: center;">-------------------------------</p>
-
-                
-
-                <div class="col-md-12 m-auto">
-                    <span><strong>Nom du client:</strong> <?php echo e($commande->client->first_name); ?>
-
-                        <?php echo e($commande->client->last_name); ?></span><br>
-                    <span><strong>Contact du client:</strong> <?php echo e($commande->client->phone); ?></span><br>
-                    <span><strong>mode de livraison:</strong> <?php echo e($commande->mode_livraison); ?></span><br>
-                    <span><strong>Adresse de livraison:</strong>
-                        <?php echo e($commande->adresse_livraison ?? 'Au restaurant'); ?></span>
-
+            
+                <div class="ticket-total" style="text-align: right; margin-bottom: 10px;">
+                    <strong>Total:</strong> <?php echo e(number_format($commande->montant_total, 0, ',', ' ')); ?> FCFA
                 </div>
+            
+                <div class="ticket-client" style="margin-bottom: 10px;">
+                    <p>
+                        <strong>Nom du client:</strong> <?php echo e($commande->client->first_name); ?> <?php echo e($commande->client->last_name); ?><br>
+                        <strong>Contact:</strong> <?php echo e($commande->client->phone); ?><br>
+                        <strong>Mode de livraison:</strong> <?php echo e($commande->mode_livraison); ?><br>
+                        <strong>Adresse:</strong> <?php echo e($commande->adresse_livraison ?? 'Au restaurant'); ?>
 
-                <p style="text-align: center;">-------------------------------</p>
-
-                <div class="ticket-footer" style="text-align: center;">
+                    </p>
+                    <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
+                </div>
+            
+                <div class="ticket-footer" style="text-align: center; font-size: 10px;">
                     <p>MERCI DE VOTRE VISITE</p>
-                    <p>AU REVOIR ET A BIENTÔT</p>
+                    <p>AU REVOIR ET À BIENTÔT</p>
                     <p>RESERVATIONS: 07-49-88-95-18</p>
-                    <p>A BIENTÔT</p>
                 </div>
             </div>
+            
 
 
             <script>

@@ -372,7 +372,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
                     $('.totalPriceMenu').html(response.totalPrice + ' FCFA');
 
                     // rediriger au panier
-                    window.location.href = "{{ route('panier') }}";
+                    // window.location.href = "{{ route('panier') }}";
                 },
                 error: function() {
                     Swal.fire({
@@ -392,6 +392,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
         }
     });
 </script>
+
 
 
 {{-- 

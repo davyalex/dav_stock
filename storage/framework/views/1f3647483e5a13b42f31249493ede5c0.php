@@ -1,6 +1,6 @@
 
 <?php $__env->startSection('title'); ?>
-    <?php echo app('translator')->get('translation.signin'); ?>
+   Caisse
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
     <?php if($setting != null): ?>

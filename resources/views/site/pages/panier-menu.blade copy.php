@@ -1,154 +1,85 @@
 @if (session()->has('cartMenu'))
     <div class="row">
         @foreach (session('cartMenu') as $cartKey => $detailsMenu)
-            {{-- <div class="col-12 col-lg-6 mb-4" id="platDiv_{{ $cartKey }}">
-                <div class="card h-100 p-3">
-                    <div class="d-flex flex-column">
-                        <!-- Catégorie -->
-                        <div>
-                            <h6 class="text-italic text-danger fs-8">Catégorie : {{ $detailsMenu['categorie_menu'] }}
-                            </h6>
-                        </div>
-
-                        <!-- Nom du plat -->
-                        <div>
-                            <h5 class="card-title text-uppercase">Plat : {{ $detailsMenu['plat_name'] }}</h5>
-                        </div>
-
-                        <!-- Compléments -->
-                        @if (!empty($detailsMenu['complements']))
-                            <div>
-                                <h6 class="card-title text-capitalize"><small>Compléments :</small></h6>
-                                <ul>
-                                    @foreach ($detailsMenu['complements'] as $item)
-                                        <li>
-                                            {{ $item['nom'] }} (Quantité : {{ $item['quantity'] }})
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-
-                        <!-- Garnitures -->
-                        @if (!empty($detailsMenu['garnitures']))
-                            <div>
-                                <h6 class="card-title text-capitalize"><small>Garnitures :</small></h6>
-                                <ul>
-                                    @foreach ($detailsMenu['garnitures'] as $item)
-                                        <li>
-                                            {{ $item['nom'] }} (Quantité : {{ $item['quantity'] }})
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-
-                        <!-- Prix et quantité -->
-                        <div>
-                            <p class="font-weight-bold text-danger">
-                                Prix : {{ number_format($detailsMenu['price'], 0, ',', ' ') }} FCFA
-                            </p>
-                            <div class="product-quantity">
-                                <div class="cart-plus-minus">
-                                    <div class="dec qtybutton" onclick="decrementProductQuantity({{ $cartKey }})">-
-                                    </div>
-                                    <input data-id="{{ $cartKey }}" id="quantityMenu-{{ $cartKey }}"
-                                        class="cart-plus-minus-box" type="text" name="quantityMenu"
-                                        value="{{ $detailsMenu['quantity'] }}" min="1" readonly>
-                                    <div class="inc qtybutton" onclick="incrementProductQuantity({{ $cartKey }})">
-                                        +</div>
-                                </div>
-                            </div>
-                            <p class="font-weight-bold text-danger">
-                                Total :
-                                <span class="totalPriceQty-{{ $cartKey }}">
-                                    {{ number_format($detailsMenu['price'] * $detailsMenu['quantity'], 0, ',', ' ') }}
-                                    FCFA
-                                </span>
-                            </p>
-                        </div>
-
-                        <!-- Bouton supprimer -->
-                        <button data-id="{{ $cartKey }}" class="btn btn-danger btn-sm mt-2"
-                            onclick="removeProductFromCart({{ $cartKey }})">Supprimer</button>
-                    </div>
-                </div>
-            </div> --}}
-
-
             <div class="col-12 col-lg-6 mb-4" id="platDiv_{{ $cartKey }}">
                 <div class="card h-100 p-3">
-                    <!-- Bouton supprimer (icône en haut à droite) -->
-                    <button data-id="{{ $cartKey }}" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2"
-                        onclick="removeProductFromCart({{ $cartKey }})">
-                        <i class=" fa fa-trash"></i>
-                    </button>
+                    <div class="d-flex align-items-center">
+                        <!-- Image du produit -->
+                        <div class="product-image me-3">
+                            {{-- @php
+                                $plat = app\Models\Plat::whereId($detailsMenu['plat_id'])->first();
+                                $categorie = $plat->categorie->nom ?? null;
+                            @endphp --}}
 
-                    <div class="d-flex flex-column">
-                        <!-- Catégorie -->
-                        <div>
-                            <h6 class="text-italic text-danger fs-8">Catégorie : {{ $detailsMenu['categorie_menu'] }}
-                            </h6>
-                        </div>
-
-                        <!-- Nom du plat -->
-                        <div>
-                            <h5 class="card-title text-uppercase">{{ $detailsMenu['plat_name'] }}  * <span class="text-danger">{{ $detailsMenu['quantity'] }}</span></h5>
-                        </div>
-
-                        <!-- Compléments -->
-                        @if (!empty($detailsMenu['complements']))
-                            <div class="ms-3">
-                                <h6 class="card-title text-capitalize fw-bold"><small>Compléments :</small></h6>
-                                <ul class="ms-4">
-                                    @foreach ($detailsMenu['complements'] as $item)
-                                        <li>
-                                            {{ $item['nom'] }} (Qté : {{ $item['quantity'] }})
-                                        </li>
-                                    @endforeach
-                                </ul>
+                            <div style="width: 150px; height: 150px; overflow: hidden;">
+                                <i class="text-italic text-danger fs-8"> {{ $detailsMenu['categorie_menu'] }} </i>
+                                @if ($detailsMenu['image_plat'])
+                                    <img src="{{ $detailsMenu['image_plat'] }}" class="img-fluid"
+                                        style="object-fit: cover; width: 100%; height: 100%;"
+                                        alt="{{ $detailsMenu['plat_name'] }}">
+                                @else
+                                    <img src="{{ asset('assets/img/logo/logo_Chez-jeanne.jpg') }}" class="img-fluid"
+                                        style="object-fit: cover; width: 100%; height: 100%;"
+                                        alt="{{ $detailsMenu['plat_name'] }}">
+                                @endif
                             </div>
-                        @endif
+                        </div>
+                        <!-- Détails du produit -->
+                        <div class="product-info flex-grow-1">
+                            <h6 class="card-title text-uppercase"> {{ $detailsMenu['plat_name'] }}</h6>
 
-                        <!-- Garnitures -->
-                        @if (!empty($detailsMenu['garnitures']))
-                            <div class="ms-3 mt-3">
-                                <h6 class="card-title text-capitalize fw-bold"><small>Garnitures :</small></h6>
-                                <ul class="ms-4">
-                                    @foreach ($detailsMenu['garnitures'] as $item)
-                                        <li>
-                                            {{ $item['nom'] }} (Qté : {{ $item['quantity'] }})
-                                        </li>
+                            @if ($detailsMenu['complements'])
+                                <span class="card-title text-capitalize"> <small>Complement:</small>
+                                    @foreach ($detailsMenu['complements'] as $key => $item)
+                                        {{ $item['id'] }} <br>
+                                        {{ $item['nom'] }} <br>
+                                        {{ $item['quantity'] }} <br>
                                     @endforeach
-                                </ul>
-                            </div>
-                        @endif
+                                </span>
+                            @endif
+                            @if ($detailsMenu['garnitures'])
+                                <span class="card-title text-capitalize">
+                                    <small>Garniture:</small>
+                                    @foreach ($detailsMenu['garnitures'] as $key => $item)
+                                        {{ $item['id'] }} <br>
+                                        {{ $item['nom'] }} <br>
+                                        {{ $item['quantity'] }} <br>
+                                    @endforeach
+                                </span>
+                            @endif
 
-                        <!-- Prix et quantité -->
-                        <div>
-                            <p class="font-weight-bold text-danger mt-3">
-                                Prix : {{ number_format($detailsMenu['price'], 0, ',', ' ') }} FCFA
-                            </p>
-                            <div class="product-quantity" style="width: 80px">
-                                <div class="cart-plus-minus">
-                                    <div class="dec qtybutton" onclick="decrementProductQuantity({{ $cartKey }})">
-                                        -</div>
-                                    <input data-id="{{ $cartKey }}" id="quantityMenu-{{ $cartKey }}"
-                                        class="cart-plus-minus-box" type="text" name="quantityMenu"
-                                        value="{{ $detailsMenu['quantity'] }}" min="1" readonly>
-                                    <div class="inc qtybutton" onclick="incrementProductQuantity({{ $cartKey }})">
-                                        +</div>
+                            <!-- Prix et quantité -->
+                            <div class="d-flex justify-content-between col-sm-12">
+                                <div>
+                                    <p class="font-weight-bold text-danger">
+                                        Prix : {{ number_format($detailsMenu['price'], 0, ',', ' ') }} FCFA
+                                    </p>
+                                    <div class="product-quantity">
+                                        <div class="cart-plus-minus">
+                                            <div class="dec qtybutton"
+                                                onclick="decrementProductQuantity({{ $cartKey }})">-
+                                            </div>
+                                            <input data-id="{{ $cartKey }}" id="quantityMenu-{{ $cartKey }}"
+                                                class="cart-plus-minus-box" type="text" name="quantityMenu"
+                                                value="{{ $detailsMenu['quantity'] }}" min="1" readonly>
+                                            <div class="inc qtybutton"
+                                                onclick="incrementProductQuantity({{ $cartKey }})">+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="font-weight-bold text-danger">
+                                        Total :
+                                        <span class="totalPriceQty-{{ $cartKey }}">
+                                            {{ number_format($detailsMenu['price'] * $detailsMenu['quantity'], 0, ',', ' ') }}
+                                            FCFA
+                                        </span>
+                                    </p>
                                 </div>
                             </div>
-                            <p class="font-weight-bold text-danger fs-6">
-                                TOTAL :
-                                <span class="totalPriceQty-{{ $cartKey }}">
-                                    {{ number_format($detailsMenu['price'] * $detailsMenu['quantity'], 0, ',', ' ') }}
-                                    FCFA
-                                </span>
-                            </p>
                         </div>
                     </div>
+                    <button data-id="{{ $cartKey }}" class="btn btn-danger btn-sm me-2"
+                        onclick="removeProductFromCart({{ $cartKey }})">Supprimer</button>
                 </div>
             </div>
         @endforeach

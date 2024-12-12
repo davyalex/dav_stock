@@ -215,14 +215,23 @@
                                                                     <tr>
                                                                         <td>
                                                                             <div class="o-pro-dec">
-                                                                                <p class="fw-bold">{{ $detailsMenu['title_plat'] }}</p>
-
-                                                                            @if($detailsMenu['title_complement'])
-                                                                                <p>Complément: {{ $detailsMenu['title_complement'] }}</p>
-                                                                            @endif
-                                                                            @if($detailsMenu['title_garniture'])
-                                                                                <p>Garniture: {{ $detailsMenu['title_garniture'] }}</p>
-                                                                            @endif
+                                                                                <p class="fw-bold text-capitalize">{{ $detailsMenu['plat_name'] }}</p>
+                                                                                @if($detailsMenu['complements'])
+                                                                                    <small class="fw-bold ms-2">Compléments:</small>
+                                                                                    <ul class="ms-3">
+                                                                                        @foreach($detailsMenu['complements'] as $complement)
+                                                                                            <li class="text-capitalize ms-3">{{ $complement['nom'] }} (Qté: {{ $complement['quantity'] }})</li>
+                                                                                        @endforeach
+                                                                                    </ul>
+                                                                                @endif
+                                                                                @if($detailsMenu['garnitures'])
+                                                                                    <small class="fw-bold">Garnitures:</small>
+                                                                                    <ul class="ms-3">
+                                                                                        @foreach($detailsMenu['garnitures'] as $garniture)
+                                                                                            <li class="text-capitalize ms-3">{{ $garniture['nom'] }} (Qté: {{ $garniture['quantity'] }})</li>
+                                                                                        @endforeach
+                                                                                    </ul>
+                                                                                @endif
                                                                             </div>
                                                                         </td>
                                                                         <td>
