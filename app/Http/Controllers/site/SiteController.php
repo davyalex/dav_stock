@@ -9,6 +9,7 @@ use App\Models\Produit;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 
 class SiteController extends Controller
 {
@@ -216,6 +217,10 @@ class SiteController extends Controller
             //         },
             //     ])->first();
 
+            // recuperer le menu du jour en session
+            $cartMenu = Session::get('cartMenu');
+           
+
             // Récupérer le menu du jour avec les produits, compléments et garnitures
             $menu = Menu::where('date_menu', Carbon::today()->toDateString())
                 ->with([
@@ -260,7 +265,7 @@ class SiteController extends Controller
 
             // dd($categories->toArray());
 
-            return view('site.pages.menu', compact('categories', 'menu'));
+            return view('site.pages.menu', compact('categories', 'menu' , 'cartMenu'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }

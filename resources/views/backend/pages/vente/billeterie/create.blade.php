@@ -350,7 +350,7 @@
         });
     </script> --}}
 
-    <script>
+    {{-- <script>
         document.addEventListener("DOMContentLoaded", function() {
             const typeMobileMoney = @json($type_mobile_money);
             const billetData = @json($billets);
@@ -416,10 +416,10 @@
             required >
                 <
                 option selected disabled value = "" > Sélectionner < /option>
-            $ {
-                Object.entries(typeMobileMoney).map(([key, type]) =>
-                    `<option value="${key}">${type}</option>`).join('')
-            } <
+            ${Object.entries(typeMobileMoney).map(([key, type]) => `<option value="${key}">${type}</option>`).join('')  }
+                   
+          
+                 <
             /select> <
             /div> <
             div class = "col-2 mobile-money-fields d-none" >
@@ -562,7 +562,10 @@
         }
         });
         });
-    </script>
+    </script> --}}
+
+   @include('backend.pages.vente.billeterie.script-js')
+    
 @endsection
 
 

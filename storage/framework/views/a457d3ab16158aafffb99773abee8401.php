@@ -148,7 +148,7 @@
                                     $totalNet = (int) session('totalPriceMenu', 0) + (int) session('totalPrice', 0);
                                 ?>
 
-                                <h4 class="text-danger">Grand Total : <span class="grand-totall-title totalNet ">
+                                <h4 class="text-dark">Total à payer : <span class="grand-totall-title totalNet text-danger">
                                         <?php echo e(number_format($totalNet, 0, ',', ' ')); ?> FCFA </span></h4>
 
 
