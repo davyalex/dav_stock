@@ -37,8 +37,12 @@
                                 <?php if(session()->has('cart')): ?>
                                     <div class="row">
                                         <?php $__currentLoopData = session('cart'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $details): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <div class="col-12 col-lg-12 mb-4" id="productDiv_<?php echo e($id); ?>">
+                                            <div class="col-12 col-lg-6 mb-4" id="productDiv_<?php echo e($id); ?>">
                                                 <div class="card h-100 p-3">
+                                                    <button data-id="<?php echo e($id); ?>"
+                                                        class="btn btn-danger btn-sm me-2 justify-content-end position-absolute top-0 end-0 m-2 remove">
+                                                        <i class=" fa fa-trash"></i>
+                                                    </button>
                                                     <div class="d-flex align-items-center">
                                                         <!-- Image du produit -->
                                                         <div class="product-image me-3">
@@ -96,8 +100,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <button data-id="<?php echo e($id); ?>"
-                                                        class="btn btn-danger btn-sm me-2 remove">Supprimer</button>
+                                                    
                                                 </div>
                                             </div>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

@@ -79,10 +79,15 @@
             <div class="col-12 col-lg-6 mb-4" id="platDiv_{{ $cartKey }}">
                 <div class="card h-100 p-3">
                     <!-- Bouton supprimer (icône en haut à droite) -->
-                    <button data-id="{{ $cartKey }}" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2"
-                        onclick="removeProductFromCart({{ $cartKey }})">
-                        <i class=" fa fa-trash"></i>
-                    </button>
+                    <div class="d-flex justify-content-end position-absolute top-0 end-0 m-2">
+                        <button data-id="{{ $cartKey }}" class="btn btn-danger btn-sm me-2"
+                            onclick="removeProductFromCart({{ $cartKey }})">
+                            <i class=" fa fa-trash"></i>
+                        </button>
+                        <a href="{{route('menu')}}" class="btn btn-primary btn-sm">
+                            <i class=" fa fa-plus"></i>
+                        </a>
+                    </div>
 
                     <div class="d-flex flex-column">
                         <!-- Catégorie -->
@@ -93,7 +98,8 @@
 
                         <!-- Nom du plat -->
                         <div>
-                            <h5 class="card-title text-uppercase">{{ $detailsMenu['plat_name'] }}  * <span class="text-danger">{{ $detailsMenu['quantity'] }}</span></h5>
+                            <h5 class="card-title text-uppercase">{{ $detailsMenu['plat_name'] }} * <span
+                                    class="text-danger">{{ $detailsMenu['quantity'] }}</span></h5>
                         </div>
 
                         <!-- Compléments -->
@@ -127,9 +133,10 @@
                         <!-- Prix et quantité -->
                         <div>
                             <p class="font-weight-bold text-danger mt-3">
-                                Prix : {{ number_format($detailsMenu['price'], 0, ',', ' ') }} FCFA
+                                Prix : {{ number_format($detailsMenu['price'], 0, ',', ' ') }} FCFA *
+                                {{ $detailsMenu['quantity'] }}
                             </p>
-                            <div class="product-quantity" style="width: 80px">
+                            {{-- <div class="product-quantity" style="width: 80px">
                                 <div class="cart-plus-minus">
                                     <div class="dec qtybutton" onclick="decrementProductQuantity({{ $cartKey }})">
                                         -</div>
@@ -139,7 +146,7 @@
                                     <div class="inc qtybutton" onclick="incrementProductQuantity({{ $cartKey }})">
                                         +</div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <p class="font-weight-bold text-danger fs-6">
                                 TOTAL :
                                 <span class="totalPriceQty-{{ $cartKey }}">
@@ -147,6 +154,12 @@
                                     FCFA
                                 </span>
                             </p>
+
+                            {{-- <div class="text-center">
+                                <a href="{{route('menu')}}" class="btn btn-dark btn-sm">
+                                    Completer ma selection <i class=" fa fa-plus"></i>
+                                </a>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
