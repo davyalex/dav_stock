@@ -3,6 +3,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
 " rel="stylesheet">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+
+
 <script>
     $('.addCart').click(function(e) {
         e.preventDefault();
@@ -35,7 +38,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
                 // Mettre à jour le montant total du panier
                 $('.totalPriceTop').html(response.priceNet.toLocaleString("fr-FR") + ' FCFA');
                 // Mise a jour total global
-                $('.totalNet').html(response.priceNet.toLocaleString("fr-FR") + ' FCFA');   
+                $('.totalNet').html(response.priceNet.toLocaleString("fr-FR") + ' FCFA');
 
                 //   $('.pro-quantity').html(response.qte)
                 //   $('.cart-price').html(response.price)
@@ -71,6 +74,10 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
 
     });
 </script>
+
+
+
+
 <script src="
 https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js
 "></script>
