@@ -669,26 +669,34 @@ class PanierMenuController extends Controller
 
     public function add(Request $request)
     {
-        // Valider les données reçues
-        $validated = $request->validate([
-            'items' => 'required|array',
-            'items.*.plat.id' => 'required|exists:plats,id',
-            'items.*.plat.quantity' => 'required|integer|min:1',
-            'items.*.plat.price' => 'required|numeric|min:0',
-            'items.*.complements' => 'nullable|array',
-            'items.*.complements.*.id' => 'nullable|exists:plats,id',
-            'items.*.complements.*.quantity' => 'nullable|integer|min:1',
-            'items.*.garnitures' => 'nullable|array',
-            'items.*.garnitures.*.id' => 'nullable|exists:plats,id',
-            'items.*.garnitures.*.quantity' => 'nullable|integer|min:1',
-        ], [
-            'items.required' => 'Vous devez ajouter au moins un plat.',
-            'items.*.plat.id.required' => 'Le champ id est obligatoire pour chaque plat.',
-            'items.*.plat.quantity.required' => 'Le champ quantity est obligatoire pour chaque plat.',
-            'items.*.plat.price.required' => 'Le champ price est obligatoire pour chaque plat.',
-        ]);
+        if (session()->has('cartMenu')) {
+            session()->forget('cartMenu');
+        }
 
         try {
+
+
+            // Valider les données reçues
+            $validated = $request->validate([
+                'items' => 'required|array',
+                'items.*.plat.id' => 'required|exists:plats,id',
+                'items.*.plat.quantity' => 'required|integer|min:1',
+                'items.*.plat.price' => 'required|numeric|min:0',
+                'items.*.complements' => 'nullable|array',
+                'items.*.complements.*.id' => 'nullable|exists:plats,id',
+                'items.*.complements.*.quantity' => 'nullable|integer|min:1',
+                'items.*.garnitures' => 'nullable|array',
+                'items.*.garnitures.*.id' => 'nullable|exists:plats,id',
+                'items.*.garnitures.*.quantity' => 'nullable|integer|min:1',
+            ], [
+                'items.required' => 'Vous devez ajouter au moins un plat.',
+                'items.*.plat.id.required' => 'Le champ id est obligatoire pour chaque plat.',
+                'items.*.plat.quantity.required' => 'Le champ quantity est obligatoire pour chaque plat.',
+                'items.*.plat.price.required' => 'Le champ price est obligatoire pour chaque plat.',
+                'items.*.complements.*.quantity.required' => 'La quantité superieur 0 est obligatoire pour chaque complément.',
+                'items.*.garnitures.*.quantity.required' => 'La quantité  superieur 0 est obligatoire pour chaque garniture.',
+            ]);
+
             // Récupérer ou initialiser le panier
             $cartMenu = session()->get('cartMenu', []);
 

@@ -294,7 +294,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
 
                 Swal.fire({
                     icon: 'error',
-                    title: 'Validation échouée',
+                    title: 'Attention',
                     text: message,
                 });
                 return;
@@ -319,32 +319,6 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
 
         if (panier.length > 0) {
             console.log('Panier :', panier);
-
-            // // Envoyer les données au backend via AJAX
-            // $.ajax({
-            //     url: '/votre-url-backend', // Remplacez par votre URL
-            //     method: 'POST',
-            //     data: {
-            //         panier: panier,
-            //         _token: document.querySelector('meta[name="csrf-token"]').getAttribute(
-            //             'content'), // CSRF Token
-            //     },
-            //     success: function(response) {
-            //         Swal.fire({
-            //             icon: 'success',
-            //             title: 'Succès',
-            //             text: 'Les produits ont été ajoutés au panier avec succès !',
-            //         });
-            //     },
-            //     error: function(error) {
-            //         Swal.fire({
-            //             icon: 'error',
-            //             title: 'Erreur',
-            //             text: 'Une erreur est survenue lors de l\'ajout au panier.',
-            //         });
-            //     },
-            // });
-
 
             // Envoyer les données au backend via AJAX
             $.ajax({
@@ -372,12 +346,12 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
                     $('.totalPriceMenu').html(response.totalPrice + ' FCFA');
 
                     // rediriger au panier
-                    // window.location.href = "{{ route('panier') }}";
+                    window.location.href = "{{ route('panier') }}";
                 },
-                error: function() {
+                error: function(response) {
                     Swal.fire({
                         title: 'Erreur',
-                        text: 'Une erreur est survenue lors de l\'ajout au panier.',
+                        text: response.message,
                         icon: 'error',
                         confirmButtonText: 'Réessayer'
                     });
