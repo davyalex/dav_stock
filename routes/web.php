@@ -444,6 +444,8 @@ Route::controller(AuthUserController::class)->group(function () {
 Route::controller(SiteController::class)->group(function () {
     route::get('', 'accueil')->name('accueil');
     route::get('nous-contacter', 'nousContacter')->name('nous-contactez');
+    route::post('contacter-mail', 'sendMailContacter')->name('email-nous-contactez'); // envoie de email nous contacter
+
 
     route::get('/categorie/{id}', 'produit')->name('produit'); // get product of categorie selected
     route::get('/menu', 'menu')->name('menu');
