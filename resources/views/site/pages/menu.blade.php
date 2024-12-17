@@ -187,7 +187,7 @@
                                                                                             class="cart-plus-minus-box quantityComplement text-danger"
                                                                                             type="text" name="quantity"
                                                                                             value="{{ $complementQuantity }}"
-                                                                                            min="0" readonly>
+                                                                                            min="1" readonly>
                                                                                         <div class="inc qtybutton"
                                                                                             onclick="increaseValue(this)">+
                                                                                         </div>
@@ -232,7 +232,7 @@
                                                                                             class="cart-plus-minus-box quantityGarniture text-danger"
                                                                                             type="text" name="quantity"
                                                                                             value="{{ $garnitureQuantity }}"
-                                                                                            min="0" readonly>
+                                                                                            min="1" readonly>
                                                                                         <div class="inc qtybutton"
                                                                                             onclick="increaseValue(this)">+
                                                                                         </div>
@@ -335,17 +335,29 @@
                 parent.querySelectorAll('.quantityGarniture')
             ).reduce((sum, input) => sum + (parseInt(input.value) || 0), 0);
 
-            if (garnitureQuantities > platQuantity) {
+            if (garnitureQuantities >= platQuantity) {
                 adjustGarnitureQuantities(parent, platQuantity);
+            } else {
+
+                // Permettre de cocher d'autres options si platQuantity est inférieur
+                parent.querySelectorAll('.garniture-checkbox').forEach((checkbox) => {
+                    checkbox.disabled = false;
+                });
             }
+
 
             // Gestion des quantités des compléments
             const complementQuantities = Array.from(
                 parent.querySelectorAll('.quantityComplement')
             ).reduce((sum, input) => sum + (parseInt(input.value) || 0), 0);
 
-            if (complementQuantities > platQuantity) {
+            if (complementQuantities >= platQuantity) {
                 adjustComplementQuantities(parent, platQuantity);
+            } else {
+                // Permettre de cocher d'autres options si platQuantity est inférieur
+                parent.querySelectorAll('.complement-checkbox').forEach((checkbox) => {
+                    checkbox.disabled = false;
+                });
             }
 
             // Mise à jour des prix
@@ -369,9 +381,9 @@
         //     });
         // }
 
-     
 
-       
+
+
         // Fonction pour ajuster les quantités des garnitures
         // function adjustGarnitureQuantities(parent, maxQuantity) {
         //     const garnitureInputs = parent.querySelectorAll('.quantityGarniture');
@@ -390,58 +402,58 @@
 
 
         // Fonction pour ajuster les quantités des compléments
-function adjustComplementQuantities(parent, maxQuantity) {
-    const complementInputs = parent.querySelectorAll('.quantityComplement');
-    let remainingQuantity = maxQuantity;
+        function adjustComplementQuantities(parent, maxQuantity) {
+            const complementInputs = parent.querySelectorAll('.quantityComplement');
+            let remainingQuantity = maxQuantity;
 
-    complementInputs.forEach((input) => {
-        const value = parseInt(input.value) || 0;
+            complementInputs.forEach((input) => {
+                const value = parseInt(input.value) || 0;
 
-        if (value > remainingQuantity) {
-            input.value = remainingQuantity;
-            remainingQuantity = 0;
-        } else {
-            remainingQuantity -= value;
+                if (value > remainingQuantity) {
+                    input.value = remainingQuantity;
+                    remainingQuantity = 0;
+                } else {
+                    remainingQuantity -= value;
+                }
+
+                // Si la quantité tombe à 0 , décocher, désactiver et cacher
+                if (parseInt(input.value) === 0) {
+                    const checkbox = input.closest('.form-check').querySelector('.complement-checkbox');
+                    if (checkbox) {
+                        checkbox.checked = false;
+                        checkbox.disabled = true;
+                        toggleQuantityVisibility(checkbox, false);
+                    }
+                }
+            });
         }
 
-        // Si la quantité tombe à 0, décocher, désactiver et cacher
-        if (parseInt(input.value) === 0) {
-            const checkbox = input.closest('.form-check').querySelector('.complement-checkbox');
-            if (checkbox) {
-                checkbox.checked = false;
-                checkbox.disabled = true;
-                toggleQuantityVisibility(checkbox, false);
-            }
+        // Fonction pour ajuster les quantités des garnitures
+        function adjustGarnitureQuantities(parent, maxQuantity) {
+            const garnitureInputs = parent.querySelectorAll('.quantityGarniture');
+            let remainingQuantity = maxQuantity;
+
+            garnitureInputs.forEach((input) => {
+                const value = parseInt(input.value) || 0;
+
+                if (value > remainingQuantity) {
+                    input.value = remainingQuantity;
+                    remainingQuantity = 0;
+                } else {
+                    remainingQuantity -= value;
+                }
+
+                // Si la quantité tombe à 0  , décocher, désactiver et cacher
+                if (parseInt(input.value) === 0) {
+                    const checkbox = input.closest('.form-check').querySelector('.garniture-checkbox');
+                    if (checkbox) {
+                        checkbox.checked = false;
+                        checkbox.disabled = true;
+                        toggleQuantityVisibility(checkbox, false);
+                    }
+                }
+            });
         }
-    });
-}
-
-// Fonction pour ajuster les quantités des garnitures
-function adjustGarnitureQuantities(parent, maxQuantity) {
-    const garnitureInputs = parent.querySelectorAll('.quantityGarniture');
-    let remainingQuantity = maxQuantity;
-
-    garnitureInputs.forEach((input) => {
-        const value = parseInt(input.value) || 0;
-
-        if (value > remainingQuantity) {
-            input.value = remainingQuantity;
-            remainingQuantity = 0;
-        } else {
-            remainingQuantity -= value;
-        }
-
-        // Si la quantité tombe à 0, décocher, désactiver et cacher
-        if (parseInt(input.value) === 0) {
-            const checkbox = input.closest('.form-check').querySelector('.garniture-checkbox');
-            if (checkbox) {
-                checkbox.checked = false;
-                checkbox.disabled = true;
-                toggleQuantityVisibility(checkbox, false);
-            }
-        }
-    });
-}
 
 
         // Fonction pour gérer la limite de sélection des compléments et garnitures
@@ -501,11 +513,19 @@ function adjustGarnitureQuantities(parent, maxQuantity) {
                 quantityWrapper.style.display = isVisible ? "block" : "none";
 
                 // Réinitialisation de la quantité à 0 si l'élément est décoché et la quantité est cachée
+                // a 1 si l'élément est sélectionné et la quantité est visible
                 if (!isVisible && !checkbox.checked) {
                     const quantityInput = parent.querySelector(".cart-plus-minus-box");
                     if (quantityInput) {
                         quantityInput.value = 0;
                     }
+                } else {
+                    const quantityInput = parent.querySelector(".cart-plus-minus-box");
+                    if (quantityInput) {
+                        quantityInput.value = quantityInput.value != null ? quantityInput.value : 1;
+
+                    }
+                    console.log( quantityInput.value);
                 }
             }
         }
