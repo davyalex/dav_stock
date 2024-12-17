@@ -46,7 +46,7 @@ class PanierController extends Controller
                 ->orderBy('position', 'DESC')
                 ->get();
         }
-        // dd($cartMenu);
+        // dd(session()->get('totalPriceMenu'));
         return view('site.pages.panier', compact('cart',  'cartMenu'));
         // return response()->json($cart);
     }

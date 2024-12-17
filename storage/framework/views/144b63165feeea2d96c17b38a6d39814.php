@@ -68,6 +68,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
                     timerProgressBar: true // Affiche une barre de progression pour le timer
                 })
 
+                   // Rediriger vers le panier
+                   window.location.href = "<?php echo e(route('panier')); ?>";
+
             }
         });
 

@@ -671,6 +671,8 @@ class PanierMenuController extends Controller
     {
         if (session()->has('cartMenu')) {
             session()->forget('cartMenu');
+            session()->forget('totalQuantityMenu');
+            session()->forget('totalPriceMenu');
         }
 
         try {
@@ -785,7 +787,7 @@ class PanierMenuController extends Controller
             // Calcul des totaux
             $totalQuantity = array_sum(array_column($cartMenu, 'quantity'));
             $totalPrice = array_sum(array_map(function ($item) {
-                return $item['price'];
+                return $item['price'] * $item['quantity'];
             }, $cartMenu));
 
             // Sauvegarder dans la session

@@ -121,7 +121,7 @@
                                                                     class="form-check-input plat-checkbox" name="plats[]"
                                                                     value="{{ $plat->id }}"
                                                                     {{ $isPlatChecked ? 'checked' : '' }}>
-                                                                <label for="plat_{{ $plat->id }}" 
+                                                                <label for="plat_{{ $plat->id }}"
                                                                     class="form-check-label fw-bold text-capitalize fs-6">
                                                                     {{ $plat->nom }}
                                                                 </label>
@@ -153,7 +153,8 @@
                                                             </strong>
                                                         </div>
                                                         <div class="row">
-                                                            <div class="{{ $plat->garnitures->isNotEmpty() ? 'col-6' : 'col-12' }}">
+                                                            <div
+                                                                class="{{ $plat->garnitures->isNotEmpty() ? 'col-6' : 'col-12' }}">
                                                                 @if ($plat->complements->isNotEmpty())
                                                                     <p class="card-text fw-bold mt-3">Choisir des
                                                                         compléments :</p>
@@ -198,7 +199,8 @@
                                                                     </form>
                                                                 @endif
                                                             </div>
-                                                            <div class="{{ $plat->complements->isNotEmpty() ? 'col-6' : 'col-12' }}">
+                                                            <div
+                                                                class="{{ $plat->complements->isNotEmpty() ? 'col-6' : 'col-12' }}">
                                                                 @if ($plat->garnitures->isNotEmpty())
                                                                     <p class="card-text fw-bold mt-3">Choisir des
                                                                         garnitures :</p>

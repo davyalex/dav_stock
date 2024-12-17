@@ -153,7 +153,10 @@
 
 
                                 <div class="cart-shiping-update mb-3">
-                                    <a href="{{ route('accueil') }}">Continuer mes achats</a>
+                                    @php
+                                    $idCatPlat = app\Models\Categorie::whereSlug('cuisine-interne')->first();
+                                @endphp
+                                    <a href="{{ route('produit', $idCatPlat->id) }}">Continuer mes achats</a>
                                 </div>
 
 

@@ -157,7 +157,10 @@
 
 
                                 <div class="cart-shiping-update mb-3">
-                                    <a href="<?php echo e(route('accueil')); ?>">Continuer mes achats</a>
+                                    <?php
+                                    $idCatPlat = app\Models\Categorie::whereSlug('cuisine-interne')->first();
+                                ?>
+                                    <a href="<?php echo e(route('produit', $idCatPlat->id)); ?>">Continuer mes achats</a>
                                 </div>
 
 

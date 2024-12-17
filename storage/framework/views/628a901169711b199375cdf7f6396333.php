@@ -214,7 +214,7 @@
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
                                 <?php
-                                    $idCatPlat = app\Models\Categorie::whereSlug('bar')->first();
+                                    $idCatPlat = app\Models\Categorie::whereSlug('cuisine-interne')->first();
                                 ?>
                                 <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-4">
                                     <a href="<?php echo e(route('produit', $idCatPlat->id)); ?>"

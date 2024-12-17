@@ -231,7 +231,7 @@
                                     @endforeach
                                 </div>
                                 @php
-                                    $idCatPlat = app\Models\Categorie::whereSlug('bar')->first();
+                                    $idCatPlat = app\Models\Categorie::whereSlug('cuisine-interne')->first();
                                 @endphp
                                 <div class="col-12 col-md-6 col-lg-6  m-auto text-center mt-4">
                                     <a href="{{ route('produit', $idCatPlat->id) }}"
