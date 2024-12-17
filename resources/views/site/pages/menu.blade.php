@@ -506,29 +506,52 @@
         }
 
         // Fonction pour afficher ou masquer la quantité en fonction de la sélection
+        // function toggleQuantityVisibility(checkbox, isVisible) {
+        //     const parent = checkbox.closest(".form-check");
+        //     const quantityWrapper = parent.querySelector(".product-quantity");
+        //     if (quantityWrapper) {
+        //         quantityWrapper.style.display = isVisible ? "block" : "none";
+
+        //         // Réinitialisation de la quantité à 0 si l'élément est décoché et la quantité est cachée
+        //         // a 1 si l'élément est sélectionné et la quantité est visible
+        //         if (!isVisible && !checkbox.checked) {
+        //             const quantityInput = parent.querySelector(".cart-plus-minus-box");
+        //             if (quantityInput) {
+        //                 quantityInput.value = 0;
+        //             }
+        //         } else {
+        //             const quantityInput = parent.querySelector(".cart-plus-minus-box");
+        //             if (quantityInput) {
+        //                 quantityInput.value = 1;
+        //             }
+        //         }
+        //     }
+        // }
+
+
+
         function toggleQuantityVisibility(checkbox, isVisible) {
             const parent = checkbox.closest(".form-check");
             const quantityWrapper = parent.querySelector(".product-quantity");
-            if (quantityWrapper) {
+            const quantityInput = parent.querySelector(".cart-plus-minus-box");
+
+            if (quantityWrapper && quantityInput) {
+                // Afficher ou masquer la section quantité
                 quantityWrapper.style.display = isVisible ? "block" : "none";
 
-                // Réinitialisation de la quantité à 0 si l'élément est décoché et la quantité est cachée
-                // a 1 si l'élément est sélectionné et la quantité est visible
-                if (!isVisible && !checkbox.checked) {
-                    const quantityInput = parent.querySelector(".cart-plus-minus-box");
-                    if (quantityInput) {
-                        quantityInput.value = 0;
+                if (checkbox.checked) {
+                    // Si l'élément est coché et que la quantité est vide, initialiser à 1
+                    if (!quantityInput.value || quantityInput.value == 0) {
+                        quantityInput.value = 1;
                     }
                 } else {
-                    const quantityInput = parent.querySelector(".cart-plus-minus-box");
-                    if (quantityInput) {
-                        quantityInput.value = quantityInput.value != null ? quantityInput.value : 1;
-
-                    }
-                    console.log( quantityInput.value);
+                    // Si l'élément est décoché, la quantité devient 0
+                    quantityInput.value = 0;
                 }
             }
         }
+
+
 
         // Initialisation des événements lors du chargement du document
         document.addEventListener("DOMContentLoaded", function() {
