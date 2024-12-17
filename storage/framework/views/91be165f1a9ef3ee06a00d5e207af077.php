@@ -15,38 +15,46 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-4">Sélection des produits</h4>
-                    <select name="produit_id" class="form-select js-example-basic-single product-select">
-                        <option value="">Sélectionnez un produit</option>
-                        <?php $__currentLoopData = $data_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <?php if($produit->stock == 0 && $produit->categorie->famille == 'bar'): ?>
-                                <option value="<?php echo e($produit->id); ?>" data-price="<?php echo e($produit->prix); ?>"
-                                    data-stock="<?php echo e($produit->stock); ?>" disabled>
-                                    <?php echo e($produit->nom); ?> <?php echo e($produit->valeur_unite ?? ''); ?>
+                    <div class="row">
+                        <div class="col-10">
+                            <select name="produit_id" class="form-select js-example-basic-single product-select">
+                                <option value="">Sélectionnez un produit</option>
+                                <?php $__currentLoopData = $data_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php if($produit->stock == 0 && $produit->categorie->famille == 'bar'): ?>
+                                        <option value="<?php echo e($produit->id); ?>" data-price="<?php echo e($produit->prix); ?>"
+                                            data-stock="<?php echo e($produit->stock); ?>" disabled>
+                                            <?php echo e($produit->nom); ?> <?php echo e($produit->valeur_unite ?? ''); ?>
 
-                                    <?php echo e($produit->unite->libelle ?? ''); ?>
+                                            <?php echo e($produit->unite->libelle ?? ''); ?>
 
-                                    <?php echo e($produit->unite ? '(' . $produit->unite->abreviation . ')' : ''); ?>
+                                            <?php echo e($produit->unite ? '(' . $produit->unite->abreviation . ')' : ''); ?>
 
-                                    (<?php echo e($produit->prix); ?> FCFA)
-                                    - <span style="color: red" class="text-danger">(Stock: <?php echo e($produit->stock); ?>)</span>
-                                </option>
-                            <?php else: ?>
-                                <option value="<?php echo e($produit->id); ?>" data-price="<?php echo e($produit->prix); ?>"
-                                    data-stock="<?php echo e($produit->stock); ?>">
-                                    <?php echo e($produit->nom); ?> <?php echo e($produit->valeur_unite ?? ''); ?>
+                                            (<?php echo e($produit->prix); ?> FCFA)
+                                            - <span style="color: red" class="text-danger">(Stock: <?php echo e($produit->stock); ?>)</span>
+                                        </option>
+                                    <?php else: ?>
+                                        <option value="<?php echo e($produit->id); ?>" data-price="<?php echo e($produit->prix); ?>"
+                                            data-stock="<?php echo e($produit->stock); ?>">
+                                            <?php echo e($produit->nom); ?> <?php echo e($produit->valeur_unite ?? ''); ?>
 
-                                    <?php echo e($produit->unite->libelle ?? ''); ?>
+                                            <?php echo e($produit->unite->libelle ?? ''); ?>
 
-                                    <?php echo e($produit->unite ? '(' . $produit->unite->abreviation . ')' : ''); ?>
+                                            <?php echo e($produit->unite ? '(' . $produit->unite->abreviation . ')' : ''); ?>
 
-                                    (<?php echo e($produit->prix); ?> FCFA)
-                                    - <span class="text-primary">(Stock: <?php echo e($produit->stock); ?>)</span>
-
-                                </option>
-                            <?php endif; ?>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </select>
+                                            (<?php echo e($produit->prix); ?> FCFA)
+                                            - <span class="text-primary">(Stock: <?php echo e($produit->stock); ?>)</span>
+        
+                                        </option>
+                                    <?php endif; ?>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger" id="add-to-cart">Vente du menu</button>
+                        </div>
+                    </div>
+                    
+                  
                 </div>
             </div>
         </div>

@@ -15,32 +15,40 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-4">Sélection des produits</h4>
-                    <select name="produit_id" class="form-select js-example-basic-single product-select">
-                        <option value="">Sélectionnez un produit</option>
-                        @foreach ($data_produit as $produit)
-                            @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
-                                <option value="{{ $produit->id }}" data-price="{{ $produit->prix }}"
-                                    data-stock="{{ $produit->stock }}" disabled>
-                                    {{ $produit->nom }} {{ $produit->valeur_unite ?? '' }}
-                                    {{ $produit->unite->libelle ?? '' }}
-                                    {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
-                                    ({{ $produit->prix }} FCFA)
-                                    - <span style="color: red" class="text-danger">(Stock: {{{$produit->stock}}})</span>
-                                </option>
-                            @else
-                                <option value="{{ $produit->id }}" data-price="{{ $produit->prix }}"
-                                    data-stock="{{ $produit->stock }}">
-                                    {{ $produit->nom }} {{ $produit->valeur_unite ?? '' }}
-                                    {{ $produit->unite->libelle ?? '' }}
-                                    {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
-                                    ({{ $produit->prix }} FCFA)
-                                    - <span class="text-primary">(Stock: {{{$produit->stock}}})</span>
-
-                                </option>
-                            @endif
-                        @endforeach
-                    </select>
+                    <div class="row">
+                        <div class="col-10">
+                            <select name="produit_id" class="form-select js-example-basic-single product-select">
+                                <option value="">Sélectionnez un produit</option>
+                                @foreach ($data_produit as $produit)
+                                    @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                                        <option value="{{ $produit->id }}" data-price="{{ $produit->prix }}"
+                                            data-stock="{{ $produit->stock }}" disabled>
+                                            {{ $produit->nom }} {{ $produit->valeur_unite ?? '' }}
+                                            {{ $produit->unite->libelle ?? '' }}
+                                            {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
+                                            ({{ $produit->prix }} FCFA)
+                                            - <span style="color: red" class="text-danger">(Stock: {{{$produit->stock}}})</span>
+                                        </option>
+                                    @else
+                                        <option value="{{ $produit->id }}" data-price="{{ $produit->prix }}"
+                                            data-stock="{{ $produit->stock }}">
+                                            {{ $produit->nom }} {{ $produit->valeur_unite ?? '' }}
+                                            {{ $produit->unite->libelle ?? '' }}
+                                            {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
+                                            ({{ $produit->prix }} FCFA)
+                                            - <span class="text-primary">(Stock: {{{$produit->stock}}})</span>
+        
+                                        </option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger" id="add-to-cart">Vente du menu</button>
+                        </div>
+                    </div>
+                    {{-- <h4 class="card-title mb-4">Sélection des produits</h4> --}}
+                  
                 </div>
             </div>
         </div>
