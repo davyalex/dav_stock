@@ -53,7 +53,7 @@
                     <div class="contact-message-wrapper">
                         <h4 class="contact-title">Ecrivez nous</h4>
                         <div class="contact-message">
-                            <form id="contact-form" action="{{route('email-nous-contactez')}}" method="post">
+                            <form  action="{{route('email-nous-contactez')}}" method="post">
                                 @csrf
                                 <div class="row">
                                     <div class="col-lg-6">

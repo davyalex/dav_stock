@@ -10,6 +10,7 @@ use App\Mail\ContactMail;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
@@ -103,14 +104,32 @@ class SiteController extends Controller
             ];
 
             // Envoi de l'email avec les données et la vue
-            Mail::send('contact_mail', $data, function ($message) use ($data) {
-                $message->to('info@chezjeanne.ci') // Destinataire
-                    ->subject($data['objet'])    // Objet de l'email
-                    ->from($data['email'], $data['nom']); // Expéditeur
-            });
+            // Mail::send('contact_mail', $data, function ($message) use ($data) {
+            //     $message->to('info@chezjeanne.ci') // Destinataire
+            //         ->subject($data['objet'])    // Objet de l'email
+            //         ->from($data['email'], $data['nom']); // Expéditeur
+            // });
+
+            // // Envoi de l'email en utilisant du contenu HTML
+            // Mail::html(
+            //     "<h1>Message de Contact</h1>
+            // <p><strong>Nom :</strong> {$data['nom']}</p>
+            // <p><strong>Email :</strong> {$data['email']}</p>
+            // <p><strong>Message :</strong><br>{$data['message']}</p>",
+            //     function ($message) use ($data) {
+            //         $message->to('info@chezjeanne.ci') // Destinataire
+            //             ->subject($data['objet'])        // Objet de l'email
+            //             ->from($data['email'], $data['nom']); // Expéditeur
+            //     }
+            // );
+
+
+            Mail::to('info@chezjeanne.ci')->queue(new ContactMail($data));
+            Alert::success('Votre message a bien été envoyé');
+            return back();
 
             // Rediriger avec un message de succès
-            return redirect()->back()->with('success', 'Votre message a été envoyé avec succès!');
+            
         } catch (\Throwable $th) {
             return $th->getMessage();
         }

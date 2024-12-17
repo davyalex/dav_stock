@@ -17,11 +17,11 @@ class ContactMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public $details;
+    public $data;
 
-    public function __construct($details)
+    public function __construct($data)
     {
-        $this->details = $details;
+        $this->data = $data;
     }
 
     /**
@@ -30,9 +30,8 @@ class ContactMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Nouveau message de contact',
-            from: new Address('contact@monapp.com', 'Mon Application'),
-
+            subject: $this->data['objet'],
+            from: new Address($this->data['email'], $this->data['nom']),
         );
     }
 
@@ -42,7 +41,8 @@ class ContactMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'site.pages.email.contact_mail',
+            with: ['data' => $this->data],
         );
     }
 
