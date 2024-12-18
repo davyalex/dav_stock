@@ -44,7 +44,7 @@
                             </select>
                         </div>
                         <div class="col-2">
-                            <button type="button" class="btn btn-danger" id="add-to-cart">Vente du menu</button>
+                            <a href="{{route('vente.menu.create')}}" class="btn btn-danger" >Vente du menu</a>
                         </div>
                     </div>
                     {{-- <h4 class="card-title mb-4">Sélection des produits</h4> --}}

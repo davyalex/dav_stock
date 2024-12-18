@@ -316,7 +316,7 @@ class SiteController extends Controller
 
 
 
-            // dd($cartMenu);
+            // dd($menu->toArray());
 
             return view('site.pages.menu', compact('categories', 'menu', 'cartMenu'));
         } catch (\Throwable $e) {

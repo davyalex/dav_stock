@@ -1,75 +1,21 @@
-@extends('site.layouts.app')
-
-@section('title', 'Liste du menu')
-
-{{-- @section('content') --}}
-
-    {{-- <style>
-        .product-img img {
-            width: 100%;
-            /* Adapter à la largeur du conteneur */
-            height: 250px;
-            /* Fixer une hauteur spécifique */
-            object-fit: contain;
-            /* Maintenir les proportions tout en remplissant la zone */
-        }
-
-        .category-sticker {
-            position: absolute;
-            top: 10px;
-            /* Ajuster la position verticale */
-            left: 10px;
-            /* Ajuster la position horizontale */
-            background-color: rgba(0, 0, 0, 0.7);
-            /* Fond semi-transparent */
-            color: white;
-            padding: 5px 10px;
-            font-size: 12px;
-            border-radius: 5px;
-            z-index: 10;
-        }
-
-        /* Couleur par défaut */
-        .form-check-input {
-            accent-color: black;
-            /* Mettre la couleur par défaut en noir */
-        }
-
-        /* Couleur rouge lorsqu'un bouton radio est sélectionné */
-        .form-check-input:checked {
-            accent-color: red;
-            /* Couleur rouge lorsqu'il est coché */
-        }
-
-        /*  Style for increment decrement*/
-
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .quantity-input {
-            width: 60px;
-            text-align: center;
-            font-size: 16px;
-        }
-
-        button.btn {
-            padding: 5px 10px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        button.btn:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-    </style> --}}
+@extends('backend.layouts.master')
+@section('title')
+    Vente Menu
+@endsection
 
 
 @section('content')
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+
+
+    @component('backend.components.breadcrumb')
+        @slot('li_1')
+            Vente
+        @endslot
+        @slot('title')
+            Point de Vente
+        @endslot
+    @endcomponent
     <style>
         .menu-image {
             max-width: 100%;
@@ -96,7 +42,7 @@
                 </h1>
 
                 <?php $cartMenu = Session::get('cartMenu', []); ?>
-                <div class="d-flex mt-4 ol-sm-12 col-md-12 col-lg-12 col-xl-12 m-auto">
+                <div class="d-flex mt-4 ol-sm-12 col-md-12 col-lg-12 col-xl-12  m-auto">
                     <div class="col-12 col-md-12 col-lg-12 col-xl-8">
                         @foreach ($categories as $categorie => $plats)
                             <div class="card shadow col-12">
@@ -148,7 +94,7 @@
                                                             </div>
 
                                                             <strong data-price="{{ $plat->prix }}"
-                                                                class="price text-danger">
+                                                                class="price text-danger plat-price-display">
                                                                 {{ number_format($plat->prix, 0, ',', ' ') }} FCFA
                                                             </strong>
                                                         </div>
@@ -255,18 +201,80 @@
                             </div>
                         @endforeach
                     </div>
-                    <div class="image-container d-none d-lg-block d-md-block col-4">
-                        @if ($menu && $menu->hasMedia('images'))
+                    <div class="image-container d-none d-lg-block d-md-block col-4 mx-2">
+                        {{-- @if ($menu && $menu->hasMedia('images'))
                             <img src="{{ $menu->getFirstMediaUrl('images') }}" alt="Menu Image"
                                 class="img-fluid menu-image">
-                        @endif
+                        @endif --}}
+                        <div class="card" style="background-color:rgb(240, 234, 234) ; position: fixed ; width: 400px;">
+                            <div class="card-body total-payment-container">
+                                <h2 class="card-title fw-bold fs-3 mb-3">Total: <span id="totalAmount">0</span></h2>
+
+                                <div class="payment-method mb-3">
+                                    <label for="paymentMethod">Moyen de paiement:</label>
+                                    <select id="payment-method" name="mode_reglement" class="form-select" required>
+                                        <option value="espece" selected>Espèce</option>
+                                        <option value="orange money">Orange Money</option>
+                                        <option value="moov money">Moov Money</option>
+                                        <option value="mtn money">MTN Money</option>
+                                        <option value="wave">Wave</option>
+                                        <option value="visa">Visa</option>
+                                        <option value="mastercard">MasterCard</option>
+                                    </select>
+                                </div>
+                                <div class="amount-received mb-3">
+                                    <label for="amountReceived">Montant reçu:</label>
+                                    <input type="number" id="amountReceived" class="form-control"
+                                        placeholder="Entrez le montant reçu" required>
+                                </div>
+                                {{-- <div class="change-given">
+                                    <label for="changeGiven">Monnaie rendue:</label>
+                                    <input type="number" id="changeGiven" class="form-control"
+                                        placeholder="Monnaie rendue" readonly>
+                                </div> --}}
+                                <div class=" mt-3">
+                                    <h4>Monnaie rendu : <span id="changeGiven">0</span> FCFA</h4>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-success addCart text-white w-100 "
+                               >
+                                <i class="fa fa-shopping-cart"></i> Commander
+                            </button>
+                        </div>
+
+
+
+                        <script>
+                            // Fonction pour extraire un nombre depuis une chaîne formatée
+                            function parseFormattedNumber(numberString) {
+                                return parseFloat(numberString.replace(/\s/g, '').replace(',', '.')) || 0;
+                            }
+
+                            // Fonction de recalcul automatique de la monnaie rendue
+                            function updateChange() {
+                                const totalText = document.getElementById('totalAmount').textContent;
+                                const total = parseFormattedNumber(totalText); // Convertir le total formaté
+                                const received = parseFloat(document.getElementById('amountReceived').value) || 0;
+                                const change = received - total;
+                                $('#changeGiven').text(change >= 0 ? change.toLocaleString('fr-FR') : '0');
+                                // document.getElementById('changeGiven').value = change >= 0 ? change.toLocaleString('fr-FR') : '0';
+                            }
+
+                            // Écoute des changements dynamiques du total
+                            const observer = new MutationObserver(updateChange);
+                            observer.observe(document.getElementById('totalAmount'), {
+                                childList: true,
+                                characterData: true,
+                                subtree: true
+                            });
+
+                            // Écoute des entrées du montant reçu
+                            document.getElementById('amountReceived').addEventListener('input', updateChange);
+                        </script>
+
+
                     </div>
                 </div>
-
-                <button type="button" class="btn btn-danger addCart text-white w-100 mt-3"
-                    style="border-radius: 5px; font-size: 20px;">
-                    <i class="fa fa-shopping-cart"></i> Commander
-                </button>
             @endif
         </div>
         @include('site.components.ajouter-au-panier-menu')
@@ -274,8 +282,7 @@
 
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-
+@section('script')
     <script>
         const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
         const popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
@@ -287,8 +294,11 @@
             let currentValue = parseInt(input.value, 10) || 0;
             input.value = currentValue + 1;
             triggerChange(input);
-
             updateComplementGarnitureLimits(input);
+
+            // Met à jour le prix total
+            updateTotalPrice();
+            updatePlatPrice(input);
         }
 
         // Fonction pour diminuer la quantité du plat
@@ -303,7 +313,93 @@
 
             ensureSelectionWithinLimits(input);
             updateComplementGarnitureLimits(input);
+
+            // Met à jour le prix total
+            updateTotalPrice();
+            updatePlatPrice(input);
         }
+
+
+        // Fonction pour mettre à jour le prix total d'un plat
+        function updatePlatPrice(input) {
+            const parent = input.closest(".card-body");
+            const platCheckbox = parent.querySelector(".plat-checkbox");
+            const price = parseFloat(platCheckbox.dataset.price || 0);
+            const quantity = parseInt(input.value, 10) || 0;
+            const platTotal = price * quantity;
+
+            // Afficher le prix total dans un élément spécifique si nécessaire
+            const platPriceDisplay = parent.querySelector(".plat-price-display");
+            if (platPriceDisplay) {
+                platPriceDisplay.textContent = platTotal.toLocaleString("fr-FR") + " FCFA"; // Adapter selon votre devise
+            }
+
+            updateTotalPrice(); // Mettre à jour le total global
+        }
+
+        // Fonction pour mettre à jour le tableau des prix totaux
+        function updateTotalPrice() {
+            const platCheckboxes = document.querySelectorAll(".plat-checkbox:checked");
+            let total = 0;
+
+            platCheckboxes.forEach((checkbox) => {
+                const parent = checkbox.closest(".card-body");
+                const quantityInput = parent.querySelector(".cart-plus-minus-box");
+                const price = parseFloat(checkbox.dataset.price || 0);
+                const quantity = parseInt(quantityInput.value, 10) || 0;
+
+                total += price * quantity;
+            });
+
+            // Mettre à jour l'affichage du total dans un élément spécifique
+            const totalDisplay = document.getElementById("totalAmount");
+            if (totalDisplay) {
+                totalDisplay.textContent = total.toLocaleString("fr-FR") + " FCFA"; // Adapter selon votre devise
+            }
+        }
+
+        // Fonction pour gérer l'ajout ou le retrait des prix dans le tableau
+        function handlePlatSelection(checkbox) {
+            const parent = checkbox.closest(".card-body");
+            const quantityInput = parent.querySelector(".cart-plus-minus-box");
+            const price = parseFloat(checkbox.dataset.price || 0);
+            const quantity = parseInt(quantityInput.value, 10) || 0;
+
+            if (checkbox.checked) {
+                // Ajouter au total
+                updateTotalPrice();
+            } else {
+                // Réinitialiser la quantité à 0 si décoché
+                quantityInput.value = 1;
+                updateTotalPrice();
+            }
+        }
+
+        // Ajout des événements nécessaires
+        document.addEventListener("DOMContentLoaded", function() {
+            const platInputs = document.querySelectorAll(".cart-plus-minus-box");
+            const platCheckboxes = document.querySelectorAll(".plat-checkbox");
+
+            platInputs.forEach((input) => {
+                input.addEventListener("change", function() {
+                    updatePlatPrice(input);
+                });
+            });
+
+            platCheckboxes.forEach((checkbox) => {
+                checkbox.addEventListener("change", function() {
+                    handlePlatSelection(checkbox);
+                });
+            });
+
+            // Mettre à jour le total au chargement initial
+            updateTotalPrice();
+        });
+
+
+
+
+
 
         // Fonction pour mettre à jour les limites de sélection des compléments et garnitures
         function updateComplementGarnitureLimits(input) {
@@ -362,45 +458,8 @@
                 });
             }
 
-            // Mise à jour des prix
-            // updateTotalPrice(parent);
+
         }
-
-
-        // Fonction pour ajuster les quantités des compléments
-        // function adjustComplementQuantities(parent, maxQuantity) {
-        //     const complementInputs = parent.querySelectorAll('.quantityComplement');
-        //     let remainingQuantity = maxQuantity;
-
-        //     complementInputs.forEach((input) => {
-        //         const value = parseInt(input.value) || 0;
-        //         if (value > remainingQuantity) {
-        //             input.value = remainingQuantity;
-        //             remainingQuantity = 0;
-        //         } else {
-        //             remainingQuantity -= value;
-        //         }
-        //     });
-        // }
-
-
-
-
-        // Fonction pour ajuster les quantités des garnitures
-        // function adjustGarnitureQuantities(parent, maxQuantity) {
-        //     const garnitureInputs = parent.querySelectorAll('.quantityGarniture');
-        //     let remainingQuantity = maxQuantity;
-
-        //     garnitureInputs.forEach((input) => {
-        //         const value = parseInt(input.value) || 0;
-        //         if (value > remainingQuantity) {
-        //             input.value = remainingQuantity;
-        //             remainingQuantity = 0;
-        //         } else {
-        //             remainingQuantity -= value;
-        //         }
-        //     });
-        // }
 
 
         // Fonction pour ajuster les quantités des compléments
@@ -507,29 +566,6 @@
             });
         }
 
-        // Fonction pour afficher ou masquer la quantité en fonction de la sélection
-        // function toggleQuantityVisibility(checkbox, isVisible) {
-        //     const parent = checkbox.closest(".form-check");
-        //     const quantityWrapper = parent.querySelector(".product-quantity");
-        //     if (quantityWrapper) {
-        //         quantityWrapper.style.display = isVisible ? "block" : "none";
-
-        //         // Réinitialisation de la quantité à 0 si l'élément est décoché et la quantité est cachée
-        //         // a 1 si l'élément est sélectionné et la quantité est visible
-        //         if (!isVisible && !checkbox.checked) {
-        //             const quantityInput = parent.querySelector(".cart-plus-minus-box");
-        //             if (quantityInput) {
-        //                 quantityInput.value = 0;
-        //             }
-        //         } else {
-        //             const quantityInput = parent.querySelector(".cart-plus-minus-box");
-        //             if (quantityInput) {
-        //                 quantityInput.value = 1;
-        //             }
-        //         }
-        //     }
-        // }
-
 
 
         function toggleQuantityVisibility(checkbox, isVisible) {
@@ -625,6 +661,8 @@
             });
         });
     </script>
+@endsection
+
 
 
 @endsection

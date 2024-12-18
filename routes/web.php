@@ -335,6 +335,8 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('billeterie-caisse', 'billeterieCaisse')->name('vente.billeterie-caisse');
         route::post('session-date-vente', 'sessionDate')->name('vente.session-date');  // definir manuellement une session date pour la vente
 
+        ##vente menu
+        route::get('menu/create', 'createVenteMenu')->name('vente.menu.create'); //vue de la page de vente menu
     });
 
     // Commande

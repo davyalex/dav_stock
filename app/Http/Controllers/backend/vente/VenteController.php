@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\backend\vente;
 
 use Carbon\Carbon;
+use App\Models\Menu;
 use App\Models\User;
 use App\Models\Vente;
 use App\Models\Caisse;
@@ -371,6 +372,67 @@ class VenteController extends Controller
         } catch (\Throwable $th) {
             Alert::error('Erreur', 'Une erreur est survenue lors de la création de la session : ' . $th->getMessage());
             return back();
+        }
+    }
+
+
+
+
+    ############################################VENTE AU NIVEAU MENU##############################################
+    public function createVenteMenu()
+    {
+        try {
+            // recuperer le menu du jour en session
+            $cartMenu = Session::get('cartMenu');
+
+
+            // Récupérer le menu du jour avec les produits, compléments et garnitures
+            $menu = Menu::where('date_menu', Carbon::today()->toDateString())
+                ->with([
+                    'plats' => function ($query) {
+                        $query->with([
+                            'categorieMenu',  // Relation vers la catégorie de produit
+                            'complements' => function ($query) {
+                                $query->wherePivot('menu_id', function ($subQuery) {
+                                    $subQuery->select('id')
+                                        ->from('menus')
+                                        ->where('date_menu', Carbon::today()->toDateString());
+                                });
+                            },
+                            'garnitures' => function ($query) {
+                                $query->wherePivot('menu_id', function ($subQuery) {
+                                    $subQuery->select('id')
+                                        ->from('menus')
+                                        ->where('date_menu', Carbon::today()->toDateString());
+                                });
+                            }
+                        ]);
+                    },
+                ])->first();
+
+            // Vérifier s'il y a un menu
+            if (!$menu) {
+                return view('backend.pages.vente.menu.create', ['menu' => null, 'categories' => []]);
+            }
+
+            // Grouper les produits par nom de catégorie et trier par position de catégorie
+            $categories = $menu->plats
+                ->groupBy(function ($plat) {
+                    return $plat->categorieMenu->nom; // Grouper par le nom de la catégorie
+                })
+                ->sortBy(function ($group, $key) {
+                    // Trier les groupes par la position des catégories
+                    $categorie = $group->first()->categorieMenu;
+                    return $categorie ? $categorie->position : 0; // Si une catégorie n'a pas de position, utiliser 0
+                });
+
+
+
+            // dd($menu->toArray);
+
+            return view('backend.pages.vente.menu.create', compact('categories', 'menu', 'cartMenu'));
+        } catch (\Throwable $e) {
+            return $e->getMessage();
         }
     }
 }
