@@ -28,17 +28,20 @@
             <div class="alert alert-info alert-dismissible fade show d-flex justify-content-center align-items-center"
                 role="alert">
                 <div class="me-3">
-                    <h5 class="card-title mb-0">Date de vente actuelle : <span id="heureActuelle">{{ Session::get('session_date') !=null
-                        ? \Carbon\Carbon::parse(Session::get('session_date'))->format('d-m-Y')
-                        : 'non defini'}}</span>
+                    <h5 class="card-title mb-0">Date de vente actuelle : <span
+                            id="heureActuelle">{{ Session::get('session_date') != null
+                                ? \Carbon\Carbon::parse(Session::get('session_date'))->format('d-m-Y')
+                                : 'non defini' }}</span>
                     </h5>
                 </div>
+                @if ($data_vente->sum('montant_total') == 0)
+                    <button type="button" class="btn btn-info ms-3" data-bs-toggle="modal"
+                        data-bs-target="#dateSessionVenteModal">
+                        {{ Session::get('session_date') != null ? 'Modifier la date de la session de vente' : ' Choisir une date pour la session vente' }}
+                    </button>
+                @endif
 
-                <button type="button" class="btn btn-info ms-3" data-bs-toggle="modal"
-                    data-bs-target="#dateSessionVenteModal">
-                    {{Session::get('session_date') !=null ? 'Modifier la date de la session de vente' : ' Choisir une date pour la session vente' }}
-                   
-                </button>
+
 
                 <button type="button" class="btn-close ms-3" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -47,7 +50,7 @@
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Liste des ventes </strong></h5>
                     @if (auth()->user()->hasRole('caisse'))
-                        @if (Session::get('session_date') !=null)
+                        @if (Session::get('session_date') != null)
                             <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">
                                 Nouvelle vente</a>
                         @else
@@ -115,7 +118,8 @@
                                                 class="btn btn-danger ">Procéder a la Clóturer
                                                 la caisse</a>
                                         @else
-                                            <button class="btn btn-danger" disabled>Procéder a la Clóturer la caisse</button>
+                                            <button class="btn btn-danger" disabled>Procéder a la Clóturer la
+                                                caisse</button>
                                         @endif
                                     </p>
 
@@ -146,10 +150,11 @@
                                         <td> {{ $loop->iteration }} </td>
                                         <td> <a class="fw-bold"
                                                 href="{{ route('vente.show', $item->id) }}">#{{ $item['code'] }}</a> </td>
-                                        <td> {{ $item['type_vente'] }} 
+                                        <td> {{ $item['type_vente'] }}
 
-                                            @if($item['type_vente'] == 'commande')
-                                              <br>  <a href="{{ route('commande.show', $item['commande_id']) }}" class="text-primary fw-bold">#{!! $item['commande']['code'] !!}</a>
+                                            @if ($item['type_vente'] == 'commande')
+                                                <br> <a href="{{ route('commande.show', $item['commande_id']) }}"
+                                                    class="text-primary fw-bold">#{!! $item['commande']['code'] !!}</a>
                                             @endif
                                         </td>
                                         <td> {{ \Carbon\Carbon::parse($item['date_vente'])->format('d-m-Y') }}

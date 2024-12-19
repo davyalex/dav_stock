@@ -41,8 +41,8 @@
                                                 <a href="#">Forgot Password?</a>
                                             </div> --}}
                                             <button type="submit" class="w-100"><span>Valider</span></button>
-                                        <div class="login-toggle-btn text-center">
-                                            <a href="{{route('user.register')}}">Pas encore inscrit ? Inscrivez-vous maintenant !</a>
+                                        <div class="login-toggle-btn">
+                                            <a href="{{route('user.register')}}" class="text-center">Pas encore inscrit ? Cliquez ici pour s'inscrire maintenant !</a>
                                         </div>
                                         </div>
                                     </form>

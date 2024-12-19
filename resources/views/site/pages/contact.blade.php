@@ -43,7 +43,7 @@
                     </div>
                 </div>
             </div>
-            @if(session('success'))
+            @if (session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
                 </div>
@@ -53,7 +53,7 @@
                     <div class="contact-message-wrapper">
                         <h4 class="contact-title">Ecrivez nous</h4>
                         <div class="contact-message">
-                            <form  action="{{route('email-nous-contactez')}}" method="post">
+                            <form id="formSubmit" action="{{ route('email-nous-contactez') }}" method="post">
                                 @csrf
                                 <div class="row">
                                     <div class="col-lg-6">
@@ -74,7 +74,17 @@
                                     <div class="col-lg-12">
                                         <div class="contact-form-style">
                                             <textarea name="message" placeholder="Message" required></textarea>
+
+                                            {!! NoCaptcha::renderJs() !!}
+                                            {!! NoCaptcha::display() !!}
+
+
+                                            <p id="recaptchaError" style="color: red;"></p>
+
+
                                             <button class="submit btn-style" type="submit">ENVOYEZ</button>
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -96,4 +106,19 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.querySelector('#formSubmit').addEventListener('submit', function(e) {
+            if (typeof grecaptcha !== 'undefined') {
+                var response = grecaptcha.getResponse();
+                if (response.length === 0) {
+                    e.preventDefault();
+                document.getElementById('recaptchaError').innerHTML = 'Veuillez cocher la case reCAPTCHA.';
+                }
+            } else {
+                e.preventDefault();
+                document.getElementById('recaptchaError').innerHTML = 'reCAPTCHA n\'est pas chargé. Veuillez actualiser la page.';
+            }
+        });
+    </script>
 @endsection

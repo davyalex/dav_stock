@@ -435,4 +435,82 @@ class VenteController extends Controller
             return $e->getMessage();
         }
     }
+
+
+    /**
+     * Stocke une vente au niveau menu
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeVenteMenu(Request $request)
+    {
+        try {
+            //recuperation des informations depuis ajax
+            $cart = $request->input('cart');
+            // $montantAvantRemise = $request->input('montantAvantRemise');
+            // $montantApresRemise = $request->input('montantApresRemise');
+            // $montantRemise = $request->input('montantRemise');
+            // $typeRemise = $request->input('typeRemise');
+            // $valeurRemise = $request->input('valeurRemise');
+            $modePaiement = $request->input('modePaiement');
+            $montantRecu = $request->input('montantRecu');
+            $montantRendu = $request->input('montantRendu');
+            $montantAPayer = $request->input('montantAPayer');
+
+            // Création de la vente
+            // Obtenir les deux premières lettres du nom de la caissière
+            $initialesCaissiere = substr(auth()->user()->first_name, 0, 2);
+            $initialesCaisse = substr(auth()->user()->caisse->libelle, 0, 2);
+
+            // Obtenir le numéro d'ordre de la vente pour aujourd'hui
+            $nombreVentes = Vente::count();
+            $numeroOrdre = $nombreVentes + 1;
+
+            // Obtenir la date et l'heure actuelles
+            $dateHeure = now()->format('dmYHi');
+
+            // Générer le code de vente
+            $codeVente = strtoupper($initialesCaissiere) . '-' . strtoupper($initialesCaisse) . $numeroOrdre . $dateHeure;
+
+            //session de la date manuelle
+            $sessionDate = Session::get('session_date', now()->toDateString());
+
+            $vente = Vente::create([
+                'code' => $codeVente,
+                // 'client_id' => $request->client_id,
+                'caisse_id' => auth()->user()->caisse_id, // la caisse qui fait la vente
+                'user_id' => auth()->user()->id, // l'admin qui a fait la vente
+                'montant_total' => $montantAPayer,
+                'date_vente' =>  Carbon::parse($sessionDate),
+                'mode_paiement' => $modePaiement,
+                'montant_recu' => $montantRecu,
+                'montant_rendu' => $montantRendu,
+                'statut' => 'confirmée',
+                'type_vente' => 'Menu du jour'
+            ]);
+
+            // inserer les produits dans la vente
+            foreach ($cart as $item) {
+                $plat = $item['plat'];
+                $vente->plats()->attach($plat['id'], [
+                    'quantite' => $plat['quantity'],
+                    'prix_unitaire' => $plat['price'],
+                    'total' => $plat['price'] * $plat['quantity'],
+                    'garniture' => json_encode($item['garnitures'] ?? []),
+                    'complement' => json_encode($item['complements'] ?? []),
+                ]);
+            }
+
+            $idVente = $vente->id;
+
+            return response()->json([
+                'message' => 'Vente enregistrée avec succès.',
+                'status' => 'success',
+                'idVente' => $idVente,
+            ], 200);
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
 }

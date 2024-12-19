@@ -85,18 +85,6 @@ class CommandeController extends Controller
                     ]);
 
 
-                    // Associer les plats a la commande
-                    foreach ($commande->plats as $plat) {
-                        $vente->plats()->attach($plat->id, [
-                            'quantite' => $plat->pivot->quantite,
-                            'prix_unitaire' => $plat->pivot->prix_unitaire,
-                            'total' => $plat->pivot->total,
-                            'garniture' => $plat->pivot->garniture ?? '',
-                            'complement' => $plat->pivot->complement ?? '',
-                        ]);
-                    }
-
-
                     // Mise à jour du stock pour les produits de la catégorie "bar"
                     if ($produit->categorie->famille == 'bar') {
                         // Mise à jour du stock du produit
@@ -111,6 +99,23 @@ class CommandeController extends Controller
                         }
                     }
                 }
+
+
+                // Associer les plats à la commande
+                foreach ($commande->plats as $plat) {
+                    $vente->plats()->attach($plat->id, [
+                        'quantite' => $plat->pivot->quantite,
+                        'prix_unitaire' => $plat->pivot->prix_unitaire,
+                        'total' => $plat->pivot->total,
+                        'garniture' => $plat->pivot->garniture ?? [],
+                        'complement' => $plat->pivot->complement ?? [],
+                    ]);
+                }
+                return response()->json(['success' => true, 
+                'message' => 'Statut mis à jour avec succès',
+                'statut' => 'confirmée',
+                'idVente' => $vente->id
+            ]);
             }
             // Si le statut est annulé
             elseif ($nouveauStatut == 'annulée') {

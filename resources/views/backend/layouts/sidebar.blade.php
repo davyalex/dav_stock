@@ -101,11 +101,6 @@
                             id="sidebarConfiguration">
                             <ul class="nav nav-sm flex-column">
 
-
-
-
-
-
                                 <li class="nav-item active">
                                     <a href="{{ route('magasin.index') }}"
                                         class="nav-link {{ Route::is('magasin.*') ? 'active' : '' }}">Magasin</a>
@@ -406,7 +401,8 @@
                                 </li> --}}
                                 <li class="nav-item">
                                     <a href="{{ route('permission.index') }}"
-                                        class="nav-link {{ Route::is('permission.*') ? 'active' : '' }}">Permissions/ Roles</a>
+                                        class="nav-link {{ Route::is('permission.*') ? 'active' : '' }}">Permissions/
+                                        Roles</a>
                                 </li>
                             </ul>
                         </div>

@@ -8,8 +8,13 @@
     <meta name="description" content="Bienvenue au restaurant Chez Jeanne, votre destination culinaire pour une expérience gastronomique authentique et délicieuse. Découvrez notre menu varié, notre ambiance chaleureuse et notre service attentionné.">
     <meta name="robots" content="noindex, follow" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+
     <!-- Favicon -->
     
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 
     <link rel="apple-touch-icon" sizes="57x57" href="<?php echo e(asset('assets/img/favicon/apple-icon-57x57.png')); ?>">
     <link rel="apple-touch-icon" sizes="60x60" href="<?php echo e(asset('assets/img/favicon/apple-icon-60x60.png')); ?>">

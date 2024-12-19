@@ -28,18 +28,21 @@
             <div class="alert alert-info alert-dismissible fade show d-flex justify-content-center align-items-center"
                 role="alert">
                 <div class="me-3">
-                    <h5 class="card-title mb-0">Date de vente actuelle : <span id="heureActuelle"><?php echo e(Session::get('session_date') !=null
-                        ? \Carbon\Carbon::parse(Session::get('session_date'))->format('d-m-Y')
-                        : 'non defini'); ?></span>
+                    <h5 class="card-title mb-0">Date de vente actuelle : <span
+                            id="heureActuelle"><?php echo e(Session::get('session_date') != null
+                                ? \Carbon\Carbon::parse(Session::get('session_date'))->format('d-m-Y')
+                                : 'non defini'); ?></span>
                     </h5>
                 </div>
+                <?php if($data_vente->sum('montant_total') == 0): ?>
+                    <button type="button" class="btn btn-info ms-3" data-bs-toggle="modal"
+                        data-bs-target="#dateSessionVenteModal">
+                        <?php echo e(Session::get('session_date') != null ? 'Modifier la date de la session de vente' : ' Choisir une date pour la session vente'); ?>
 
-                <button type="button" class="btn btn-info ms-3" data-bs-toggle="modal"
-                    data-bs-target="#dateSessionVenteModal">
-                    <?php echo e(Session::get('session_date') !=null ? 'Modifier la date de la session de vente' : ' Choisir une date pour la session vente'); ?>
+                    </button>
+                <?php endif; ?>
 
-                   
-                </button>
+
 
                 <button type="button" class="btn-close ms-3" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -48,7 +51,7 @@
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Liste des ventes </strong></h5>
                     <?php if(auth()->user()->hasRole('caisse')): ?>
-                        <?php if(Session::get('session_date') !=null): ?>
+                        <?php if(Session::get('session_date') != null): ?>
                             <a href="<?php echo e(route('vente.create')); ?>" type="button" class="btn btn-primary">
                                 Nouvelle vente</a>
                         <?php else: ?>
@@ -118,7 +121,8 @@
                                                 class="btn btn-danger ">Procéder a la Clóturer
                                                 la caisse</a>
                                         <?php else: ?>
-                                            <button class="btn btn-danger" disabled>Procéder a la Clóturer la caisse</button>
+                                            <button class="btn btn-danger" disabled>Procéder a la Clóturer la
+                                                caisse</button>
                                         <?php endif; ?>
                                     </p>
 
@@ -149,10 +153,12 @@
                                         <td> <?php echo e($loop->iteration); ?> </td>
                                         <td> <a class="fw-bold"
                                                 href="<?php echo e(route('vente.show', $item->id)); ?>">#<?php echo e($item['code']); ?></a> </td>
-                                        <td> <?php echo e($item['type_vente']); ?> 
+                                        <td> <?php echo e($item['type_vente']); ?>
+
 
                                             <?php if($item['type_vente'] == 'commande'): ?>
-                                              <br>  <a href="<?php echo e(route('commande.show', $item['commande_id'])); ?>" class="text-primary fw-bold">#<?php echo $item['commande']['code']; ?></a>
+                                                <br> <a href="<?php echo e(route('commande.show', $item['commande_id'])); ?>"
+                                                    class="text-primary fw-bold">#<?php echo $item['commande']['code']; ?></a>
                                             <?php endif; ?>
                                         </td>
                                         <td> <?php echo e(\Carbon\Carbon::parse($item['date_vente'])->format('d-m-Y')); ?>

@@ -53,28 +53,37 @@
                             <p><strong>N° vente :</strong> #{{ $vente->code }}</p>
                             <p><strong>Date :</strong> {{ $vente->created_at->format('d/m/Y à H:i') }}</p>
                             @if ($vente->type_vente == 'commande')
-                            <p><strong>Type de vente :</strong> <a href="{{ route('commande.show', $vente->commande->id) }}"> {{ $vente->type_vente }}; #{{ $vente->commande->code }} </a></p>
+                                <p><strong>Type de vente :</strong> <a
+                                        href="{{ route('commande.show', $vente->commande->id) }}"> {{ $vente->type_vente }};
+                                        #{{ $vente->commande->code }} </a></p>
                             @else
-                            <p><strong>Type de vente :</strong> {{ $vente->type_vente }}</p>
+                                <p><strong>Type de vente :</strong> {{ $vente->type_vente }}</p>
                             @endif
                         </div>
                         <div class="col-md-4">
-                            <p><strong>remise :</strong> {{ $vente->valeur_remise ?? 0 }}
-                                {{ $vente->type_remise == 'amount' ? 'FCFA' : '%' }}</p>
+                            @if($vente->valeur_remise > 0)
+                                <p><strong>Remise :</strong> {{ $vente->valeur_remise }} {{ $vente->type_remise == 'amount' ? 'FCFA' : '%' }}</p>
+                            @endif
                             <p><strong>Montant vente :</strong> {{ $vente->montant_total }}</p>
                         </div>
-                       @if ($vente->type_vente != 'commande')
-                       <div class="col-md-4">
-                        <p><strong>Réglement :</strong> {{ $vente->mode_paiement }}</p>
-                        <p><strong>Montant réçu :</strong> {{ $vente->montant_recu }}</p>
-                        <p><strong>Montant rendu :</strong> {{ $vente->montant_rendu }}</p>
-                    </div>
-                       @endif
+                        {{-- @if ($vente->type_vente != 'commande') --}}
+                            <div class="col-md-4">
+                                @if($vente->mode_paiement)
+                                    <p><strong>Réglement :</strong> {{ $vente->mode_paiement }}</p>
+                                @endif
+                                @if($vente->montant_recu)
+                                    <p><strong>Montant reçu :</strong> {{ $vente->montant_recu }}</p>
+                                @endif
+                                @if($vente->montant_rendu)
+                                    <p><strong>Montant rendu :</strong> {{ $vente->montant_rendu }}</p>
+                                @endif
+                            </div>
+                        {{-- @endif --}}
                     </div>
                 </div>
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Produits de la vente </h5>
-                       
+
                     {{-- <div class="d-flex justify-content-end">
                         <button id="btnImprimerTicket" class="btn btn-secondary me-2 flot-end">  <i class="ri-printer-line align-bottom me-1"></i> Imprimer la fature</button>
                     <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">Nouvelle vente</a>
@@ -100,10 +109,55 @@
                                     <tr id="row_{{ $item['id'] }}">
                                         <td>{{ ++$key }}</td>
                                         <td>
-                                            <img class="rounded avatar-sm" src="{{ $item->getFirstMediaUrl('ProduitImage') }}"
-                                                width="50px" alt="{{$item['nom']}}">
+                                            <img class="rounded avatar-sm"
+                                                src="{{ $item->getFirstMediaUrl('ProduitImage') }}" width="50px"
+                                                alt="{{ $item['nom'] }}">
                                         </td>
                                         <td>{{ $item['nom'] }}</td>
+                                        <td>{{ $item['pivot']['quantite'] }}</td>
+                                        <td>{{ number_format($item['pivot']['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
+                                        <td>{{ number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ') }}
+                                            FCFA</td>
+                                    </tr>
+                                @endforeach
+
+
+                                @foreach ($vente->plats as $key => $item)
+                                    <tr id="row_{{ $item['id'] }}">
+                                        <td>
+                                            <span class="badge bg-primary">Vente depuis Menu du jour</span>
+                                        </td>
+                                        <td>
+                                            <img class="rounded avatar-sm"
+                                                src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
+                                                width="50px" alt="{{ $item['nom'] }}">
+                                        </td>
+                                        <td>
+                                            <p class="text-capitalize fw-bold ">{{ $item['nom'] }} * <span
+                                                    class="text-danger">{{ $item['pivot']['quantite'] }}</span></p>
+                                            @if (json_decode($item['pivot']['garniture']))
+                                                <div>
+                                                    <small class="ms-3 fw-bold">Garniture:</small>
+                                                    @foreach (json_decode($item['pivot']['garniture']) as $garniture)
+                                                        <div class="garniture ms-3">
+                                                            {{ $garniture->nom }} (Qté: {{ $garniture->quantity }})
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @endif
+
+
+                                            @if (json_decode($item['pivot']['complement']))
+                                                <div class="mt-2">
+                                                    <small class="ms-3 fw-bold">Complément:</small>
+                                                    @foreach (json_decode($item['pivot']['complement']) as $complement)
+                                                        <div class="complement ms-3">
+                                                            {{ $complement->nom }} (Qté: {{ $complement->quantity }})
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @endif
+                                        </td>
                                         <td>{{ $item['pivot']['quantite'] }}</td>
                                         <td>{{ number_format($item['pivot']['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
                                         <td>{{ number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ') }}
@@ -119,100 +173,94 @@
             </div>
 
             <!-- ========== Start facture generé ========== -->
-            <div class="ticket-container col-10 m-auto"
-                style="font-family: 'Courier New', monospace; font-size: 12px; width: 350px;">
-                <div class="ticket-header" style="text-align: center;">
-                    <h3>CHEZ JEANNE</h3>
-                    <h4>RESTAURANT LOUNGE</h4>
-                    <h5>AFRICAIN ET EUROPEEN</h5>
-                    <p>-------------------------------</p>
-                    <div style="display: flex; justify-content: space-between; padding: 0 10px;">
-                        <span><strong>Vente:</strong> #{{ $vente->code }}</span>
-                        <span><strong>Date:</strong> {{ $vente->created_at->format('d/m/Y à H:i') }}</span>
-                    </div>
+            <div class="ticket-container"
+                style="font-family: 'Courier New', monospace; font-size: 12px; width: 300px; margin: 0 auto;">
+                <div class="ticket-header" style="text-align: center; margin-bottom: 10px;">
+                    <h3 style="margin: 0;">CHEZ JEANNE</h3>
+                    <h4 style="margin: 0;">RESTAURANT LOUNGE</h4>
+                    <h5 style="margin: 5px 0;">AFRICAIN ET EUROPEEN</h5>
+                    <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
+                    <p>
+                        <strong>Vente:</strong> #{{ $vente->code }}<br>
+                        <strong>Date:</strong> {{ $vente->created_at->format('d/m/Y à H:i') }}
+                    </p>
                 </div>
-                <div class="ticket-info" style="padding: 0 10px;">
 
-                    <div style="display: flex; justify-content: space-between;">
-                        <span><strong>Table N° </strong> {{ $vente->numero_table ?? 0 }}</span>
-                        <span><strong>Couvert(s):</strong> {{ $vente->nombre_couverts ?? 0 }} </span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <span><strong>Caisse:</strong> {{ $vente->caisse->libelle ?? 'Non définie' }}</span>
-                        <span><strong>Caissier:</strong> {{ $vente->user->first_name }}
-                            {{ $vente->user->last_name }}</span>
-                    </div>
+                <div class="ticket-info" style="margin-bottom: 10px;">
+                    <p>
+                        <strong>Caisse:</strong> {{ Auth::user()->caisse->libelle ?? 'Non définie' }}<br>
+                        <strong>Caissier:</strong> {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
+                    </p>
+                    <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
                 </div>
-                <p style="text-align: center;">-------------------------------</p>
+
                 <div class="ticket-products">
-                    <table style="width: 100%;">
-                        <thead>
+                    <table style="width: 100%; font-size: 12px; border-collapse: collapse; margin-bottom: 10px;">
+                        <thead style="border-bottom: 1px dashed black;">
                             <tr>
-                                <th>Designation</th>
-                                <th>Qté</th>
-                                <th>P.U.</th>
-                                <th>Total</th>
+                                <th style="text-align: left;">Désignation</th>
+                                <th style="text-align: right;">P.U.</th>
+                                <th style="text-align: right;">Total</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($vente->produits as $produit)
                                 <tr>
-                                    <td>{{ $produit->nom }}</td>
-                                    <td>{{ $produit->pivot->quantite }}</td>
-                                    <td>{{ number_format($produit->pivot->prix_unitaire, 0, ',', ' ') }}</td>
-                                    <td>{{ number_format($produit->pivot->quantite * $produit->pivot->prix_unitaire, 0, ',', ' ') }}
+                                    <td>{{ $produit->nom }} x{{ $produit->pivot->quantite }}</td>
+                                    <td style="text-align: right;">
+                                        {{ number_format($produit->pivot->prix_unitaire, 0, ',', ' ') }}</td>
+                                    <td style="text-align: right;">
+                                        {{ number_format($produit->pivot->quantite * $produit->pivot->prix_unitaire, 0, ',', ' ') }}
                                     </td>
                                 </tr>
                             @endforeach
-                        <tfoot>
-                           
-                                @if ($vente->valeur_remise > 0)
-                                  <tr>
-                                    <th colspan="3" style="text-align: right;">Montant avant remise:</th>
-                                    <th> {{ number_format($vente->montant_avant_remise, 0, ',', ' ') }} FCFA</th>
-                                  </tr>
-                                 
-                                  <tr>
-                                    <th colspan="3" style="text-align: right;">Remise:</th>
-                                    <th>{{ $vente->valeur_remise }} {{ $vente->type_remise == 'percentage' ? '%' : 'FCFA' }} </th>
-                                  </tr>
-                                  <tr>
-                                    <th colspan="3" style="text-align: right;">Montant apres remise:</th>
-                                    <th> {{ number_format($vente->montant_total, 0, ',', ' ') }} FCFA</th>
-                                  </tr>
-                                @else
-                                <tr>
-                                    <th colspan="3" style="text-align: right;">Total:</th>
-                                    <th>{{ number_format($vente->montant_total, 0, ',', ' ') }} FCFA</th>
-                                </tr>
-                                @endif
 
-                           
-                        </tfoot>
+                            @foreach ($vente->plats as $plat)
+                                <tr>
+                                    <td>
+                                        {{ $plat->nom }} x{{ $plat->pivot->quantite }}
+                                        @if (json_decode($plat['pivot']['garniture']))
+                                            <small><br>- Garniture:
+                                                @foreach (json_decode($plat['pivot']['garniture']) as $garniture)
+                                                    {{ $garniture->nom }} (Qté: {{ $garniture->quantity }})
+                                                @endforeach
+                                            </small>
+                                        @endif
+                                        @if (json_decode($plat['pivot']['complement']))
+                                            <small><br>- Complément:
+                                                @foreach (json_decode($plat['pivot']['complement']) as $complement)
+                                                    {{ $complement->nom }} (Qté: {{ $complement->quantity }})
+                                                @endforeach
+                                            </small>
+                                        @endif
+                                    </td>
+                                    <td style="text-align: right;">
+                                        {{ number_format($plat->pivot->prix_unitaire, 0, ',', ' ') }}</td>
+                                    <td style="text-align: right;">
+                                        {{ number_format($plat->pivot->quantite * $plat->pivot->prix_unitaire, 0, ',', ' ') }}
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
-                </div>
-                {{-- <p style="text-align: center;">-------------------------------</p>
-                <div class="ticket-total" style="text-align: center;">
-                    <p><strong>Total:</strong> {{ number_format($vente->montant_total, 0, ',', ' ') }} FCFA</p>
-                </div> --}}
 
-                <p style="text-align: center;">-------------------------------</p>
 
-                <div class="reglement col-md-8 m-auto" style="text-align: justify;">
-                    <span><strong>Réglement:</strong> {{ $vente->created_at->format('d/m/Y à H:i:s') }}</span><br>
-                    <span><strong class="text-capitalize">{{ $vente->mode_paiement }}:</strong>
-                        {{ number_format($vente->montant_recu, 0, ',', ' ') }} FCFA</span><br>
-                    <span><strong>Rendu:</strong> {{ number_format($vente->montant_rendu, 0, ',', ' ') }} FCFA</span>
+
+                    <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
                 </div>
 
-                <p style="text-align: center;">-------------------------------</p>
+                <div class="ticket-total" style="text-align: right; margin-bottom: 10px;">
+                    <strong>Total:</strong> {{ number_format($vente->montant_total, 0, ',', ' ') }} FCFA
+                </div>
 
-                <div class="ticket-footer" style="text-align: center;">
+              
+
+                <div class="ticket-footer" style="text-align: center; font-size: 10px;">
                     <p>MERCI DE VOTRE VISITE</p>
-                    <p>AU REVOIR ET A BIENTÔT</p>
+                    <p>AU REVOIR ET À BIENTÔT</p>
                     <p>RESERVATIONS: 07-49-88-95-18</p>
-                    <p>A BIENTÔT</p>
+                    <p>www.chezjeanne.ci</p>
+
                 </div>
             </div>
 

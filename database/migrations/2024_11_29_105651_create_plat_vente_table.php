@@ -16,8 +16,8 @@ return new class extends Migration
             $table->integer('quantite')->nullable(); // quantite du produit
             $table->double('prix_unitaire')->nullable(); //prix  unitaire
             $table->double('total')->nullable(); // total quantite * prix unitaire
-            $table->string('garniture')->nullable(); //
-            $table->string('complement')->nullable(); //
+            $table->text('garniture')->nullable(); //
+            $table->text('complement')->nullable(); //
 
 
             $table->foreignId('vente_id')

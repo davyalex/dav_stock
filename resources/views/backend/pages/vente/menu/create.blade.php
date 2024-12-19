@@ -37,6 +37,11 @@
         <div class="container-fluid">
             @if (!$menu)
                 <p class="text-center">Aucun menu disponible pour aujourd'hui.</p>
+                @can('voir-menu')
+                    <div class="text-center mt-4">
+                        <a href="{{ route('menu.create') }}" class="btn btn-success">Créer un nouveau menu</a>
+                    </div>
+                @endcan
             @else
                 <h1 class="text-center my-4">Menu du <span>{{ \Carbon\Carbon::parse($menu->date)->format('d/m/Y') }}</span>
                 </h1>
@@ -52,7 +57,6 @@
                                 <div class="card-body">
                                     <div class="row">
                                         @foreach ($plats as $platKey => $plat)
-                                            
                                             <div class="col-md-6 mb-3">
                                                 <div class="card h-100">
                                                     <div class="card-body">
@@ -61,8 +65,7 @@
                                                                 <input type="checkbox" data-price="{{ $plat->prix }}"
                                                                     id="plat_{{ $plat->id }}"
                                                                     class="form-check-input plat-checkbox" name="plats[]"
-                                                                    value="{{ $plat->id }}"
-                                                                  >
+                                                                    value="{{ $plat->id }}">
                                                                 <label for="plat_{{ $plat->id }}"
                                                                     class="form-check-label fw-bold text-capitalize fs-6">
                                                                     {{ $plat->nom }}
@@ -80,9 +83,8 @@
                                                                             onclick="decreaseValue(this)">-</div>
                                                                         <input id="quantity"
                                                                             class="cart-plus-minus-box quantityPlat text-danger"
-                                                                            type="text" name="quantity"
-                                                                            value="1" min="1"
-                                                                            readonly>
+                                                                            type="text" name="quantity" value="1"
+                                                                            min="1" readonly>
                                                                         <div class="inc qtybutton"
                                                                             onclick="increaseValue(this)">+</div>
                                                                     </div>
@@ -102,15 +104,13 @@
                                                                         compléments :</p>
                                                                     <form class="complement-form">
                                                                         @foreach ($plat->complements as $complementKey => $complement)
-                                                                          
                                                                             <div class="form-check">
                                                                                 <input type="checkbox"
                                                                                     id="complement_{{ $platKey }}_{{ $complementKey }}"
                                                                                     name="complements_{{ $platKey }}[]"
                                                                                     class="form-check-input complement-checkbox"
                                                                                     data-plat-id="{{ $plat->id }}"
-                                                                                    value="{{ $complement->id }}"
-                                                                                   >
+                                                                                    value="{{ $complement->id }}">
                                                                                 <label
                                                                                     for="complement_{{ $platKey }}_{{ $complementKey }}"
                                                                                     class="form-check-label">
@@ -126,8 +126,8 @@
                                                                                         <input id="quantity"
                                                                                             class="cart-plus-minus-box quantityComplement text-danger"
                                                                                             type="text" name="quantity"
-                                                                                            value="1"
-                                                                                            min="1" readonly>
+                                                                                            value="1" min="1"
+                                                                                            readonly>
                                                                                         <div class="inc qtybutton"
                                                                                             onclick="increaseValue(this)">+
                                                                                         </div>
@@ -145,15 +145,13 @@
                                                                         garnitures :</p>
                                                                     <form class="garniture-form">
                                                                         @foreach ($plat->garnitures as $garnitureKey => $garniture)
-                                                                           
                                                                             <div class="form-check">
                                                                                 <input type="checkbox"
                                                                                     id="garniture_{{ $platKey }}_{{ $garnitureKey }}"
                                                                                     name="garnitures_{{ $platKey }}[]"
                                                                                     class="form-check-input garniture-checkbox"
                                                                                     data-plat-id="{{ $plat->id }}"
-                                                                                    value="1"
-                                                                                    >
+                                                                                    value="1">
                                                                                 <label
                                                                                     for="garniture_{{ $platKey }}_{{ $garnitureKey }}"
                                                                                     class="form-check-label">
@@ -169,8 +167,8 @@
                                                                                         <input id="quantity"
                                                                                             class="cart-plus-minus-box quantityGarniture text-danger"
                                                                                             type="text" name="quantity"
-                                                                                            value="1"
-                                                                                            min="1" readonly>
+                                                                                            value="1" min="1"
+                                                                                            readonly>
                                                                                         <div class="inc qtybutton"
                                                                                             onclick="increaseValue(this)">+
                                                                                         </div>
@@ -198,7 +196,7 @@
                         @endif --}}
                         <div class="card" style="background-color:rgb(240, 234, 234) ; position: fixed ; width: 400px;">
                             <div class="card-body total-payment-container">
-                                <h2 class="card-title fw-bold fs-3 mb-3">Total: <span id="totalAmount">0</span></h2>
+                                <h2 class="card-title fs-3 mb-3">Montant à payer: <span class="fw-bold" id="totalAmount">0</span></h2>
 
                                 <div class="payment-method mb-3">
                                     <label for="paymentMethod">Moyen de paiement:</label>
@@ -226,9 +224,8 @@
                                     <h4>Monnaie rendu : <span id="changeGiven">0</span> FCFA</h4>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-success addCart text-white w-100 "
-                               >
-                                <i class="fa fa-shopping-cart"></i> Commander
+                            <button type="button" class="btn btn-success addCartMenu text-white w-100 ">
+                                <i class="fa fa-shopping-cart"></i> Confirmer la vente
                             </button>
                         </div>
 
@@ -267,7 +264,7 @@
                 </div>
             @endif
         </div>
-        @include('site.components.ajouter-au-panier-menu')
+        @include('backend.components.ajouter-au-panier-menu')
     </div>
 
 
@@ -362,7 +359,7 @@
                 // Réinitialiser la quantité à 0 si décoché
                 quantityInput.value = 1;
                 updatePlatPrice(quantityInput);
-                
+
                 updateTotalPrice();
             }
         }

@@ -93,6 +93,11 @@ class SiteController extends Controller
                 'email' => 'required|email',
                 'message' => 'required|string',
                 'objet' => 'required|string',
+                'g-recaptcha-response' => 'required|captcha',
+                
+            ] , [
+                'g-recaptcha-response.required' => 'Le champ reCAPTCHA est obligatoire.',
+                'g-recaptcha-response.captcha' => 'La validation reCAPTCHA a échoué. Veuillez réessayer.',
             ]);
 
             // Récupérer les données du formulaire
@@ -127,11 +132,13 @@ class SiteController extends Controller
             Mail::to('info@chezjeanne.ci')->queue(new ContactMail($data));
             Alert::success('Votre message a bien été envoyé');
             return back();
+            
 
             // Rediriger avec un message de succès
             
         } catch (\Throwable $th) {
-            return $th->getMessage();
+            Alert::error('Une erreur est survenue', $th->getMessage());
+            return back();
         }
     }
 

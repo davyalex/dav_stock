@@ -92,11 +92,6 @@
                             id="sidebarConfiguration">
                             <ul class="nav nav-sm flex-column">
 
-
-
-
-
-
                                 <li class="nav-item active">
                                     <a href="<?php echo e(route('magasin.index')); ?>"
                                         class="nav-link <?php echo e(Route::is('magasin.*') ? 'active' : ''); ?>">Magasin</a>
@@ -359,7 +354,8 @@
                                 
                                 <li class="nav-item">
                                     <a href="<?php echo e(route('permission.index')); ?>"
-                                        class="nav-link <?php echo e(Route::is('permission.*') ? 'active' : ''); ?>">Permissions/ Roles</a>
+                                        class="nav-link <?php echo e(Route::is('permission.*') ? 'active' : ''); ?>">Permissions/
+                                        Roles</a>
                                 </li>
                             </ul>
                         </div>

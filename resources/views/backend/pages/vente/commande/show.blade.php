@@ -104,7 +104,8 @@
                                                 src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
                                                 width="50px" alt="{{ $item['nom'] }}">
                                         </td>
-                                        <td>{{ $item['nom'] }} * <span class="text-danger">{{ $item['pivot']['quantite'] }}</span> </td>
+                                        <td>{{ $item['nom'] }} * <span
+                                                class="text-danger">{{ $item['pivot']['quantite'] }}</span> </td>
                                         {{-- <td>{{ $item['pivot']['quantite'] }}</td> --}}
                                         <td>{{ number_format($item['pivot']['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
                                         <td>{{ number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ') }}
@@ -171,7 +172,8 @@
             <!-- ========== Start facture generé ========== -->
 
 
-            <div class="ticket-container" style="font-family: 'Courier New', monospace; font-size: 12px; width: 300px; margin: 0 auto;">
+            <div class="ticket-container"
+                style="font-family: 'Courier New', monospace; font-size: 12px; width: 300px; margin: 0 auto;">
                 <div class="ticket-header" style="text-align: center; margin-bottom: 10px;">
                     <h3 style="margin: 0;">CHEZ JEANNE</h3>
                     <h4 style="margin: 0;">RESTAURANT LOUNGE</h4>
@@ -182,7 +184,7 @@
                         <strong>Date:</strong> {{ $commande->created_at->format('d/m/Y à H:i') }}
                     </p>
                 </div>
-            
+
                 <div class="ticket-info" style="margin-bottom: 10px;">
                     <p>
                         <strong>Caisse:</strong> {{ Auth::user()->caisse->libelle ?? 'Non définie' }}<br>
@@ -190,7 +192,7 @@
                     </p>
                     <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
                 </div>
-            
+
                 <div class="ticket-products">
                     <table style="width: 100%; font-size: 12px; border-collapse: collapse; margin-bottom: 10px;">
                         <thead style="border-bottom: 1px dashed black;">
@@ -204,11 +206,14 @@
                             @foreach ($commande->produits as $produit)
                                 <tr>
                                     <td>{{ $produit->nom }} x{{ $produit->pivot->quantite }}</td>
-                                    <td style="text-align: right;">{{ number_format($produit->pivot->prix_unitaire, 0, ',', ' ') }}</td>
-                                    <td style="text-align: right;">{{ number_format($produit->pivot->quantite * $produit->pivot->prix_unitaire, 0, ',', ' ') }}</td>
+                                    <td style="text-align: right;">
+                                        {{ number_format($produit->pivot->prix_unitaire, 0, ',', ' ') }}</td>
+                                    <td style="text-align: right;">
+                                        {{ number_format($produit->pivot->quantite * $produit->pivot->prix_unitaire, 0, ',', ' ') }}
+                                    </td>
                                 </tr>
                             @endforeach
-            
+
                             @foreach ($commande->plats as $plat)
                                 <tr>
                                     <td>
@@ -228,39 +233,44 @@
                                             </small>
                                         @endif
                                     </td>
-                                    <td style="text-align: right;">{{ number_format($plat->pivot->prix_unitaire, 0, ',', ' ') }}</td>
-                                    <td style="text-align: right;">{{ number_format($plat->pivot->quantite * $plat->pivot->prix_unitaire, 0, ',', ' ') }}</td>
+                                    <td style="text-align: right;">
+                                        {{ number_format($plat->pivot->prix_unitaire, 0, ',', ' ') }}</td>
+                                    <td style="text-align: right;">
+                                        {{ number_format($plat->pivot->quantite * $plat->pivot->prix_unitaire, 0, ',', ' ') }}
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
 
-                    
-            
+
+
                     <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
                 </div>
-            
+
                 <div class="ticket-total" style="text-align: right; margin-bottom: 10px;">
                     <strong>Total:</strong> {{ number_format($commande->montant_total, 0, ',', ' ') }} FCFA
                 </div>
-            
+
                 <div class="ticket-client" style="margin-bottom: 10px;">
                     <p>
-                        <strong>Nom du client:</strong> {{ $commande->client->first_name }} {{ $commande->client->last_name }}<br>
+                        <strong>Nom du client:</strong> {{ $commande->client->first_name }}
+                        {{ $commande->client->last_name }}<br>
                         <strong>Contact:</strong> {{ $commande->client->phone }}<br>
                         <strong>Mode de livraison:</strong> {{ $commande->mode_livraison }}<br>
                         <strong>Adresse:</strong> {{ $commande->adresse_livraison ?? 'Au restaurant' }}
                     </p>
                     <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
                 </div>
-            
+
                 <div class="ticket-footer" style="text-align: center; font-size: 10px;">
                     <p>MERCI DE VOTRE VISITE</p>
                     <p>AU REVOIR ET À BIENTÔT</p>
                     <p>RESERVATIONS: 07-49-88-95-18</p>
+                    <p>www.chezjeanne.ci</p>
                 </div>
             </div>
-            
+
 
 
             <script>
@@ -324,6 +334,11 @@
                         location.reload(); // Recharger la page pour afficher les changements
                     } else {
                         alert('Une erreur est survenue lors de la mise à jour du statut');
+                    }
+
+                    if(response.statut == 'confirmée'){
+                        window.location.href = '{{ route('vente.show', ':idVente') }}'
+                        .replace(':idVente', response.idVente);
                     }
                 },
                 error: function() {
