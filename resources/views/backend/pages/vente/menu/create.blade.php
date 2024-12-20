@@ -1,4 +1,4 @@
-@extends('backend.layouts.master')
+{{-- @extends('backend.layouts.master')
 @section('title')
     Vente Menu
 @endsection
@@ -15,7 +15,7 @@
         @slot('title')
             Point de Vente
         @endslot
-    @endcomponent
+    @endcomponent --}}
     <style>
         .menu-image {
             max-width: 100%;
@@ -36,7 +36,7 @@
     <div class="shop-page-area pt-10 pb-100">
         <div class="container-fluid">
             @if (!$menu)
-                <p class="text-center">Aucun menu disponible pour aujourd'hui.</p>
+                <h3 class="text-center text-danger ">Le Menu du jour n'est pas encore disponible.</h3>
                 @can('voir-menu')
                     <div class="text-center mt-4">
                         <a href="{{ route('menu.create') }}" class="btn btn-success">Créer un nouveau menu</a>
@@ -654,4 +654,4 @@
 
 
 
-@endsection
+{{-- @endsection --}}

@@ -1,219 +1,170 @@
-
-<?php $__env->startSection('title'); ?>
+@extends('backend.layouts.master')
+@section('title')
     Vente
-<?php $__env->stopSection(); ?>
-<?php $__env->startSection('content'); ?>
-    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
-        <?php $__env->slot('li_1'); ?>
+@endsection
+@section('content')
+    @component('backend.components.breadcrumb')
+        @slot('li_1')
             Vente
-        <?php $__env->endSlot(); ?>
-        <?php $__env->slot('title'); ?>
+        @endslot
+        @slot('title')
             Point de Vente
-        <?php $__env->endSlot(); ?>
-    <?php echo $__env->renderComponent(); ?>
-
+        @endslot
+    @endcomponent
     <div class="row">
-        <div class="col-xxl-8">
+        <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-pills nav-custom nav-custom-light mb-3 w-100" role="tablist">
-                        <li class="nav-item w-50">
-                            <a class="nav-link active w-100" data-bs-toggle="tab" href="#nav-vente-ordinaire" role="tab">
-                              Vente Ordinaire
-                            </a>
-                        </li>
-                        <li class="nav-item w-50">
-                            <a class="nav-link w-100" data-bs-toggle="tab" href="#nav-vente-menu" role="tab">
-                                Vente Menu
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="tab-content text-muted">
-                        <div class="tab-pane active" id="nav-vente-ordinaire" role="tabpanel">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-body"> 
-                                        <div class="row">
-                                            <div class="col-10">
-                                                <select name="produit_id" class="form-select js-example-basic-single product-select">
-                                                    <option value="">Sélectionnez un produit</option>
-                                                    <?php $__currentLoopData = $data_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                        <?php if($produit->stock == 0 && $produit->categorie->famille == 'bar'): ?>
-                                                            <option value="<?php echo e($produit->id); ?>" data-price="<?php echo e($produit->prix); ?>"
-                                                                data-stock="<?php echo e($produit->stock); ?>" disabled>
-                                                                <?php echo e($produit->nom); ?> <?php echo e($produit->valeur_unite ?? ''); ?>
-
-                                                                <?php echo e($produit->unite->libelle ?? ''); ?>
-
-                                                                <?php echo e($produit->unite ? '(' . $produit->unite->abreviation . ')' : ''); ?>
-
-                                                                (<?php echo e($produit->prix); ?> FCFA)
-                                                                - <span style="color: red" class="text-danger">(Stock: <?php echo e($produit->stock); ?>)</span>
-                                                            </option>
-                                                        <?php else: ?>
-                                                            <option value="<?php echo e($produit->id); ?>" data-price="<?php echo e($produit->prix); ?>"
-                                                                data-stock="<?php echo e($produit->stock); ?>">
-                                                                <?php echo e($produit->nom); ?> <?php echo e($produit->valeur_unite ?? ''); ?>
-
-                                                                <?php echo e($produit->unite->libelle ?? ''); ?>
-
-                                                                <?php echo e($produit->unite ? '(' . $produit->unite->abreviation . ')' : ''); ?>
-
-                                                                (<?php echo e($produit->prix); ?> FCFA)
-                                                                - <span class="text-primary">(Stock: <?php echo e($produit->stock); ?>)</span>
-                            
-                                                            </option>
-                                                        <?php endif; ?>
-                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                </select>
-                                            </div>
-                                            <div class="col-2">
-                                                <a href="<?php echo e(route('vente.menu.create')); ?>" class="btn btn-danger" >Vente du menu</a>
-                                            </div>
-                                        </div>
-                                        
-                                      
-                                    </div>
-                                </div>
-                            </div>
-                    
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h4 class="card-title mb-4">Panier</h4>
-                                        <div class="table-responsive">
-                                            <div class="alert alert-danger d-none" role="alert">
-                                               <span id="errorMessage"></span>
-                                            </div>
-                                            <table class="table table-bordered" id="cart-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Produit</th>
-                                                        <th>Mode de vente</th>
-                                                        <th>Prix unitaire</th>
-                                                        <th>Quantité</th>
-                                                        
-                                                        <th>Total</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                    
-                    
-                                     
-                    
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="row">
+                        <div class="col-10">
+                            <select name="produit_id" class="form-select js-example-basic-single product-select">
+                                <option value="">Sélectionnez un produit</option>
+                                @foreach ($data_produit as $produit)
+                                    @if ($produit->stock == 0 && $produit->categorie->famille == 'bar')
+                                        <option value="{{ $produit->id }}" data-price="{{ $produit->prix }}"
+                                            data-stock="{{ $produit->stock }}" disabled>
+                                            {{ $produit->nom }} {{ $produit->valeur_unite ?? '' }}
+                                            {{ $produit->unite->libelle ?? '' }}
+                                            {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
+                                            ({{ $produit->prix }} FCFA)
+                                            - <span style="color: red" class="text-danger">(Stock: {{{$produit->stock}}})</span>
+                                        </option>
+                                    @else
+                                        <option value="{{ $produit->id }}" data-price="{{ $produit->prix }}"
+                                            data-stock="{{ $produit->stock }}">
+                                            {{ $produit->nom }} {{ $produit->valeur_unite ?? '' }}
+                                            {{ $produit->unite->libelle ?? '' }}
+                                            {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
+                                            ({{ $produit->prix }} FCFA)
+                                            - <span class="text-primary">(Stock: {{{$produit->stock}}})</span>
+        
+                                        </option>
+                                    @endif
+                                @endforeach
+                            </select>
                         </div>
-                        <div class="tab-pane" id="nav-vente-menu" role="tabpanel">
-                            <?php echo $__env->make('backend.pages.vente.menu.create', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                        <div class="col-2">
+                            <a href="{{route('vente.menu.create')}}" class="btn btn-danger" >Vente du menu</a>
                         </div>
-                      
                     </div>
-                </div><!-- end card-body -->
+                    {{-- <h4 class="card-title mb-4">Sélection des produits</h4> --}}
+                  
+                </div>
             </div>
         </div>
 
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Panier</h4>
+                    <div class="table-responsive">
+                        <div class="alert alert-danger d-none" role="alert">
+                           <span id="errorMessage"></span>
+                        </div>
+                        <table class="table table-bordered" id="cart-table">
+                            <thead>
+                                <tr>
+                                    <th>Produit</th>
+                                    <th>Mode de vente</th>
+                                    <th>Prix unitaire</th>
+                                    <th>Quantité</th>
+                                    {{-- <th>Remise (%)</th> --}}
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
 
 
-        <!-- ========== Start Total  ========== -->
-       <div class="col-xxl-4">
-         <div class="p-3" style="background-color:rgb(240, 234, 234) ; position: fixed ; width: 400px;">
-               <!-- Total geral, remise e montant depois da remise -->
-               <div class=" mt-3">
-                <h4>Sous Total : <span id="grand-total">0</span> FCFA</h4>
-                <h4>Total remise : <span id="discount-amount">0</span> FCFA</h4>
-                <h4>Total TTC : <span id="total-after-discount">0</span> FCFA</h4>
-            </div>
+                    <!-- Total geral, remise e montant depois da remise -->
+                    <div class="text-end mt-3">
+                        <h4>Sous Total : <span id="grand-total">0</span> FCFA</h4>
+                        <h4>Total remise : <span id="discount-amount">0</span> FCFA</h4>
+                        <h4>Total TTC : <span id="total-after-discount">0</span> FCFA</h4>
+                    </div>
 
-            <!-- Seleção do tipo de remise e remise -->
-            <div class="row mt-3">
-                <div class="col-md-6">
-                    <label for="discount-type">Type de remise</label>
-                    <select id="discount-type" class="form-select" name="discount_type">
-                        <option selected disabled value="">Selectionner</option>
-                        <option value="percentage">Pourcentage</option>
-                        <option value="amount">Montant fixe</option>
-                    </select>
+                    <!-- Seleção do tipo de remise e remise -->
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="discount-type">Type de remise</label>
+                            <select id="discount-type" class="form-select" name="discount_type">
+                                <option selected disabled value="">Selectionner</option>
+                                <option value="percentage">Pourcentage</option>
+                                <option value="amount">Montant fixe</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="total-discount">Valeur de la remise</label>
+                            <input type="number" id="total-discount" name="total_discount" class="form-control"
+                                value="0" min="0">
+                        </div>
+                    </div>
+
+
+                    <!-- Numéro de table et nombre de couverts -->
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="table-number">Numéro de table</label>
+                            <input type="number" name="numero_table" id="table-number" class="form-control"
+                                placeholder="Numéro de table" min="1">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="number-covers">Nombre de couverts</label>
+                            <input type="number" name="nombre_couverts" id="number-covers" class="form-control"
+                                value="1" min="1">
+                        </div>
+                    </div>
+
+                    <!-- Informations de<|pad|>glement -->
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="payment-method">Mode du réglement</label>
+                            <select id="payment-method" name="mode_reglement" class="form-select" required>
+                                <option value="orange money">Orange Money</option>
+                                <option value="moov money">Moov Money</option>
+                                <option value="mtn money">MTN Money</option>
+                                <option value="wave">Wave</option>
+                                <option value="visa">Visa</option>
+                                <option value="mastercard">MasterCard</option>
+                                <option value="espece" selected>Espèce</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="received-amount">Montant réçu</label>
+                            <input type="number" name="montant_recu" id="received-amount" class="form-control"
+                                min="0" required>
+                        </div>
+                    </div>
+
+                    <div class="text-end mt-3">
+                        <h4>Monnaie rendu : <span id="change-amount">0</span> FCFA</h4>
+                    </div>
+
+                    <!-- Bouton de validation -->
+                    <div class="mt-3">
+                        <button type="button" id="validate-sale" class="btn btn-primary w-100">Valider la vente</button>
+                    </div>
+
                 </div>
-
-                <div class="col-md-6">
-                    <label for="total-discount">Valeur de la remise</label>
-                    <input type="number" id="total-discount" name="total_discount" class="form-control"
-                        value="0" min="0">
-                </div>
             </div>
-
-
-            <!-- Numéro de table et nombre de couverts -->
-            <div class="row mt-3">
-                <div class="col-md-6">
-                    <label for="table-number">Numéro de table</label>
-                    <input type="number" name="numero_table" id="table-number" class="form-control"
-                        placeholder="Numéro de table" min="1">
-                </div>
-
-                <div class="col-md-6">
-                    <label for="number-covers">Nombre de couverts</label>
-                    <input type="number" name="nombre_couverts" id="number-covers" class="form-control"
-                        value="1" min="1">
-                </div>
-            </div>
-
-            <!-- Informations de<|pad|>glement -->
-            <div class="row mt-3">
-                <div class="col-md-6">
-                    <label for="payment-method">Mode du réglement</label>
-                    <select id="payment-method" name="mode_reglement" class="form-select" required>
-                        <option value="orange money">Orange Money</option>
-                        <option value="moov money">Moov Money</option>
-                        <option value="mtn money">MTN Money</option>
-                        <option value="wave">Wave</option>
-                        <option value="visa">Visa</option>
-                        <option value="mastercard">MasterCard</option>
-                        <option value="espece" selected>Espèce</option>
-                    </select>
-                </div>
-
-                <div class="col-md-6">
-                    <label for="received-amount">Montant réçu</label>
-                    <input type="number" name="montant_recu" id="received-amount" class="form-control"
-                        min="0" required>
-                </div>
-            </div>
-
-            <div class=" mt-3">
-                <h4>Monnaie rendu : <span id="change-amount">0</span> FCFA</h4>
-            </div>
-
-            <!-- Bouton de validation -->
-            <div class="mt-3">
-                <button type="button" id="validate-sale" class="btn btn-primary w-100">Valider la vente</button>
-            </div>
-         </div>
-       </div>
-        <!-- ========== End Total  ========== -->
-        
+        </div>
     </div>
+@endsection
 
-
-
-  
-<?php $__env->stopSection(); ?>
-
-<?php $__env->startSection('script'); ?>
+@section('script')
     <script>
         $(document).ready(function() {
             let cart = [];
             let totalDiscountType = 'percentage';
             let totalDiscountValue = 0;
             let grandTotal = 0;
-            var dataProduct = <?php echo json_encode($data_produit, 15, 512) ?>; // Données récupérées depuis le contrôleur
+            var dataProduct = @json($data_produit); // Données récupérées depuis le contrôleur
 
             $('.product-select').change(function() {
                 
@@ -230,9 +181,7 @@
                     addToCart(productId, productName, productPrice, productStock);
                     updateCartTable();
                     updateGrandTotal();
-                    verifyQty();
                 }
-               
             });
 
             $('#discount-type').change(function() {
@@ -260,13 +209,11 @@
                         name: name,
                         price: price,
                         stock: stock,
-                        selectedVariante: variante ? variante : null, // ajoute la variante choisie
+                        selectedVariante: variante, // ajoute la variante choisie
                         quantity: 1,
                         discount: 0
                     });
                 }
-                console.log('panier : ', cart);
-                
             }
 
 
@@ -284,7 +231,7 @@
                     if (selectedProduct && selectedProduct.variantes) {
                         selectedProduct.variantes.forEach(variante => {
                             // Garde la sélection de la variante dans le tableau affiché
-                            let isSelected = item.selectedVariante == variante.id ? 'selected' :
+                            let isSelected = item.selectedVariante === variante.id ? 'selected' :
                                 '';
                             variantesOptions += `
                 <option value="${variante.id}" data-price="${variante.pivot.prix}" ${isSelected}>
@@ -292,6 +239,7 @@
                 </option>`;
 
                         });
+
 
                     }
 
@@ -381,10 +329,31 @@
                 $('#change-amount').text(changeAmount < 0 ? 0 : changeAmount);
             }
 
-          
+            // function verifyQty() {
+            //     var dataProduct = @json($data_produit);
+
+            //     cart.forEach((item, index) => {
+            //         var product = dataProduct.find(dataItem => dataItem.id == item.id);
+
+            //         if (product.categorie.famille === 'bar' && item.quantity > product.stock) {
+            //             Swal.fire({
+            //                 title: 'Erreur',
+            //                 text: 'La quantité entrée dépasse la quantité en stock pour le produit "' +
+            //                     item.name + '"',
+            //                 icon: 'error',
+            //             });
+
+            //             $('#validate-sale').prop('disabled', true);
+            //         } else {
+            //             $('#validate-sale').prop('disabled', false);
+            //         }
+            //     });
+            // }
+
+            
 
             function verifyQty() {
-                var dataProduct = <?php echo json_encode($data_produit, 15, 512) ?>;
+                var dataProduct = @json($data_produit);
                 var allQuantitiesValid = true; // Pour suivre si toutes les quantités sont valides
 
                 cart.forEach((item) => {
@@ -399,16 +368,7 @@
 
                         allQuantitiesValid =
                             false; // Marquer comme invalide si une quantité dépasse le stock
-
-                           
-
-
                     }
-// si la quantité est égale au stock alors empecher d'augmenter
-                    if (item.quantity == product.stock) {
-                        $('.increase-qty[data-index="' + cart.indexOf(item) + '"]').prop('disabled', true);
-                    }
-                  
                 });
 
                 // Si toutes les quantités sont valides, masquer l'alerte
@@ -497,7 +457,7 @@
                 }
 
                 $.ajax({
-                    url: '<?php echo e(route('vente.store')); ?>',
+                    url: '{{ route('vente.store') }}',
                     type: 'POST',
                     data: {
                         cart: cart,
@@ -511,7 +471,7 @@
                         montantRendu: montantRendu,
                         numeroDeTable: numeroDeTable,
                         nombreDeCouverts: nombreDeCouverts,
-                        _token: '<?php echo e(csrf_token()); ?>'
+                        _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
                         Swal.fire({
@@ -527,7 +487,7 @@
                                 $('#table-number').val('');
                                 $('#number-covers').val(1);
 
-                                window.location.href = '<?php echo e(route('vente.show', ':idVente')); ?>'
+                                window.location.href = '{{ route('vente.show', ':idVente') }}'
                                     .replace(':idVente', response.idVente);
                         });
                     },
@@ -543,6 +503,4 @@
             });
         });
     </script>
-<?php $__env->stopSection(); ?>
-
-<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/vente/create.blade.php ENDPATH**/ ?>
+@endsection

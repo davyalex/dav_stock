@@ -79,24 +79,6 @@ class VenteController extends Controller
             })
                 ->with(['categorie', 'variantes'])
                 ->get();
-            // ->where(function ($query) {
-            //     $query->whereHas('categorie', function ($subQuery) {
-            //         $subQuery->where('famille', 'menu');
-            //     })
-            //         ->orWhere(function ($subQuery) {
-            //             $subQuery->whereHas('categorie', function ($subSubQuery) {
-            //                 $subSubQuery->where('famille', 'bar');
-            //             })->whereHas('achats', function ($achatsQuery) {
-            //                 $achatsQuery->where('statut', 'active');
-            //             });
-            //         });
-            // })
-            // ->with(['categorie', 'achats' => function ($query) {
-            //     $query->where('statut', 'active')->orderBy('created_at', 'asc');
-            // }])
-
-
-
 
             // dd(Session::get('session_date'));
 
@@ -104,7 +86,60 @@ class VenteController extends Controller
                 $query->where('name', 'client');
             })->get();
 
-            return view('backend.pages.vente.create', compact('data_produit', 'data_client'));
+
+
+
+            ####################### // script pour la gestion de menu ##################
+            // recuperer le menu du jour en session
+            $cartMenu = Session::get('cartMenu');
+
+
+            // Récupérer le menu du jour avec les produits, compléments et garnitures
+            $menu = Menu::where('date_menu', Carbon::today()->toDateString())
+                ->with([
+                    'plats' => function ($query) {
+                        $query->with([
+                            'categorieMenu',  // Relation vers la catégorie de produit
+                            'complements' => function ($query) {
+                                $query->wherePivot('menu_id', function ($subQuery) {
+                                    $subQuery->select('id')
+                                        ->from('menus')
+                                        ->where('date_menu', Carbon::today()->toDateString());
+                                });
+                            },
+                            'garnitures' => function ($query) {
+                                $query->wherePivot('menu_id', function ($subQuery) {
+                                    $subQuery->select('id')
+                                        ->from('menus')
+                                        ->where('date_menu', Carbon::today()->toDateString());
+                                });
+                            }
+                        ]);
+                    },
+                ])->first();
+
+            // Vérifier s'il y a un menu
+            if (!$menu) {
+                return view('backend.pages.vente.create', ['menu' => null, 'categories' => [] , 'cartMenu' => $cartMenu , 'data_produit' => $data_produit, 'data_client' => $data_client] , );
+            }
+
+            // Grouper les produits par nom de catégorie et trier par position de catégorie
+            $categories = $menu->plats
+                ->groupBy(function ($plat) {
+                    return $plat->categorieMenu->nom; // Grouper par le nom de la catégorie
+                })
+                ->sortBy(function ($group, $key) {
+                    // Trier les groupes par la position des catégories
+                    $categorie = $group->first()->categorieMenu;
+                    return $categorie ? $categorie->position : 0; // Si une catégorie n'a pas de position, utiliser 0
+                });
+
+
+
+            // dd($menu->toArray);
+
+
+            return view('backend.pages.vente.create', compact('data_produit', 'data_client', 'categories', 'menu', 'cartMenu'));
         } catch (\Exception $e) {
             // Gestion des erreurs
             return back()->with('error', 'Une erreur est survenue lors du chargement du formulaire de création : ' . $e->getMessage());
