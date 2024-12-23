@@ -115,15 +115,15 @@
 
         <!-- ========== Start Total  ========== -->
        <div class="col-xxl-4">
-         <div class="p-3" style="background-color:rgb(240, 234, 234) ; position: fixed ; width: 400px;">
+         <div class="p-3" style="background-color:rgb(240, 234, 234) ; position: top ; width: 400px;">
                <!-- Total geral, remise e montant depois da remise -->
                <div class=" mt-3">
                    <h6>Total ordinaire : <span id="grand-total">0</span> FCFA</h6>
                    <h6>Total menu : <span id="totalAmount">0</span> </h6>
-                   {{-- <h6>Total Net : <span id="totalNet">0</span> FCFA</h6> --}}
+                   <h6>Total Net : <span id="totalNet">0</span> FCFA</h6>
 
 
-                <h5>Remise : <span id="discount-amount">0</span> FCFA</h5>
+                <h6>Remise : <span id="discount-amount">0</span> FCFA</h6>
                 <h4>Total à payer : <span id="total-after-discount">0</span> FCFA</h4>
             </div>
 
@@ -211,6 +211,7 @@
             let totalDiscountType = 'percentage';
             let totalDiscountValue = 0;
             let grandTotal = 0;
+            // let totalNet = 0;
             var dataProduct = @json($data_produit); // Données récupérées depuis le contrôleur
 
             $('.product-select').change(function() {
@@ -228,21 +229,29 @@
                     addToCart(productId, productName, productPrice, productStock);
                     updateCartTable();
                     updateGrandTotal();
+                    totalNet();
                     verifyQty();
+
+                    $(this).val(null).trigger('change'); // Réinitialise Select2
                 }
                
             });
-
+                // type de remise
             $('#discount-type').change(function() {
                 totalDiscountType = $(this).val() || 0;
-                updateGrandTotal();
+                // updateGrandTotal();
+                totalNet();
             });
-
+                // taux de la remise
             $('#total-discount').on('input', function() {
                 totalDiscountValue = parseFloat($(this).val() || 0);
-                updateGrandTotal();
+                // updateGrandTotal();
+                totalNet();
+
             });
 
+
+            // montant reçu
             $('#received-amount').on('input', function() {
                 updateChangeAmount();
             });
@@ -266,7 +275,6 @@
                 console.log('panier : ', cart);
                 
             }
-
 
 
 
@@ -348,6 +356,7 @@
                         $(this).closest('tr').find('.total-cell').text(calculateTotal(cart[index]) +
                             ' FCFA');
                         updateGrandTotal();
+                        totalNet();
                     }
                 });
             }
@@ -358,23 +367,29 @@
                 return (item.price * item.quantity) - discountAmount;
             }
 
-            function updateGrandTotal(totalAddPlatMenu = null) {
 
-                // grand total est le total vente ordinaire
-                grandTotal = cart.reduce((sum, item) => sum + calculateTotal(item), 0);
-                let discountAmount = 0;
+         function totalNet(totalAddPlatMenu = null){
+                    let grandTotalValue = parseFloat($('#grand-total').text());
+                   
+
+               // Si totalAddPlatMenu est null, on le considère comme 0
+               totalAddPlatMenu = totalAddPlatMenu !== null ? totalAddPlatMenu : 0;
+                    let totalNet = grandTotalValue + totalAddPlatMenu;
+                        $('#totalNet').text(totalNet);
+
+                        // calcul du montant apres remise
+                        let discountAmount = 0;
 
                 if (totalDiscountType === 'percentage') {
-                    discountAmount = (grandTotal * totalDiscountValue) / 100;
+                    discountAmount = (totalNet * totalDiscountValue) / 100;
                 } else if (totalDiscountType === 'amount') {
                     discountAmount = totalDiscountValue;
                 }
 
-                 // Si totalAddPlatMenu est null, on le considère comme 0
-                totalAddPlatMenu = totalAddPlatMenu !== null ? totalAddPlatMenu : 0;
+              
 
-// total apres reduction 
-                let totalAfterDiscount = grandTotal - discountAmount + totalAddPlatMenu ;
+                    // total apres reduction 
+                let totalAfterDiscount = totalNet - discountAmount  ;
                 totalAfterDiscount = totalAfterDiscount < 0 ? 0 : totalAfterDiscount;
 
                  // Fonction pour extraire un nombre depuis une chaîne formatée
@@ -383,11 +398,46 @@
                 //             }
 
                           
-                $('#grand-total').text(grandTotal); // total vente ordinaire
+                $('#totalNet').text(totalNet);
                 $('#discount-amount').text(discountAmount);
                 $('#total-after-discount').text(totalAfterDiscount);
+                        
+                // updateChangeAmount();
 
-                updateChangeAmount();
+            }
+            window.totalNet = totalNet;
+
+
+
+            function updateGrandTotal() {
+
+                // grand total est le total vente ordinaire
+                grandTotal = cart.reduce((sum, item) => sum + calculateTotal(item), 0);
+
+//                 if (totalDiscountType === 'percentage') {
+//                     discountAmount = (grandTotal * totalDiscountValue) / 100;
+//                 } else if (totalDiscountType === 'amount') {
+//                     discountAmount = totalDiscountValue;
+//                 }
+
+//                  // Si totalAddPlatMenu est null, on le considère comme 0
+//                 totalAddPlatMenu = totalAddPlatMenu !== null ? totalAddPlatMenu : 0;
+
+// // total apres reduction 
+//                 let totalAfterDiscount = grandTotal - discountAmount + totalAddPlatMenu ;
+//                 totalAfterDiscount = totalAfterDiscount < 0 ? 0 : totalAfterDiscount;
+
+//                  // Fonction pour extraire un nombre depuis une chaîne formatée
+//                 //  function parseFormattedNumber(numberString) {
+//                 //                 return parseFloat(numberString.replace(/\s/g, '').replace(',', '.')) || 0;
+//                 //             }
+
+                          
+                $('#grand-total').text(grandTotal); // total vente ordinaire
+//                 $('#discount-amount').text(discountAmount);
+//                 $('#total-after-discount').text(totalAfterDiscount);
+
+//                 updateChangeAmount();
             }
 
             // Expose the function to the global scope
@@ -420,6 +470,9 @@
                         allQuantitiesValid =
                             false; // Marquer comme invalide si une quantité dépasse le stock
 
+                           
+
+
                     }
 // si la quantité est égale au stock alors empecher d'augmenter
                     if (item.quantity == product.stock) {
@@ -444,6 +497,7 @@
                 cart[index].quantity += 1;
                 updateCartTable();
                 updateGrandTotal();
+                totalNet();
                 verifyQty();
             });
 
@@ -453,6 +507,7 @@
                     cart[index].quantity -= 1;
                     updateCartTable();
                     updateGrandTotal();
+                    totalNet();
                     verifyQty();
                 }
             });
@@ -464,6 +519,7 @@
                     cart[index].quantity = newQuantity;
                     updateCartTable();
                     updateGrandTotal();
+                    totalNet();
                 }
             });
 
@@ -473,6 +529,7 @@
                 cart[index].discount = newDiscount;
                 updateCartTable();
                 updateGrandTotal();
+                totalNet()
             });
 
             $(document).on('click', '.remove-item', function() {
@@ -481,6 +538,8 @@
                 updateCartTable();
                 updateGrandTotal();
                 verifyQty()
+                totalNet();
+
             });
 
             

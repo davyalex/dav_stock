@@ -35,11 +35,11 @@
                                 <div class="card">
                                     <div class="card-body"> 
                                         <div class="row">
-                                            <div class="col-10">
+                                            <div class="col-12">
                                                 <select name="produit_id" class="form-select js-example-basic-single product-select">
                                                     <option value="">Sélectionnez un produit</option>
                                                     <?php $__currentLoopData = $data_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                        <?php if($produit->stock == 0 && $produit->categorie->famille == 'bar'): ?>
+                                                        <?php if($produit->stock <= 0 && $produit->categorie->famille == 'bar'): ?>
                                                             <option value="<?php echo e($produit->id); ?>" data-price="<?php echo e($produit->prix); ?>"
                                                                 data-stock="<?php echo e($produit->stock); ?>" disabled>
                                                                 <?php echo e($produit->nom); ?> <?php echo e($produit->valeur_unite ?? ''); ?>
@@ -68,9 +68,7 @@
                                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </select>
                                             </div>
-                                            <div class="col-2">
-                                                <a href="<?php echo e(route('vente.menu.create')); ?>" class="btn btn-danger" >Vente du menu</a>
-                                            </div>
+                                           
                                         </div>
                                         
                                       
@@ -126,9 +124,13 @@
          <div class="p-3" style="background-color:rgb(240, 234, 234) ; position: fixed ; width: 400px;">
                <!-- Total geral, remise e montant depois da remise -->
                <div class=" mt-3">
-                <h4>Sous Total : <span id="grand-total">0</span> FCFA</h4>
-                <h4>Total remise : <span id="discount-amount">0</span> FCFA</h4>
-                <h4>Total TTC : <span id="total-after-discount">0</span> FCFA</h4>
+                   <h6>Total ordinaire : <span id="grand-total">0</span> FCFA</h6>
+                   <h6>Total menu : <span id="totalAmount">0</span> </h6>
+                   
+
+
+                <h5>Remise : <span id="discount-amount">0</span> FCFA</h5>
+                <h4>Total à payer : <span id="total-after-discount">0</span> FCFA</h4>
             </div>
 
             <!-- Seleção do tipo de remise e remise -->
@@ -206,9 +208,11 @@
   
 <?php $__env->stopSection(); ?>
 
+
 <?php $__env->startSection('script'); ?>
     <script>
         $(document).ready(function() {
+
             let cart = [];
             let totalDiscountType = 'percentage';
             let totalDiscountValue = 0;
@@ -310,20 +314,27 @@
                     // Ajoute une ligne pour chaque produit dans le tableau
                     tbody.append(`
         <tr>
-            <td>${item.name}</td>
-            <td>${varianteSelectHtml}</td>
-            <td class="price-cell">${item.price} FCFA</td>
-            <td>
-                <button class="btn btn-secondary btn-sm decrease-qty" data-index="${index}">-</button>
-                <input readonly type="number" class="form-control quantity-input d-inline-block text-center" value="${item.quantity}" min="1" style="width: 60px;" data-index="${index}">
-                <button class="btn btn-secondary btn-sm increase-qty" data-index="${index}">+</button>
-            </td>
-            <td class="d-none">
-                <input type="number" class="form-control discount-input" value="${item.discount}" min="0" max="100" data-index="${index}">
-            </td>
-            <td class="total-cell">${calculateTotal(item)} FCFA</td>
-            <td><button class="btn btn-danger btn-sm remove-item" data-index="${index}">Supprimer</button></td>
-        </tr>
+    <td>${item.name}</td>
+    <td>${varianteSelectHtml}</td>
+    <td class="price-cell">${item.price} FCFA</td>
+    <td class="d-flex justify-content-between align-items-center">
+        <div class="btn-group" role="group" aria-label="Quantity control">
+            <button class="btn btn-primary btn-sm decrease-qty" data-index="${index}">-</button>
+            <button class="btn btn-secondary btn-sm increase-qty" data-index="${index}">+</button>
+        </div>
+        <input readonly type="number" class="form-control quantity-input text-center" value="${item.quantity}" min="1" style="width: 50px;" data-index="${index}">
+    </td>
+    <td class="d-none">
+        <input type="number" class="form-control discount-input" value="${item.discount}" min="0" max="100" data-index="${index}">
+    </td>
+    <td class="total-cell">${calculateTotal(item)} FCFA</td>
+    <td>
+        <button class="btn btn-danger btn-sm remove-item" data-index="${index}"> 
+            <i class="ri ri-delete-bin-2-fill"></i> 
+        </button>
+    </td>
+</tr>
+
     `);
                 });
 
@@ -353,7 +364,9 @@
                 return (item.price * item.quantity) - discountAmount;
             }
 
-            function updateGrandTotal() {
+            function updateGrandTotal(totalAddPlatMenu = null) {
+
+                // grand total est le total vente ordinaire
                 grandTotal = cart.reduce((sum, item) => sum + calculateTotal(item), 0);
                 let discountAmount = 0;
 
@@ -363,15 +376,28 @@
                     discountAmount = totalDiscountValue;
                 }
 
-                let totalAfterDiscount = grandTotal - discountAmount;
+                 // Si totalAddPlatMenu est null, on le considère comme 0
+                totalAddPlatMenu = totalAddPlatMenu !== null ? totalAddPlatMenu : 0;
+
+// total apres reduction 
+                let totalAfterDiscount = grandTotal - discountAmount + totalAddPlatMenu ;
                 totalAfterDiscount = totalAfterDiscount < 0 ? 0 : totalAfterDiscount;
 
-                $('#grand-total').text(grandTotal);
+                 // Fonction pour extraire un nombre depuis une chaîne formatée
+                //  function parseFormattedNumber(numberString) {
+                //                 return parseFloat(numberString.replace(/\s/g, '').replace(',', '.')) || 0;
+                //             }
+
+                          
+                $('#grand-total').text(grandTotal); // total vente ordinaire
                 $('#discount-amount').text(discountAmount);
                 $('#total-after-discount').text(totalAfterDiscount);
 
-                updateChangeAmount();
+                // updateChangeAmount();
             }
+
+            // Expose the function to the global scope
+            window.updateGrandTotal = updateGrandTotal;
 
             function updateChangeAmount() {
                 let receivedAmount = parseFloat($('#received-amount').val() || 0);
@@ -466,6 +492,8 @@
                 verifyQty()
             });
 
+            
+
             $('#validate-sale').click(function(e) {
                 let montantAvantRemise = parseFloat($('#grand-total').text() || 0);
                 let montantApresRemise = parseFloat($('#total-after-discount').text() || 0);
@@ -543,6 +571,8 @@
             });
         });
     </script>
+
+<script src="<?php echo e(URL::asset('myJs/js/create-vente-menu.js')); ?>"></script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/vente/create.blade.php ENDPATH**/ ?>

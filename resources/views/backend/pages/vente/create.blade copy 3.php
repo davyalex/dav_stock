@@ -118,13 +118,11 @@
          <div class="p-3" style="background-color:rgb(240, 234, 234) ; position: fixed ; width: 400px;">
                <!-- Total geral, remise e montant depois da remise -->
                <div class=" mt-3">
-                   <h6>Total ordinaire : <span id="grand-total">0</span> FCFA</h6>
-                   <h6>Total menu : <span id="totalAmount">0</span> </h6>
-                   {{-- <h6>Total Net : <span id="totalNet">0</span> FCFA</h6> --}}
-
+                <h5>Sous Total ordinaire : <span id="grand-total">0</span> FCFA</h5>
+                <h5>Sous Total menu : <span id="totalAmount">0</span> FCFA</h5>
 
                 <h5>Remise : <span id="discount-amount">0</span> FCFA</h5>
-                <h4>Total à payer : <span id="total-after-discount">0</span> FCFA</h4>
+                <h4>Total TTC : <span id="total-after-discount">0</span> FCFA</h4>
             </div>
 
             <!-- Seleção do tipo de remise e remise -->
@@ -359,8 +357,6 @@
             }
 
             function updateGrandTotal(totalAddPlatMenu = null) {
-
-                // grand total est le total vente ordinaire
                 grandTotal = cart.reduce((sum, item) => sum + calculateTotal(item), 0);
                 let discountAmount = 0;
 
@@ -373,7 +369,7 @@
                  // Si totalAddPlatMenu est null, on le considère comme 0
                 totalAddPlatMenu = totalAddPlatMenu !== null ? totalAddPlatMenu : 0;
 
-// total apres reduction 
+
                 let totalAfterDiscount = grandTotal - discountAmount + totalAddPlatMenu ;
                 totalAfterDiscount = totalAfterDiscount < 0 ? 0 : totalAfterDiscount;
 
@@ -383,7 +379,7 @@
                 //             }
 
                           
-                $('#grand-total').text(grandTotal); // total vente ordinaire
+                $('#grand-total').text(grandTotal); // total ordinaire
                 $('#discount-amount').text(discountAmount);
                 $('#total-after-discount').text(totalAfterDiscount);
 
@@ -419,6 +415,9 @@
 
                         allQuantitiesValid =
                             false; // Marquer comme invalide si une quantité dépasse le stock
+
+                           
+
 
                     }
 // si la quantité est égale au stock alors empecher d'augmenter
