@@ -54,6 +54,34 @@ function updatePlatPrice(input) {
 }
 
 // Fonction pour mettre à jour le tableau des prix totaux
+// function updateTotalPrice() {
+//     const platCheckboxes = document.querySelectorAll(".plat-checkbox:checked");
+//     let total = 0;
+
+//     platCheckboxes.forEach((checkbox) => {
+//         const parent = checkbox.closest(".card-body");
+//         const quantityInput = parent.querySelector(".cart-plus-minus-box");
+//         const price = parseFloat(checkbox.dataset.price || 0);
+//         const quantity = parseInt(quantityInput.value, 10) || 0;
+
+//         total += price * quantity;
+//     });
+
+//     // Appeler la fonction définie dans le fichier Blade
+//     if (typeof window.updateGrandTotal === "function") {
+//         window.updateGrandTotal(total);
+//         // window.updateTotalNet(total)
+//     } else {
+//         console.error("La fonction updateGrandTotal n'est pas définie.");
+//     }
+//     // Mettre à jour l'affichage du total dans un élément spécifique
+//     const totalDisplay = document.getElementById("totalAmount");
+//     if (totalDisplay) {
+//         totalDisplay.textContent = total.toLocaleString("fr-FR") + " FCFA"; // Adapter selon votre devise
+//     }
+// }
+
+
 function updateTotalPrice() {
     const platCheckboxes = document.querySelectorAll(".plat-checkbox:checked");
     let total = 0;
@@ -65,28 +93,29 @@ function updateTotalPrice() {
         const quantity = parseInt(quantityInput.value, 10) || 0;
 
         total += price * quantity;
-
-        // Appeler la fonction définie dans le fichier Blade
-        if (typeof window.updateGrandTotal === "function") {
-            window.updateGrandTotal(total);
-            // window.updateTotalNet(total)
-        } else {
-            console.error("La fonction updateGrandTotal n'est pas définie.");
-        }
-
-        // additionner le plat choisit au total global
-        //  let totalAfterDiscount = parseFloat($("#total-after-discount").text());
-
-        //  let totalGlobal = totalAfterDiscount + total
-        //  $('#total-after-discount').text(totalGlobal);
     });
 
-    // Mettre à jour l'affichage du total dans un élément spécifique
+    // Mettre à jour l'affichage dans le DOM
     const totalDisplay = document.getElementById("totalAmount");
     if (totalDisplay) {
-        totalDisplay.textContent = total.toLocaleString("fr-FR") + " FCFA"; // Adapter selon votre devise
+        totalDisplay.textContent = total.toLocaleString("fr-FR") + " FCFA"; // Mise à jour
+    }
+
+    // Appeler updateGrandTotal
+    if (typeof window.updateGrandTotal === "function") {
+        setTimeout(() => {
+            const totalMenu = parseFloat(
+                totalDisplay.textContent
+                    .replace(/\s/g, "")
+                    .replace("FCFA", "") || 0
+            );
+            window.updateGrandTotal(totalMenu);
+        }, 10);
+    } else {
+        console.error("La fonction updateGrandTotal n'est pas définie.");
     }
 }
+
 
 // Fonction pour gérer l'ajout ou le retrait des prix dans le tableau
 function handlePlatSelection(checkbox) {

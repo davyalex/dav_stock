@@ -13,7 +13,7 @@
     @endcomponent
 
     <div class="row">
-        <div class="col-xxl-8">
+        <div class="col-8">
             <div class="card">
                 <div class="card-body">
                     <!-- Nav tabs -->
@@ -114,13 +114,13 @@
 
 
         <!-- ========== Start Total  ========== -->
-       <div class="col-xxl-4">
-         <div class="p-3" style="background-color:rgb(240, 234, 234) ; position: fixed ; width: 400px;">
+       <div class="col-4 ">
+         <div class="p-3" style="background-color:rgb(240, 234, 234) ; position: top ; width: 400px;">
                <!-- Total geral, remise e montant depois da remise -->
                <div class=" mt-3">
                    <h6>Total ordinaire : <span id="grand-total">0</span> FCFA</h6>
                    <h6>Total menu : <span id="totalAmount">0</span> </h6>
-                   {{-- <h6>Total Net : <span id="totalNet">0</span> FCFA</h6> --}}
+                   <h6>Total Net : <span id="totalNet">0</span> FCFA</h6>
 
 
                 <h5>Remise : <span id="discount-amount">0</span> FCFA</h5>
@@ -229,6 +229,9 @@
                     updateCartTable();
                     updateGrandTotal();
                     verifyQty();
+
+                      // Réinitialiser Select2 à l'option par défaut
+        $(this).val(null).trigger('change'); // Réinitialise Select2
                 }
                
             });
@@ -264,7 +267,6 @@
                     });
                 }
                 console.log('panier : ', cart);
-                
             }
 
 
@@ -364,8 +366,22 @@
                 grandTotal = cart.reduce((sum, item) => sum + calculateTotal(item), 0);
                 let discountAmount = 0;
 
+                // recuperer le total de menu
+                let totalMenu = $('#totalAmount').text().replace(/\s/g, '');
+                let totalMenuValue = parseFloat(totalMenu); // total des plats du menu
+
+                
+
+                // calculer le total net menu + ordinaire
+                let totalNet = grandTotal + totalMenuValue;
+                // afficher
+                $('#totalNet').text(totalNet);
+
+              
+               
+
                 if (totalDiscountType === 'percentage') {
-                    discountAmount = (grandTotal * totalDiscountValue) / 100;
+                    discountAmount = (totalNet * totalDiscountValue) / 100 ;
                 } else if (totalDiscountType === 'amount') {
                     discountAmount = totalDiscountValue;
                 }
@@ -373,8 +389,8 @@
                  // Si totalAddPlatMenu est null, on le considère comme 0
                 totalAddPlatMenu = totalAddPlatMenu !== null ? totalAddPlatMenu : 0;
 
-// total apres reduction 
-                let totalAfterDiscount = grandTotal - discountAmount + totalAddPlatMenu ;
+                // total apres reduction 
+                let totalAfterDiscount = totalNet - discountAmount   ;
                 totalAfterDiscount = totalAfterDiscount < 0 ? 0 : totalAfterDiscount;
 
                  // Fonction pour extraire un nombre depuis une chaîne formatée
@@ -390,9 +406,45 @@
                 updateChangeAmount();
             }
 
+
+//             function updateGrandTotal(totalAddPlatMenu = null) {
+//             console.log("Valeur reçue par updateGrandTotal:", totalAddPlatMenu);
+
+//             const cart = []; // Exemple : Remplacez par votre logique pour obtenir les articles du panier
+//             let grandTotal = cart.reduce((sum, item) => sum + calculateTotal(item), 0);
+//             console.log("Grand total ordinaire:", grandTotal);
+
+//             const totalMenu = $('#totalAmount').text().replace(/\s/g, '');
+//             const totalMenuValue = parseFloat(totalMenu) || 0;
+
+//             let totalNet = grandTotal + totalMenuValue;
+//             $('#totalNet').text(totalNet.toLocaleString("fr-FR") + " FCFA");
+
+//             let discountAmount = 0;
+//             if (totalDiscountType === 'percentage') {
+//                 discountAmount = (totalNet * totalDiscountValue) / 100;
+//             } else if (totalDiscountType === 'amount') {
+//                 discountAmount = totalDiscountValue;
+//             }
+
+//             totalAddPlatMenu = totalAddPlatMenu !== null ? totalAddPlatMenu : 0;
+
+//             let totalAfterDiscount = totalNet - discountAmount;
+//             totalAfterDiscount = totalAfterDiscount < 0 ? 0 : totalAfterDiscount;
+
+//             $('#grand-total').text(grandTotal.toLocaleString("fr-FR") + " FCFA");
+//             $('#discount-amount').text(discountAmount.toLocaleString("fr-FR") + " FCFA");
+//             $('#total-after-discount').text(totalAfterDiscount.toLocaleString("fr-FR") + " FCFA");
+
+//             updateChangeAmount(); // Appelez votre fonction de mise à jour supplémentaire
+// }
+
+
             // Expose the function to the global scope
             window.updateGrandTotal = updateGrandTotal;
 
+
+            // calcul du montant reçu
             function updateChangeAmount() {
                 let receivedAmount = parseFloat($('#received-amount').val() || 0);
                 let totalAfterDiscount = parseFloat($('#total-after-discount').text());
