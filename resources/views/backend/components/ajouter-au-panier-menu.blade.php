@@ -667,7 +667,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css
 
 
 <script>
-    document.querySelector('.addCartMenu').addEventListener('click', function() {
+    document.querySelector('.validate-sale').addEventListener('click', function() {
         const plats = document.querySelectorAll('.plat-checkbox:checked');
         const panier = [];
         let validationEchouee = false;

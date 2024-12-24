@@ -189,7 +189,7 @@
 
             <!-- Bouton de validation -->
             <div class="mt-3">
-                <button type="button" id="validate-sale" class="btn btn-primary w-100">Valider la vente</button>
+                <button type="button"  class="btn btn-primary w-100 validate-sale">Valider la vente</button>
             </div>
          </div>
        </div>
@@ -313,13 +313,15 @@
     <td>${item.name}</td>
     <td>${varianteSelectHtml}</td>
     <td class="price-cell">${item.price} FCFA</td>
-    <td class="d-flex justify-content-between align-items-center">
-        <div class="btn-group" role="group" aria-label="Quantity control">
-            <button class="btn btn-primary btn-sm decrease-qty" data-index="${index}">-</button>
-            <button class="btn btn-secondary btn-sm increase-qty" data-index="${index}">+</button>
-        </div>
-        <input readonly type="number" class="form-control quantity-input text-center" value="${item.quantity}" min="1" style="width: 50px;" data-index="${index}">
-    </td>
+    <td class="d-flex justify-content-center align-items-center">
+    <div class="d-flex align-items-center">
+        <button class="btn btn-primary btn-sm decrease-qty" data-index="${index}">-</button>
+        <input readonly type="number" class="form-control quantity-input text-center mx-2" 
+               value="${item.quantity}" min="1" style="width: 50px;">
+        <button class="btn btn-secondary btn-sm increase-qty" data-index="${index}">+</button>
+    </div>
+</td>
+
     <td class="d-none">
         <input type="number" class="form-control discount-input" value="${item.discount}" min="0" max="100" data-index="${index}">
     </td>
@@ -486,7 +488,7 @@
                 }
 
                 // Activer ou désactiver le bouton selon la validité des quantités
-                $('#validate-sale').prop('disabled', !allQuantitiesValid);
+                $('.validate-sale').prop('disabled', !allQuantitiesValid);
             }
 
 
@@ -537,7 +539,7 @@
 
             
 
-            $('#validate-sale').click(function(e) {
+            $('.validate-sale').click(function(e) {
                 let montantAvantRemise = parseFloat($('#grand-total').text() || 0);
                 let montantApresRemise = parseFloat($('#total-after-discount').text() || 0);
                 let montantRemise = parseFloat($('#discount-amount').text() || 0);

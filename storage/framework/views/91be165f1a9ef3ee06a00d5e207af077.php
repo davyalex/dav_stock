@@ -13,7 +13,7 @@
     <?php echo $__env->renderComponent(); ?>
 
     <div class="row">
-        <div class="col-xxl-8">
+        <div class="col-8">
             <div class="card">
                 <div class="card-body">
                     <!-- Nav tabs -->
@@ -120,13 +120,13 @@
 
 
         <!-- ========== Start Total  ========== -->
-       <div class="col-xxl-4">
-         <div class="p-3" style="background-color:rgb(240, 234, 234) ; position: fixed ; width: 400px;">
+       <div class="col-4 ">
+         <div class="p-3" style="background-color:rgb(240, 234, 234) ; position: top ; width: 400px;">
                <!-- Total geral, remise e montant depois da remise -->
                <div class=" mt-3">
                    <h6>Total ordinaire : <span id="grand-total">0</span> FCFA</h6>
                    <h6>Total menu : <span id="totalAmount">0</span> </h6>
-                   
+                   <h6>Total Net : <span id="totalNet">0</span> FCFA</h6>
 
 
                 <h5>Remise : <span id="discount-amount">0</span> FCFA</h5>
@@ -195,7 +195,7 @@
 
             <!-- Bouton de validation -->
             <div class="mt-3">
-                <button type="button" id="validate-sale" class="btn btn-primary w-100">Valider la vente</button>
+                <button type="button"  class="btn btn-primary w-100 validate-sale">Valider la vente</button>
             </div>
          </div>
        </div>
@@ -235,6 +235,9 @@
                     updateCartTable();
                     updateGrandTotal();
                     verifyQty();
+
+                      // Réinitialiser Select2 à l'option par défaut
+        $(this).val(null).trigger('change'); // Réinitialise Select2
                 }
                
             });
@@ -270,7 +273,6 @@
                     });
                 }
                 console.log('panier : ', cart);
-                
             }
 
 
@@ -317,13 +319,15 @@
     <td>${item.name}</td>
     <td>${varianteSelectHtml}</td>
     <td class="price-cell">${item.price} FCFA</td>
-    <td class="d-flex justify-content-between align-items-center">
-        <div class="btn-group" role="group" aria-label="Quantity control">
-            <button class="btn btn-primary btn-sm decrease-qty" data-index="${index}">-</button>
-            <button class="btn btn-secondary btn-sm increase-qty" data-index="${index}">+</button>
-        </div>
-        <input readonly type="number" class="form-control quantity-input text-center" value="${item.quantity}" min="1" style="width: 50px;" data-index="${index}">
-    </td>
+    <td class="d-flex justify-content-center align-items-center">
+    <div class="d-flex align-items-center">
+        <button class="btn btn-primary btn-sm decrease-qty" data-index="${index}">-</button>
+        <input readonly type="number" class="form-control quantity-input text-center mx-2" 
+               value="${item.quantity}" min="1" style="width: 50px;">
+        <button class="btn btn-secondary btn-sm increase-qty" data-index="${index}">+</button>
+    </div>
+</td>
+
     <td class="d-none">
         <input type="number" class="form-control discount-input" value="${item.discount}" min="0" max="100" data-index="${index}">
     </td>
@@ -370,8 +374,22 @@
                 grandTotal = cart.reduce((sum, item) => sum + calculateTotal(item), 0);
                 let discountAmount = 0;
 
+                // recuperer le total de menu
+                let totalMenu = $('#totalAmount').text().replace(/\s/g, '');
+                let totalMenuValue = parseFloat(totalMenu); // total des plats du menu
+
+                
+
+                // calculer le total net menu + ordinaire
+                let totalNet = grandTotal + totalMenuValue;
+                // afficher
+                $('#totalNet').text(totalNet);
+
+              
+               
+
                 if (totalDiscountType === 'percentage') {
-                    discountAmount = (grandTotal * totalDiscountValue) / 100;
+                    discountAmount = (totalNet * totalDiscountValue) / 100 ;
                 } else if (totalDiscountType === 'amount') {
                     discountAmount = totalDiscountValue;
                 }
@@ -379,8 +397,8 @@
                  // Si totalAddPlatMenu est null, on le considère comme 0
                 totalAddPlatMenu = totalAddPlatMenu !== null ? totalAddPlatMenu : 0;
 
-// total apres reduction 
-                let totalAfterDiscount = grandTotal - discountAmount + totalAddPlatMenu ;
+                // total apres reduction 
+                let totalAfterDiscount = totalNet - discountAmount   ;
                 totalAfterDiscount = totalAfterDiscount < 0 ? 0 : totalAfterDiscount;
 
                  // Fonction pour extraire un nombre depuis une chaîne formatée
@@ -393,12 +411,48 @@
                 $('#discount-amount').text(discountAmount);
                 $('#total-after-discount').text(totalAfterDiscount);
 
-                // updateChangeAmount();
+                updateChangeAmount();
             }
+
+
+//             function updateGrandTotal(totalAddPlatMenu = null) {
+//             console.log("Valeur reçue par updateGrandTotal:", totalAddPlatMenu);
+
+//             const cart = []; // Exemple : Remplacez par votre logique pour obtenir les articles du panier
+//             let grandTotal = cart.reduce((sum, item) => sum + calculateTotal(item), 0);
+//             console.log("Grand total ordinaire:", grandTotal);
+
+//             const totalMenu = $('#totalAmount').text().replace(/\s/g, '');
+//             const totalMenuValue = parseFloat(totalMenu) || 0;
+
+//             let totalNet = grandTotal + totalMenuValue;
+//             $('#totalNet').text(totalNet.toLocaleString("fr-FR") + " FCFA");
+
+//             let discountAmount = 0;
+//             if (totalDiscountType === 'percentage') {
+//                 discountAmount = (totalNet * totalDiscountValue) / 100;
+//             } else if (totalDiscountType === 'amount') {
+//                 discountAmount = totalDiscountValue;
+//             }
+
+//             totalAddPlatMenu = totalAddPlatMenu !== null ? totalAddPlatMenu : 0;
+
+//             let totalAfterDiscount = totalNet - discountAmount;
+//             totalAfterDiscount = totalAfterDiscount < 0 ? 0 : totalAfterDiscount;
+
+//             $('#grand-total').text(grandTotal.toLocaleString("fr-FR") + " FCFA");
+//             $('#discount-amount').text(discountAmount.toLocaleString("fr-FR") + " FCFA");
+//             $('#total-after-discount').text(totalAfterDiscount.toLocaleString("fr-FR") + " FCFA");
+
+//             updateChangeAmount(); // Appelez votre fonction de mise à jour supplémentaire
+// }
+
 
             // Expose the function to the global scope
             window.updateGrandTotal = updateGrandTotal;
 
+
+            // calcul du montant reçu
             function updateChangeAmount() {
                 let receivedAmount = parseFloat($('#received-amount').val() || 0);
                 let totalAfterDiscount = parseFloat($('#total-after-discount').text());
@@ -426,9 +480,6 @@
                         allQuantitiesValid =
                             false; // Marquer comme invalide si une quantité dépasse le stock
 
-                           
-
-
                     }
 // si la quantité est égale au stock alors empecher d'augmenter
                     if (item.quantity == product.stock) {
@@ -443,7 +494,7 @@
                 }
 
                 // Activer ou désactiver le bouton selon la validité des quantités
-                $('#validate-sale').prop('disabled', !allQuantitiesValid);
+                $('.validate-sale').prop('disabled', !allQuantitiesValid);
             }
 
 
@@ -494,7 +545,7 @@
 
             
 
-            $('#validate-sale').click(function(e) {
+            $('.validate-sale').click(function(e) {
                 let montantAvantRemise = parseFloat($('#grand-total').text() || 0);
                 let montantApresRemise = parseFloat($('#total-after-discount').text() || 0);
                 let montantRemise = parseFloat($('#discount-amount').text() || 0);
