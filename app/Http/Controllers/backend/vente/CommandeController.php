@@ -15,9 +15,19 @@ class CommandeController extends Controller
     public function index()
     {
         try {
-            $commandes = Commande::with('client', 'produits', 'plats')->orderBy('created_at', 'desc')->get();
-            // dd( $commandes->toArray());
-            return view('backend.pages.vente.commande.index', compact('commandes'));
+
+            $statut = ['en attente', 'confirmée', 'livrée', 'annulée'];
+            
+                $filter = request('filter');
+            $commandes = Commande::with('client', 'produits', 'plats')
+            ->when($filter, function ($query) use ($filter) {
+                return $query->where('statut', $filter);
+            })
+            ->orderBy('created_at', 'desc') // Trier par date de création (récent en premier)
+            ->get();
+        
+            // dd( $filter);
+            return view('backend.pages.vente.commande.index', compact('commandes' , 'statut'));
         } catch (\Exception $e) {
             Alert::error('Erreur', 'Une erreur est survenue lors de la récupération des commandes : ' . $e->getMessage());
             return back();

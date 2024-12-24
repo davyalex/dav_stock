@@ -120,7 +120,7 @@ class VenteController extends Controller
 
             // Vérifier s'il y a un menu
             if (!$menu) {
-                return view('backend.pages.vente.create', ['menu' => null, 'categories' => [] , 'cartMenu' => $cartMenu , 'data_produit' => $data_produit, 'data_client' => $data_client] , );
+                return view('backend.pages.vente.create', ['menu' => null, 'categories' => [], 'cartMenu' => $cartMenu, 'data_produit' => $data_produit, 'data_client' => $data_client],);
             }
 
             // Grouper les produits par nom de catégorie et trier par position de catégorie
@@ -167,6 +167,8 @@ class VenteController extends Controller
 
             //recuperation des informations depuis ajax
             $cart = $request->input('cart');
+            $cartMenu = $request->input('cartMenu');
+
             $montantAvantRemise = $request->input('montantAvantRemise');
             $montantApresRemise = $request->input('montantApresRemise');
             $montantRemise = $request->input('montantRemise');
@@ -219,30 +221,47 @@ class VenteController extends Controller
 
             // Préparation des données pour la table pivot
 
-            foreach ($cart as $item) {
-                // Attachement des produits à la vente
-                $vente->produits()->attach($item['id'], [
-                    'quantite' => $item['quantity'],
-                    'prix_unitaire' => $item['price'],
-                    'total' => $item['price'] * $item['quantity'],
-                    'unite_vente_id' => $item['selectedVariante'] ?? null,
-                ]);
+            if (!empty($cart)) {
+                foreach ($cart as $item) {
+                    // Attachement des produits à la vente
+                    $vente->produits()->attach($item['id'], [
+                        'quantite' => $item['quantity'],
+                        'prix_unitaire' => $item['price'],
+                        'total' => $item['price'] * $item['quantity'],
+                        'unite_vente_id' => $item['selectedVariante'] ?? null,
+                    ]);
 
-                // Mise à jour du stock du produit
-                $produit = Produit::find($item['id']);
-                $quantiteVendue = $item['quantity'];
-
-                if ($produit->categorie->famille == 'bar') {
                     // Mise à jour du stock du produit
-                    $produit->stock -= $quantiteVendue;
-                    $produit->save();
+                    $produit = Produit::find($item['id']);
+                    $quantiteVendue = $item['quantity'];
 
-                    // Mise à jour de la quantité stockée dans l'achat
-                    $achat = $produit->achats()->latest()->first();
-                    if ($achat) {
-                        $achat->quantite_stocke -= $quantiteVendue;
-                        $achat->save();
+                    if ($produit->categorie->famille == 'bar') {
+                        // Mise à jour du stock du produit
+                        $produit->stock -= $quantiteVendue;
+                        $produit->save();
+
+                        // Mise à jour de la quantité stockée dans l'achat
+                        $achat = $produit->achats()->latest()->first();
+                        if ($achat) {
+                            $achat->quantite_stocke -= $quantiteVendue;
+                            $achat->save();
+                        }
                     }
+                }
+            }
+
+
+             // inserer les produits dans la vente
+             if (!empty($cartMenu)) {
+                foreach ($cartMenu as $item) {
+                    $plat = $item['plat'];
+                    $vente->plats()->attach($plat['id'], [
+                        'quantite' => $plat['quantity'],
+                        'prix_unitaire' => $plat['price'],
+                        'total' => $plat['price'] * $plat['quantity'],
+                        'garniture' => json_encode($item['garnitures'] ?? []),
+                        'complement' => json_encode($item['complements'] ?? []),
+                    ]);
                 }
             }
             $idVente = $vente->id;

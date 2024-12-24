@@ -259,8 +259,121 @@
             </div>
         @endif
     </div>
-    @include('backend.components.ajouter-au-panier-menu')
 </div>
+
+{{-- <script>
+    const plats = document.querySelectorAll('.plat-checkbox:checked');
+    const panier = []; // panier vente menu
+
+    let validationEchouee = false;
+
+    plats.forEach((plat) => {
+        const platId = plat.value;
+        const platNom = plat.nextElementSibling.textContent.trim();
+        const platQuantite = parseInt(plat.closest('.form-check').querySelector('.quantityPlat')
+            .value);
+        const prixPlat = plat.getAttribute('data-price');
+
+        const complements = [];
+        const garnitures = [];
+        let complementManquant = false;
+        let garnitureManquante = false;
+
+        // Compléments
+        const complementCheckboxes = plat.closest('.card-body').querySelectorAll(
+            '.complement-checkbox');
+        let totalQuantiteComplements = 0;
+        complementCheckboxes.forEach((complement) => {
+            if (complement.checked) {
+                const quantite = parseInt(complement.closest('.form-check').querySelector(
+                    '.quantityComplement').value);
+                totalQuantiteComplements += quantite;
+                complements.push({
+                    id: complement.value,
+                    nom: complement.nextElementSibling.textContent.trim(),
+                    quantity: quantite,
+                });
+            }
+        });
+
+        if (complementCheckboxes.length > 0 && complements.length === 0) {
+            complementManquant = true;
+        }
+
+        // Garnitures
+        const garnitureCheckboxes = plat.closest('.card-body').querySelectorAll(
+            '.garniture-checkbox');
+        let totalQuantiteGarnitures = 0;
+        garnitureCheckboxes.forEach((garniture) => {
+            if (garniture.checked) {
+                const quantite = parseInt(garniture.closest('.form-check').querySelector(
+                    '.quantityGarniture').value);
+                totalQuantiteGarnitures += quantite;
+                garnitures.push({
+                    id: garniture.value,
+                    nom: garniture.nextElementSibling.textContent.trim(),
+                    quantity: quantite,
+                });
+            }
+        });
+
+        if (garnitureCheckboxes.length > 0 && garnitures.length === 0) {
+            garnitureManquante = true;
+        }
+
+        // Vérification des compléments et garnitures manquants
+        if (complementManquant || garnitureManquante) {
+            validationEchouee = true;
+            const message = complementManquant ?
+                'Veuillez sélectionner au moins un complément pour le plat : ' + platNom :
+                'Veuillez sélectionner au moins une garniture pour le plat : ' + platNom;
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Attention',
+                text: message,
+            });
+            return;
+        }
+
+        // Vérification des quantités des compléments et garnitures
+        if (complements.length > 0 && totalQuantiteComplements !== platQuantite) {
+            validationEchouee = true;
+            Swal.fire({
+                icon: 'error',
+                title: 'Quantité invalide',
+                text: `La somme des quantités des compléments doit être égale à ${platQuantite} pour le plat : ${platNom}`,
+            });
+            return;
+        }
+
+        if (garnitures.length > 0 && totalQuantiteGarnitures !== platQuantite) {
+            validationEchouee = true;
+            Swal.fire({
+                icon: 'error',
+                title: 'Quantité invalide',
+                text: `La somme des quantités des garnitures doit être égale à ${platQuantite} pour le plat : ${platNom}`,
+            });
+            return;
+        }
+
+
+
+
+        // Ajouter au panier
+        panier.push({
+            plat: {
+                id: platId,
+                nom: platNom,
+                quantity: platQuantite,
+                price: prixPlat
+            },
+            complements,
+            garnitures,
+
+        });
+    });
+</script> --}}
 
 
 

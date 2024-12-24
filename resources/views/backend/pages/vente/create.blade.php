@@ -18,14 +18,20 @@
                 <div class="card-body">
                     <!-- Nav tabs -->
                     <ul class="nav nav-pills nav-custom nav-custom-light mb-3 w-100" role="tablist">
-                        <li class="nav-item w-50">
+                        <li class="nav-item " style="width: 33%">
                             <a class="nav-link active w-100" data-bs-toggle="tab" href="#nav-vente-ordinaire" role="tab">
                               Vente Ordinaire
                             </a>
                         </li>
-                        <li class="nav-item w-50">
+                        <li class="nav-item " style="width: 33%">
                             <a class="nav-link w-100" data-bs-toggle="tab" href="#nav-vente-menu" role="tab">
-                                Vente Menu
+                                Vente Menu du jour
+                            </a>
+                        </li>
+
+                        <li class="nav-item " style="width: 34%">
+                            <a class="nav-link w-100" href="{{route('commande.index' , ['filter'=>'en attente'])}}">
+                               Commande en ligne
                             </a>
                         </li>
                     </ul>
@@ -97,7 +103,7 @@
                     
                     
                                      
-                    
+    
                                     </div>
                                 </div>
                             </div>
@@ -189,7 +195,7 @@
 
             <!-- Bouton de validation -->
             <div class="mt-3">
-                <button type="button"  class="btn btn-primary w-100 validate-sale">Valider la vente</button>
+                <button type="button" id="validate-sale"  class="btn btn-primary w-100">Valider la vente</button>
             </div>
          </div>
        </div>
@@ -204,10 +210,11 @@
 
 
 @section('script')
+
     <script>
         $(document).ready(function() {
 
-            let cart = [];
+            let cart = []; // panier de vente ordinaire
             let totalDiscountType = 'percentage';
             let totalDiscountValue = 0;
             let grandTotal = 0;
@@ -361,6 +368,7 @@
                 let discountAmount = (item.price * item.quantity) * (item.discount / 100);
                 return (item.price * item.quantity) - discountAmount;
             }
+            
 
             function updateGrandTotal(totalAddPlatMenu = null) {
 
@@ -409,39 +417,6 @@
             }
 
 
-//             function updateGrandTotal(totalAddPlatMenu = null) {
-//             console.log("Valeur reçue par updateGrandTotal:", totalAddPlatMenu);
-
-//             const cart = []; // Exemple : Remplacez par votre logique pour obtenir les articles du panier
-//             let grandTotal = cart.reduce((sum, item) => sum + calculateTotal(item), 0);
-//             console.log("Grand total ordinaire:", grandTotal);
-
-//             const totalMenu = $('#totalAmount').text().replace(/\s/g, '');
-//             const totalMenuValue = parseFloat(totalMenu) || 0;
-
-//             let totalNet = grandTotal + totalMenuValue;
-//             $('#totalNet').text(totalNet.toLocaleString("fr-FR") + " FCFA");
-
-//             let discountAmount = 0;
-//             if (totalDiscountType === 'percentage') {
-//                 discountAmount = (totalNet * totalDiscountValue) / 100;
-//             } else if (totalDiscountType === 'amount') {
-//                 discountAmount = totalDiscountValue;
-//             }
-
-//             totalAddPlatMenu = totalAddPlatMenu !== null ? totalAddPlatMenu : 0;
-
-//             let totalAfterDiscount = totalNet - discountAmount;
-//             totalAfterDiscount = totalAfterDiscount < 0 ? 0 : totalAfterDiscount;
-
-//             $('#grand-total').text(grandTotal.toLocaleString("fr-FR") + " FCFA");
-//             $('#discount-amount').text(discountAmount.toLocaleString("fr-FR") + " FCFA");
-//             $('#total-after-discount').text(totalAfterDiscount.toLocaleString("fr-FR") + " FCFA");
-
-//             updateChangeAmount(); // Appelez votre fonction de mise à jour supplémentaire
-// }
-
-
             // Expose the function to the global scope
             window.updateGrandTotal = updateGrandTotal;
 
@@ -488,7 +463,7 @@
                 }
 
                 // Activer ou désactiver le bouton selon la validité des quantités
-                $('.validate-sale').prop('disabled', !allQuantitiesValid);
+                $('#validate-sale').prop('disabled', !allQuantitiesValid);
             }
 
 
@@ -537,11 +512,134 @@
                 verifyQty()
             });
 
-            
 
-            $('.validate-sale').click(function(e) {
-                let montantAvantRemise = parseFloat($('#grand-total').text() || 0);
-                let montantApresRemise = parseFloat($('#total-after-discount').text() || 0);
+
+
+//////###FONCTION POUR LA VALIDATION MENU  ##########/////
+
+            //////### END FONCTION POUR LA VALIDATION MENY  ##########/////
+
+            $('#validate-sale').click(function(e) {
+               
+                const plats = document.querySelectorAll('.plat-checkbox:checked');
+             let panier = []; // panier vente menu
+
+        let validationEchouee = false;
+
+        plats.forEach((plat) => {
+            const platId = plat.value;
+            const platNom = plat.nextElementSibling.textContent.trim();
+            const platQuantite = parseInt(plat.closest('.form-check').querySelector('.quantityPlat')
+                .value);
+            const prixPlat = plat.getAttribute('data-price');
+
+            const complements = [];
+            const garnitures = [];
+            let complementManquant = false;
+            let garnitureManquante = false;
+
+            // Compléments
+            const complementCheckboxes = plat.closest('.card-body').querySelectorAll(
+                '.complement-checkbox');
+            let totalQuantiteComplements = 0;
+            complementCheckboxes.forEach((complement) => {
+                if (complement.checked) {
+                    const quantite = parseInt(complement.closest('.form-check').querySelector(
+                        '.quantityComplement').value);
+                    totalQuantiteComplements += quantite;
+                    complements.push({
+                        id: complement.value,
+                        nom: complement.nextElementSibling.textContent.trim(),
+                        quantity: quantite,
+                    });
+                }
+            });
+
+            if (complementCheckboxes.length > 0 && complements.length === 0) {
+                complementManquant = true;
+            }
+
+            // Garnitures
+            const garnitureCheckboxes = plat.closest('.card-body').querySelectorAll(
+                '.garniture-checkbox');
+            let totalQuantiteGarnitures = 0;
+            garnitureCheckboxes.forEach((garniture) => {
+                if (garniture.checked) {
+                    const quantite = parseInt(garniture.closest('.form-check').querySelector(
+                        '.quantityGarniture').value);
+                    totalQuantiteGarnitures += quantite;
+                    garnitures.push({
+                        id: garniture.value,
+                        nom: garniture.nextElementSibling.textContent.trim(),
+                        quantity: quantite,
+                    });
+                }
+            });
+
+            if (garnitureCheckboxes.length > 0 && garnitures.length === 0) {
+                garnitureManquante = true;
+            }
+
+            // Vérification des compléments et garnitures manquants
+            if (complementManquant || garnitureManquante) {
+                validationEchouee = true;
+                const message = complementManquant ?
+                    'Veuillez sélectionner au moins un complément pour le plat : ' + platNom :
+                    'Veuillez sélectionner au moins une garniture pour le plat : ' + platNom;
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Attention',
+                    text: message,
+                });
+                return;
+            }
+
+            // Vérification des quantités des compléments et garnitures
+            if (complements.length > 0 && totalQuantiteComplements !== platQuantite) {
+                validationEchouee = true;
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Quantité invalide',
+                    text: `La somme des quantités des compléments doit être égale à ${platQuantite} pour le plat : ${platNom}`,
+                });
+                return;
+            }
+
+            if (garnitures.length > 0 && totalQuantiteGarnitures !== platQuantite) {
+                validationEchouee = true;
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Quantité invalide',
+                    text: `La somme des quantités des garnitures doit être égale à ${platQuantite} pour le plat : ${platNom}`,
+                });
+                return;
+            }
+
+        
+                        // Panier du Menu
+                        panier.push({
+                            plat: {
+                                id: platId,
+                                nom: platNom,
+                                quantity: platQuantite,
+                                price: prixPlat
+                            },
+                            complements,
+                            garnitures,
+
+                        });
+        });
+                
+        if (validationEchouee) {
+            return; // Stopper l'exécution si une validation échoue
+        }
+        
+                
+                let montantVenteOrdinaire = parseFloat($('#grand-total').text() || 0); // montant  de vente ordinaire
+                let montantVenteMenu = parseFloat($('#totalAmount').text() || 0); // montant  de vente menu
+                let montantNet = parseFloat($('#totalNet').text() || 0); // montant  de vente menu
+                let montantApresRemise = parseFloat($('#total-after-discount').text() || 0); // total apres remise
                 let montantRemise = parseFloat($('#discount-amount').text() || 0);
                 let typeRemise = $('#discount-type').val();
                 let valeurRemise = $('#total-discount').val();
@@ -551,7 +649,7 @@
                 let numeroDeTable = $('#table-number').val();
                 let nombreDeCouverts = $('#number-covers').val();
 
-                if (cart.length === 0) {
+                if (cart.length === 0  && panier.length === 0  ) {
                     Swal.fire({
                         title: 'Erreur',
                         text: 'Vous devez ajouter au moins un produit au panier.',
@@ -574,7 +672,10 @@
                     type: 'POST',
                     data: {
                         cart: cart,
-                        montantAvantRemise: montantAvantRemise,
+                        cartMenu: panier,
+                        montantVenteOrdinaire: montantVenteOrdinaire,
+                        montantVenteMenu: montantVenteOrdinaire,
+                        montantAvantRemise: montantNet,
                         montantApresRemise: montantApresRemise,
                         montantRemise: montantRemise,
                         typeRemise: typeRemise,

@@ -244,7 +244,7 @@
                                 </li> --}}
 
                                 <li class="nav-item active">
-                                    <a href="{{ route('commande.index') }}"
+                                    <a href="{{ route('commande.index' , ['filter'=>'en attente']) }}"
                                         class="nav-link {{ Route::is('commande.*') ? 'active' : '' }}">Commandes</a>
                                 </li>
 

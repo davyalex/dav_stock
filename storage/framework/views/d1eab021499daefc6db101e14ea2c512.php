@@ -232,7 +232,7 @@
                                 
 
                                 <li class="nav-item active">
-                                    <a href="<?php echo e(route('commande.index')); ?>"
+                                    <a href="<?php echo e(route('commande.index' , ['filter'=>'en attente'])); ?>"
                                         class="nav-link <?php echo e(Route::is('commande.*') ? 'active' : ''); ?>">Commandes</a>
                                 </li>
 

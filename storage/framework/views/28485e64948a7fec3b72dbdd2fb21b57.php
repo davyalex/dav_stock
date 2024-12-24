@@ -25,8 +25,21 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des commandes</h5>
+                    <h5 class="card-title mb-0">Liste des commandes <?php if(request()->has('filter')): ?> - <b><?php echo e(request('filter')); ?></b> <?php endif; ?></h5>
+
+                    <div class="dropdown">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class=" ri ri-filter-2-fill"></i> Filtrer par statut
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="/admin/commande">Tous</a></li>
+                            <?php $__currentLoopData = ['en attente' => 'En attente', 'confirmée' => 'Confirmée', 'livrée' => 'Livrée', 'annulée' => 'Annulée']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <li><a class="dropdown-item" href="/admin/commande?filter=<?php echo e($key); ?>" ><?php echo e($value); ?></a></li>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </ul>
+                    </div>
                 </div>
+              
 
                 <div class="card-body">
                     <div class="table-responsive">

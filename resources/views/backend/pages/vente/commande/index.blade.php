@@ -25,8 +25,21 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des commandes</h5>
+                    <h5 class="card-title mb-0">Liste des commandes @if(request()->has('filter')) - <b>{{ request('filter') }}</b> @endif</h5>
+
+                    <div class="dropdown">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class=" ri ri-filter-2-fill"></i> Filtrer par statut
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="/admin/commande">Tous</a></li>
+                            @foreach(['en attente' => 'En attente', 'confirmée' => 'Confirmée', 'livrée' => 'Livrée', 'annulée' => 'Annulée'] as $key => $value)
+                                <li><a class="dropdown-item" href="/admin/commande?filter={{$key}}" >{{ $value }}</a></li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
+              
 
                 <div class="card-body">
                     <div class="table-responsive">
