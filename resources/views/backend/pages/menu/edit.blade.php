@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-   Menu
+    Menu
 @endsection
 @section('content')
     @component('backend.components.breadcrumb')
@@ -18,7 +18,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('menu.update' , $menu->id) }}" autocomplete="off" id="formSave"
+                    <form method="POST" action="{{ route('menu.update', $menu->id) }}" autocomplete="off" id="formSave"
                         class="needs-validation" novalidate enctype="multipart/form-data">
                         @csrf
                         <div class="row">
@@ -37,7 +37,8 @@
                                         <div class="col-md-4">
                                             <label class="form-label" for="meta-title-input">Libellé
                                             </label>
-                                            <input type="text" value="{{$menu->libelle}}" name="libelle" class="form-control">
+                                            <input type="text" value="{{ $menu->libelle }}" name="libelle"
+                                                class="form-control">
                                         </div>
 
 
@@ -45,7 +46,7 @@
                                             <label class="form-label" for="meta-title-input">Date <span
                                                     class="text-danger">*</span>
                                             </label>
-                                            <input type="date" id="currentDate" value="{{$menu->date_menu}}"
+                                            <input type="date" id="currentDate" value="{{ $menu->date_menu }}"
                                                 name="date_menu" class="form-control" required>
                                         </div>
 
@@ -177,7 +178,8 @@
                             $('.plats-select').html(platsOptions);
 
                             // Charger les compléments
-                            let complementsOptions = `<option value="">Sélectionner un complément</option>`;
+                            // let complementsOptions = `<option value="">Sélectionner un complément</option>`;
+                            let complementsOptions
                             response.plats_complements.forEach(item => {
                                 complementsOptions +=
                                     `<option value="${item.id}">${item.nom}</option>`;
@@ -185,7 +187,8 @@
                             $('.complements-select').html(complementsOptions);
 
                             // Charger les garnitures
-                            let garnituresOptions = `<option value="">Sélectionner une garniture</option>`;
+                            // let garnituresOptions = `<option value="">Sélectionner une garniture</option>`;
+                            let garnituresOptions
                             response.plats_garnitures.forEach(item => {
                                 garnituresOptions +=
                                     `<option value="${item.id}">${item.nom}</option>`;
@@ -203,6 +206,25 @@
 
                             $('.garnitures-select').each(function(index) {
                                 $(this).val(garnituresSelected[index]).trigger('change');
+                            });
+
+
+
+                            // Ajouter un événement pour filtrer les plats en fonction de la catégorie
+                            $('.categorie').on('change', function() {
+                                let categorieId = $(this).val();
+                                let platsSelect = $(this).closest('.variante-row').find(
+                                    '.plats-select');
+                                platsSelect.html('');
+                                platsSelect.append(
+                                    `<option value="">Sélectionner un plat</option>`);
+                                response.plats.forEach(item => {
+                                    if (item.categorie_menu_id == categorieId) {
+                                        platsSelect.append(
+                                            `<option value="${item.id}">${item.nom}</option>`
+                                        );
+                                    }
+                                });
                             });
                         },
                         error: function() {
@@ -414,6 +436,7 @@
                 let varianteIndex = parseInt(dataMenu.length);
 
                 document.getElementById('add-variante').addEventListener('click', function() {
+                    loadAllOptions();
                     const container = document.getElementById('variantes-container');
                     const newRow = document.createElement('div');
                     newRow.classList.add('row', 'variante-row', 'mb-4');
@@ -619,6 +642,58 @@
                         },
 
                     });
+
+
+                });
+
+
+
+                //si je clique sur le boutton valider
+                $('#btnSubmit').on('click', function(e) {
+                    var form = document.getElementById('formSave');
+                    var categories = document.querySelectorAll('select[name^="plats"][name*="[categorie_id]"]');
+                    var plats = document.querySelectorAll('select[name^="plats"][name*="[plat_selected]"]');
+
+                    categories.forEach(function(categorie) {
+                        var categorieValue = categorie.options[categorie.selectedIndex].value;
+                        if (categorieValue === '') {
+                            e.preventDefault();
+                            Swal.fire({
+                                title: 'Erreur',
+                                text: 'Verifier si toutes les categories sont choisies',
+                                icon: 'error',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                                    cancelButton: 'btn btn-danger w-xs mt-2',
+                                },
+                                buttonsStyling: false,
+                                showCloseButton: true
+                            });
+                        }
+                    });
+
+                    plats.forEach(function(plat) {
+                        var platValue = plat.options[plat.selectedIndex].value;
+                        if (platValue === '') {
+                            e.preventDefault();
+                            Swal.fire({
+                                title: 'Erreur',
+                                text: 'Verifier si tous les plats sont choisies',
+                                icon: 'error',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                                    cancelButton: 'btn btn-danger w-xs mt-2',
+                                },
+                                buttonsStyling: false,
+                                showCloseButton: true
+                            });
+                        }
+                    });
+
+                    if (categories.every(categorie => categorie.options[categorie.selectedIndex].value !==
+                            '') && plats.every(plat => plat.options[plat.selectedIndex].value !== '')) {
+                        form.submit();
+                    }
 
 
                 });

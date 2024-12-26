@@ -123,7 +123,7 @@ class CaisseController extends Controller
         }
     }
 
-// stocker la session date de vente
+    // stocker la session date de vente
     public function sessionDate(Request $request)
     {
 
@@ -133,10 +133,14 @@ class CaisseController extends Controller
             ]);
 
             // Stocker la date dans la session 
-            Caisse::create([
-                'session_date_vente'=>$request->session_date
+            Caisse::whereId(Auth::user()->caisse_id)->update([
+                'session_date_vente' => $request->session_date
             ]);
-           
+
+            // enregistrer la date dans l'historique
+            HistoriqueCaisse::where('caisse_id', Auth::user()->caisse_id)->update([
+                'session_date_vente' => $request->session_date
+            ]);
 
             alert()->success('Succès', 'Date de session vente modifiée avec succès');
             return back();
@@ -145,5 +149,4 @@ class CaisseController extends Controller
             return back();
         }
     }
-
 }

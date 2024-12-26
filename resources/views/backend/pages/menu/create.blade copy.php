@@ -219,8 +219,6 @@
 
                 // liste des plats from controller
                 var plats = @json($plats)
-                //recupere les categorie menu
-                var categories = @json($categorie_menu)
 
 
                 function loadAllOptions() {
@@ -248,14 +246,12 @@
                             // Charger les plats
                             let platsOptions = `<option value="">Sélectionner un plat</option>`;
                             response.plats.forEach(item => {
-                                platsOptions +=
-                                    `<option value="${item.id}" data-categorie-menu-id="${item.categorie_menu_id}">${item.nom}</option>`;
+                                platsOptions += `<option value="${item.id}">${item.nom}</option>`;
                             });
                             $('.plats-select').html(platsOptions);
 
                             // Charger les compléments
-                            // let complementsOptions = `<option value="">Sélectionner un complément</option>`;
-                            let complementsOptions
+                            let complementsOptions = `<option value="">Sélectionner un complément</option>`;
                             response.plats_complements.forEach(item => {
                                 complementsOptions +=
                                     `<option value="${item.id}">${item.nom}</option>`;
@@ -263,8 +259,7 @@
                             $('.complements-select').html(complementsOptions);
 
                             // Charger les garnitures
-                            // let garnituresOptions = `<option value="">Sélectionner une garniture</option>`;
-                            let garnituresOptions
+                            let garnituresOptions = `<option value="">Sélectionner une garniture</option>`;
                             response.plats_garnitures.forEach(item => {
                                 garnituresOptions +=
                                     `<option value="${item.id}">${item.nom}</option>`;
@@ -283,23 +278,6 @@
                             $('.garnitures-select').each(function(index) {
                                 $(this).val(garnituresSelected[index]).trigger('change');
                             });
-
-                            // Ajouter un événement pour filtrer les plats en fonction de la catégorie
-                            $('.categorie').on('change', function() {
-                                let categorieId = $(this).val();
-                                let platsSelect = $(this).closest('.variante-row').find(
-                                    '.plats-select');
-                                platsSelect.html('');
-                                platsSelect.append(
-                                    `<option value="">Sélectionner un plat</option>`);
-                                response.plats.forEach(item => {
-                                    if (item.categorie_menu_id == categorieId) {
-                                        platsSelect.append(
-                                            `<option value="${item.id}">${item.nom}</option>`
-                                        );
-                                    }
-                                });
-                            });
                         },
                         error: function() {
                             alert("Erreur lors du chargement des données.");
@@ -307,50 +285,9 @@
                     });
                 }
 
-
-                // function filterPlatsByCategorie(categorieId) {
-                //     // let platsSelect = $(this).closest('.variante-row').find('.plats-select');
-                //     // platsSelect.html('');
-                //     // platsSelect.append(`<option value="">Sélectionner un plat</option>`);
-                //     // plats.forEach(item => {
-                //     //     if (item.categorie_menu_id == categorieId) {
-                //     //         platsSelect.append(`<option value="${item.id}">${item.nom}</option>`);
-                //     //     }
-                //     // });
-
-
-                //     // Ajouter un événement pour filtrer les plats en fonction de la catégorie
-                //     $('.categorie').on('change', function() {
-                //         let categorieId = $(this).val();
-                //         let platsSelect = $(this).closest('.variante-row').find('.plats-select');
-                //         platsSelect.html('');
-                //         platsSelect.append(`<option value="">Sélectionner un plat</option>`);
-                //         plats.forEach(item => {
-                //             if (item.categorie_menu_id == categorieId) {
-                //                 platsSelect.append(`<option value="${item.id}">${item.nom}</option>`);
-                //             }
-                //         });
-                //     });
-
-                //     // Ajouter un événement pour filtrer les plats en fonction de la catégorie pour toutes les variantes
-                //     $('.variante-row').each(function() {
-                //         let categorieId = $(this).find('.categorie').val();
-                //         let platsSelect = $(this).find('.plats-select');
-                //         platsSelect.html('');
-                //         platsSelect.append(`<option value="">Sélectionner un plat</option>`);
-                //         plats.forEach(item => {
-                //             if (item.categorie_menu_id == categorieId) {
-                //                 platsSelect.append(`<option value="${item.id}">${item.nom}</option>`);
-                //             }
-                //         });
-                //     });
-                // }
-
-
                 // // Initialiser au chargement de la page
                 $(document).ready(function() {
                     loadAllOptions();
-                    // filterPlatsByCategorie();
                 });
 
 
@@ -358,26 +295,6 @@
                 let varianteIndex = 1;
 
                 document.getElementById('add-variante').addEventListener('click', function() {
-                    // publier la function
-                    loadAllOptions();
-
-                    // Ajouter un événement pour filtrer les plats en fonction de la catégorie
-                    // $('.categorie').on('change', function() {
-                    //     let categorieId = $(this).val();
-                    //     let platsSelect = $(this).closest('.variante-row').find(
-                    //         '.plats-select');
-                    //     platsSelect.html('');
-                    //     platsSelect.append(
-                    //         `<option value="">Sélectionner un plat</option>`);
-                    //     response.plats.forEach(item => {
-                    //         if (item.categorie_menu_id == categorieId) {
-                    //             platsSelect.append(
-                    //                 `<option value="${item.id}">${item.nom}</option>`
-                    //             );
-                    //         }
-                    //     });
-                    // });
-
                     const container = document.getElementById('variantes-container');
                     const newRow = document.createElement('div');
                     newRow.classList.add('row', 'variante-row', 'mb-4');
@@ -465,10 +382,8 @@
 
 
 
-
-
                 //////////////////////////////////Envoyer le menu au controller ///////////////////////////////////////////////
-
+              
                 /////////////////////////////////############### Ajouter les nouveaux enregistrement #########################///////////////////////////////////////////
 
 
@@ -505,7 +420,7 @@
                     $(this).closest('div').remove();
                 });
 
-                //enregistrer le formulaire ==> nouveau plat entrant
+                //enregistrer le formulaire ==> nouveau plat entran
                 $('.formSend').on('submit', function(e) {
 
                     e.preventDefault();
@@ -520,9 +435,6 @@
 
                     // var categorie = $('select[name="categorie"] option:selected').text();
                     // console.log(categorie);
-
-
-
 
 
                     var formData = new FormData(this);
@@ -585,56 +497,6 @@
                         },
 
                     });
-
-
-                });
-
-                //si je clique sur le boutton valider
-                $('#btnSubmit').on('click', function(e) {
-                    var form = document.getElementById('formSave');
-                    var categories = document.querySelectorAll('select[name^="plats"][name*="[categorie_id]"]');
-                    var plats = document.querySelectorAll('select[name^="plats"][name*="[plat_selected]"]');
-
-                    categories.forEach(function(categorie) {
-                        var categorieValue = categorie.options[categorie.selectedIndex].value;
-                        if (categorieValue === '') {
-                            e.preventDefault();
-                            Swal.fire({
-                                title: 'Erreur',
-                                text: 'Verifier si toutes les categories sont choisies',
-                                icon: 'error',
-                                customClass: {
-                                    confirmButton: 'btn btn-primary w-xs me-2 mt-2',
-                                    cancelButton: 'btn btn-danger w-xs mt-2',
-                                },
-                                buttonsStyling: false,
-                                showCloseButton: true
-                            });
-                        }
-                    });
-
-                    plats.forEach(function(plat) {
-                        var platValue = plat.options[plat.selectedIndex].value;
-                        if (platValue === '') {
-                            e.preventDefault();
-                            Swal.fire({
-                                title: 'Erreur',
-                                text: 'Verifier si tous les plats sont choisies',
-                                icon: 'error',
-                                customClass: {
-                                    confirmButton: 'btn btn-primary w-xs me-2 mt-2',
-                                    cancelButton: 'btn btn-danger w-xs mt-2',
-                                },
-                                buttonsStyling: false,
-                                showCloseButton: true
-                            });
-                        }
-                    });
-
-                    if (categories.every(categorie => categorie.options[categorie.selectedIndex].value !==
-                        '') && plats.every(plat => plat.options[plat.selectedIndex].value !== '')) {
-                        form.submit();
-                    }
 
 
                 });

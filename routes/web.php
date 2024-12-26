@@ -286,7 +286,6 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('', 'index')->name('etat-stock.index');
     });
 
-
     // stock -achat
     Route::prefix('achat')->controller(AchatController::class)->group(function () {
         route::get('index', 'index')->name('achat.index');  // liste des facture

@@ -23,163 +23,163 @@
 
 
     <div class="row">
-        <div class="col-lg-12">
+        <?php if(Auth::user()->hasRole('caisse')): ?>
+            <div class="col-lg-12">
+                <div class="alert alert-info alert-dismissible fade show d-flex justify-content-center align-items-center"
+                    role="alert">
+                    <div class="me-3">
 
-            <div class="alert alert-info alert-dismissible fade show d-flex justify-content-center align-items-center"
-                role="alert">
-                <div class="me-3">
-                    <h5 class="card-title mb-0">Date de vente actuelle : <span
-                            id="heureActuelle"><?php echo e(Session::get('session_date') != null
-                                ? \Carbon\Carbon::parse(Session::get('session_date'))->format('d-m-Y')
-                                : 'non defini'); ?></span>
-                    </h5>
+                        <h5 class="card-title mb-0">Date de vente actuelle : <span
+                                id="heureActuelle"><?php echo e($sessionDate != null ? \Carbon\Carbon::parse($sessionDate)->format('d-m-Y') : 'non defini'); ?></span>
+                        </h5>
+
+
+                    </div>
+                    <?php if($data_vente->sum('montant_total') == 0): ?>
+                        <button type="button" class="btn btn-info ms-3" data-bs-toggle="modal"
+                            data-bs-target="#dateSessionVenteModal">
+                            <?php echo e($sessionDate != null ? 'Modifier la date de la session de vente' : ' Choisir une date pour la session vente'); ?>
+
+                        </button>
+                    <?php endif; ?>
+
+                    <button type="button" class="btn-close ms-3" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <?php if($data_vente->sum('montant_total') == 0): ?>
-                    <button type="button" class="btn btn-info ms-3" data-bs-toggle="modal"
-                        data-bs-target="#dateSessionVenteModal">
-                        <?php echo e(Session::get('session_date') != null ? 'Modifier la date de la session de vente' : ' Choisir une date pour la session vente'); ?>
+        <?php endif; ?>
 
-                    </button>
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <h5 class="card-title mb-0">Liste des ventes </strong></h5>
+                <?php if(auth()->user()->hasRole('caisse')): ?>
+                    <?php if($sessionDate != null): ?>
+                        <a href="<?php echo e(route('vente.create')); ?>" type="button" class="btn btn-primary">
+                            Nouvelle vente</a>
+                    <?php else: ?>
+                        <button type="button" class="btn btn-info ms-3 btnChoiceDate">
+                            Nouvelle vente
+                        </button>
+                    <?php endif; ?>
                 <?php endif; ?>
 
 
 
-                <button type="button" class="btn-close ms-3" data-bs-dismiss="alert" aria-label="Close"></button>
+                <?php if(!auth()->user()->hasRole('caisse')): ?>
+                    <form action="<?php echo e(route('vente.index')); ?>" method="GET">
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label for="date_debut" class="form-label">Date de début</label>
+                                <input type="date" class="form-control" id="date_debut" name="date_debut">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="date_fin" class="form-label">Date de fin</label>
+                                <input type="date" class="form-control" id="date_fin" name="date_fin">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="caisse" class="form-label">Caisse</label>
+                                <select class="form-select" id="caisse" name="caisse">
+                                    <option value="">Toutes les caisses</option>
+                                    <?php $__currentLoopData = $caisses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $caisse): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($caisse->id); ?>"><?php echo e($caisse->libelle); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3 mt-4">
+                                <button type="submit" class="btn btn-primary">Filtrer</button>
+                            </div>
+                        </div>
+                    </form>
+                <?php endif; ?>
+
             </div>
 
-            <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des ventes </strong></h5>
-                    <?php if(auth()->user()->hasRole('caisse')): ?>
-                        <?php if(Session::get('session_date') != null): ?>
-                            <a href="<?php echo e(route('vente.create')); ?>" type="button" class="btn btn-primary">
-                                Nouvelle vente</a>
-                        <?php else: ?>
-                            <button type="button" class="btn btn-info ms-3 btnChoiceDate">
-                                Nouvelle vente
-                            </button>
-                        <?php endif; ?>
-                    <?php endif; ?>
+            <?php if(auth()->user()->hasRole('caisse')): ?>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Caisse actuelle</h5>
+                                <p class="card-text h3 text-primary">
+                                    <?php echo e(auth()->user()->caisse->libelle ?? 'Non définie'); ?>
 
-
-
-                    <?php if(!auth()->user()->hasRole('caisse')): ?>
-                        <form action="<?php echo e(route('vente.index')); ?>" method="GET">
-                            <div class="row mb-3">
-                                <div class="col-md-3">
-                                    <label for="date_debut" class="form-label">Date de début</label>
-                                    <input type="date" class="form-control" id="date_debut" name="date_debut">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="date_fin" class="form-label">Date de fin</label>
-                                    <input type="date" class="form-control" id="date_fin" name="date_fin">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="caisse" class="form-label">Caisse</label>
-                                    <select class="form-select" id="caisse" name="caisse">
-                                        <option value="">Toutes les caisses</option>
-                                        <?php $__currentLoopData = $caisses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $caisse): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <option value="<?php echo e($caisse->id); ?>"><?php echo e($caisse->libelle); ?></option>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-3 mt-4">
-                                    <button type="submit" class="btn btn-primary">Filtrer</button>
-                                </div>
+                                </p>
                             </div>
-                        </form>
-                    <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body d-flex justify-content-around">
+                                <h5 class="card-title">Total des ventes du jour : <br> <strong
+                                        class="text-primary fs-3"><?php echo e(number_format($data_vente->sum('montant_total'), 0, ',', ' ')); ?>
 
+                                        FCFA</strong> </h5>
+                                <p class="card-text h3 text-success">
+
+
+                                    <?php if($data_vente->sum('montant_total') > 0): ?>
+                                        <a href="<?php echo e(route('vente.billeterie-caisse')); ?>" class="btn btn-danger ">Procéder a
+                                            la Clóturer
+                                            la caisse</a>
+                                    <?php else: ?>
+                                        <button class="btn btn-danger" disabled>Procéder a la Clóturer la
+                                            caisse</button>
+                                    <?php endif; ?>
+                                </p>
+
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            <?php endif; ?>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>N° de vente</th>
+                                <th>Type de vente</th>
+                                <th>Session vente</th>
+                                <th>Montant</th>
+                                <th>Vendu le</th>
+                                <th>Vendu par</th>
+                                <th>Caisse</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $__empty_1 = true; $__currentLoopData = $data_vente; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <tr id="row_<?php echo e($item['id']); ?>">
+                                    <td> <?php echo e($loop->iteration); ?> </td>
+                                    <td> <a class="fw-bold"
+                                            href="<?php echo e(route('vente.show', $item->id)); ?>">#<?php echo e($item['code']); ?></a> </td>
+                                    <td> <?php echo e($item['type_vente']); ?>
 
-                <?php if(auth()->user()->hasRole('caisse')): ?>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Caisse actuelle</h5>
-                                    <p class="card-text h3 text-primary">
-                                        <?php echo e(auth()->user()->caisse->libelle ?? 'Non définie'); ?>
 
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body d-flex justify-content-around">
-                                    <h5 class="card-title">Total des ventes du jour : <br> <strong
-                                            class="text-primary fs-3"><?php echo e(number_format($data_vente->sum('montant_total'), 0, ',', ' ')); ?>
-
-                                            FCFA</strong> </h5>
-                                    <p class="card-text h3 text-success">
-
-
-                                        <?php if($data_vente->sum('montant_total') > 0): ?>
-                                            <a href="<?php echo e(route('vente.billeterie-caisse')); ?>"
-                                                class="btn btn-danger ">Procéder a la Clóturer
-                                                la caisse</a>
-                                        <?php else: ?>
-                                            <button class="btn btn-danger" disabled>Procéder a la Clóturer la
-                                                caisse</button>
+                                        <?php if($item['type_vente'] == 'commande'): ?>
+                                            <br> <a href="<?php echo e(route('commande.show', $item['commande_id'])); ?>"
+                                                class="text-primary fw-bold">#<?php echo $item['commande']['code']; ?></a>
                                         <?php endif; ?>
-                                    </p>
+                                    </td>
+                                    <td> <?php echo e(\Carbon\Carbon::parse($item['date_vente'])->format('d-m-Y')); ?>
 
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <?php endif; ?>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>N° de vente</th>
-                                    <th>Type de vente</th>
-                                    <th>Session vente</th>
-                                    <th>Montant</th>
-                                    <th>Vendu le</th>
-                                    <th>Vendu par</th>
-                                    <th>Caisse</th>
+                                        <?php echo e($item['created_at']->format('à H:i')); ?> </td>
+                                    <td> <?php echo e(number_format($item['montant_total'], 0, ',', ' ')); ?> FCFA </td>
+                                    <td> <?php echo e($item['created_at']->format('d-m-Y à H:i')); ?> </td>
+                                    <td> <?php echo e($item['user']['first_name']); ?> <?php echo e($item['user']['last_name']); ?> </td>
+                                    <td> <?php echo e($item['caisse']['libelle'] ?? ''); ?> </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <?php $__empty_1 = true; $__currentLoopData = $data_vente; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                    <tr id="row_<?php echo e($item['id']); ?>">
-                                        <td> <?php echo e($loop->iteration); ?> </td>
-                                        <td> <a class="fw-bold"
-                                                href="<?php echo e(route('vente.show', $item->id)); ?>">#<?php echo e($item['code']); ?></a> </td>
-                                        <td> <?php echo e($item['type_vente']); ?>
-
-
-                                            <?php if($item['type_vente'] == 'commande'): ?>
-                                                <br> <a href="<?php echo e(route('commande.show', $item['commande_id'])); ?>"
-                                                    class="text-primary fw-bold">#<?php echo $item['commande']['code']; ?></a>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td> <?php echo e(\Carbon\Carbon::parse($item['date_vente'])->format('d-m-Y')); ?>
-
-                                            <?php echo e($item['created_at']->format('à H:i')); ?> </td>
-                                        <td> <?php echo e(number_format($item['montant_total'], 0, ',', ' ')); ?> FCFA </td>
-                                        <td> <?php echo e($item['created_at']->format('d-m-Y à H:i')); ?> </td>
-                                        <td> <?php echo e($item['user']['first_name']); ?> <?php echo e($item['user']['last_name']); ?> </td>
-                                        <td> <?php echo e($item['caisse']['libelle'] ?? ''); ?> </td>
-                                    </tr>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                    <tr>
-                                        <td colspan="6" class="text-center">Aucune vente trouvée</td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                <tr>
+                                    <td colspan="6" class="text-center">Aucune vente trouvée</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <!--end row-->
 

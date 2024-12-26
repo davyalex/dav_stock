@@ -59,10 +59,15 @@ class AdminController extends Controller
         // Si l'utilisateur a une caisse active, la désactiver
         if ($user->caisse_id) {
 
-            // niveau caisse
-            $caisse = Caisse::find($user->caisse_id);
-            $caisse->statut = 'desactive';
-            $caisse->save();
+            // Mettre a Null la session de vente et desactiver la caisse
+            Caisse::whereId($user->caisse_id)->update([
+                'statut' => 'desactive',
+                'session_date_vente' => null
+            ]);
+            // $caisse = Caisse::find($user->caisse_id);
+            // $caisse->statut = 'desactive';
+            // $caisse->session_date_vente = null;
+            // $caisse->save();
             // mettre caisse_id a null
             User::whereId($user->id)->update([
                 'caisse_id' => null,

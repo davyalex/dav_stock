@@ -84,10 +84,10 @@
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Produits de la vente </h5>
 
-                    {{-- <div class="d-flex justify-content-end">
-                        <button id="btnImprimerTicket" class="btn btn-secondary me-2 flot-end">  <i class="ri-printer-line align-bottom me-1"></i> Imprimer la fature</button>
+                    <div class="d-flex justify-content-end">
+                        <button id="btnImprimerTicket" class="btn btn-info me-2 flot-end">  <i class="ri-printer-line align-bottom me-1"></i> Imprimer la fature</button>
                     <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">Nouvelle vente</a>
-                    </div> --}}
+                    </div>
                 </div>
 
 

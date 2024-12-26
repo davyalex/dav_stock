@@ -25,7 +25,7 @@ class VenteController extends Controller
     public function index(Request $request)
     {
         try {
-         
+
             // $data_vente = Vente::with('produits')
             //     ->where('caisse_id', auth()->user()->caisse_id)
             //     ->where('user_id', auth()->user()->id)
@@ -35,6 +35,8 @@ class VenteController extends Controller
             //     ->orderBy('created_at', 'desc')
             //     ->get();
             $caisses = Caisse::all();
+
+
 
 
             $query = Vente::with('produits')
@@ -64,7 +66,16 @@ class VenteController extends Controller
             $data_vente = $query->get();
             // dd($data_vente->toArray());
 
-            return view('backend.pages.vente.index', compact('data_vente', 'caisses'));
+
+            //session de la date manuelle
+            $sessionDate = null;
+            if ($request->user()->hasRole('caisse')) {
+                $sessionDate = Caisse::find(Auth::user()->caisse_id);
+                $sessionDate = $sessionDate->session_date_vente;
+            }
+
+
+            return view('backend.pages.vente.index', compact('data_vente', 'caisses', 'sessionDate'));
         } catch (\Exception $e) {
             Alert::error('Erreur', 'Une erreur est survenue lors du chargement des ventes : ' . $e->getMessage());
             return back();
@@ -199,14 +210,15 @@ class VenteController extends Controller
             $codeVente = strtoupper($initialesCaissiere) . '-' . strtoupper($initialesCaisse) . $numeroOrdre . $dateHeure;
 
             //session de la date manuelle
-            $sessionDate = Session::get('session_date', now()->toDateString());
+            $sessionDate = Caisse::find(Auth::user()->caisse_id);
+            $sessionDate = $sessionDate->session_date_vente;
 
             $vente = Vente::create([
                 'code' => $codeVente,
                 // 'client_id' => $request->client_id,
                 'caisse_id' => auth()->user()->caisse_id, // la caisse qui fait la vente
                 'user_id' => auth()->user()->id, // l'admin qui a fait la vente
-                'date_vente' =>  Carbon::parse($sessionDate),
+                'date_vente' =>  $sessionDate,
                 'montant_total' => $montantApresRemise,
                 'montant_avant_remise' => $montantAvantRemise,
                 'montant_remise' => $montantRemise,
@@ -328,6 +340,7 @@ class VenteController extends Controller
                 // niveau caisse
                 $caisse = Caisse::find($user->caisse_id);
                 $caisse->statut = 'desactive';
+                $caisse->session_date_vente = null;
                 $caisse->save();
                 // mettre caisse_id a null
                 User::whereId($user->id)->update([
@@ -514,7 +527,6 @@ class VenteController extends Controller
             //session de la date manuelle
             $sessionDate = Session::get('session_date', now()->toDateString());
 
-            $sessionDate = Caisse::find(Auth::user()->caisse_id);
 
             $vente = Vente::create([
                 'code' => $codeVente,
