@@ -25,7 +25,7 @@ class VenteController extends Controller
     public function index(Request $request)
     {
         try {
-
+         
             // $data_vente = Vente::with('produits')
             //     ->where('caisse_id', auth()->user()->caisse_id)
             //     ->where('user_id', auth()->user()->id)
@@ -70,6 +70,8 @@ class VenteController extends Controller
             return back();
         }
     }
+
+
 
     public function create()
     {
@@ -251,8 +253,8 @@ class VenteController extends Controller
             }
 
 
-             // inserer les produits dans la vente
-             if (!empty($cartMenu)) {
+            // inserer les produits dans la vente
+            if (!empty($cartMenu)) {
                 foreach ($cartMenu as $item) {
                     $plat = $item['plat'];
                     $vente->plats()->attach($plat['id'], [
@@ -410,24 +412,6 @@ class VenteController extends Controller
 
 
 
-    public function sessionDate(Request $request)
-    {
-
-        try {
-            $request->validate([
-                'session_date' => 'required|date',
-            ]);
-
-            // Stocker la date dans la session 
-            Session::put('session_date', $request->session_date);
-
-            alert()->success('Succès', 'Date de session vente modifiée avec succès');
-            return back();
-        } catch (\Throwable $th) {
-            Alert::error('Erreur', 'Une erreur est survenue lors de la création de la session : ' . $th->getMessage());
-            return back();
-        }
-    }
 
 
 
@@ -529,6 +513,8 @@ class VenteController extends Controller
 
             //session de la date manuelle
             $sessionDate = Session::get('session_date', now()->toDateString());
+
+            $sessionDate = Caisse::find(Auth::user()->caisse_id);
 
             $vente = Vente::create([
                 'code' => $codeVente,

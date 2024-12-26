@@ -111,7 +111,7 @@ class CaisseController extends Controller
                     HistoriqueCaisse::create([
                         'user_id' => $user->id,
                         'caisse_id' => $request->caisse,
-                        'date_ouverture' => Carbon::now()
+                        'date_ouverture' => Carbon::now(),
                     ]);
 
                     Alert::success('Connexion réussi,  Bienvenue  ' . Auth::user()->first_name, 'Success Message');
@@ -123,6 +123,27 @@ class CaisseController extends Controller
         }
     }
 
+// stocker la session date de vente
+    public function sessionDate(Request $request)
+    {
 
- 
+        try {
+            $request->validate([
+                'session_date' => 'required|date',
+            ]);
+
+            // Stocker la date dans la session 
+            Caisse::create([
+                'session_date_vente'=>$request->session_date
+            ]);
+           
+
+            alert()->success('Succès', 'Date de session vente modifiée avec succès');
+            return back();
+        } catch (\Throwable $th) {
+            Alert::error('Erreur', 'Une erreur est survenue lors de la création de la session : ' . $th->getMessage());
+            return back();
+        }
+    }
+
 }

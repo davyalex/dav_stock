@@ -227,6 +227,8 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::post('update/{id}', 'update')->name('caisse.update');
         route::get('select', 'selectCaisse')->name('caisse.select')->middleware('role:caisse');
         route::post('select', 'selectCaisse')->name('caisse.select.post')->middleware('role:caisse');
+        route::post('session-date-vente', 'sessionDate')->name('vente.session-date')->middleware('role:caisse');  // definir manuellement une session date pour la vente
+
 
         // route::get('delete/{id}', 'delete')->name('caisse.delete');
     });
@@ -285,7 +287,6 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     });
 
 
-
     // stock -achat
     Route::prefix('achat')->controller(AchatController::class)->group(function () {
         route::get('index', 'index')->name('achat.index');  // liste des facture
@@ -333,7 +334,6 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::post('store', 'store')->name('vente.store');
         route::get('cloture-caisse', 'clotureCaisse')->name('vente.cloture-caisse');
         route::get('billeterie-caisse', 'billeterieCaisse')->name('vente.billeterie-caisse');
-        route::post('session-date-vente', 'sessionDate')->name('vente.session-date');  // definir manuellement une session date pour la vente
 
         ##vente menu
         route::get('create-menu', 'createVenteMenu')->name('vente.menu.create'); //vue de la page de vente menu
