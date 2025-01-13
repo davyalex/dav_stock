@@ -97,14 +97,14 @@
                             aria-controls="sidebarConfiguration">
                             <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
                         </a>
-                        <div class="collapse menu-dropdown {{ Route::is('categorie.*') || Route::is('produit.*') || Route::is('fournisseur.*') || Route::is('admin-register.*') || Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*') ? 'show' : '' }}"
+                        <div class="collapse menu-dropdown {{ Route::is('categorie.*') || Route::is('produit.*') || Route::is('fournisseur.*') || Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*') ? 'show' : '' }}"
                             id="sidebarConfiguration">
                             <ul class="nav nav-sm flex-column">
 
-                                <li class="nav-item active">
+                                {{-- <li class="nav-item active">
                                     <a href="{{ route('magasin.index') }}"
                                         class="nav-link {{ Route::is('magasin.*') ? 'active' : '' }}">Magasin</a>
-                                </li>
+                                </li> --}}
 
                                 <li class="nav-item active">
                                     <a href="{{ route('unite.index') }}"
@@ -378,7 +378,7 @@
                             aria-controls="sidebarAuth">
                             <i class=" ri-settings-2-fill"></i> <span>PARAMETRE</span>
                         </a>
-                        <div class="collapse menu-dropdown {{ Route::is('setting.*') || Route::is('module.*') || Route::is('role.*') || Route::is('permission.*') ? 'show' : '' }}"
+                        <div class="collapse menu-dropdown {{ Route::is('setting.*') || Route::is('module.*') || Route::is('role.*') || Route::is('permission.*') || Route::is('admin-register.*') ? 'show' : '' }}"
                             id="sidebarAuth">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item active">
@@ -388,7 +388,7 @@
 
                                 <li class="nav-item active">
                                     <a href="{{ route('admin-register.index') }}"
-                                        class="nav-link {{ Route::is('admin-register.*') ? 'active' : '' }}">Administrateurs</a>
+                                        class="nav-link {{ Route::is('admin-register.*') ? 'active' : '' }}">Utilisateurs</a>
                                 </li>
 
                                 <li class="nav-item">

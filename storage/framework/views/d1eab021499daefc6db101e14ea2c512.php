@@ -88,14 +88,11 @@
                             aria-controls="sidebarConfiguration">
                             <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
                         </a>
-                        <div class="collapse menu-dropdown <?php echo e(Route::is('categorie.*') || Route::is('produit.*') || Route::is('fournisseur.*') || Route::is('admin-register.*') || Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*') ? 'show' : ''); ?>"
+                        <div class="collapse menu-dropdown <?php echo e(Route::is('categorie.*') || Route::is('produit.*') || Route::is('fournisseur.*') || Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*') ? 'show' : ''); ?>"
                             id="sidebarConfiguration">
                             <ul class="nav nav-sm flex-column">
 
-                                <li class="nav-item active">
-                                    <a href="<?php echo e(route('magasin.index')); ?>"
-                                        class="nav-link <?php echo e(Route::is('magasin.*') ? 'active' : ''); ?>">Magasin</a>
-                                </li>
+                                
 
                                 <li class="nav-item active">
                                     <a href="<?php echo e(route('unite.index')); ?>"
@@ -334,7 +331,7 @@
                             aria-controls="sidebarAuth">
                             <i class=" ri-settings-2-fill"></i> <span>PARAMETRE</span>
                         </a>
-                        <div class="collapse menu-dropdown <?php echo e(Route::is('setting.*') || Route::is('module.*') || Route::is('role.*') || Route::is('permission.*') ? 'show' : ''); ?>"
+                        <div class="collapse menu-dropdown <?php echo e(Route::is('setting.*') || Route::is('module.*') || Route::is('role.*') || Route::is('permission.*') || Route::is('admin-register.*') ? 'show' : ''); ?>"
                             id="sidebarAuth">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item active">
@@ -344,7 +341,7 @@
 
                                 <li class="nav-item active">
                                     <a href="<?php echo e(route('admin-register.index')); ?>"
-                                        class="nav-link <?php echo e(Route::is('admin-register.*') ? 'active' : ''); ?>">Administrateurs</a>
+                                        class="nav-link <?php echo e(Route::is('admin-register.*') ? 'active' : ''); ?>">Utilisateurs</a>
                                 </li>
 
                                 <li class="nav-item">

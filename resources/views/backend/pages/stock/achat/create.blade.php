@@ -159,7 +159,7 @@
             <!-- start form duplicate-->
             <div id="product-form-template" style="display: none;">
                 <div class="row mb-3 form-duplicate">
-                    <div class="col-md-8 mb-3">
+                    <div class="col-md-12 mb-3">
                         <label class="form-label" for="product-title-input">Produits
                             <span class="text-danger">*</span>
                         </label>
@@ -176,7 +176,7 @@
                         </select>
                     </div>
 
-                    <div class="col-md-4">
+                    {{-- <div class="col-md-4">
                         <label class="form-label" for="product-title-input">Magasin
                             <span class="text-danger">*</span>
                         </label>
@@ -189,7 +189,7 @@
                                 </option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> --}}
 
                     <div class="col-md-2 mb-3">
                         <label class="form-label" for="stocks-input">Qté acquise

@@ -1,6 +1,6 @@
 
 <?php $__env->startSection('title'); ?>
-    <?php echo app('translator')->get('translation.datatables'); ?>
+   Inventaire
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('css'); ?>
     <!--datatable css-->

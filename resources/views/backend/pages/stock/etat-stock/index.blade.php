@@ -24,8 +24,24 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des produits en stock</h5>
+                    <h5 class="card-title mb-0">Liste des produits en stock
+                        @if(request()->has('filter')) - <b>{{ request('filter') }}</b> @endif
+                    </h5>
+
+                    <div class="dropdown">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class=" ri ri-filter-2-fill"></i> Filtrer par categorie
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="/admin/etat-stock?filter=Restaurant">Restaurant</a></li>
+                            <li><a class="dropdown-item" href="/admin/etat-stock?filter=Bar">Bar</a></li>
+                            <li><a class="dropdown-item" href="/admin/etat-stock">Toutes les categories</a></li>
+                        </ul>
+                    </div>
                 </div>
+
+                
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="buttons-datatables" class="display table table-bordered" style="width:100%">

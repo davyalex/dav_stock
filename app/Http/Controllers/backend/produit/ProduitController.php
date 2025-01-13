@@ -23,8 +23,15 @@ class ProduitController extends Controller
     {
         $categorie = Categorie::whereIn('type', ['restaurant', 'bar'])->get();
 
+            // filtrer les produits selon le type
+            $filter = request('filter');
+
         $data_produit = Produit::withWhereHas('typeProduit', fn($q) => $q->whereIn('type', ['restaurant', 'bar']))
-            ->orderBy('created_at', 'DESC')->get();
+        ->when($filter, function ($query) use ($filter) {
+            return $query->withWhereHas('typeProduit', fn($q) => $q->where('type', $filter));
+        })->orderBy('created_at', 'DESC')->get();
+        // $data_produit = Produit::withWhereHas('typeProduit', fn($q) => $q->whereIn('type', ['restaurant', 'bar']))
+        //     ->orderBy('created_at', 'DESC')->get();
         return view('backend.pages.produit.index', compact('data_produit'));
     }
 

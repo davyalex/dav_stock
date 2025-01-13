@@ -93,7 +93,7 @@ class Produit extends Model implements HasMedia
 
     public function typeProduit()
     {
-        return $this->belongsTo(Categorie::class, 'type_id');
+        return $this->belongsTo(Categorie::class, 'type_id');  // famille de produit Bar et restaurant
     }
 
     public function user()

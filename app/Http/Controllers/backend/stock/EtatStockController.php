@@ -11,7 +11,18 @@ class EtatStockController extends Controller
     public function index()
     {
         try {
-            $produits = Produit::with(['categorie' ,'achats' , ])->get();
+            $filter = request('filter');
+
+            $produits = Produit::with(['categorie', 'achats',])
+                ->when($filter, function ($query) use ($filter) {
+                    return $query->withWhereHas('typeProduit', fn($q) => $q->where('type', $filter));
+                })
+                ->get();
+
+            // filtrer les produits selon les categories
+            $filter = request('filter');
+
+
             // dd($produits->toArray());
             return view('backend.pages.stock.etat-stock.index', compact('produits'));
         } catch (\Exception $e) {

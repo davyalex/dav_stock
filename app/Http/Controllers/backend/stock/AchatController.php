@@ -147,7 +147,7 @@ class AchatController extends Controller
                         'numero_facture' => 'required',
                         'montant' => 'required', // montant de la facture
                         'date_achat' => 'required',
-                        'magasin_id.*' => 'required|exists:magasins,id',
+                        // 'magasin_id.*' => 'required|exists:magasins,id',
                         'produit_id.*' => 'required|exists:produits,id',
                         'fournisseur_id.*' => 'required|exists:fournisseurs,id',
                         'format_id.*' => 'required|exists:formats,id|min:1',
@@ -168,7 +168,7 @@ class AchatController extends Controller
                         'numero_facture' => 'required',
                         'montant' => 'required', // montant de la facture
                         'date_achat' => 'required',
-                        'magasin_id.*' => 'required|exists:magasins,id',
+                        // 'magasin_id.*' => 'required|exists:magasins,id',
                         'produit_id.*' => 'required|exists:produits,id',
                         'fournisseur_id.*' => 'required|exists:fournisseurs,id',
                         'format_id.*' => 'required|exists:formats,id',
@@ -235,7 +235,7 @@ class AchatController extends Controller
                     'prix_achat_unitaire' => $type_produit == 'bar' ? $request->prix_achat_unitaire[$index] : null,
                     'prix_vente_unitaire' =>  $type_produit == 'bar' ? $request->prix_vente_unitaire[$index] : null,
                     // 'unite_id' => $request->unite_sortie[$index],
-                    'magasin_id' => $request->magasin_id,
+                    // 'magasin_id' => $request->magasin_id,
                     'statut' => 'active',
                     'user_id' => Auth::id(),
                 ]);

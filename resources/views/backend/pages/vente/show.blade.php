@@ -61,23 +61,24 @@
                             @endif
                         </div>
                         <div class="col-md-4">
-                            @if($vente->valeur_remise > 0)
-                                <p><strong>Remise :</strong> {{ $vente->valeur_remise }} {{ $vente->type_remise == 'amount' ? 'FCFA' : '%' }}</p>
+                            @if ($vente->valeur_remise > 0)
+                                <p><strong>Remise :</strong> {{ $vente->valeur_remise }}
+                                    {{ $vente->type_remise == 'amount' ? 'FCFA' : '%' }}</p>
                             @endif
                             <p><strong>Montant vente :</strong> {{ $vente->montant_total }}</p>
                         </div>
                         {{-- @if ($vente->type_vente != 'commande') --}}
-                            <div class="col-md-4">
-                                @if($vente->mode_paiement)
-                                    <p><strong>Réglement :</strong> {{ $vente->mode_paiement }}</p>
-                                @endif
-                                @if($vente->montant_recu)
-                                    <p><strong>Montant reçu :</strong> {{ $vente->montant_recu }}</p>
-                                @endif
-                                @if($vente->montant_rendu)
-                                    <p><strong>Montant rendu :</strong> {{ $vente->montant_rendu }}</p>
-                                @endif
-                            </div>
+                        <div class="col-md-4">
+                            @if ($vente->mode_paiement)
+                                <p><strong>Réglement :</strong> {{ $vente->mode_paiement }}</p>
+                            @endif
+                            @if ($vente->montant_recu)
+                                <p><strong>Montant reçu :</strong> {{ $vente->montant_recu }}</p>
+                            @endif
+                            @if ($vente->montant_rendu)
+                                <p><strong>Montant rendu :</strong> {{ $vente->montant_rendu }}</p>
+                            @endif
+                        </div>
                         {{-- @endif --}}
                     </div>
                 </div>
@@ -85,8 +86,12 @@
                     <h5 class="card-title mb-0">Produits de la vente </h5>
 
                     <div class="d-flex justify-content-end">
-                        <button id="btnImprimerTicket" class="btn btn-info me-2 flot-end">  <i class="ri-printer-line align-bottom me-1"></i> Imprimer la fature</button>
-                    <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">Nouvelle vente</a>
+                        <button id="btnImprimerTicket" class="btn btn-info me-2 flot-end"> <i
+                                class="ri-printer-line align-bottom me-1"></i> Imprimer la fature</button>
+
+                        @role('caisse')
+                            <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">Nouvelle vente</a>
+                        @endrole
                     </div>
                 </div>
 
@@ -253,7 +258,7 @@
                     <strong>Total:</strong> {{ number_format($vente->montant_total, 0, ',', ' ') }} FCFA
                 </div>
 
-              
+
 
                 <div class="ticket-footer" style="text-align: center; font-size: 10px;">
                     <p>MERCI DE VOTRE VISITE</p>

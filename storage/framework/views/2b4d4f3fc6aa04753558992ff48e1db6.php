@@ -62,22 +62,24 @@
                         </div>
                         <div class="col-md-4">
                             <?php if($vente->valeur_remise > 0): ?>
-                                <p><strong>Remise :</strong> <?php echo e($vente->valeur_remise); ?> <?php echo e($vente->type_remise == 'amount' ? 'FCFA' : '%'); ?></p>
+                                <p><strong>Remise :</strong> <?php echo e($vente->valeur_remise); ?>
+
+                                    <?php echo e($vente->type_remise == 'amount' ? 'FCFA' : '%'); ?></p>
                             <?php endif; ?>
                             <p><strong>Montant vente :</strong> <?php echo e($vente->montant_total); ?></p>
                         </div>
                         
-                            <div class="col-md-4">
-                                <?php if($vente->mode_paiement): ?>
-                                    <p><strong>Réglement :</strong> <?php echo e($vente->mode_paiement); ?></p>
-                                <?php endif; ?>
-                                <?php if($vente->montant_recu): ?>
-                                    <p><strong>Montant reçu :</strong> <?php echo e($vente->montant_recu); ?></p>
-                                <?php endif; ?>
-                                <?php if($vente->montant_rendu): ?>
-                                    <p><strong>Montant rendu :</strong> <?php echo e($vente->montant_rendu); ?></p>
-                                <?php endif; ?>
-                            </div>
+                        <div class="col-md-4">
+                            <?php if($vente->mode_paiement): ?>
+                                <p><strong>Réglement :</strong> <?php echo e($vente->mode_paiement); ?></p>
+                            <?php endif; ?>
+                            <?php if($vente->montant_recu): ?>
+                                <p><strong>Montant reçu :</strong> <?php echo e($vente->montant_recu); ?></p>
+                            <?php endif; ?>
+                            <?php if($vente->montant_rendu): ?>
+                                <p><strong>Montant rendu :</strong> <?php echo e($vente->montant_rendu); ?></p>
+                            <?php endif; ?>
+                        </div>
                         
                     </div>
                 </div>
@@ -85,8 +87,12 @@
                     <h5 class="card-title mb-0">Produits de la vente </h5>
 
                     <div class="d-flex justify-content-end">
-                        <button id="btnImprimerTicket" class="btn btn-info me-2 flot-end">  <i class="ri-printer-line align-bottom me-1"></i> Imprimer la fature</button>
-                    <a href="<?php echo e(route('vente.create')); ?>" type="button" class="btn btn-primary">Nouvelle vente</a>
+                        <button id="btnImprimerTicket" class="btn btn-info me-2 flot-end"> <i
+                                class="ri-printer-line align-bottom me-1"></i> Imprimer la fature</button>
+
+                        <?php if (\Illuminate\Support\Facades\Blade::check('role', 'caisse')): ?>
+                            <a href="<?php echo e(route('vente.create')); ?>" type="button" class="btn btn-primary">Nouvelle vente</a>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -260,7 +266,7 @@
                     <strong>Total:</strong> <?php echo e(number_format($vente->montant_total, 0, ',', ' ')); ?> FCFA
                 </div>
 
-              
+
 
                 <div class="ticket-footer" style="text-align: center; font-size: 10px;">
                     <p>MERCI DE VOTRE VISITE</p>

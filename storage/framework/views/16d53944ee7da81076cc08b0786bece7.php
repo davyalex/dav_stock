@@ -1,5 +1,7 @@
 
-
+<?php $__env->startSection('title'); ?>
+   Inventaire
+<?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
 
 

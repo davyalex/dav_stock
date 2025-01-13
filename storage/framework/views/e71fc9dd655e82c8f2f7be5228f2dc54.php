@@ -26,7 +26,23 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des produits</h5>
+                    <h5 class="card-title mb-0">Liste des produits 
+                        <?php if(request()->has('filter')): ?> - <b><?php echo e(request('filter')); ?></b> <?php endif; ?>
+                    </h5>
+
+
+                    <div class="dropdown">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class=" ri ri-filter-2-fill"></i> Filtrer par categorie
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="/admin/produit?filter=Restaurant">Restaurant</a></li>
+                            <li><a class="dropdown-item" href="/admin/produit?filter=Bar">Bar</a></li>
+                            <li><a class="dropdown-item" href="/admin/produit">Toutes les categories</a></li>
+                        </ul>
+                    </div>
+
                     <a href="<?php echo e(route('produit.create')); ?>" type="button" class="btn btn-primary ">Créer
                         un produit</a>
                 </div>
@@ -148,7 +164,7 @@
             var table = $('#buttons-datatables').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
+                    'copy', 'csv', 'excel', 'print'
                 ],
 
                 // Utilisez drawCallback pour exécuter delete_row après chaque redessin
