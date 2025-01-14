@@ -54,32 +54,34 @@
                                         <td> {{ $item['created_at'] }} </td>
 
                                         <td>
-                                            <div class="dropdown d-inline-block">
-                                                <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
-                                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="ri-more-fill align-middle"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
+                                           @if ($item['slug'] !='achats')
+                                           <div class="dropdown d-inline-block">
+                                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ri-more-fill align-middle"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
 
-                                                    {{-- <li><a type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                            data-bs-target="#myModalPosition{{ $item['id'] }}"><i
-                                                                class="ri-list-ordered  align-bottom me-2 text-muted"></i>
-                                                            Position</a>
-                                                    </li> --}}
-                                                    <li><a type="button" class="dropdown-item edit-item-btn"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#myModalEdit{{ $item['id'] }}"><i
-                                                                class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Modifier</a></li>
-                                                    <li>
-                                                        <a href="#" class="dropdown-item remove-item-btn delete"
-                                                            data-id={{ $item['id'] }}>
-                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Supprimer
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                                {{-- <li><a type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                        data-bs-target="#myModalPosition{{ $item['id'] }}"><i
+                                                            class="ri-list-ordered  align-bottom me-2 text-muted"></i>
+                                                        Position</a>
+                                                </li> --}}
+                                                <li><a type="button" class="dropdown-item edit-item-btn"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#myModalEdit{{ $item['id'] }}"><i
+                                                            class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                                                        Modifier</a></li>
+                                                <li>
+                                                    <a href="#" class="dropdown-item remove-item-btn delete"
+                                                        data-id={{ $item['id'] }}>
+                                                        <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                        Supprimer
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                           @endif
                                         </td>
                                     </tr>
                                     @include('backend.pages.depense.categorie-depense.edit')
