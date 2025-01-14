@@ -16,7 +16,9 @@ class LibelleDepenseController extends Controller
         //
         try {
             $data_libelleDepense = LibelleDepense::OrderBy('libelle', 'ASC')->get();
-            $categorie_depense = CategorieDepense::OrderBy('libelle', 'ASC')->get();
+            // $categorie_depense = CategorieDepense::OrderBy('libelle', 'ASC')->get();
+            $categorie_depense = CategorieDepense::whereNotIn('slug', ['achats'])->get();
+
             return view('backend.pages.depense.libelle-depense.index', compact('data_libelleDepense' , 'categorie_depense'));
         } catch (\Throwable $th) {
             //throw $th;

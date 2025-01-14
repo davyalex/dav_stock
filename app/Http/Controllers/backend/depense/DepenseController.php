@@ -21,9 +21,12 @@ class DepenseController extends Controller
     {
         //
         try {
-            $data_depense = Depense::OrderBy('created_at', 'ASC')->get();
+            $data_depense = Depense::OrderBy('created_at', 'DESC')->get();
+            $data_libelle_depense = LibelleDepense::OrderBy('created_at', 'ASC')->get();
             $categorie_depense = CategorieDepense::whereNotIn('slug', ['achats'])->get();
-            return view('backend.pages.depense.index', compact('data_depense', 'categorie_depense'));
+
+            // dd($categorie_depense->toArray());
+            return view('backend.pages.depense.index', compact('data_depense', 'categorie_depense' , 'data_libelle_depense'));
         } catch (\Throwable $th) {
             //throw $th;
             return $th->getMessage();

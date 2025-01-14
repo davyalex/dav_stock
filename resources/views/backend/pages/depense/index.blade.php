@@ -47,8 +47,8 @@
                                 <tr id="row_{{ $item['id'] }}">
                                     <td>{{ ++$key }}</td>
                                     <td>{{ $item['categorie_depense']['libelle'] ?? '' }}</td>
-                                    <td>{{ $item['libelle_depense']['libelle'] ?? '' }}</td>
-                                    <td>{{ number_format($item['montant'], 2, ',', ' ') }}</td>
+                                    <td>{{ $item['libelle_depense']['libelle'] ?? $item['categorie_depense']['libelle'] }}</td>
+                                    <td>{{ number_format($item['montant'], 0, ',', ' ') }}</td>
                                     <td>{{ $item['user']['first_name'] }}</td>
                                     <td>{{ $item['created_at']->format('d/m/Y H:i') }}</td>
                                     <td>
@@ -77,7 +77,7 @@
                         <tfoot>
                             <tr>
                                 <th colspan="3" class="text-end">Total des dépenses :</th>
-                                <th>{{ number_format($data_depense->sum('montant'), 2, ',', ' ') }}</th>
+                                <th>{{ number_format($data_depense->sum('montant'), 0, ',', ' ') }}</th>
                                 <th colspan="3"></th>
                             </tr>
                         </tfoot>
@@ -116,7 +116,7 @@
             var table = $('#buttons-datatables').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
+                    'copy', 'csv', 'excel', 'print'
                 ],
 
                 // Utilisez drawCallback pour exécuter delete_row après chaque redessin

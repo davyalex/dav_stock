@@ -4,7 +4,7 @@
             <!-- Default Modals -->
             <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
                 style="display: none;">
-                <div class="modal-dialog modal-lg">
+                <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="myModalLabel">Créer une nouvelle depense </h5>
@@ -17,14 +17,14 @@
                                 novalidate>
                                 @csrf
 
-                                <div class="col-md-8">
+                                {{-- <div class="col-md-4">
                                     <label for="validationCustom01" class="form-label">Categorie</label>
                                     <select name="categorie_depense" class="form-control categorie-select" required>
                                         <option disabled selected value="">Selectionner</option>
                                         @foreach ($categorie_depense as $item)
                                             <!-- Si la catégorie a des libelleDepenses, rendre l'option non cliquable -->
                                             <option value="{{ $item['id'] }}" class="categorie" 
-                                                @if($item->libelleDepenses->isNotEmpty()) disabled @endif>
+                                                @if ($item->libelleDepenses->isNotEmpty()) disabled @endif>
                                                 {{ strtoupper($item['libelle']) }}
                                             </option>
                                 
@@ -39,8 +39,41 @@
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
+                                </div> --}}
+
+
+                                <div class="col-md-4">
+                                    <label for="validationCustom01" class="form-label">Categorie depense</label>
+                                    <select name="categorie_depense" class="form-control categorie-depense " required>
+                                        <option disabled selected value="">Selectionner</option>
+                                        @foreach ($categorie_depense as $item)
+                                            <!-- Si la catégorie a des libelleDepenses, rendre l'option non cliquable -->
+                                            <option value="{{ $item['id'] }}" class="categorie">
+                                                {{ strtoupper($item['libelle']) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
                                 </div>
-                                
+
+                                <div class="col-md-4">
+                                    <label for="validationCustom01" class="form-label">Libellé depense</label>
+                                    <select name="libelle" class="form-control libelle-depense">
+                                        <option disabled selected value="">Selectionner</option>
+                                        {{-- @foreach ($data_libelle_depense as $item)
+                                            <!-- Si la catégorie a des libelleDepenses, rendre l'option non cliquable -->
+                                            <option value="{{ $item['id'] }}" class="categorie">
+                                                {{ strtoupper($item['libelle']) }}
+                                            </option>
+                                        @endforeach --}}
+                                    </select>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+
 
                                 <div class="col-md-2">
                                     <label for="validationCustom01" class="form-label">Montant</label>
@@ -55,8 +88,8 @@
                                     <label class="form-label" for="meta-title-input">Date <span
                                             class="text-danger">*</span>
                                     </label>
-                                    <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>" name="date_depense"
-                                        class="form-control" required>
+                                    <input type="date" id="currentDate" value="<?php echo date('Y-m-d'); ?>"
+                                        name="date_depense" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-12">
@@ -93,11 +126,80 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Sélectionner toutes les options avec la classe 'categorie'
-        let categories = document.querySelectorAll('.categorie-select .categorie');
-        categories.forEach(function(option) {
-            // Appliquer le style inline pour chaque catégorie
-            option.style.fontWeight = 'bold'; // Texte en gras
-            option.style.textTransform = 'uppercase'; // Texte en majuscule
+        // let categories = document.querySelectorAll('.categorie-select .categorie');
+        // categories.forEach(function(option) {
+        //     // Appliquer le style inline pour chaque catégorie
+        //     option.style.fontWeight = 'bold'; // Texte en gras
+        //     option.style.textTransform = 'uppercase'; // Texte en majuscule
+        // });
+
+
+        // // Récupérer les catégories de dépenses
+        // let categories = @json($categorie_depense);
+
+        // // Écouter les changements sur la catégorie sélectionnée
+        // document.querySelector('.categorie-depense').addEventListener('change', function() {
+        //     let selectedCategorieId = this.value; // ID de la catégorie sélectionnée
+        //     let libelleDropdown = document.querySelector('.libelle-depense');
+        //     libelleDropdown.innerHTML = ''; // Réinitialiser les options
+
+        //     // Filtrer les libellés de dépenses en fonction de la catégorie sélectionnée
+        //     let selectedCategorie = categories.find(cat => cat.id == selectedCategorieId);
+
+        //     console.log(selectedCategorie.libelle_depenses);
+
+
+        //     if (selectedCategorie && selectedCategorie.libelle_depenses) {
+        //         selectedCategorie.libelle_depenses.forEach(function(libelle) {
+        //             let option = document.createElement('option');
+        //             option.value = libelle.id;
+        //             option.textContent = libelle.libelle;
+        //             libelleDropdown.appendChild(option);
+        //         });
+        //     } else {
+        //         // Ajouter une option par défaut si aucune catégorie n'est trouvée
+        //         let option = document.createElement('option');
+        //         option.value = '';
+        //         option.textContent = 'Aucun libellé disponible';
+        //         libelleDropdown.appendChild(option);
+        //     }
+        // });
+
+
+        // Récupérer les catégories de dépenses
+        let categories = @json($categorie_depense);
+
+        // Écouter les changements sur la catégorie sélectionnée dans le modal
+        document.querySelector('#myModal').addEventListener('change', function(event) {
+            if (event.target.classList.contains('categorie-depense')) {
+                let selectedCategorieId = event.target.value; // ID de la catégorie sélectionnée
+                let libelleDropdown = document.querySelector('#myModal .libelle-depense');
+                libelleDropdown.innerHTML = ''; // Réinitialiser les options
+
+                // Filtrer les libellés de dépenses en fonction de la catégorie sélectionnée
+                let selectedCategorie = categories.find(cat => cat.id == selectedCategorieId);
+
+                if (selectedCategorie && selectedCategorie.libelle_depenses && selectedCategorie
+                    .libelle_depenses.length > 0) {
+                    // Ajouter les libellés de dépenses disponibles
+                    selectedCategorie.libelle_depenses.forEach(function(libelle) {
+                        let option = document.createElement('option');
+                        option.value = libelle.id;
+                        option.textContent = libelle.libelle;
+                        libelleDropdown.appendChild(option);
+                    });
+                } else {
+                    // Ajouter une option avec les informations de la catégorie sélectionnée
+                    let option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = selectedCategorie ? selectedCategorie.libelle :
+                        'Aucun libellé disponible pour cette catégorie';
+                    libelleDropdown.appendChild(option);
+                }
+            }
         });
+
+
+
     });
 </script>

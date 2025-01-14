@@ -28,7 +28,7 @@ class AchatController extends Controller
     public function index()
     {
         try {
-            $data_facture = Facture::with('achats')->get();
+            $data_facture = Facture::with('achats')->orderBy('created_at', 'DESC')->get();
             // dd($data_facture->toArray());
             return view('backend.pages.stock.achat.index', compact('data_facture'));
         } catch (\Throwable $e) {
@@ -132,58 +132,110 @@ class AchatController extends Controller
 
 
             //gestion des validations 
+            // foreach ($request->produit_id as $index => $produitId) {
+            //     $produit = Produit::find($produitId);
+            //     $categorie = Categorie::find($produit->categorie_id); // catégorie du produit
+
+            //     // récupérer le type de produit
+            //     $type_produit = $categorie->famille;
+
+            //     // Validation en fonction du type de produit
+            //     if ($type_produit == 'restaurant') {
+            //         // Validation pour un produit de type "restaurant"
+            //         $request->validate([
+            //             'type' => 'required', // type facture
+            //             'numero_facture' => 'required',
+            //             'montant' => 'required', // montant de la facture
+            //             'date_achat' => 'required',
+            //             // 'magasin_id.*' => 'required|exists:magasins,id',
+            //             'produit_id.*' => 'required|exists:produits,id',
+            //             'fournisseur_id.*' => 'required|exists:fournisseurs,id',
+            //             'format_id.*' => 'required|exists:formats,id|min:1',
+            //             'quantite_format.*' => 'required',
+            //             'quantite_in_format.*' => 'required',
+            //             'quantite_stocke.*' => 'required',
+            //             'prix_unitaire_format.*' => 'required',
+            //             'prix_total_format.*' => 'required',
+            //             // Ces champs ne sont pas requis pour le restaurant
+            //             'prix_achat_unitaire.*' => 'nullable',
+            //             'prix_vente_unitaire.*' => 'nullable',
+            //             // 'unite_sortie.*' => 'required',
+            //         ]);
+            //     } elseif ($type_produit == 'bar') {
+            //         // Validation pour un produit de type "bar"
+            //         $request->validate([
+            //             'type' => 'required', // type facture
+            //             'numero_facture' => 'required',
+            //             'montant' => 'required', // montant de la facture
+            //             'date_achat' => 'required',
+            //             // 'magasin_id.*' => 'required|exists:magasins,id',
+            //             'produit_id.*' => 'required|exists:produits,id',
+            //             'fournisseur_id.*' => 'required|exists:fournisseurs,id',
+            //             'format_id.*' => 'required|exists:formats,id',
+            //             'quantite_format.*' => 'required',
+            //             'quantite_in_format.*' => 'required',
+            //             'quantite_stocke.*' => 'required',
+            //             'prix_unitaire_format.*' => 'required',
+            //             'prix_total_format.*' => 'required',
+            //             // Ces champs sont requis pour le bar
+            //             'prix_achat_unitaire.*' => 'required',
+            //             'prix_vente_unitaire.*' => 'required',
+            //             // 'unite_sortie.*' => 'required|exists:unites,id',
+            //         ]);
+            //     }
+            // }
+
+            // Gestion des validations
+            $rules = [];
+            $messages = [];
+
             foreach ($request->produit_id as $index => $produitId) {
                 $produit = Produit::find($produitId);
-                $categorie = Categorie::find($produit->categorie_id); // catégorie du produit
 
-                // récupérer le type de produit
+                if (!$produit) {
+                    $messages["produit_id.{$index}"] = "Le produit avec l'ID {$produitId} n'existe pas.";
+                    continue;
+                }
+
+                $categorie = Categorie::find($produit->categorie_id);
+
+                if (!$categorie) {
+                    $messages["categorie_id.{$index}"] = "La catégorie pour le produit avec l'ID {$produitId} n'existe pas.";
+                    continue;
+                }
+
+                // Récupérer le type de produit
                 $type_produit = $categorie->famille;
 
-                // Validation en fonction du type de produit
+                // Règles de validation communes
+                $rules["type"] = 'required';
+                $rules["numero_facture"] = 'required';
+                $rules["montant"] = 'required';
+                $rules["date_achat"] = 'required';
+                $rules["produit_id.{$index}"] = 'required|exists:produits,id';
+                $rules["fournisseur_id"] = 'required|exists:fournisseurs,id';
+                $rules["format_id.{$index}"] = 'required|exists:formats,id';
+                $rules["quantite_format.{$index}"] = 'required';
+                $rules["quantite_in_format.{$index}"] = 'required';
+                $rules["quantite_stocke.{$index}"] = 'required';
+                $rules["prix_unitaire_format.{$index}"] = 'required';
+                $rules["prix_total_format.{$index}"] = 'required';
+
+                // Validation spécifique au type de produit
                 if ($type_produit == 'restaurant') {
-                    // Validation pour un produit de type "restaurant"
-                    $request->validate([
-                        'type' => 'required', // type facture
-                        'numero_facture' => 'required',
-                        'montant' => 'required', // montant de la facture
-                        'date_achat' => 'required',
-                        // 'magasin_id.*' => 'required|exists:magasins,id',
-                        'produit_id.*' => 'required|exists:produits,id',
-                        'fournisseur_id.*' => 'required|exists:fournisseurs,id',
-                        'format_id.*' => 'required|exists:formats,id|min:1',
-                        'quantite_format.*' => 'required',
-                        'quantite_in_format.*' => 'required',
-                        'quantite_stocke.*' => 'required',
-                        'prix_unitaire_format.*' => 'required',
-                        'prix_total_format.*' => 'required',
-                        // Ces champs ne sont pas requis pour le restaurant
-                        'prix_achat_unitaire.*' => 'nullable',
-                        'prix_vente_unitaire.*' => 'nullable',
-                        // 'unite_sortie.*' => 'required',
-                    ]);
+                    // Champs optionnels pour les produits de type restaurant
+                    $rules["prix_achat_unitaire.{$index}"] = 'nullable';
+                    $rules["prix_vente_unitaire.{$index}"] = 'nullable';
                 } elseif ($type_produit == 'bar') {
-                    // Validation pour un produit de type "bar"
-                    $request->validate([
-                        'type' => 'required', // type facture
-                        'numero_facture' => 'required',
-                        'montant' => 'required', // montant de la facture
-                        'date_achat' => 'required',
-                        // 'magasin_id.*' => 'required|exists:magasins,id',
-                        'produit_id.*' => 'required|exists:produits,id',
-                        'fournisseur_id.*' => 'required|exists:fournisseurs,id',
-                        'format_id.*' => 'required|exists:formats,id',
-                        'quantite_format.*' => 'required',
-                        'quantite_in_format.*' => 'required',
-                        'quantite_stocke.*' => 'required',
-                        'prix_unitaire_format.*' => 'required',
-                        'prix_total_format.*' => 'required',
-                        // Ces champs sont requis pour le bar
-                        'prix_achat_unitaire.*' => 'required',
-                        'prix_vente_unitaire.*' => 'required',
-                        // 'unite_sortie.*' => 'required|exists:unites,id',
-                    ]);
+                    // Champs obligatoires pour les produits de type bar
+                    $rules["prix_achat_unitaire.{$index}"] = 'required';
+                    $rules["prix_vente_unitaire.{$index}"] = 'required';
                 }
             }
+
+            // Valider les règles et les messages collectés
+            $request->validate($rules, $messages);
+
 
             //on verifie le montant de la facture et le montant total des achats
             if ($request->montant != $montant_facture) {
@@ -193,7 +245,7 @@ class AchatController extends Controller
             //enregistrer la facture 
             $facture = new Facture();
             $facture->type = $request->type;
-            $facture->numero_facture = $request->type == 'facture' ? 'FAC-' . $request->numero_facture : 'BC-' . $request->numero_facture;
+            $facture->numero_facture = $request->type == 'facture' ? 'FAC-' . $request->numero_facture : 'BS-' . $request->numero_facture;
             $facture->date_facture = $request->date_achat;
             $facture->fournisseur_id = $request->fournisseur_id;
             $facture->montant = $request->montant;

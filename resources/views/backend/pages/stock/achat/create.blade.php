@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-   Stock
+    Stock
 @endsection
 @section('content')
     @component('backend.components.breadcrumb')
@@ -71,7 +71,7 @@
                                         <select name="type" id="type" class="form-control" required>
                                             <option disabled selected value="">Choisir</option>
                                             <option value="facture">Facture</option>
-                                            <option value="bon de commande">Bon de commande</option>
+                                            <option value="bon de sortie">Bon de sortie</option>
                                         </select>
                                     </div>
 
@@ -109,8 +109,8 @@
                                         <label class="form-label" for="meta-title-input">Date <span
                                                 class="text-danger">*</span>
                                         </label>
-                                        <input type="datetime-local" id="currentDate" value="<?php echo date('Y-m-d H:i:s'); ?>" name="date_achat"
-                                            class="form-control" required>
+                                        <input type="datetime-local" id="currentDate" value="<?php echo date('Y-m-d H:i:s'); ?>"
+                                            name="date_achat" class="form-control" required>
                                     </div>
 
 
@@ -168,9 +168,10 @@
                             <option disabled selected value>Selectionner un produit
                             </option>
                             @foreach ($data_produit as $produit)
-                                <option value="{{ $produit->id }}">{{ $produit->nom }} 
-                                    {{ $produit->valeur_unite ?? '' }} {{ $produit->unite->libelle ?? '' }} {{ $produit->unite ? '('. $produit->unite->abreviation . ')' : '' }}
-                                   
+                                <option value="{{ $produit->id }}">{{ $produit->nom }}
+                                    {{ $produit->valeur_unite ?? '' }} {{ $produit->unite->libelle ?? '' }}
+                                    {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
+
                                 </option>
                             @endforeach
                         </select>
@@ -273,7 +274,7 @@
                         </select>
                     </div> --}}
 
-                  
+
 
 
 
@@ -967,6 +968,9 @@
                         form.find('.prixAchatUnite').val(0)
                         form.find('.prixVente').val(0)
 
+                        form.find('.prixVente').prop('required', false)
+                        form.find('.prixAchatUnite').prop('required',   false)
+
 
                     } else {
                         form.find('.prixAchatUniteDiv').show()
@@ -990,7 +994,7 @@
                     })
 
                     form.find('.prixVente').val(filteredProduct[0].prix)
-                    form.find('.uniteSortie').val(filteredProduct[0].unite_sortie.libelle)                 
+                    form.find('.uniteSortie').val(filteredProduct[0].unite_sortie.libelle)
                 }
 
                 $(document).on('change', '.productSelected', function() {
