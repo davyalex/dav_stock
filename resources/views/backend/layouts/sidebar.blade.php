@@ -145,7 +145,6 @@
                 @endcan
 
 
-
                 @can('voir-stock')
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarStock" data-bs-toggle="collapse" role="button"
@@ -244,7 +243,7 @@
                                 </li> --}}
 
                                 <li class="nav-item active">
-                                    <a href="{{ route('commande.index' , ['filter'=>'en attente']) }}"
+                                    <a href="{{ route('commande.index', ['filter' => 'en attente']) }}"
                                         class="nav-link {{ Route::is('commande.*') ? 'active' : '' }}">Commandes</a>
                                 </li>
 
@@ -280,25 +279,41 @@
                 @endcan --}}
 
 
-
-                @can('voir-site')
+                @can('voir-menu')
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sidebarSite" data-bs-toggle="collapse" role="button"
-                            aria-controls="sidebarSite">
-                            <i class="ri ri-global-fill"></i> <span>SITE</span>
+                        <a class="nav-link menu-link" href="#sideBarMenu" data-bs-toggle="collapse" role="button"
+                            aria-controls="sideBarMenu">
+                            <i class="ri ri-file-list-line"></i> <span>PLATS & MENU</span>
                         </a>
-                        <div class="collapse menu-dropdown {{ Route::is('slide.*') ? 'show' : '' }}" id="sidebarSite">
+                        <div class="collapse menu-dropdown {{ Route::is('menu.*') || Route::is('plat.*') || Route::is('plat-menu.*') || Route::is('categorie-menu.*') ? 'show' : '' }}"
+                            id="sideBarMenu">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item active">
-                                    <a href="{{ route('slide.index') }}"
-                                        class="nav-link {{ Route::is('slide.*') ? 'active' : '' }}">Slides</a>
+                                    <a href="{{ route('categorie-menu.index') }}"
+                                        class="nav-link {{ Route::is('categorie-menu') ? 'active' : '' }}">
+                                        Categories</a>
+                                </li>
+                                <li class="nav-item active">
+                                    <a href="{{ route('plat-menu.index') }}"
+                                        class="nav-link {{ Route::is('plat-menu.*') ? 'active' : '' }}">Plats Menu </a>
+                                </li>
+
+                                <li class="nav-item active">
+                                    <a href="{{ route('plat.index') }}"
+                                        class="nav-link {{ Route::is('plat.*') ? 'active' : '' }}">Plats Quotidiens</a>
                                 </li>
 
 
+
+                                <li class="nav-item active">
+                                    <a href="{{ route('menu.index') }}"
+                                        class="nav-link {{ Route::is('menu.*') ? 'active' : '' }}">Menu du jour</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
                 @endcan
+
                 @can('voir-rapport')
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sideBarRapport" data-bs-toggle="collapse" role="button"
@@ -336,37 +351,20 @@
                     </li>
                 @endcan
 
-
-                @can('voir-menu')
+                @can('voir-site')
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sideBarMenu" data-bs-toggle="collapse" role="button"
-                            aria-controls="sideBarMenu">
-                            <i class="ri ri-file-list-line"></i> <span>PLATS & MENU</span>
+                        <a class="nav-link menu-link" href="#sidebarSite" data-bs-toggle="collapse" role="button"
+                            aria-controls="sidebarSite">
+                            <i class="ri ri-global-fill"></i> <span>SITE</span>
                         </a>
-                        <div class="collapse menu-dropdown {{ Route::is('menu.*') || Route::is('plat.*') || Route::is('plat-menu.*') || Route::is('categorie-menu.*') ? 'show' : '' }}"
-                            id="sideBarMenu">
+                        <div class="collapse menu-dropdown {{ Route::is('slide.*') ? 'show' : '' }}" id="sidebarSite">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item active">
-                                    <a href="{{ route('categorie-menu.index') }}"
-                                        class="nav-link {{ Route::is('categorie-menu') ? 'active' : '' }}">
-                                        Categories</a>
-                                </li>
-                                <li class="nav-item active">
-                                    <a href="{{ route('plat-menu.index') }}"
-                                        class="nav-link {{ Route::is('plat-menu.*') ? 'active' : '' }}">Plats Menu </a>
-                                </li>
-
-                                <li class="nav-item active">
-                                    <a href="{{ route('plat.index') }}"
-                                        class="nav-link {{ Route::is('plat.*') ? 'active' : '' }}">Plats Quotidiens</a>
+                                    <a href="{{ route('slide.index') }}"
+                                        class="nav-link {{ Route::is('slide.*') ? 'active' : '' }}">Slides</a>
                                 </li>
 
 
-
-                                <li class="nav-item active">
-                                    <a href="{{ route('menu.index') }}"
-                                        class="nav-link {{ Route::is('menu.*') ? 'active' : '' }}">Menu du jour</a>
-                                </li>
                             </ul>
                         </div>
                     </li>
@@ -408,10 +406,6 @@
                         </div>
                     </li>
                 @endif
-
-
-
-
 
             </ul>
         </div>

@@ -121,7 +121,7 @@
             var table = $('#buttons-datatables').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
+                    'copy', 'csv', 'excel', 'print'
                 ],
 
                 // Utilisez drawCallback pour exécuter delete_row après chaque redessin
