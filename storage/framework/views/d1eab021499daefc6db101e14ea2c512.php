@@ -133,7 +133,6 @@
                 <?php endif; ?>
 
 
-
                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-stock')): ?>
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarStock" data-bs-toggle="collapse" role="button"
@@ -229,7 +228,7 @@
                                 
 
                                 <li class="nav-item active">
-                                    <a href="<?php echo e(route('commande.index' , ['filter'=>'en attente'])); ?>"
+                                    <a href="<?php echo e(route('commande.index', ['filter' => 'en attente'])); ?>"
                                         class="nav-link <?php echo e(Route::is('commande.*') ? 'active' : ''); ?>">Commandes</a>
                                 </li>
 
@@ -241,53 +240,6 @@
                 <?php endif; ?>
 
                 
-
-
-
-                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-site')): ?>
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sidebarSite" data-bs-toggle="collapse" role="button"
-                            aria-controls="sidebarSite">
-                            <i class="ri ri-global-fill"></i> <span>SITE</span>
-                        </a>
-                        <div class="collapse menu-dropdown <?php echo e(Route::is('slide.*') ? 'show' : ''); ?>" id="sidebarSite">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item active">
-                                    <a href="<?php echo e(route('slide.index')); ?>"
-                                        class="nav-link <?php echo e(Route::is('slide.*') ? 'active' : ''); ?>">Slides</a>
-                                </li>
-
-
-                            </ul>
-                        </div>
-                    </li>
-                <?php endif; ?>
-                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-rapport')): ?>
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sideBarRapport" data-bs-toggle="collapse" role="button"
-                            aria-controls="sideBarRapport">
-                            <i class="ri ri-file-list-line"></i> <span>RAPPORTS</span>
-                        </a>
-                        <div class="collapse menu-dropdown <?php echo e(Route::is('rapport.*') ? 'show' : ''); ?>"
-                            id="sideBarRapport">
-                            <ul class="nav nav-sm flex-column">
-
-                                
-
-                                
-                                <li class="nav-item active">
-                                    <a href="<?php echo e(route('rapport.vente')); ?>"
-                                        class="nav-link <?php echo e(Route::is('rapport.vente') ? 'active' : ''); ?>">
-                                        Ventes</a>
-                                </li>
-                                <li class="nav-item active">
-                                    <a href="<?php echo e(route('rapport.exploitation')); ?>"
-                                        class="nav-link <?php echo e(Route::is('rapport.exploitation') ? 'active' : ''); ?>">Exploitation</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                <?php endif; ?>
 
 
                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-menu')): ?>
@@ -320,6 +272,52 @@
                                     <a href="<?php echo e(route('menu.index')); ?>"
                                         class="nav-link <?php echo e(Route::is('menu.*') ? 'active' : ''); ?>">Menu du jour</a>
                                 </li>
+                            </ul>
+                        </div>
+                    </li>
+                <?php endif; ?>
+
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-rapport')): ?>
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sideBarRapport" data-bs-toggle="collapse" role="button"
+                            aria-controls="sideBarRapport">
+                            <i class="ri ri-file-list-line"></i> <span>RAPPORTS</span>
+                        </a>
+                        <div class="collapse menu-dropdown <?php echo e(Route::is('rapport.*') ? 'show' : ''); ?>"
+                            id="sideBarRapport">
+                            <ul class="nav nav-sm flex-column">
+
+                                
+
+                                
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('rapport.vente')); ?>"
+                                        class="nav-link <?php echo e(Route::is('rapport.vente') ? 'active' : ''); ?>">
+                                        Ventes</a>
+                                </li>
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('rapport.exploitation')); ?>"
+                                        class="nav-link <?php echo e(Route::is('rapport.exploitation') ? 'active' : ''); ?>">Exploitation</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                <?php endif; ?>
+
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-site')): ?>
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sidebarSite" data-bs-toggle="collapse" role="button"
+                            aria-controls="sidebarSite">
+                            <i class="ri ri-global-fill"></i> <span>SITE</span>
+                        </a>
+                        <div class="collapse menu-dropdown <?php echo e(Route::is('slide.*') ? 'show' : ''); ?>" id="sidebarSite">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('slide.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('slide.*') ? 'active' : ''); ?>">Slides</a>
+                                </li>
+
+
                             </ul>
                         </div>
                     </li>
@@ -358,10 +356,6 @@
                         </div>
                     </li>
                 <?php endif; ?>
-
-
-
-
 
             </ul>
         </div>

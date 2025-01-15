@@ -44,8 +44,9 @@ class Produit extends Model implements HasMedia
         'slug',
         'description',
         'prix', // prix de vente
-        'stock_initial',
+        'stock_initial', // stock des nouveau achat apres inventaire
         'stock', //quantité
+        'stock_dernier_inventaire', // stock du dernier inventaire
         'stock_alerte', // stock de securite
         'categorie_id',
         'categorie_menu_id',

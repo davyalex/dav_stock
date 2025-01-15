@@ -23,13 +23,13 @@ class ProduitController extends Controller
     {
         $categorie = Categorie::whereIn('type', ['restaurant', 'bar'])->get();
 
-            // filtrer les produits selon le type
-            $filter = request('filter');
+        // filtrer les produits selon le type
+        $filter = request('filter');
 
         $data_produit = Produit::withWhereHas('typeProduit', fn($q) => $q->whereIn('type', ['restaurant', 'bar']))
-        ->when($filter, function ($query) use ($filter) {
-            return $query->withWhereHas('typeProduit', fn($q) => $q->where('type', $filter));
-        })->orderBy('created_at', 'DESC')->get();
+            ->when($filter, function ($query) use ($filter) {
+                return $query->withWhereHas('typeProduit', fn($q) => $q->where('type', $filter));
+            })->orderBy('created_at', 'DESC')->get();
         // $data_produit = Produit::withWhereHas('typeProduit', fn($q) => $q->whereIn('type', ['restaurant', 'bar']))
         //     ->orderBy('created_at', 'DESC')->get();
         return view('backend.pages.produit.index', compact('data_produit'));
@@ -39,11 +39,24 @@ class ProduitController extends Controller
     {
         try {
 
-            $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
-                ->whereIn('type', ['bar', 'restaurant'])
-                ->OrderBy('position', 'ASC')->get();
+            // $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
+            //     ->whereIn('type', ['bar', 'restaurant'])
+            //     ->OrderBy('position', 'ASC')->get();
 
-            $categorieAll = Categorie::all();
+
+            // $categorieAll = Categorie::all();
+
+
+            $data_categorie = Categorie::whereNull('parent_id') // Catégories principales
+                ->with('children', fn($q) => $q->orderBy('position', 'ASC')) // Récupérer les sous-catégories avec tri
+                ->withCount('children') // Compter le nombre d'enfants pour chaque catégorie
+                ->whereIn('type', ['bar', 'restaurant']) // Filtrer par type 'bar' ou 'restaurant'
+                ->orderBy('position', 'ASC') // Trier les catégories principales par position
+                ->get();
+
+            // Récupérer toutes les catégories (avec leurs enfants, s'ils existent)
+            $categorieAll = Categorie::with('children')->get();
+
 
             $data_unite = Unite::all();
             $data_format = Format::all();
@@ -51,12 +64,20 @@ class ProduitController extends Controller
             // $data_variante = Variante::all();
 
 
-            // dd($data_produit->toArray());
+            // dd($data_categorie->toArray());
 
             return view('backend.pages.produit.create', compact('data_categorie', 'categorieAll', 'data_unite', 'data_magasin', 'data_format'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
+    }
+
+    public function categoryFilter(Request $request)
+    {
+
+        $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
+            ->whereIn('type', ['bar', 'restaurant'])
+            ->OrderBy('position', 'ASC')->get();
     }
 
 
@@ -121,7 +142,7 @@ class ProduitController extends Controller
                 'categorie_id' => $request['categorie_id'],
                 'stock_alerte' => $request['stock_alerte'],
                 'type_id' => $principaCat['id'], // Type produit
-                'prix' => $request['prix'],
+                'prix' => $categorie->famille == 'bar'  ? $request['prix'] : null,
                 'valeur_unite' => $request['valeur_unite'],
                 'unite_id' => $request['unite_id'],
                 'unite_sortie_id' => $categorie->famille == 'restaurant'  ? $request['unite_sortie_id'] :   $request->variantes[0]['libelle'],
@@ -131,16 +152,19 @@ class ProduitController extends Controller
 
 
             // Erengistrer les variantes dans la table pivot  ------*variantes represente les unite de vente associer au produit
-            if ($request->variantes) {
-                foreach ($request->variantes as  $variante) {
-                    $data_produit->variantes()->attach(
-                        $variante['libelle'],
-                        [
-                            'quantite' => $variante['quantite'],
-                            'prix' => $variante['prix'],
-                            'total' => $variante['quantite'] * $variante['prix']
-                        ]
-                    );
+            // famille est bar
+            if ($categorie->famille == 'bar') {
+                if ($request->variantes) {
+                    foreach ($request->variantes as  $variante) {
+                        $data_produit->variantes()->attach(
+                            $variante['libelle'],
+                            [
+                                'quantite' => $variante['quantite'],
+                                'prix' => $variante['prix'],
+                                'total' => $variante['quantite'] * $variante['prix']
+                            ]
+                        );
+                    }
                 }
             }
 
@@ -201,16 +225,26 @@ class ProduitController extends Controller
     public function edit($id)
     {
         try {
+
+            $data_produit = Produit::find($id);
+
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
                 ->whereIn('type', ['bar', 'restaurant'])
                 ->OrderBy('position', 'ASC')->get();
 
-            $data_produit = Produit::find($id);
+            // children ctegories of famile select
+            $data_categorie_edit = Categorie::where('parent_id', $data_produit->type_id)->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
+                // ->whereNotIn('parent_id' , [null])
+                // ->whereIn('type', ['bar', 'restaurant'])
+                ->OrderBy('position', 'ASC')->get();
 
-            // dd($data_produit->toArray());
+
+            // dd($data_categorie->toArray());
             //recuperer les variante
 
             $categorieAll = Categorie::all();
+
+
 
             $data_unite = Unite::all();
             $data_format = Format::all();
@@ -235,7 +269,7 @@ class ProduitController extends Controller
             // dd($galleryProduit);
 
             $id = $id;
-            return view('backend.pages.produit.edit', compact('data_produit', 'data_categorie', 'categorieAll', 'data_unite', 'data_magasin', 'galleryProduit', 'id', 'data_format'));
+            return view('backend.pages.produit.edit', compact('data_produit', 'data_categorie', 'data_categorie_edit', 'categorieAll',  'data_unite', 'data_magasin', 'galleryProduit', 'id', 'data_format'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }

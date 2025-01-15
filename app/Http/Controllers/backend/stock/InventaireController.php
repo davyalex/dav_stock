@@ -5,6 +5,7 @@ namespace App\Http\Controllers\backend\stock;
 use Carbon\Carbon;
 use App\Models\Unite;
 use App\Models\Produit;
+use App\Models\Categorie;
 use App\Models\Inventaire;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -37,44 +38,51 @@ class InventaireController extends Controller
 
         try {
 
-          
+
 
             // Récupérer la date du dernier inventaire
             $date_dernier_inventaire = Inventaire::select('created_at')
                 ->orderBy('created_at', 'desc')
                 ->first();
             $date_dernier_inventaire = $date_dernier_inventaire ? $date_dernier_inventaire->created_at : Carbon::now()->startOfDay();
-            
+
             // Date du jour
             $date_jour = Carbon::now();
-            
+
             // Récupérer les produits avec le nombre de ventes entre la date du dernier inventaire et la date du jour
             $data_produit = Produit::whereHas('categorie', function ($q) {
                 $q->whereIn('famille', ['restaurant', 'bar']);
             })
-            ->withSum(['ventes as quantite_vendue' => function ($query) use ($date_dernier_inventaire, $date_jour) {
-                // Filtrer les ventes entre la date du dernier inventaire et la date du jour
-                $query->whereBetween('ventes.created_at', [$date_dernier_inventaire, $date_jour]);
-            }], 'produit_vente.quantite') // Somme de la quantité vendue dans le pivot produit_vente
-           
+                ->withSum(['ventes as quantite_vendue' => function ($query) use ($date_dernier_inventaire, $date_jour) {
+                    // Filtrer les ventes entre la date du dernier inventaire et la date du jour
+                    $query->whereBetween('ventes.created_at', [$date_dernier_inventaire, $date_jour]);
+                }], 'produit_vente.quantite') // Somme de la quantité vendue dans le pivot produit_vente
 
-            ->withSum(['sorties as quantite_utilisee' => function ($query) use ($date_dernier_inventaire, $date_jour) {
-                // Filtrer les sorties entre la date du dernier inventaire et la date du jour
-                $query->whereBetween('sorties.created_at', [$date_dernier_inventaire, $date_jour]);
-            }], 'produit_sortie.quantite_utilise') // Somme de la quantité utilisée dans le pivot produit_sortie
-           
-            // ->withCount(['sorties as total_quantite_utilisee' => function ($query) use ($date_dernier_inventaire, $date_jour) {
-            //     // Somme des quantités utilisées dans le pivot `produit_sortie`
-            //     $query->whereBetween('sorties.created_at', [$date_dernier_inventaire, $date_jour])
-            //           ->select(DB::raw('SUM(produit_sortie.quantite_utilise)'));
-            // }])
-            ->with('categorie')
-            ->get();
-            
-            
+
+                ->withSum(['sorties as quantite_utilisee' => function ($query) use ($date_dernier_inventaire, $date_jour) {
+                    // Filtrer les sorties entre la date du dernier inventaire et la date du jour
+                    $query->whereBetween('sorties.created_at', [$date_dernier_inventaire, $date_jour]);
+                }], 'produit_sortie.quantite_utilise') // Somme de la quantité utilisée dans le pivot produit_sortie
+
+                // ->withCount(['sorties as total_quantite_utilisee' => function ($query) use ($date_dernier_inventaire, $date_jour) {
+                //     // Somme des quantités utilisées dans le pivot `produit_sortie`
+                //     $query->whereBetween('sorties.created_at', [$date_dernier_inventaire, $date_jour])
+                //           ->select(DB::raw('SUM(produit_sortie.quantite_utilise)'));
+                // }])
+                ->with('categorie')
+                ->get();
+
+
+                // recuperer les familles de categories bar et restaurant
+                $categorie_famille = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
+                ->whereIn('type', ['bar', 'restaurant'])
+                ->OrderBy('position', 'ASC')->get();
+
+
+
 
             // dd($data_produit->toArray());
-            return view('backend.pages.stock.inventaire.create', compact('data_produit'));
+            return view('backend.pages.stock.inventaire.create', compact('data_produit' , 'categorie_famille'));
         } catch (\Throwable $e) {
             return  $e->getMessage();
         }
@@ -122,6 +130,11 @@ class InventaireController extends Controller
 
                 // remplacer le stock  par le stock physique
                 $produit->stock = $request->stock_physique[$key];
+
+                // stock du dernier inventaire
+                $produit->stock_dernier_inventaire = $request->stock_physique[$key];
+
+                // mettre le stock initial a 0
                 $produit->stock_initial = 0;
 
                 $produit->save();

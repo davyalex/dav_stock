@@ -1,5 +1,7 @@
 
-
+<?php $__env->startSection('title'); ?>
+   Sortie
+<?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
     <?php $__env->startComponent('backend.components.breadcrumb'); ?>
         <?php $__env->slot('li_1'); ?>

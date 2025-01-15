@@ -20,7 +20,7 @@
                         novalidate>
                         @csrf
                         <div class="row">
-                            <div class="col-lg-8">
+                            <div class="col-lg-12">
                                 <div class="card">
                                     {{-- <a href="{{ route('achat.create') }}" class="float-end text-decoration-underline">
                                         <i class="ri ri-arrow-left-line"></i>
@@ -29,24 +29,43 @@
                                     <div class="card-body">
                                         <div class="mb-3 row">
 
-                                            <div class="mb-3 col-md-6">
-                                                <label class="form-label" for="product-title-input">Sélectionner une
-                                                    categorie <span class="text-danger">*</span>
+                                            <div class="mb-3 col-md-3">
+                                                <label class="form-label" for="product-title-input">Famille<span
+                                                        class="text-danger">*</span>
                                                 </label>
-                                                <select id="categorie" class="form-control js-example-basic-single"
-                                                    name="categorie_id" required>
+                                                <select id="categorie" class="form-control " name="famille" required>
                                                     <option value="" disabled selected>Selectionner</option>
 
                                                     @foreach ($data_categorie as $categorie)
-                                                        @include(
+                                                        {{-- @include(
                                                             'backend.pages.produit.partials.subCategorieOption',
                                                             ['category' => $categorie]
-                                                        )
+                                                        ) --}}
+                                                        <option value=" {{ $categorie->id }} ">{{ $categorie->name }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
 
-                                            <div class="col-md-6">
+                                            <div class="mb-3 col-md-5">
+                                                <label class="form-label" for="product-title-input">
+                                                    Categorie <span class="text-danger">*</span>
+                                                </label>
+                                                <select id="categorie-filter"
+                                                    class="form-control js-example-basic-single categorie-filter"
+                                                    name="categorie_id" required>
+                                                    <option value="" disabled selected>Selectionner</option>
+
+                                                    {{-- @foreach ($data_categorie as $categorie)
+                                                        @include(
+                                                            'backend.pages.produit.partials.subCategorieOption',
+                                                            ['category' => $categorie]
+                                                        )
+                                                    @endforeach --}}
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
                                                 <label class="form-label" for="meta-title-input">Libellé <span
                                                         class="text-danger">*</span>
                                                 </label>
@@ -186,8 +205,9 @@
                                                     </div>
                                                     <div class="col-4">
                                                         <label for="prix">Prix unitaire de vente :</label>
-                                                        <input type="number" step="0.01" class="form-control prixVente"
-                                                            name="variantes[0][prix]" required>
+                                                        <input type="number" step="0.01"
+                                                            class="form-control prixVente" name="variantes[0][prix]"
+                                                            required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -199,69 +219,81 @@
                                         <!-- ========== End Variante ========== -->
 
 
-                                        <div>
-                                            <label>Description</label>
-                                            <textarea name="description" id="ckeditor-classic"></textarea>
-                                        </div>
+
                                     </div>
                                 </div>
                                 <!-- end card -->
                             </div>
                             <!-- end col -->
 
-                            <div class="col-lg-4">
+                            <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                <div>
+                                                    <label>Description</label>
+                                                    <textarea name="description" id="ckeditor-classic"></textarea>
+                                                </div>
+                                            </div>
 
-
-                                        <div class="mb-4">
-                                            <h5 class="fs-14 mb-1">Image principale <span class="text-danger">*</span>
-                                            </h5>
-                                            <div class="text-center">
-                                                <div class="position-relative d-inline-block">
-                                                    <div class="position-absolute top-100 start-100 translate-middle">
-                                                        <label for="product-image-input" class="mb-0"
-                                                            data-bs-toggle="tooltip" data-bs-placement="right"
-                                                            title="Select Image">
-                                                            <div class="avatar-xs">
-                                                                <div
-                                                                    class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
-                                                                    <i class="ri-image-fill"></i>
+                                            <div class="col-md-5">
+                                                <div class="mb-4">
+                                                    <h6 class="fs-14 mb-1">Image principale <span
+                                                            class="text-danger">*</span>
+                                                    </h6>
+                                                    <div class="text-center">
+                                                        <div class="position-relative d-inline-block">
+                                                            <div
+                                                                class="position-absolute top-100 start-100 translate-middle">
+                                                                <label for="product-image-input" class="mb-0"
+                                                                    data-bs-toggle="tooltip" data-bs-placement="right"
+                                                                    title="Select Image">
+                                                                    <div class="avatar-xs">
+                                                                        <div
+                                                                            class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
+                                                                            <i class="ri-image-fill"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                </label>
+                                                                <input class="form-control d-none"
+                                                                    id="product-image-input" type="file"
+                                                                    name="imagePrincipale" accept="image/*" required>
+                                                                <div class="invalid-feedback">Ajouter une image</div>
+                                                            </div>
+                                                            <div class="avatar-lg">
+                                                                <div class="avatar-title bg-light rounded">
+                                                                    <img src="" id="product-img"
+                                                                        class="avatar-md h-auto" />
                                                                 </div>
                                                             </div>
-                                                        </label>
-                                                        <input class="form-control d-none" id="product-image-input"
-                                                            type="file" name="imagePrincipale" accept="image/*"
-                                                            required>
-                                                        <div class="invalid-feedback">Ajouter une image</div>
-                                                    </div>
-                                                    <div class="avatar-lg">
-                                                        <div class="avatar-title bg-light rounded">
-                                                            <img src="" id="product-img"
-                                                                class="avatar-md h-auto" />
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
 
 
-                                        <div class="col-md-12 mt-3">
-                                            <label for="imageInput" class="form-label col-12">
-                                                <div class="col-md-12 border border-dark rounded border-dashed text-center px-5 mt-4"
-                                                    style=" cursor: pointer;">
-                                                    <i class="ri ri-image-add-fill fs-1 "></i>
-                                                    <h5>Ajouter des images</h5>
+                                                <div class="col-md-12 mt-3">
+                                                    <label for="imageInput" class="form-label col-12">
+                                                        <div class="col-md-12 border border-dark rounded border-dashed text-center px-5 mt-4"
+                                                            style=" cursor: pointer;">
+                                                            <i class="ri ri-image-add-fill fs-1 "></i>
+                                                            <h5>Ajouter des images</h5>
+                                                        </div>
+                                                    </label>
+                                                    <input type="file" id="imageInput" accept="image/*"
+                                                        class="form-control d-none" multiple>
+
+                                                    <div class="row" id="imageTableBody"></div>
+
+                                                    <div class="valid-feedback">
+                                                        Success!
+                                                    </div>
                                                 </div>
-                                            </label>
-                                            <input type="file" id="imageInput" accept="image/*"
-                                                class="form-control d-none" multiple>
-
-                                            <div class="row" id="imageTableBody"></div>
-
-                                            <div class="valid-feedback">
-                                                Success!
                                             </div>
+
+
+
+
                                         </div>
 
                                     </div>
@@ -345,7 +377,70 @@
 
             // Afficher les champs en fonction de la categorie selectionné
             let categoryFamille;
-            var categorieData = @json($categorieAll) // from product controller
+            // var categorieData = @json($categorieAll) // from product controller
+            var categorieFilter =
+                @json($data_categorie) // from product controller--- categorie parent et leur sous categorie
+
+
+            // remplissage des categorie en fonction de la categorie famille selectionnee
+
+            // Données des catégories
+            var categorieData = @json($categorieAll); // Toutes les catégories avec leurs enfants
+            var categorieSelect = document.getElementById('categorie'); // Select Famille
+            var categorieFilterSelect = document.getElementById('categorie-filter'); // Select Catégorie
+
+            // Fonction pour récupérer toutes les sous-catégories récursivement
+            function getRecursiveCategories(categories, parentId, level = 0) {
+                const result = [];
+
+                categories.forEach(category => {
+                    if (category.parent_id === parentId) {
+                        // Ajouter la catégorie actuelle avec une indentation selon le niveau
+                        result.push({
+                            id: category.id,
+                            name: `${'--'.repeat(level)} ${category.name}`,
+                        });
+
+                        // Appeler la fonction récursivement pour ses enfants
+                        const children = getRecursiveCategories(categories, category.id, level + 1);
+                        result.push(...children);
+                    }
+                });
+
+                return result;
+            }
+
+            // Fonction pour mettre à jour le select "Catégorie"
+            function updateCategorieFilter(categories) {
+                categorieFilterSelect.innerHTML =
+                    '<option value="" disabled selected>Selectionner</option>'; // Réinitialiser le select
+
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.name;
+                    categorieFilterSelect.appendChild(option);
+                });
+            }
+
+            // Événement : Quand la "Famille" change
+            categorieSelect.addEventListener('change', function() {
+                const selectedFamilyId = parseInt(this.value, 10);
+
+                if (selectedFamilyId) {
+                    // Récupérer toutes les sous-catégories récursivement
+                    const filteredCategories = getRecursiveCategories(categorieData, selectedFamilyId);
+
+                    // Mettre à jour le select "Catégorie"
+                    updateCategorieFilter(filteredCategories);
+                } else {
+                    // Réinitialiser si aucune famille n'est sélectionnée
+                    categorieFilterSelect.innerHTML = '<option value="" disabled selected>Selectionner</option>';
+                }
+            });
+
+
+
 
             //recuperer la categorie selectionné
             $('#categorie').change(function(e) {
@@ -353,17 +448,24 @@
 
                 var categorieSelect = $(this).val()
 
+
+
                 //filtrer pour recuperer la categorie selectionnée
                 var categorieFilter = categorieData.filter(function(item) {
                     return item.id == categorieSelect
                 })
 
 
+                console.log(categorieFilter);
+
+
                 // si categorieFilter = restaurant , required false
                 if (categorieFilter[0].famille == 'restaurant') {
                     $('.prixVente').prop('required', false)
                     $('.divVariante').hide();
-                    $('.prixVente').val('')
+                    var price = parseFloat($('.prixVente').val(''));
+                    console.log(price);
+
 
                     $('.divUniteSortie').show();
                     $('.uniteSortie').prop('required', true);
@@ -442,9 +544,12 @@
 
 
 
-
+                // si la famille est bar  on recupere le prix de la premiere variante
                 var prixVente = parseFloat($('.prixVente').val());
                 var prixVenteHide = $('#prixVenteHide').val(prixVente);
+
+
+
 
 
 

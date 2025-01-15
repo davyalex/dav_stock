@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-   Inventaire
+    Inventaire
 @endsection
 @section('content')
 
@@ -116,7 +116,21 @@
                         <button type="button" class="btn btn-danger remove-form btn-custom-size"> <i
                                 class="ri ri-delete-bin-fill fs-5 remove-form"></i> </button>
                     </div>
+
                     <div class="col-md-4 mb-3">
+                        <label class="form-label" for="product-title-input">Famille de produit
+                            <span class="text-danger">*</span>
+                        </label>
+                        <span class="error-text">Champ obligatoire</span> <!-- Conteneur pour l'erreur -->
+                        <select class="form-control famille" required>
+                            <option disabled selected value>Selectionner
+                            </option>
+                            @foreach ($categorie_famille as $categorie)
+                                <option value="{{ $categorie->id }}">{{ $categorie->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-8 mb-3">
                         <label class="form-label" for="product-title-input">Produits
                             <span class="text-danger">*</span>
                         </label>
@@ -134,12 +148,24 @@
                         </select>
                     </div>
 
-
                     <div class="col-md-2 mb-3">
-                        <label class="form-label" for="stocks-input">Stock initial
+                        <label class="form-label" for="stocks-input">Stock dernier inventaire
                             <span class="text-danger">*</span>
                         </label>
-                        <input type="number" name="stock_initial[]" class="form-control stockInitial" readonly>
+                        <input type="number" class="form-control stockLastInventaire" readonly>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label" for="stocks-input">Stock recent ajouté
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="number" name="stock_initial[]" class="form-control stockRecent" readonly>
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label" for="stocks-input">Stock actuel
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="number" class="form-control stockActuel" readonly>
                     </div>
 
                     <div class="col-md-2 mb-3">
@@ -411,71 +437,46 @@
                 });
 
 
-
-                //Fonction pour  verifier la quantité entrée , elle ,e dois pas depasser la quantité en stock
-                // function verifyQty(form) {
-                //     var dataProduct = @json($data_produit); // Données du contrôleur
-
-                //     // Récupérer la quantité utilisée et l'ID du produit sélectionné
-                //     var qteStock = form.find('.qteUtilise').val(); // Assurez-vous que la classe est correcte
-                //     var productSelected = form.find('.productSelected')
-                //         .val(); // Assurez-vous que la classe est correcte
-
-                //     // Trouver le produit dans dataProduct basé sur l'ID sélectionné
-                //     var product = dataProduct.find(function(item) {
-                //         return item.id == productSelected;
-                //     });
-
-                //     if (qteStock > product.stock) {
-                //         //swalfire
-                //         Swal.fire({
-                //             title: 'Erreur',
-                //             text: 'La quantité entrée dépasse la quantité en stock',
-                //             icon: 'error',
-                //         });
-
-                //         //mettre le button save en disabled
-                //         $('#save').prop('disabled', true)
-
-                //     } else {
-                //         //mettre le button save en enable
-                //         $('#save').prop('disabled', false)
-                //     }
-                // }
-
-                // Utiliser la délégation d'événements pour les champs dynamiques
-                // $(document).on('input change', '.qteUtilise , .productSelected', function() {
-                //     var form = $(this).closest('.row'); // Cibler le formulaire ou la ligne parent
-                //     verifyQty(form); // Appeler la fonction avec le formulaire
-                // });
+                // fonction qui permet selectionné les produits en fonction de la famille choisie
+                function selectProduitsByFamille(form) {
+                    var famille = form.find('.famille').val();
 
 
-                // Fonction pour verifier si un produit est selectionner 2 fois
-                // function validateProductSelection() {
-                //     let selectedProducts = [];
+                    var produits = @json($data_produit); // Données du contrôleur
+                    var options = produits.filter(function(item) {
+                        return item.type_id == famille;
+                    })
 
-                //     $('.productSelected').each(function(index, element) {
-                //         let produitId = $(element).val();
-                //         let form = $(element).closest('.row');
-                //         // Vérifier si le produit a déjà été sélectionné
-                //         if (selectedProducts.includes(produitId)) {
-                //             Swal.fire({
-                //                 title: 'Erreur',
-                //                 text: 'Ce produit a déjà été sélectionné.',
-                //                 icon: 'error',
-                //                 confirmButtonText: 'OK',
-                //             });
+                    // Mettre à jour le select produit
+                    var selectProduit = form.find('.productSelected');
+                    selectProduit.empty();
+                    selectProduit.append($('<option>', {
+                        value: '',
+                        text: 'Sélectionnez un produit'
+                    }));
+
+                    for (var i = 0; i < options.length; i++) {
+                        selectProduit.append($('<option>', {
+                            value: options[i].id,
+                            text: options[i].nom +
+                                (options[i].valeur_unite ? ' ' + options[i].valeur_unite : '') +
+                                (options[i].unite ? ' ' + options[i].unite.libelle : '') +
+                                (options[i].unite ? ' (' + options[i].unite.abreviation + ')' : '')
+                        }));
+                    }
 
 
-                //             // Réinitialiser le champ select pour éviter la sélection en double
-                //             $(element).val(null).trigger('change.select2');
+                }
 
-                //         } else {
-                //             selectedProducts.push(produitId);
+                // attacher l'événement de changement aux champs famille 
+                $(document).on('change', '.famille', function() {
+                    var form = $(this).closest('.row');
+                    selectProduitsByFamille(form);
+                })
 
-                //         }
-                //     });
-                // }
+
+
+
 
                 // Fonction pour verifier si un produit est sélectionné 2 fois
                 function validateProductSelection() {
@@ -507,6 +508,9 @@
                 }
 
 
+
+
+
                 //fonction pour remplir les champs stock initial et stock restante
                 function getProductInfo(form) {
 
@@ -523,16 +527,23 @@
                     var product = dataProduct.find(function(item) {
                         return item.id == productId;
                     });
+
                     var stockTheorique;
                     if (product.categorie.famille == 'bar') {
-                        var stockTheorique = product.stock_initial - product.quantite_vendue;
+                        var stockTheorique = product.stock - product.quantite_vendue;
                     } else {
-                        var stockTheorique = product.stock_initial - product.quantite_utilisee;
+                        var stockTheorique = product.stock - product.quantite_utilisee;
                     }
 
 
-                    form.find('.stockInitial').val(product.stock_initial) || 0; // stock globale
                     form.find('.stockTheorique').val(stockTheorique) || 0; // stock restante
+                    form.find('.stockRecent').val(product.stock_initial) ||
+                        0; // stock nouveau ajouté apres last inventaire
+                    form.find('.stockLastInventaire').val(product.stock_dernier_inventaire) ||
+                        0; // stock disponible pendant le dernier inventaire
+                    form.find('.stockActuel').val(product.stock) ||
+                        0; // stock disponible pendant le dernier inventaire
+
 
 
                     var stockVendu;
@@ -731,7 +742,8 @@
                 // Calculer le total dépensé
                 function prixTotalDepense(form) {
                     var qte_acquise = form.find(".qteAcquise").val() || 0; // combien de format
-                    var pu_unitaire_format = form.find(".prixUnitaireFormat").val() || 0; // prix unitaire d'un format
+                    var pu_unitaire_format = form.find(".prixUnitaireFormat").val() ||
+                        0; // prix unitaire d'un format
                     var montant_facture = $("#montant_facture").val();
                     var total_depense = qte_acquise * pu_unitaire_format;
                     form.find(".prixTotalFormat").val(total_depense);
@@ -774,13 +786,14 @@
                 }
 
                 // Ajouter des écouteurs sur les champs dupliqués
-                $(document).on('input', '.qteAcquise, .qteFormat, .prixUnitaireFormat , #montant_facture', function() {
-                    var form = $(this).closest('.row');
-                    qteStockable(form);
-                    prixTotalDepense(form);
-                    prixAchatUnite(form);
+                $(document).on('input', '.qteAcquise, .qteFormat, .prixUnitaireFormat , #montant_facture',
+                    function() {
+                        var form = $(this).closest('.row');
+                        qteStockable(form);
+                        prixTotalDepense(form);
+                        prixAchatUnite(form);
 
-                });
+                    });
 
                 // Ajout d'écouteurs pour les champs qui influencent le calcul du prix d'achat
                 $(document).on('input', '.qteFormat, .prixAchatTotal', function() {
