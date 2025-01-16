@@ -7,7 +7,8 @@
     <!--datatable css-->
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
     <!--datatable responsive css-->
-    <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet"
+        type="text/css" />
     <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
@@ -25,9 +26,9 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Liste des dépenses</h5>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                    <a href="{{ route('depense.create') }}" class="btn btn-primary">
                         Créer une dépense
-                    </button>
+                    </a>
                 </div>
                 <div class="card-body">
                     <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
@@ -47,24 +48,35 @@
                                 <tr id="row_{{ $item['id'] }}">
                                     <td>{{ ++$key }}</td>
                                     <td>{{ $item['categorie_depense']['libelle'] ?? '' }}</td>
-                                    <td>{{ $item['libelle_depense']['libelle'] ?? $item['categorie_depense']['libelle'] }}</td>
+                                    <td>{{ $item['libelle_depense']['libelle'] ?? $item['categorie_depense']['libelle'] }}
+                                    </td>
                                     <td>{{ number_format($item['montant'], 0, ',', ' ') }}</td>
                                     <td>{{ $item['user']['first_name'] }}</td>
                                     <td>{{ $item['created_at']->format('d/m/Y H:i') }}</td>
                                     <td>
                                         <div class="dropdown d-inline-block">
-                                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="ri-more-fill align-middle"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end">
+
+                                                @if ($item['categorie_depense']['slug'] != 'achats')
+                                                    <li>
+                                                        <a class="dropdown-item edit-item-btn" href="#"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#myModalEdit{{ $item['id'] }}">
+                                                            <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                                                            Modifier
+                                                        </a>
+                                                    </li>
+                                                @endif
+
                                                 <li>
-                                                    <a class="dropdown-item edit-item-btn" href="#" data-bs-toggle="modal" data-bs-target="#myModalEdit{{ $item['id'] }}">
-                                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Modifier
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item remove-item-btn delete" href="#" data-id="{{ $item['id'] }}">
-                                                        <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Supprimer
+                                                    <a class="dropdown-item remove-item-btn delete" href="#"
+                                                        data-id="{{ $item['id'] }}">
+                                                        <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                        Supprimer
                                                     </a>
                                                 </li>
                                             </ul>
@@ -87,11 +99,12 @@
         </div>
     </div>
 
-    @include('backend.pages.depense.create')
+    {{-- @include('backend.pages.depense.create') --}}
 @endsection
 
 @section('script')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
@@ -106,8 +119,8 @@
 
     <script>
         $(document).ready(function() {
- // Vérifiez si la DataTable est déjà initialisée
- if ($.fn.DataTable.isDataTable('#buttons-datatables')) {
+            // Vérifiez si la DataTable est déjà initialisée
+            if ($.fn.DataTable.isDataTable('#buttons-datatables')) {
                 // Si déjà initialisée, détruisez l'instance existante
                 $('#buttons-datatables').DataTable().destroy();
             }

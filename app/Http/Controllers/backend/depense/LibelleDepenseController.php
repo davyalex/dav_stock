@@ -15,11 +15,11 @@ class LibelleDepenseController extends Controller
     {
         //
         try {
-            $data_libelleDepense = LibelleDepense::OrderBy('libelle', 'ASC')->get();
+            $data_libelleDepense = LibelleDepense::OrderBy('created_at', 'desc')->get();
             // $categorie_depense = CategorieDepense::OrderBy('libelle', 'ASC')->get();
             $categorie_depense = CategorieDepense::whereNotIn('slug', ['achats'])->get();
 
-            return view('backend.pages.depense.libelle-depense.index', compact('data_libelleDepense' , 'categorie_depense'));
+            return view('backend.pages.depense.libelle-depense.index', compact('data_libelleDepense', 'categorie_depense'));
         } catch (\Throwable $th) {
             //throw $th;
             return $th->getMessage();
@@ -42,8 +42,18 @@ class LibelleDepenseController extends Controller
 
             $data_LibelleDepense = LibelleDepense::firstOrCreate($data, ['user_id' => Auth::id()]);
 
+            // Si vous utilisez AJAX, renvoyez les données en JSON
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Libellé ajouté avec succès.',
+                    'libelle' => $data_LibelleDepense // Vous renvoyez ici l'élément inséré
+                ]);
+            }
+
+
             Alert::success('Operation réussi', 'Success Message');
-            return back();
+            return back(); // Retour avec les données du nouveau libellé
         } catch (\Throwable $e) {
             return $e->getMessage();
         }

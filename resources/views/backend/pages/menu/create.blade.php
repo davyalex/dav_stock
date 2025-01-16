@@ -632,7 +632,7 @@
                     });
 
                     if (categories.every(categorie => categorie.options[categorie.selectedIndex].value !==
-                        '') && plats.every(plat => plat.options[plat.selectedIndex].value !== '')) {
+                            '') && plats.every(plat => plat.options[plat.selectedIndex].value !== '')) {
                         form.submit();
                     }
 

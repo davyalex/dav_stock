@@ -33,6 +33,22 @@ class DepenseController extends Controller
         }
     }
 
+    public function create()
+    {
+        try {
+            // $data_depense = Depense::OrderBy('created_at', 'DESC')->get();
+            $data_libelle_depense = LibelleDepense::OrderBy('created_at', 'ASC')->get();
+            $categorie_depense = CategorieDepense::with('libelleDepenses')->
+            whereNotIn('slug', ['achats'])->get();
+
+            // dd($categorie_depense->toArray());
+            return view('backend.pages.depense.create', compact('categorie_depense' , 'data_libelle_depense'));
+        } catch (\Throwable $th) {
+            //throw $th;
+            return $th->getMessage();
+        }
+    }
+
 
     public function store(Request $request)
     {
