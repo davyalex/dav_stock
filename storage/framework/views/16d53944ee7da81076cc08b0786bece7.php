@@ -136,16 +136,7 @@
                         <select class="form-control productSelected selectView" name="produit_id[]" required>
                             <option disabled selected value>Selectionner un produit
                             </option>
-                            <?php $__currentLoopData = $data_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($produit->id); ?>"><?php echo e($produit->nom); ?>
-
-                                    <?php echo e($produit->valeur_unite ?? ''); ?> <?php echo e($produit->unite->libelle ?? ''); ?>
-
-                                    <?php echo e($produit->unite ? '(' . $produit->unite->abreviation . ')' : ''); ?>
-
-
-                                </option>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            
                         </select>
                     </div>
 

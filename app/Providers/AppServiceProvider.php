@@ -80,21 +80,17 @@ class AppServiceProvider extends ServiceProvider
 
 
         $this->app->booted(function () {
-            $permissions = \Spatie\Permission\Models\Permission::all();
+            $permissions = \Spatie\Permission\Models\Permission::pluck('id')->toArray();
         
             $developpeurRole = \Spatie\Permission\Models\Role::where('name', 'developpeur')->first();
             $superadminRole = \Spatie\Permission\Models\Role::where('name', 'superadmin')->first();
         
             if ($developpeurRole) {
-                $existingPermissions = $developpeurRole->permissions->pluck('id');
-                $permissionsToSync = $permissions->pluck('id')->diff($existingPermissions);
-                $developpeurRole->syncPermissions($permissionsToSync);
+                $developpeurRole->permissions()->sync($permissions);
             }
         
             if ($superadminRole) {
-                $existingPermissions = $superadminRole->permissions->pluck('id');
-                $permissionsToSync = $permissions->pluck('id')->diff($existingPermissions);
-                $superadminRole->syncPermissions($permissionsToSync);
+                $superadminRole->permissions()->sync($permissions);
             }
         });
         

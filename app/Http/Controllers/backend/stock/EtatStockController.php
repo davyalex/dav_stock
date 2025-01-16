@@ -14,6 +14,9 @@ class EtatStockController extends Controller
             $filter = request('filter');
 
             $produits = Produit::with(['categorie', 'achats',])
+                ->whereHas('categorie', function ($query) {
+                    $query->whereIn('famille', ['bar', 'restaurant']);
+                })
                 ->when($filter, function ($query) use ($filter) {
                     return $query->withWhereHas('typeProduit', fn($q) => $q->where('type', $filter));
                 })

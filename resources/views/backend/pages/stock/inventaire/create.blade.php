@@ -138,13 +138,13 @@
                         <select class="form-control productSelected selectView" name="produit_id[]" required>
                             <option disabled selected value>Selectionner un produit
                             </option>
-                            @foreach ($data_produit as $produit)
+                            {{-- @foreach ($data_produit as $produit)
                                 <option value="{{ $produit->id }}">{{ $produit->nom }}
                                     {{ $produit->valeur_unite ?? '' }} {{ $produit->unite->libelle ?? '' }}
                                     {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
 
                                 </option>
-                            @endforeach
+                            @endforeach --}}
                         </select>
                     </div>
 
