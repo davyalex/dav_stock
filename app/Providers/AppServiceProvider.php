@@ -63,20 +63,41 @@ class AppServiceProvider extends ServiceProvider
         // $this->app->make('verifierQuantiteStockee')();
 
         // Attribuer toutes les permissions au rôle développeur et superadmin apr defaut
+        // $this->app->booted(function () {
+        //     $permissions = \Spatie\Permission\Models\Permission::all();
+
+        //     $developpeurRole = \Spatie\Permission\Models\Role::where('name', 'developpeur')->first();
+        //     $superadminRole = \Spatie\Permission\Models\Role::where('name', 'superadmin')->first();
+
+        //     if ($developpeurRole) {
+        //         $developpeurRole->syncPermissions($permissions);
+        //     }
+
+        //     if ($superadminRole) {
+        //         $superadminRole->syncPermissions($permissions);
+        //     }
+        // });
+
+
         $this->app->booted(function () {
             $permissions = \Spatie\Permission\Models\Permission::all();
-
+        
             $developpeurRole = \Spatie\Permission\Models\Role::where('name', 'developpeur')->first();
             $superadminRole = \Spatie\Permission\Models\Role::where('name', 'superadmin')->first();
-
+        
             if ($developpeurRole) {
-                $developpeurRole->syncPermissions($permissions);
+                $existingPermissions = $developpeurRole->permissions->pluck('id');
+                $permissionsToSync = $permissions->pluck('id')->diff($existingPermissions);
+                $developpeurRole->syncPermissions($permissionsToSync);
             }
-
+        
             if ($superadminRole) {
-                $superadminRole->syncPermissions($permissions);
+                $existingPermissions = $superadminRole->permissions->pluck('id');
+                $permissionsToSync = $permissions->pluck('id')->diff($existingPermissions);
+                $superadminRole->syncPermissions($permissionsToSync);
             }
         });
+        
 
 
         //get setting data
