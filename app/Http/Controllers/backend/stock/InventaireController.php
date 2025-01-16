@@ -22,7 +22,7 @@ class InventaireController extends Controller
     {
         //
         try {
-            $data_inventaire = Inventaire::with('produits')->get();
+            $data_inventaire = Inventaire::with('produits')->orderBy('created_at', 'desc')->get();
 
             return view('backend.pages.stock.inventaire.index', compact('data_inventaire'));
         } catch (\Throwable $e) {
@@ -37,9 +37,6 @@ class InventaireController extends Controller
     {
 
         try {
-
-
-
             // Récupérer la date du dernier inventaire
             $date_dernier_inventaire = Inventaire::select('created_at')
                 ->orderBy('created_at', 'desc')
