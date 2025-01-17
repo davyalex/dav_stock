@@ -17,17 +17,17 @@ class CommandeController extends Controller
         try {
 
             $statut = ['en attente', 'confirmée', 'livrée', 'annulée'];
-            
-                $filter = request('filter');
+
+            $filter = request('filter');
             $commandes = Commande::with('client', 'produits', 'plats')
-            ->when($filter, function ($query) use ($filter) {
-                return $query->where('statut', $filter);
-            })
-            ->orderBy('created_at', 'desc') // Trier par date de création (récent en premier)
-            ->get();
-        
+                ->when($filter, function ($query) use ($filter) {
+                    return $query->where('statut', $filter);
+                })
+                ->orderBy('created_at', 'desc') // Trier par date de création (récent en premier)
+                ->get();
+
             // dd( $filter);
-            return view('backend.pages.vente.commande.index', compact('commandes' , 'statut'));
+            return view('backend.pages.vente.commande.index', compact('commandes', 'statut'));
         } catch (\Exception $e) {
             Alert::error('Erreur', 'Une erreur est survenue lors de la récupération des commandes : ' . $e->getMessage());
             return back();
@@ -52,6 +52,8 @@ class CommandeController extends Controller
             $commande = Commande::findOrFail($request->input('commandeId'));
             $nouveauStatut = $request->input('statut');
 
+            // dd($nouveauStatut);
+
             $commande->statut = $nouveauStatut;
 
             if ($commande->statut != $nouveauStatut) {
@@ -59,73 +61,97 @@ class CommandeController extends Controller
                 $commande->caisse_id = auth()->user()->caisse_id;
             }
 
-            if ($nouveauStatut == 'confirmée' || $nouveauStatut == 'livrée') {
+
+            if (in_array($nouveauStatut, ['livrée', 'confirmée'])) {
                 // Mise à jour de la table vente
-                ##Generer le code vente
-                // Obtenir les deux premières lettres du nom de la caissière
-                $initialesCaissiere = substr(auth()->user()->first_name, 0, 2);
-                // Obtenir le numéro d'ordre de la vente pour aujourd'hui
-                $nombreVentes = Vente::count();
-                $numeroOrdre = $nombreVentes + 1;
-                // Obtenir la date et l'heure actuelles
-                $dateHeure = now()->format('dmYHi');
-                // Générer le code de vente
-                $codeVente = strtoupper($initialesCaissiere) . '-' . $numeroOrdre . $dateHeure;
-                $vente = new Vente();
-                $vente->code = $codeVente;
-                $vente->date_vente = now();
-                $vente->montant_total = $commande->montant_total;
-                $vente->user_id = auth()->id();
-                $vente->caisse_id = auth()->user()->caisse_id;
-                $vente->client_id = $commande->client_id;
-                $vente->statut = 'confirmée';
-                $vente->type_vente = 'commande';
-                $vente->commande_id = $commande->id;
-                $vente->mode_paiement = $commande->mode_paiement;
-                $vente->save();
+
+
+                // Vérifier si une vente existe déjà pour cette commande
+                $vente = Vente::where('commande_id', $commande->id)->first();
+
+                if ($vente) {
+                    // Mise à jour de la vente existante
+                    $vente->statut = 'confirmée';
+                    $vente->save();
+                    // enregistrer le statut de la commande
+                    $commande->save();
+                } else {
+
+                    // on creer une nouvelle vente
+                    ##Generer le code vente
+                    // Obtenir les deux premières lettres du nom de la caissière
+                    $initialesCaissiere = substr(auth()->user()->first_name, 0, 2);
+                    // Obtenir le numéro d'ordre de la vente pour aujourd'hui
+                    $nombreVentes = Vente::count();
+                    $numeroOrdre = $nombreVentes + 1;
+                    // Obtenir la date et l'heure actuelles
+                    $dateHeure = now()->format('dmYHi');
+                    // Générer le code de vente
+                    $codeVente = strtoupper($initialesCaissiere) . '-' . $numeroOrdre . $dateHeure;
+                    $vente = new Vente();
+                    $vente->code = $codeVente;
+                    $vente->date_vente = now();
+                    $vente->montant_total = $commande->montant_total;
+                    $vente->user_id = auth()->id();
+                    $vente->caisse_id = auth()->user()->caisse_id;
+                    $vente->client_id = $commande->client_id;
+                    $vente->statut = 'confirmée';
+                    $vente->type_vente = 'commande';
+                    $vente->commande_id = $commande->id;
+                    $vente->mode_paiement = $commande->mode_paiement;
+                    $vente->save();
 
 
 
-                // Associer les produits de la commande à la vente
-                foreach ($commande->produits as $produit) {
-                    $vente->produits()->attach($produit->id, [
-                        'quantite' => $produit->pivot->quantite,
-                        'prix_unitaire' => $produit->pivot->prix_unitaire,
-                        'total' => $produit->pivot->total,
-                    ]);
+                    // Associer les produits de la commande à la vente
+                    foreach ($commande->produits as $produit) {
+                        $vente->produits()->attach($produit->id, [
+                            'quantite' => $produit->pivot->quantite,
+                            'prix_unitaire' => $produit->pivot->prix_unitaire,
+                            'total' => $produit->pivot->total,
+                        ]);
 
 
-                    // Mise à jour du stock pour les produits de la catégorie "bar"
-                    if ($produit->categorie->famille == 'bar') {
-                        // Mise à jour du stock du produit
-                        $produit->stock -= $produit->pivot->quantite;
-                        $produit->save();
+                        // Mise à jour du stock pour les produits de la catégorie "bar"
+                        if ($produit->categorie->famille == 'bar') {
+                            // Mise à jour du stock du produit
+                            $produit->stock -= $produit->pivot->quantite;
+                            $produit->save();
 
-                        // Mise à jour de la quantité stockée dans l'achat le plus récent
-                        $achat = $produit->achats()->latest()->first();
-                        if ($achat) {
-                            $achat->quantite_stocke -= $produit->pivot->quantite;
-                            $achat->save();
+                            // Mise à jour de la quantité stockée dans l'achat le plus récent
+                            $achat = $produit->achats()->latest()->first();
+                            if ($achat) {
+                                $achat->quantite_stocke -= $produit->pivot->quantite;
+                                $achat->save();
+                            }
                         }
                     }
+
+
+                    // Associer les plats à la commande
+                    foreach ($commande->plats as $plat) {
+                        $vente->plats()->attach($plat->id, [
+                            'quantite' => $plat->pivot->quantite,
+                            'prix_unitaire' => $plat->pivot->prix_unitaire,
+                            'total' => $plat->pivot->total,
+                            'garniture' => $plat->pivot->garniture ?? [],
+                            'complement' => $plat->pivot->complement ?? [],
+                        ]);
+                    }
+
+
+                    // enregistrer le statut de la commande
+                    $commande->save();
                 }
 
 
-                // Associer les plats à la commande
-                foreach ($commande->plats as $plat) {
-                    $vente->plats()->attach($plat->id, [
-                        'quantite' => $plat->pivot->quantite,
-                        'prix_unitaire' => $plat->pivot->prix_unitaire,
-                        'total' => $plat->pivot->total,
-                        'garniture' => $plat->pivot->garniture ?? [],
-                        'complement' => $plat->pivot->complement ?? [],
-                    ]);
-                }
-                return response()->json(['success' => true, 
-                'message' => 'Statut mis à jour avec succès',
-                'statut' => 'confirmée',
-                'idVente' => $vente->id
-            ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Statut mis à jour avec succès',
+                    'statut' => 'confirmée',
+                    'idVente' => $vente->id
+                ]);
             }
             // Si le statut est annulé
             elseif ($nouveauStatut == 'annulée') {
