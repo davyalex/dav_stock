@@ -80,4 +80,14 @@
     <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
 
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+    $('#example').DataTable({
+        "pageLength": 50,
+        "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]  // Personnalisation des options
+    });
+});
+
+    </script>
 @endsection

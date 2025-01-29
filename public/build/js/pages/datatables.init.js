@@ -7,7 +7,12 @@ File: datatables init js
 */
 
 function initializeTables() {
-    let example = new DataTable('#example',);
+    // let example = new DataTable('#example',);
+    let example = new DataTable('#example', {
+        pageLength: 50, // Par défaut 50 lignes affichées
+        lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]] // Options de pagination
+    });
+    
 
     let scrollVertical = new DataTable('#scroll-vertical', {
         "scrollY": "210px",

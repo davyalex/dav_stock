@@ -76,7 +76,7 @@ class DashboardController extends Controller
         // Produits en alerte
         $produitsEnAlerte = Produit::where('stock', '=', 'stock_alerte')->get()->count();
 
-// dd($montantTotalVentes);
+        // dd($montantTotalVentes);
 
 
         // dd($produitsLesPlusVendus->toArray());

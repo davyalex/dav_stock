@@ -56,21 +56,26 @@
                                                     <i class="ri-more-fill align-middle"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a href="#!" class="dropdown-item"><i
+                                                    {{-- <li><a href="#!" class="dropdown-item"><i
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                             View</a>
-                                                    </li>
+                                                    </li> --}}
+                                                    @can('modifier-configuration')
                                                     <li><a type="button" class="dropdown-item edit-item-btn"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#myModalEdit{{ $item['id'] }}"><i
-                                                                class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Edit</a></li>
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#myModalEdit{{ $item['id'] }}"><i
+                                                            class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                                                        Modifier</a></li>
+                                                    @endcan
+
+                                                    @can('supprimer-configuration')
                                                     <li>
                                                         <a href="#" class="dropdown-item remove-item-btn delete" data-id={{$item['id']}}>
                                                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Delete
+                                                            Supprimer
                                                         </a>
                                                     </li>
+                                                    @endcan
                                                 </ul>
                                             </div>
                                         </td>
