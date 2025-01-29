@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-   Sortie
+    Sortie
 @endsection
 @section('content')
     @component('backend.components.breadcrumb')
@@ -87,6 +87,8 @@
                     addToCart(productId, productName, productStock, productUniteSortie);
                     updateCartTable();
                     verifyQty();
+                    $(this).val(null).trigger('change'); // Réinitialise Select2
+
 
                 }
             });
@@ -117,7 +119,7 @@
                             <td>${item.stock} ${item.uniteSortie}</td>
                             <td>
                                 <button class="btn btn-secondary btn-sm decrease-qty" data-index="${index}">-</button>
-                                <input readonly type="number" class="form-control quantity-input d-inline-block text-center" value="${item.quantity}" min="1" style="width: 60px;" data-index="${index}">
+                                <input  type="number" class="form-control quantity-input d-inline-block text-center" value="${item.quantity}" min="1" style="width: 60px;" data-index="${index}">
                                 <button class="btn btn-secondary btn-sm increase-qty" data-index="${index}">+</button>
                             </td>
                            
@@ -143,6 +145,20 @@
                     updateCartTable();
                     verifyQty();
                 }
+            });
+
+
+            // lorsque je change la quantité manuellement
+            $(document).on('input', '.quantity-input', function() {
+                let index = $(this).data('index');
+                let value = $(this).val();
+                if (value > 0) {
+                    cart[index].quantity = parseFloat(value);
+                    // updateCartTable();
+                    verifyQty();
+                }
+                // Déclencher l'événement change après l'input
+                $(this).trigger('change');
             });
 
             // $(document).on('change', '.quantity-input', function() {

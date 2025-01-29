@@ -417,7 +417,7 @@
                 ${$('.divPrint').html()}
                 <footer>
                     <p style="font-size: 8px;">Imprimé le : ${new Date().toLocaleString()} par {{ Auth::user()->first_name }}</p>
-                    <p style="font-size: 8px;">Page 1 / ${totalPages}</p> <!-- Affichage de la page actuelle et du total -->
+                    <!--<p style="font-size: 8px;">Page 1 / ${totalPages}</p>  Affichage de la page actuelle et du total -->
                 </footer>
             </body>
         </html>
