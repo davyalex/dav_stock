@@ -52,7 +52,7 @@
                                         <td>
                                             <img class="rounded avatar-sm"
                                                 src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
-                                                width="50px" alt="">
+                                                width="20px" height="20px" alt="">
                                         </td>
                                         <td>{{ $item['nom'] }} {{ $item['valeur_unite'] ?? '' }}
                                             {{ $item['unite']['libelle'] ?? '' }} </td>

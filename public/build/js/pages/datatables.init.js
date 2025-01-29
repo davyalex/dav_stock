@@ -10,7 +10,7 @@ function initializeTables() {
     // let example = new DataTable('#example',);
     let example = new DataTable('#example', {
         pageLength: 50, // Par défaut 50 lignes affichées
-        lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]] // Options de pagination
+        lengthMenu: [[50, 100], [50, 100]] // Options de pagination
     });
     
 

@@ -52,7 +52,7 @@
                                         <td>
                                             <img class="rounded avatar-sm"
                                                 src="<?php echo e($item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg')); ?>"
-                                                width="50px" alt="">
+                                                width="20px" height="20px" alt="">
                                         </td>
                                         <td><?php echo e($item['nom']); ?> <?php echo e($item['valeur_unite'] ?? ''); ?>
 
