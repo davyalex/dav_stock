@@ -52,7 +52,7 @@
                                         <td>
                                             <img class="rounded avatar-sm"
                                                 src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
-                                                width="20px" height="20px" alt="">
+                                                width="10px" height="10px" alt="">
                                         </td>
                                         <td>{{ $item['nom'] }} {{ $item['valeur_unite'] ?? '' }}
                                             {{ $item['unite']['libelle'] ?? '' }} </td>
@@ -219,6 +219,80 @@
 
 
 
+            //         function imprimerRapport() {
+            //             // Sauvegarder l'ID de la table
+            //             var table = $('#example');
+            //             var originalId = table.attr('id');
+
+            //             // Désactiver DataTable temporairement (pagination, recherche, etc.)
+            //             if ($.fn.DataTable.isDataTable('#example')) {
+            //                 // Détruire DataTables pour enlever la pagination, la barre de recherche, etc.
+            //                 table.DataTable().destroy();
+            //             }
+
+            //             // Supprimer l'ID avant l'impression pour éviter des conflits
+            //             table.removeAttr('id');
+
+            //             // Créer une nouvelle fenêtre pour l'impression
+            //             var fenetreImpression = window.open('', '_blank');
+
+            //             // Nombre total de pages (selon DataTable)
+            //             var totalPages = Math.ceil(table.find('tbody tr').length / 20); // 20 lignes par page (exemple)
+
+            //             // Contenu à imprimer
+            //             var contenuImprimer = `
+        //     <html>
+        //         <head>
+        //             <title style="text-align: center;">Compte exploitation</title>
+        //             <style>
+        //                 body { font-family: Arial, sans-serif; }
+        //                 table { width: 100%; border-collapse: collapse; }
+        //                 th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        //                 th { background-color: #f2f2f2; }
+        //                 footer { position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 12px; margin-top: 20px; }
+        //             </style>
+        //         </head>
+        //         <body>
+        //             <h2 style="text-align: center;">Fiche Inventaire</h2>
+        //             <p style="text-align: center;">Code : {{ $inventaire->code }}</p>
+        //             <p style="text-align: center;">Réalisé le : {{ $inventaire->created_at->format('d-m-Y à H:i') }}</p>
+        //             ${$('.divPrint').html()}
+        //             <footer>
+        //                 <p>Imprimé le : ${new Date().toLocaleString()} par {{ Auth::user()->first_name }}</p>
+        //                 <p>Page 1 / ${totalPages}</p> <!-- Affichage de la page actuelle et du total -->
+        //             </footer>
+        //         </body>
+        //     </html>
+        // `;
+
+            //             // Écrire le contenu dans la nouvelle fenêtre
+            //             fenetreImpression.document.write(contenuImprimer);
+
+            //             // Fermer le document
+            //             fenetreImpression.document.close();
+
+            //             // Imprimer la fenêtre
+            //             fenetreImpression.print();
+
+            //             // Restaurer l'ID de la table après l'impression
+            //             table.attr('id', originalId);
+
+            //             // Réinitialiser DataTable après l'impression
+            //             table.DataTable({
+            //                 paging: true,
+            //                 searching: true,
+            //                 // Réinitialiser ici les options de DataTables si nécessaires
+            //             });
+            //         }
+
+            //         // Ajouter un bouton d'impression
+            //         $('#btnImprimer')
+            //             .text('Imprimer le Rapport')
+            //             .addClass('btn btn-primary mt-3')
+            //             .on('click', imprimerRapport);
+
+
+
             function imprimerRapport() {
                 // Sauvegarder l'ID de la table
                 var table = $('#example');
@@ -245,21 +319,21 @@
             <head>
                 <title style="text-align: center;">Compte exploitation</title>
                 <style>
-                    body { font-family: Arial, sans-serif; }
-                    table { width: 100%; border-collapse: collapse; }
-                    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                    body { font-family: Arial, sans-serif; font-size: 10px; } /* Taille de police réduite */
+                    table { width: 100%; border-collapse: collapse; font-size: 10px; } /* Table avec police réduite */
+                    th, td { border: 1px solid #ddd; padding: 5px; text-align: left; } /* Réduction du padding */
                     th { background-color: #f2f2f2; }
-                    footer { position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 12px; margin-top: 20px; }
+                    footer { position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 8px; margin-top: 20px; }
                 </style>
             </head>
             <body>
-                <h2 style="text-align: center;">Fiche Inventaire</h2>
-                <p style="text-align: center;">Code : {{ $inventaire->code }}</p>
-                <p style="text-align: center;">Réalisé le : {{ $inventaire->created_at->format('d-m-Y à H:i') }}</p>
+                <h2 style="text-align: center; font-size: 12px;">Fiche Inventaire</h2> <!-- Réduire la taille du titre -->
+                <p style="text-align: center; font-size: 10px;">Code : {{ $inventaire->code }}</p>
+                <p style="text-align: center; font-size: 10px;">Réalisé le : {{ $inventaire->created_at->format('d-m-Y à H:i') }}</p>
                 ${$('.divPrint').html()}
                 <footer>
-                    <p>Imprimé le : ${new Date().toLocaleString()} par {{ Auth::user()->first_name }}</p>
-                    <p>Page 1 / ${totalPages}</p> <!-- Affichage de la page actuelle et du total -->
+                    <p style="font-size: 8px;">Imprimé le : ${new Date().toLocaleString()} par {{ Auth::user()->first_name }}</p>
+                    <p style="font-size: 8px;">Page 1 / ${totalPages}</p> <!-- Affichage de la page actuelle et du total -->
                 </footer>
             </body>
         </html>
