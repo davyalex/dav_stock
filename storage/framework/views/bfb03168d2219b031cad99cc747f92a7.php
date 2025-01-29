@@ -1,6 +1,6 @@
 
 <?php $__env->startSection('title'); ?>
-   Inventaire
+    Inventaire
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('css'); ?>
     <!--datatable css-->
@@ -153,6 +153,75 @@
 
         $(document).ready(function() {
             // Fonction pour imprimer le rapport
+            //     function imprimerRapport() {
+            //         // Sauvegarder l'ID de la table
+            //         var table = $('#example');
+            //         var originalId = table.attr('id');
+
+            //         // Désactiver DataTable temporairement (pagination, recherche, etc.)
+            //         if ($.fn.DataTable.isDataTable('#example')) {
+            //             // Détruire DataTables pour enlever la pagination, la barre de recherche, etc.
+            //             table.DataTable().destroy();
+            //         }
+
+            //         // Supprimer l'ID avant l'impression pour éviter des conflits
+            //         table.removeAttr('id');
+
+            //         // Créer une nouvelle fenêtre pour l'impression
+            //         var fenetreImpression = window.open('', '_blank');
+
+            //         // Contenu à imprimer
+            //         var contenuImprimer = `
+        //     <html>
+        //         <head>
+        //             <title style="text-align: center;">Compte exploitation</title>
+        //             <style>
+        //                 body { font-family: Arial, sans-serif; }
+        //                 table { width: 100%; border-collapse: collapse; }
+        //                 th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        //                 th { background-color: #f2f2f2; }
+        //             </style>
+        //         </head>
+        //         <body>
+        //             <h2 style="text-align: center;">Fiche Inventaire  </h2>
+        //             <p style="text-align: center;">Code : <?php echo e($inventaire->code); ?></p>
+        //             <p style="text-align: center;">Réalisé le : <?php echo e($inventaire->created_at->format('d-m-Y à H:i')); ?></p>
+        //             ${$('.divPrint').html()}
+        //             <footer style="position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 12px; margin-top: 20px;">
+        //                 <p>Imprimé le : ${new Date().toLocaleString()} par <?php echo e(Auth::user()->first_name); ?></p>
+        //             </footer>
+        //         </body>
+        //     </html>
+        // `;
+
+            //         // Écrire le contenu dans la nouvelle fenêtre
+            //         fenetreImpression.document.write(contenuImprimer);
+
+            //         // Fermer le document
+            //         fenetreImpression.document.close();
+
+            //         // Imprimer la fenêtre
+            //         fenetreImpression.print();
+
+            //         // Restaurer l'ID de la table après l'impression
+            //         table.attr('id', originalId);
+
+            //         // Réinitialiser DataTable après l'impression
+            //         table.DataTable({
+            //             paging: true,
+            //             searching: true,
+            //             // Réinitialiser ici les options de DataTables si nécessaires
+            //         });
+            //     }
+
+            //     // Ajouter un bouton d'impression
+            //     $('#btnImprimer')
+            //         .text('Imprimer le Rapport')
+            //         .addClass('btn btn-primary mt-3')
+            //         .on('click', imprimerRapport);
+
+
+
             function imprimerRapport() {
                 // Sauvegarder l'ID de la table
                 var table = $('#example');
@@ -170,29 +239,34 @@
                 // Créer une nouvelle fenêtre pour l'impression
                 var fenetreImpression = window.open('', '_blank');
 
+                // Nombre total de pages (selon DataTable)
+                var totalPages = Math.ceil(table.find('tbody tr').length / 20); // 20 lignes par page (exemple)
+
                 // Contenu à imprimer
                 var contenuImprimer = `
-            <html>
-                <head>
-                    <title style="text-align: center;">Compte exploitation</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; }
-                        table { width: 100%; border-collapse: collapse; }
-                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-                        th { background-color: #f2f2f2; }
-                    </style>
-                </head>
-                <body>
-                    <h2 style="text-align: center;">Fiche Inventaire  </h2>
-                    <p style="text-align: center;">Code : <?php echo e($inventaire->code); ?></p>
-                    <p style="text-align: center;">Réalisé le : <?php echo e($inventaire->created_at->format('d-m-Y à H:i')); ?></p>
-                    ${$('.divPrint').html()}
-                    <footer style="position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 12px; margin-top: 20px;">
-                        <p>Imprimé le : ${new Date().toLocaleString()} par <?php echo e(Auth::user()->first_name); ?></p>
-                    </footer>
-                </body>
-            </html>
-        `;
+        <html>
+            <head>
+                <title style="text-align: center;">Compte exploitation</title>
+                <style>
+                    body { font-family: Arial, sans-serif; }
+                    table { width: 100%; border-collapse: collapse; }
+                    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                    th { background-color: #f2f2f2; }
+                    footer { position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 12px; margin-top: 20px; }
+                </style>
+            </head>
+            <body>
+                <h2 style="text-align: center;">Fiche Inventaire</h2>
+                <p style="text-align: center;">Code : <?php echo e($inventaire->code); ?></p>
+                <p style="text-align: center;">Réalisé le : <?php echo e($inventaire->created_at->format('d-m-Y à H:i')); ?></p>
+                ${$('.divPrint').html()}
+                <footer>
+                    <p>Imprimé le : ${new Date().toLocaleString()} par <?php echo e(Auth::user()->first_name); ?></p>
+                    <p>Page 1 / ${totalPages}</p> <!-- Affichage de la page actuelle et du total -->
+                </footer>
+            </body>
+        </html>
+    `;
 
                 // Écrire le contenu dans la nouvelle fenêtre
                 fenetreImpression.document.write(contenuImprimer);
@@ -219,6 +293,9 @@
                 .text('Imprimer le Rapport')
                 .addClass('btn btn-primary mt-3')
                 .on('click', imprimerRapport);
+
+
+
         });
     </script>
 <?php $__env->stopSection(); ?>
