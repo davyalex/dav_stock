@@ -80,6 +80,16 @@
     <script src="<?php echo e(URL::asset('build/js/pages/datatables.init.js')); ?>"></script>
 
     <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+
+    <script>
+        $(document).ready(function() {
+    $('#example').DataTable({
+        "pageLength": 50,
+        "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]  // Personnalisation des options
+    });
+});
+
+    </script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/stock/inventaire/index.blade.php ENDPATH**/ ?>
