@@ -26,8 +26,10 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des produits 
-                        <?php if(request()->has('filter')): ?> - <b><?php echo e(request('filter')); ?></b> <?php endif; ?>
+                    <h5 class="card-title mb-0">Liste des produits
+                        <?php if(request()->has('filter')): ?>
+                            - <b><?php echo e(request('filter')); ?></b>
+                        <?php endif; ?>
                     </h5>
 
 
@@ -43,8 +45,10 @@
                         </ul>
                     </div>
 
-                    <a href="<?php echo e(route('produit.create')); ?>" type="button" class="btn btn-primary ">Créer
-                        un produit</a>
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('creer-produit')): ?>
+                        <a href="<?php echo e(route('produit.create')); ?>" type="button" class="btn btn-primary ">Créer
+                            un produit</a>
+                    <?php endif; ?>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -99,22 +103,28 @@
                                                     <i class="ri-more-fill align-middle"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a href="<?php echo e(route('produit.show', $item['id'])); ?>"
-                                                            class="dropdown-item"><i
-                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            Detail</a>
-                                                    </li>
-                                                    <li><a href="<?php echo e(route('produit.edit', $item['id'])); ?>" type="button"
-                                                            class="dropdown-item edit-item-btn"><i
-                                                                class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Modifier</a></li>
-                                                    <li>
-                                                        <a href="#" class="dropdown-item remove-item-btn delete"
-                                                            data-id=<?php echo e($item['id']); ?>>
-                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Supprimer
-                                                        </a>
-                                                    </li>
+                                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-produit')): ?>
+                                                        <li><a href="<?php echo e(route('produit.show', $item['id'])); ?>"
+                                                                class="dropdown-item"><i
+                                                                    class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                                                Detail</a>
+                                                        </li>
+                                                    <?php endif; ?>
+                                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('modifier-produit')): ?>
+                                                        <li><a href="<?php echo e(route('produit.edit', $item['id'])); ?>" type="button"
+                                                                class="dropdown-item edit-item-btn"><i
+                                                                    class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                                                                Modifier</a></li>
+                                                    <?php endif; ?>
+                                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('supprimer-produit')): ?>
+                                                        <li>
+                                                            <a href="#" class="dropdown-item remove-item-btn delete"
+                                                                data-id=<?php echo e($item['id']); ?>>
+                                                                <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                                Supprimer
+                                                            </a>
+                                                        </li>
+                                                    <?php endif; ?>
                                                 </ul>
                                             </div>
                                         </td>

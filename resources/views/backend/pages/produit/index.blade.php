@@ -26,8 +26,10 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des produits 
-                        @if(request()->has('filter')) - <b>{{ request('filter') }}</b> @endif
+                    <h5 class="card-title mb-0">Liste des produits
+                        @if (request()->has('filter'))
+                            - <b>{{ request('filter') }}</b>
+                        @endif
                     </h5>
 
 
@@ -43,8 +45,10 @@
                         </ul>
                     </div>
 
-                    <a href="{{ route('produit.create') }}" type="button" class="btn btn-primary ">Créer
-                        un produit</a>
+                    @can('creer-produit')
+                        <a href="{{ route('produit.create') }}" type="button" class="btn btn-primary ">Créer
+                            un produit</a>
+                    @endcan
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -97,22 +101,28 @@
                                                     <i class="ri-more-fill align-middle"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a href="{{ route('produit.show', $item['id']) }}"
-                                                            class="dropdown-item"><i
-                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            Detail</a>
-                                                    </li>
-                                                    <li><a href="{{ route('produit.edit', $item['id']) }}" type="button"
-                                                            class="dropdown-item edit-item-btn"><i
-                                                                class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Modifier</a></li>
-                                                    <li>
-                                                        <a href="#" class="dropdown-item remove-item-btn delete"
-                                                            data-id={{ $item['id'] }}>
-                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Supprimer
-                                                        </a>
-                                                    </li>
+                                                    @can('voir-produit')
+                                                        <li><a href="{{ route('produit.show', $item['id']) }}"
+                                                                class="dropdown-item"><i
+                                                                    class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                                                Detail</a>
+                                                        </li>
+                                                    @endcan
+                                                    @can('modifier-produit')
+                                                        <li><a href="{{ route('produit.edit', $item['id']) }}" type="button"
+                                                                class="dropdown-item edit-item-btn"><i
+                                                                    class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                                                                Modifier</a></li>
+                                                    @endcan
+                                                    @can('supprimer-produit')
+                                                        <li>
+                                                            <a href="#" class="dropdown-item remove-item-btn delete"
+                                                                data-id={{ $item['id'] }}>
+                                                                <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                                Supprimer
+                                                            </a>
+                                                        </li>
+                                                    @endcan
                                                 </ul>
                                             </div>
                                         </td>
