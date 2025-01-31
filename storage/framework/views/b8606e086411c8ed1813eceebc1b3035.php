@@ -3,9 +3,10 @@
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
             <h4 class="mb-sm-0 font-size-18">
-               <?php if($previousUrl = url()->previous() ): ?>
-               <a href="<?php echo e($previousUrl); ?>" class="btn btn-primary" id="goBack"> <i class="ri ri-arrow-left-fill"></i> Retour</a>
-               <?php endif; ?>
+                <?php if($previousUrl = url()->previous()): ?>
+                    <a href="#" class="btn btn-primary" id="goBack"> <i class="ri ri-arrow-left-fill"></i>
+                        Retour</a>
+                <?php endif; ?>
                 <?php echo e($title); ?>
 
             </h4>
@@ -23,11 +24,14 @@
 </div>
 <script>
     // go to back
+    // document.getElementById('goBack').addEventListener('click', function() {
+    //     window.history.back();
+    //     setTimeout(function() {
+    //         location.reload();
+    //     }, 500);
+    // });
     document.getElementById('goBack').addEventListener('click', function() {
-        window.history.back();
-        setTimeout(function() {
-            location.reload();
-        }, 500);
+        window.location.href = document.referrer;
     });
 </script>
 <!-- end page title -->
