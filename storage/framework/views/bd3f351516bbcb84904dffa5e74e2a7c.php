@@ -20,6 +20,12 @@
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
 
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
@@ -117,21 +123,25 @@
                             <tbody>
                                 <?php $__currentLoopData = $categories_depense; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr class="table-secondary">
-                                        <td><strong><a class="text-capitalize"
-                                                    href="<?php echo e(route('rapport.detail', ['categorie_depense' => $categorie->id, 'date_debut' => request('date_debut'), 'date_fin' => request('date_fin')])); ?>"
-                                                    style="text-decoration: none; color: black;"><?php echo e($categorie->libelle); ?></a></strong>
+                                        
+
+                                        <td><strong>
+                                                <a class="text-capitalize categorie-depense" href="#"
+                                                    style="text-decoration: none; color: black;"><?php echo e($categorie->libelle); ?></a>
+                                                
+                                            </strong>
                                         </td>
                                         <td><strong><?php echo e(number_format($depensesParCategorie->get($categorie->libelle, collect())->sum('total_montant'), 0, ',', ' ')); ?>
 
                                                 FCFA</strong></td>
                                     </tr>
                                     <?php $__currentLoopData = $categorie->libelleDepenses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $libelle): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <tr>
+                                        <tr class="ibelle-depense hidden">
                                             <td style="padding-left: 20px;">- <a class="text-capitalize"
                                                     href="<?php echo e(route('rapport.detail', ['libelle_depense' => $libelle->id, 'categorie_depense' => $categorie->id, 'date_debut' => request('date_debut'), 'date_fin' => request('date_fin')])); ?>"
                                                     style="text-decoration: none; color: black;"><?php echo e($libelle->libelle); ?></a>
                                             </td>
-                                            <td><?php echo e(number_format($depensesParCategorie->get($categorie->libelle, collect())->where('libelle_depense_id', $libelle->id)->sum('total_montant'),0,',',' ')); ?>
+                                            <td><?php echo e(number_format($depensesParCategorie->get($categorie->libelle, collect())->where('libelle_depense_id', $libelle->id)->sum('total_montant'), 0, ',', ' ')); ?>
 
                                                 FCFA</td>
                                         </tr>
@@ -144,11 +154,11 @@
                                     <td><strong><?php echo e(number_format($totalDepenses, 0, ',', ' ')); ?> FCFA</strong></td>
                                 </tr>
                                 <div class="row">
-                                        <tr class="mt-4">
-                                            <th class="text-uppercase">Catégorie ventes</th>
-                                            <th class="text-uppercase">Montant total</th>
-                                        </tr>
-                                  
+                                    <tr class="mt-4">
+                                        <th class="text-uppercase">Catégorie ventes</th>
+                                        <th class="text-uppercase">Montant total</th>
+                                    </tr>
+
                                     <?php $__currentLoopData = $dataParFamille; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $famille => $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
                                             <td style="padding-left: 20px;">-
@@ -166,7 +176,8 @@
                                         </td>
                                     </tr>
                                     <tr class="<?php echo e($benefice >= 0 ? 'table-success' : 'table-danger'); ?>">
-                                        <td><strong>Resultats  <span class="text-danger"> (dépense - vente) </span> </strong></td>
+                                        <td><strong>Resultats <span class="text-danger"> (dépense - vente) </span> </strong>
+                                        </td>
                                         <td><strong><?php echo e(number_format($benefice, 0, ',', ' ')); ?> FCFA</strong></td>
                                     </tr>
 
@@ -208,6 +219,18 @@
 
     <script>
         $(document).ready(function() {
+
+
+            // fonction pour afficher et masquer le bouton les libelle depense
+            $(".categorie-depense").on("click", function(event) {
+                event.preventDefault(); // Empêche le lien de rediriger la page
+
+                // Trouve les lignes suivantes qui contiennent les libellés de cette catégorie
+                let libelles = $(this).closest("tr").nextUntil(".table-secondary");
+
+                // Basculer l'affichage des libellés
+                libelles.toggleClass("hidden");
+            });
             // Fonction pour imprimer le rapport
             function imprimerRapport() {
                 // Créer une nouvelle fenêtre pour l'impression
