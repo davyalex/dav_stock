@@ -54,7 +54,7 @@
                                 <?php $__currentLoopData = $depenses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $depense): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
                                         <td><?php echo e(++$key); ?></td>
-                                        <td><?php echo e($depense['libelle']); ?></td>
+                                        <td><?php echo e($depense['libelle'] ?? ''); ?></td>
                                         <td><?php echo e(number_format($depense['montant_total'], 0, ',', ' ')); ?> FCFA</td>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

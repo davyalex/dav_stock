@@ -122,11 +122,13 @@
                                         class="nav-link <?php echo e(Route::is('categorie.*') ? 'active' : ''); ?>">Categories
                                     </a>
                                 </li>
-                                <li class="nav-item active">
-                                    <a href="<?php echo e(route('produit.index')); ?>"
-                                        class="nav-link <?php echo e(Route::is('produit.*') ? 'active' : ''); ?>">Produits
-                                    </a>
-                                </li>
+                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-produit')): ?>
+                                    <li class="nav-item active">
+                                        <a href="<?php echo e(route('produit.index')); ?>"
+                                            class="nav-link <?php echo e(Route::is('produit.*') ? 'active' : ''); ?>">Produits
+                                        </a>
+                                    </li>
+                                <?php endif; ?>
                             </ul>
                         </div>
                     </li>

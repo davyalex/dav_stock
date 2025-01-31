@@ -52,7 +52,7 @@
                                 @foreach ($depenses as $key => $depense)
                                     <tr>
                                         <td>{{ ++$key }}</td>
-                                        <td>{{ $depense['libelle'] }}</td>
+                                        <td>{{ $depense['libelle'] ?? '' }}</td>
                                         <td>{{ number_format($depense['montant_total'], 0, ',', ' ') }} FCFA</td>
                                     </tr>
                                 @endforeach

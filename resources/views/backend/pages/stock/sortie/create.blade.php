@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-   Sortie
+    Sortie
 @endsection
 @section('content')
     @component('backend.components.breadcrumb')
@@ -87,7 +87,7 @@
                     addToCart(productId, productName, productStock, productUniteSortie);
                     updateCartTable();
                     verifyQty();
-                            // $(this).val(null).trigger('change'); // Réinitialise Select2
+                    // $(this).val(null).trigger('change'); // Réinitialise Select2
 
 
                 }
@@ -157,7 +157,7 @@
                     // updateCartTable();
                     verifyQty();
                 }
-              
+
             });
 
             // $(document).on('change', '.quantity-input', function() {

@@ -55,12 +55,12 @@ class DepenseController extends Controller
         try {
             // dd($request->all());
 
-            $data_libelle = LibelleDepense::whereId($request->categorie_depense)->first();
-            $data_categorie = CategorieDepense::whereId($request->categorie_depense)->first();
+            $data_libelle = LibelleDepense::whereId($request->libelle)->first(); // LibelleDepense
+            $data_categorie = CategorieDepense::whereId($request->categorie_depense)->first(); // CategorieDepense
 
             $libelle = '';
             $categorie = '';
-            // dd($data_categorie->toArray());
+            // dd($data_libelle->toArray());
 
             if ($data_libelle) {
                 $libelle =  $data_libelle->id;
@@ -117,7 +117,7 @@ class DepenseController extends Controller
             ]);
 
 
-            $data_libelle = LibelleDepense::whereId($request->categorie_depense)->first();
+            $data_libelle = LibelleDepense::whereId($request->libelle)->first();
             $data_categorie = CategorieDepense::whereId($request->categorie_depense)->first();
 
             $libelle = '';

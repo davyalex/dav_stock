@@ -134,11 +134,13 @@
                                         class="nav-link {{ Route::is('categorie.*') ? 'active' : '' }}">Categories
                                     </a>
                                 </li>
-                                <li class="nav-item active">
-                                    <a href="{{ route('produit.index') }}"
-                                        class="nav-link {{ Route::is('produit.*') ? 'active' : '' }}">Produits
-                                    </a>
-                                </li>
+                                @can('voir-produit')
+                                    <li class="nav-item active">
+                                        <a href="{{ route('produit.index') }}"
+                                            class="nav-link {{ Route::is('produit.*') ? 'active' : '' }}">Produits
+                                        </a>
+                                    </li>
+                                @endcan
                             </ul>
                         </div>
                     </li>

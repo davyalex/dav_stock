@@ -335,6 +335,20 @@ class RapportController extends Controller
         }
     }
 
+    /**
+     * Display the details of purchases or expenses based on the specified category and date range.
+     *
+     * This method retrieves and groups data about products and expenses depending on the category
+     * selected by the user. If the category is 'achats', it fetches products with their purchase
+     * details within the specified date range. If the category is another type of expense, it 
+     * retrieves expenses for that category within the date range.
+     *
+     * @param Request $request The HTTP request object containing 'date_debut', 'date_fin', and
+     *                         'categorie_depense' as optional parameters.
+     * @return \Illuminate\Contracts\View\View|string The view with the details of purchases or expenses,
+     *                                                or an error message if an exception occurs.
+     */
+
     public function detail(Request $request)
     {
         try {
@@ -342,7 +356,7 @@ class RapportController extends Controller
 
             $dateDebut = $request->input('date_debut');
             $dateFin = $request->input('date_fin');
-            $categorieDepense = $request->input('categorie_depense');
+            $categorieDepense = $request->input('categorie_depense');  // ID de la catégorie de depense selectionnée
 
             // Vérification de la catégorie de dépense
             // Vérification si la catégorie de dépense existe
@@ -384,7 +398,6 @@ class RapportController extends Controller
                     ];
                 })->values();
 
-                // dd($produitsGroupes->toArray());
 
                 return view('backend.pages.rapport.detail_achat', compact('produitsGroupes', 'dateDebut', 'dateFin'));
             } else {
