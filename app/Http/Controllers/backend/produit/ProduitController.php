@@ -61,12 +61,12 @@ class ProduitController extends Controller
             $data_unite = Unite::all();
             $data_format = Format::all();
             $data_magasin = Magasin::all();
-            // $data_variante = Variante::all();
+            $data_variante = Variante::whereNotIn('slug', ['bouteille'])->get();
 
 
             // dd($data_categorie->toArray());
 
-            return view('backend.pages.produit.create', compact('data_categorie', 'categorieAll', 'data_unite', 'data_magasin', 'data_format'));
+            return view('backend.pages.produit.create', compact('data_categorie', 'categorieAll', 'data_unite', 'data_magasin', 'data_format', 'data_variante'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -84,6 +84,8 @@ class ProduitController extends Controller
     public function store(Request $request)
     {
         try {
+
+            // dd($request->all());
             // Récupérer la catégorie principale de la catégorie demandée
             $categorie = Categorie::find($request['categorie_id']);
             $principaCat = $categorie->getPrincipalCategory();
@@ -133,7 +135,6 @@ class ProduitController extends Controller
 
             // Générer un SKU unique
             $sku = 'PROD-' . strtoupper(Str::random(8));
-
             // Créer le produit
             $data_produit = Produit::create([
                 'nom' => $request['nom'],
@@ -145,7 +146,7 @@ class ProduitController extends Controller
                 'prix' => $categorie->famille == 'bar'  ? $request['prix'] : null,
                 'valeur_unite' => $request['valeur_unite'],
                 'unite_id' => $request['unite_id'],
-                'unite_sortie_id' => $categorie->famille == 'restaurant'  ? $request['unite_sortie_id'] :   $request->variantes[0]['libelle'],
+                'unite_sortie_id' => $categorie->famille == 'restaurant'  ? $request['unite_sortie_id'] : Unite::whereLibelle('Bouteille')->first()->id,
                 'statut' => 'active',
                 'user_id' => Auth::id(),
             ]);
@@ -153,6 +154,7 @@ class ProduitController extends Controller
 
             // Erengistrer les variantes dans la table pivot  ------*variantes represente les unite de vente associer au produit
             // famille est bar
+            // dd($categorie->famille);
             if ($categorie->famille == 'bar') {
                 if ($request->variantes) {
                     foreach ($request->variantes as  $variante) {
@@ -269,7 +271,7 @@ class ProduitController extends Controller
             // dd($galleryProduit);
 
             $id = $id;
-            return view('backend.pages.produit.edit', compact('data_produit', 'data_categorie', 'data_categorie_edit', 'categorieAll',  'data_unite', 'data_magasin', 'galleryProduit', 'id', 'data_format'));
+            return view('backend.pages.produit.edit', compact('data_produit', 'data_categorie', 'data_categorie_edit', 'categorieAll',  'data_unite', 'data_magasin', 'galleryProduit', 'id', 'data_format' , 'data_variante'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }

@@ -61,8 +61,7 @@
                                                                 {{ $produit->unite->libelle ?? '' }}
                                                                 {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
                                                                 ({{ $produit->prix }} FCFA)
-                                                                - <span class="text-primary">(Stock: {{{$produit->stock}}})</span>
-                            
+                                                                {{-- - <span class="text-primary">(Stock: {{{$produit->stock}}})</span> --}}
                                                             </option>
                                                         @endif
                                                     @endforeach
@@ -71,7 +70,6 @@
                                            
                                         </div>
                                         {{-- <h4 class="card-title mb-4">Sélection des produits</h4> --}}
-                                      
                                     </div>
                                 </div>
                             </div>
@@ -100,10 +98,6 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                    
-                    
-                                     
-    
                                     </div>
                                 </div>
                             </div>

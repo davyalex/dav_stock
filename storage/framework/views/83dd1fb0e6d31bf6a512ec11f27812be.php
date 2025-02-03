@@ -151,13 +151,18 @@
                                                             name="variantes[0][quantite]" value="1" readonly>
                                                     </div>
                                                     <div class="col-4">
-                                                        <label for="variante">Unite de vente :</label>
-                                                        <select name="variantes[0][libelle]" class="form-control"required>
-                                                            <option value="" selected> Selectionner</option>
-                                                            <?php $__currentLoopData = $data_unite; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $variante): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                                <option value="<?php echo e($variante->id); ?>">
-                                                                    <?php echo e($variante->libelle); ?></option>
-                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        <label for="variante">Unite de vente(principale) :</label>
+                                                        <select name="variantes[0][libelle]" class="form-control"
+                                                            <?php if(true): echo 'readonly'; endif; ?>>
+
+                                                            <?php
+                                                                $variante = App\Models\Variante::all();
+                                                                // recuperer la varianrte bouteille
+                                                                $variante = $variante->where('slug', 'bouteille')->first();
+                                                            ?>
+                                                            <option value="<?php echo e($variante->id); ?>">
+                                                                <?php echo e($variante->libelle); ?></option>
+
                                                         </select>
                                                     </div>
                                                     <div class="col-4">
@@ -250,7 +255,6 @@
 
 
 
-
                                         </div>
 
                                     </div>
@@ -295,14 +299,19 @@
                 newRow.classList.add('row', 'variante-row', 'mb-4');
                 newRow.innerHTML = `
                   <div class="col-2">
-                    <label for="prix">Quantité :</label>
+                    <label for="prix">Quantité :
+                        
+                            <small class="text-danger">
+                             Nombre de quantité de variante pour atteindre une bouteille :
+                             </small>                                                    
+                        </label>
                         <input type="number" name="variantes[${varianteIndex}][quantite]" class="form-control"  required >
                         </div>
         <div class="col-4">
-            <label for="variante">Nom de la Variante :</label>
+            <label for="variante">Variante de vente :</label>
             <select class="form-control" name="variantes[${varianteIndex}][libelle]" required>
                 <option value="" selected>Choisir</option>
-                <?php $__currentLoopData = $data_unite; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $variante): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php $__currentLoopData = $data_variante; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $variante): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <option value="<?php echo e($variante->id); ?>"><?php echo e($variante->libelle); ?></option>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>

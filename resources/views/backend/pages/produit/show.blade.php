@@ -53,8 +53,8 @@
                         <h5>Variantes des prix</h5>
                        <div class="d-flex justify-content-around">
                         @foreach ($data_produit->variantes as $key => $value)
-                        <p>{{ ++$key }} : <span class="fw-bold" id="stock">{{ $value->libelle }}</span>
-                         => <span class="fw-bold" id="prix">{{ $value->pivot->prix }}</span> FCFA
+                        <p>{{ $value->pivot->quantite }} : <span class="fw-bold" id="stock">{{ $value->libelle }}</span>
+                         => pour la bouteille<br>Prix Unitaire : <span class="fw-bold" id="prix">{{ $value->pivot->prix }}</span> FCFA
                         </p>
                        
                     @endforeach

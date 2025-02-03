@@ -194,13 +194,18 @@
                                                             name="variantes[0][quantite]" value="1" readonly>
                                                     </div>
                                                     <div class="col-4">
-                                                        <label for="variante">Unite de vente :</label>
-                                                        <select name="variantes[0][libelle]" class="form-control"required>
-                                                            <option value="" selected> Selectionner</option>
-                                                            @foreach ($data_unite as $variante)
-                                                                <option value="{{ $variante->id }}">
-                                                                    {{ $variante->libelle }}</option>
-                                                            @endforeach
+                                                        <label for="variante">Unite de vente(principale) :</label>
+                                                        <select name="variantes[0][libelle]" class="form-control"
+                                                            @readonly(true)>
+
+                                                            @php
+                                                                $variante = App\Models\Variante::all();
+                                                                // recuperer la varianrte bouteille
+                                                                $variante = $variante->where('slug', 'bouteille')->first();
+                                                            @endphp
+                                                            <option value="{{ $variante->id }}">
+                                                                {{ $variante->libelle }}</option>
+
                                                         </select>
                                                     </div>
                                                     <div class="col-4">
@@ -293,7 +298,6 @@
 
 
 
-
                                         </div>
 
                                     </div>
@@ -338,14 +342,19 @@
                 newRow.classList.add('row', 'variante-row', 'mb-4');
                 newRow.innerHTML = `
                   <div class="col-2">
-                    <label for="prix">Quantité :</label>
+                    <label for="prix">Quantité :
+                        
+                            <small class="text-danger">
+                             Nombre de quantité de variante pour atteindre une bouteille :
+                             </small>                                                    
+                        </label>
                         <input type="number" name="variantes[${varianteIndex}][quantite]" class="form-control"  required >
                         </div>
         <div class="col-4">
-            <label for="variante">Nom de la Variante :</label>
+            <label for="variante">Variante de vente :</label>
             <select class="form-control" name="variantes[${varianteIndex}][libelle]" required>
                 <option value="" selected>Choisir</option>
-                @foreach ($data_unite as $variante)
+                @foreach ($data_variante as $variante)
                     <option value="{{ $variante->id }}">{{ $variante->libelle }}</option>
                 @endforeach
             </select>

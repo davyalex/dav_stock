@@ -305,12 +305,12 @@ class RapportController extends Controller
             $dataParFamille = [
                 'Bar' => [
                     'ventes' => $venteMenu,
-                    'benefice' => $beneficeMenu,
+                    'benefice' => $beneficeBar,
                     'ratio' => $ratioMenu
                 ],
                 'Restaurant' => [
                     'ventes' => $venteBar,
-                    'benefice' => $beneficeBar,
+                    'benefice' => $beneficeMenu,
                     'ratio' => $ratioBar
                 ],
 

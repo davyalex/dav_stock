@@ -94,8 +94,9 @@
                     <h5 class="card-title mb-0">
                         Rapport d'exploitation
                         <?php if(request('date_debut') || request('date_fin') || request('categorie_depense')): ?>
-                            du
+                           
                             <?php if(request('date_debut')): ?>
+                            du
                                 <?php echo e(\Carbon\Carbon::parse(request('date_debut'))->format('d/m/Y')); ?>
 
                             <?php endif; ?>
@@ -128,7 +129,7 @@
                                         <td><strong>
                                                 <a class="text-capitalize categorie-depense" href="#"
                                                     style="text-decoration: none; color: black;"><?php echo e($categorie->libelle); ?></a>
-                                                
+
                                             </strong>
                                         </td>
                                         <td><strong><?php echo e(number_format($depensesParCategorie->get($categorie->libelle, collect())->sum('total_montant'), 0, ',', ' ')); ?>

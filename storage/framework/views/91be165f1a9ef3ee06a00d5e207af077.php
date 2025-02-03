@@ -67,8 +67,7 @@
                                                                 <?php echo e($produit->unite ? '(' . $produit->unite->abreviation . ')' : ''); ?>
 
                                                                 (<?php echo e($produit->prix); ?> FCFA)
-                                                                - <span class="text-primary">(Stock: <?php echo e($produit->stock); ?>)</span>
-                            
+                                                                
                                                             </option>
                                                         <?php endif; ?>
                                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -77,7 +76,6 @@
                                            
                                         </div>
                                         
-                                      
                                     </div>
                                 </div>
                             </div>
@@ -106,10 +104,6 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                    
-                    
-                                     
-    
                                     </div>
                                 </div>
                             </div>
