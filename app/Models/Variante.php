@@ -44,6 +44,14 @@ class Variante extends Model
 
     public function produits(): BelongsToMany
     {
-        return $this->belongsToMany(Produit::class ,'produit_variante')->withPivot(['quantite', 'prix', 'total'])->withTimestamps();
+        return $this->belongsToMany(Produit::class, 'produit_variante')->withPivot([
+            'quantite',
+            'prix',
+            'total',
+            // 'quantite_stocke',
+            'quantite_disponible',
+            'quantite_vendu',
+            'bouteille_vendu'
+        ])->withTimestamps();
     }
 }

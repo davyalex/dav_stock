@@ -29,6 +29,13 @@ return new class extends Migration
                 ->constrained('variantes')
                 ->onUpdate('cascade')
                 ->onDelete('cascade ');
+            $table->double('quantite_stocke')->nullable(); // quantite stocké
+            $table->double('quantite_disponible')->nullable(); // quantite disponible
+            $table->double('quantite_vendu')->nullable(); // quantite utilise
+            $table->double('bouteille_vendu')->nullable(); // bouteille utilise
+
+
+
 
             $table->timestamps();
         });

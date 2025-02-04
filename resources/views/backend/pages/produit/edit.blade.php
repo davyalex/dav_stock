@@ -329,18 +329,18 @@
                                             </div>
                                         </div>
 
-                                        </div>
                                     </div>
-                                    <!-- end card -->
-
-
                                 </div>
+                                <!-- end card -->
+
+
                             </div>
-                            <!-- end row -->
-                            <!-- end card -->
-                            <div class="text-end mb-3">
-                                <button type="submit" class="btn btn-success w-lg">Enregistrer</button>
-                            </div>
+                        </div>
+                        <!-- end row -->
+                        <!-- end card -->
+                        <div class="text-end mb-3">
+                            <button type="submit" class="btn btn-success w-lg">Enregistrer</button>
+                        </div>
                     </form>
                 </div>
             </div><!-- end row -->
@@ -365,6 +365,7 @@
             //gestion des variante dejà enregister
 
             let dataVariante = @json($data_produit->variantes);
+            // Trier par quantité (ordre croissant)
             let idVariante = dataVariante.map(variante => variante.id); // Récupérer les IDs des variantes
 
             let nombreVariantes = dataVariante.length;
@@ -381,7 +382,7 @@
                             <label for="libelle">Nom de la Variante :</label>
                             <select class="form-control" name="variantes[${i}][libelle]" required>
                                 <option value="" selected>Choisir</option>
-                                @foreach ($data_unite as $item)
+                                @foreach ($data_variante as $item)
                                     <option value="{{ $item->id }}">{{ $item->libelle }}</option>
                                 @endforeach
                             </select>
@@ -416,6 +417,13 @@
 
                     if (i === 0) {
                         newRow.querySelector('.remove-variante').style.display = 'none';
+                        newRow.querySelector(`input[name="variantes[${i}][quantite]"]`).readOnly = true;
+                        newRow.querySelector(`input[name="variantes[${i}][quantite]"]`).style.backgroundColor = '#eff2f7';
+                        //mettre le select libelle non selectionnable
+                        selectElement.classList.add('non-selectable');
+                        
+
+                        
                     }
                 }
 
@@ -440,7 +448,7 @@
                     <label for="variante">Nom de la Variante :</label>
                     <select class="form-control" name="variantes[${varianteIndex}][libelle]" required>
                         <option value="" selected>Choisir</option>
-                        @foreach ($data_unite as $variante)
+                        @foreach ($data_variante as $variante)
                             <option value="{{ $variante->id }}">{{ $variante->libelle }}</option>
                         @endforeach
                     </select>
@@ -690,7 +698,7 @@
 
                         if (response.message == 'operation reussi') {
                             Swal.fire({
-                                title: 'Produit ajouté avec success!',
+                                title: 'Produit modifié avec success!',
                                 // text: 'You clicked the button!',
                                 icon: 'success',
                                 showCancelButton: false,

@@ -257,7 +257,7 @@
                 updateChangeAmount();
             });
 
-            function addToCart(id, name, price, stock, variante) {
+            function addToCart(id, name, price, stock, variante , varianteStock) {
                 let existingItem = cart.find(item => item.id === id);
                 if (existingItem) {
                     existingItem.quantity += 1;
@@ -266,9 +266,10 @@
                     cart.push({
                         id: id,
                         name: name,
-                        price: price,
+                        price: 0,
                         stock: stock,
-                        selectedVariante: variante ? variante : null, // ajoute la variante choisie
+                        selectedVariante: variante ? variante : null, // ajoute la variante choisie ou choisi la variante dans le select
+                        varianteStock: variante ? variante.pivot.quantite_disponible : null,
                         quantity: 1,
                         discount: 0
                     });
@@ -294,8 +295,8 @@
                             let isSelected = item.selectedVariante == variante.id ? 'selected' :
                                 '';
                             variantesOptions += `
-                <option value="${variante.id}" data-price="${variante.pivot.prix}" ${isSelected}>
-                    ${variante.libelle} (${variante.pivot.prix} FCFA)
+                <option value="${variante.id}" data-qte="${variante.pivot.quantite_disponible}" data-price="${variante.pivot.prix}" ${isSelected}>
+                    ${variante.libelle} (${variante.pivot.prix} FCFA) (${variante.pivot.quantite_disponible} Q)
                 </option>`;
 
                         });
@@ -307,7 +308,8 @@
                         .famille === 'bar') {
                         varianteSelectHtml = `
             <select  class="form-select form-control variante-select" data-index="${index}">
-                <option disabled value="" ${!item.selectedVariante ? 'selected' : ''}>Sélectionnez une variante</option>
+                  <option disabled value="" ${!item.selectedVariante ? 'selected' : ''}>Sélectionnez une variante</option>
+              
                 ${variantesOptions}
             </select>`;
                     } else {
@@ -347,12 +349,17 @@
                 tbody.find('.variante-select').change(function() {
                     let index = $(this).data('index');
                     let variantePrice = $(this).find('option:selected').data('price');
+                    let varianteStock = $(this).find('option:selected').data('qte');
                     let selectedVarianteId = $(this).val();
+
+                    // console.log(variantePrice, varianteStock, selectedVarianteId);
+                    
 
                     if (variantePrice) {
                         // Met à jour le prix et la variante sélectionnée dans le panier
                         cart[index].price = variantePrice;
                         cart[index].selectedVariante = selectedVarianteId;
+                        cart[index].varianteStock = varianteStock;
 
                         // Met à jour l'affichage des prix dans la ligne
                         $(this).closest('tr').find('.price-cell').text(variantePrice + ' FCFA');
@@ -439,7 +446,7 @@
                 cart.forEach((item) => {
                     var product = dataProduct.find(dataItem => dataItem.id == item.id);
 
-                    if (item.quantity > product.stock) {
+                    if (item.quantity > item.varianteStock) {
                         $('#errorMessage').text(
                             'La quantité entrée dépasse la quantité en stock pour le produit "' + item
                             .name + '"'
@@ -450,8 +457,8 @@
                             false; // Marquer comme invalide si une quantité dépasse le stock
 
                     }
-// si la quantité est égale au stock alors empecher d'augmenter
-                    if (item.quantity == product.stock) {
+                    // si la quantité est égale au stock alors empecher d'augmenter
+                    if (item.quantity == item.varianteStock) {
                         $('.increase-qty[data-index="' + cart.indexOf(item) + '"]').prop('disabled', true);
                     }
                   
@@ -517,7 +524,7 @@
 
 //////###FONCTION POUR LA VALIDATION MENU  ##########/////
 
-            //////### END FONCTION POUR LA VALIDATION MENY  ##########/////
+            //////### END FONCTION POUR LA VALIDATION MENU  ##########/////
 
             $('#validate-sale').click(function(e) {
                

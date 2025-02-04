@@ -131,19 +131,19 @@ class Produit extends Model implements HasMedia
     public function menus()
     {
         return $this->belongsToMany(Menu::class, 'menu_produit')
-        ->withPivot('categorie_menu_id')
-        ->withTimestamps();
+            ->withPivot('categorie_menu_id')
+            ->withTimestamps();
     }
 
 
-     // Relation avec les compléments
-     public function complements()
-     {
-         return $this->belongsToMany(Produit::class, 'produit_complement', 'produit_id', 'complement_id')
-         ->withPivot('menu_id')
-         ->withTimestamps();
-     }
- 
+    // Relation avec les compléments
+    public function complements()
+    {
+        return $this->belongsToMany(Produit::class, 'produit_complement', 'produit_id', 'complement_id')
+            ->withPivot('menu_id')
+            ->withTimestamps();
+    }
+
 
     public function commandes(): BelongsToMany
     {
@@ -157,13 +157,13 @@ class Produit extends Model implements HasMedia
 
     public function inventaires()
     {
-        return $this->belongsToMany(Produit::class)->withPivot(['stock_initial','stock_vendu', 'stock_theorique', 'stock_physique', 'ecart', 'etat', 'observation'])->withTimestamps();
+        return $this->belongsToMany(Produit::class)->withPivot(['stock_initial', 'stock_vendu', 'stock_theorique', 'stock_physique', 'ecart', 'etat', 'observation'])->withTimestamps();
     }
 
     public function ventes()
     {
         return $this->belongsToMany(Vente::class, 'produit_vente')
-            ->withPivot('quantite', 'prix_unitaire', 'total' , 'unite_vente_id')
+            ->withPivot('quantite', 'prix_unitaire', 'total', 'unite_vente_id')
             ->withTimestamps();
     }
 
@@ -188,6 +188,14 @@ class Produit extends Model implements HasMedia
 
     public function variantes(): BelongsToMany
     {
-        return $this->belongsToMany(Variante::class ,'produit_variante')->withPivot(['quantite', 'prix', 'total'])->withTimestamps();
+        return $this->belongsToMany(Variante::class, 'produit_variante')->withPivot([
+            'quantite',
+            'prix',
+            'total',
+            // 'quantite_stocke',
+            'quantite_disponible',
+            'quantite_vendu',
+            'bouteille_vendu'
+        ])->withTimestamps();
     }
 }

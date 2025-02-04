@@ -87,11 +87,22 @@ class VenteController extends Controller
     public function create()
     {
         try {
-            $data_produit = Produit::active()->whereHas('categorie', function ($query) {
-                $query->whereIn('famille', ['bar', 'menu']);
-            })
-                ->with(['categorie', 'variantes'])
+            // $data_produit = Produit::active()->whereHas('categorie', function ($query) {
+            //     $query->whereIn('famille', ['bar', 'menu']);
+
+            // })
+            //     ->with(['categorie', 'variantes'])
+            //     ->get();
+
+            $data_produit = Produit::active()
+                ->whereHas('categorie', function ($query) {
+                    $query->whereIn('famille', ['bar', 'menu']);
+                })
+                ->with(['categorie', 'variantes' => function ($query) {
+                    $query->orderBy('quantite', 'asc'); // Trier par quantité croissante
+                }])
                 ->get();
+
 
             // dd(Session::get('session_date'));
 

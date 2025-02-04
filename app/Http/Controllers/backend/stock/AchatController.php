@@ -14,9 +14,10 @@ use App\Models\Categorie;
 use App\Models\Fournisseur;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\CategorieDepense;
-use App\Http\Controllers\Controller;
 use App\Models\LibelleDepense;
+use App\Models\CategorieDepense;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -301,6 +302,47 @@ class AchatController extends Controller
                 //     $produit->save();
                 // }
 
+
+
+                // //Mettre a jour la table produit_variantes en calculant par la quantite stocke de chaque variante
+
+                if ($type_produit == 'bar') {
+
+                    // Récupérer toutes les variantes associées au produit
+                    $variantes = DB::table('produit_variante')
+                        ->where('produit_id', $request->produit_id[$index])
+                        ->get(); // Récupérer toutes les variantes du produit
+
+                    // foreach ($variantes as $variante) {
+                    //     DB::table('produit_variante')
+                    //         ->where('produit_id', $request->produit_id[$index])
+                    //         ->where('variante_id', $variante->variante_id) // Vérifie que cette colonne existe
+                    //         ->update([
+                    //             'quantite_disponible' => $request->quantite_stocke[$index] * $variante->quantite
+                    //         ]);
+                    // }
+
+
+                    foreach ($variantes as $variante) {
+                        // Récupérer la quantité disponible actuelle
+                        $quantite_disponible_actuelle = DB::table('produit_variante')
+                            ->where('produit_id', $request->produit_id[$index])
+                            ->where('variante_id', $variante->variante_id)
+                            ->value('quantite_disponible'); // Récupère uniquement la colonne quantite_disponible
+                    
+                        // Calculer la nouvelle quantité
+                        $nouvelle_quantite = $quantite_disponible_actuelle + ($request->quantite_stocke[$index] * $variante->quantite);
+                    
+                        // Mettre à jour la quantité disponible
+                        DB::table('produit_variante')
+                            ->where('produit_id', $request->produit_id[$index])
+                            ->where('variante_id', $variante->variante_id)
+                            ->update([
+                                'quantite_disponible' => $nouvelle_quantite,
+                            ]);
+                    }
+                    
+                }
             }
 
             //ajouter l'achat comme depense
@@ -417,6 +459,31 @@ class AchatController extends Controller
 
     public function delete($id)
     {
+        // recuperer l'achat liéà la facture
+        $achat = Achat::where('facture_id', $id)->first();
+        // recuperer le produit et la quantité
+        $produit = Produit::find($achat->produit_id); // recuperer le produit lié à l'achat
+        $quantite = $achat->quantite_stocke; // recuperer la quantité stockable de l'achat
+        // mettre a jour le stock du produit
+        $produit->stock -= $quantite;
+        $produit->stock_initial -= $quantite;
+        $produit->save();
+
+
+        //Enlever le stock dans la table ivot produit_variante
+        $variantes = DB::table('produit_variante')
+            ->where('produit_id',  $produit)
+            ->get(); // Récupérer toutes les variantes du produit
+
+        foreach ($variantes as $variante) {
+            DB::table('produit_variante')
+                ->where('produit_id',  $produit)
+                ->where('variante_id', $variante->variante_id) // Vérifie que cette colonne existe
+                ->update([
+                    'quantite_disponible' =>   $variante->quantite_disponible - $quantite
+                ]);
+        }
+
         Facture::find($id)->forceDelete();
         return response()->json([
             'status' => 200,

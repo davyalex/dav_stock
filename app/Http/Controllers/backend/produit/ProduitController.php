@@ -228,7 +228,13 @@ class ProduitController extends Controller
     {
         try {
 
-            $data_produit = Produit::find($id);
+            // $data_produit = Produit::find($id);
+
+            $data_produit = Produit::with(['variantes' => function ($query) {
+                $query->orderBy('produit_variante.quantite', 'asc'); // Trier par quantité croissante
+            }])->find($id);
+            // dd($data_produit->variantes->toArray());
+
 
             $data_categorie = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
                 ->whereIn('type', ['bar', 'restaurant'])
@@ -252,6 +258,8 @@ class ProduitController extends Controller
             $data_format = Format::all();
             $data_magasin = Magasin::all();
             $data_variante = Variante::all();
+            // $data_variante = Variante::whereNotIn('slug', ['bouteille'])->get();
+
 
 
 
@@ -331,7 +339,7 @@ class ProduitController extends Controller
                 'unite_id' => $request['unite_id'],
                 // 'format_id' => $request['format_id'],
                 // 'valeur_format' => $request['valeur_format'],
-                'unite_sortie_id' => $categorie->famille == 'restaurant'  ? $request['unite_sortie_id'] : $request->variantes[0]['libelle'],
+                'unite_sortie_id' => $categorie->famille == 'restaurant'  ? $request['unite_sortie_id'] : Unite::whereLibelle('Bouteille')->first()->id,
                 'statut' => $statut,
                 'user_id' => Auth::id(),
             ]);
@@ -341,6 +349,10 @@ class ProduitController extends Controller
 
             // Erengistrer les variantes dans la table pivot
             if ($request->variantes) {
+                // supprimer les element pivot lié au produit
+                DB::table('produit_variante')->where('produit_id', $id)->delete();// supprimer les variantes existantes
+
+                // ajouter les nouvelles variantes
                 foreach ($request->variantes as  $variante) {
                     $data_produit->variantes()->attach(
                         $variante['libelle'],
