@@ -229,7 +229,7 @@
                     addToCart(productId, productName, productPrice, productStock);
                     updateCartTable();
                     updateGrandTotal();
-                    verifyQty();
+                    // verifyQty();
 
                       // Réinitialiser Select2 à l'option par défaut
         $(this).val(null).trigger('change'); // Réinitialise Select2
@@ -257,10 +257,11 @@
                     existingItem.quantity += 1;
                     existingItem.selectedVariante = variante; // garde la variante sélectionnée
                 } else {
+                    selectedProd = dataProduct.find(dataItem => dataItem.id == id)
                     cart.push({
                         id: id,
                         name: name,
-                        price: 0,
+                        price: price,
                         stock: stock,
                         selectedVariante: variante ? variante : null, // ajoute la variante choisie ou choisi la variante dans le select
                         varianteStock: variante ? variante.pivot.quantite_disponible : null,
@@ -302,7 +303,7 @@
                         .famille === 'bar') {
                         varianteSelectHtml = `
             <select  class="form-select form-control variante-select" data-index="${index}">
-                  <option disabled value="" ${!item.selectedVariante ? 'selected' : ''}>Sélectionnez une variante</option>
+                 <!-- <option disabled value="" ${!item.selectedVariante ? 'selected' : ''}>Sélectionnez une variante</option> -->
               
                 ${variantesOptions}
             </select>`;
@@ -440,7 +441,7 @@
                 cart.forEach((item) => {
                     var product = dataProduct.find(dataItem => dataItem.id == item.id);
 
-                    if (item.quantity > item.varianteStock) {
+                    if (item.quantity > product.stock) {
                         $('#errorMessage').text(
                             'La quantité entrée dépasse la quantité en stock pour le produit "' + item
                             .name + '"'
@@ -452,7 +453,7 @@
 
                     }
                     // si la quantité est égale au stock alors empecher d'augmenter
-                    if (item.quantity == item.varianteStock) {
+                    if (item.quantity == product.stock) {
                         $('.increase-qty[data-index="' + cart.indexOf(item) + '"]').prop('disabled', true);
                     }
                   
@@ -474,7 +475,7 @@
                 cart[index].quantity += 1;
                 updateCartTable();
                 updateGrandTotal();
-                verifyQty();
+                // verifyQty();
             });
 
             $(document).on('click', '.decrease-qty', function() {
@@ -483,7 +484,7 @@
                     cart[index].quantity -= 1;
                     updateCartTable();
                     updateGrandTotal();
-                    verifyQty();
+                    // verifyQty();
                 }
             });
 
@@ -510,7 +511,7 @@
                 cart.splice(index, 1);
                 updateCartTable();
                 updateGrandTotal();
-                verifyQty()
+                // verifyQty()
             });
 
 
