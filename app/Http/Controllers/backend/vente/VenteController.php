@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ClotureCaisse;
 use App\Models\HistoriqueCaisse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\RouteAction;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -174,6 +175,7 @@ class VenteController extends Controller
     public function store(Request $request)
     {
         try {
+
             // Validation des données
             // $request->validate([
             //     // 'client_id' => 'required|exists:users,id',
@@ -191,6 +193,7 @@ class VenteController extends Controller
 
             //recuperation des informations depuis ajax
             $cart = $request->input('cart');
+            // dd($cart);
             $cartMenu = $request->input('cartMenu');
 
             $montantAvantRemise = $request->input('montantAvantRemise');
@@ -247,14 +250,16 @@ class VenteController extends Controller
             // Préparation des données pour la table pivot
 
             if (!empty($cart)) {
+                // Attachement des produits à la vente
                 foreach ($cart as $item) {
-                    // Attachement des produits à la vente
                     $vente->produits()->attach($item['id'], [
                         'quantite' => $item['quantity'],
                         'prix_unitaire' => $item['price'],
                         'total' => $item['price'] * $item['quantity'],
-                        'unite_vente_id' => $item['selectedVariante'] ?? null,
+                        // 'unite_vente_id' => $item['selectedVariante'] ?? null,
+                        'variante_id' => $item['selectedVariante'] ?? null,
                     ]);
+
 
                     // Mise à jour du stock du produit
                     $produit = Produit::find($item['id']);
@@ -273,6 +278,15 @@ class VenteController extends Controller
                         }
                     }
                 }
+
+                // Mise a jour dans la table pivot produit variante
+                DB::table('produit_variante')
+                    ->where('produit_id', $item['id'])
+                    ->where('variante_id', $item['selectedVariante'])
+                    ->update([
+                        'quantite_disponible' => DB::raw('quantite_disponible - ' . $item['quantity']),
+                        'quantite_vendu' => DB::raw('quantite_vendu + ' . $item['quantity']),
+                    ]);
             }
 
 

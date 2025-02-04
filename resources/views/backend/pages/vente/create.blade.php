@@ -46,8 +46,10 @@
                                                     <option value="">Sélectionnez un produit</option>
                                                     @foreach ($data_produit as $produit)
                                                         @if ($produit->stock <= 0 && $produit->categorie->famille == 'bar')
-                                                            <option value="{{ $produit->id }}" data-price="{{ $produit->prix }}"
-                                                                data-stock="{{ $produit->stock }}" disabled>
+                                                            <option value="{{ $produit->id }}" 
+                                                                data-price="{{ $produit->prix }}"
+                                                                data-stock="{{ $produit->stock }}" 
+                                                                disabled>
                                                                 {{ $produit->nom }} {{ $produit->valeur_unite ?? '' }}
                                                                 {{ $produit->unite->libelle ?? '' }}
                                                                 {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
@@ -212,7 +214,7 @@
             let totalDiscountType = 'percentage';
             let totalDiscountValue = 0;
             let grandTotal = 0;
-            var dataProduct = @json($data_produit); // Données récupérées depuis le contrôleur
+            let dataProduct = @json($data_produit); // Données récupérées depuis le contrôleur
 
             $('.product-select').change(function() {
                 
@@ -220,11 +222,28 @@
                 let productName = $(this).find('option:selected').text();
                 let productPrice = $(this).find('option:selected').data('price');
                 let productStock = $(this).find('option:selected').data('stock');
-                // let productVariante = $(this).find('option:selected').val();
 
-                // console.log('id:', productId, 'nom:', productName, 'prix:', productPrice, 'stock:',
-                //     productStock, 'variante:', productVariante);
+                //recuperer les infos du produit selectionné 
+                               
+        
+    //
+    //   // recuperer son Id et son stock
+    //   let idVarianteBtle = variante.id, stockVarianteBtle = variante.pivot.quantite_disponible;
+    
+                //mettre dans le panier les infos par defaut
+                // cart.push({
+                //     id: productId,
+                //     name: productName,
+                //     price: productPrice,
+                //     stock: productStock,
+                //     quantity: 1,
+                //     selectedVariante: idVarianteBtle,
+                //     varianteStock: stockVarianteBtle,
+                //     discount: 0
+                // });
 
+               
+              
                 if (productId) {
                     addToCart(productId, productName, productPrice, productStock);
                     updateCartTable();
@@ -232,7 +251,32 @@
                     // verifyQty();
 
                       // Réinitialiser Select2 à l'option par défaut
-        $(this).val(null).trigger('change'); // Réinitialise Select2
+                      $(this).val(null).trigger('change'); // Réinitialise Select2
+
+
+            //           // Pour chaque ligne attribuer la variante bouteille par defaut
+            //       cart.forEach((item, index) => {
+            //         let dataVariante = dataProduct.find(dataItem => dataItem.id == item.id);
+
+            //         if (dataVariante.categorie
+            //         .famille === 'bar') {
+            //             let varianteBtle = dataVariante.variantes.find(variante => variante.slug =='bouteille');
+                 
+            //      // id
+            //      let idVarianteBtle = varianteBtle.id, stockVarianteBtle = varianteBtle.pivot.quantite_disponible;
+            //      // mettre dans le panier les infos par defaut
+            //      cart[index].selectedVariante = idVarianteBtle;
+            //      cart[index].varianteStock = stockVarianteBtle;
+  
+            //   //    console.log(cart[index].selectedVariante, cart[index].varianteStock);
+                 
+                    
+            //         }
+            //         // recuperer la variante bouteille par defaut
+              
+
+                   
+            //     })
                 }
                
             });
@@ -261,7 +305,8 @@
                     cart.push({
                         id: id,
                         name: name,
-                        price: price,
+                        price: selectedProd.categorie.famille === 'bar' ? 0 : price,
+                       
                         stock: stock,
                         selectedVariante: variante ? variante : null, // ajoute la variante choisie ou choisi la variante dans le select
                         varianteStock: variante ? variante.pivot.quantite_disponible : null,
@@ -274,10 +319,11 @@
 
 
 
-
             function updateCartTable() {
                 let tbody = $('#cart-table tbody');
                 tbody.empty();
+
+                  
 
                 cart.forEach((item, index) => {
                     let selectedProduct = dataProduct.find(dataItem => dataItem.id == item.id);
@@ -302,8 +348,8 @@
                     if (selectedProduct && selectedProduct.categorie && selectedProduct.categorie
                         .famille === 'bar') {
                         varianteSelectHtml = `
-            <select  class="form-select form-control variante-select" data-index="${index}">
-                 <!-- <option disabled value="" ${!item.selectedVariante ? 'selected' : ''}>Sélectionnez une variante</option> -->
+            <select   class="form-select form-control variante-select" data-index="${index}" required>
+               <option disabled value="" ${!item.selectedVariante ? 'selected' : ''}>Sélectionnez une variante</option>
               
                 ${variantesOptions}
             </select>`;
@@ -339,6 +385,9 @@
 
     `);
                 });
+              
+               
+
 
                 // Ajoute un événement de changement sur chaque select de variante pour mettre à jour la sélection
                 tbody.find('.variante-select').change(function() {
@@ -522,7 +571,9 @@
             //////### END FONCTION POUR LA VALIDATION MENU  ##########/////
 
             $('#validate-sale').click(function(e) {
-               
+
+
+              
                 const plats = document.querySelectorAll('.plat-checkbox:checked');
              let panier = []; // panier vente menu
 
@@ -632,6 +683,27 @@
 
                         });
         });
+
+          // Parcourir le tableau si une varianteSelected est null envoyer un message d'erreur
+        cart.forEach((item) => {
+            //recuperer la famille du produit
+            let data = dataProduct.find(dataItem => dataItem.id == item.id)
+            let famille = data.categorie.famille;
+            let name = data.nom;
+            if (item.selectedVariante === null && famille === 'bar') {
+                validationEchouee = true;
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Attention',
+                    text: 'Veuillez choisir une variante  pour ' + name,
+                });
+                return;
+            }
+        });
+          
+         
+
+       
                 
         if (validationEchouee) {
             return; // Stopper l'exécution si une validation échoue
