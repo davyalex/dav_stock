@@ -22,7 +22,7 @@ class MenuController extends Controller
     public function index()
     {
         try {
-            $data_menu = Menu::all();
+            $data_menu = Menu::OrderBy('created_at', 'DESC')->get();
             return view('backend.pages.menu.index',  compact('data_menu'));
         } catch (\Throwable $e) {
             return $e->getMessage();
