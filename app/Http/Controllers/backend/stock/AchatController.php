@@ -304,7 +304,7 @@ class AchatController extends Controller
 
 
 
-                // //Mettre a jour la table produit_variantes en calculant par la quantite stocke de chaque variante
+                // //Mettre a jour la table produit_variantes en mettant à jour la quantité disponible de chaque variante
 
                 if ($type_produit == 'bar') {
 
@@ -312,15 +312,6 @@ class AchatController extends Controller
                     $variantes = DB::table('produit_variante')
                         ->where('produit_id', $request->produit_id[$index])
                         ->get(); // Récupérer toutes les variantes du produit
-
-                    // foreach ($variantes as $variante) {
-                    //     DB::table('produit_variante')
-                    //         ->where('produit_id', $request->produit_id[$index])
-                    //         ->where('variante_id', $variante->variante_id) // Vérifie que cette colonne existe
-                    //         ->update([
-                    //             'quantite_disponible' => $request->quantite_stocke[$index] * $variante->quantite
-                    //         ]);
-                    // }
 
 
                     foreach ($variantes as $variante) {

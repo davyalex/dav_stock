@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Validator;
 class ProduitController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
         $categorie = Categorie::whereIn('type', ['restaurant', 'bar'])->get();
 
@@ -32,6 +32,46 @@ class ProduitController extends Controller
             })->orderBy('created_at', 'DESC')->get();
         // $data_produit = Produit::withWhereHas('typeProduit', fn($q) => $q->whereIn('type', ['restaurant', 'bar']))
         //     ->orderBy('created_at', 'DESC')->get();
+
+
+
+        #### script
+
+        // recuperer les produit de famille bar
+
+        $data_produit_bar = Produit::withWhereHas('categorie', fn($q) => $q->where('famille', 'bar'))
+            ->orderBy('created_at', 'DESC')->get();
+
+
+        foreach ($data_produit_bar as $index => $value) {
+            // Récupérer toutes les variantes associées au produit
+            $variantes = DB::table('produit_variante')
+                ->where('produit_id', $value['id'])
+                ->get(); // Récupérer toutes les variantes du produit
+
+
+            foreach ($variantes as $variante) {
+                // Récupérer la quantité disponible actuelle
+                $quantite_disponible_actuelle = DB::table('produit_variante')
+                    ->where('produit_id', $value['id'])
+                    ->where('variante_id', $variante->variante_id)
+                    ->value('quantite_disponible'); // Récupère uniquement la colonne quantite_disponible
+
+                // Calculer la nouvelle quantité disponible
+                $nouvelle_quantite = $quantite_disponible_actuelle + ($value['stock'] * $variante->quantite);
+
+                // Mettre à jour la quantité disponible
+                DB::table('produit_variante')
+                    ->where('produit_id', $value['id'])
+                    ->where('variante_id', $variante->variante_id)
+                    ->update([
+                        'quantite_disponible' => $nouvelle_quantite,
+                    ]);
+            }
+        }
+
+
+
         return view('backend.pages.produit.index', compact('data_produit'));
     }
 
@@ -279,7 +319,7 @@ class ProduitController extends Controller
             // dd($galleryProduit);
 
             $id = $id;
-            return view('backend.pages.produit.edit', compact('data_produit', 'data_categorie', 'data_categorie_edit', 'categorieAll',  'data_unite', 'data_magasin', 'galleryProduit', 'id', 'data_format' , 'data_variante'));
+            return view('backend.pages.produit.edit', compact('data_produit', 'data_categorie', 'data_categorie_edit', 'categorieAll',  'data_unite', 'data_magasin', 'galleryProduit', 'id', 'data_format', 'data_variante'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -350,7 +390,7 @@ class ProduitController extends Controller
             // Erengistrer les variantes dans la table pivot
             if ($request->variantes) {
                 // supprimer les element pivot lié au produit
-                DB::table('produit_variante')->where('produit_id', $id)->delete();// supprimer les variantes existantes
+                DB::table('produit_variante')->where('produit_id', $id)->delete(); // supprimer les variantes existantes
 
                 // ajouter les nouvelles variantes
                 foreach ($request->variantes as  $variante) {
