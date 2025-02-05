@@ -35,40 +35,40 @@ class ProduitController extends Controller
 
 
 
-        #### script
+        // #### script
 
-        // recuperer les produit de famille bar
+        // // recuperer les produit de famille bar
 
-        $data_produit_bar = Produit::withWhereHas('categorie', fn($q) => $q->where('famille', 'bar'))
-            ->orderBy('created_at', 'DESC')->get();
-
-
-        foreach ($data_produit_bar as $index => $value) {
-            // Récupérer toutes les variantes associées au produit
-            $variantes = DB::table('produit_variante')
-                ->where('produit_id', $value['id'])
-                ->get(); // Récupérer toutes les variantes du produit
+        // $data_produit_bar = Produit::withWhereHas('categorie', fn($q) => $q->where('famille', 'bar'))
+        //     ->orderBy('created_at', 'DESC')->get();
 
 
-            foreach ($variantes as $variante) {
-                // Récupérer la quantité disponible actuelle
-                $quantite_disponible_actuelle = DB::table('produit_variante')
-                    ->where('produit_id', $value['id'])
-                    ->where('variante_id', $variante->variante_id)
-                    ->value('quantite_disponible'); // Récupère uniquement la colonne quantite_disponible
+        // foreach ($data_produit_bar as $index => $value) {
+        //     // Récupérer toutes les variantes associées au produit
+        //     $variantes = DB::table('produit_variante')
+        //         ->where('produit_id', $value['id'])
+        //         ->get(); // Récupérer toutes les variantes du produit
 
-                // Calculer la nouvelle quantité disponible
-                $nouvelle_quantite = $quantite_disponible_actuelle + ($value['stock'] * $variante->quantite);
 
-                // Mettre à jour la quantité disponible
-                DB::table('produit_variante')
-                    ->where('produit_id', $value['id'])
-                    ->where('variante_id', $variante->variante_id)
-                    ->update([
-                        'quantite_disponible' => $nouvelle_quantite,
-                    ]);
-            }
-        }
+        //     foreach ($variantes as $variante) {
+        //         // Récupérer la quantité disponible actuelle
+        //         $quantite_disponible_actuelle = DB::table('produit_variante')
+        //             ->where('produit_id', $value['id'])
+        //             ->where('variante_id', $variante->variante_id)
+        //             ->value('quantite_disponible'); // Récupère uniquement la colonne quantite_disponible
+
+        //         // Calculer la nouvelle quantité disponible
+        //         $nouvelle_quantite = $quantite_disponible_actuelle + ($value['stock'] * $variante->quantite);
+
+        //         // Mettre à jour la quantité disponible
+        //         DB::table('produit_variante')
+        //             ->where('produit_id', $value['id'])
+        //             ->where('variante_id', $variante->variante_id)
+        //             ->update([
+        //                 'quantite_disponible' => $nouvelle_quantite,
+        //             ]);
+        //     }
+        // }
 
 
 
