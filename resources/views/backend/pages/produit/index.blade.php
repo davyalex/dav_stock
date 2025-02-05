@@ -56,6 +56,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>ID</th>
                                     <th>Code</th>
                                     <th>Image</th>
                                     <th>Nom</th>
@@ -71,6 +72,8 @@
                                 @foreach ($data_produit as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
+                                        <td>{{ $item['id'] }}
+
                                         <td>{{ $item['code'] }}
                                             <span
                                                 class="badge{{ $item->statut == 'desactive' ? ' bg-danger' : ' bg-success' }}">{{ $item['statut'] }}</span>
