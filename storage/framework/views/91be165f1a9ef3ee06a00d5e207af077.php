@@ -351,17 +351,28 @@
                     }
 
                     // Affichage du champ select pour les variantes ou texte 'Plat entier'
-                    if (selectedProduct && selectedProduct.categorie && selectedProduct.categorie
-                        .famille === 'bar') {
+                    if (selectedProduct && selectedProduct.categorie && selectedProduct.categorie.famille === 'bar') {
+                        //mettre le bouton increment en disabled
+                        // disableQteInc = `<button class="btn btn-primary btn-sm decrease-qty" data-index="${index}" disabled>-</button>`
+                        // disableQteDec = `<button class="btn btn-primary btn-sm increase-qty" data-index="${index}" disabled>+</button>`
+
+
+                        
                         varianteSelectHtml = `
             <select   class="form-select form-control variante-select" data-index="${index}" required>
                <option disabled value="" ${!item.selectedVariante ? 'selected' : ''}>Sélectionnez une variante</option>
               
                 ${variantesOptions}
             </select>`;
+
+
+          
                     } else {
                         varianteSelectHtml = `<p>Plat entier</p>`;
                     }
+
+
+
 
                     // Ajoute une ligne pour chaque produit dans le tableau
                     tbody.append(`
@@ -371,10 +382,12 @@
     <td class="price-cell">${item.price} FCFA</td>
     <td class="d-flex justify-content-center align-items-center">
     <div class="d-flex align-items-center">
-        <button class="btn btn-primary btn-sm decrease-qty" data-index="${index}">-</button>
+      <button class="btn btn-primary btn-sm decrease-qty" data-index="${index}">-</button>
+     
         <input readonly type="number" class="form-control quantity-input text-center mx-2" 
                value="${item.quantity}" min="1" style="width: 50px;">
         <button class="btn btn-secondary btn-sm increase-qty" data-index="${index}">+</button>
+
     </div>
 </td>
 
@@ -397,6 +410,9 @@
 
                 // Ajoute un événement de changement sur chaque select de variante pour mettre à jour la sélection
                 tbody.find('.variante-select').change(function() {
+
+                    // si une variante est choisie desactiver les boutons + et -
+                    $(this).closest('tr').find('.increase-qty, .decrease-qty').prop('disabled', false);
                     let index = $(this).data('index');
                     let variantePrice = $(this).find('option:selected').data('price');
                     let varianteStock = $(this).find('option:selected').data('qte');
@@ -530,7 +546,7 @@
                 cart[index].quantity += 1;
                 updateCartTable();
                 updateGrandTotal();
-                // verifyQty();
+                verifyQty();
             });
 
             $(document).on('click', '.decrease-qty', function() {
@@ -539,7 +555,7 @@
                     cart[index].quantity -= 1;
                     updateCartTable();
                     updateGrandTotal();
-                    // verifyQty();
+                    verifyQty();
                 }
             });
 

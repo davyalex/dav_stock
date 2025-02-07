@@ -70,8 +70,8 @@ class InventaireController extends Controller
                 ->get();
 
 
-                // recuperer les familles de categories bar et restaurant
-                $categorie_famille = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
+            // recuperer les familles de categories bar et restaurant
+            $categorie_famille = Categorie::whereNull('parent_id')->with('children', fn($q) => $q->OrderBy('position', 'ASC'))->withCount('children')
                 ->whereIn('type', ['bar', 'restaurant'])
                 ->OrderBy('position', 'ASC')->get();
 
@@ -79,7 +79,7 @@ class InventaireController extends Controller
 
 
             // dd($data_produit->toArray());
-            return view('backend.pages.stock.inventaire.create', compact('data_produit' , 'categorie_famille'));
+            return view('backend.pages.stock.inventaire.create', compact('data_produit', 'categorie_famille'));
         } catch (\Throwable $e) {
             return  $e->getMessage();
         }
@@ -185,5 +185,39 @@ class InventaireController extends Controller
     public function destroy(Inventaire $inventaire)
     {
         //
+    }
+
+
+    // Fiche inventaire
+    public function ficheInventaire(Request $request)
+    {
+        try {
+            // recuperer tous les produit en les groupant par categorie bar et restaurant
+            $type = $request->query('type'); // Récupère le paramètre 'type' de l'URL
+
+            if ($type == 'bar') {
+                $produits = Produit::whereHas('categorie', function ($q) {
+                    $q->where('famille', 'bar');
+                })->get();
+            } elseif ($type == 'restaurant') {
+                $produits = Produit::whereHas('categorie', function ($q) {
+                    $q->where('famille', 'restaurant');
+                })->get();
+            } else {
+                // Récupère les produits des familles 'bar' et 'restaurant' et les groupe par famille
+                $produits = Produit::with('categorie')
+                    ->whereHas('categorie', function ($q) {
+                        $q->whereIn('famille', ['bar', 'restaurant']);
+                    })
+                    ->get();
+                    // ->groupBy('categorie.famille'); // Groupe les produits par famille
+            }
+
+            // dd($produits->toArray());
+
+            return view('backend.pages.stock.inventaire.fiche', compact('produits'));
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
     }
 }

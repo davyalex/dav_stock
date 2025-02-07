@@ -25,8 +25,32 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Liste des inventaires</h5>
-                    <a href="{{ route('inventaire.create') }}" type="button" class="btn btn-primary ">
-                        Nouvel inventaire</a>
+                    <div class="d-flex ms-3">
+                        <!-- Dropdown Fiche de Produit -->
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Fiche de produit <i class="ri ri-printer-fill"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item"
+                                        href="{{ route('inventaire.fiche-inventaire', ['type' => 'bar']) }}">Produit Bar</a>
+                                </li>
+                                <li><a class="dropdown-item"
+                                        href="{{ route('inventaire.fiche-inventaire', ['type' => 'restaurant']) }}">Produit
+                                        Restaurant</a></li>
+                                <li><a class="dropdown-item"
+                                        href="{{ route('inventaire.fiche-inventaire', ['type' => 'tous']) }}">Tous les
+                                        Produits</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Bouton Nouvel Inventaire -->
+                        <a href="{{ route('inventaire.create') }}" class="btn btn-primary ms-2">
+                            Nouvel inventaire
+                        </a>
+                    </div>
+
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -83,11 +107,13 @@
 
     <script>
         $(document).ready(function() {
-    $('#example').DataTable({
-        "pageLength": 50,
-        "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]  // Personnalisation des options
-    });
-});
-
+            $('#example').DataTable({
+                "pageLength": 50,
+                "lengthMenu": [
+                    [10, 25, 50, 100],
+                    [10, 25, 50, 100]
+                ] // Personnalisation des options
+            });
+        });
     </script>
 @endsection

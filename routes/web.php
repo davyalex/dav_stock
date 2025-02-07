@@ -322,6 +322,9 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('show/{id}', 'show')->name('inventaire.show');
         route::get('create', 'create')->name('inventaire.create');
         route::post('store', 'store')->name('inventaire.store');
+        route::get('fiche-inventaire', 'ficheInventaire')->name('inventaire.fiche-inventaire');
+
+
     });
 
 

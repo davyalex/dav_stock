@@ -56,7 +56,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>ID</th>
+                                    
                                     <th>Code</th>
                                     <th>Image</th>
                                     <th>Nom</th>
@@ -72,8 +72,7 @@
                                 <?php $__currentLoopData = $data_produit; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr id="row_<?php echo e($item['id']); ?>">
                                         <td> <?php echo e(++$key); ?> </td>
-                                        <td><?php echo e($item['id']); ?>
-
+                                        
 
                                         <td><?php echo e($item['code']); ?>
 
