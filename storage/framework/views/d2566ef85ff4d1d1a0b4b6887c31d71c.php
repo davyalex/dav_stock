@@ -1,6 +1,6 @@
 
 <?php $__env->startSection('title'); ?>
-   Sortie
+    Sortie
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
     <?php $__env->startComponent('backend.components.breadcrumb'); ?>
@@ -89,7 +89,7 @@
                     addToCart(productId, productName, productStock, productUniteSortie);
                     updateCartTable();
                     verifyQty();
-                            // $(this).val(null).trigger('change'); // Réinitialise Select2
+                    // $(this).val(null).trigger('change'); // Réinitialise Select2
 
 
                 }
@@ -150,7 +150,6 @@
             });
 
             // ajouter la quantité manuellement
-
             $(document).on('input', '.quantity-input', function() {
                 let index = $(this).data('index');
                 let value = $(this).val();
@@ -159,7 +158,7 @@
                     // updateCartTable();
                     verifyQty();
                 }
-              
+
             });
 
             // $(document).on('change', '.quantity-input', function() {

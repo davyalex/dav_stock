@@ -384,8 +384,8 @@
     <div class="d-flex align-items-center">
       <button class="btn btn-primary btn-sm decrease-qty" data-index="${index}">-</button>
      
-        <input readonly type="number" class="form-control quantity-input text-center mx-2" 
-               value="${item.quantity}" min="1" style="width: 50px;">
+        <input  type="number" class="form-control quantity-input text-center mx-2" 
+               value="${item.quantity}" min="0.5" style="width: 50px;" data-index="${index}">
         <button class="btn btn-secondary btn-sm increase-qty" data-index="${index}">+</button>
 
     </div>
@@ -558,6 +558,26 @@
                     verifyQty();
                 }
             });
+
+   
+
+                // changer la quantité manuellement
+            $(document).on('input', '.quantity-input', function() {
+                let index = $(this).data('index');
+                let value = $(this).val();
+                // console.log('Index:', index, 'Cart Item:', cart[index]);
+
+                if (cart[index] && value > 0) { // Vérifie si cart[index] existe
+                    cart[index].quantity = parseFloat(value);
+                    // updateCartTable();
+                    updateGrandTotal();
+                    // verifyQty();
+                }
+            });
+
+
+
+          
 
             $(document).on('change', '.quantity-input', function() {
                 let index = $(this).data('index');

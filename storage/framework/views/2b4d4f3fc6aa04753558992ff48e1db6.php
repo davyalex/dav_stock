@@ -120,7 +120,10 @@
                                                 alt="<?php echo e($item['nom']); ?>">
                                         </td>
                                         <td><?php echo e($item['nom']); ?></td>
-                                        <td><?php echo e($item['pivot']['quantite']); ?></td>
+                                        <!-- Recuperer le libelle de la variante en fonction de son id -->
+                                       
+
+                                        <td><b> <?php echo e($item['pivot']['quantite']); ?></b> <?php echo e(\App\Models\Variante::find($item['pivot']['variante_id'])->libelle); ?>  </td>
                                         <td><?php echo e(number_format($item['pivot']['prix_unitaire'], 0, ',', ' ')); ?> FCFA</td>
                                         <td><?php echo e(number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ')); ?>
 
@@ -216,7 +219,7 @@
                         <tbody>
                             <?php $__currentLoopData = $vente->produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $produit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
-                                    <td><?php echo e($produit->nom); ?> x<?php echo e($produit->pivot->quantite); ?></td>
+                                    <td><?php echo e($produit->nom); ?> x<?php echo e($produit->pivot->quantite); ?> <?php echo e(\App\Models\Variante::find($produit['pivot']['variante_id'])->libelle); ?></td>
                                     <td style="text-align: right;">
                                         <?php echo e(number_format($produit->pivot->prix_unitaire, 0, ',', ' ')); ?></td>
                                     <td style="text-align: right;">

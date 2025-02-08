@@ -119,7 +119,10 @@
                                                 alt="{{ $item['nom'] }}">
                                         </td>
                                         <td>{{ $item['nom'] }}</td>
-                                        <td>{{ $item['pivot']['quantite'] }}</td>
+                                        <!-- Recuperer le libelle de la variante en fonction de son id -->
+                                       
+
+                                        <td><b> {{ $item['pivot']['quantite'] }}</b> {{\App\Models\Variante::find($item['pivot']['variante_id'])->libelle}}  </td>
                                         <td>{{ number_format($item['pivot']['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
                                         <td>{{ number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ') }}
                                             FCFA</td>
@@ -211,7 +214,7 @@
                         <tbody>
                             @foreach ($vente->produits as $produit)
                                 <tr>
-                                    <td>{{ $produit->nom }} x{{ $produit->pivot->quantite }}</td>
+                                    <td>{{ $produit->nom }} x{{ $produit->pivot->quantite }} {{\App\Models\Variante::find($produit['pivot']['variante_id'])->libelle}}</td>
                                     <td style="text-align: right;">
                                         {{ number_format($produit->pivot->prix_unitaire, 0, ',', ' ') }}</td>
                                     <td style="text-align: right;">
