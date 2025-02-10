@@ -61,8 +61,6 @@ class RapportController extends Controller
     }
 
 
-
-
     public function produits(Request $request)
     {
         try {
@@ -335,20 +333,19 @@ class RapportController extends Controller
         }
     }
 
-
     public function detail(Request $request)
     {
         try {
-
-
             $dateDebut = $request->input('date_debut');
             $dateFin = $request->input('date_fin');
             $categorieDepense = $request->input('categorie_depense');  // ID de la catégorie de depense selectionnée
+            $libelleDepense = $request->input('libelle_depense');
+
+            $produitId = $request->input('produitId'); // Id du produit pour recuperer tous les achats du produits
+
 
             // Vérification de la catégorie de dépense
-            // Vérification si la catégorie de dépense existe
             $categorieDepenseExiste = CategorieDepense::where('id', $categorieDepense)->first();
-
 
             if ($categorieDepenseExiste->slug === 'achats') {
                 // Récupération des produits avec des achats dans la période spécifiée
@@ -368,7 +365,8 @@ class RapportController extends Controller
                     } elseif ($dateFin) {
                         $query->where('date_achat', '<=', $dateFin);
                     }
-                }])->get()->groupBy('id');
+                }])->get()
+                    ->groupBy('id');
 
                 $produitsGroupes = $produits->map(function ($groupe) {
                     $premierProduit = $groupe->first();
@@ -390,6 +388,7 @@ class RapportController extends Controller
             } else {
                 // Récupération des dépenses de la catégorie sélectionnée dans la période spécifiée
                 $depenses = Depense::where('categorie_depense_id', $categorieDepense)
+                    ->where('libelle_depense_id', $libelleDepense)
                     ->when($dateDebut && $dateFin, function ($query) use ($dateDebut, $dateFin) {
                         return $query->whereBetween('date_depense', [$dateDebut, $dateFin]);
                     })
@@ -400,16 +399,16 @@ class RapportController extends Controller
                         return $query->where('date_depense', '<=', $dateFin);
                     })
                     ->with(['categorie_depense', 'libelle_depense'])
-                    ->get()
-                    ->groupBy('libelle_depense_id')
-                    ->map(function ($groupe) {
-                        return [
-                            'libelle' => $groupe->first()->libelle_depense->libelle,
-                            'montant_total' => $groupe->sum('montant'),
-                            'details' => $groupe
-                        ];
-                    })
-                    ->values();
+                    ->get();
+                // ->groupBy('libelle_depense_id')
+                // ->map(function ($groupe) {
+                //     return [
+                //         'libelle' => $groupe->first()->libelle_depense->libelle,
+                //         'montant_total' => $groupe->sum('montant'),
+                //         'details' => $groupe
+                //     ];
+                // })
+                // ->values();
                 // dd($depenses->toArray());
 
                 return view('backend.pages.rapport.detail_depense', compact('depenses', 'dateDebut', 'dateFin', 'categorieDepense'));

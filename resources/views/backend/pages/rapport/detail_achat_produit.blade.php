@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-    Détail des Dépenses
+    Détail des Achats
 @endsection
 @section('css')
     <!--datatable css-->
@@ -16,7 +16,7 @@
             Rapports
         @endslot
         @slot('title')
-            Détail des Dépenses
+            Détail des Achats
         @endslot
     @endcomponent
 
@@ -25,16 +25,13 @@
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
-                        Détail des Dépenses 
-                        > {{App\Models\CategorieDepense::whereId(request('categorie_depense'))->first()->libelle}}
-                        >{{App\Models\LibelleDepense::whereId(request('libelle_depense'))->first()->libelle}}
-
-                        @if ($dateDebut || $dateFin)
-                            du
-                            @if ($dateDebut)
+                        Détail des Achats 
+                        @if($dateDebut || $dateFin)
+                            du 
+                            @if($dateDebut)
                                 {{ \Carbon\Carbon::parse($dateDebut)->format('d/m/Y') }}
                             @endif
-                            @if ($dateFin)
+                            @if($dateFin)
                                 au {{ \Carbon\Carbon::parse($dateFin)->format('d/m/Y') }}
                             @endif
                         @endif
@@ -46,20 +43,21 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Libellé</th>
-                                    <th>Date de dépense</th>
-                                    <th>Montant</th>
+                                    <th>Produit</th>
+                                    <th>Quantité achetée</th>
+                                    <th>Prix total</th>
+                                    <th>Stock restant</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($depenses as $key => $depense)
-                                    <tr>
-                                        <td>{{ ++$key }}</td>
-                                        <td>{{ $depense['libelle_depense']['libelle'] ?? '' }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($depense['date_depense'])->format('d/m/Y') }}
-                                        </td>
-                                        <td>{{ number_format($depense['montant'], 0, ',', ' ') }} FCFA</td>
-                                    </tr>
+                                @foreach ($produitsGroupes as $key => $produit)
+                                <tr>
+                                    <td>{{ ++$key }}</td>
+                                    <td> <a href="">{{ $produit['nom'] }}</a> </td>
+                                    <td>{{ $produit['quantite_achat'] }}</td>
+                                    <td>{{ $produit['prix_total_format'] }}</td>
+                                    <td>{{ $produit['stock_restant'] }}</td>
+                                </tr>
                                 @endforeach
                             </tbody>
                             {{-- <tfoot>
@@ -67,12 +65,12 @@
                                     <th colspan="5">Résumé</th>
                                 </tr>
                                 <tr>
-                                    <td colspan="2">Nombre total de dépenses :</td>
-                                    <td colspan="3">{{ $depenses->count() }}</td>
+                                    <td colspan="2">Nombre total de produits achetés :</td>
+                                    <td colspan="3">{{ $produitsGroupes->count() }}</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2">Montant total des dépenses :</td>
-                                    <td colspan="3">{{ number_format($depenses->sum('montant'), 0, ',', ' ') }} FCFA</td>
+                                    <td colspan="2">Montant total des achats :</td>
+                                    <td colspan="3">{{ number_format($produitsGroupes->sum('prix_total'), 0, ',', ' ') }} FCFA</td>
                                 </tr>
                             </tfoot> --}}
                         </table>

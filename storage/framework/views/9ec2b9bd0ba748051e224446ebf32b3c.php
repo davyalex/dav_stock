@@ -83,7 +83,7 @@
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-success-subtle rounded fs-3">
-                                            <i class="bx bx-dollar-circle text-success"></i>
+                                            <i class="bx bx-money text-success"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -139,7 +139,7 @@
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-warning-subtle rounded fs-3">
-                                            <i class="bx bx-shopping-bag text-danger"></i>
+                                            <i class="bx bx-bell text-danger"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -231,7 +231,7 @@
                                         <?php $__currentLoopData = $produitsLesPlusVendus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
                                             <td>
-                                                <a href="apps-ecommerce-order-details"
+                                                <a href="#"
                                                     class="fw-medium link-primary">#<?php echo e($item->code); ?> </a>
                                             </td>
                                             <td>

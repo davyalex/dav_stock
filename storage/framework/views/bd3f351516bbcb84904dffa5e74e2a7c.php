@@ -44,11 +44,11 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="mb-3">
+                                <di  v class="mb-3">
                                     <label for="date_fin" class="form-label">Date de fin</label>
                                     <input type="date" class="form-control" id="date_fin" name="date_fin"
                                         value="<?php echo e(request('date_fin')); ?>">
-                                </div>
+                                </di>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
@@ -86,7 +86,6 @@
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-lg-12">
             <div class="card divPrint">
@@ -94,9 +93,8 @@
                     <h5 class="card-title mb-0">
                         Rapport d'exploitation
                         <?php if(request('date_debut') || request('date_fin') || request('categorie_depense')): ?>
-                           
                             <?php if(request('date_debut')): ?>
-                            du
+                                du
                                 <?php echo e(\Carbon\Carbon::parse(request('date_debut'))->format('d/m/Y')); ?>
 
                             <?php endif; ?>
@@ -177,7 +175,7 @@
                                         </td>
                                     </tr>
                                     <tr class="<?php echo e($benefice >= 0 ? 'table-success' : 'table-danger'); ?>">
-                                        <td><strong>Resultats <span class="text-danger"> (dépense - vente) </span> </strong>
+                                        <td><strong>Resultats <span class="text-danger"> (vente - dépense) </span> </strong>
                                         </td>
                                         <td><strong><?php echo e(number_format($benefice, 0, ',', ' ')); ?> FCFA</strong></td>
                                     </tr>
@@ -186,8 +184,6 @@
                                     
                                     
                                 </div>
-
-
                             </tfoot>
                         </table>
                     </div>

@@ -53,7 +53,7 @@
                                 @foreach ($produitsGroupes as $key => $produit)
                                 <tr>
                                     <td>{{ ++$key }}</td>
-                                    <td>{{ $produit['nom'] }}</td>
+                                    <td class="fw-bold"> <a href="#">{{ $produit['nom'] }}</a> </td>
                                     <td>{{ $produit['quantite_achat'] }}</td>
                                     <td>{{ $produit['prix_total_format'] }}</td>
                                     <td>{{ $produit['stock_restant'] }}</td>
