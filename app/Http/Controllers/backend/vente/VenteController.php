@@ -366,7 +366,7 @@ class VenteController extends Controller
                     ->value('quantite'); // Récupère uniquement la colonne quantite de la variante
 
                 // $bouteille_vendu = $quantite_variante / $item['quantity'];
-                $bouteille_vendu = $quantite_variante / $item['quantity'];
+                $bouteille_vendu =  $item['quantity'] / $quantite_variante;
 
                 // retirer le nombre de bouteille vendu du stock produit
                 $produit = Produit::find($item['id']); // Récupère le produit
