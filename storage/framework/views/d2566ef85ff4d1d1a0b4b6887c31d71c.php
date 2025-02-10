@@ -121,7 +121,7 @@
                             <td>${item.stock} ${item.uniteSortie}</td>
                             <td>
                                 <button class="btn btn-secondary btn-sm decrease-qty" data-index="${index}">-</button>
-                                <input  type="number" class="form-control quantity-input d-inline-block text-center" value="${item.quantity}" min="1" style="width: 60px;" data-index="${index}">
+                                <input  type="number" class="form-control quantity-input d-inline-block text-center" value="${item.quantity}" min="0" step="any" style="width: 60px;" data-index="${index}">
                                 <button class="btn btn-secondary btn-sm increase-qty" data-index="${index}">+</button>
                             </td>
                            

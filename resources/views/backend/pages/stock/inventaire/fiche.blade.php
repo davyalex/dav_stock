@@ -16,7 +16,7 @@
             Gestion de stock
         @endslot
         @slot('title')
-           Fiche de produit Inventaire
+            Fiche de produit Inventaire
         @endslot
     @endcomponent
 
@@ -24,24 +24,52 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Produits de l'inventaire
+                    <h5 class="card-title mb-0">
+                        @if (request()->has('type'))
+                            @if (request('type') == 'tous')
+                                Tous les produits
+                            @else
+                                Produit: <strong>{{ ucfirst(request('type')) }}</strong>
+                            @endif
+                        @endif
                         <strong>#</strong>
                     </h5>
-                    <a href="{{ route('inventaire.create') }}" type="button" class="btn btn-primary">Nouvel inventaire</a>
+                    <div class="d-flex ms-3">
+                        <!-- Dropdown Fiche de Produit -->
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Fiche de produit <i class="ri ri-printer-fill"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item"
+                                        href="{{ route('inventaire.fiche-inventaire', ['type' => 'bar']) }}">Produit Bar</a>
+                                </li>
+                                <li><a class="dropdown-item"
+                                        href="{{ route('inventaire.fiche-inventaire', ['type' => 'restaurant']) }}">Produit
+                                        Restaurant</a></li>
+                                <li><a class="dropdown-item"
+                                        href="{{ route('inventaire.fiche-inventaire', ['type' => 'tous']) }}">Tous les
+                                        Produits</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Bouton Nouvel Inventaire -->
+                        <a href="{{ route('inventaire.create') }}" class="btn btn-primary ms-2">
+                            Nouvel inventaire
+                        </a>
+                    </div>
+
                 </div>
                 <div class="card-body divPrint">
                     <div class="table-responsive">
-                        <table id="example" class="display table table-bordered" style="width:100%">
+                        <table id="exampleFiche" class="display table table-bordered" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Code</th>
                                     <th>Nom</th>
                                     <th>Stock Physique</th>
-                                    {{-- <th>Stock physique</th>
-                                    <th>Écart</th>
-                                    <th>Etat du stock</th>
-                                    <th>Observation</th>
-                                    <th>Stock alerte</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -51,17 +79,9 @@
                                 @foreach ($produits as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td>{{ ++$key }}</td>
-                                       
+                                        <td>{{ $item['code'] }}</td>
                                         <td>{{ $item['nom'] }} {{ $item['valeur_unite'] ?? '' }}
-                                            {{ $item['unite']['libelle'] ?? '' }} </td>
-                                        {{-- <td>{{ $item['pivot']['stock_theorique'] }}
-                                            {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
-                                        <td>{{ $item['pivot']['stock_physique'] }}
-                                            {{ $item['uniteSortie']['libelle'] ?? '' }}</td> --}}
-                                        {{-- <td>{{ $item['pivot']['ecart'] }}</td>
-                                        <td>{{ $item['pivot']['etat'] }}</td> --}}
                                         <td></td>
-                                        {{-- <td>{{ $item['stock_alerte'] }} {{ $item['uniteSortie']['libelle'] ?? '' }}</td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -99,11 +119,11 @@
 
             function imprimerRapport() {
                 // Sauvegarder l'ID de la table
-                var table = $('#example');
+                var table = $('#exampleFiche');
                 var originalId = table.attr('id');
 
                 // Désactiver DataTable temporairement (pagination, recherche, etc.)
-                if ($.fn.DataTable.isDataTable('#example')) {
+                if ($.fn.DataTable.isDataTable('#exampleFiche')) {
                     // Détruire DataTables pour enlever la pagination, la barre de recherche, etc.
                     table.DataTable().destroy();
                 }
@@ -119,7 +139,7 @@
 
                 // Calculer le nombre total de pages basé sur la taille de la police et la taille d'une ligne
                 var lignesParPage =
-                20; // Ajustez ce chiffre si nécessaire, par exemple, si vous avez plus ou moins de lignes par page
+                    20; // Ajustez ce chiffre si nécessaire, par exemple, si vous avez plus ou moins de lignes par page
                 var totalPages = Math.ceil(totalLignes / lignesParPage);
 
                 // Si vous avez des lignes incomplètes ou des ajustements à faire, ajustez le nombre de pages
@@ -131,7 +151,7 @@
                 var contenuImprimer = `
         <html>
             <head>
-                <title style="text-align: center;">Compte exploitation</title>
+                <title style="text-align: center;">Fiche de produit</title>
                 <style>
                     body { font-family: Arial, sans-serif; font-size: 10px; }
                     table { width: 100%; border-collapse: collapse; font-size: 10px; }
@@ -141,9 +161,15 @@
                 </style>
             </head>
             <body>
-                <h2 style="text-align: center; font-size: 12px;">Fiche Inventaire</h2>
+                <h2 style="text-align: center; font-size: 12px;">Fiche de produit 
+                @if (request()->get('type') != 'tous')
+                    <span>{{ request()->get('type') }}</span>
+                @endif
+                     pour inventaire</h2>
                 
                 <p style="text-align: center; font-size: 10px;">Réalisé le : {{ \Carbon\Carbon::now()->format('d-m-Y à H:i') }}</p>
+                 <p style="text-align: center; font-size: 10px;">Réalisé Par : .............................................................</p>
+
                 ${$('.divPrint').html()}
                 <footer>
                     <p style="font-size: 8px;">Imprimé le : ${new Date().toLocaleString()} par {{ Auth::user()->first_name }}</p>
@@ -174,7 +200,7 @@
 
             // Ajouter un bouton d'impression
             $('#btnImprimer')
-                .text('Imprimer le Rapport')
+                .text('Imprimer la fiche')
                 .addClass('btn btn-primary mt-3')
                 .on('click', imprimerRapport);
 

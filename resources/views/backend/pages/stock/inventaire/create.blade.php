@@ -117,7 +117,7 @@
                                 class="ri ri-delete-bin-fill fs-5 remove-form"></i> </button>
                     </div>
 
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-3 mb-3">
                         <label class="form-label" for="product-title-input">Famille de produit
                             <span class="text-danger">*</span>
                         </label>
@@ -130,7 +130,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-8 mb-3">
+                    <div class="col-md-7 mb-3">
                         <label class="form-label" for="product-title-input">Produits
                             <span class="text-danger">*</span>
                         </label>
@@ -148,27 +148,27 @@
                         </select>
                     </div>
 
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-2 mb-3 d-none">
                         <label class="form-label" for="stocks-input">Stock dernier inventaire
                             <span class="text-danger">*</span>
                         </label>
                         <input type="number" class="form-control stockLastInventaire" readonly>
                     </div>
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-2 mb-3 d-none">
                         <label class="form-label" for="stocks-input">Stock recent ajouté
                             <span class="text-danger">*</span>
                         </label>
                         <input type="number" name="stock_initial[]" class="form-control stockRecent" readonly>
                     </div>
 
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-2 mb-3 d-none">
                         <label class="form-label" for="stocks-input">Stock actuel
                             <span class="text-danger">*</span>
                         </label>
                         <input type="number" class="form-control stockActuel" readonly>
                     </div>
 
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-2 mb-3 d-none">
                         <label class="form-label" for="stocks-input">Stock vendu ou utilisé
                             <span class="text-danger">*</span>
                         </label>
@@ -176,7 +176,7 @@
                     </div>
 
 
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-2 mb-3 d-none">
                         <label class="form-label" for="stocks-input">Stock théorique
                             <span class="text-danger">*</span>
                         </label>
@@ -192,21 +192,21 @@
                         <input type="number" name="stock_physique[]" class="form-control stockPhysique" required>
                     </div>
 
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-2 mb-3 d-none">
                         <label class="form-label" for="stocks-input">Rapport Ecart
                             <span class="text-danger">*</span>
                         </label>
                         <input type="number" name="ecart[]" class="form-control ecart" readonly>
                     </div>
 
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-4 mb-3 d-none">
                         <label class="form-label" for="stocks-input">Etat de stock
                             <span class="text-danger">*</span>
                         </label>
                         <input type="text" name="etat[]" class="form-control etatStock" readonly>
                     </div>
 
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-6 mb-3 d-none">
                         <label class="form-label" for="stocks-input">Observation
                         </label>
                         <input type="text" name="observation[]" class="form-control observation">

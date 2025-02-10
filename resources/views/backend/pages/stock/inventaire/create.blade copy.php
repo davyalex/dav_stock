@@ -1,20 +1,20 @@
-
-<?php $__env->startSection('title'); ?>
+@extends('backend.layouts.master')
+@section('title')
     Inventaire
-<?php $__env->stopSection(); ?>
-<?php $__env->startSection('content'); ?>
+@endsection
+@section('content')
 
 
-    <?php $__env->startComponent('backend.components.breadcrumb'); ?>
-        <link href="<?php echo e(URL::asset('build/libs/dropzone/dropzone.css')); ?>" rel="stylesheet">
+    @component('backend.components.breadcrumb')
+        <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 
-        <?php $__env->slot('li_1'); ?>
+        @slot('li_1')
             Stock
-        <?php $__env->endSlot(); ?>
-        <?php $__env->slot('title'); ?>
+        @endslot
+        @slot('title')
             Faire un inventaire
-        <?php $__env->endSlot(); ?>
-    <?php echo $__env->renderComponent(); ?>
+        @endslot
+    @endcomponent
     <style>
         form label {
             font-size: 11px
@@ -64,13 +64,15 @@
 
     <div class="row">
         <div class="col-lg-12">
-            
-            <form id="myForm" method="POST" action="<?php echo e(route('inventaire.store')); ?>" autocomplete="off" novalidate
+            {{-- <div class="card">
+                <div class="card-body"> --}}
+            <form id="myForm" method="POST" action="{{ route('inventaire.store') }}" autocomplete="off" novalidate
                 enctype="multipart/form-data">
-                <?php echo csrf_field(); ?>
+                @csrf
                 <div class="row">
                     <div class="col-lg-12">
-                        
+                        {{-- <div class="card">
+                                    <div class="card-body"> --}}
                         <div class="row mb-3">
 
                             <div id="form-container">
@@ -115,7 +117,7 @@
                                 class="ri ri-delete-bin-fill fs-5 remove-form"></i> </button>
                     </div>
 
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label" for="product-title-input">Famille de produit
                             <span class="text-danger">*</span>
                         </label>
@@ -123,12 +125,12 @@
                         <select class="form-control famille" required>
                             <option disabled selected value>Selectionner
                             </option>
-                            <?php $__currentLoopData = $categorie_famille; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($categorie->id); ?>"><?php echo e($categorie->name); ?></option>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            @foreach ($categorie_famille as $categorie)
+                                <option value="{{ $categorie->id }}">{{ $categorie->name }}</option>
+                            @endforeach
                         </select>
                     </div>
-                    <div class="col-md-7 mb-3">
+                    <div class="col-md-8 mb-3">
                         <label class="form-label" for="product-title-input">Produits
                             <span class="text-danger">*</span>
                         </label>
@@ -136,31 +138,37 @@
                         <select class="form-control productSelected selectView" name="produit_id[]" required>
                             <option disabled selected value>Selectionner un produit
                             </option>
-                            
+                            {{-- @foreach ($data_produit as $produit)
+                                <option value="{{ $produit->id }}">{{ $produit->nom }}
+                                    {{ $produit->valeur_unite ?? '' }} {{ $produit->unite->libelle ?? '' }}
+                                    {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
+
+                                </option>
+                            @endforeach --}}
                         </select>
                     </div>
 
-                    <div class="col-md-2 mb-3 d-none">
+                    <div class="col-md-2 mb-3">
                         <label class="form-label" for="stocks-input">Stock dernier inventaire
                             <span class="text-danger">*</span>
                         </label>
                         <input type="number" class="form-control stockLastInventaire" readonly>
                     </div>
-                    <div class="col-md-2 mb-3 d-none">
+                    <div class="col-md-2 mb-3">
                         <label class="form-label" for="stocks-input">Stock recent ajouté
                             <span class="text-danger">*</span>
                         </label>
                         <input type="number" name="stock_initial[]" class="form-control stockRecent" readonly>
                     </div>
 
-                    <div class="col-md-2 mb-3 d-none">
+                    <div class="col-md-2 mb-3">
                         <label class="form-label" for="stocks-input">Stock actuel
                             <span class="text-danger">*</span>
                         </label>
                         <input type="number" class="form-control stockActuel" readonly>
                     </div>
 
-                    <div class="col-md-2 mb-3 d-none">
+                    <div class="col-md-2 mb-3">
                         <label class="form-label" for="stocks-input">Stock vendu ou utilisé
                             <span class="text-danger">*</span>
                         </label>
@@ -168,7 +176,7 @@
                     </div>
 
 
-                    <div class="col-md-2 mb-3 d-none">
+                    <div class="col-md-2 mb-3">
                         <label class="form-label" for="stocks-input">Stock théorique
                             <span class="text-danger">*</span>
                         </label>
@@ -184,21 +192,21 @@
                         <input type="number" name="stock_physique[]" class="form-control stockPhysique" required>
                     </div>
 
-                    <div class="col-md-2 mb-3 d-none">
+                    <div class="col-md-2 mb-3">
                         <label class="form-label" for="stocks-input">Rapport Ecart
                             <span class="text-danger">*</span>
                         </label>
                         <input type="number" name="ecart[]" class="form-control ecart" readonly>
                     </div>
 
-                    <div class="col-md-4 mb-3 d-none">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label" for="stocks-input">Etat de stock
                             <span class="text-danger">*</span>
                         </label>
                         <input type="text" name="etat[]" class="form-control etatStock" readonly>
                     </div>
 
-                    <div class="col-md-6 mb-3 d-none">
+                    <div class="col-md-6 mb-3">
                         <label class="form-label" for="stocks-input">Observation
                         </label>
                         <input type="text" name="observation[]" class="form-control observation">
@@ -219,17 +227,17 @@
 
         <!--end row-->
 
-    <?php $__env->startSection('script'); ?>
-        <script src="<?php echo e(URL::asset('build/libs/prismjs/prism.js')); ?>"></script>
+    @section('script')
+        <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
         <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
-        <script src="<?php echo e(URL::asset('build/js/pages/modal.init.js')); ?>"></script>
-        
-        <script src="<?php echo e(URL::asset('build/tinymce/tinymce.min.js')); ?>"></script>
-        <script src="<?php echo e(URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js')); ?>"></script>
+        <script src="{{ URL::asset('build/js/pages/modal.init.js') }}"></script>
+        {{-- <script src="{{ URL::asset('build/js/pages/form-editor.init.js') }}"></script> --}}
+        <script src="{{ URL::asset('build/tinymce/tinymce.min.js') }}"></script>
+        <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
 
-        <script src="<?php echo e(URL::asset('build/libs/dropzone/dropzone-min.js')); ?>"></script>
-        <script src="<?php echo e(URL::asset('build/js/pages/ecommerce-product-create.init.js')); ?>"></script>
-        <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+        <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
+        <script src="{{ URL::asset('build/js/pages/ecommerce-product-create.init.js') }}"></script>
+        <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -434,7 +442,7 @@
                     var famille = form.find('.famille').val();
 
 
-                    var produits = <?php echo json_encode($data_produit, 15, 512) ?>; // Données du contrôleur
+                    var produits = @json($data_produit); // Données du contrôleur
                     var options = produits.filter(function(item) {
                         return item.type_id == famille;
                     })
@@ -514,7 +522,7 @@
 
 
                     //recuperer les infos de produit
-                    var dataProduct = <?php echo json_encode($data_produit, 15, 512) ?>; // Données du contrôleur
+                    var dataProduct = @json($data_produit); // Données du contrôleur
                     var productId = form.find('.productSelected').val();
                     var product = dataProduct.find(function(item) {
                         return item.id == productId;
@@ -660,7 +668,7 @@
 
                                 // Rediriger vers la liste des sortie
                                 var url =
-                                    "<?php echo e(route('inventaire.index')); ?>"; // Rediriger vers la route liste sortie
+                                    "{{ route('inventaire.index') }}"; // Rediriger vers la route liste sortie
                                 window.location.replace(url);
                             }
                         },
@@ -725,7 +733,7 @@
                     var qte_stockable = qte_acquise * qte_format;
                     form.find(".qteStockable").val(qte_stockable);
 
-                    var dataProduct = <?php echo e(Js::from($data_produit)); ?>; // Données du contrôleur
+                    var dataProduct = {{ Js::from($data_produit) }}; // Données du contrôleur
 
                     console.log(dataProduct);
 
@@ -795,7 +803,5 @@
 
             });
         </script>
-    <?php $__env->stopSection(); ?>
-<?php $__env->stopSection(); ?>
-
-<?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\restaurant\resources\views/backend/pages/stock/inventaire/create.blade.php ENDPATH**/ ?>
+    @endsection
+@endsection

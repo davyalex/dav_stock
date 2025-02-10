@@ -125,7 +125,7 @@
                    <h6>Total Net : <span id="totalNet">0</span> FCFA</h6>
 
 
-                <h5>Remise : <span id="discount-amount">0</span> FCFA</h5>
+                <h5>Remise: <span id="discount-amount">0</span> FCFA</h5>
                 <h4>Total à payer : <span id="total-after-discount">0</span> FCFA</h4>
             </div>
 
@@ -379,7 +379,7 @@
       <button class="btn btn-primary btn-sm decrease-qty" data-index="${index}">-</button>
      
         <input  type="number" class="form-control quantity-input text-center mx-2" 
-               value="${item.quantity}" min="0.5" style="width: 50px;" data-index="${index}">
+               value="${item.quantity}" min="0" step="any" style="width: 50px;" data-index="${index}" >
         <button class="btn btn-secondary btn-sm increase-qty" data-index="${index}">+</button>
 
     </div>
@@ -426,7 +426,10 @@
                         $(this).closest('tr').find('.total-cell').text(calculateTotal(cart[index]) +
                             ' FCFA');
                         updateGrandTotal();
+                        verifyQty();
+
                     }
+                    
                 });
             }
 
@@ -455,10 +458,17 @@
                 $('#totalNet').text(totalNet);
 
               
-               
 
+                // Calculer le montant de la remise
                 if (totalDiscountType === 'percentage') {
-                    discountAmount = (totalNet * totalDiscountValue) / 100 ;
+                  
+                if(totalDiscountValue > 100){
+                    $('#total-discount').val(100);
+                    totalDiscountValue = 100;
+                   
+                }
+                discountAmount = (totalNet * totalDiscountValue) / 100 ;
+                
                 } else if (totalDiscountType === 'amount') {
                     discountAmount = totalDiscountValue;
                 }
@@ -497,16 +507,16 @@
                 $('#change-amount').text(changeAmount < 0 ? 0 : changeAmount);
             }
 
-          
-
+          //fonction pour verifier la quantité saisir
             function verifyQty() {
                 var dataProduct = @json($data_produit);
                 var allQuantitiesValid = true; // Pour suivre si toutes les quantités sont valides
 
                 cart.forEach((item) => {
                     var product = dataProduct.find(dataItem => dataItem.id == item.id);
+                    // console.log(item.varianteStock, qte);
 
-                    if (item.quantity > product.stock) {
+                    if (item.quantity > item.varianteStock && product.categorie.famille == 'bar') {
                         $('#errorMessage').text(
                             'La quantité entrée dépasse la quantité en stock pour le produit "' + item
                             .name + '"'
@@ -515,10 +525,10 @@
 
                         allQuantitiesValid =
                             false; // Marquer comme invalide si une quantité dépasse le stock
-
+                          
                     }
                     // si la quantité est égale au stock alors empecher d'augmenter
-                    if (item.quantity == product.stock) {
+                    if (item.quantity == item.varianteStock && product.categorie.famille == 'bar') {
                         $('.increase-qty[data-index="' + cart.indexOf(item) + '"]').prop('disabled', true);
                     }
                   
@@ -540,7 +550,9 @@
                 cart[index].quantity += 1;
                 updateCartTable();
                 updateGrandTotal();
-                verifyQty();
+                // recuperer la quantité saisir 
+                // verifyQty(cart[index].quantity);
+                verifyQty( );
             });
 
             $(document).on('click', '.decrease-qty', function() {
@@ -565,7 +577,7 @@
                     cart[index].quantity = parseFloat(value);
                     // updateCartTable();
                     updateGrandTotal();
-                    // verifyQty();
+                    verifyQty();
                 }
             });
 

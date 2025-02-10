@@ -85,6 +85,48 @@ class InventaireController extends Controller
         }
     }
 
+
+        /**
+         * Mettre à jour le stock des variantes d'un produit
+         *
+         * @param int $id L'ID du produit
+         *
+         * @return void
+         */
+//
+    public function miseAJourStock($id)
+    {
+        $produit = Produit::find($id);
+
+        if (!$produit) {
+            return; // Arrête l'exécution si le produit n'existe pas
+        }
+
+        // Récupérer toutes les variantes associées au produit
+        $variantes = DB::table('produit_variante')
+            ->where('produit_id', $produit->id)
+            ->get();
+
+        foreach ($variantes as $variante) {
+            // Récupérer la quantité disponible actuelle
+            $quantite_disponible_actuelle = DB::table('produit_variante')
+                ->where('produit_id', $produit->id)
+                ->where('variante_id', $variante->variante_id)
+                ->value('quantite_disponible');
+
+            // Calculer la nouvelle quantité disponible
+            $nouvelle_quantite = $quantite_disponible_actuelle + ($produit->stock * $variante->quantite);
+
+            // Mettre à jour la quantité disponible
+            DB::table('produit_variante')
+                ->where('produit_id', $produit->id)
+                ->where('variante_id', $variante->variante_id)
+                ->update([
+                    'quantite_disponible' => $nouvelle_quantite,
+                ]);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -135,6 +177,17 @@ class InventaireController extends Controller
                 $produit->stock_initial = 0;
 
                 $produit->save();
+
+                // Vérifier si la catégorie famille est 'bar'
+                if ($produit->categorie->famille === 'bar') {
+                    // Mettre à jour la quantité disponible des variantes du produit à 0
+                    DB::table('produit_variante')
+                        ->where('produit_id', $produit_id)
+                        ->update(['quantite_disponible' => 0]);
+
+                    // Appeler la méthode miseAJourStock
+                    $this->miseAJourStock($produit_id);
+                }
             }
 
 
@@ -210,7 +263,7 @@ class InventaireController extends Controller
                         $q->whereIn('famille', ['bar', 'restaurant']);
                     })
                     ->get();
-                    // ->groupBy('categorie.famille'); // Groupe les produits par famille
+                // ->groupBy('categorie.famille'); // Groupe les produits par famille
             }
 
             // dd($produits->toArray());

@@ -35,7 +35,8 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Image</th>
+                                    {{-- <th>Image</th> --}}
+                                    <th>Code</th>
                                     <th>Nom</th>
                                     <th>Stock théorique</th>
                                     <th>Stock physique</th>
@@ -49,11 +50,12 @@
                                 @foreach ($inventaire->produits as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td>{{ ++$key }}</td>
-                                        <td>
+                                        <td> {{$item['code']}} </td>
+                                        {{-- <td>
                                             <img class="rounded avatar-sm"
                                                 src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
                                                 width="10px" height="10px" alt="">
-                                        </td>
+                                        </td> --}}
                                         <td>{{ $item['nom'] }} {{ $item['valeur_unite'] ?? '' }}
                                             {{ $item['unite']['libelle'] ?? '' }} </td>
                                         <td>{{ $item['pivot']['stock_theorique'] }}
