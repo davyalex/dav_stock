@@ -215,8 +215,9 @@ class RapportController extends Controller
             $categories = CategorieDepense::with('libelleDepenses')->orderBy('libelle')->get(); // pour le filtre des cat_depense
 
             // 2. Création des requêtes de base pour les ventes et les dépenses
-            $venteQuery = Vente::query();
-            $depenseQuery = Depense::query();
+            $moisEnCours = date('m');
+            $venteQuery = Vente::query()->whereRaw("MONTH(ventes.created_at) = $moisEnCours");
+            $depenseQuery = Depense::query()->whereRaw("MONTH(date_depense) = $moisEnCours");
 
             // 3. Application des filtres de date
             // Formatage des dates
@@ -228,12 +229,19 @@ class RapportController extends Controller
                 $venteQuery->whereBetween('ventes.created_at', [$dateDebut, $dateFin]);
                 $depenseQuery->whereBetween('date_depense', [$dateDebut, $dateFin]);
             } elseif ($dateDebut) {
-                $venteQuery->where('ventes.created_at', '>=', $dateDebut);
-                $depenseQuery->where('date_depense', '>=', $dateDebut);
+                $venteQuery->where('ventes.created_at', '=', $dateDebut);
+                $depenseQuery->where('date_depense', '=', $dateDebut);
             } elseif ($dateFin) {
-                $venteQuery->where('ventes.created_at', '<=', $dateFin);
-                $depenseQuery->where('date_depense', '<=', $dateFin);
+                $venteQuery->where('ventes.created_at', '=', $dateFin);
+                $depenseQuery->where('date_depense', '=', $dateFin);
             }
+            // else{
+            //     // recuperer pour le mois en cours
+            //     $venteQuery->whereRaw("MONTH(ventes.created_at) = $moisEnCours");
+            //     $depenseQuery->whereRaw("MONTH(date_depense) = $moisEnCours");
+            // }
+
+
             // 4. Filtrage par catégorie de dépense
             if ($request->filled('categorie_depense')) {
                 $categories_depense = $categories_depense->where('id', $request->categorie_depense);
@@ -284,8 +292,6 @@ class RapportController extends Controller
 
             // total vente
             $totalVentes = $venteBar + $venteMenu + $ventePlatMenu;
-
-
 
             // 9. Calcul des totaux et ratios
             $totalDepenses = $depenses->sum('total_montant');
@@ -382,7 +388,6 @@ class RapportController extends Controller
                         }), 0, ',', ' ') . ' FCFA'
                     ];
                 })->values();
-
 
                 return view('backend.pages.rapport.detail_achat', compact('produitsGroupes', 'dateDebut', 'dateFin'));
             } else {

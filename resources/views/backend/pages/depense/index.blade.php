@@ -25,12 +25,68 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des dépenses</h5>
+                    <h5 class="card-title mb-0">Liste des dépenses
+
+                        @if (request()->has('categorie') && request('categorie') != null)
+
+                            - <strong>{{ ucfirst(App\Models\CategorieDepense::find(request('categorie'))->libelle) }}</strong>
+                        @endif
+
+                        @if (request('date_debut') || request('date_fin'))
+                            du
+                            @if (request('date_debut'))
+                                {{ \Carbon\Carbon::parse(request('date_debut'))->format('d/m/Y') }}
+                            @endif
+                            @if (request('date_fin'))
+                                au {{ \Carbon\Carbon::parse(request('date_fin'))->format('d/m/Y') }}
+                            @endif
+                        @endif
+                    </h5>
                     <a href="{{ route('depense.create') }}" class="btn btn-primary">
                         Créer une dépense
                     </a>
                 </div>
                 <div class="card-body">
+                    <form action="{{ route('depense.index') }}" method="GET">
+                        @csrf
+                        <div class="row mx-3">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="statut" class="form-label">Categorie</label>
+                                    <select class="form-select" id="categorie" name="categorie">
+                                        <option value="">Toutes les depenses</option>
+                                        @foreach (App\Models\CategorieDepense::get() as $key => $value)
+                                            <option value="{{ $value->id }}"
+                                                {{ request('categorie') == $value->id ? 'selected' : '' }}>
+                                                {{ $value->libelle }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="date_debut" class="form-label">Date de début</label>
+                                    <input type="date" class="form-control" id="date_debut" name="date_debut"
+                                        value="{{ request('date_debut') }}">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="date_fin" class="form-label">Date de fin</label>
+                                    <input type="date" class="form-control" id="date_fin" name="date_fin"
+                                        value="{{ request('date_fin') }}">
+                                </div>
+                            </div>
+                            <div class="col-md-3 mt-4">
+                                <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+                            </div>
+
+                        </div>
+
+                    </form>
                     <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
                         <thead>
                             <tr>

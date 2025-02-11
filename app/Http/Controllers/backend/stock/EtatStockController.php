@@ -12,6 +12,7 @@ class EtatStockController extends Controller
     {
         try {
             $filter = request('filter');
+            $statut = request('statut'); // Alerte ou Normal
 
             $produits = Produit::with(['categorie', 'achats',])
                 ->whereHas('categorie', function ($query) {
@@ -20,10 +21,12 @@ class EtatStockController extends Controller
                 ->when($filter, function ($query) use ($filter) {
                     return $query->withWhereHas('typeProduit', fn($q) => $q->where('type', $filter));
                 })
+                ->when($statut === 'alerte', function ($query) {
+                    return $query->where('stock', '<=', 'stock_alerte');
+                })
                 ->get();
 
-            // filtrer les produits selon les categories
-            $filter = request('filter');
+
 
 
             // dd($produits->toArray());

@@ -25,6 +25,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Liste des produits en stock
+                        @if(request()->has('statut')) - <b>{{ request('statut') }}</b> @endif
                         @if(request()->has('filter')) - <b>{{ request('filter') }}</b> @endif
                     </h5>
 

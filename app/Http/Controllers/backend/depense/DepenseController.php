@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\backend\depense;
 
+use Carbon\Carbon;
 use App\Models\Depense;
 use Illuminate\Http\Request;
 use App\Models\LibelleDepense;
@@ -17,16 +18,41 @@ class DepenseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
         try {
-            $data_depense = Depense::OrderBy('created_at', 'DESC')->get();
+            $query = Depense::OrderBy('created_at', 'DESC');
             $data_libelle_depense = LibelleDepense::OrderBy('created_at', 'ASC')->get();
             $categorie_depense = CategorieDepense::whereNotIn('slug', ['achats'])->get();
 
+            $dateDebut = $request->input('date_debut');
+            $dateFin = $request->input('date_fin');
+            $categorie = $request->input('categorie');
+
+
+            // Formatage des dates
+            $dateDebut = $request->filled('date_debut') ? Carbon::parse($dateDebut)->format('Y-m-d') : null;
+            $dateFin = $request->filled('date_fin') ? Carbon::parse($dateFin)->format('Y-m-d') : null;
+
+            // Application des filtres de date
+            if ($dateDebut && $dateFin) {
+                $query->whereBetween('created_at', [$dateDebut, $dateFin]);
+            } elseif ($dateDebut) {
+                $query->where('created_at', '>=', $dateDebut);
+            } elseif ($dateFin) {
+                $query->where('created_at', '<=', $dateFin);
+            }
+
+            // Application du filtre de statut
+            if ($request->filled('categorie')) {
+                $query->where('categorie_depense_id', $categorie);
+            }
+
+            $data_depense = $query->orderBy('created_at', 'desc')->get();
+
             // dd($categorie_depense->toArray());
-            return view('backend.pages.depense.index', compact('data_depense', 'categorie_depense' , 'data_libelle_depense'));
+            return view('backend.pages.depense.index', compact('data_depense', 'categorie_depense', 'data_libelle_depense'));
         } catch (\Throwable $th) {
             //throw $th;
             return $th->getMessage();
@@ -38,11 +64,10 @@ class DepenseController extends Controller
         try {
             // $data_depense = Depense::OrderBy('created_at', 'DESC')->get();
             $data_libelle_depense = LibelleDepense::OrderBy('created_at', 'ASC')->get();
-            $categorie_depense = CategorieDepense::with('libelleDepenses')->
-            whereNotIn('slug', ['achats'])->get();
+            $categorie_depense = CategorieDepense::with('libelleDepenses')->whereNotIn('slug', ['achats'])->get();
 
             // dd($categorie_depense->toArray());
-            return view('backend.pages.depense.create', compact('categorie_depense' , 'data_libelle_depense'));
+            return view('backend.pages.depense.create', compact('categorie_depense', 'data_libelle_depense'));
         } catch (\Throwable $th) {
             //throw $th;
             return $th->getMessage();

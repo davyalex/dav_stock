@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\backend\vente;
 
+use Carbon\Carbon;
 use App\Models\Vente;
 use App\Models\Commande;
 use Illuminate\Support\Str;
@@ -12,19 +13,47 @@ use RealRashid\SweetAlert\Facades\Alert;
 class CommandeController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
         try {
 
-            $statut = ['en attente', 'confirmée', 'livrée', 'annulée'];
+            // $statut = ['en attente', 'confirmée', 'livrée', 'annulée'];
 
-            $filter = request('filter');
-            $commandes = Commande::with('client', 'produits', 'plats')
-                ->when($filter, function ($query) use ($filter) {
-                    return $query->where('statut', $filter);
-                })
-                ->orderBy('created_at', 'desc') // Trier par date de création (récent en premier)
-                ->get();
+            // $filter = request('filter');
+
+            
+            // $commandes = Commande::with('client', 'produits', 'plats')
+            //     ->when($filter, function ($query) use ($filter) {
+            //         return $query->where('statut', $filter);
+            //     })
+            //     ->orderBy('created_at', 'desc') // Trier par date de création (récent en premier)
+            //     ->get();
+
+            $dateDebut = $request->input('date_debut');
+            $dateFin = $request->input('date_fin');
+            $statut = $request->input('statut');
+
+            $query = Commande::with('client', 'produits', 'plats');
+
+            // Formatage des dates
+            $dateDebut = $request->filled('date_debut') ? Carbon::parse($dateDebut)->format('Y-m-d') : null;
+            $dateFin = $request->filled('date_fin') ? Carbon::parse($dateFin)->format('Y-m-d') : null;
+
+            // Application des filtres de date
+            if ($dateDebut && $dateFin) {
+                $query->whereBetween('created_at', [$dateDebut, $dateFin]);
+            } elseif ($dateDebut) {
+                $query->where('created_at', '>=', $dateDebut);
+            } elseif ($dateFin) {
+                $query->where('created_at', '<=', $dateFin);
+            }
+
+            // Application du filtre de statut
+            if ($request->filled('statut')) {
+                $query->where('statut', $statut);
+            }
+
+            $commandes = $query->orderBy('created_at', 'desc')->get();
 
             // dd( $filter);
             return view('backend.pages.vente.commande.index', compact('commandes', 'statut'));

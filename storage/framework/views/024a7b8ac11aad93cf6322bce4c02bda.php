@@ -25,6 +25,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Liste des produits en stock
+                        <?php if(request()->has('statut')): ?> - <b><?php echo e(request('statut')); ?></b> <?php endif; ?>
                         <?php if(request()->has('filter')): ?> - <b><?php echo e(request('filter')); ?></b> <?php endif; ?>
                     </h5>
 
