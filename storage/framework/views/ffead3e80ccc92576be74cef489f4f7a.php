@@ -16,7 +16,7 @@
             Rapports
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
-            Rapport des ventes par catégorie
+            Rapport des ventes
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
 
@@ -31,7 +31,7 @@
                         <?php echo csrf_field(); ?>
                         <div class="row">
 
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="mb-3">
                                     <label for="caisse_id" class="form-label">Caisse</label>
                                     <select class="form-select" id="caisse_id" name="caisse_id">
@@ -46,7 +46,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label for="date_debut" class="form-label">Famille</label>
                                 <select class="form-select" id="categorie" name="categorie_famille">
                                     <option value="">Toutes les catégories</option>
@@ -64,26 +64,41 @@
 
                                         </option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="plats du menu">Menu</option>
+                                    <option value="plats du menu"  <?php echo e(request('categorie_famille') == 'plats du menu' ? 'selected' : ''); ?>>Menu</option>
                                 </select>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="mb-3">
                                     <label for="date_debut" class="form-label">Date de début</label>
                                     <input type="date" class="form-control" id="date_debut" name="date_debut"
                                         value="<?php echo e(request('date_debut')); ?>">
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="mb-3">
                                     <label for="date_fin" class="form-label">Date de fin</label>
                                     <input type="date" class="form-control" id="date_fin" name="date_fin"
                                         value="<?php echo e(request('date_fin')); ?>">
                                 </div>
                             </div>
-                        </div>
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-primary">Filtrer</button>
+                            <div class="col-md-2">
+                                <div class="mb-3">
+                                    <label for="statut" class="form-label">Periodes</label>
+                                    <select class="form-select" id="periode" name="periode">
+                                        <option value="">Toutes les periodes</option>
+                                        <?php $__currentLoopData = ['jour' => 'Jour', 'semaine' => 'Semaine', 'mois' => 'Mois', 'annee' => 'Année']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($key); ?>"
+                                                <?php echo e(request('periode') == $key ? 'selected' : ''); ?>>
+                                                <?php echo e($value); ?>
+
+                                            </option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 mt-4">
+                                <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -121,6 +136,10 @@
 
                             <?php endif; ?>
                         <?php endif; ?>
+                        <?php if(request()->has('periode') && request('periode') != null): ?>
+                        -
+                        <strong><?php echo e(request('periode')); ?></strong>
+                    <?php endif; ?>
                     </h5>
                 </div>
                 <div class="card-body">

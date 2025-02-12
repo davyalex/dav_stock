@@ -21,7 +21,7 @@ class CommandeController extends Controller
 
             // $filter = request('filter');
 
-            
+
             // $commandes = Commande::with('client', 'produits', 'plats')
             //     ->when($filter, function ($query) use ($filter) {
             //         return $query->where('statut', $filter);
@@ -32,6 +32,7 @@ class CommandeController extends Controller
             $dateDebut = $request->input('date_debut');
             $dateFin = $request->input('date_fin');
             $statut = $request->input('statut');
+            $periode = $request->input('periode');
 
             $query = Commande::with('client', 'produits', 'plats');
 
@@ -51,6 +52,20 @@ class CommandeController extends Controller
             // Application du filtre de statut
             if ($request->filled('statut')) {
                 $query->where('statut', $statut);
+            }
+
+            // Application du filtre de periode
+            // periode=> jour, semaine, mois, année
+            if ($request->filled('periode')) {
+                if ($periode == 'jour') {
+                    $query->whereDate('created_at', Carbon::today());
+                } elseif ($periode == 'semaine') {
+                    $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                } elseif ($periode == 'mois') {
+                    $query->whereMonth('created_at', Carbon::now()->month);
+                } elseif ($periode == 'annee') {
+                    $query->whereYear('created_at', Carbon::now()->year);
+                }
             }
 
             $commandes = $query->orderBy('created_at', 'desc')->get();

@@ -16,7 +16,7 @@
             Rapports
         @endslot
         @slot('title')
-            Rapport des ventes par catégorie
+            Rapport des ventes
         @endslot
     @endcomponent
 
@@ -31,7 +31,7 @@
                         @csrf
                         <div class="row">
 
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="mb-3">
                                     <label for="caisse_id" class="form-label">Caisse</label>
                                     <select class="form-select" id="caisse_id" name="caisse_id">
@@ -45,7 +45,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label for="date_debut" class="form-label">Famille</label>
                                 <select class="form-select" id="categorie" name="categorie_famille">
                                     <option value="">Toutes les catégories</option>
@@ -62,26 +62,40 @@
 
                                         </option>
                                     @endforeach
-                                    <option value="plats du menu">Menu</option>
+                                    <option value="plats du menu"  {{ request('categorie_famille') == 'plats du menu' ? 'selected' : '' }}>Menu</option>
                                 </select>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="mb-3">
                                     <label for="date_debut" class="form-label">Date de début</label>
                                     <input type="date" class="form-control" id="date_debut" name="date_debut"
                                         value="{{ request('date_debut') }}">
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="mb-3">
                                     <label for="date_fin" class="form-label">Date de fin</label>
                                     <input type="date" class="form-control" id="date_fin" name="date_fin"
                                         value="{{ request('date_fin') }}">
                                 </div>
                             </div>
-                        </div>
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-primary">Filtrer</button>
+                            <div class="col-md-2">
+                                <div class="mb-3">
+                                    <label for="statut" class="form-label">Periodes</label>
+                                    <select class="form-select" id="periode" name="periode">
+                                        <option value="">Toutes les periodes</option>
+                                        @foreach (['jour' => 'Jour', 'semaine' => 'Semaine', 'mois' => 'Mois', 'annee' => 'Année'] as $key => $value)
+                                            <option value="{{ $key }}"
+                                                {{ request('periode') == $key ? 'selected' : '' }}>
+                                                {{ $value }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 mt-4">
+                                <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -116,6 +130,10 @@
                                 au {{ \Carbon\Carbon::parse(request('date_fin'))->format('d/m/Y') }}
                             @endif
                         @endif
+                        @if (request()->has('periode') && request('periode') != null)
+                        -
+                        <strong>{{ request('periode') }}</strong>
+                    @endif
                     </h5>
                 </div>
                 <div class="card-body">

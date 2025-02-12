@@ -86,8 +86,8 @@
                                     </div>
                                     <div class="d-flex align-items-end justify-content-between mt-4">
                                         <div>
-                                            <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
-                                                    data-target="{{ $montantTotalVentes }}">{{ $montantTotalVentes }}</span>
+                                            <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class=""
+                                                   >{{ number_format($montantTotalVentes , 0 , ',' , ' ') }}</span>
                                                 FCFA </h4>
 
                                         </div>
@@ -119,7 +119,7 @@
                                     <div class="d-flex align-items-end justify-content-between mt-4">
                                         <div>
                                             <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
-                                                    data-target="{{ $nombreCommandes }}">{{ $nombreCommandes }}</span></h4>
+                                                    data-target="{{number_format($nombreCommandes , 0 , ',' , ' ') }}">{{ $nombreCommandes }}</span></h4>
                                             {{-- <a href="" class="text-decoration-underline">Voir toutes les commandes</a> --}}
                                         </div>
                                         <div class="avatar-sm flex-shrink-0">
@@ -186,8 +186,8 @@
                                     </div>
                                     <div class="d-flex align-items-end justify-content-between mt-4">
                                         <div>
-                                            <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
-                                                    data-target="{{ $montantTotalDepenses }}">{{ number_format($montantTotalDepenses, 0, ',', ' ') }}</span>
+                                            <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class=""
+                                                   >{{ number_format($montantTotalDepenses, 0, ',', ' ') }}</span>
                                                 FCFA </h4>
 
                                         </div>

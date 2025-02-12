@@ -29,6 +29,7 @@ class DepenseController extends Controller
             $dateDebut = $request->input('date_debut');
             $dateFin = $request->input('date_fin');
             $categorie = $request->input('categorie');
+            $periode = $request->input('periode');
 
 
             // Formatage des dates
@@ -47,6 +48,20 @@ class DepenseController extends Controller
             // Application du filtre de statut
             if ($request->filled('categorie')) {
                 $query->where('categorie_depense_id', $categorie);
+            }
+
+             // Application du filtre de periode
+            // periode=> jour, semaine, mois, année
+            if ($request->filled('periode')) {
+                if ($periode == 'jour') {
+                    $query->whereDate('created_at', Carbon::today());
+                } elseif ($periode == 'semaine') {
+                    $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                } elseif ($periode == 'mois') {
+                    $query->whereMonth('created_at', Carbon::now()->month);
+                } elseif ($periode == 'annee') {
+                    $query->whereYear('created_at', Carbon::now()->year);
+                }
             }
 
             $data_depense = $query->orderBy('created_at', 'desc')->get();

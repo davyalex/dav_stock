@@ -28,6 +28,9 @@
                         <?php if(request()->has('statut') && request('statut') != null): ?>
                             - <strong><?php echo e(ucfirst(request('statut'))); ?></strong>
                         <?php endif; ?>
+                        <?php if(request()->has('periode') && request('periode') != null): ?>
+                            - <strong><?php echo e(ucfirst(request('periode'))); ?></strong>
+                        <?php endif; ?>
 
                         <?php if(request('date_debut') || request('date_fin')): ?>
                             du
@@ -53,7 +56,7 @@
                     <form action="<?php echo e(route('commande.index')); ?>" method="GET">
                         <?php echo csrf_field(); ?>
                         <div class="row mx-3">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="mb-3">
                                     <label for="statut" class="form-label">Statut</label>
                                     <select class="form-select" id="statut" name="statut">
@@ -84,7 +87,23 @@
                                         value="<?php echo e(request('date_fin')); ?>">
                                 </div>
                             </div>
-                            <div class="col-md-3 mt-4">
+
+                            <div class="col-md-2">
+                                <div class="mb-3">
+                                    <label for="statut" class="form-label">Periodes</label>
+                                    <select class="form-select" id="periode" name="periode">
+                                        <option value="">Toutes les periodes</option>
+                                        <?php $__currentLoopData = ['jour' => 'Jour', 'semaine' => 'Semaine', 'mois' => 'Mois', 'annee' => 'Année']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($key); ?>"
+                                                <?php echo e(request('periode') == $key ? 'selected' : ''); ?>>
+                                                <?php echo e($value); ?>
+
+                                            </option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 mt-4">
                                 <button type="submit" class="btn btn-primary w-100">Filtrer</button>
                             </div>
 

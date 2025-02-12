@@ -28,6 +28,9 @@
                         @if (request()->has('statut') && request('statut') != null)
                             - <strong>{{ ucfirst(request('statut')) }}</strong>
                         @endif
+                        @if (request()->has('periode') && request('periode') != null)
+                            - <strong>{{ ucfirst(request('periode')) }}</strong>
+                        @endif
 
                         @if (request('date_debut') || request('date_fin'))
                             du
@@ -61,7 +64,7 @@
                     <form action="{{ route('commande.index') }}" method="GET">
                         @csrf
                         <div class="row mx-3">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="mb-3">
                                     <label for="statut" class="form-label">Statut</label>
                                     <select class="form-select" id="statut" name="statut">
@@ -91,7 +94,22 @@
                                         value="{{ request('date_fin') }}">
                                 </div>
                             </div>
-                            <div class="col-md-3 mt-4">
+
+                            <div class="col-md-2">
+                                <div class="mb-3">
+                                    <label for="statut" class="form-label">Periodes</label>
+                                    <select class="form-select" id="periode" name="periode">
+                                        <option value="">Toutes les periodes</option>
+                                        @foreach (['jour' => 'Jour', 'semaine' => 'Semaine', 'mois' => 'Mois', 'annee' => 'Année'] as $key => $value)
+                                            <option value="{{ $key }}"
+                                                {{ request('periode') == $key ? 'selected' : '' }}>
+                                                {{ $value }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 mt-4">
                                 <button type="submit" class="btn btn-primary w-100">Filtrer</button>
                             </div>
 

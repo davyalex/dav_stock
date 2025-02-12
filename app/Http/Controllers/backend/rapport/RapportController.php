@@ -432,10 +432,11 @@ class RapportController extends Controller
             $dateFin = $request->input('date_fin');
             $caisseId = $request->input('caisse_id');
             $categorieFamille = $request->input('categorie_famille');
+            $periode = $request->input('periode');
             // $categorieMenu = 'plat_menu';
 
 
-
+            //Pour les vente bar et restaurant
             $query = Vente::with(['produits.categorie', 'plats.categorieMenu', 'caisse']);
 
             // pour la vente des plats menu
@@ -465,13 +466,33 @@ class RapportController extends Controller
                 $queryMenu->where('caisse_id', $caisseId);
             }
 
+
+            // Application du filtre de periode
+            // periode=> jour, semaine, mois, année
+            if ($request->filled('periode')) {
+                if ($periode == 'jour') {
+                    $query->whereDate('date_vente', Carbon::today());
+                    $queryMenu->whereDate('date_vente', Carbon::today());
+                } elseif ($periode == 'semaine') {
+                    $query->whereBetween('date_vente', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                    $queryMenu->whereBetween('date_vente', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                } elseif ($periode == 'mois') {
+                    $query->whereMonth('date_vente', Carbon::now()->month);
+                    $queryMenu->whereMonth('date_vente', Carbon::now()->month);
+                } elseif ($periode == 'annee') {
+                    $query->whereYear('date_vente', Carbon::now()->year);
+                    $queryMenu->whereYear('date_vente', Carbon::now()->year);
+                }
+            }
+
+            // pour les vente bar et restaurant
             $ventes = $query->get();
 
             // pour la vente des plats menu
             $ventesMenu = $queryMenu->get();
 
 
-            // pour les produits restaurant
+            // pour les produits restaurant et bar
             $produitsVendus = $ventes->flatMap(function ($vente) {
                 return $vente->produits;
             })->groupBy('id')->map(function ($groupe) use ($categorieFamille) {
