@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\backend;
 
+use Carbon\Carbon;
 use App\Models\Vente;
 use App\Models\Depense;
 use App\Models\Produit;
 use App\Models\Commande;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -78,6 +80,37 @@ class DashboardController extends Controller
 
         // dd($montantTotalVentes);
 
+        // Chiffre d'affaire par mois avec apexchart
+        // $chiffreAffaireParMois = Vente::selectRaw('EXTRACT(MONTH FROM date_vente) as mois, SUM(montant_total) as chiffre_affaire')
+        //     ->groupBy('mois')
+        //     ->pluck('chiffre_affaire', 'mois');
+        // dd($chiffreAffaireParMois);
+
+        // $revenus = DB::table('ventes')
+        //     ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as mois, SUM(montant_total) as total_revenu")
+        //     ->groupBy('mois')
+        //     ->orderBy('mois')
+        //     ->get();
+
+        $revenus = DB::table('ventes')
+            ->selectRaw("MONTHNAME(created_at) as mois, MONTH(created_at) as mois_num, SUM(montant_total) as total_revenu")
+            ->groupBy('mois', 'mois_num')
+            ->orderBy('mois_num')
+            ->get();
+
+
+        // Recuperer les mois et Traduire les mois en français avec Carbon
+        $labels = $revenus->map(function ($revenu) {
+            return Carbon::create()->month($revenu->mois_num)->locale('fr')->translatedFormat('F');
+        });
+        $data = $revenus->pluck('total_revenu'); // Revenus correspondants
+
+        // dd($labels, $data);
+
+
+
+
+
 
         // dd($produitsLesPlusVendus->toArray());
         return view('backend.pages.index', compact(
@@ -87,6 +120,10 @@ class DashboardController extends Controller
             'montantTotalVentes',
             'montantTotalDepenses',
             'produitsEnAlerte',
+
+            // 'chiffreAffaireParMois',
+            'labels',
+            'data'
         ));
     }
 }
