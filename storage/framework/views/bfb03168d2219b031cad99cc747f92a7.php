@@ -35,7 +35,8 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Image</th>
+                                    
+                                    <th>Code</th>
                                     <th>Nom</th>
                                     <th>Stock théorique</th>
                                     <th>Stock physique</th>
@@ -49,11 +50,8 @@
                                 <?php $__currentLoopData = $inventaire->produits; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr id="row_<?php echo e($item['id']); ?>">
                                         <td><?php echo e(++$key); ?></td>
-                                        <td>
-                                            <img class="rounded avatar-sm"
-                                                src="<?php echo e($item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg')); ?>"
-                                                width="10px" height="10px" alt="">
-                                        </td>
+                                        <td> <?php echo e($item['code']); ?> </td>
+                                        
                                         <td><?php echo e($item['nom']); ?> <?php echo e($item['valeur_unite'] ?? ''); ?>
 
                                             <?php echo e($item['unite']['libelle'] ?? ''); ?> </td>

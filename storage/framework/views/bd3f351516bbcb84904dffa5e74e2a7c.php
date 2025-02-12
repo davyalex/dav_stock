@@ -44,7 +44,7 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <di  v class="mb-3">
+                                <di v class="mb-3">
                                     <label for="date_fin" class="form-label">Date de fin</label>
                                     <input type="date" class="form-control" id="date_fin" name="date_fin"
                                         value="<?php echo e(request('date_fin')); ?>">
@@ -91,7 +91,7 @@
             <div class="card divPrint">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
-                        Rapport d'exploitation 
+                        Rapport d'exploitation
                         <?php if(request('date_debut') || request('date_fin') || request('categorie_depense')): ?>
                             <?php if(request('date_debut')): ?>
                                 du
@@ -107,8 +107,8 @@
                                 <?php echo e($categories_depense->where('id', request('categorie_depense'))->first()->libelle); ?>
 
                             <?php endif; ?>
-                            <?php else: ?>
-                            du mois en cours -  <?php echo e(\Carbon\Carbon::now()->translatedFormat('F Y')); ?>
+                        <?php else: ?>
+                            du mois en cours - <?php echo e(\Carbon\Carbon::now()->translatedFormat('F Y')); ?>
 
                         <?php endif; ?>
                     </h5>
