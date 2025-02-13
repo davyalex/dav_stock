@@ -18,10 +18,10 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
 
         // Planifier la sauvegarde tous les jours à 16h
-        // $schedule->command('backup:run')->dailyAt('16:00');
+        $schedule->command('backup:run')->dailyAt('16:00');
 
-        // executer chaque minute
-        $schedule->command('backup:run')->everyMinute();
+        // // executer chaque minute
+        // $schedule->command('backup:run')->everyMinute();
     }
 
     /**
