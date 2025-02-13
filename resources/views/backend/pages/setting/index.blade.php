@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-   Parametre
+    Parametre
 @endsection
 @section('content')
     {{-- <div class="position-relative mx-n4 mt-n4">
@@ -34,6 +34,12 @@
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#privacy" role="tab">
                                 <i class="far fa-envelope"></i> Application
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#backup" role="tab">
+                                <i class="far fa-envelope"></i> Base de données(Sauvegardes)
                             </a>
                         </li>
                     </ul>
@@ -142,8 +148,8 @@
                                     <div class="col-lg-4">
                                         <div class="mb-3">
                                             <label for="phonenumberInput" class="form-label">Telephone2</label>
-                                            <input type="text" name="phone2" class="form-control" id="phonenumberInput"
-                                                value="{{ $data_setting['phone2'] ?? '' }}">
+                                            <input type="text" name="phone2" class="form-control"
+                                                id="phonenumberInput" value="{{ $data_setting['phone2'] ?? '' }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
@@ -211,8 +217,7 @@
                                                 </span>
                                             </div>
                                             <input type="text" name="facebook_link" class="form-control"
-                                                id="websiteInput" 
-                                                value="{{ $data_setting['facebook_link'] ?? '' }}">
+                                                id="websiteInput" value="{{ $data_setting['facebook_link'] ?? '' }}">
                                         </div>
                                         <div class="mb-3 d-flex">
                                             <div class="avatar-xs d-block flex-shrink-0 me-3">
@@ -221,8 +226,7 @@
                                                 </span>
                                             </div>
                                             <input type="text" name="instagram_link" class="form-control"
-                                                id="websiteInput" 
-                                                value="{{ $data_setting['instagram_link'] ?? '' }}">
+                                                id="websiteInput" value="{{ $data_setting['instagram_link'] ?? '' }}">
                                         </div>
 
                                         <div class=" mb-3 d-flex">
@@ -232,8 +236,7 @@
                                                 </span>
                                             </div>
                                             <input type="text" name="tiktok_link" class="form-control"
-                                                id="pinterestName" 
-                                                value="{{ $data_setting['tiktok_link'] ?? '' }}">
+                                                id="pinterestName" value="{{ $data_setting['tiktok_link'] ?? '' }}">
                                         </div>
                                         <div class="mb-3 d-flex">
                                             <div class="avatar-xs d-block flex-shrink-0 me-3">
@@ -252,8 +255,7 @@
                                                 </span>
                                             </div>
                                             <input type="text" name="twitter_link" class="form-control"
-                                                id="pinterestName" 
-                                                value="{{ $data_setting['twitter_link'] ?? '' }}">
+                                                id="pinterestName" value="{{ $data_setting['twitter_link'] ?? '' }}">
                                         </div>
                                     </div>
                                     <!-- ========== End social network ========== -->
@@ -324,6 +326,36 @@
 
                         </div>
                         <!--end tab-pane-->
+
+                        <div class="tab-pane" id="backup" role="tabpanel">
+                            <div class="mb-3">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Nom du fichier</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($backup_db as $file)
+                                            <tr>
+                                                <td>{{ basename($file) }}</td>
+                                                <td>
+                                                    <a
+                                                        href="{{ route('backups.download', basename($file)) }}">Télécharger</a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+
+
+
+                            </div>
+
+
+                        </div>
+
                     </div>
                 </div>
             </div>

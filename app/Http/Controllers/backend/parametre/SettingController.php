@@ -4,10 +4,11 @@ namespace App\Http\Controllers\backend\parametre;
 
 use App\Models\Setting;
 use App\Models\Optimize;
+use App\Models\Maintenance;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Maintenance;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class SettingController extends Controller
@@ -19,8 +20,29 @@ class SettingController extends Controller
 
         //get status mode maintenance
         $data_maintenance = Maintenance::latest()->select('type')->first();
-        // dd($data_maintenance);
+
+        // recuperer la liste des sauvegardes base de donnée
+        $backup_db = Storage::disk('local')->files('Restaurant');
+
+
+        // dd($backup_db);
         return view('backend.pages.setting.index', compact('data_setting', 'data_maintenance'));
+    }
+
+    // Télécharger un fichier de sauvegarde
+    public function downloadBackupdb($file)
+    {
+        $path = "Restaurant/" . $file;
+
+        if (Storage::disk('local')->exists($path)) {
+            return Storage::disk('local')->download($path);
+        }
+
+        Alert::error('Fichier non trouvé.', 'Error Message');
+
+        return back();
+
+        // return redirect()->back()->with('error', 'Fichier non trouvé.');
     }
 
 
@@ -108,7 +130,7 @@ class SettingController extends Controller
 
                 'email1' => $request['email1'],
                 'email2' => $request['email2'],
-                
+
                 'localisation' => $request['localisation'],
                 'google_maps' => $request['google_maps'],
                 'siege_social' => $request['siege_social'],

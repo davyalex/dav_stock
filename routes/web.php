@@ -143,6 +143,9 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     Route::prefix('setting')->controller(SettingController::class)->group(function () {
         route::get('', 'index')->name('setting.index');
         route::post('store', 'store')->name('setting.store');
+
+        // download backua db
+        Route::get('download-backup-db/{file}', 'downloadBackupdb')->name('setting.download-backup-db');
     });
 
 
