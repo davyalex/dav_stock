@@ -325,6 +325,40 @@ class ProduitController extends Controller
         }
     }
 
+
+    public function miseAJourStock($id)
+    {
+        $produit = Produit::find($id);
+
+        if (!$produit) {
+            return; // Arrête l'exécution si le produit n'existe pas
+        }
+
+        // Récupérer toutes les variantes associées au produit
+        $variantes = DB::table('produit_variante')
+            ->where('produit_id', $produit->id)
+            ->get();
+
+        foreach ($variantes as $variante) {
+            // Récupérer la quantité disponible actuelle
+            $quantite_disponible_actuelle = DB::table('produit_variante')
+                ->where('produit_id', $produit->id)
+                ->where('variante_id', $variante->variante_id)
+                ->value('quantite_disponible');
+
+            // Calculer la nouvelle quantité disponible
+            $nouvelle_quantite = $quantite_disponible_actuelle + ($produit->stock * $variante->quantite);
+
+            // Mettre à jour la quantité disponible
+            DB::table('produit_variante')
+                ->where('produit_id', $produit->id)
+                ->where('variante_id', $variante->variante_id)
+                ->update([
+                    'quantite_disponible' => $nouvelle_quantite,
+                ]);
+        }
+    }
+
     public function update(Request $request, $id)
     {
         try {
@@ -400,10 +434,14 @@ class ProduitController extends Controller
                             'quantite' => $variante['quantite'],
                             'prix' => $variante['prix'],
                             'total' => $variante['quantite'] * $variante['prix']
+
                         ]
                     );
                 }
             }
+
+            // mise a jour du stock disponible des variantes
+            $this->miseAJourStock($id);
 
             // recuperer le prix du produit de la variante bouteille dans la table pivot
             // $variante = Variante::where('slug', 'bouteille')->first();
