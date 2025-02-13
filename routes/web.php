@@ -145,7 +145,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::post('store', 'store')->name('setting.store');
 
         // download backua db
-        Route::get('download-backup-db/{file}', 'downloadBackupdb')->name('setting.download-backup-db');
+        Route::get('download-backup/{file}', 'downloadBackup')->name('setting.download-backup');
     });
 
 

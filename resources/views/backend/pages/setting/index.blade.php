@@ -20,6 +20,13 @@
         </div>
     </div> --}}
 
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; border: 1px solid black; text-align: left; }
+        th { background-color: #f4f4f4; }
+        a { text-decoration: none; color: blue; }
+    </style>
+
     <div class="row">
         <div class="col-xxl-12  mt-5">
             <div class="card mt-xxl-n5">
@@ -39,7 +46,7 @@
 
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#backup" role="tab">
-                                <i class="far fa-envelope"></i> Base de données(Sauvegardes)
+                                <i class="far fa-envelope"></i> Backups
                             </a>
                         </li>
                     </ul>
@@ -337,17 +344,19 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($backup_db as $file)
+                                        @foreach ($backup as $file)
                                             <tr>
                                                 <td>{{ basename($file) }}</td>
                                                 <td>
                                                     <a
-                                                        href="{{ route('backups.download', basename($file)) }}">Télécharger</a>
+                                                        href="{{ route('setting.download-backup', basename($file)) }}">Télécharger <i class="ri-download-line align-bottom"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
+
+
 
 
 

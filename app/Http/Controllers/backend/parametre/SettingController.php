@@ -21,22 +21,27 @@ class SettingController extends Controller
         //get status mode maintenance
         $data_maintenance = Maintenance::latest()->select('type')->first();
 
-        // recuperer la liste des sauvegardes base de donnée
-        $backup_db = Storage::disk('local')->files('Restaurant');
+        // recuperer la liste des sauvegardes du projet
+        $backup = Storage::disk('local')->files('Restaurant');
 
 
         // dd($backup_db);
-        return view('backend.pages.setting.index', compact('data_setting', 'data_maintenance'));
+        return view('backend.pages.setting.index', compact('data_setting', 'data_maintenance' , 'backup'));
     }
 
     // Télécharger un fichier de sauvegarde
-    public function downloadBackupdb($file)
+    public function downloadBackup($file)
     {
-        $path = "Restaurant/" . $file;
+        // $path = "Restaurant/" . $file;
 
-        if (Storage::disk('local')->exists($path)) {
-            return Storage::disk('local')->download($path);
-        }
+        // if (Storage::disk('local')->exists($path)) {
+        //     return Storage::disk('local')->download($path);
+        // }
+        $path = storage_path("app/Restaurant/" . $file);
+
+    if (file_exists($path)) {
+        return response()->download($path);
+    }
 
         Alert::error('Fichier non trouvé.', 'Error Message');
 
