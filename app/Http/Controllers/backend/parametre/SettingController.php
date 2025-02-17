@@ -22,7 +22,8 @@ class SettingController extends Controller
         $data_maintenance = Maintenance::latest()->select('type')->first();
 
         // recuperer la liste des sauvegardes du projet
-        $backup = Storage::disk('local')->files('Restaurant');
+        $appName = config('app.name');
+        $backup = Storage::disk('local')->files('' . $appName . '/');
 
 
         // dd($backup_db);
@@ -37,7 +38,8 @@ class SettingController extends Controller
         // if (Storage::disk('local')->exists($path)) {
         //     return Storage::disk('local')->download($path);
         // }
-        $path = storage_path("app/Restaurant/" . $file);
+        $appName = config('app.name');
+        $path = storage_path("app/' . $appName . '/" . $file);
 
     if (file_exists($path)) {
         return response()->download($path);
