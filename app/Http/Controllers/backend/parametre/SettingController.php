@@ -39,7 +39,7 @@ class SettingController extends Controller
         //     return Storage::disk('local')->download($path);
         // }
         $appName = config('app.name');
-        $path = storage_path("app/' . $appName . '/" . $file);
+        $path = storage_path("app/" . $appName . "/" . $file);
 
     if (file_exists($path)) {
         return response()->download($path);
