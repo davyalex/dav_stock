@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employes', function (Blueprint $table) {
+        Schema::create('postes', function (Blueprint $table) {
             $table->id();
+            $table->string('nom')->nullable();
+            $table->string('slug')->nullable();
+            $table->longText('description')->nullable();
+            $table->enum('statut', ['active', 'desactive'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employes');
+        Schema::dropIfExists('postes');
     }
 };
