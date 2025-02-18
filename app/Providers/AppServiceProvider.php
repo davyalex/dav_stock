@@ -80,7 +80,7 @@ class AppServiceProvider extends ServiceProvider
         // });
 
 
-        // function miseAJourStockVente()
+        // function miseAjourBouteilleVendu()
         // {
 
         //     // produit vente
@@ -97,7 +97,7 @@ class AppServiceProvider extends ServiceProvider
         // }
 
 
-        // function miseAJourStockVente()
+        // function miseAjourBouteilleVendu()
         // {
         //     // Récupération des ventes
         //     $data = DB::table('produit_vente')->get();
@@ -129,8 +129,8 @@ class AppServiceProvider extends ServiceProvider
         //     }
         // }
 
-        // Exécuter la fonction miseAJourStockVente au démarrage de l'application
-        miseAJourStockVente();
+        // // Exécuter la fonction miseAjourBouteilleVendu au démarrage de l'application
+        // miseAjourBouteilleVendu();
 
 
         $this->app->booted(function () {
