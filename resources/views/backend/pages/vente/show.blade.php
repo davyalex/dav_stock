@@ -120,9 +120,13 @@
                                         </td>
                                         <td>{{ $item['nom'] }}</td>
                                         <!-- Recuperer le libelle de la variante en fonction de son id -->
-                                       
 
-                                        <td><b> {{ $item['pivot']['quantite'] }}</b> {{\App\Models\Variante::find($item['pivot']['variante_id'])->libelle}}  </td>
+
+                                        <td><b> {{ $item['pivot']['quantite'] }}</b>
+                                            @if ($item['pivot']['variante_id'])
+                                                 {{ \App\Models\Variante::find($item['pivot']['variante_id'])->libelle }} 
+                                            @endif
+                                           </td>
                                         <td>{{ number_format($item['pivot']['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
                                         <td>{{ number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ') }}
                                             FCFA</td>
@@ -214,7 +218,11 @@
                         <tbody>
                             @foreach ($vente->produits as $produit)
                                 <tr>
-                                    <td>{{ $produit->nom }} x{{ $produit->pivot->quantite }} {{\App\Models\Variante::find($produit['pivot']['variante_id'])->libelle}}</td>
+                                    <td>{{ $produit->nom }} x{{ $produit->pivot->quantite }}
+                                        @if ($produit->categorie->famille == 'bar')
+                                            {{ \App\Models\Variante::find($produit['pivot']['variante_id'])->libelle }}
+                                        @endif
+                                    </td>
                                     <td style="text-align: right;">
                                         {{ number_format($produit->pivot->prix_unitaire, 0, ',', ' ') }}</td>
                                     <td style="text-align: right;">
