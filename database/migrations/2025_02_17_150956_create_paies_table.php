@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('statut', ['en attente', 'paye'])->nullable();
             $table->date('date_paiement')->nullable();
             // foreignId employeId
-            $table->foreignId('employe_id')->constrained('employes')->onDelete('cascade')->onUpdate('cascade')->nullable();
+            $table->foreignId('employe_id')->nullable()->constrained('employes')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

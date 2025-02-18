@@ -26,7 +26,7 @@ return new class extends Migration
             // $table->string('photo')->nullable();
 
             // poste Id
-            $table->foreignId('poste_id')->constrained('postes')->onDelete('cascade')->onUpdate('cascade')->nullable();
+            $table->foreignId('poste_id')->nullable()->constrained('postes')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
         });

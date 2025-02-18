@@ -38,6 +38,8 @@
                                     {{-- <th>Image</th> --}}
                                     <th>Code</th>
                                     <th>Nom</th>
+                                    <th>Stock initial</th>
+                                    <th>Stock vendu</th>
                                     <th>Stock théorique</th>
                                     <th>Stock physique</th>
                                     <th>Écart</th>
@@ -50,7 +52,7 @@
                                 @foreach ($inventaire->produits as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td>{{ ++$key }}</td>
-                                        <td> {{$item['code']}} </td>
+                                        <td> {{ $item['code'] }} </td>
                                         {{-- <td>
                                             <img class="rounded avatar-sm"
                                                 src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
@@ -58,6 +60,10 @@
                                         </td> --}}
                                         <td>{{ $item['nom'] }} {{ $item['valeur_unite'] ?? '' }}
                                             {{ $item['unite']['libelle'] ?? '' }} </td>
+                                        <td>{{ $item['pivot']['stock_initial'] }}
+                                            {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
+                                        <td>{{ $item['pivot']['stock_vendu'] }}
+                                            {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
                                         <td>{{ $item['pivot']['stock_theorique'] }}
                                             {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
                                         <td>{{ $item['pivot']['stock_physique'] }}
@@ -391,7 +397,7 @@
 
                 // Calculer le nombre total de pages basé sur la taille de la police et la taille d'une ligne
                 var lignesParPage =
-                20; // Ajustez ce chiffre si nécessaire, par exemple, si vous avez plus ou moins de lignes par page
+                    20; // Ajustez ce chiffre si nécessaire, par exemple, si vous avez plus ou moins de lignes par page
                 var totalPages = Math.ceil(totalLignes / lignesParPage);
 
                 // Si vous avez des lignes incomplètes ou des ajustements à faire, ajustez le nombre de pages
