@@ -27,6 +27,7 @@ return new class extends Migration
                 ->onDelete('cascade');
 
             // $table->double('stock_global')->nullable(); // stock net
+            $table->double('stock_dernier_inventaire')->nullable(); // stock total
             $table->double('stock_initial')->nullable();
             $table->double('stock_vendu')->nullable();
             $table->double('stock_theorique')->nullable(); //stock theorique

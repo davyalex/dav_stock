@@ -62,11 +62,10 @@
                                         </td> --}}
                                         <td>{{ $item['nom'] }} {{ $item['valeur_unite'] ?? '' }}
                                             {{ $item['unite']['libelle'] ?? '' }} </td>
-                                        <td>{{ $item['stock_dernier_inventaire'] ?? '' }}</td>
+                                        <td>{{ $item['pivot']['stock_dernier_inventaire'] ?? '' }}</td>
                                         <td>{{ $item['pivot']['stock_initial'] }}
                                             {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
-
-                                        <td>{{ $item['stock'] }}
+                                        <td>{{ $item['pivot']['stock_dernier_inventaire'] + $item['pivot']['stock_initial'] }}
                                             {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
                                         <td>{{ $item['pivot']['stock_vendu'] }}
                                             {{ $item['uniteSortie']['libelle'] ?? '' }}</td>

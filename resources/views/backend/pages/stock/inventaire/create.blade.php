@@ -528,12 +528,12 @@
                         return item.id == productId;
                     });
 
-                    var stockTheorique;
-                    if (product.categorie.famille == 'bar') {
-                        var stockTheorique = product.stock - product.quantite_vendue;
-                    } else {
-                        var stockTheorique = product.stock - product.quantite_utilisee;
-                    }
+                    var stockTheorique = product.stock;
+                    // if (product.categorie.famille == 'bar') {
+                    //     var stockTheorique = product.stock - product.quantite_vendue;
+                    // } else {
+                    //     var stockTheorique = product.stock - product.quantite_utilisee;
+                    // }
 
 
                     form.find('.stockTheorique').val(stockTheorique) || 0; // stock restante
@@ -552,7 +552,7 @@
                     } else {
                         var stockVendu = product.quantite_utilisee;
                     }
-                    form.find('.stockVendu').val(stockVendu) || 0; // stock vendu
+                    form.find('.stockVendu').val(stockVendu ?? 0); // stock vendu
 
                 }
 

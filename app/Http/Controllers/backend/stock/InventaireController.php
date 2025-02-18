@@ -158,7 +158,8 @@ class InventaireController extends Controller
 
                 // Attacher le produit à la sortie avec les informations associées
                 $inventaire->produits()->attach($produit_id, [
-                    'stock_initial' => $request->stock_initial[$key], // stock a l'inventaire
+                    'stock_dernier_inventaire' => $produit->stock_dernier_inventaire, // direct dans la table produit
+                    'stock_initial' => $request->stock_initial[$key], // nouveau stock ajouté apres l'inventaire precedent
                     'stock_theorique' => $request->stock_theorique[$key],
                     'stock_physique' => $request->stock_physique[$key],
                     'stock_vendu' => $request->stock_vendu[$key],
