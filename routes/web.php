@@ -7,7 +7,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PaieController;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Http\Controllers\PosteController;
+use App\Http\Controllers\EmployeController;
 use App\Http\Controllers\site\SiteController;
 use App\Http\Controllers\site\PanierController;
 use App\Http\Controllers\site\AuthUserController;
@@ -326,8 +329,6 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('create', 'create')->name('inventaire.create');
         route::post('store', 'store')->name('inventaire.store');
         route::get('fiche-inventaire', 'ficheInventaire')->name('inventaire.fiche-inventaire');
-
-
     });
 
 
@@ -426,6 +427,33 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::post('store', 'store')->name('categorie-menu.store');
         route::post('update/{id}', 'update')->name('categorie-menu.update');
         route::get('delete/{id}', 'delete')->name('categorie-menu.delete');
+    });
+
+
+    //RH poste
+    Route::prefix('poste')->controller(PosteController::class)->group(function () {
+        route::get('', 'index')->name('poste.index');
+        route::post('store', 'store')->name('poste.store');
+        route::post('update/{id}', 'update')->name('poste.update');
+        route::get('delete/{id}', 'delete')->name('poste.delete');
+    });
+
+
+    //RH employe
+    Route::prefix('employe')->controller(EmployeController::class)->group(function () {
+        route::get('', 'index')->name('employe.index');
+        route::post('store', 'store')->name('employe.store');
+        route::post('update/{id}', 'update')->name('employe.update');
+        route::get('delete/{id}', 'delete')->name('employe.delete');
+    });
+
+
+     //RH paie
+     Route::prefix('paie')->controller(PaieController::class)->group(function () {
+        route::get('', 'index')->name('paie.index');
+        route::post('store', 'store')->name('paie.store');
+        route::post('update/{id}', 'update')->name('paie.update');
+        route::get('delete/{id}', 'delete')->name('paie.delete');
     });
 });
 

@@ -30,7 +30,7 @@ function delete_row(route){
                         if (response.status == 200) {
                             Swal.fire({
                                 title: 'Supprimé!',
-                                text: 'Votre fichier a été supprimé.',
+                                text: 'Suppression effectuée avec succès.',
                                 icon: 'success',
                                 customClass: {
                                     confirmButton: 'btn btn-primary w-xs mt-2',

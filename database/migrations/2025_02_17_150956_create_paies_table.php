@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('paies', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-
+            $table->double('montant')->nullable();
+            $table->enum('type', ['avance', 'salaire', 'prime', 'indemnité'])->nullable();
+            $table->enum('statut', ['en attente', 'paye'])->nullable();
+            $table->date('date_paiement')->nullable();
             // foreignId employeId
-            $table->foreignId('poste_id')->constrained('postes')->onDelete('cascade')->onUpdate('cascade')->nullable();
-
+            $table->foreignId('employe_id')->constrained('employes')->onDelete('cascade')->onUpdate('cascade')->nullable();
             $table->timestamps();
         });
     }

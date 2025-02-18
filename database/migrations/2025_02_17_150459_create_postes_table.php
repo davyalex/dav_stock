@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('postes', function (Blueprint $table) {
             $table->id();
-            $table->string('nom')->nullable();
+            $table->string('libelle')->nullable();
             $table->string('slug')->nullable();
             $table->longText('description')->nullable();
             $table->enum('statut', ['active', 'desactive'])->default('active');
-            $table->softDeletes();
             $table->timestamps();
         });
     }
