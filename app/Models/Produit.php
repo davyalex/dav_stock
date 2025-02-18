@@ -163,7 +163,7 @@ class Produit extends Model implements HasMedia
     public function ventes()
     {
         return $this->belongsToMany(Vente::class, 'produit_vente')
-            ->withPivot('quantite', 'prix_unitaire', 'total', 'unite_vente_id' , 'variante_id')
+            ->withPivot('quantite', 'quantite_bouteille', 'prix_unitaire', 'total', 'unite_vente_id', 'variante_id')
             ->withTimestamps();
     }
 

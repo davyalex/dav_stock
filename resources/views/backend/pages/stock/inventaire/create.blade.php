@@ -168,7 +168,7 @@
                         <input type="number" class="form-control stockActuel" readonly>
                     </div>
 
-                    <div class="col-md-2 mb-3 d-none">
+                    <div class="col-md-2 mb-3 ">
                         <label class="form-label" for="stocks-input">Stock vendu ou utilisé
                             <span class="text-danger">*</span>
                         </label>

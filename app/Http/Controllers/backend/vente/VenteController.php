@@ -208,6 +208,18 @@ class VenteController extends Controller
     //     }
     // } // mise a jourstock
 
+    /**
+     * Met à jour la quantité disponible en stock pour chaque variante d'un produit donné.
+     *
+     * Cette méthode récupère le produit correspondant à l'ID fourni. Si le produit existe,
+     * elle parcourt toutes ses variantes, calcule la nouvelle quantité disponible pour
+     * chaque variante en ajoutant la quantité actuelle au produit du stock du produit et de
+     * la quantité de la variante, puis met à jour la quantité disponible dans la base de données.
+     *
+     * @param int $id L'ID du produit dont le stock doit être mis à jour.
+     * @return void
+     */
+
     public function miseAJourStock($id)
     {
         $produit = Produit::find($id);
@@ -238,6 +250,23 @@ class VenteController extends Controller
                 ->update([
                     'quantite_disponible' => $nouvelle_quantite,
                 ]);
+        }
+    }
+
+    // fonction pour mise a jour stock quantite bouteille vendu
+    function miseAJourStockVente()
+    {
+
+        // produit vente
+        $data = DB::table('produit_vente')->get();
+
+        foreach ($data as $index => $value) {
+            // quantite qui fait la  bouteille dans produit_variante
+            $quantite = DB::table('produit_variante')->where('produit_id', $value->produit_id)->where('variante_id', $value->variante_id)->value('quantite');
+            // determiner la quantite bouteille vendu dans produit vente en fonction de quantite et variante
+            DB::table('produit_vente')->where('produit_id', $value->produit_id)->where('variante_id', $value->variante_id)->update([
+                'quantite_bouteille' => $value->quantite / $quantite,
+            ]);
         }
     }
 
@@ -373,13 +402,15 @@ class VenteController extends Controller
                 $produit->stock -= $bouteille_vendu;
                 $produit->save();
 
+
+
                 // Mettre à jour la quantité disponible des variantes du produit a 0
                 DB::table('produit_variante')
-                ->where('produit_id', $produit->id)
-                ->update(['quantite_disponible' => 0]);
+                    ->where('produit_id', $produit->id)
+                    ->update(['quantite_disponible' => 0]);
 
                 // on appel la fonction miseAJourStock
-                $this->miseAJourStock($produit->id);// Appelle la fonction miseAJourStock avec l'id du produit
+                $this->miseAJourStock($produit->id); // Appelle la fonction miseAJourStock avec l'id du produit
 
             }
 
