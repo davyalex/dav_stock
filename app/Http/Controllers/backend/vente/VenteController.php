@@ -242,7 +242,7 @@ class VenteController extends Controller
     }
 
 
-    
+
 
     public function store(Request $request)
     {
@@ -411,7 +411,8 @@ class VenteController extends Controller
 
                         // Vérifier la division par zéro
                         if ($quantite_variante && $quantite_variante > 0) {
-                            $bouteille_vendu = $item['quantity'] / $quantite_variante;
+                            $bouteille_vendu =round( $item['quantity'] / $quantite_variante , 2);
+                            
                         } else {
                             $bouteille_vendu = 0;
                         }

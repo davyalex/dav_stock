@@ -131,7 +131,7 @@ class AppServiceProvider extends ServiceProvider
                     ->where('categories.famille', 'bar') // Se limiter aux produits de la famille "bar"
                     ->where('produit_vente.id', $value->id) // Condition sur l'ID du produit_vente
                     ->update([
-                        'quantite_bouteille' => $value->quantite / $quantite,
+                        'quantite_bouteille' => round($value->quantite / $quantite, 2),
                     ]);
             }
         }
