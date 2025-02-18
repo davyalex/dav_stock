@@ -39,9 +39,9 @@
                                     <th>Code</th>
                                     <th>Nom</th>
                                     <th>stock dernier inventaire</th>
-                                    <th>Stock à l'inventaire</th>
+                                    <th>Achat après dernier inventaire</th>
                                     <th>Stock de la periode</th>
-                                    <th>Stock vendu</th>
+                                    <th>Vente après dernier inventaire</th>
                                     <th>Stock théorique</th>
                                     <th>Stock physique</th>
                                     <th>Écart</th>
