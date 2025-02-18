@@ -40,6 +40,7 @@
                                     <th>Nom</th>
                                     <th>stock dernier inventaire</th>
                                     <th>Stock à l'inventaire</th>
+                                    <th>Stock de la periode</th>
                                     <th>Stock vendu</th>
                                     <th>Stock théorique</th>
                                     <th>Stock physique</th>
@@ -61,8 +62,11 @@
                                         </td> --}}
                                         <td>{{ $item['nom'] }} {{ $item['valeur_unite'] ?? '' }}
                                             {{ $item['unite']['libelle'] ?? '' }} </td>
-                                            <td>{{ $item['stock_dernier_inventaire'] ?? '' }}</td>
+                                        <td>{{ $item['stock_dernier_inventaire'] ?? '' }}</td>
                                         <td>{{ $item['pivot']['stock_initial'] }}
+                                            {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
+
+                                        <td>{{ $item['stock'] }}
                                             {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
                                         <td>{{ $item['pivot']['stock_vendu'] }}
                                             {{ $item['uniteSortie']['libelle'] ?? '' }}</td>

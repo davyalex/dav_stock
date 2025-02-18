@@ -16,7 +16,7 @@ class PosteController extends Controller
         $data_poste = Poste::get();
         $data_poste->sortBy('libelle');
 
-        return view('backend.pages.rh.Poste.index', compact('data_poste'));
+        return view('backend.pages.rh.poste.index', compact('data_poste'));
     }
 
 
