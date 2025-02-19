@@ -542,8 +542,10 @@
                     form.find('.stockLastInventaire').val(product.stock_dernier_inventaire) ||
                         0; // stock disponible pendant le dernier inventaire
 
+
+
                     form.find('.stockActuel').val(
-                        ((product.stock_initial || 0) + (product.stock_initial || 0)).toFixed(3)
+                        ((product.stock_dernier_inventaire || 0) + (product.stock_initial || 0)).toFixed(2)
                     );
 
 

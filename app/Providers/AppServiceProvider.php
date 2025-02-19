@@ -140,6 +140,38 @@ class AppServiceProvider extends ServiceProvider
         miseAJourStockVente();
 
 
+        // Mise a jour dans produit inventaire 
+
+        $data = DB::table('inventaire_produit')->get(); // Récupérer les données
+
+        foreach ($data as $value) {
+            // Calculer le stock théorique
+            $sth = ($value->stock_dernier_inventaire + $value->stock_initial) - $value->stock_vendu;
+
+            // Calculer l'écart
+            $ecart = $value->stock_physique - $sth;
+
+            // Déterminer l'état du stock
+            if ($sth == 0 && $value->stock_physique == 0) {
+                $etat = 'Rupture';
+            } elseif ($ecart < 0) {
+                $etat = 'Perte';
+            } elseif ($ecart > 0) {
+                $etat = 'Surplus';
+            } else {
+                $etat = 'Conforme';
+            }
+
+            // Mise à jour du stock théorique et de l'état
+            DB::table('inventaire_produit')
+                ->where('id', $value->id)
+                ->update([
+                    'stock_theorique' => $sth,
+                    'ecart' => $ecart,
+                    'etat' => $etat,
+                ]);
+        }
+
 
 
         $this->app->booted(function () {

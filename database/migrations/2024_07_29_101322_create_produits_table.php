@@ -22,6 +22,9 @@ return new class extends Migration
             $table->double('stock_alerte')->default(0); //
             $table->longText('description')->nullable();
             $table->enum('statut', ['active', 'desactive'])->default('active');
+            $table->double('stock_dernier_inventaire')->default(0); //quantité en stock
+            
+            
 
             //foreign table
             $table->foreignId('categorie_id')
