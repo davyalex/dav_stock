@@ -306,7 +306,6 @@
                         id: id,
                         name: name,
                         price: selectedProd.categorie.famille === 'bar' ? 0 : price,
-                       
                         stock: stock,
                         selectedVariante: variante ? variante : null, // ajoute la variante choisie ou choisi la variante dans le select
                         varianteStock: variante ? variante.pivot.quantite_disponible : null,
@@ -314,7 +313,7 @@
                         discount: 0
                     });
                 }
-                console.log('panier : ', cart);
+                // console.log('panier : ', cart);
             }
 
 
@@ -322,9 +321,6 @@
             function updateCartTable() {
                 let tbody = $('#cart-table tbody');
                 tbody.empty();
-
-                  
-
                 cart.forEach((item, index) => {
                     let selectedProduct = dataProduct.find(dataItem => dataItem.id == item.id);
                     let variantesOptions = '';
@@ -364,8 +360,6 @@
                     } else {
                         varianteSelectHtml = `<p>Plat entier</p>`;
                     }
-
-
 
 
                     // Ajoute une ligne pour chaque produit dans le tableau
@@ -608,7 +602,7 @@
                 cart.splice(index, 1);
                 updateCartTable();
                 updateGrandTotal();
-                // verifyQty()
+                verifyQty()
             });
 
 
