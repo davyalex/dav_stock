@@ -192,7 +192,7 @@
                         <input type="number" name="stock_physique[]" class="form-control stockPhysique" required>
                     </div>
 
-                    <div class="col-md-2 mb-3 d-none">
+                    <div class="col-md-2 mb-3">
                         <label class="form-label" for="stocks-input">Rapport Ecart
                             <span class="text-danger">*</span>
                         </label>
