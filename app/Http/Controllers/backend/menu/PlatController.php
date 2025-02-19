@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\backend\menu;
 
+use App\Models\Plat;
 use App\Models\Unite;
 use App\Models\Format;
 use App\Models\Produit;
@@ -9,8 +10,8 @@ use App\Models\Categorie;
 use App\Models\Fournisseur;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\CategorieMenu;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class PlatController extends Controller
@@ -111,6 +112,24 @@ class PlatController extends Controller
                 }
             }
 
+            // si categorie_menu_id != null on ajoute comme un plat de menu
+            if ($request['categorie_menu_id'] != null) {
+
+                $sku = 'PM-' . strtoupper(Str::random(8));
+                $plat = Plat::firstOrCreate([
+                    'nom' => $request['nom'],
+                    'code' =>  $sku,
+                    'description' => $request['description'],
+                    'categorie_menu_id' => $request['categorie_menu_id'],
+                    'prix' => $request['prix'],
+                    'statut' => $statut,
+                    'user_id' => Auth::id(),
+                ]);
+            }
+
+
+
+
             return response([
                 'message' => 'operation reussi'
             ]);
@@ -176,7 +195,7 @@ class PlatController extends Controller
                 'description' => '',
                 'categorie' => 'required',
                 'categorie_menu_id' => '',
-                
+
                 'prix' => 'required',
                 'statut' => '',
             ]);

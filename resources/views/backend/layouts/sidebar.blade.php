@@ -253,7 +253,7 @@
                     </li>
                 @endcan
 
-             
+
                 @can('voir-menu')
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sideBarMenu" data-bs-toggle="collapse" role="button"
@@ -268,17 +268,16 @@
                                         class="nav-link {{ Route::is('categorie-menu') ? 'active' : '' }}">
                                         Categories</a>
                                 </li>
-                                <li class="nav-item active">
-                                    <a href="{{ route('plat-menu.index') }}"
-                                        class="nav-link {{ Route::is('plat-menu.*') ? 'active' : '' }}">Plats Menu </a>
-                                </li>
 
                                 <li class="nav-item active">
                                     <a href="{{ route('plat.index') }}"
                                         class="nav-link {{ Route::is('plat.*') ? 'active' : '' }}">Plats Quotidiens</a>
                                 </li>
 
-
+                                <li class="nav-item active">
+                                    <a href="{{ route('plat-menu.index') }}"
+                                        class="nav-link {{ Route::is('plat-menu.*') ? 'active' : '' }}">Plats Menu </a>
+                                </li>
 
                                 <li class="nav-item active">
                                     <a href="{{ route('menu.index') }}"

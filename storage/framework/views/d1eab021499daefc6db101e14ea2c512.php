@@ -238,7 +238,7 @@
                     </li>
                 <?php endif; ?>
 
-             
+
                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-menu')): ?>
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sideBarMenu" data-bs-toggle="collapse" role="button"
@@ -253,17 +253,16 @@
                                         class="nav-link <?php echo e(Route::is('categorie-menu') ? 'active' : ''); ?>">
                                         Categories</a>
                                 </li>
-                                <li class="nav-item active">
-                                    <a href="<?php echo e(route('plat-menu.index')); ?>"
-                                        class="nav-link <?php echo e(Route::is('plat-menu.*') ? 'active' : ''); ?>">Plats Menu </a>
-                                </li>
 
                                 <li class="nav-item active">
                                     <a href="<?php echo e(route('plat.index')); ?>"
                                         class="nav-link <?php echo e(Route::is('plat.*') ? 'active' : ''); ?>">Plats Quotidiens</a>
                                 </li>
 
-
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('plat-menu.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('plat-menu.*') ? 'active' : ''); ?>">Plats Menu </a>
+                                </li>
 
                                 <li class="nav-item active">
                                     <a href="<?php echo e(route('menu.index')); ?>"

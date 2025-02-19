@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-   Menu
+    Menu
 @endsection
 @section('content')
     @component('backend.components.breadcrumb')
@@ -48,7 +48,7 @@
                                                 </label>
                                                 <select class="form-control js-example-basic-single"
                                                     name="categorie_menu_id">
-                                                    <option value=""  selected>Selectionner</option>
+                                                    <option value="" selected>Selectionner</option>
 
                                                     @foreach ($data_categorie_menu as $categorie_menu)
                                                         <option value="{{ $categorie_menu->id }}">{{ $categorie_menu->nom }}
@@ -68,7 +68,8 @@
                                                 <label class="form-label" for="meta-title-input">prix <span
                                                         class="text-danger">*</span>
                                                 </label>
-                                                <input type="number" name="prix" class="form-control" id="prix" required>
+                                                <input type="number" name="prix" class="form-control" id="prix"
+                                                    required>
                                             </div>
 
 
@@ -215,64 +216,129 @@
                 $(this).closest('div').remove();
             });
 
+            // $('#formSend').on('submit', function(e) {
+
+            //     // on verifie si une image principale à éte inseré
+            //     if ($('#product-image-input').val() === '') {
+            //         e.preventDefault();
+            //     } else {
+            //         e.preventDefault();
+            //         var formData = new FormData(this);
+
+            //         $('#imageTableBody div').each(function() {
+            //             var imageFile = $(this).find('img').attr('src');
+            //             formData.append('images[]', imageFile)
+            //         });
+
+            //         $.ajax({
+            //             url: "{{ route('plat.store') }}", // Adjust the route as needed
+            //             type: 'POST',
+            //             data: formData,
+            //             contentType: false,
+            //             processData: false,
+            //             success: function(response) {
+            //                 $('#imageTableBody').empty();
+
+            //                 if (response.message == 'operation reussi') {
+            //                     Swal.fire({
+            //                         title: 'plat ajouté avec success!',
+            //                         // text: 'You clicked the button!',
+            //                         icon: 'success',
+            //                         showCancelButton: false,
+            //                         customClass: {
+            //                             confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+            //                             cancelButton: 'btn btn-danger w-xs mt-2',
+            //                         },
+            //                         buttonsStyling: false,
+            //                         showCloseButton: true
+            //                     })
+            //                     var url = "{{ route('plat.index') }}" // redirect route stock
+
+            //                     window.location.replace(url);
+            //                 } else if (response == 'The nom has already been taken.') {
+            //                     Swal.fire({
+            //                         title: 'Ce plat existe déjà ?',
+            //                         text: $('#nomplat').val(),
+            //                         icon: 'warning',
+            //                         customClass: {
+            //                             confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+            //                             cancelButton: 'btn btn-danger w-xs mt-2',
+            //                         },
+            //                         buttonsStyling: false,
+            //                         showCloseButton: true
+            //                     })
+            //                 }
+            //             },
+
+            //         });
+            //     }
+
+
+            // });
+
+
             $('#formSend').on('submit', function(e) {
-
-                // on verifie si une image principale à éte inseré
-                if ($('#product-image-input').val() === '') {
+                if ($('#product-image-input').val().trim() === '') {
                     e.preventDefault();
-                } else {
-                    e.preventDefault();
-                    var formData = new FormData(this);
-
-                    $('#imageTableBody div').each(function() {
-                        var imageFile = $(this).find('img').attr('src');
-                        formData.append('images[]', imageFile)
-                    });
-
-                    $.ajax({
-                        url: "{{ route('plat.store') }}", // Adjust the route as needed
-                        type: 'POST',
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function(response) {
-                            $('#imageTableBody').empty();
-
-                            if (response.message == 'operation reussi') {
-                                Swal.fire({
-                                    title: 'plat ajouté avec success!',
-                                    // text: 'You clicked the button!',
-                                    icon: 'success',
-                                    showCancelButton: false,
-                                    customClass: {
-                                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
-                                        cancelButton: 'btn btn-danger w-xs mt-2',
-                                    },
-                                    buttonsStyling: false,
-                                    showCloseButton: true
-                                })
-                                var url = "{{ route('plat.index') }}" // redirect route stock
-
-                                window.location.replace(url);
-                            } else if (response == 'The nom has already been taken.') {
-                                Swal.fire({
-                                    title: 'Ce plat existe déjà ?',
-                                    text: $('#nomplat').val(),
-                                    icon: 'warning',
-                                    customClass: {
-                                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
-                                        cancelButton: 'btn btn-danger w-xs mt-2',
-                                    },
-                                    buttonsStyling: false,
-                                    showCloseButton: true
-                                })
-                            }
+                    Swal.fire({
+                        title: 'Image requise!',
+                        text: 'Veuillez ajouter une image avant de soumettre.',
+                        icon: 'warning',
+                        customClass: {
+                            confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                            cancelButton: 'btn btn-danger w-xs mt-2',
                         },
-
+                        buttonsStyling: false,
+                        showCloseButton: true
                     });
+                    return; // Stop execution
                 }
 
+                e.preventDefault();
+                var formData = new FormData(this);
 
+                $('#imageTableBody div').each(function() {
+                    var imageFile = $(this).find('img').attr('src');
+                    formData.append('images[]', imageFile);
+                });
+
+                $.ajax({
+                    url: "{{ route('plat.store') }}", // Ajuste la route si nécessaire
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        $('#imageTableBody').empty();
+
+                        if (response.message === 'operation reussi') {
+                            Swal.fire({
+                                title: 'Plat ajouté avec succès!',
+                                icon: 'success',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                                    cancelButton: 'btn btn-danger w-xs mt-2',
+                                },
+                                buttonsStyling: false,
+                                showCloseButton: true
+                            });
+                            var url = "{{ route('plat.index') }}"; // Redirection
+                            window.location.replace(url);
+                        } else if (response === 'The nom has already been taken.') {
+                            Swal.fire({
+                                title: 'Ce plat existe déjà!',
+                                text: $('#nomplat').val(),
+                                icon: 'warning',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                                    cancelButton: 'btn btn-danger w-xs mt-2',
+                                },
+                                buttonsStyling: false,
+                                showCloseButton: true
+                            });
+                        }
+                    }
+                });
             });
         </script>
     @endsection

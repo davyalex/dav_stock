@@ -59,6 +59,30 @@
             /* Change la couleur de fond pour indiquer que c'est désactivé */
         }
     </style>
+    <!-- si le user a pour role developpeur on affiche les champs sinon on les cache-->
+    @php
+        $dNone = Auth::user()->hasRole('developpeur') ? 'd-block' : 'd-none';
+    @endphp
+
+    <!--End  si le user a pour role developpeur on affiche les champs sinon on les cache-->
+
+    @role('developpeur')
+        <!-- START Afficher les legende-->
+
+        <div class="alert alert-info alert-border-left alert-dismissible fade show material-shadow" role="alert">
+            <i class="ri-airplay-line me-3 align-middle"></i> <strong>Signification des titre</strong>
+            S.D.I
+            A.D.I
+            S.V.D.I ou S.U.D.I
+            <ul>
+                <li><strong> S.D.I</strong> : Stock du dernier inventaire </li>
+                <li> <strong>A.D.I</strong> : Achat effectué apres dernier inventaire </li>
+                <li> <strong> S.V.D.I</strong> ou S.U.D.I : Stock vendu ou utilisé apres dernier inventaire</li>
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <!-- END Afficher les legende-->
+    @endrole
 
 
 
@@ -69,6 +93,7 @@
             <form id="myForm" method="POST" action="{{ route('inventaire.store') }}" autocomplete="off" novalidate
                 enctype="multipart/form-data">
                 @csrf
+
                 <div class="row">
                     <div class="col-lg-12">
                         {{-- <div class="card">
@@ -148,35 +173,35 @@
                         </select>
                     </div>
 
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label" for="stocks-input">Stock dernier inventaire
+                    <div class="col-md-2 mb-3 {{ $dNone }}">
+                        <label class="form-label" for="stocks-input">S.D.I
                             <span class="text-danger">*</span>
                         </label>
                         <input type="number" class="form-control stockLastInventaire" readonly>
                     </div>
-                    <div class="col-md-2 mb-3 ">
-                        <label class="form-label" for="stocks-input">Stock recent ajouté
+                    <div class="col-md-2 mb-3 {{ $dNone }}">
+                        <label class="form-label" for="stocks-input">A.D.I
                             <span class="text-danger">*</span>
                         </label>
                         <input type="number" name="stock_initial[]" class="form-control stockRecent" readonly>
                     </div>
 
-                    <div class="col-md-2 mb-3 ">
-                        <label class="form-label" for="stocks-input">Stock actuel
+                    <div class="col-md-2 mb-3 {{ $dNone }}">
+                        <label class="form-label" for="stocks-input">Stock de la periode
                             <span class="text-danger">*</span>
                         </label>
                         <input type="number" class="form-control stockActuel" readonly>
                     </div>
 
-                    <div class="col-md-2 mb-3  ">
-                        <label class="form-label" for="stocks-input">Stock vendu ou utilisé
+                    <div class="col-md-2 mb-3 {{ $dNone }} ">
+                        <label class="form-label" for="stocks-input">S.V.D.I ou S.U.D.I
                             <span class="text-danger">*</span>
                         </label>
                         <input type="number" name="stock_vendu[]" class="form-control stockVendu" readonly>
                     </div>
 
 
-                    <div class="col-md-2 mb-3 ">
+                    <div class="col-md-2 mb-3 {{ $dNone }}">
                         <label class="form-label" for="stocks-input">Stock théorique
                             <span class="text-danger">*</span>
                         </label>
@@ -192,28 +217,25 @@
                         <input type="number" name="stock_physique[]" class="form-control stockPhysique" required>
                     </div>
 
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-2 mb-3 {{ $dNone }}">
                         <label class="form-label" for="stocks-input">Rapport Ecart
                             <span class="text-danger">*</span>
                         </label>
                         <input type="number" name="ecart[]" class="form-control ecart" readonly>
                     </div>
 
-                    <div class="col-md-4 mb-3 ">
+                    <div class="col-md-4 mb-3 {{ $dNone }}">
                         <label class="form-label" for="stocks-input">Etat de stock
                             <span class="text-danger">*</span>
                         </label>
                         <input type="text" name="etat[]" class="form-control etatStock" readonly>
                     </div>
 
-                    <div class="col-md-6 mb-3 ">
+                    <div class="col-md-6 mb-3 {{ $dNone }}">
                         <label class="form-label" for="stocks-input">Observation
                         </label>
                         <input type="text" name="observation[]" class="form-control observation">
                     </div>
-
-
-
                 </div>
 
             </div>
@@ -544,9 +566,13 @@
 
 
 
-                    form.find('.stockActuel').val(
-                        ((product.stock_dernier_inventaire || 0) + (product.stock_initial || 0)).toFixed(2)
-                    );
+                    // form.find('.stockActuel').val(
+                    //     ((product.stock_dernier_inventaire || 0) + (product.stock_initial || 0)).toFixed(2)
+                    // );
+
+                    let stockActuel = (product.stock_dernier_inventaire || 0) + (product.stock_initial || 0);
+                    form.find('.stockActuel').val(stockActuel % 1 === 0 ? stockActuel : stockActuel.toFixed(2));
+
 
 
 
@@ -572,10 +598,12 @@
                 function calculEcart(form) {
                     var stock_physique = parseFloat(form.find('.stockPhysique').val()) || 0;
                     var stock_theorique = parseFloat(form.find('.stockTheorique').val()) || 0;
-                    var ecart = stock_physique - stock_theorique;
 
-                    // Arrondir à 3 décimales et forcer l'affichage du format nombre
-                    form.find('.ecart').val(ecart.toFixed(2));
+                    // var ecart = stock_physique - stock_theorique;
+                    // form.find('.ecart').val(ecart.toFixed(2));
+                    var ecart = stock_physique - stock_theorique;
+                    form.find('.ecart').val(ecart % 1 === 0 ? ecart : ecart.toFixed(2));
+
                 }
 
 
