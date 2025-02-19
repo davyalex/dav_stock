@@ -541,8 +541,10 @@
                         0; // stock nouveau ajouté apres last inventaire
                     form.find('.stockLastInventaire').val(product.stock_dernier_inventaire) ||
                         0; // stock disponible pendant le dernier inventaire
-                    form.find('.stockActuel').val(product.stock) ||
-                        0; // stock disponible pendant le dernier inventaire
+
+                    form.find('.stockActuel').val(
+                        ((product.stock_initial || 0) + (product.stock_initial || 0)).toFixed(3)
+                    );
 
 
 
@@ -566,11 +568,14 @@
 
                 // calculer l'ecart de stock
                 function calculEcart(form) {
-                    var stock_physique = form.find('.stockPhysique').val() || 0;
-                    var stock_theorique = form.find('.stockTheorique').val() || 0;
+                    var stock_physique = parseFloat(form.find('.stockPhysique').val()) || 0;
+                    var stock_theorique = parseFloat(form.find('.stockTheorique').val()) || 0;
                     var ecart = stock_physique - stock_theorique;
-                    form.find('.ecart').val(ecart);
+
+                    // Arrondir à 3 décimales et forcer l'affichage du format nombre
+                    form.find('.ecart').val(ecart.toFixed(2));
                 }
+
 
                 // Attacher l'événement de changement aux champs select des produits
                 $(document).on('input change', '.stockPhysique ', function() {
