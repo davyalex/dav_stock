@@ -136,10 +136,10 @@ class AppServiceProvider extends ServiceProvider
             }
         }
 
-
-
         // // Exécuter la fonction miseAJourStockVente au démarrage de l'application
         miseAJourStockVente();
+
+
 
 
         $this->app->booted(function () {
