@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('paies', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->nullable();
             $table->double('montant')->nullable();
-            $table->enum('type', ['avance', 'salaire', 'prime', 'indemnité'])->nullable();
             $table->enum('statut', ['en attente', 'paye'])->nullable();
             $table->date('date_paiement')->nullable();
+            $table->integer('mois'); // Stocke le mois (1 à 12)
+            $table->integer('annee'); // Stocke l'année (ex: 2024)
+            $table->foreignId('type_paie')->nullable()->constrained('libelle_depenses')->onDelete('cascade')->onUpdate('cascade');
             // foreignId employeId
             $table->foreignId('employe_id')->nullable()->constrained('employes')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

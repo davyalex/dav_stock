@@ -23,12 +23,43 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Produits de l'inventaire
-                        <strong>#{{ $inventaire->code }} du {{ $inventaire->created_at->format('d-m-Y à H:i') }} </strong>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        Produits de l'inventaire <strong>#{{ $inventaire->code }} du
+                            {{ $inventaire->created_at->format('d-m-Y à H:i') }}</strong>
                     </h5>
-                    <a href="{{ route('inventaire.create') }}" type="button" class="btn btn-primary">Nouvel inventaire</a>
+
+                    <div class="d-flex align-items-center gap-2">
+
+                        @php
+                            $etat = ['Surplus', 'Perte', 'Conforme', 'Rupture'];
+                        @endphp
+
+                        <form action="{{ route('inventaire.show', $inventaire->id) }}" method="get"
+                            class="d-flex align-items-center gap-2">
+                            <select class="form-select" name="filter_etat">
+                                <option value="">Tous les états</option>
+                                @foreach ($etat as $item)
+                                    <option value="{{ $item }}"
+                                        {{ request()->get('filter_etat') == $item ? 'selected' : '' }}>
+                                        {{ $item }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <button class="btn btn-primary">
+                                Filtrer
+                            </button>
+                        </form>
+
+                        <a href="{{ route('inventaire.create') }}" class="btn btn-success">Nouvel inventaire</a>
+
+                    </div>
                 </div>
+
+
+
+
                 <div class="card-body divPrint">
                     <div class="table-responsive">
                         <table id="example" class="display table table-bordered" style="width:100%">

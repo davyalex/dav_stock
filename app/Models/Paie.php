@@ -10,10 +10,13 @@ class Paie extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'code',
         'employe_id',
         'montant',
-        'type', // 1 salaire, 2 prime, 3 indemnité, 4 avance
         'statut', // 1 payé, 2 en attente
+        'mois', // mois de paiement
+        'annee', // Année de paiement
+        'type_paie', // from libelle depense de la categorie charge personnel
         'date_paiement',
     ];
 
@@ -21,6 +24,13 @@ class Paie extends Model
     {
         return $this->belongsTo(Employe::class);
     }
+
+    public function typePaie()
+    {
+        return $this->belongsTo(LibelleDepense::class , 'type_paie');
+    }
+
+
 
 
     public static function boot()

@@ -86,14 +86,14 @@ class InventaireController extends Controller
     }
 
 
-        /**
-         * Mettre à jour le stock des variantes d'un produit
-         *
-         * @param int $id L'ID du produit
-         *
-         * @return void
-         */
-//
+    /**
+     * Mettre à jour le stock des variantes d'un produit
+     *
+     * @param int $id L'ID du produit
+     *
+     * @return void
+     */
+    //
     public function miseAJourStock($id)
     {
         $produit = Produit::find($id);
@@ -210,7 +210,20 @@ class InventaireController extends Controller
     {
         //
         try {
+            //filtrer les produit en fonction de leur etat du stock
+
+            $etatFilter = request('filter_etat');
+
             $inventaire = Inventaire::with('produits')->find($id);
+
+            if ($etatFilter) {
+                $inventaire = Inventaire::with(['produits' => function ($query) use ($etatFilter) {
+                    $query->wherePivot('etat', $etatFilter);
+                }])->find($id);
+            }
+            
+         
+
             return view('backend.pages.stock.inventaire.show', compact('inventaire'));
         } catch (\Throwable $e) {
             return $e->getMessage();

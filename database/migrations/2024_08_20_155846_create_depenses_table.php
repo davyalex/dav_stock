@@ -41,6 +41,12 @@ return new class extends Migration
             ->onUpdate('cascade')
             ->onDelete('cascade');
 
+            $table->foreignId('paie_id')
+            ->nullable()
+            ->constrained('paies')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+
 
             $table->date('date_depense')->nullable();
 

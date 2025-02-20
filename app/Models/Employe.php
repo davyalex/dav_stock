@@ -44,4 +44,10 @@ class Employe extends Model
     {
         return $this->hasMany(Paie::class);
     }
+
+    // scope pour les utilisateur active
+    public function scopeActive($query)
+    {
+        return $query->where('statut', 'active');
+    }
 }
