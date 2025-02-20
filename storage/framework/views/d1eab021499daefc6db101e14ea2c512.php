@@ -319,33 +319,35 @@
                     </li>
                 <?php endif; ?>
 
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('voir-ressource humaine')): ?>
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sidebarRh" data-bs-toggle="collapse" role="button"
+                            aria-controls="sidebarRh">
+                            <i class="ri ri-home-office-fill"></i> <span>RESSOURCES HUMAINES</span>
+                        </a>
+                        <div class="collapse menu-dropdown <?php echo e(Route::is('poste.*') || Route::is('employe.*') || Route::is('paie.*') ? 'show' : ''); ?>"
+                            id="sidebarRh">
+                            <ul class="nav nav-sm flex-column">
 
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarRh" data-bs-toggle="collapse" role="button"
-                        aria-controls="sidebarRh">
-                        <i class="ri ri-home-office-fill"></i> <span>RESSOURCES HUMAINES</span>
-                    </a>
-                    <div class="collapse menu-dropdown <?php echo e(Route::is('poste.*') || Route::is('employe.*') || Route::is('paie.*') ? 'show' : ''); ?>"
-                        id="sidebarRh">
-                        <ul class="nav nav-sm flex-column">
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('poste.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('poste.*') ? 'active' : ''); ?>">Postes</a>
+                                </li>
 
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('poste.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('poste.*') ? 'active' : ''); ?>">Postes</a>
-                            </li>
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('employe.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('employe.*') ? 'active' : ''); ?>">Employés</a>
+                                </li>
 
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('employe.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('employe.*') ? 'active' : ''); ?>">Employés</a>
-                            </li>
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('paie.index')); ?>"
+                                        class="nav-link <?php echo e(Route::is('paie.*') ? 'active' : ''); ?>">Paie</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                <?php endif; ?>
 
-                            <li class="nav-item active">
-                                <a href="<?php echo e(route('paie.index')); ?>"
-                                    class="nav-link <?php echo e(Route::is('paie.*') ? 'active' : ''); ?>">Paie</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
 
                 <?php if(Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur' || Auth::user()->can('voir-parametre')): ?>
                     <li class="nav-item">

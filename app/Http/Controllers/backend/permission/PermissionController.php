@@ -24,7 +24,9 @@ class PermissionController extends Controller
     public function index()
     {
         $roles = Role::with('permissions')->orderBy('name', 'ASC')->get();
-        $modules_with_permissions = Module::with('permissions')->orderBy('name', 'ASC')->get();
+        $modules_with_permissions = Module::with('permissions')->get();
+        $modules_with_permissions =  $modules_with_permissions->sortBy('name');
+
 
         return view('backend.pages.role-permission.index', compact('roles', 'modules_with_permissions'));
     }
@@ -76,6 +78,8 @@ class PermissionController extends Controller
             }
 
             Alert::success('Operation réussi', 'Success Message');
+
+            return redirect()->route('permission.index');
             return back();
         } catch (\Throwable $e) {
 
@@ -175,8 +179,12 @@ class PermissionController extends Controller
             // Supprimer le rôle
             $role->delete();
 
-            Alert::success('Opération réussie', 'Le rôle et ses permissions ont été supprimés avec succès.');
-            return redirect()->route('permission.index');
+            return response()->json([
+                'status' => 200,
+            ]);// Retourne un code HTTP 200 (OK)
+
+            // Alert::success('Opération réussie', 'Le rôle et ses permissions ont été supprimés avec succès.');
+            // return redirect()->route('permission.index');
         } catch (\Exception $e) {
             Alert::error('Erreur', 'Une erreur est survenue lors de la suppression du rôle et de ses permissions.');
             return back();

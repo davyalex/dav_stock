@@ -51,8 +51,8 @@
                                             @endforeach
                                         </td>
                                         <td>
-                                            <a href="{{ route('permission.edit', $role->id) }}" class="btn btn-sm btn-primary">Modifier</a>
-                                            <button class="btn btn-sm btn-danger delete-role" data-id="{{ $role->id }}">Supprimer</button>
+                                            <a href="{{ route('permission.edit', $role->id) }}" class="btn btn-sm btn-primary"> <i class="ri ri-pencil-fill"></i> </a>
+                                            <button class="btn btn-sm btn-danger delete" data-id="{{ $role->id }}"> <i class="ri ri-delete-bin-2-fill"></i> </button>
                                         </td>
                                     </tr>
                                 @empty
