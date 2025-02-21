@@ -298,12 +298,11 @@
                             id="sideBarRapport">
                             <ul class="nav nav-sm flex-column">
 
-                                {{-- <li class="nav-item active">
-                                    <a href="{{ route('rapport.categorie') }}"
-                                        class="nav-link {{ Route::is('rapport.categorie') ? 'active' : '' }}">Chiffre
-                                        d'affaire par
-                                        categorie</a>
-                                </li> --}}
+                                <li class="nav-item active">
+                                    <a href="{{ route('rapport.historique') }}"
+                                        class="nav-link {{ Route::is('rapport.historique') ? 'active' : '' }}">Historiques
+                                       </a>
+                                </li>
 
                                 {{-- <li class="nav-item active">
                                     <a href="{{ route('rapport.produit') }}"

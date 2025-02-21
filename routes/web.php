@@ -209,7 +209,9 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('produit', 'produits')->name('rapport.produit');
         route::get('vente', 'vente')->name('rapport.vente');
         route::get('exploitation', 'exploitation')->name('rapport.exploitation');
-        route::get('detail', 'detail')->name('rapport.detail');  //detail exploitation 
+        route::get('detail', 'detail')->name('rapport.detail');  //detail exploitation en fonction de la categorie depense
+        route::get('historique', 'historique')->name('rapport.historique'); // historique, vente, achats inventaire pour chaque produit
+
 
         route::get('caisse', 'caisses')->name('rapport.caisse');
         route::get('commande', 'commandes')->name('rapport.commande');

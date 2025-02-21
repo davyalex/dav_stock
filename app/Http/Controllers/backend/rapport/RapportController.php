@@ -8,6 +8,7 @@ use App\Models\Caisse;
 use App\Models\Depense;
 use App\Models\Produit;
 use App\Models\Categorie;
+use App\Models\ProduitVente;
 use Illuminate\Http\Request;
 use App\Models\CategorieDepense;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,7 @@ use App\Http\Controllers\Controller;
 
 class RapportController extends Controller
 {
-    //
+    //NO USE
     public function categorie(Request $request)
     {
         try {
@@ -60,7 +61,7 @@ class RapportController extends Controller
         }
     }
 
-
+    //NO USE    
     public function produits(Request $request)
     {
         try {
@@ -207,6 +208,21 @@ class RapportController extends Controller
     // }
 
 
+    /**
+     * Generate an exploitation report based on sales and expenses.
+     *
+     * This function retrieves categories of expenses and creates base queries
+     * for sales and expenses. It applies date filters, filters expenses by category,
+     * calculates sales and expenses totals, and computes benefits and ratios.
+     * Finally, it prepares data to be sent to the exploitation view for rendering.
+     *
+     * @param Request $request The HTTP request containing optional filters such as
+     *                         'date_debut', 'date_fin', and 'categorie_depense'.
+     *
+     * @return \Illuminate\View\View|string Returns a view with exploitation data or
+     *                                      an error message in case of an exception.
+     */
+
     public function exploitation(Request $request)
     {
         try {
@@ -339,6 +355,12 @@ class RapportController extends Controller
         }
     }
 
+    /**
+     * Affiche le détail des achats ou des dépenses d'une catégorie de dépense
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function detail(Request $request)
     {
         try {
@@ -425,6 +447,14 @@ class RapportController extends Controller
 
 
 
+    /**
+     * Affiche les ventes pour une periode donnee, un type de famille, une caisse, etc.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Exception
+     */
     public function vente(Request $request)
     {
         try {
@@ -549,6 +579,70 @@ class RapportController extends Controller
             return view('backend.pages.rapport.vente', compact('platsVendus', 'produitsVendus', 'caisses', 'dateDebut', 'dateFin', 'caisseId', 'categorieFamille', 'famille'));
         } catch (\Exception $e) {
             return back()->with('error', 'Une erreur s\'est produite : ' . $e->getMessage());
+        }
+    }
+
+
+
+
+
+
+    public function historique(Request $request)
+    {
+        try {
+            // recuperer les produit bar et restaurant
+            $data_produit = Produit::active()->whereHas('categorie', function ($q) {
+                $q->whereIn('famille', ['restaurant', 'bar']);
+            })->get();
+
+            // recuperer les request
+            $produit = request('produit');
+            $dateDebut = request('date_debut');
+            $dateFin = request('date_fin');
+            $type = request('type'); // vente, achat, inventaire
+
+
+            $request->validate([
+                'produit' => 'required',
+                'dateDebut' => 'nullable',
+                'dateFin' => 'nullable',
+                'type' => 'required',
+            ]);
+            
+            $vente = [];
+            if ($type == 'vente') {
+                $vente = ProduitVente::with(['vente', 'variante', 'produit'])
+                    ->where('produit_id', $produit)
+                    ->orderBy('created_at', 'DESC');
+
+                // Filtrer en fonction des dates
+                if ($dateDebut && $dateFin) {
+                    $vente->whereHas('vente', function ($query) use ($dateDebut, $dateFin) {
+                        $query->whereBetween('date_vente', [$dateDebut, $dateFin]);
+                    });
+                } elseif ($dateDebut) {
+                    $vente->whereHas('vente', function ($query) use ($dateDebut) {
+                        $query->whereDate('date_vente', $dateDebut);
+                    });
+                } elseif ($dateFin) {
+                    $vente->whereHas('vente', function ($query) use ($dateFin) {
+                        $query->whereDate('date_vente', $dateFin);
+                    });
+                }
+
+                // Récupération des données
+                $vente = $vente->get();
+            }
+
+            // dd($vente->toArray());
+
+
+            return view('backend.pages.rapport.historique', compact('data_produit', 'vente'));
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Une erreur est survenue lors du chargement de l\'historique : ' . $e->getMessage()
+            ], 500);
         }
     }
 }

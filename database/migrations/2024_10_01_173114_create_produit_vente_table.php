@@ -38,6 +38,12 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
+                $table->foreignId('variante_id') // colone out delete after
+                ->nullable()
+                ->constrained('variantes')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
             $table->timestamps();
         });
     }

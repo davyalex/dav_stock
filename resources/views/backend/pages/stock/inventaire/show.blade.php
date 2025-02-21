@@ -445,7 +445,7 @@
                 var contenuImprimer = `
         <html>
             <head>
-                <title style="text-align: center;">Compte exploitation</title>
+                <title style="text-align: center;">Fiche produit Inventaire</title>
                 <style>
                     body { font-family: Arial, sans-serif; font-size: 10px; }
                     table { width: 100%; border-collapse: collapse; font-size: 10px; }

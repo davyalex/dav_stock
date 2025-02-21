@@ -283,7 +283,11 @@
                             id="sideBarRapport">
                             <ul class="nav nav-sm flex-column">
 
-                                
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('rapport.historique')); ?>"
+                                        class="nav-link <?php echo e(Route::is('rapport.historique') ? 'active' : ''); ?>">Historiques
+                                       </a>
+                                </li>
 
                                 
                                 <li class="nav-item active">
