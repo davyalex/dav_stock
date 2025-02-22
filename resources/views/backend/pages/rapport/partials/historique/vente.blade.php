@@ -10,7 +10,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($vente as $key => $item)
+        @forelse ($vente as $key => $item)
             <tr>
                 <td>{{ ++$key }}</td>
                 <td>{{ $item['produit']['nom'] }}</td>
@@ -20,6 +20,27 @@
                 <td>{{ number_format($item['total'], 0, ',', ' ') }}
                     FCFA</td>
             </tr>
-        @endforeach
+        @empty
+            <tr>
+                <td colspan="6">
+                    <h6 class="text-center fw-bold text-warning">Aucune vente trouvé</h6>
+                </td>
+            </tr>
+        @endforelse
     </tbody>
+
+
 </table>
+<tfoot>
+    <tr>
+        <th colspan="7">
+            <div class="text-start">
+                {{-- <div>Total pour {{ $famille }}</div> --}}
+                <div>Quantité de bouteille vendue : <b>{{ $vente->sum('quantite_bouteille') }}</b></div>
+                <div>Montant total :
+                    <b> {{ number_format($vente->sum('total'), 0, ',', ' ') }} FCFA</b>
+                </div>
+            </div>
+        </th>
+    </tr>
+</tfoot>

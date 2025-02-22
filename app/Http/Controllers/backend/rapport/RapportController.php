@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\backend\rapport;
 
 use Carbon\Carbon;
+use App\Models\Achat;
 use App\Models\Vente;
 use App\Models\Caisse;
 use App\Models\Depense;
@@ -10,7 +11,9 @@ use App\Models\Produit;
 use App\Models\Categorie;
 use App\Models\ProduitVente;
 use Illuminate\Http\Request;
+use App\Models\ProduitSortie;
 use App\Models\CategorieDepense;
+use App\Models\InventaireProduit;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
@@ -590,6 +593,16 @@ class RapportController extends Controller
     public function historique(Request $request)
     {
         try {
+
+
+
+            $request->validate([
+                'produit' => '',
+                'dateDebut' => 'nullable',
+                'dateFin' => 'nullable',
+                'type' => '',
+            ]);
+
             // recuperer les produit bar et restaurant
             $data_produit = Produit::active()->whereHas('categorie', function ($q) {
                 $q->whereIn('famille', ['restaurant', 'bar']);
@@ -599,17 +612,14 @@ class RapportController extends Controller
             $produit = request('produit');
             $dateDebut = request('date_debut');
             $dateFin = request('date_fin');
-            $type = request('type'); // vente, achat, inventaire
+            $type = request('type'); // vente, achat, inventaire , sortie
 
-
-            $request->validate([
-                'produit' => 'required',
-                'dateDebut' => 'nullable',
-                'dateFin' => 'nullable',
-                'type' => 'required',
-            ]);
-            
             $vente = [];
+            $achat = [];
+            $inventaire = [];
+            $sortie = [];
+
+            // vente
             if ($type == 'vente') {
                 $vente = ProduitVente::with(['vente', 'variante', 'produit'])
                     ->where('produit_id', $produit)
@@ -634,10 +644,84 @@ class RapportController extends Controller
                 $vente = $vente->get();
             }
 
-            // dd($vente->toArray());
+
+            // achat
+            if ($type == 'achat') {
+                $achat = Achat::with('produit')
+                    ->where('produit_id', $produit)
+                    ->orderBy('created_at', 'DESC');
+
+                // Filtrer en fonction des dates
+                if ($dateDebut && $dateFin) {
+                    $achat->whereBetween('date_achat', [$dateDebut, $dateFin]);
+                } elseif ($dateDebut) {
+                    $achat->whereDate('date_achat', $dateDebut);
+                } elseif ($dateFin) {
+                    $achat->whereDate('date_achat', $dateFin);
+                }
+
+                // Récupération des données
+                $achat = $achat->get();
+            }
 
 
-            return view('backend.pages.rapport.historique', compact('data_produit', 'vente'));
+            // inventaire
+            if ($type == 'inventaire') {
+                $inventaire = InventaireProduit::with(['inventaire', 'produit'])
+                    ->where('produit_id', $produit)
+                    ->orderBy('created_at', 'DESC');
+
+                // Filtrer en fonction des dates
+                if ($dateDebut && $dateFin) {
+                    $inventaire->whereHas('inventaire', function ($query) use ($dateDebut, $dateFin) {
+                        $query->whereBetween('date_inventaire', [$dateDebut, $dateFin]);
+                    });
+                } elseif ($dateDebut) {
+                    $inventaire->whereHas('inventaire', function ($query) use ($dateDebut) {
+                        $query->whereDate('date_inventaire', $dateDebut);
+                    });
+                } elseif ($dateFin) {
+                    $inventaire->whereHas('inventaire', function ($query) use ($dateFin) {
+                        $query->whereDate('date_inventaire', $dateFin);
+                    });
+                }
+
+                // Récupération des données
+                $inventaire = $inventaire->get();
+            }
+
+
+
+            // inventaire
+            if ($type == 'sortie') {
+                $sortie = ProduitSortie::with(['sortie', 'produit'])
+                    ->where('produit_id', $produit)
+                    ->orderBy('created_at', 'DESC');
+
+                // Filtrer en fonction des dates
+                if ($dateDebut && $dateFin) {
+                    $sortie->whereHas('sortie', function ($query) use ($dateDebut, $dateFin) {
+                        $query->whereBetween('date_sortie', [$dateDebut, $dateFin]);
+                    });
+                } elseif ($dateDebut) {
+                    $sortie->whereHas('sortie', function ($query) use ($dateDebut) {
+                        $query->whereDate('date_sortie', $dateDebut);
+                    });
+                } elseif ($dateFin) {
+                    $sortie->whereHas('sortie', function ($query) use ($dateFin) {
+                        $query->whereDate('date_sortie', $dateFin);
+                    });
+                }
+
+                // Récupération des données
+                $sortie = $sortie->get();
+            }
+
+
+            // dd($sortie->toArray());
+
+
+            return view('backend.pages.rapport.historique', compact('data_produit', 'vente', 'achat', 'inventaire', 'sortie'));
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',

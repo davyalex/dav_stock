@@ -1,0 +1,47 @@
+<table id="buttons-datatables" class="display table table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Produit</th>
+            <th>Date achat</th>
+            <th>Quantité acheté</th>
+            {{-- <th>Prix unitaire</th>
+            <th>total</th> --}}
+        </tr>
+    </thead>
+    <tbody>
+        @forelse ($achat as $key => $item)
+            <tr>
+                <td>{{ ++$key }}</td>
+                <td>{{ $item['produit']['nom'] }}</td>
+                <td>{{ \Carbon\Carbon::parse($item['created_at'])->format('d-m-Y à H:i') }}</td>
+                <td><b> {{ $item['quantite_stocke'] ?? 0 }}
+                        {{ $item['produit']['uniteSortie']['libelle'] ?? 'bouteille' }} </b> </td>
+                {{-- <td>{{ number_format($item['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
+                <td>{{ number_format($item['total'], 0, ',', ' ') }}
+                    FCFA</td> --}}
+            </tr>
+        @empty
+        <tr>
+            <td colspan="6">
+                <h6 class="text-center fw-bold text-warning">Aucun achat enregistré</h6>
+            </td>
+        </tr>
+        @endforelse
+    </tbody>
+
+
+</table>
+<tfoot>
+    <tr>
+        <th colspan="7">
+            <div class="text-start">
+                {{-- <div>Total pour {{ $famille }}</div> --}}
+                <div>Quantité de bouteille vendue : <b>{{ $achat->sum('quantite_stocke') }}</b></div>
+                <div>Montant total :
+                    <b> {{ number_format($achat->sum('prix_total_format'), 0, ',', ' ') }} FCFA</b>
+                </div>
+            </div>
+        </th>
+    </tr>
+</tfoot>

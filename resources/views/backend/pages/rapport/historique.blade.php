@@ -50,6 +50,7 @@
                                     <select name="type" class="form-control" required>
                                         <option value="">Sélectionnez un type</option>
                                         <option value="vente" @selected(request('type') == 'vente')>Vente</option>
+                                        <option value="sortie" @selected(request('type') == 'sortie')>Sortie</option>
                                         <option value="achat" @selected(request('type') == 'achat')>Achat</option>
                                         <option value="inventaire" @selected(request('type') == 'inventaire')>Inventaire</option>
                                     </select>
@@ -104,6 +105,12 @@
                        <!-- Afficher les produits ici en fonction du type-->
                        @if (request('type') == 'vente')
                            @include('backend.pages.rapport.partials.historique.vente')
+                           @elseif (request('type') == 'achat')
+                           @include('backend.pages.rapport.partials.historique.achat')
+                           @elseif (request('type') == 'sortie')
+                           @include('backend.pages.rapport.partials.historique.sortie')
+                           @elseif (request('type') == 'inventaire')
+                           @include('backend.pages.rapport.partials.historique.inventaire')
                        @endif
 
                     </div>
