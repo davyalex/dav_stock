@@ -214,6 +214,13 @@ class InventaireController extends Controller
 
             $etatFilter = request('filter_etat');
 
+            // recuperer l'inventaire precedent de l'inventaire actuel
+            $inventairePrecedent =Inventaire::with('produits')
+                ->where('id', '<', $id)
+                ->orderBy('id', 'desc')
+                ->first();
+
+
             $inventaire = Inventaire::with('produits')->find($id);
 
             if ($etatFilter) {
@@ -221,10 +228,10 @@ class InventaireController extends Controller
                     $query->wherePivot('etat', $etatFilter);
                 }])->find($id);
             }
-            
-         
 
-            return view('backend.pages.stock.inventaire.show', compact('inventaire'));
+
+
+            return view('backend.pages.stock.inventaire.show', compact('inventaire' , 'inventairePrecedent'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }

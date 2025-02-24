@@ -25,8 +25,9 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">
-                        Produits de l'inventaire <strong>#{{ $inventaire->code }} du
-                            {{ $inventaire->created_at->format('d-m-Y à H:i') }}</strong>
+                        Detail Inventaire {{ $inventaire->code }} du <strong>{{ $inventairePrecedent->created_at->format('d-m-Y') }}</strong>
+                        au <strong> du
+                            {{ $inventaire->created_at->format('d-m-Y') }}</strong>
                     </h5>
 
                     <div class="d-flex align-items-center gap-2">
