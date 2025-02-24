@@ -2,8 +2,13 @@
 
 namespace App\Providers;
 
+use Carbon\Carbon;
+use App\Models\Vente;
+use App\Models\Produit;
 use App\Models\Setting;
 use App\Models\Categorie;
+use App\Models\Inventaire;
+use App\Models\ProduitVente;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Request;
@@ -171,6 +176,129 @@ class AppServiceProvider extends ServiceProvider
                     'etat' => $etat,
                 ]);
         }
+
+
+        ######################################################## 
+
+        // ##Mise à jour de la quantite vendu dans la table inventaire_produit
+        // $produits = [];
+
+        // $data = DB::table('inventaire_produit')->get(); // Récupérer les données
+
+        // foreach ($data as $value) {
+        //     // Récupérer l'inventaire actuel
+        //     $inventaireActuel = Inventaire::with('produits')->find($value->inventaire_id);
+
+        //     // Récupérer l'inventaire précédent (le plus récent ayant un ID inférieur)
+        //     $inventairePrecedent = Inventaire::where('id', '<', $value->inventaire_id)
+        //         ->orderBy('id', 'desc')
+        //         ->first();
+
+        //     // Déterminer la plage de dates
+        //     if ($inventairePrecedent) {
+        //         $dateDebut = $inventairePrecedent->created_at; // Date du dernier inventaire
+        //     } else {
+        //         $dateDebut = null; // On prend toutes les transactions avant l'inventaire actuel
+        //     }
+        //     $dateFin = $inventaireActuel->created_at; // Date de l'inventaire actuel
+
+        //     // Récupérer les produits avec la quantité vendue et utilisée
+        //     $data_produit = Produit::whereHas('categorie', function ($q) {
+        //         $q->whereIn('famille', ['restaurant', 'bar']);
+        //     })
+        //         ->withSum(['ventes as quantite_vendue' => function ($query) use ($dateDebut, $dateFin) {
+        //             if ($dateDebut) {
+        //                 $query->whereBetween('ventes.created_at', [$dateDebut, $dateFin]);
+        //             } else {
+        //                 $query->where('ventes.created_at', '<', $dateFin);
+        //             }
+        //         }], 'produit_vente.quantite_bouteille')
+
+        //         ->withSum(['sorties as quantite_utilisee' => function ($query) use ($dateDebut, $dateFin) {
+        //             if ($dateDebut) {
+        //                 $query->whereBetween('sorties.created_at', [$dateDebut, $dateFin]);
+        //             } else {
+        //                 $query->where('sorties.created_at', '<', $dateFin);
+        //             }
+        //         }], 'produit_sortie.quantite_utilise')
+
+        //         ->with('categorie')
+        //         ->where('id', $value->produit_id)
+        //         ->get();
+
+        //     // Mise à jour de la quantité vendue et utilisée dans la table inventaire_produit pour stock_vendu 
+        //     if ($data_produit) {
+        //         foreach ($data_produit as $produit) {
+        //         // Mise à jour de la quantité vendue et utilisée dans la table inventaire_produit
+        //         DB::table('inventaire_produit')
+        //             ->where('produit_id', $produit->id)
+        //             ->where('inventaire_id', $value->id)
+        //             ->update([
+        //                 'stock_vendu' => $produit->quantite_vendue != null ? $produit->quantite_vendue : $produit->quantite_utilisee,
+        //             ]);
+        //     }
+
+
+        // }
+
+
+        $data = DB::table('inventaire_produit')->get(); // Récupérer les données
+
+        foreach ($data as $value) {
+            // Récupérer l'inventaire actuel
+            $inventaireActuel = Inventaire::with('produits')->find($value->inventaire_id);
+
+            if (!$inventaireActuel) {
+                continue; // Si l'inventaire actuel n'existe pas, on passe au suivant
+            }
+
+            // Récupérer l'inventaire précédent (le plus récent ayant un ID inférieur)
+            $inventairePrecedent = Inventaire::where('id', '<', $value->inventaire_id)
+                ->orderBy('id', 'desc')
+                ->first();
+
+            // Déterminer la plage de dates
+            $dateDebut = $inventairePrecedent ? $inventairePrecedent->date_inventaire : null;
+            $dateFin = $inventaireActuel->date_inventaire;
+
+            // Récupérer les produits avec la quantité vendue et utilisée
+            $data_produit = Produit::whereHas('categorie', function ($q) {
+                $q->whereIn('famille', ['restaurant', 'bar']);
+            })
+                ->withSum(['ventes as quantite_vendue' => function ($query) use ($dateDebut, $dateFin) {
+                    if ($dateDebut) {
+                        $query->whereBetween('ventes.date_vente', [$dateDebut, $dateFin]);
+                    } else {
+                        $query->where('ventes.date_vente', '<', $dateFin);
+                    }
+                }], 'produit_vente.quantite_bouteille')
+
+                ->withSum(['sorties as quantite_utilisee' => function ($query) use ($dateDebut, $dateFin) {
+                    if ($dateDebut) {
+                        $query->whereBetween('sorties.date_sortie', [$dateDebut, $dateFin]);
+                    } else {
+                        $query->where('sorties.date_sortie', '<', $dateFin);
+                    }
+                }], 'produit_sortie.quantite_utilise')
+
+                ->with('categorie')
+                ->where('id', $value->produit_id)
+                ->get();
+
+            // Vérifier s'il y a des produits avant de faire la mise à jour
+            if ($data_produit->isNotEmpty()) {
+                foreach ($data_produit as $produit) {
+                    DB::table('inventaire_produit')
+                        ->where('produit_id', $produit->id)
+                        ->where('inventaire_id', $value->inventaire_id) // Correction ici
+                        ->update([
+                            'stock_vendu' => $produit->quantite_vendue ?? $produit->quantite_utilisee, // Correction ici
+                        ]);
+                }
+            }
+        }
+
+
 
 
 

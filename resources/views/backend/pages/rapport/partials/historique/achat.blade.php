@@ -37,7 +37,7 @@
         <th colspan="7">
             <div class="text-start">
                 {{-- <div>Total pour {{ $famille }}</div> --}}
-                <div>Quantité de bouteille vendue : <b>{{ $achat->sum('quantite_stocke') }}</b></div>
+                <div>Quantité de bouteille acheté : <b>{{ $achat->sum('quantite_stocke') }}</b></div>
                 <div>Montant total :
                     <b> {{ number_format($achat->sum('prix_total_format'), 0, ',', ' ') }} FCFA</b>
                 </div>

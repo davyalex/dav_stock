@@ -38,10 +38,10 @@ class InventaireController extends Controller
 
         try {
             // Récupérer la date du dernier inventaire
-            $date_dernier_inventaire = Inventaire::select('created_at')
-                ->orderBy('created_at', 'desc')
+            $date_dernier_inventaire = Inventaire::select('date_inventaire')
+                ->orderBy('date_inventaire', 'desc')
                 ->first();
-            $date_dernier_inventaire = $date_dernier_inventaire ? $date_dernier_inventaire->created_at : Carbon::now()->startOfDay();
+            $date_dernier_inventaire = $date_dernier_inventaire ? $date_dernier_inventaire->date_inventaire : Carbon::now()->startOfDay();
 
             // Date du jour
             $date_jour = Carbon::now();
@@ -52,20 +52,15 @@ class InventaireController extends Controller
             })
                 ->withSum(['ventes as quantite_vendue' => function ($query) use ($date_dernier_inventaire, $date_jour) {
                     // Filtrer les ventes entre la date du dernier inventaire et la date du jour
-                    $query->whereBetween('ventes.created_at', [$date_dernier_inventaire, $date_jour]);
+                    $query->whereBetween('ventes.date_vente', [$date_dernier_inventaire, $date_jour]);
                 }], 'produit_vente.quantite_bouteille') // Somme de la quantité vendue dans le pivot produit_vente
 
 
                 ->withSum(['sorties as quantite_utilisee' => function ($query) use ($date_dernier_inventaire, $date_jour) {
                     // Filtrer les sorties entre la date du dernier inventaire et la date du jour
-                    $query->whereBetween('sorties.created_at', [$date_dernier_inventaire, $date_jour]);
+                    $query->whereBetween('sorties.date_sortie', [$date_dernier_inventaire, $date_jour]);
                 }], 'produit_sortie.quantite_utilise') // Somme de la quantité utilisée dans le pivot produit_sortie
 
-                // ->withCount(['sorties as total_quantite_utilisee' => function ($query) use ($date_dernier_inventaire, $date_jour) {
-                //     // Somme des quantités utilisées dans le pivot `produit_sortie`
-                //     $query->whereBetween('sorties.created_at', [$date_dernier_inventaire, $date_jour])
-                //           ->select(DB::raw('SUM(produit_sortie.quantite_utilise)'));
-                // }])
                 ->with('categorie')
                 ->get();
 
@@ -215,7 +210,7 @@ class InventaireController extends Controller
             $etatFilter = request('filter_etat');
 
             // recuperer l'inventaire precedent de l'inventaire actuel
-            $inventairePrecedent =Inventaire::with('produits')
+            $inventairePrecedent = Inventaire::with('produits')
                 ->where('id', '<', $id)
                 ->orderBy('id', 'desc')
                 ->first();
@@ -231,7 +226,7 @@ class InventaireController extends Controller
 
 
 
-            return view('backend.pages.stock.inventaire.show', compact('inventaire' , 'inventairePrecedent'));
+            return view('backend.pages.stock.inventaire.show', compact('inventaire', 'inventairePrecedent'));
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
