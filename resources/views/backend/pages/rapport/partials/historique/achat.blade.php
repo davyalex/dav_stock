@@ -22,11 +22,11 @@
                     FCFA</td> --}}
             </tr>
         @empty
-        <tr>
-            <td colspan="6">
-                <h6 class="text-center fw-bold text-warning">Aucun achat enregistré</h6>
-            </td>
-        </tr>
+            <tr>
+                <td colspan="6">
+                    <h6 class="text-center fw-bold text-warning">Aucun achat enregistré</h6>
+                </td>
+            </tr>
         @endforelse
     </tbody>
 
