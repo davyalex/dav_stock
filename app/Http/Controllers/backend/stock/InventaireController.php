@@ -93,7 +93,7 @@ class InventaireController extends Controller
      * @return void
      */
 
-    public function miseAjourProduitInventaire(Request $request)
+    public function miseAjourProduitInventaire()
     {
         $data = DB::table('inventaire_produit')->get(); // Récupérer les données
 
@@ -288,6 +288,10 @@ class InventaireController extends Controller
                     $this->miseAJourStock($produit_id);
                 }
             }
+
+            //Appeler la methode miseAJourStockVariante
+            $this->miseAjourProduitInventaire();
+
 
 
             // retur response

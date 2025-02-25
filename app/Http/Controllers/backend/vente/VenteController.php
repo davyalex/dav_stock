@@ -179,7 +179,7 @@ class VenteController extends Controller
      *
      * @return void
      */
-    public function miseAJourStock($id)
+    public function miseAJourStock($id) // Mise a jour des stock variante
     {
         $produit = Produit::find($id);
 
@@ -265,13 +265,9 @@ class VenteController extends Controller
 
 
 
-
-
     public function store(Request $request)
     {
         try {
-
-
             //recuperation des informations depuis ajax
             $cart = $request->input('cart');
             // dd($cart);
