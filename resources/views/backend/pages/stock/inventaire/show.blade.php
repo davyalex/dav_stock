@@ -94,8 +94,8 @@
                                                 src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
                                                 width="10px" height="10px" alt="">
                                         </td> --}}
-                                        <td>{{ $item['nom'] }} {{ $item['valeur_unite'] ?? '' }}
-                                            {{ $item['unite']['libelle'] ?? '' }} </td>
+                                        <td>{{ $item['nom'] }} <b>{{ $item['valeur_unite'] ?? '' }}</b>
+                                            {{ $item['unite']['abreviation'] ?? '' }} </td>
                                         <td>{{ $item['pivot']['stock_dernier_inventaire'] ?? '' }}</td>
                                         <td>{{ $item['pivot']['stock_initial'] }}
                                             {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
