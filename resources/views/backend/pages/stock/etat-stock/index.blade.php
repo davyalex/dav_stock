@@ -25,8 +25,12 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Liste des produits en stock
-                        @if(request()->has('statut')) - <b>{{ request('statut') }}</b> @endif
-                        @if(request()->has('filter')) - <b>{{ request('filter') }}</b> @endif
+                        @if (request()->has('statut'))
+                            - <b>{{ request('statut') }}</b>
+                        @endif
+                        @if (request()->has('filter'))
+                            - <b>{{ request('filter') }}</b>
+                        @endif
                     </h5>
 
                     <div class="dropdown">
@@ -42,7 +46,7 @@
                     </div>
                 </div>
 
-                
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
@@ -62,18 +66,26 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>
-                                         
-                                                <img class="rounded avatar-sm"
+
+                                            <img class="rounded avatar-sm"
                                                 src="{{ $produit->hasMedia('ProduitImage') ? $produit->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
                                                 width="50px" alt="{{ $produit['nom'] }}">
                                         </td>
                                         <td>{{ $produit->nom }}
                                             <p> {{ $produit['valeur_unite'] ?? '' }}
-                                                {{ $produit['unite']['libelle'] ?? '' }}  {{ $produit->unite ? '('. $produit['unite']['abreviation'] .')' : '' }}   </p>
+                                                {{ $produit['unite']['libelle'] ?? '' }}
+                                                {{ $produit->unite ? '(' . $produit['unite']['abreviation'] . ')' : '' }}
+                                            </p>
                                         </td>
                                         <td>{{ $produit->categorie->name }}</td>
-                                        <td>{{ $produit->stock }}     {{ $produit['uniteSortie']['libelle'] ?? '' }}  {{ $produit->unite ? '('. $produit['uniteSortie']['abreviation'] .')' : '' }} </td>
-                                        <td>{{ $produit->stock_alerte }} {{ $produit['uniteSortie']['libelle'] ?? '' }}  {{ $produit->unite ? '('. $produit['uniteSortie']['abreviation'] .')' : '' }} </td>
+                                        <td>
+                                            {{ $produit->stock }} {{ $produit->uniteSortie?->libelle ?? '' }}
+                                            {{ $produit->uniteSortie?->abreviation ? '(' . $produit->uniteSortie?->abreviation . ')' : '' }}
+                                        </td>
+
+                                        <td>{{ $produit->stock_alerte }} {{ $produit['uniteSortie']['libelle'] ?? '' }}
+                                            {{ $produit->unite ? '(' . $produit['uniteSortie']['abreviation'] . ')' : '' }}
+                                        </td>
                                         <td>
                                             @if ($produit->stock <= $produit->stock_alerte)
                                                 <span class="badge bg-danger">Alerte</span>
