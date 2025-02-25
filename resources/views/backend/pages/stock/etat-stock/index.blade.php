@@ -83,9 +83,11 @@
                                             {{ $produit->uniteSortie?->abreviation ? '(' . $produit->uniteSortie?->abreviation . ')' : '' }}
                                         </td>
 
-                                        <td>{{ $produit->stock_alerte }} {{ $produit['uniteSortie']['libelle'] ?? '' }}
-                                            {{ $produit->unite ? '(' . $produit['uniteSortie']['abreviation'] . ')' : '' }}
+                                        <td>
+                                            {{ $produit->stock_alerte }} {{ $produit->uniteSortie?->libelle ?? '' }}
+                                            {{ $produit->uniteSortie?->abreviation ? '(' . $produit->uniteSortie?->abreviation . ')' : '' }}
                                         </td>
+                                        
                                         <td>
                                             @if ($produit->stock <= $produit->stock_alerte)
                                                 <span class="badge bg-danger">Alerte</span>
