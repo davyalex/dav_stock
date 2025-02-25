@@ -38,7 +38,9 @@
                                         <option value="">Sélectionnez un produit</option>
                                         @foreach ($data_produit as $produit)
                                             <option value="{{ $produit->id }}" @selected(request('produit') == $produit->id)>
-                                                {{ $produit->nom }}
+                                                {{ $produit->nom }} {{ $produit->valeur_unite ?? '' }}
+                                                {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
+
                                             </option>
                                         @endforeach
                                     </select>
@@ -60,7 +62,7 @@
                                 <div class="mb-3">
                                     <label for="date_debut" class="form-label">Date de début</label>
                                     <input type="date" class="form-control" id="date_debut" name="date_debut"
-                                        value="{{ request('date_debut') }}" >
+                                        value="{{ request('date_debut') }}">
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -87,31 +89,32 @@
             <div class="card">
                 <div class="card-header">
                     @if (request('type'))
-                    <h5 class="card-title mb-0">{{request('type')}} - Produit {{\App\Models\Produit::find(request('produit'))->nom}} 
+                        <h5 class="card-title mb-0">{{ request('type') }} - Produit
+                            {{ \App\Models\Produit::find(request('produit'))->nom }}
 
-                        @if(request('date_debut') && request('date_fin'))
-                            du 
-                            {{ \Carbon\Carbon::parse(request('date_debut'))->format('d/m/Y') }}
-                            au {{ \Carbon\Carbon::parse(request('date_fin'))->format('d/m/Y') }}
-                        @endif
-                    </h5>
+                            @if (request('date_debut') && request('date_fin'))
+                                du
+                                {{ \Carbon\Carbon::parse(request('date_debut'))->format('d/m/Y') }}
+                                au {{ \Carbon\Carbon::parse(request('date_fin'))->format('d/m/Y') }}
+                            @endif
+                        </h5>
                     @else
-                    <h5 class="card-title mb-0">Produit en attente de filtre</h5>
+                        <h5 class="card-title mb-0">Produit en attente de filtre</h5>
                     @endif
-                
+
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                       <!-- Afficher les produits ici en fonction du type-->
-                       @if (request('type') == 'vente')
-                           @include('backend.pages.rapport.partials.historique.vente')
-                           @elseif (request('type') == 'achat')
-                           @include('backend.pages.rapport.partials.historique.achat')
-                           @elseif (request('type') == 'sortie')
-                           @include('backend.pages.rapport.partials.historique.sortie')
-                           @elseif (request('type') == 'inventaire')
-                           @include('backend.pages.rapport.partials.historique.inventaire')
-                       @endif
+                        <!-- Afficher les produits ici en fonction du type-->
+                        @if (request('type') == 'vente')
+                            @include('backend.pages.rapport.partials.historique.vente')
+                        @elseif (request('type') == 'achat')
+                            @include('backend.pages.rapport.partials.historique.achat')
+                        @elseif (request('type') == 'sortie')
+                            @include('backend.pages.rapport.partials.historique.sortie')
+                        @elseif (request('type') == 'inventaire')
+                            @include('backend.pages.rapport.partials.historique.inventaire')
+                        @endif
 
                     </div>
                 </div>
