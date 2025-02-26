@@ -9,6 +9,7 @@ use App\Models\Caisse;
 use App\Models\Depense;
 use App\Models\Produit;
 use App\Models\Categorie;
+use App\Models\Inventaire;
 use App\Models\ProduitVente;
 use Illuminate\Http\Request;
 use App\Models\ProduitSortie;
