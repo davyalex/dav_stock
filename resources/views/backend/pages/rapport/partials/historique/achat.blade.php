@@ -17,7 +17,7 @@
                    <b> {{ $item['produit']['valeur_unite'] ?? '' }} {{ $item['produit']['unite']['abreviation'] ?? '' }}</b>
 
                 </td>
-                <td>{{ \Carbon\Carbon::parse($item['created_at'])->format('d-m-Y à H:i') }}</td>
+                <td>{{ \Carbon\Carbon::parse($item['date_achat'])->format('d-m-Y à H:i') }}</td>
                 <td><b> {{ $item['quantite_stocke'] ?? 0 }}
                         {{ $item['produit']['uniteSortie']['libelle'] ?? '' }} </b> </td>
                 {{-- <td>{{ number_format($item['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
