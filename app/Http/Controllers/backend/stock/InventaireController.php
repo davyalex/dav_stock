@@ -312,30 +312,35 @@ class InventaireController extends Controller
     {
         //
         try {
-            //filtrer les produit en fonction de leur etat du stock
-
+            // Filtrer les produits en fonction de leur état de stock
             $etatFilter = request('filter_etat');
 
-            // recuperer l'inventaire precedent de l'inventaire actuel
+            // Récupérer l'inventaire précédent
             $inventairePrecedent = Inventaire::with('produits')
                 ->where('id', '<', $id)
                 ->orderBy('id', 'desc')
                 ->first();
 
+            // Récupérer l'inventaire actuel avec les produits
+            $query = Inventaire::with('produits')->where('id', $id);
 
-            $inventaire = Inventaire::with('produits')->find($id);
-
+            // Si un filtre d'état est défini, appliquer le filtrage sur les produits
             if ($etatFilter) {
-                $inventaire = Inventaire::with(['produits' => function ($query) use ($etatFilter) {
+                $query->with(['produits' => function ($query) use ($etatFilter) {
                     $query->wherePivot('etat', $etatFilter);
-                }])->find($id);
+                }]);
             }
 
+            $inventaire = $query->first();
 
+            // Vérifier si l'inventaire existe
+            if (!$inventaire) {
+                return redirect()->route('inventaire.index')->with('error', "L'inventaire demandé n'existe pas.");
+            }
 
             return view('backend.pages.stock.inventaire.show', compact('inventaire', 'inventairePrecedent'));
-        } catch (\Throwable $e) {
-            return $e->getMessage();
+        } catch (\Exception $e) {
+            return redirect()->route('inventaire.index')->with('error', "Une erreur s'est produite. Veuillez réessayer.");
         }
     }
 

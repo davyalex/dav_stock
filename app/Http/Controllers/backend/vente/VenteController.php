@@ -412,19 +412,15 @@ class VenteController extends Controller
         }
     }
 
-
-
-
-
-
     public function show($id)
     {
         try {
-            $vente = Vente::find($id);
+            $vente = Vente::findOrFail($id);
             return view('backend.pages.vente.show', compact('vente'));
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return redirect()->route('vente.index')->with('error', "La vente demandée n'existe plus.");
         } catch (\Exception $e) {
-            Alert::error('Erreur', 'Une erreur est survenue lors du chargement de la vente : ' . $e->getMessage());
-            return back();
+            return redirect()->route('vente.index')->with('error', "Une erreur s'est produite. Veuillez réessayer.");
         }
     }
 

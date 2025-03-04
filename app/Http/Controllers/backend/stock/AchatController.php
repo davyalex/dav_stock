@@ -41,11 +41,17 @@ class AchatController extends Controller
     {
         try {
             $facture = Facture::whereId($id)->first();
+
+            // Vérifier si la facture existe
+            if (!$facture) {
+                return redirect()->route('achat.index')->with('error', "La facture demandée n'existe pas.");
+            }
+
             $data_achat = Achat::where('facture_id', $id)->get();
-            // dd($data_facture->toArray());
+
             return view('backend.pages.stock.achat.show', compact('data_achat', 'facture'));
-        } catch (\Throwable $e) {
-            return  $e->getMessage();
+        } catch (\Exception $e) {
+            return redirect()->route('factures.index')->with('error', "Une erreur s'est produite. Veuillez réessayer.");
         }
     }
 

@@ -30,14 +30,19 @@ class SortieController extends Controller
     public function show($id)
     {
         try {
-            $sortie = Sortie::with('produits')->whereId($id)->first();
-
-            // dd(  $sortie->toArray());
-
+            $sortie = Sortie::with('produits')->find($id);
+        
+            // Vérifier si la sortie existe
+            if (!$sortie) {
+                return redirect()->route('sortie.index')->with('error', "La sortie demandée n'existe pas.");
+            }
+        
             return view('backend.pages.stock.sortie.show', compact('sortie'));
-        } catch (\Throwable $e) {
-            return  $e->getMessage();
+        
+        } catch (\Exception $e) {
+            return redirect()->route('sortie.index')->with('error', "Une erreur s'est produite. Veuillez réessayer.");
         }
+        
     }
 
 

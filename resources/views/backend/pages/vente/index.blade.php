@@ -129,6 +129,8 @@
                     </div>
                 </div>
             @endif
+            @include('backend.components.alertMessage')
+
             <div class="card-body">
                 <div class="table-responsive">
                     <table id="buttons-datatables" class="display table table-bordered" style="width:100%">

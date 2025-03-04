@@ -22,6 +22,7 @@
 
     <div class="row">
         <div class="col-lg-12">
+            @include('backend.components.alertMessage')
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Liste des sorties</h5>
