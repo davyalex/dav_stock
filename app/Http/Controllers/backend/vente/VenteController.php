@@ -42,15 +42,15 @@ class VenteController extends Controller
 
             $query = Vente::with('produits')
                 ->whereStatut('confirmée')
-                ->orderBy('created_at', 'desc');
+                ->orderBy('date_vente', 'desc');
 
             // Filtre par date
             if ($request->filled('date_debut') && $request->filled('date_fin')) {
-                $query->whereBetween('created_at', [$request->date_debut, $request->date_fin]);
+                $query->whereBetween('date_vente', [$request->date_debut, $request->date_fin]);
             } elseif ($request->filled('date_debut')) {
-                $query->whereDate('created_at', '>=', $request->date_debut);
+                $query->whereDate('date_vente', '>=', $request->date_debut);
             } elseif ($request->filled('date_fin')) {
-                $query->whereDate('created_at', '<=', $request->date_fin);
+                $query->whereDate('date_vente', '<=', $request->date_fin);
             }
 
             // Filtre par caisse

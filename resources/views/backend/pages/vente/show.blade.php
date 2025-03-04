@@ -124,9 +124,9 @@
 
                                         <td><b> {{ $item['pivot']['quantite'] }}</b>
                                             @if ($item['pivot']['variante_id'])
-                                                 {{ \App\Models\Variante::find($item['pivot']['variante_id'])->libelle }} 
+                                                {{ \App\Models\Variante::find($item['pivot']['variante_id'])->libelle }}
                                             @endif
-                                           </td>
+                                        </td>
                                         <td>{{ number_format($item['pivot']['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
                                         <td>{{ number_format($item['pivot']['quantite'] * $item['pivot']['prix_unitaire'], 0, ',', ' ') }}
                                             FCFA</td>
@@ -219,9 +219,15 @@
                             @foreach ($vente->produits as $produit)
                                 <tr>
                                     <td>{{ $produit->nom }} x{{ $produit->pivot->quantite }}
-                                        @if ($produit->categorie->famille == 'bar')
-                                            {{ \App\Models\Variante::find($produit['pivot']['variante_id'])->libelle }}
+                                        @if ($produit->categorie->famille == 'bar' && isset($produit['pivot']['variante_id']))
+                                            @php
+                                                $variante = \App\Models\Variante::find(
+                                                    $produit['pivot']['variante_id'],
+                                                );
+                                            @endphp
+                                            {{ $variante ? $variante->libelle : 'Aucune variante' }}
                                         @endif
+
                                     </td>
                                     <td style="text-align: right;">
                                         {{ number_format($produit->pivot->prix_unitaire, 0, ',', ' ') }}</td>
