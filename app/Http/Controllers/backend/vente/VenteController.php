@@ -23,6 +23,44 @@ use App\Http\Controllers\backend\user\AdminController;
 class VenteController extends Controller
 {
 
+
+    /**
+     * Mettre à jour les quantités disponibles des variantes de produits de la famille "bar"
+     *
+     * @return void
+     */
+    public function calculeQteVarianteProduit()
+    {
+        // Récupérer les produits appartenant à la famille "bar"
+        $data_produit_bar = Produit::withWhereHas('categorie', fn($q) => $q->where('famille', 'bar'))
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        foreach ($data_produit_bar as $produit) {
+            // Mettre à zéro toutes les quantités disponibles des variantes du produit
+            DB::table('produit_variante')
+                ->where('produit_id', $produit->id)
+                ->update(['quantite_disponible' => 0]);
+
+            // Récupérer toutes les variantes associées au produit
+            $variantes = DB::table('produit_variante')
+                ->where('produit_id', $produit->id)
+                ->get();
+
+            foreach ($variantes as $variante) {
+                // Calculer la nouvelle quantité disponible
+                $nouvelle_quantite = $produit->stock * $variante->quantite;
+
+                // Mettre à jour la quantité disponible
+                DB::table('produit_variante')
+                    ->where('produit_id', $produit->id)
+                    ->where('variante_id', $variante->variante_id)
+                    ->update(['quantite_disponible' => $nouvelle_quantite]);
+            }
+        }
+    }
+
+
     public function index(Request $request)
     {
         try {
@@ -88,12 +126,10 @@ class VenteController extends Controller
     public function create()
     {
         try {
-            // $data_produit = Produit::active()->whereHas('categorie', function ($query) {
-            //     $query->whereIn('famille', ['bar', 'menu']);
 
-            // })
-            //     ->with(['categorie', 'variantes'])
-            //     ->get();
+            // appeler la fonction calculeQteVarianteProduit
+            $this->calculeQteVarianteProduit(); // calcule la quantité de chaque produit variantes
+
 
             $data_produit = Produit::active()
                 ->whereHas('categorie', function ($query) {
@@ -170,6 +206,8 @@ class VenteController extends Controller
             return back()->with('error', 'Une erreur est survenue lors du chargement du formulaire de création : ' . $e->getMessage());
         }
     }
+
+
 
 
     /**
