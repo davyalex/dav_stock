@@ -46,7 +46,7 @@
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
                                         <td> <a class="fw-bold" href="{{route('sortie.show' , $item->id)}}">#{{ $item['code'] }}</a> </td>
-                                        <td> {{ $item['created_at'] }} </td>
+                                        <td> {{ \Carbon\Carbon::parse($item['date_sortie'])->format('d-m-Y à H:i') }} </td>
                                         <td> {{ $item['user']['first_name'] }} </td>
                                         {{-- <td class="d-none">
                                             <div class="dropdown d-inline-block">

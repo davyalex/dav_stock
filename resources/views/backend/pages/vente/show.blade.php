@@ -51,7 +51,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <p><strong>N° vente :</strong> #{{ $vente->code }}</p>
-                            <p><strong>Date :</strong> {{ $vente->created_at->format('d/m/Y à H:i') }}</p>
+                            <p><strong>Date :</strong> {{ \Carbon\Carbon::parse($vente['date_vente'])->format('d-m-Y') }}</p>
                             @if ($vente->type_vente == 'commande')
                                 <p><strong>Type de vente :</strong> <a
                                         href="{{ route('commande.show', $vente->commande->id) }}"> {{ $vente->type_vente }};

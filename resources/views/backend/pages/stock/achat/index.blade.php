@@ -53,7 +53,7 @@
                                         <td>{{ $item['type'] }}</td>
                                         <td>{{ $item['fournisseur']['nom'] ?? 'N/A' }}</td>
                                         <td> {{ $item['montant'] }} </td>
-                                        <td> {{ $item['date_facture'] }} </td>
+                                        <td> {{ \Carbon\Carbon::parse($item['date_facture'])->format('d-m-Y à H:i') }} </td>
                                         <td> {{ $item['user']['first_name'] }} </td>
                                         <td class="d-block">
                                             <div class="dropdown d-inline-block">

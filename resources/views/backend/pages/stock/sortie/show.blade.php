@@ -25,7 +25,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Liste des produits de la sortie en stock
-                        <strong>#{{ $sortie->code }} du {{ $sortie->date_sortie }} </strong>
+                        <strong>#{{ $sortie->code }} du {{ \Carbon\Carbon::parse($sortie['date_sortie'])->format('d-m-Y à H:i') }} </strong>
                     </h5>
                     <a href="{{ route('sortie.create') }}" type="button" class="btn btn-primary ">Faire
                         une sortie de stock</a>
