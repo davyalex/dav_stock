@@ -421,9 +421,9 @@
                         newRow.querySelector(`input[name="variantes[${i}][quantite]"]`).style.backgroundColor = '#eff2f7';
                         //mettre le select libelle non selectionnable
                         selectElement.classList.add('non-selectable');
-                        
 
-                        
+
+
                     }
                 }
 
@@ -671,24 +671,136 @@
                 $(this).closest('div').remove();
             });
 
-            $('#formSend').on('submit', function(e) {
+            // $('#formSend').on('submit', function(e) {
 
+            //     e.preventDefault();
+
+            //     // var variantes = document.querySelector('select[name="variantes[0][libelle]"] option[value="Bouteille"]');
+            //     // var prixVariante = variantes[0].value;
+            //     // var prixVenteHide = $('#prixVenteHide').val(prixVariante);
+
+            //     // recuperer le bouton de soumission
+            //     let submitButton = $(this).find('button[type="submit"]');
+
+            //     // Ajouter le spinner et désactiver le bouton
+            //     submitButton.prop('disabled', true).html(`
+            //         <span class="d-flex align-items-center">
+            //             <span class="spinner-border flex-shrink-0" role="status">
+            //                 <span class="visually-hidden">Loading...</span>
+            //             </span>
+            //             <span class="flex-grow-1 ms-2">Envoi en cours...</span>
+            //         </span>
+            //     `);
+
+            //     var productId = {{ Js::from($id) }} // product Id
+            //     var formData = new FormData(this);
+
+            //     $('#imageTableBody div').each(function() {
+            //         var imageFile = $(this).find('img').attr('src');
+            //         formData.append('images[]', imageFile)
+            //     });
+
+            //     $.ajax({
+            //         url: "/admin/produit/update/" + productId, // Adjust the route as needed
+            //         type: 'POST',
+            //         data: formData,
+            //         contentType: false,
+            //         processData: false,
+            //         success: function(response) {
+            //             $('#imageTableBody').empty();
+
+            //             if (response.message == 'operation reussi') {
+            //                 Swal.fire({
+            //                     title: 'Produit modifié avec success!',
+            //                     // text: 'You clicked the button!',
+            //                     icon: 'success',
+            //                     showCancelButton: false,
+            //                     customClass: {
+            //                         confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+            //                         cancelButton: 'btn btn-danger w-xs mt-2',
+            //                     },
+            //                     buttonsStyling: false,
+            //                     showCloseButton: true
+            //                 })
+            //                 var url = "{{ route('produit.index') }}" // redirect route product list
+
+            //                 window.location.replace(url);
+            //             } else if (response == 'The nom has already been taken.') {
+            //                 Swal.fire({
+            //                     title: 'Ce produit existe déjà ?',
+            //                     text: $('#nomProduit').val(),
+            //                     icon: 'warning',
+            //                     customClass: {
+            //                         confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+            //                         cancelButton: 'btn btn-danger w-xs mt-2',
+            //                     },
+            //                     buttonsStyling: false,
+            //                     showCloseButton: true
+            //                 })
+
+            //                 submitButton.prop('disabled', false).html('Enregistrer');
+
+            //             }
+            //         },
+
+            //     });
+            // });
+
+
+            // Envoyer le formulaire
+            $('#formSend').on('submit', function(e) {
                 e.preventDefault();
 
-                // var variantes = document.querySelector('select[name="variantes[0][libelle]"] option[value="Bouteille"]');
-                // var prixVariante = variantes[0].value;
-                // var prixVenteHide = $('#prixVenteHide').val(prixVariante);
+                let hasError = false;
+                let submitButton = $(this).find('button[type="submit"]');
 
-                var productId = {{ Js::from($id) }} // product Id
+                // Vérifier si tous les champs obligatoires sont remplis
+                $(this).find('[required]').each(function() {
+                    if (!$(this).val()) {
+                        hasError = true;
+                        let label = $(this).closest('div').find('label').text() || $(this).attr('name');
+
+                        $(this).closest('div').find('.error-text').text('Champ obligatoire').show();
+
+                        Swal.fire({
+                            title: 'Erreur',
+                            text: `Le champ ${label} est obligatoire.`,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+
+                        return false; // Stopper l'itération
+                    } else {
+                        $(this).closest('div').find('.error-text').hide();
+                    }
+                });
+
+                // S'il y a une erreur, ne pas soumettre et réactiver le bouton
+                if (hasError) {
+                    submitButton.prop('disabled', false).html('Enregistrer');
+                    return;
+                }
+
+                // Désactiver le bouton et afficher le spinner
+                submitButton.prop('disabled', true).html(`
+                    <span class="d-flex align-items-center">
+                        <span class="spinner-border flex-shrink-0" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </span>
+                        <span class="flex-grow-1 ms-2">Envoi en cours...</span>
+                    </span>
+                `);
+
+                var productId = {{ Js::from($id) }};
                 var formData = new FormData(this);
 
                 $('#imageTableBody div').each(function() {
                     var imageFile = $(this).find('img').attr('src');
-                    formData.append('images[]', imageFile)
+                    formData.append('images[]', imageFile);
                 });
 
                 $.ajax({
-                    url: "/admin/produit/update/" + productId, // Adjust the route as needed
+                    url: "/admin/produit/update/" + productId,
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -699,7 +811,6 @@
                         if (response.message == 'operation reussi') {
                             Swal.fire({
                                 title: 'Produit modifié avec success!',
-                                // text: 'You clicked the button!',
                                 icon: 'success',
                                 showCancelButton: false,
                                 customClass: {
@@ -709,8 +820,8 @@
                                 buttonsStyling: false,
                                 showCloseButton: true
                             })
-                            var url = "{{ route('produit.index') }}" // redirect route product list
 
+                            var url = "{{ route('produit.index') }}";
                             window.location.replace(url);
                         } else if (response == 'The nom has already been taken.') {
                             Swal.fire({
@@ -724,9 +835,22 @@
                                 buttonsStyling: false,
                                 showCloseButton: true
                             })
+
+                            // Réactiver le bouton et supprimer le spinner
+                            submitButton.prop('disabled', false).html('Enregistrer');
                         }
                     },
+                    error: function() {
+                        Swal.fire({
+                            title: 'Erreur',
+                            text: "Une erreur s'est produite.",
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
 
+                        // Réactiver le bouton et supprimer le spinner en cas d'erreur
+                        submitButton.prop('disabled', false).html('Enregistrer');
+                    }
                 });
             });
         </script>

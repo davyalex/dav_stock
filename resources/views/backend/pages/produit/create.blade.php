@@ -201,7 +201,9 @@
                                                             @php
                                                                 $variante = App\Models\Variante::all();
                                                                 // recuperer la varianrte bouteille
-                                                                $variante = $variante->where('slug', 'bouteille')->first();
+                                                                $variante = $variante
+                                                                    ->where('slug', 'bouteille')
+                                                                    ->first();
                                                             @endphp
                                                             <option value="{{ $variante->id }}">
                                                                 {{ $variante->libelle }}</option>
@@ -551,15 +553,23 @@
             $('#formSend').on('submit', function(e) {
                 e.preventDefault();
 
+                // recuperer le bouton de soumission
+                let submitButton = $(this).find('button[type="submit"]');
+
+                // Ajouter le spinner et désactiver le bouton
+                submitButton.prop('disabled', true).html(`
+                    <span class="d-flex align-items-center">
+                        <span class="spinner-border flex-shrink-0" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </span>
+                        <span class="flex-grow-1 ms-2">Envoi en cours...</span>
+                    </span>
+`);
 
 
                 // si la famille est bar  on recupere le prix de la premiere variante
                 var prixVente = parseFloat($('.prixVente').val());
                 var prixVenteHide = $('#prixVenteHide').val(prixVente);
-
-
-
-
 
 
                 // Vérifier si un champ avec required est vide
@@ -579,6 +589,8 @@
                 if ($('#product-image-input').val() === '' && categoryFamille === 'bar') {
 
                     e.preventDefault();
+                    submitButton.prop('disabled', false).html('Enregistrer'); // arreter le spinner
+
                 } else {
                     var formData = new FormData(this);
 
@@ -628,6 +640,10 @@
                                     buttonsStyling: false,
                                     showCloseButton: true
                                 });
+
+                                submitButton.prop('disabled', false).html(
+                                'Enregistrer'); // arreter le spinner
+
                             } else {
                                 // Autres types d'erreurs
                                 Swal.fire({
@@ -641,6 +657,8 @@
                                     buttonsStyling: false,
                                     showCloseButton: true
                                 });
+                                submitButton.prop('disabled', false).html(
+                                'Enregistrer'); // arreter le spinner
                             }
                         }
                     });

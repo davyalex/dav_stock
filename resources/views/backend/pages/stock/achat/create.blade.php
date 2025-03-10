@@ -731,11 +731,22 @@
 
 
 
-
+                //enregister le formulaire
                 $('#myForm').on('submit', function(event) {
                     event.preventDefault(); // Empêcher le rechargement de la page
 
                     let hasError = false;
+                    let submitButton = $(this).find('button[type="submit"]');
+
+                    // Ajouter le spinner et désactiver le bouton
+                    submitButton.prop('disabled', true).html(`
+                    <span class="d-flex align-items-center">
+                        <span class="spinner-border flex-shrink-0" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </span>
+                        <span class="flex-grow-1 ms-2">Envoi en cours...</span>
+                    </span>
+`);
 
                     // Parcourir tous les champs ayant l'attribut `required`
                     $(this).find('[required]').each(function() {
@@ -771,6 +782,7 @@
 
                     // Si une erreur a été trouvée, arrêter l'envoi
                     if (hasError) {
+                        submitButton.prop('disabled', false).html('Enregistrer');
                         return false;
                     }
 
@@ -810,6 +822,10 @@
                                     icon: 'error',
                                     confirmButtonText: 'OK',
                                 });
+
+                                submitButton.prop('disabled', false).html('Enregistrer');
+
+
                             } else {
                                 Swal.fire({
                                     title: 'Erreur',
@@ -818,6 +834,7 @@
                                     icon: 'error',
                                     confirmButtonText: 'OK',
                                 });
+                                submitButton.prop('disabled', false).html('Enregistrer');
                             }
                         }
                     });
@@ -969,7 +986,7 @@
                         form.find('.prixVente').val(0)
 
                         form.find('.prixVente').prop('required', false)
-                        form.find('.prixAchatUnite').prop('required',   false)
+                        form.find('.prixAchatUnite').prop('required', false)
 
 
                     } else {

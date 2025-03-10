@@ -638,30 +638,127 @@
                 }
 
 
+                // envoi du formulaire
 
+                // $('#myForm').on('submit', function(event) {
+                //     event.preventDefault(); // Empêcher le rechargement de la page
+
+                //     let hasError = false;
+
+                //     // Parcourir tous les champs ayant l'attribut `required`
+                //     $(this).find('[required]').each(function() {
+                //         // Vérifier si le champ est vide
+                //         if (!$(this).val()) {
+                //             hasError = true;
+                //             let fieldName = $(this).attr('name'); // Récupérer le nom du champ
+                //             let label = $(this).closest('div').find('label').text() ||
+                //                 fieldName; // Trouver le label ou utiliser le nom du champ
+
+                //             // Ajouter le texte d'erreur sous le champ
+                //             // $(this).closest('div').find('.error-text').text(
+                //             //     `Le champ ${label} est obligatoire.`).show();
+                //             $(this).closest('div').find('.error-text').text('Champs obligatoire')
+                //                 .show();
+
+
+                //             // Afficher une alerte avec SweetAlert
+                //             Swal.fire({
+                //                 title: 'Erreur',
+                //                 text: `Le champ ${label} est obligatoire.`,
+                //                 icon: 'error',
+                //                 confirmButtonText: 'OK',
+                //             });
+
+                //             return false; // Stopper l'itération et éviter l'envoi
+                //         } else {
+                //             // Cacher le message d'erreur si le champ est rempli
+                //             $(this).closest('div').find('.error-text').hide();
+                //         }
+                //     });
+
+
+                //     // Si une erreur a été trouvée, arrêter l'envoi
+                //     if (hasError) {
+                //         return false;
+                //     }
+
+                //     // Si tout est correct, soumettre le formulaire avec Ajax
+                //     let formData = $(this).serialize(); // Récupérer les données du formulaire
+                //     $.ajax({
+                //         url: $(this).attr('action'), // URL de la soumission du formulaire
+                //         type: 'POST',
+                //         data: formData,
+                //         dataType: 'json',
+                //         success: function(response, textStatus, xhr) {
+
+                //             let statusCode = xhr.status;
+
+                //             // Si la soumission est réussie
+                //             if (statusCode === 200) {
+                //                 Swal.fire({
+                //                     title: 'Succès',
+                //                     text: response.message,
+                //                     icon: 'success',
+                //                 });
+
+                //                 // Rediriger vers la liste des sortie
+                //                 var url =
+                //                     "{{ route('inventaire.index') }}"; // Rediriger vers la route liste sortie
+                //                 window.location.replace(url);
+                //             }
+                //         },
+                //         error: function(xhr, textStatus, errorThrown) {
+                //             let statusCode = xhr.status;
+
+                //             // Si une erreur serveur (500) est rencontrée
+                //             if (statusCode === 500) {
+                //                 Swal.fire({
+                //                     title: 'Erreur',
+                //                     text: xhr.responseJSON ? xhr.responseJSON.message :
+                //                         'Une erreur est survenue.',
+                //                     icon: 'error',
+                //                     confirmButtonText: 'OK',
+                //                 });
+                //             } else {
+                //                 Swal.fire({
+                //                     title: 'Erreur',
+                //                     text: xhr.responseJSON ? xhr.responseJSON.message :
+                //                         'Une erreur est survenue.',
+                //                     icon: 'error',
+                //                     confirmButtonText: 'OK',
+                //                 });
+                //             }
+                //         }
+                //     });
+                // });
 
                 $('#myForm').on('submit', function(event) {
                     event.preventDefault(); // Empêcher le rechargement de la page
 
                     let hasError = false;
+                    let submitButton = $(this).find('button[type="submit"]');
+
+                    // Ajouter le spinner et désactiver le bouton
+                    submitButton.prop('disabled', true).html(`
+                    <span class="d-flex align-items-center">
+                        <span class="spinner-border flex-shrink-0" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </span>
+                        <span class="flex-grow-1 ms-2">Envoi en cours...</span>
+                    </span>
+`);
+
 
                     // Parcourir tous les champs ayant l'attribut `required`
                     $(this).find('[required]').each(function() {
-                        // Vérifier si le champ est vide
                         if (!$(this).val()) {
                             hasError = true;
-                            let fieldName = $(this).attr('name'); // Récupérer le nom du champ
-                            let label = $(this).closest('div').find('label').text() ||
-                                fieldName; // Trouver le label ou utiliser le nom du champ
+                            let fieldName = $(this).attr('name');
+                            let label = $(this).closest('div').find('label').text() || fieldName;
 
-                            // Ajouter le texte d'erreur sous le champ
-                            // $(this).closest('div').find('.error-text').text(
-                            //     `Le champ ${label} est obligatoire.`).show();
                             $(this).closest('div').find('.error-text').text('Champs obligatoire')
                                 .show();
 
-
-                            // Afficher une alerte avec SweetAlert
                             Swal.fire({
                                 title: 'Erreur',
                                 text: `Le champ ${label} est obligatoire.`,
@@ -669,31 +766,28 @@
                                 confirmButtonText: 'OK',
                             });
 
-                            return false; // Stopper l'itération et éviter l'envoi
+                            return false; // Stopper l'itération
                         } else {
-                            // Cacher le message d'erreur si le champ est rempli
                             $(this).closest('div').find('.error-text').hide();
                         }
                     });
 
-
-                    // Si une erreur a été trouvée, arrêter l'envoi
                     if (hasError) {
+                        // Réactiver le bouton en cas d'erreur
+                        submitButton.prop('disabled', false).html('Enregistrer');
                         return false;
                     }
 
-                    // Si tout est correct, soumettre le formulaire avec Ajax
-                    let formData = $(this).serialize(); // Récupérer les données du formulaire
+                    // Envoyer le formulaire via Ajax
+                    let formData = $(this).serialize();
                     $.ajax({
-                        url: $(this).attr('action'), // URL de la soumission du formulaire
+                        url: $(this).attr('action'),
                         type: 'POST',
                         data: formData,
                         dataType: 'json',
                         success: function(response, textStatus, xhr) {
-
                             let statusCode = xhr.status;
 
-                            // Si la soumission est réussie
                             if (statusCode === 200) {
                                 Swal.fire({
                                     title: 'Succès',
@@ -701,33 +795,22 @@
                                     icon: 'success',
                                 });
 
-                                // Rediriger vers la liste des sortie
-                                var url =
-                                    "{{ route('inventaire.index') }}"; // Rediriger vers la route liste sortie
-                                window.location.replace(url);
+                                window.location.replace("{{ route('inventaire.index') }}");
                             }
                         },
                         error: function(xhr, textStatus, errorThrown) {
-                            let statusCode = xhr.status;
+                            let errorMessage = xhr.responseJSON ? xhr.responseJSON.message :
+                                'Une erreur est survenue.';
 
-                            // Si une erreur serveur (500) est rencontrée
-                            if (statusCode === 500) {
-                                Swal.fire({
-                                    title: 'Erreur',
-                                    text: xhr.responseJSON ? xhr.responseJSON.message :
-                                        'Une erreur est survenue.',
-                                    icon: 'error',
-                                    confirmButtonText: 'OK',
-                                });
-                            } else {
-                                Swal.fire({
-                                    title: 'Erreur',
-                                    text: xhr.responseJSON ? xhr.responseJSON.message :
-                                        'Une erreur est survenue.',
-                                    icon: 'error',
-                                    confirmButtonText: 'OK',
-                                });
-                            }
+                            Swal.fire({
+                                title: 'Erreur',
+                                text: errorMessage,
+                                icon: 'error',
+                                confirmButtonText: 'OK',
+                            });
+
+                            // Réactiver le bouton et remettre le texte initial
+                            submitButton.prop('disabled', false).html('Envoyer');
                         }
                     });
                 });
