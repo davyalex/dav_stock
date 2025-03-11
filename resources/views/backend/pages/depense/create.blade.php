@@ -117,8 +117,6 @@
 
                 @include('backend.pages.depense.partials.modalAddnewLibelleDepense')
 
-
-
             </div>
         </div><!-- end row -->
     </div><!-- end col -->
