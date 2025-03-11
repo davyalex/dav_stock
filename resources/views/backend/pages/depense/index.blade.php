@@ -128,7 +128,7 @@
                                     </td>
                                     <td>{{ number_format($item['montant'], 0, ',', ' ') }}</td>
                                     <td>{{ $item['user']['first_name'] }}</td>
-                                    <td>{{ \\Carbon\Carbon::parse($item['date_depense'])->format('d/m/Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item['date_depense'])->format('d/m/Y') }}</td>
                                     <td>
                                         <div class="dropdown d-inline-block">
                                             <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
