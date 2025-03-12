@@ -153,24 +153,39 @@ class DepenseController extends Controller
                 'description' => '',
                 'date_depense' => 'required',
 
-
             ]);
 
 
-            $data_libelle = LibelleDepense::whereId($request->libelle)->first();
-            $data_categorie = CategorieDepense::whereId($request->categorie_depense)->first();
+                  // verifier si c'est une categorie ou libelle on reçoit
+                  $data_libelle = LibelleDepense::whereId($request->categorie)->first();
+                  $data_categorie = CategorieDepense::whereId($request->categorie)->first();
+      
+                  $libelle = '';
+                  $categorie = '';
+      
+                  if ($data_libelle) {
+                      $libelle =  $data_libelle->id;
+                      $categorie =  $data_libelle->categorie_depense_id;
+                  } elseif ($data_categorie) {
+                      $categorie =  $data_categorie->id;
+                      $libelle = null;
+                  }
 
-            $libelle = '';
-            $categorie = '';
-            // dd($data_categorie->toArray());
 
-            if ($data_libelle) {
-                $libelle =  $data_libelle->id;
-                $categorie =  $data_libelle->categorie_depense_id;
-            } elseif ($data_categorie) {
-                $categorie =  $data_categorie->id;
-                $libelle = null;
-            }
+            // $data_libelle = LibelleDepense::whereId($request->libelle)->first();
+            // $data_categorie = CategorieDepense::whereId($request->categorie_depense)->first();
+
+            // $libelle = '';
+            // $categorie = '';
+            // // dd($data_categorie->toArray());
+
+            // if ($data_libelle) {
+            //     $libelle =  $data_libelle->id;
+            //     $categorie =  $data_libelle->categorie_depense_id;
+            // } elseif ($data_categorie) {
+            //     $categorie =  $data_categorie->id;
+            //     $libelle = null;
+            // }
 
 
             $data_depense = Depense::find($id)->update(
