@@ -404,7 +404,7 @@ class RapportController extends Controller
             // Résultat final
             // return $resultatFinal;
 
-
+dd($dataParFamille);
 
             return view('backend.pages.rapport.exploitation', compact('totalVentes', 'totalDepenses', 'benefice', 'ratio', 'categories_depense', 'depensesParCategorie', 'dataParFamille', 'categories',));
         } catch (\Exception $e) {
