@@ -70,10 +70,12 @@ class DashboardController extends Controller
         $nombreCommandes = Commande::count();
 
         // Montant total des ventes
-        $montantTotalVentes = Vente::sum('montant_total');
+        $montantTotalVentes = Vente::whereYear('created_at', Carbon::now()->year)
+        ->sum('montant_total');
 
         // Montant total des dépenses
-        $montantTotalDepenses = Depense::sum('montant');
+        $montantTotalDepenses = Depense::whereYear('created_at', Carbon::now()->year)
+        ->sum('montant');
 
         // Produits en alerte
         $produitsEnAlerte = Produit::where('stock', '=', 'stock_alerte')->get()->count();
@@ -93,7 +95,7 @@ class DashboardController extends Controller
         //     ->get();
 
         $revenus = DB::table('ventes')
-            ->selectRaw("MONTHNAME(created_at) as mois, MONTH(created_at) as mois_num, SUM(montant_total) as total_revenu")
+            ->selectRaw("MONTHNAME(date_vente) as mois, MONTH(date_vente) as mois_num, SUM(montant_total) as total_revenu")
             ->groupBy('mois', 'mois_num')
             ->orderBy('mois_num')
             ->get();
@@ -106,9 +108,6 @@ class DashboardController extends Controller
         $data = $revenus->pluck('total_revenu'); // Revenus correspondants
 
         // dd($labels, $data);
-
-
-
 
 
 

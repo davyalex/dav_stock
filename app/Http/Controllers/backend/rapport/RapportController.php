@@ -234,10 +234,21 @@ class RapportController extends Controller
             $categories_depense = CategorieDepense::with('libelleDepenses')->orderBy('libelle')->get(); //categorie pour recuperer les libelles de cat_depense selectionner
             $categories = CategorieDepense::with('libelleDepenses')->orderBy('libelle')->get(); // pour le filtre des cat_depense
 
-            // 2. Création des requêtes de base pour les ventes et les dépenses
-            $moisEnCours = date('m');
-            $venteQuery = Vente::query()->whereRaw("MONTH(ventes.date_vente) = $moisEnCours");
-            $depenseQuery = Depense::query()->whereRaw("MONTH(date_depense) = $moisEnCours");
+
+
+            $venteQuery = Vente::query(); // toutes les ventes
+            $depenseQuery = Depense::query(); // toutes les depenses
+
+
+
+            // Vérifier si aucune période ou date spécifique n'a été fournie
+            if (!$request->filled('periode') && !$request->filled('date_debut') && !$request->filled('date_fin')) {
+                $venteQuery->whereMonth('ventes.date_vente', Carbon::now()->month)
+                    ->whereYear('ventes.date_vente', Carbon::now()->year);
+                $depenseQuery->whereMonth('date_depense', Carbon::now()->month)
+                    ->whereYear('date_depense', Carbon::now()->year);
+            }
+
 
             // 3. Application des filtres de date
             // Formatage des dates
@@ -279,11 +290,6 @@ class RapportController extends Controller
                 }
             }
 
-            // else{
-            //     // recuperer pour le mois en cours
-            //     $venteQuery->whereRaw("MONTH(ventes.date_vente) = $moisEnCours");
-            //     $depenseQuery->whereRaw("MONTH(date_depense) = $moisEnCours");
-            // }
 
 
             // 4. Filtrage par catégorie de dépense
@@ -302,8 +308,9 @@ class RapportController extends Controller
             // 6. Groupement des dépenses par catégorie
             $depensesParCategorie = $depenses->groupBy('categorie_depense.libelle');
 
-            // 7. Total des ventes
-            // $totalVentes = $venteQuery->sum('montant_total');
+            // 7. Total des ventes globale apres remise
+            $venteGlobale = $venteQuery->sum('montant_total');
+
 
             // 8. Calcul des ventes par famille (bar et menu) avec la table pivot
             $ventesParFamille = $venteQuery->with('produits.categorie')
@@ -316,6 +323,12 @@ class RapportController extends Controller
                 ->get()
                 ->pluck('total_ventes', 'famille')
                 ->toArray();
+
+
+            // dd($ventesParFamille);
+
+
+
 
 
             // Calcul du montant total des plats vendus
@@ -334,12 +347,18 @@ class RapportController extends Controller
             $venteMenu = $ventesParFamille['menu'] ?? 0;
             $ventePlatMenu = $ventesMenu['vente_menu'] ?? 0;
 
-            // total vente
-            $totalVentes = $venteBar + $venteMenu + $ventePlatMenu;
+            // total vente des familles
+            // $totalVentes = $venteBar + $venteMenu + $ventePlatMenu;
+            $totalVentes = $venteGlobale;
+
+
+
+
 
             // 9. Calcul des totaux et ratios
             $totalDepenses = $depenses->sum('total_montant');
             $benefice = $totalVentes - $totalDepenses;
+
             $ratio = $totalVentes > 0 ? ($benefice / $totalVentes) * 100 : 0;
 
             // 10. Calcul benefice et du ratio pour chaque famille
@@ -373,11 +392,10 @@ class RapportController extends Controller
 
             // Résultat final
             // return $resultatFinal;
-            // dd($totalVentes);
 
 
 
-            return view('backend.pages.rapport.exploitation', compact('totalVentes', 'totalDepenses', 'benefice', 'ratio', 'categories_depense', 'depensesParCategorie', 'dataParFamille', 'categories'));
+            return view('backend.pages.rapport.exploitation', compact('totalVentes', 'totalDepenses', 'benefice', 'ratio', 'categories_depense', 'depensesParCategorie', 'dataParFamille', 'categories',));
         } catch (\Exception $e) {
             return $e->getMessage();
         }
