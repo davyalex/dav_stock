@@ -328,25 +328,36 @@ class RapportController extends Controller
             // dd($ventesParFamille);
 
 
-
-
-
             // Calcul du montant total des plats vendus
-            $ventesMenu = $venteQuery->with('plats.categorieMenu')
-                ->select(DB::raw('SUM(plat_vente.quantite * plat_vente.prix_unitaire) as total_ventes'))
+            // $ventesMenu = $venteQuery->with('plats.categorieMenu')
+            //     ->select(DB::raw('SUM(plat_vente.quantite * plat_vente.prix_unitaire) as total_ventes'))
+            //     ->join('plat_vente', 'ventes.id', '=', 'plat_vente.vente_id')
+            //     ->join('plats', 'plat_vente.plat_id', '=', 'plats.id')
+            //     ->get()
+            //     ->mapWithKeys(function ($item) {
+            //         return ['vente_menu' => $item->total_ventes]; // Remplacez 'alias_desire' par votre clé
+            //     })
+            //     ->toArray();
+
+            $ventesMenu = $venteQuery
                 ->join('plat_vente', 'ventes.id', '=', 'plat_vente.vente_id')
                 ->join('plats', 'plat_vente.plat_id', '=', 'plats.id')
-                ->get()
-                ->mapWithKeys(function ($item) {
-                    return ['vente_menu' => $item->total_ventes]; // Remplacez 'alias_desire' par votre clé
-                })
-                ->toArray();
+                ->selectRaw('SUM(plat_vente.quantite * plat_vente.prix_unitaire) as total_ventes')
+                ->first(); // Récupérer une seule ligne
+
+         
+
+            // dd($ventesMenu);
+
 
             // montant des ventes realisés
             $venteBar = $ventesParFamille['bar'] ?? 0;
             $venteMenu = $ventesParFamille['menu'] ?? 0;
-            $ventePlatMenu = $ventesMenu['vente_menu'] ?? 0;
+            $ventePlatMenu = $ventesMenu->total_ventes ?? 0; // Éviter les valeurs nulles
+            // $ventePlatMenu = $ventesMenu['vente_menu'] ?? 0;
 
+
+            ## modifié 13-03-2025 ##
             // total vente des familles
             // $totalVentes = $venteBar + $venteMenu + $ventePlatMenu;
             $totalVentes = $venteGlobale;
