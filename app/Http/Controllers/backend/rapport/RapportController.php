@@ -346,11 +346,10 @@ class RapportController extends Controller
                 ->first(); // Récupérer une seule ligne
 
          
-
             // dd($ventesMenu);
 
 
-            // montant des ventes realisés
+            // montant des ventes realisés par famille 
             $venteBar = $ventesParFamille['bar'] ?? 0;
             $venteMenu = $ventesParFamille['menu'] ?? 0;
             $ventePlatMenu = $ventesMenu->total_ventes ?? 0; // Éviter les valeurs nulles
@@ -404,7 +403,7 @@ class RapportController extends Controller
             // Résultat final
             // return $resultatFinal;
 
-dd($dataParFamille);
+// dd($dataParFamille);
 
             return view('backend.pages.rapport.exploitation', compact('totalVentes', 'totalDepenses', 'benefice', 'ratio', 'categories_depense', 'depensesParCategorie', 'dataParFamille', 'categories',));
         } catch (\Exception $e) {
