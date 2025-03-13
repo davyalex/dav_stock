@@ -45,11 +45,11 @@ class RapportController extends Controller
             }
 
             if ($request->filled('date_debut') && $request->filled('date_fin')) {
-                $chiffresAffaires->whereBetween('ventes.created_at', [$request->date_debut, $request->date_fin]);
+                $chiffresAffaires->whereBetween('ventes.date_vente', [$request->date_debut, $request->date_fin]);
             } elseif ($request->filled('date_debut')) {
-                $chiffresAffaires->where('ventes.created_at', '>=', $request->date_debut);
+                $chiffresAffaires->where('ventes.date_vente', '>=', $request->date_debut);
             } elseif ($request->filled('date_fin')) {
-                $chiffresAffaires->where('ventes.created_at', '<=', $request->date_fin);
+                $chiffresAffaires->where('ventes.date_vente', '<=', $request->date_fin);
             }
 
             // Exécuter la requête et obtenir les résultats
@@ -140,15 +140,15 @@ class RapportController extends Controller
 
             if ($request->filled(['date_debut', 'date_fin'])) {
                 $query->whereHas('ventes', function ($q) use ($request) {
-                    $q->whereBetween('ventes.created_at', [$request->date_debut, $request->date_fin]); // Préciser la table 'ventes'
+                    $q->whereBetween('ventes.date_vente', [$request->date_debut, $request->date_fin]); // Préciser la table 'ventes'
                 });
             } elseif ($request->filled('date_debut')) {
                 $query->whereHas('ventes', function ($q) use ($request) {
-                    $q->where('ventes.created_at', '>=', $request->date_debut); // Préciser la table 'ventes'
+                    $q->where('ventes.date_vente', '>=', $request->date_debut); // Préciser la table 'ventes'
                 });
             } elseif ($request->filled('date_fin')) {
                 $query->whereHas('ventes', function ($q) use ($request) {
-                    $q->where('ventes.created_at', '<=', $request->date_fin); // Préciser la table 'ventes'
+                    $q->where('ventes.date_vente', '<=', $request->date_fin); // Préciser la table 'ventes'
                 });
             } else {
                 $query->whereHas('categorie', function ($q) {
@@ -236,7 +236,7 @@ class RapportController extends Controller
 
             // 2. Création des requêtes de base pour les ventes et les dépenses
             $moisEnCours = date('m');
-            $venteQuery = Vente::query()->whereRaw("MONTH(ventes.created_at) = $moisEnCours");
+            $venteQuery = Vente::query()->whereRaw("MONTH(ventes.date_vente) = $moisEnCours");
             $depenseQuery = Depense::query()->whereRaw("MONTH(date_depense) = $moisEnCours");
 
             // 3. Application des filtres de date
@@ -246,18 +246,42 @@ class RapportController extends Controller
 
             // Application des filtres de date
             if ($dateDebut && $dateFin) {
-                $venteQuery->whereBetween('ventes.created_at', [$dateDebut, $dateFin]);
+                $venteQuery->whereBetween('ventes.date_vente', [$dateDebut, $dateFin]);
                 $depenseQuery->whereBetween('date_depense', [$dateDebut, $dateFin]);
             } elseif ($dateDebut) {
-                $venteQuery->where('ventes.created_at', '=', $dateDebut);
+                $venteQuery->where('ventes.date_vente', '=', $dateDebut);
                 $depenseQuery->where('date_depense', '=', $dateDebut);
             } elseif ($dateFin) {
-                $venteQuery->where('ventes.created_at', '=', $dateFin);
+                $venteQuery->where('ventes.date_vente', '=', $dateFin);
                 $depenseQuery->where('date_depense', '=', $dateFin);
             }
+
+            // Application du filtre de periode
+            // periode=> jour, semaine, mois, année
+
+            $periode = $request->input('periode'); // request periode
+
+            if ($request->filled('periode')) {
+                if ($periode == 'jour') {
+                    $venteQuery->whereDate('ventes.date_vente', Carbon::today());
+                    $depenseQuery->whereDate('date_depense', Carbon::today());
+                } elseif ($periode == 'semaine') {
+                    $venteQuery->whereBetween('ventes.date_vente', [Carbon::today()->startOfWeek(), Carbon::today()->endOfWeek()]);
+                    $depenseQuery->whereBetween('date_depense', [Carbon::today()->startOfWeek(), Carbon::today()->endOfWeek()]);
+                } elseif ($periode == 'mois') {
+                    $venteQuery->whereMonth('ventes.date_vente', Carbon::now()->month)
+                        ->whereYear('ventes.date_vente', Carbon::now()->year);
+                    $depenseQuery->whereMonth('date_depense', Carbon::now()->month)
+                        ->whereYear('date_depense', Carbon::now()->year);
+                } elseif ($periode == 'annee') {
+                    $venteQuery->whereYear('ventes.date_vente', Carbon::now()->year);
+                    $depenseQuery->whereYear('date_depense', Carbon::now()->year);
+                }
+            }
+
             // else{
             //     // recuperer pour le mois en cours
-            //     $venteQuery->whereRaw("MONTH(ventes.created_at) = $moisEnCours");
+            //     $venteQuery->whereRaw("MONTH(ventes.date_vente) = $moisEnCours");
             //     $depenseQuery->whereRaw("MONTH(date_depense) = $moisEnCours");
             // }
 
@@ -504,20 +528,31 @@ class RapportController extends Controller
             // Application du filtre de periode
             // periode=> jour, semaine, mois, année
             if ($request->filled('periode')) {
-                if ($periode == 'jour') {
-                    $query->whereDate('date_vente', Carbon::today());
-                    $queryMenu->whereDate('date_vente', Carbon::today());
-                } elseif ($periode == 'semaine') {
-                    $query->whereBetween('date_vente', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
-                    $queryMenu->whereBetween('date_vente', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
-                } elseif ($periode == 'mois') {
-                    $query->whereMonth('date_vente', Carbon::now()->month);
-                    $queryMenu->whereMonth('date_vente', Carbon::now()->month);
-                } elseif ($periode == 'annee') {
-                    $query->whereYear('date_vente', Carbon::now()->year);
-                    $queryMenu->whereYear('date_vente', Carbon::now()->year);
+                $dates = match ($periode) {
+                    'jour' => [Carbon::today(), Carbon::today()],
+                    'semaine' => [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()],
+                    'mois' => [Carbon::now()->month, Carbon::now()->year], // Stocke mois et année pour `whereMonth`
+                    'annee' => Carbon::now()->year, // Stocke année pour `whereYear`
+                    default => null,
+                };
+
+                if ($dates) {
+                    if ($periode == 'jour') {
+                        $query->whereDate('date_vente', $dates[0]);
+                        $queryMenu->whereDate('date_vente', $dates[1]);
+                    } elseif ($periode == 'semaine') {
+                        $query->whereBetween('date_vente', $dates);
+                        $queryMenu->whereBetween('date_vente', $dates);
+                    } elseif ($periode == 'mois') {
+                        $query->whereMonth('date_vente', $dates[0])->whereYear('date_vente', $dates[1]);
+                        $queryMenu->whereMonth('date_vente', $dates[0])->whereYear('date_vente', $dates[1]);
+                    } elseif ($periode == 'annee') {
+                        $query->whereYear('date_vente', $dates);
+                        $queryMenu->whereYear('date_vente', $dates);
+                    }
                 }
             }
+
 
             // pour les vente bar et restaurant
             $ventes = $query->get();
