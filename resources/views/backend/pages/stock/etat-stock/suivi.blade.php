@@ -13,10 +13,10 @@
 @section('content')
     @component('backend.components.breadcrumb')
         @slot('li_1')
-            Gestion de stock
+            Suivi de stock
         @endslot
         @slot('title')
-            État des stocks
+            Suivi des stocks
         @endslot
     @endcomponent
 
@@ -24,18 +24,16 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des produits en stock
-                        @if (request()->has('statut'))
+                    <h5 class="card-title mb-0">Suivi de stock depuis le dernier inventaire [{{\Carbon\Carbon::parse($date_dernier_inventaire)->format('d/m/Y')}} - {{$date_jour -> format('d/m/Y')}}]
+                        {{-- @if (request()->has('statut'))
                             - <b>{{ request('statut') }}</b>
                         @endif
                         @if (request()->has('filter'))
                             - <b>{{ request('filter') }}</b>
-                        @endif
+                        @endif --}}
                     </h5>
 
-                    <div class="dropdown">
-                        <button class="btn btn-primary">Suivi de stock</button>
-
+                    {{-- <div class="dropdown">
                         <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <i class=" ri ri-filter-2-fill"></i> Filtrer par categorie
@@ -45,7 +43,7 @@
                             <li><a class="dropdown-item" href="/admin/etat-stock?filter=Bar">Bar</a></li>
                             <li><a class="dropdown-item" href="/admin/etat-stock">Toutes les categories</a></li>
                         </ul>
-                    </div>
+                    </div> --}}
                 </div>
 
 
@@ -55,46 +53,40 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Image</th>
                                     <th>Nom</th>
                                     <th>Catégorie</th>
-                                    <th>Stock actuel</th>
-                                    <th>Stock alerte</th>
-                                    <th>État du stock</th>
+                                    <th>Stock existante</th>
+                                    <th>Stock ajouté</th>
+                                    <th>Stock total</th>
+                                    <th>Qté vendu ou utilisé</th>
+                                    <th>Qté restante</th>
+                                    <th>Statut</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($produits as $key => $produit)
+                                @foreach ($data_produit as $key => $produit)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>
 
-                                            <img class="rounded avatar-sm"
-                                                src="{{ $produit->hasMedia('ProduitImage') ? $produit->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
-                                                width="50px" alt="{{ $produit['nom'] }}">
-                                        </td>
                                         <td>{{ $produit->nom }}
                                             <p> {{ $produit['valeur_unite'] ?? '' }}
-                                                {{ $produit['unite']['libelle'] ?? '' }}
+
                                                 {{ $produit->unite ? '(' . $produit['unite']['abreviation'] . ')' : '' }}
                                             </p>
                                         </td>
                                         <td>{{ $produit->categorie->name }}</td>
-                                        <td>
-                                            {{ $produit->stock }} {{ $produit->uniteSortie?->libelle ?? '' }}
-                                            {{ $produit->uniteSortie?->abreviation ? '(' . $produit->uniteSortie?->abreviation . ')' : '' }}
-                                        </td>
+                                        <td>{{ $produit['inventaires']->first()->pivot->stock_physique ?? 0 }}</td>
 
-                                        <td>
-                                            {{ $produit->stock_alerte }} {{ $produit->uniteSortie?->libelle ?? '' }}
-                                            {{ $produit->uniteSortie?->abreviation ? '(' . $produit->uniteSortie?->abreviation . ')' : '' }}
+                                        <td>{{ $produit->stock_initial }}</td>
+                                        <td>{{ $produit->inventaires->first()->pivot->stock_physique ?? 0 + $produit->stock_initial }}
                                         </td>
-                                        
+                                        <td>{{ $produit->quantite_vendue ?? $produit->quantite_utilisee ?? 0 }}</td>
+                                        <td>{{ $produit->stock }}</td>
                                         <td>
-                                            @if ($produit->stock <= $produit->stock_alerte)
-                                                <span class="badge bg-danger">Alerte</span>
-                                            @else
+                                            @if ($produit->stock == ($produit->inventaires->first()->pivot->stock_physique ?? 0 + $produit->stock_initial) - $produit->quantite_vendue ?? $produit->quantite_utilisee ?? 0)
                                                 <span class="badge bg-success">Normal</span>
+                                            @else
+                                                <span class="badge bg-danger">Alerte</span>
                                             @endif
                                         </td>
                                     </tr>

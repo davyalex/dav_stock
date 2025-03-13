@@ -292,6 +292,8 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     //etat stock
     Route::prefix('etat-stock')->controller(EtatStockController::class)->group(function () {
         route::get('', 'index')->name('etat-stock.index');
+        route::get('suivi-stock', 'suiviStock')->name('etat-stock.suiviStock');
+
     });
 
     // stock -achat

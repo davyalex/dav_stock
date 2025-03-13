@@ -168,6 +168,11 @@
                                         class="nav-link <?php echo e(Route::is('etat-stock.*') ? 'active' : ''); ?>">Etat du stock</a>
                                 </li>
 
+                                <li class="nav-item active">
+                                    <a href="<?php echo e(route('etat-stock.suiviStock')); ?>"
+                                        class="nav-link <?php echo e(Route::is('suivi-stock.*') ? 'active' : ''); ?>">Suivi du stock</a>
+                                </li>
+
 
                             </ul>
                         </div>
