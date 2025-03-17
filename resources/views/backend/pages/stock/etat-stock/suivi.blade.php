@@ -85,7 +85,7 @@
                                         <td>{{ $produit->quantite_vendue ?? ($produit->quantite_utilisee ?? 0) }}</td>
                                         <td>{{ $produit->stock }}</td>
                                         <td>
-                                            @php
+                                            {{-- @php
                                                 $stock_physique =
                                                     $produit->inventaires->first()->pivot->stock_physique ?? 0;
                                                 $quantite_utilisee =
@@ -98,7 +98,24 @@
                                                 <span class="badge bg-success">Normal</span>
                                             @else
                                                 <span class="badge bg-danger">Alerte</span>
+                                            @endif --}}
+
+                                            @php
+                                                $stock_physique =
+                                                    $produit->inventaires->first()->pivot->stock_physique ?? 0;
+                                                $quantite_utilisee =
+                                                    $produit->quantite_vendue ?? ($produit->quantite_utilisee ?? 0);
+                                                $stock_calcule =
+                                                    $stock_physique + $produit->stock_initial - $quantite_utilisee;
+                                            @endphp
+
+                                            @if (abs($produit->stock - $stock_calcule) < 0.01)
+                                                {{-- Tolérance d'erreur de 0.01 --}}
+                                                <span class="badge bg-success">Normal</span>
+                                            @else
+                                                <span class="badge bg-danger">Alerte</span>
                                             @endif
+
                                         </td>
                                     </tr>
                                 @endforeach
