@@ -31,18 +31,16 @@ class SortieController extends Controller
     {
         try {
             $sortie = Sortie::with('produits')->find($id);
-        
+
             // Vérifier si la sortie existe
             if (!$sortie) {
                 return redirect()->route('sortie.index')->with('error', "La sortie demandée n'existe pas.");
             }
-        
+
             return view('backend.pages.stock.sortie.show', compact('sortie'));
-        
         } catch (\Exception $e) {
             return redirect()->route('sortie.index')->with('error', "Une erreur s'est produite. Veuillez réessayer.");
         }
-        
     }
 
 
@@ -83,7 +81,7 @@ class SortieController extends Controller
             // enregistrer la sortie
             $sortie = new Sortie();
             $sortie->code = 'SO-' . strtoupper(Str::random(8));
-            $sortie->date_sortie = Carbon::now();
+            $sortie->date_sortie = $request->date_sortie;
             $sortie->user_id = Auth::id();
             $sortie->save();
 

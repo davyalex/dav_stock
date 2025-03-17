@@ -345,7 +345,7 @@ class RapportController extends Controller
                 ->selectRaw('SUM(plat_vente.quantite * plat_vente.prix_unitaire) as total_ventes')
                 ->first(); // Récupérer une seule ligne
 
-         
+
             // dd($ventesMenu);
 
 
@@ -403,7 +403,7 @@ class RapportController extends Controller
             // Résultat final
             // return $resultatFinal;
 
-// dd($dataParFamille);
+            // dd($dataParFamille);
 
             return view('backend.pages.rapport.exploitation', compact('totalVentes', 'totalDepenses', 'benefice', 'ratio', 'categories_depense', 'depensesParCategorie', 'dataParFamille', 'categories',));
         } catch (\Exception $e) {

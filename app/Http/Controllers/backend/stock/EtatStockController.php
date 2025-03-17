@@ -79,7 +79,7 @@ class EtatStockController extends Controller
                 ->whereIn('type', ['bar', 'restaurant'])
                 ->OrderBy('position', 'ASC')->get();
 
-                
+                       
 
             // dd($data_produit->toArray());
             return view('backend.pages.stock.etat-stock.suivi', compact('data_produit', 'categorie_famille' , 'date_dernier_inventaire', 'date_jour'));

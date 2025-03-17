@@ -15,16 +15,32 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-4">Sélectionner des produits</h4>
-                    <select id="product-select" name="produit_id" class="form-select js-example-basic-single">
-                        <option value="">Sélectionnez un produit</option>
-                        @foreach ($data_produit as $produit)
-                            <option value="{{ $produit->id }}" data-stock="{{ $produit->stock }}">
-                                {{ $produit->nom }} {{ $produit->valeur_unite ?? '' }} {{ $produit->unite->libelle ?? '' }}
-                                {{ $produit->unite->abreviation ?? '' }}
-                            </option>
-                        @endforeach
-                    </select>
+                    {{-- <h4 class="card-title mb-4">Sélectionner des produits</h4> --}}
+                    <div class="row">
+                        <div class="col-md-10">
+                            <label for="date_debut" class="form-label">Produit</label>
+                            <select id="product-select" name="produit_id" class="form-select js-example-basic-single">
+                                <option value="">Sélectionnez un produit</option>
+                                @foreach ($data_produit as $produit)
+                                    <option value="{{ $produit->id }}" data-stock="{{ $produit->stock }}">
+                                        {{ $produit->nom }} {{ $produit->valeur_unite ?? '' }}
+                                        {{ $produit->unite->libelle ?? '' }}
+                                        {{ $produit->unite->abreviation ?? '' }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+
+                        <div class="col-md-2 mb-3">
+                            <label class="form-label" for="meta-title-input">Date de sortie <span
+                                    class="text-danger">*</span>
+                            </label>
+                            <input type="datetime-local" id="currentDate" value="<?php echo date('Y-m-d H:i:s'); ?>" name="date_sortie"
+                                class="form-control" required>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -245,8 +261,10 @@
                     });
 
                 } else {
+                    let currentDate = $('#currentDate').val();
 
                     let data = {
+                        date_sortie: currentDate,
                         cart: cart,
                         _token: '{{ csrf_token() }}' // N'oubliez pas d'ajouter le token CSRF
 
