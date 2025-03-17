@@ -24,7 +24,9 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Suivi de stock depuis le dernier inventaire [{{\Carbon\Carbon::parse($date_dernier_inventaire)->format('d/m/Y')}} - {{$date_jour -> format('d/m/Y')}}]
+                    <h5 class="card-title mb-0">Suivi de stock depuis le dernier inventaire
+                        [{{ \Carbon\Carbon::parse($date_dernier_inventaire)->format('d/m/Y') }} -
+                        {{ $date_jour->format('d/m/Y') }}]
                         {{-- @if (request()->has('statut'))
                             - <b>{{ request('statut') }}</b>
                         @endif
@@ -58,8 +60,8 @@
                                     <th>Stock existante</th>
                                     <th>Stock ajouté</th>
                                     <th>Stock total</th>
-                                    <th>Qté vendu ou utilisé</th>
-                                    <th>Qté restante</th>
+                                    <th>Qté vendu ou utilisée</th>
+                                    <th>Stock restant</th>
                                     <th>Statut</th>
                                 </tr>
                             </thead>
@@ -69,21 +71,30 @@
                                         <td>{{ $key + 1 }}</td>
 
                                         <td>{{ $produit->nom }}
-                                            <p> {{ $produit['valeur_unite'] ?? '' }}
-
-                                                {{ $produit->unite ? '(' . $produit['unite']['abreviation'] . ')' : '' }}
+                                            <p>
+                                                {{ $produit['valeur_unite'] ?? '' }}
+                                                {{ $produit->unite ? '(' . $produit->unite->abreviation . ')' : '' }}
                                             </p>
                                         </td>
                                         <td>{{ $produit->categorie->name }}</td>
-                                        <td>{{ $produit['inventaires']->first()->pivot->stock_physique ?? 0 }}</td>
-
+                                        <td>{{ $produit->inventaires->first()->pivot->stock_physique ?? 0 }}</td>
                                         <td>{{ $produit->stock_initial }}</td>
-                                        <td>{{ $produit->inventaires->first()->pivot->stock_physique ?? 0 + $produit->stock_initial }}
+                                        <td>
+                                            {{ ($produit->inventaires->first()->pivot->stock_physique ?? 0) + $produit->stock_initial }}
                                         </td>
-                                        <td>{{ $produit->quantite_vendue ?? $produit->quantite_utilisee ?? 0 }}</td>
+                                        <td>{{ $produit->quantite_vendue ?? ($produit->quantite_utilisee ?? 0) }}</td>
                                         <td>{{ $produit->stock }}</td>
                                         <td>
-                                            @if ($produit->stock == ($produit->inventaires->first()->pivot->stock_physique ?? 0 + $produit->stock_initial) - $produit->quantite_vendue ?? $produit->quantite_utilisee ?? 0)
+                                            @php
+                                                $stock_physique =
+                                                    $produit->inventaires->first()->pivot->stock_physique ?? 0;
+                                                $quantite_utilisee =
+                                                    $produit->quantite_vendue ?? ($produit->quantite_utilisee ?? 0);
+                                                $stock_calcule =
+                                                    $stock_physique + $produit->stock_initial - $quantite_utilisee;
+                                            @endphp
+
+                                            @if ($produit->stock == $stock_calcule)
                                                 <span class="badge bg-success">Normal</span>
                                             @else
                                                 <span class="badge bg-danger">Alerte</span>
@@ -91,6 +102,7 @@
                                         </td>
                                     </tr>
                                 @endforeach
+
                             </tbody>
                         </table>
                     </div>
