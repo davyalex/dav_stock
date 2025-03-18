@@ -308,8 +308,13 @@ class RapportController extends Controller
             // 6. Groupement des dépenses par catégorie
             $depensesParCategorie = $depenses->groupBy('categorie_depense.libelle');
 
-            // 7. Total des ventes globale apres remise
-            $venteGlobale = $venteQuery->sum('montant_total');
+            // 7. Total des ventes globale 
+            ##Total des montants avant remise
+            $totalVenteBrut = $venteQuery->sum('montant_avant_remise');
+            ##Total des montants remise
+            $totalRemise = $venteQuery->sum('montant_remise');
+            ##Total des montants apres remise
+            $TotalVenteNet = $venteQuery->sum('montant_total');
 
 
             // 8. Calcul des ventes par famille (bar et menu) avec la table pivot
@@ -359,10 +364,7 @@ class RapportController extends Controller
             ## modifié 13-03-2025 ##
             // total vente des familles
             // $totalVentes = $venteBar + $venteMenu + $ventePlatMenu;
-            $totalVentes = $venteGlobale;
-
-
-
+            $totalVentes = $TotalVenteNet;
 
 
             // 9. Calcul des totaux et ratios
@@ -405,7 +407,7 @@ class RapportController extends Controller
 
             // dd($dataParFamille);
 
-            return view('backend.pages.rapport.exploitation', compact('totalVentes', 'totalDepenses', 'benefice', 'ratio', 'categories_depense', 'depensesParCategorie', 'dataParFamille', 'categories',));
+            return view('backend.pages.rapport.exploitation', compact('totalVentes', 'totalDepenses', 'benefice', 'ratio', 'categories_depense', 'depensesParCategorie', 'dataParFamille', 'categories', 'totalVenteBrut', 'totalRemise'));
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -778,10 +780,6 @@ class RapportController extends Controller
             }
         }
     }
-
-
-
-
 
     public function historique(Request $request)
     {

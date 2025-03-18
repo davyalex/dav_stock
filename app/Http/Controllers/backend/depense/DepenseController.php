@@ -53,12 +53,15 @@ class DepenseController extends Controller
              // Application du filtre de periode
             // periode=> jour, semaine, mois, année
             if ($request->filled('periode')) {
+                $periode = $request->periode; // Ajout de cette ligne pour récupérer la période
+            
                 if ($periode == 'jour') {
                     $query->whereDate('created_at', Carbon::today());
                 } elseif ($periode == 'semaine') {
                     $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
                 } elseif ($periode == 'mois') {
-                    $query->whereMonth('created_at', Carbon::now()->month);
+                    $query->whereMonth('created_at', Carbon::now()->month)
+                          ->whereYear('created_at', Carbon::now()->year); // Ajout pour éviter d'avoir des résultats de plusieurs années
                 } elseif ($periode == 'annee') {
                     $query->whereYear('created_at', Carbon::now()->year);
                 }
