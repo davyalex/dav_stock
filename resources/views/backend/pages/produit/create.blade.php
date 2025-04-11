@@ -564,7 +564,7 @@
                         </span>
                         <span class="flex-grow-1 ms-2">Envoi en cours...</span>
                     </span>
-`);
+                `);
 
 
                 // si la famille est bar  on recupere le prix de la premiere variante
@@ -642,7 +642,7 @@
                                 });
 
                                 submitButton.prop('disabled', false).html(
-                                'Enregistrer'); // arreter le spinner
+                                    'Enregistrer'); // arreter le spinner
 
                             } else {
                                 // Autres types d'erreurs
@@ -658,7 +658,7 @@
                                     showCloseButton: true
                                 });
                                 submitButton.prop('disabled', false).html(
-                                'Enregistrer'); // arreter le spinner
+                                    'Enregistrer'); // arreter le spinner
                             }
                         }
                     });

@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
+Carbon::setLocale('fr'); // mettre en francais la date
+
 class InventaireController extends Controller
 {
     /**
@@ -37,32 +39,85 @@ class InventaireController extends Controller
     {
 
         try {
+
+            // verifier si un inventaire du mois precedent existe
+            $inventaire_existe = Inventaire::whereYear('date_inventaire', Carbon::now()->year)
+                ->whereMonth('date_inventaire', Carbon::now()->month - 1)
+                ->exists();
+            if ($inventaire_existe == true) {
+                echo "un inventaire du mois precedent existe deja.";
+            } else {
+                // si pas d'inventaire du mois precedent
+                echo "pas d'inventaire du mois precedent";
+            }
+
             // Récupérer la date du dernier inventaire
             $date_dernier_inventaire = Inventaire::select('date_inventaire')
                 ->orderBy('date_inventaire', 'desc')
                 ->first();
-            $date_dernier_inventaire = $date_dernier_inventaire ? $date_dernier_inventaire->date_inventaire : Carbon::now()->startOfDay();
 
-            // Date du jour
-            $date_jour = Carbon::now();
+            // recuperer le mois passé en fonction de du mois actuel
+            $mois = Carbon::now()->month - 1;
+            $annee = Carbon::now()->year;
 
-            // Récupérer les produits avec le nombre de ventes entre la date du dernier inventaire et la date du jour
+            // recuperer le jour 1er et le dernier jour du mois
+            $debut_jour = Carbon::create($annee, $mois, 1); // 1er jour du mois
+            $dernier_jour = Carbon::create($annee, $mois + 1, 1)->subDay(); //dernier jour du mois
+
+
+            //## on va recuperer les données en foction du mois passé de l'année actuelle
+
+            // Récupérer les produits avec le nombre de ventes entre la date du permier jour du mois et la date du dernier jour du mois passé en fonction du mois actuel
             $data_produit = Produit::whereHas('categorie', function ($q) {
                 $q->whereIn('famille', ['restaurant', 'bar']);
             })
-                ->withSum(['ventes as quantite_vendue' => function ($query) use ($date_dernier_inventaire, $date_jour) {
+                ->withSum(['ventes as quantite_vendue' => function ($query) use ($debut_jour, $dernier_jour) {
                     // Filtrer les ventes entre la date du dernier inventaire et la date du jour
-                    $query->whereBetween('ventes.date_vente', [$date_dernier_inventaire, $date_jour]);
+                    $query->whereBetween('ventes.date_vente', [$debut_jour, $dernier_jour]);
                 }], 'produit_vente.quantite_bouteille') // Somme de la quantité vendue dans le pivot produit_vente
 
 
-                ->withSum(['sorties as quantite_utilisee' => function ($query) use ($date_dernier_inventaire, $date_jour) {
+                ->withSum(['sorties as quantite_utilisee' => function ($query) use ($debut_jour, $dernier_jour) {
                     // Filtrer les sorties entre la date du dernier inventaire et la date du jour
-                    $query->whereBetween('sorties.date_sortie', [$date_dernier_inventaire, $date_jour]);
+                    $query->whereBetween('sorties.date_sortie', [$debut_jour, $dernier_jour]);
                 }], 'produit_sortie.quantite_utilise') // Somme de la quantité utilisée dans le pivot produit_sortie
 
                 ->with('categorie')
                 ->get();
+
+
+            // dd($data_produit->toArray());
+
+
+            #####################################################################################################################################
+            // Récupérer la date du dernier inventaire
+            // $date_dernier_inventaire = Inventaire::select('date_inventaire')
+            //     ->orderBy('date_inventaire', 'desc')
+            //     ->first();
+            // $date_dernier_inventaire = $date_dernier_inventaire ? $date_dernier_inventaire->date_inventaire : Carbon::now()->startOfDay();
+
+            // // Date du jour
+            // $date_jour = Carbon::now();
+
+
+
+            // // Récupérer les produits avec le nombre de ventes entre la date du dernier inventaire et la date du jour
+            // $data_produit = Produit::whereHas('categorie', function ($q) {
+            //     $q->whereIn('famille', ['restaurant', 'bar']);
+            // })
+            //     ->withSum(['ventes as quantite_vendue' => function ($query) use ($date_dernier_inventaire, $date_jour) {
+            //         // Filtrer les ventes entre la date du dernier inventaire et la date du jour
+            //         $query->whereBetween('ventes.date_vente', [$date_dernier_inventaire, $date_jour]);
+            //     }], 'produit_vente.quantite_bouteille') // Somme de la quantité vendue dans le pivot produit_vente
+
+
+            //     ->withSum(['sorties as quantite_utilisee' => function ($query) use ($date_dernier_inventaire, $date_jour) {
+            //         // Filtrer les sorties entre la date du dernier inventaire et la date du jour
+            //         $query->whereBetween('sorties.date_sortie', [$date_dernier_inventaire, $date_jour]);
+            //     }], 'produit_sortie.quantite_utilise') // Somme de la quantité utilisée dans le pivot produit_sortie
+
+            //     ->with('categorie')
+            //     ->get();
 
 
             // recuperer les familles de categories bar et restaurant
@@ -321,6 +376,19 @@ class InventaireController extends Controller
                 ->orderBy('id', 'desc')
                 ->first();
 
+            // recuperer la date de l'inventaire 
+            $dateInventaire = Inventaire::where('id', $id)->first()->date_inventaire;
+            // convertir la date en format francais
+            $date = Carbon::parse($dateInventaire)->isoFormat('D MMMM YYYY');
+
+            // recuperer le mois seulement
+            $mois = Carbon::parse($dateInventaire)->isoFormat('MMMM');
+
+
+            // recuperer le mois  -1 qui represente le mois de l'inventaire
+            $moisInventaire = Carbon::parse($dateInventaire)->subMonth()->isoFormat('MMMM');
+
+
             // Récupérer l'inventaire actuel avec les produits
             $query = Inventaire::with('produits')->where('id', $id);
 
@@ -338,7 +406,7 @@ class InventaireController extends Controller
                 return redirect()->route('inventaire.index')->with('error', "L'inventaire demandé n'existe pas.");
             }
 
-            return view('backend.pages.stock.inventaire.show', compact('inventaire', 'inventairePrecedent'));
+            return view('backend.pages.stock.inventaire.show', compact('inventaire', 'inventairePrecedent', 'moisInventaire'));
         } catch (\Exception $e) {
             return redirect()->route('inventaire.index')->with('error', "Une erreur s'est produite. Veuillez réessayer.");
         }

@@ -50,7 +50,7 @@ class AppServiceProvider extends ServiceProvider
             });
         });
 
-        
+
         // function miseAJourStockVente()
         // {
 
@@ -68,7 +68,7 @@ class AppServiceProvider extends ServiceProvider
         // }
 
 
-   
+
 
         // Mise a jour dans produit inventaire 
 
@@ -106,7 +106,7 @@ class AppServiceProvider extends ServiceProvider
         ######################################################## 
 
         // ##Mise à jour de la quantite vendu dans la table inventaire_produit
- 
+
 
         // $data = DB::table('inventaire_produit')->get(); // Récupérer les données
 
@@ -161,7 +161,7 @@ class AppServiceProvider extends ServiceProvider
         //                     'stock_vendu' => ($produit->quantite_vendue ?? 0) + ($produit->quantite_utilisee ?? 0), // Assure que les valeurs null sont remplacées par 0
         //                 ]);
         //         }
-                
+
         //     }
         // }
 
@@ -201,10 +201,18 @@ class AppServiceProvider extends ServiceProvider
             ->whereIn('type', ['menu', 'bar'])
             ->orderBy('position', 'DESC')
             ->get();
+
+        // verifier si un inventaire du mois precedent existe
+        $inventaire_existe = Inventaire::whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->month - 1)
+            ->exists();
+
         view()->share([
             'setting' => $data_setting,
             'menu_link' => $menu_link,
-            'categories' => $categories
+            'categories' => $categories,
+            'inventaire_existe' => $inventaire_existe
+
         ]);
     }
 }

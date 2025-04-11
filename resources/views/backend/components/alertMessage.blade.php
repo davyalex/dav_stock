@@ -7,6 +7,15 @@
 @endif
 
 
+@if ($Msg = Session::get('success'))
+    <div class="alert alert-success alert-top-border alert-dismissible fade show" role="alert">
+    <i class="ri-error-warning-line me-3 align-middle fs-16 text-danger"></i><strong> {{$Msg}} </strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+@endif
+
+
+
 
 
 

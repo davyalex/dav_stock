@@ -25,11 +25,12 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">
-                        Detail Inventaire {{ $inventaire->code }} du
-                        <strong>
-                            {{ ($inventairePrecedent?->created_at ?? $inventaire->created_at)->format('d-m-Y') }}
+                        Detail Inventaire {{ $inventaire->code }} du mois 
+                        <strong class="text-uppercase">
+                            {{-- {{ ($inventairePrecedent?->created_at ?? $inventaire->created_at)->format('d-m-Y') }} --}}
+                            {{$moisInventaire}}
                         </strong>
-                        au <strong>{{ $inventaire->created_at->format('d-m-Y') }}</strong>
+                        {{-- au <strong>{{ $inventaire->created_at->format('d-m-Y') }}</strong> --}}
                     </h5>
 
                     <div class="d-flex align-items-center gap-2">
