@@ -60,17 +60,24 @@
                                 <tr>
                                     <th>#</th>
                                     <th>N° d'inventaire</th>
-                                    <th>Date</th>
+                                    <th>Mois d'inventaire</th>
+                                    <th>Date de création </th>
                                     <th>Crée par</th>
                                     <th class="d-none">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($data_inventaire as $key => $item)
+                                    @php
+                                        \Carbon\Carbon::setLocale('fr');
+                                    @endphp
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
                                         <td> <a class="fw-bold"
                                                 href="{{ route('inventaire.show', $item->id) }}">#{{ $item['code'] }}</a>
+                                        </td>
+                                        <td>
+                                            {{ \Carbon\Carbon::parse($item['date_inventaire'])->subMonth()->isoFormat('MMMM YYYY') }}
                                         </td>
                                         <td> {{ \Carbon\Carbon::parse($item['created_at'])->format('d-m-Y à H:i') }} </td>
                                         <td> {{ $item['user']['first_name'] }} </td>
