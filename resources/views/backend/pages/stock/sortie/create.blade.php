@@ -249,6 +249,39 @@
                 verifyQty()
             });
 
+            // verification de la date (la date doit etre inferieur a la date actuelle)
+            let dateValue = $('#currentDate').val();
+
+
+        $(document).on('change', '#currentDate', function() {
+    var inventaireValue = @json($inventaire_existe);
+    var dateInsert = $(this).val();
+
+    if (inventaireValue == true) {
+        var currentDate = new Date();
+        var currentMonth = currentDate.getMonth() + 1;
+        var currentYear = currentDate.getFullYear();
+
+        var dateInsertMonth = new Date(dateInsert).getMonth() + 1;
+        var dateInsertYear = new Date(dateInsert).getFullYear();
+
+        if (dateInsertMonth > currentMonth && dateInsertYear == currentYear) {
+            Swal.fire({
+                title: 'Erreur',
+                text: 'La date doit être inférieure au mois en cours',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+
+            $('#validate').prop('disabled', true);
+        } else {
+            $('#validate').prop('disabled', false);
+        }
+    }
+})
+
+
+
 
             $('#validate').click(function(e) {
 

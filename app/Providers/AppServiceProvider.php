@@ -204,7 +204,7 @@ class AppServiceProvider extends ServiceProvider
 
         // verifier si un inventaire du mois precedent existe
         $inventaire_existe = Inventaire::whereYear('created_at', Carbon::now()->year)
-            ->whereMonth('created_at', Carbon::now()->month - 1)
+            ->whereMonth('created_at', Carbon::now()->month)
             ->exists();
 
         view()->share([
