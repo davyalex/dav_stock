@@ -72,7 +72,7 @@
                                         <td> <a class="fw-bold"
                                                 href="{{ route('inventaire.show', $item->id) }}">#{{ $item['code'] }}</a>
                                         </td>
-                                        <td> {{ \Carbon\Carbon::parse($item['date_inventaire'])->format('d-m-Y à H:i') }} </td>
+                                        <td> {{ \Carbon\Carbon::parse($item['created_at'])->format('d-m-Y à H:i') }} </td>
                                         <td> {{ $item['user']['first_name'] }} </td>
                                         <td class="d-none">
                                             <!-- Actions si nécessaire -->
