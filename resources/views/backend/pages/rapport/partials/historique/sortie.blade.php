@@ -6,7 +6,7 @@
                     <th>#</th>
                     <th>Date de sortie</th>
                     <th>Nom</th>
-                    <th>Stock existant</th>
+                    {{-- <th>Stock existant</th> --}}
                     <th>Quantité utilisé</th>
                     <th class="d-none">Actions</th>
                 </tr>
