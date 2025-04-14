@@ -92,7 +92,7 @@
                 <div class="card-body"> --}}
 
 
-            @if ($inventaire_existe == false)
+            @if ($inventaire_existe == true)
                 <!-- Danger Alert -->
                 <div class="alert alert-danger alert-dismissible bg-danger text-white alert-label-icon fade show material-shadow"
                     role="alert">
