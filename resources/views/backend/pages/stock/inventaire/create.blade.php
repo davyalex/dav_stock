@@ -577,8 +577,7 @@
 
 
                 form.find('.stockTheorique').val(stockTheorique) || 0; // stock restante
-                form.find('.stockRecent').val(product.stock_initial) ||
-                    0; // stock nouveau ajouté apres last inventaire
+               
                 form.find('.stockLastInventaire').val(product.stock_dernier_inventaire) ||
                     0; // stock disponible pendant le dernier inventaire
 
@@ -608,9 +607,12 @@
                 form.find('.stockVendu').val(stockVendu ?? 0); // stock vendu
 
 
-                    // recuperer le stock de la periode
+                // recuperer le stock de la periode
                 let stockActuel = (product.stock || 0) + (stockVendu || 0);
                 form.find('.stockActuel').val(stockActuel % 1 === 0 ? stockActuel : stockActuel.toFixed(2));
+
+                form.find('.stockRecent').val(stockActuel) ||
+                0; // stock nouveau ajouté apres last inventaire
 
 
             }
