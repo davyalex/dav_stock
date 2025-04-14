@@ -15,11 +15,11 @@
                 @foreach ($sortie as $key => $item)
                     <tr>
                         <td> {{ ++$key }} </td>
-                        <td>{{ \Carbon\Carbon::parse($item['date_sortie'])->format('d-m-Y à H:i') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($item ['sortie']['date_sortie'])->format('d-m-Y à H:i') }}</td>
                         <td>{{ $item['produit']['nom'] }} {{ $item['valeur_unite'] ?? '' }}
                             {{ $item['produit']['unite']['abreviation'] ?? '' }}
                         </td>
-                        <td>{{ $item['quantite_existant'] }} {{ $item['produit']['uniteSortie']['abreviation'] ?? '' }}</td>
+                        {{-- <td>{{ $item['quantite_existant'] }} {{ $item['produit']['uniteSortie']['abreviation'] ?? '' }}</td> --}}
                         <td>{{ $item['quantite_utilise'] }} {{ $item['produit']['uniteSortie']['abreviation'] ?? '' }}</td>
                     </tr>
                 @endforeach
