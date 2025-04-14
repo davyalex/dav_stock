@@ -588,8 +588,13 @@
                 //     ((product.stock_dernier_inventaire || 0) + (product.stock_initial || 0)).toFixed(2)
                 // );
 
-                let stockActuel = (product.stock_dernier_inventaire || 0) + (product.stock_initial || 0);
-                form.find('.stockActuel').val(stockActuel % 1 === 0 ? stockActuel : stockActuel.toFixed(2));
+
+                // #########version backup inventaire
+
+                // let stockActuel = (product.stock_dernier_inventaire || 0) + (product.stock_initial || 0);
+                // form.find('.stockActuel').val(stockActuel % 1 === 0 ? stockActuel : stockActuel.toFixed(2));
+
+
 
 
 
@@ -601,6 +606,12 @@
                     var stockVendu = product.quantite_utilisee;
                 }
                 form.find('.stockVendu').val(stockVendu ?? 0); // stock vendu
+
+
+                    // recuperer le stock de la periode
+                let stockActuel = (product.stock || 0) + (product.stockVendu || 0);
+                form.find('.stockActuel').val(stockActuel % 1 === 0 ? stockActuel : stockActuel.toFixed(2));
+
 
             }
 
