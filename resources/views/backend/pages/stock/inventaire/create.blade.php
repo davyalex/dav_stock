@@ -609,7 +609,7 @@
 
 
                     // recuperer le stock de la periode
-                let stockActuel = (product.stock || 0) + (product.stockVendu || 0);
+                let stockActuel = (product.stock || 0) + (stockVendu || 0);
                 form.find('.stockActuel').val(stockActuel % 1 === 0 ? stockActuel : stockActuel.toFixed(2));
 
 
