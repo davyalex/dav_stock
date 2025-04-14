@@ -82,22 +82,42 @@ class InventaireController extends Controller
             //## on va recuperer les données en foction du mois passé de l'année actuelle
 
             // Récupérer les produits avec le nombre de ventes entre la date du permier jour du mois et la date du dernier jour du mois passé en fonction du mois actuel
+            // $data_produit = Produit::whereHas('categorie', function ($q) {
+            //     $q->whereIn('famille', ['restaurant', 'bar']);
+            // })
+            //     ->withSum(['ventes as quantite_vendue' => function ($query) use ($debut_jour, $dernier_jour) {
+            //         // Filtrer les ventes entre la date du dernier inventaire et la date du jour
+            //         $query->whereBetween('ventes.date_vente', [$debut_jour, $dernier_jour]);
+            //     }], 'produit_vente.quantite_bouteille') // Somme de la quantité vendue dans le pivot produit_vente
+
+
+            //     ->withSum(['sorties as quantite_utilisee' => function ($query) use ($debut_jour, $dernier_jour) {
+            //         // Filtrer les sorties entre la date du dernier inventaire et la date du jour
+            //         $query->whereBetween('sorties.date_sortie', [$debut_jour, $dernier_jour]);
+            //     }], 'produit_sortie.quantite_utilise') // Somme de la quantité utilisée dans le pivot produit_sortie
+
+            //     ->with('categorie')
+            //     ->get();
+
+
+
             $data_produit = Produit::whereHas('categorie', function ($q) {
                 $q->whereIn('famille', ['restaurant', 'bar']);
             })
-                ->withSum(['ventes as quantite_vendue' => function ($query) use ($debut_jour, $dernier_jour) {
+                ->withSum(['ventes as quantite_vendue' => function ($query) {
                     // Filtrer les ventes entre la date du dernier inventaire et la date du jour
-                    $query->whereBetween('ventes.date_vente', [$debut_jour, $dernier_jour]);
+                    $query->whereMonth('ventes.date_vente', Carbon::now()->month - 1);
                 }], 'produit_vente.quantite_bouteille') // Somme de la quantité vendue dans le pivot produit_vente
 
 
-                ->withSum(['sorties as quantite_utilisee' => function ($query) use ($debut_jour, $dernier_jour) {
+                ->withSum(['sorties as quantite_utilisee' => function ($query) {
                     // Filtrer les sorties entre la date du dernier inventaire et la date du jour
-                    $query->whereBetween('sorties.date_sortie', [$debut_jour, $dernier_jour]);
+                    $query->whereMonth('sorties.date_sortie', Carbon::now()->month - 1);
                 }], 'produit_sortie.quantite_utilise') // Somme de la quantité utilisée dans le pivot produit_sortie
 
                 ->with('categorie')
                 ->get();
+
 
 
 
