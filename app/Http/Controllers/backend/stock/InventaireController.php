@@ -56,13 +56,27 @@ class InventaireController extends Controller
                 ->orderBy('date_inventaire', 'desc')
                 ->first();
 
-            // recuperer le mois passé en fonction de du mois actuel
-            $mois = Carbon::now()->month - 1;
-            $annee = Carbon::now()->year;
+            // // recuperer le mois passé en fonction de du mois actuel
+            // $mois = Carbon::now()->month - 1;
+            // $annee = Carbon::now()->year;
 
-            // recuperer le jour 1er et le dernier jour du mois
-            $debut_jour = Carbon::create($annee, $mois, 1); // 1er jour du mois
-            $dernier_jour = Carbon::create($annee, $mois + 1, 1)->subDay(); //dernier jour du mois
+            // // recuperer le jour 1er et le dernier jour du mois
+            // $debut_jour = Carbon::create($annee, $mois, 1); // 1er jour du mois
+            // $dernier_jour = Carbon::create($annee, $mois + 1, 1)->subDay(); //dernier jour du mois
+
+
+            $jour_mois_actuel = Carbon::now()->startOfMonth(); // 1er jour du mois actuel (1er avril)
+            $jour_mois_precedent = $jour_mois_actuel->copy()->subMonth();    // 1er jour du mois précédent (1er mars)
+
+            $debut_jour = $jour_mois_precedent;
+            $dernier_jour = $jour_mois_actuel;
+
+            // dd(
+            //     $jour_mois_actuel,
+            //     $jour_mois_precedent
+            // );
+
+
 
 
             //## on va recuperer les données en foction du mois passé de l'année actuelle
@@ -84,6 +98,10 @@ class InventaireController extends Controller
 
                 ->with('categorie')
                 ->get();
+
+
+
+
 
 
             // dd($data_produit->toArray());
