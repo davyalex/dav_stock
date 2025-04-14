@@ -18,6 +18,8 @@
                 </td>
                 <td>{{ \Carbon\Carbon::parse($item['vente']['date_vente'])->format('d-m-Y à H:i') }}</td>
                 <td><b> {{ $item['quantite_bouteille'] ?? 0 }} {{ $item['variante']['libelle'] ?? 'bouteille' }} </b> </td>
+                <td><b> {{ $item['quantite_bouteille'] ?? 0 }} bouteille</b> </td>
+
                 <td>{{ number_format($item['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
                 <td>{{ number_format($item['total'], 0, ',', ' ') }}
                     FCFA</td>

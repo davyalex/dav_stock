@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-    Chiffre d'affaires par catégorie
+   Historiques
 @endsection
 @section('css')
     <!--datatable css-->
@@ -17,7 +17,7 @@
             Rapports
         @endslot
         @slot('title')
-            Chiffre d'affaires par catégorie
+           Historiques
         @endslot
     @endcomponent
 
