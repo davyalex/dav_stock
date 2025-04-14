@@ -78,7 +78,7 @@
 
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Montant de la paie</label>
-                                    <input type="number" name="montant" class="form-control" id="validationCustom01">
+                                    <input type="number" name="montant" class="form-control" id="validationCustom01"  required>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
