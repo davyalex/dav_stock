@@ -92,7 +92,7 @@
                 <div class="card-body"> --}}
 
 
-            @if ($inventaire_existe == false)
+            @if ($inventaire_existe == true)
                 <!-- Danger Alert -->
                 <div class="alert alert-danger alert-dismissible bg-danger text-white alert-label-icon fade show material-shadow"
                     role="alert">
@@ -577,8 +577,7 @@
 
 
                 form.find('.stockTheorique').val(stockTheorique) || 0; // stock restante
-                form.find('.stockRecent').val(product.stock_initial) ||
-                    0; // stock nouveau ajouté apres last inventaire
+               
                 form.find('.stockLastInventaire').val(product.stock_dernier_inventaire) ||
                     0; // stock disponible pendant le dernier inventaire
 
@@ -588,8 +587,13 @@
                 //     ((product.stock_dernier_inventaire || 0) + (product.stock_initial || 0)).toFixed(2)
                 // );
 
-                let stockActuel = (product.stock_dernier_inventaire || 0) + (product.stock_initial || 0);
-                form.find('.stockActuel').val(stockActuel % 1 === 0 ? stockActuel : stockActuel.toFixed(2));
+
+                // #########version backup inventaire
+
+                // let stockActuel = (product.stock_dernier_inventaire || 0) + (product.stock_initial || 0);
+                // form.find('.stockActuel').val(stockActuel % 1 === 0 ? stockActuel : stockActuel.toFixed(2));
+
+
 
 
 
@@ -601,6 +605,15 @@
                     var stockVendu = product.quantite_utilisee;
                 }
                 form.find('.stockVendu').val(stockVendu ?? 0); // stock vendu
+
+
+                // recuperer le stock de la periode
+                let stockActuel = (product.stock || 0) + (stockVendu || 0);
+                form.find('.stockActuel').val(stockActuel % 1 === 0 ? stockActuel : stockActuel.toFixed(2));
+
+                form.find('.stockRecent').val(stockActuel) ||
+                0; // stock nouveau ajouté apres last inventaire
+
 
             }
 
