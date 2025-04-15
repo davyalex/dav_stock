@@ -57,8 +57,6 @@ class PaieController extends Controller
 
         try {
 
-         
-
             $data =  $request->validate([
                 'employe_id' => 'required',
                 'montant' => 'required',
@@ -70,7 +68,7 @@ class PaieController extends Controller
             ]);
 
             // date de paiement en fonction du mois et de l'annee chaque mois le 5 de chaque mois
-            $date_depense= Carbon::parse($request->mois . '-' . $request->mois. '-'.'05');
+            $date_depense= Carbon::parse($request->annee . '-' . $request->mois. '-'.'05');
 
             $code = "P-" . strtoupper(Str::random(5));
             $data_paie = Paie::firstOrCreate($data, ['code' => $code,  'date_paiement' =>$date_depense]);
