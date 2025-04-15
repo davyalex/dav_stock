@@ -1,7 +1,7 @@
  <!-- Default Modals -->
  <div id="myModalEdit{{ $item['id'] }}" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
      style="display: none;">
-     <div class="modal-dialog">
+     <div class="modal-dialog modal-lg">
          <div class="modal-content">
              <div class="modal-header">
                  <h5 class="modal-title" id="myModalLabel">Modification </h5>
@@ -16,7 +16,7 @@
                      <div class="row">
                         <div class="col-md-6">
                             <label for="validationCustom01" class="form-label">Employé</label>
-                            <select class="form-select" id="validationCustom01" name="employe_id" required>
+                            <select class="form-select" data-choices data-choices-sorting-true id="validationCustom01" name="employe_id" required>
                                 <option value=""> Selectionner</option>
                                 @foreach ($data_employe as $employe)
                                     <option value="{{ $employe->id }}" @selected($employe->id == $item['employe_id']) >{{ $employe->nom }}

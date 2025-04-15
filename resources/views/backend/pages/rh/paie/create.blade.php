@@ -4,7 +4,7 @@
             <!-- Default Modals -->
             <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
                 style="display: none;">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="myModalLabel">Créer une nouvelle paie </h5>
@@ -18,7 +18,7 @@
                                 @csrf
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Employé</label>
-                                    <select class="form-select" id="validationCustom01" name="employe_id" required>
+                                    <select class="form-select  " id="validationCustom01" data-choices data-choices-sorting-true name="employe_id" required>
                                         <option value=""> Selectionner</option>
                                         @foreach ($data_employe as $employe)
                                             <option value="{{ $employe->id }}">{{ $employe->nom }}
@@ -78,7 +78,8 @@
 
                                 <div class="col-md-6">
                                     <label for="validationCustom01" class="form-label">Montant de la paie</label>
-                                    <input type="number" name="montant" class="form-control" id="validationCustom01"  required>
+                                    <input type="number" name="montant" class="form-control" id="validationCustom01"
+                                        required>
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
