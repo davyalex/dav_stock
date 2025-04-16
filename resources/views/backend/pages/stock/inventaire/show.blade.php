@@ -25,10 +25,10 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">
-                        Detail Inventaire {{ $inventaire->code }} du mois 
+                        Detail Inventaire {{ $inventaire->code }} du mois
                         <strong class="text-uppercase">
                             {{-- {{ ($inventairePrecedent?->created_at ?? $inventaire->created_at)->format('d-m-Y') }} --}}
-                            {{$moisInventaire}}
+                            {{ $moisInventaire }}
                         </strong>
                         {{-- au <strong>{{ $inventaire->created_at->format('d-m-Y') }}</strong> --}}
                     </h5>
@@ -463,13 +463,22 @@
                 <p style="text-align: center; font-size: 10px;">Code : {{ $inventaire->code }}</p>
                 <p style="text-align: center; font-size: 10px;">Réalisé le : {{ $inventaire->created_at->format('d-m-Y à H:i') }}</p>
                 ${$('.divPrint').html()}
-                <footer>
-                    <p style="font-size: 8px;">Imprimé le : ${new Date().toLocaleString()} par {{ Auth::user()->first_name }}</p>
-                    <!--<p style="font-size: 8px;">Page 1 / ${totalPages}</p>  Affichage de la page actuelle et du total -->
-                </footer>
+               
             </body>
         </html>
     `;
+
+                // <
+                // footer >
+                //     <
+                //     p style = "font-size: 8px;" > Imprimé le: $ {
+                //         new Date().toLocaleString()
+                //     }
+                // par {{ Auth::user()->first_name }} < /p> <
+                //     !-- < p style = "font-size: 8px;" > Page 1 / $ {
+                //         totalPages
+                //     } < /p>  Affichage de la page actuelle et du total --> <
+                //     /footer>
 
                 // Écrire le contenu dans la nouvelle fenêtre
                 fenetreImpression.document.write(contenuImprimer);
