@@ -318,7 +318,19 @@ class RapportController extends Controller
 
 
             // 8. Calcul des ventes par famille (bar et menu) avec la table pivot
-            $ventesParFamille = $venteQuery->with('produits.categorie')
+            // $ventesParFamille = $venteQuery->with('produits.categorie')
+            //     ->select('categories.famille', DB::raw('SUM(produit_vente.quantite * produit_vente.prix_unitaire) as total_ventes'))
+            //     ->join('produit_vente', 'ventes.id', '=', 'produit_vente.vente_id')
+            //     ->join('produits', 'produit_vente.produit_id', '=', 'produits.id')
+            //     ->join('categories', 'produits.categorie_id', '=', 'categories.id')
+            //     ->whereIn('categories.famille', ['bar', 'menu'])
+            //     ->groupBy('categories.famille')
+            //     ->get()
+            //     ->pluck('total_ventes', 'famille')
+            //     ->toArray();
+
+
+            $ventesParFamille = (clone $venteQuery)->with('produits.categorie')
                 ->select('categories.famille', DB::raw('SUM(produit_vente.quantite * produit_vente.prix_unitaire) as total_ventes'))
                 ->join('produit_vente', 'ventes.id', '=', 'produit_vente.vente_id')
                 ->join('produits', 'produit_vente.produit_id', '=', 'produits.id')
@@ -329,8 +341,14 @@ class RapportController extends Controller
                 ->pluck('total_ventes', 'famille')
                 ->toArray();
 
+            $ventesMenu = (clone $venteQuery)
+                ->join('plat_vente', 'ventes.id', '=', 'plat_vente.vente_id')
+                ->join('plats', 'plat_vente.plat_id', '=', 'plats.id')
+                ->select(DB::raw('SUM(plat_vente.quantite * plat_vente.prix_unitaire) as total_ventes'))
+                ->first();
 
-            // dd($ventesParFamille);
+
+            // dd($ventesParFamille , $ventesMenu);
 
 
             // Calcul du montant total des plats vendus
@@ -344,14 +362,23 @@ class RapportController extends Controller
             //     })
             //     ->toArray();
 
-            $ventesMenu = $venteQuery
-                ->join('plat_vente', 'ventes.id', '=', 'plat_vente.vente_id')
-                ->join('plats', 'plat_vente.plat_id', '=', 'plats.id')
-                ->selectRaw('SUM(plat_vente.quantite * plat_vente.prix_unitaire) as total_ventes')
-                ->first(); // Récupérer une seule ligne
+            // $ventesMenu = $venteQuery
+            //     ->join('plat_vente', 'ventes.id', '=', 'plat_vente.vente_id')
+            //     ->join('plats', 'plat_vente.plat_id', '=', 'plats.id')
+            //     ->selectRaw('SUM(plat_vente.quantite * plat_vente.prix_unitaire) as total_ventes')
+            //     ->first(); // Récupérer une seule ligne
 
 
-           
+
+            // $ventesMenu = $venteQuery
+            //     ->join('plat_vente', 'ventes.id', '=', 'plat_vente.vente_id')
+            //     ->join('plats', 'plat_vente.plat_id', '=', 'plats.id')
+            //     ->select(DB::raw('SUM(plat_vente.quantite * plat_vente.prix_unitaire) as total_ventes'))
+            //     ->first();
+
+
+
+
 
             // montant des ventes realisés par famille 
             $venteBar = $ventesParFamille['bar'] ?? 0; // vente du bar
