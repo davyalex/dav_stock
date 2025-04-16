@@ -354,9 +354,9 @@ class RapportController extends Controller
            
 
             // montant des ventes realisés par famille 
-            $venteBar = $ventesParFamille['bar'] ?? 0;
-            $venteMenu = $ventesParFamille['menu'] ?? 0;
-            $ventePlatMenu = $ventesMenu->total_ventes ?? 0; // Éviter les valeurs nulles
+            $venteBar = $ventesParFamille['bar'] ?? 0; // vente du bar
+            $venteMenu = $ventesParFamille['menu'] ?? 0; // vente du restaurant
+            $ventePlatMenu = $ventesMenu->total_ventes ?? 0; // vente du menu du jour
             // $ventePlatMenu = $ventesMenu['vente_menu'] ?? 0;
 
 
@@ -385,12 +385,12 @@ class RapportController extends Controller
             // 11. Préparation des données pour la vue
             $dataParFamille = [
                 'Bar' => [
-                    'ventes' => $venteMenu,
+                    'ventes' => $venteBar,
                     'benefice' => $beneficeBar,
                     'ratio' => $ratioMenu
                 ],
                 'Restaurant' => [
-                    'ventes' => $venteBar,
+                    'ventes' => $venteMenu,
                     'benefice' => $beneficeMenu,
                     'ratio' => $ratioBar
                 ],
