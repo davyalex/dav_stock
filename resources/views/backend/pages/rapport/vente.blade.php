@@ -62,7 +62,9 @@
 
                                         </option>
                                     @endforeach
-                                    <option value="plats du menu"  {{ request('categorie_famille') == 'plats du menu' ? 'selected' : '' }}>Menu</option>
+                                    <option value="plats du menu"
+                                        {{ request('categorie_famille') == 'plats du menu' ? 'selected' : '' }}>Menu
+                                    </option>
                                 </select>
                             </div>
                             <div class="col-md-2">
@@ -107,7 +109,7 @@
         <div class="col-lg-12">
             <div class="card divPrint">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">
+                    <h5 class="card-title mb-0 " style="text-align: center";>
                         Rapport des ventes
                         @if (request('caisse_id'))
                             <strong> {{ $caisses->find(request('caisse_id'))->libelle }}</strong>
@@ -131,9 +133,9 @@
                             @endif
                         @endif
                         @if (request()->has('periode') && request('periode') != null)
-                        -
-                        <strong>{{ request('periode') }}</strong>
-                    @endif
+                            -
+                            <strong>{{ request('periode') }}</strong>
+                        @endif
                     </h5>
                 </div>
                 <div class="card-body">
@@ -269,12 +271,14 @@
                         <body>
                             <h2 style="text-align: center;">Rapport de Vente</h2>
                             ${$('.divPrint').html()}
-                            <footer style="position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 12px; margin-top: 20px;">
-                                <p>Imprimé le : ${new Date().toLocaleString()} par {{ Auth::user()->first_name }}</p>
-                            </footer>
+                           
                         </body>
                     </html>
                 `;
+
+                // <footer style="position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 12px; margin-top: 20px;">
+                //                 <p>Imprimé le : ${new Date().toLocaleString()} par {{ Auth::user()->first_name }}</p>
+                //             </footer>
 
                 // Écrire le contenu dans la nouvelle fenêtre
                 fenetreImpression.document.write(contenuImprimer);
