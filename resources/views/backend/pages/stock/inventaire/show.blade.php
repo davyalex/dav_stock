@@ -416,6 +416,7 @@
 
 
             function imprimerRapport() {
+
                 // Sauvegarder l'ID de la table
                 var table = $('#example');
                 var originalId = table.attr('id');
@@ -504,9 +505,6 @@
                 .text('Imprimer le Rapport')
                 .addClass('btn btn-primary mt-3')
                 .on('click', imprimerRapport);
-
-
-
         });
     </script>
 @endsection

@@ -23,9 +23,63 @@
 
     <div class="row">
         <div class="col-lg-12">
+            <form action="{{ route('depense.index') }}" method="GET">
+                @csrf
+                <div class="row mx-3">
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label for="statut" class="form-label">Categorie</label>
+                            <select class="form-select" id="categorie" name="categorie">
+                                <option value="">Toutes les depenses</option>
+                                @foreach (App\Models\CategorieDepense::get() as $key => $value)
+                                    <option value="{{ $value->id }}"
+                                        {{ request('categorie') == $value->id ? 'selected' : '' }}>
+                                        {{ $value->libelle }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="date_debut" class="form-label">Date de début</label>
+                            <input type="date" class="form-control" id="date_debut" name="date_debut"
+                                value="{{ request('date_debut') }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="date_fin" class="form-label">Date de fin</label>
+                            <input type="date" class="form-control" id="date_fin" name="date_fin"
+                                value="{{ request('date_fin') }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label for="statut" class="form-label">Periodes</label>
+                            <select class="form-select" id="periode" name="periode">
+                                <option value="">Toutes les periodes</option>
+                                @foreach (['jour' => 'Jour', 'semaine' => 'Semaine', 'mois' => 'Mois', 'annee' => 'Année'] as $key => $value)
+                                    <option value="{{ $key }}" {{ request('periode') == $key ? 'selected' : '' }}>
+                                        {{ $value }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mt-4">
+                        <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+                    </div>
+
+                </div>
+
+            </form>
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des dépenses
+                    <h5 class="card-title mb-0" style="text-align: center">Liste des dépenses
 
                         @if (request()->has('categorie') && request('categorie') != null)
                             -
@@ -51,127 +105,78 @@
                         Créer une dépense
                     </a>
                 </div>
-                <div class="card-body">
-                    <form action="{{ route('depense.index') }}" method="GET">
-                        @csrf
-                        <div class="row mx-3">
-                            <div class="col-md-2">
-                                <div class="mb-3">
-                                    <label for="statut" class="form-label">Categorie</label>
-                                    <select class="form-select" id="categorie" name="categorie">
-                                        <option value="">Toutes les depenses</option>
-                                        @foreach (App\Models\CategorieDepense::get() as $key => $value)
-                                            <option value="{{ $value->id }}"
-                                                {{ request('categorie') == $value->id ? 'selected' : '' }}>
-                                                {{ $value->libelle }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+                <div class="card-body divPrint">
 
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="date_debut" class="form-label">Date de début</label>
-                                    <input type="date" class="form-control" id="date_debut" name="date_debut"
-                                        value="{{ request('date_debut') }}">
-                                </div>
-                            </div>
+                    <div class="table-responsive">
+                        <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Catégorie</th>
+                                    <th>Libellé</th>
+                                    <th>Montant</th>
+                                    <th>Créé par</th>
+                                    <th>Date depense</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($data_depense as $key => $item)
+                                    <tr id="row_{{ $item['id'] }}">
+                                        <td>{{ ++$key }}</td>
+                                        <td>{{ $item['categorie_depense']['libelle'] ?? '' }}</td>
+                                        <td>{{ $item['libelle_depense']['libelle'] ?? $item['categorie_depense']['libelle'] }}
+                                        </td>
+                                        <td>{{ number_format($item['montant'], 0, ',', ' ') }}</td>
+                                        <td>{{ $item['user']['first_name'] }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($item['date_depense'])->format('d/m/Y') }}</td>
+                                        <td>
+                                            <div class="dropdown d-inline-block">
+                                                <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="ri-more-fill align-middle"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
 
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="date_fin" class="form-label">Date de fin</label>
-                                    <input type="date" class="form-control" id="date_fin" name="date_fin"
-                                        value="{{ request('date_fin') }}">
-                                </div>
-                            </div>
+                                                    @if ($item['categorie_depense']['slug'] != 'achats')
+                                                        <li>
+                                                            <a class="dropdown-item edit-item-btn" href="#"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#myModalEdit{{ $item['id'] }}">
+                                                                <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                                                                Modifier
+                                                            </a>
+                                                        </li>
+                                                    @endif
 
-                            <div class="col-md-2">
-                                <div class="mb-3">
-                                    <label for="statut" class="form-label">Periodes</label>
-                                    <select class="form-select" id="periode" name="periode">
-                                        <option value="">Toutes les periodes</option>
-                                        @foreach (['jour' => 'Jour', 'semaine' => 'Semaine', 'mois' => 'Mois', 'annee' => 'Année'] as $key => $value)
-                                            <option value="{{ $key }}"
-                                                {{ request('periode') == $key ? 'selected' : '' }}>
-                                                {{ $value }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-2 mt-4">
-                                <button type="submit" class="btn btn-primary w-100">Filtrer</button>
-                            </div>
-
-                        </div>
-
-                    </form>
-                    <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Catégorie</th>
-                                <th>Libellé</th>
-                                <th>Montant</th>
-                                <th>Créé par</th>
-                                <th>Date depense</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($data_depense as $key => $item)
-                                <tr id="row_{{ $item['id'] }}">
-                                    <td>{{ ++$key }}</td>
-                                    <td>{{ $item['categorie_depense']['libelle'] ?? '' }}</td>
-                                    <td>{{ $item['libelle_depense']['libelle'] ?? $item['categorie_depense']['libelle'] }}
-                                    </td>
-                                    <td>{{ number_format($item['montant'], 0, ',', ' ') }}</td>
-                                    <td>{{ $item['user']['first_name'] }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($item['date_depense'])->format('d/m/Y') }}</td>
-                                    <td>
-                                        <div class="dropdown d-inline-block">
-                                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="ri-more-fill align-middle"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-
-                                                @if ($item['categorie_depense']['slug'] != 'achats')
                                                     <li>
-                                                        <a class="dropdown-item edit-item-btn" href="#"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#myModalEdit{{ $item['id'] }}">
-                                                            <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Modifier
+                                                        <a class="dropdown-item remove-item-btn delete" href="#"
+                                                            data-id="{{ $item['id'] }}">
+                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                            Supprimer
                                                         </a>
                                                     </li>
-                                                @endif
-
-                                                <li>
-                                                    <a class="dropdown-item remove-item-btn delete" href="#"
-                                                        data-id="{{ $item['id'] }}">
-                                                        <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                        Supprimer
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @include('backend.pages.depense.edit')
+                                @endforeach
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="3" class="text-end">Total des dépenses :</th>
+                                    <th>{{ number_format($data_depense->sum('montant'), 0, ',', ' ') }}</th>
+                                    <th colspan="3"></th>
                                 </tr>
-                                @include('backend.pages.depense.edit')
-                            @endforeach
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="3" class="text-end">Total des dépenses :</th>
-                                <th>{{ number_format($data_depense->sum('montant'), 0, ',', ' ') }}</th>
-                                <th colspan="3"></th>
-                            </tr>
-                        </tfoot>
-                    </table>
+                            </tfoot>
+                        </table>
+                    </div>
+
                 </div>
             </div>
+            <button id="btnImprimer" class="w-100"><i class="ri ri-printer-fill"></i></button>
+
         </div>
     </div>
 
@@ -215,7 +220,53 @@
                 }
             });
 
+            // Imprimer la liste des dépenses
 
+
+            function imprimerRapport() {
+                // Créer une nouvelle fenêtre pour l'impression
+                var fenetreImpression = window.open('', '_blank');
+
+                // Contenu à imprimer
+                var contenuImprimer = `
+                    <html>
+                        <head>
+                            <title style="text-align: center;">Rapport de Vente</title>
+                            <style>
+                                body { font-family: Arial, sans-serif; }
+                                table { width: 100%; border-collapse: collapse; }
+                                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                                th { background-color: #f2f2f2; }
+                            </style>
+                        </head>
+                        <body>
+                            <h2 style="text-align: center;">Rapport de Vente</h2>
+                            ${$('.divPrint').html()}
+                           
+                        </body>
+                    </html>
+                `;
+
+                // <footer style="position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 12px; margin-top: 20px;">
+                //                 <p>Imprimé le : ${new Date().toLocaleString()} par {{ Auth::user()->first_name }}</p>
+                //             </footer>
+
+                // Écrire le contenu dans la nouvelle fenêtre
+                fenetreImpression.document.write(contenuImprimer);
+
+                // Fermer le document
+                fenetreImpression.document.close();
+
+                // Imprimer la fenêtre
+                fenetreImpression.print();
+            }
+
+            // Ajouter un bouton d'impression
+            $('#btnImprimer')
+                .text('Imprimer le Rapport')
+                .addClass('btn btn-primary mt-3')
+                .on('click', imprimerRapport);
+            // .appendTo('.divPrint');
 
         });
     </script>
