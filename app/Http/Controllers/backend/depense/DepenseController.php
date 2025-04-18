@@ -75,7 +75,7 @@ class DepenseController extends Controller
                 }
             }
 
-            $data_depense = $query->orderBy('created_at', 'desc')->get;
+            $data_depense = $query->orderBy('created_at', 'desc')->get();
 
 
 
