@@ -26,8 +26,7 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <label for="validationCustom01" class="form-label">Categorie</label>
-                                <select name="categorie" class="form-control categorie-select" data-choices
-                                    data-choices-sorting-true required>
+                                <select name="categorie" class="form-control categorie-select"  required>
                                     <option disabled selected value="">Selectionner</option>
                                     @foreach ($categorie_depense as $data)
                                         <!-- Si la catégorie a des libelleDepenses, rendre l'option non cliquable -->

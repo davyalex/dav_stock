@@ -66,7 +66,7 @@
                             <label for="validationCustom01" class="form-label">Libellé depense
                             </label>
                             <div class="d-flex">
-                                <select name="libelle" class="form-control libelle-depense">
+                                <select name="libelle" class="form-control libelle-depense" >
                                     <option disabled selected value="">Selectionner</option>
                                     {{-- @foreach ($data_libelle_depense as $item)
                             <!-- Si la catégorie a des libelleDepenses, rendre l'option non cliquable -->
