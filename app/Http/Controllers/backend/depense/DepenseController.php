@@ -22,7 +22,7 @@ class DepenseController extends Controller
     {
         //
         try {
-            $query = Depense::OrderBy('created_at', 'DESC');
+            $query = Depense::with(['libelle_depense', 'categorie_depense', 'user'])->OrderBy('created_at', 'DESC');
             $data_libelle_depense = LibelleDepense::OrderBy('created_at', 'ASC')->get();
             $categorie_depense = CategorieDepense::whereNotIn('slug', ['achats'])->get();
 
@@ -50,18 +50,18 @@ class DepenseController extends Controller
                 $query->where('categorie_depense_id', $categorie);
             }
 
-             // Application du filtre de periode
+            // Application du filtre de periode
             // periode=> jour, semaine, mois, année
             if ($request->filled('periode')) {
                 $periode = $request->periode; // Ajout de cette ligne pour récupérer la période
-            
+
                 if ($periode == 'jour') {
                     $query->whereDate('created_at', Carbon::today());
                 } elseif ($periode == 'semaine') {
                     $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
                 } elseif ($periode == 'mois') {
                     $query->whereMonth('created_at', Carbon::now()->month)
-                          ->whereYear('created_at', Carbon::now()->year); // Ajout pour éviter d'avoir des résultats de plusieurs années
+                        ->whereYear('created_at', Carbon::now()->year); // Ajout pour éviter d'avoir des résultats de plusieurs années
                 } elseif ($periode == 'annee') {
                     $query->whereYear('created_at', Carbon::now()->year);
                 }
@@ -69,8 +69,77 @@ class DepenseController extends Controller
 
             $data_depense = $query->orderBy('created_at', 'desc')->get();
 
+
+
             // dd($categorie_depense->toArray());
             return view('backend.pages.depense.index', compact('data_depense', 'categorie_depense', 'data_libelle_depense'));
+        } catch (\Throwable $th) {
+            //throw $th;
+            return $th->getMessage();
+        }
+    }
+
+
+    public function getList(Request $request)
+    {
+        //
+        try {
+            $query = Depense::with(['libelle_depense', 'categorie_depense', 'user'])->OrderBy('created_at', 'DESC');
+            $data_libelle_depense = LibelleDepense::OrderBy('created_at', 'ASC')->get();
+            $categorie_depense = CategorieDepense::whereNotIn('slug', ['achats'])->get();
+
+            $dateDebut = $request->input('date_debut');
+            $dateFin = $request->input('date_fin');
+            $categorie = $request->input('categorie');
+            $periode = $request->input('periode');
+
+
+            // Formatage des dates
+            $dateDebut = $request->filled('date_debut') ? Carbon::parse($dateDebut)->format('Y-m-d') : null;
+            $dateFin = $request->filled('date_fin') ? Carbon::parse($dateFin)->format('Y-m-d') : null;
+
+            // Application des filtres de date
+            if ($dateDebut && $dateFin) {
+                $query->whereBetween('created_at', [$dateDebut, $dateFin]);
+            } elseif ($dateDebut) {
+                $query->where('created_at', '>=', $dateDebut);
+            } elseif ($dateFin) {
+                $query->where('created_at', '<=', $dateFin);
+            }
+
+            // Application du filtre de statut
+            if ($request->filled('categorie')) {
+                $query->where('categorie_depense_id', $categorie);
+            }
+
+            // Application du filtre de periode
+            // periode=> jour, semaine, mois, année
+            if ($request->filled('periode')) {
+                $periode = $request->periode; // Ajout de cette ligne pour récupérer la période
+
+                if ($periode == 'jour') {
+                    $query->whereDate('created_at', Carbon::today());
+                } elseif ($periode == 'semaine') {
+                    $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                } elseif ($periode == 'mois') {
+                    $query->whereMonth('created_at', Carbon::now()->month)
+                        ->whereYear('created_at', Carbon::now()->year); // Ajout pour éviter d'avoir des résultats de plusieurs années
+                } elseif ($periode == 'annee') {
+                    $query->whereYear('created_at', Carbon::now()->year);
+                }
+            }
+
+            $data_depense = $query->orderBy('created_at', 'desc')->get();
+            return response()->json([
+                'depense' => $data_depense,
+                'categorie_depense' => $categorie_depense,
+                'libelle_depense' => $data_libelle_depense
+            ]);
+
+
+
+            // dd($categorie_depense->toArray());
+            // return view('backend.pages.depense.index', compact('data_depense', 'categorie_depense', 'data_libelle_depense'));
         } catch (\Throwable $th) {
             //throw $th;
             return $th->getMessage();
@@ -159,20 +228,20 @@ class DepenseController extends Controller
             ]);
 
 
-                  // verifier si c'est une categorie ou libelle on reçoit
-                  $data_libelle = LibelleDepense::whereId($request->categorie)->first();
-                  $data_categorie = CategorieDepense::whereId($request->categorie)->first();
-      
-                  $libelle = '';
-                  $categorie = '';
-      
-                  if ($data_libelle) {
-                      $libelle =  $data_libelle->id;
-                      $categorie =  $data_libelle->categorie_depense_id;
-                  } elseif ($data_categorie) {
-                      $categorie =  $data_categorie->id;
-                      $libelle = null;
-                  }
+            // verifier si c'est une categorie ou libelle on reçoit
+            $data_libelle = LibelleDepense::whereId($request->categorie)->first();
+            $data_categorie = CategorieDepense::whereId($request->categorie)->first();
+
+            $libelle = '';
+            $categorie = '';
+
+            if ($data_libelle) {
+                $libelle =  $data_libelle->id;
+                $categorie =  $data_libelle->categorie_depense_id;
+            } elseif ($data_categorie) {
+                $categorie =  $data_categorie->id;
+                $libelle = null;
+            }
 
 
             // $data_libelle = LibelleDepense::whereId($request->libelle)->first();

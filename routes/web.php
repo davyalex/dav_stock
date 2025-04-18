@@ -381,6 +381,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
 
     Route::prefix('depense')->controller(DepenseController::class)->group(function () {
         route::get('', 'index')->name('depense.index');
+        route::get('getList', 'getList')->name('depense.getList');
         route::get('create', 'create')->name('depense.create');
         route::post('store', 'store')->name('depense.store');
         route::get('edit/{id}', 'edit')->name('depense.edit');
