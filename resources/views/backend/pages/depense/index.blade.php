@@ -79,7 +79,7 @@
             </form>
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 id="filter" class="card-title mb-0" style="text-align: center">Liste des dépenses
+                    <h5 i class="card-title mb-0 filter" style="text-align: center">Liste des dépenses
 
                         @if (request()->has('categorie') && request('categorie') != null)
                             -
@@ -99,6 +99,8 @@
                             @if (request('date_fin'))
                                 au {{ \Carbon\Carbon::parse(request('date_fin'))->format('d/m/Y') }}
                             @endif
+                            @else
+                            du mois en cours - {{ \Carbon\Carbon::now()->translatedFormat('F Y') }}
                         @endif
                     </h5>
                     <a href="{{ route('depense.create') }}" class="btn btn-primary">
@@ -162,7 +164,7 @@
                                     </tr>
                                     @include('backend.pages.depense.edit')
                                 @endforeach
-                                
+
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -202,10 +204,10 @@
     <script>
         $(document).ready(function() {
             // Afficher la liste des depenses depuis la depense.getList
-             // Détruire DataTable s’il existe déjà
-             if ($.fn.DataTable.isDataTable('#buttons-datatables')) {
-                        $('#buttons-datatables').DataTable().destroy();
-                    }
+            // Détruire DataTable s’il existe déjà
+            if ($.fn.DataTable.isDataTable('#buttons-datatables')) {
+                $('#buttons-datatables').DataTable().destroy();
+            }
 
             // $.ajax({
             //     url: "{{ route('depense.getList') }}",
@@ -222,78 +224,157 @@
             //             const isAchats = item.categorie_depense?.slug === 'achats';
 
             //             tbody.innerHTML += `
-            //     <tr id="row_${item.id}">
-            //         <td>${index + 1}</td>
-            //         <td>${item.categorie_depense?.libelle || ''}</td>
-            //         <td>${item.libelle_depense?.libelle || item.categorie_depense?.libelle}</td>
-            //         <td>${Number(item.montant).toLocaleString('fr-FR')}</td>
-            //         <td>${item.user.first_name}</td>
-            //         <td>${new Date(item.date_depense).toLocaleDateString('fr-FR')}</td>
-            //         <td>
-            //             <div class="dropdown d-inline-block">
-            //                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
-            //                     data-bs-toggle="dropdown" aria-expanded="false">
-            //                     <i class="ri-more-fill align-middle"></i>
-            //                 </button>
-            //                 <ul class="dropdown-menu dropdown-menu-end">
-            //                     ${!isAchats ? `
+        //     <tr id="row_${item.id}">
+        //         <td>${index + 1}</td>
+        //         <td>${item.categorie_depense?.libelle || ''}</td>
+        //         <td>${item.libelle_depense?.libelle || item.categorie_depense?.libelle}</td>
+        //         <td>${Number(item.montant).toLocaleString('fr-FR')}</td>
+        //         <td>${item.user.first_name}</td>
+        //         <td>${new Date(item.date_depense).toLocaleDateString('fr-FR')}</td>
+        //         <td>
+        //             <div class="dropdown d-inline-block">
+        //                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
+        //                     data-bs-toggle="dropdown" aria-expanded="false">
+        //                     <i class="ri-more-fill align-middle"></i>
+        //                 </button>
+        //                 <ul class="dropdown-menu dropdown-menu-end">
+        //                     ${!isAchats ? `
             //                             <li>
             //                                 <a class="dropdown-item edit-item-btn" href="#" data-bs-toggle="modal"
             //                                     data-bs-target="#myModalEdit${item.id}">
             //                                     <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Modifier
             //                                 </a>
             //                             </li>` : ''
-            //                     }
-            //                     <li>
-            //                         <a class="dropdown-item remove-item-btn delete" href="#" data-id="${item.id}">
-            //                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Supprimer
-            //                         </a>
-            //                     </li>
-            //                 </ul>
-            //             </div>
-            //         </td>
-            //     </tr>
-                   
+        //                     }
+        //                     <li>
+        //                         <a class="dropdown-item remove-item-btn delete" href="#" data-id="${item.id}">
+        //                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Supprimer
+        //                         </a>
+        //                     </li>
+        //                 </ul>
+        //             </div>
+        //         </td>
+        //     </tr>
 
 
-            // `;
+
+        // `;
             // console.log(tbody.innerHTML);
-            
+
             //         });
 
-                   
-                    // Réinitialiser DataTable
-                    $('#buttons-datatables').DataTable({
-                        dom: 'Bfrtip',
-                        buttons: [{
-                            extend: 'print',
-                            text: 'Imprimer',
-                            className: 'btn btn-danger',
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5]
-                            },
-                            messageTop: function() {
-                                return $('#filter').text().trim();
-                            },
-                            title: '',
-                            customize: function(win) {
-                                $(win.document.body).css('text-align', 'center');
-                                $(win.document.body).find('h1').css('text-align',
-                                    'center');
-                            }
-                        }],
-                        drawCallback: function(settings) {
-                            let route = "depense";
-                            if (typeof delete_row === "function") {
-                                delete_row(route);
-                            }
+
+            // Réinitialiser DataTable
+            $('#buttons-datatables').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'print'
+                ],
+                buttons: [{
+                        extend: 'print',
+                        text: 'Imprimer',
+                        className: 'btn btn-danger',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        messageTop: function() {
+                            return $('.filter').text().trim();
+                        },
+                        title: '',
+                        customize: function(win) {
+                            $(win.document.body).css('text-align', 'center');
+                            $(win.document.body).find('h1').css('text-align',
+                                'center');
                         }
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error("Erreur AJAX :", error);
+                    },
+                    // {
+                    //     extend: 'pdf',
+                    //     text: 'Pdf',
+                    //     className: 'btn btn-danger',
+                    //     exportOptions: {
+                    //         columns: [0, 1, 2, 3, 4, 5]
+                    //     },
+                    //     messageTop: function() {
+                    //         return $('.filter').text().trim();
+                    //     },
+                    //     title: '',
+                    //     // customize: function(win) {
+                    //     //     $(win.document.body).css('text-align', 'center');
+                    //     //     $(win.document.body).find('h1').css('text-align',
+                    //     //         'center');
+                    //     // }
+                    // },
+
+                    {
+                        extend: 'csv',
+                        text: 'Csv',
+                        className: 'btn btn-danger',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        messageTop: function() {
+                            return $('.filter').text().trim();
+                        },
+                        title: '',
+                        // customize: function(win) {
+                        //     $(win.document.body).css('text-align', 'center');
+                        //     $(win.document.body).find('h1').css('text-align',
+                        //         'center');
+                        // }
+                    },
+
+                    {
+                        extend: 'copy',
+                        text: 'Copy',
+                        className: 'btn btn-danger',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        messageTop: function() {
+                            return $('.filter').text().trim();
+                        },
+                        title: '',
+                        // customize: function(win) {
+                        //     $(win.document.body).css('text-align', 'center');
+                        //     $(win.document.body).find('h1').css('text-align',
+                        //         'center');
+                        // }
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'Excel',
+                        className: 'btn btn-danger',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        messageTop: function() {
+                            return $('.filter').text().trim();
+                        },
+                        title: '',
+                        // customize: function(win) {
+                        //     $(win.document.body).css('text-align', 'center');
+                        //     $(win.document.body).find('h1').css('text-align',
+                        //         'center');
+                        // }
+                    }
+
+
+
+
+
+                ],
+                drawCallback: function(settings) {
+                    let route = "depense";
+                    if (typeof delete_row === "function") {
+                        delete_row(route);
+                    }
                 }
             });
+            // },
+            // error: function(xhr, status, error) {
+            // console.error("Erreur AJAX :", error);
+            // }
+            // });
 
         });
     </script>
