@@ -79,7 +79,7 @@
             </form>
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0" style="text-align: center">Liste des dépenses
+                    <h5 id="filter" class="card-title mb-0" style="text-align: center">Liste des dépenses
 
                         @if (request()->has('categorie') && request('categorie') != null)
                             -
@@ -108,7 +108,7 @@
                 <div class="card-body divPrint">
 
                     <div class="table-responsive">
-                        <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
+                        <table id="buttons-datatables" class="table table-bordered" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -116,63 +116,124 @@
                                     <th>Libellé</th>
                                     <th>Montant</th>
                                     <th>Créé par</th>
-                                    <th>Date depense</th>
+                                    <th>Date dépense</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($data_depense as $key => $item)
-                                    <tr id="row_{{ $item['id'] }}">
-                                        <td>{{ ++$key }}</td>
-                                        <td>{{ $item['categorie_depense']['libelle'] ?? '' }}</td>
-                                        <td>{{ $item['libelle_depense']['libelle'] ?? $item['categorie_depense']['libelle'] }}
-                                        </td>
-                                        <td>{{ number_format($item['montant'], 0, ',', ' ') }}</td>
-                                        <td>{{ $item['user']['first_name'] }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($item['date_depense'])->format('d/m/Y') }}</td>
-                                        <td>
-                                            <div class="dropdown d-inline-block">
-                                                <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
-                                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="ri-more-fill align-middle"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-
-                                                    @if ($item['categorie_depense']['slug'] != 'achats')
-                                                        <li>
-                                                            <a class="dropdown-item edit-item-btn" href="#"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#myModalEdit{{ $item['id'] }}">
-                                                                <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                                Modifier
-                                                            </a>
-                                                        </li>
-                                                    @endif
-
-                                                    <li>
-                                                        <a class="dropdown-item remove-item-btn delete" href="#"
-                                                            data-id="{{ $item['id'] }}">
-                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Supprimer
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @include('backend.pages.depense.edit')
-                                @endforeach
-                            </tbody>
+                            <tbody></tbody>
                             <tfoot>
                                 <tr>
                                     <th colspan="3" class="text-end">Total des dépenses :</th>
-                                    <th>{{ number_format($data_depense->sum('montant'), 0, ',', ' ') }}</th>
+                                    <th id="totalMontant"></th>
                                     <th colspan="3"></th>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
 
+                    <!-- Script DataTables avec Yajra -->
+                    <!-- Script DataTables avec Yajra -->
+                    <script>
+                        $(document).ready(function() {
+                            var table = $('#buttons-datatables').DataTable({
+                                processing: true,
+                                serverSide: true,
+                                ajax: {
+                                    url: "{{ route('depense.index') }}",
+                                    type: 'GET',
+                                    data: function(d) {
+                                        d.date_debut = $('#date_debut').val();
+                                        d.date_fin = $('#date_fin').val();
+                                        d.categorie = $('#categorie').val();
+                                        d.periode = $('#periode').val();
+                                    },
+                                    dataSrc: function(json) {
+                                        $('#totalMontant').text(
+                                            new Intl.NumberFormat('fr-FR').format(json.total_montant)
+                                        );
+                                        return json.data;
+                                    }
+                                },
+                                columns: [{
+                                        data: 'id',
+                                        name: 'id'
+                                    },
+                                    {
+                                        data: 'categorie',
+                                        name: 'categorie'
+                                    },
+                                    {
+                                        data: 'libelle',
+                                        name: 'libelle',
+
+                                    },
+                                    {
+                                        data: 'montant',
+                                        name: 'montant'
+                                    },
+                                    {
+                                        data: 'user',
+                                        name: 'user'
+                                    },
+                                    {
+                                        data: 'date_depense',
+                                        name: 'date_depense'
+                                    },
+                                    {
+                                        data: 'actions',
+                                        name: 'actions',
+                                        orderable: false,
+                                        searchable: false
+                                    }
+                                ],
+                                dom: 'Bfrtip', // La position des éléments (b = boutons, f = filtre, t = table, i = info, p = pagination)
+                                buttons: [{
+                                        extend: 'print', // Bouton pour imprimer
+                                        text: 'Imprimer', // Texte du bouton
+                                        exportOptions: {
+                                            columns: [0, 1, 2, 3, 4, 5] // Colonnes à inclure dans l'impression
+                                        },
+                                        messageTop: function() {
+                                            return 'Liste des Dépenses'; // Message au dessus du tableau lors de l'impression
+                                        },
+                                        title: 'Dépenses', // Titre de la page d'impression
+                                        customize: function(win) {
+                                            $(win.document.body).css('text-align', 'center');
+                                            $(win.document.body).find('h1').css('text-align', 'center');
+                                        }
+                                    },
+                                    {
+                                        extend: 'excel', // Bouton pour exporter en Excel
+                                        text: 'Exporter en Excel',
+                                        exportOptions: {
+                                            columns: [0, 1, 2, 3, 4, 5]
+                                        }
+                                    },
+                                    {
+                                        extend: 'csv', // Bouton pour exporter en CSV
+                                        text: 'Exporter en CSV',
+                                        exportOptions: {
+                                            columns: [0, 1, 2, 3, 4, 5]
+                                        }
+                                    },
+                                    {
+                                        extend: 'copy', // Bouton pour copier les données
+                                        text: 'Copier',
+                                        exportOptions: {
+                                            columns: [0, 1, 2, 3, 4, 5]
+                                        }
+                                    }
+                                ],
+                                drawCallback: function(settings) {
+                                    // Calcul du total des montants
+                                    var totalMontant = settings.json.data.reduce(function(total, row) {
+                                        return total + parseFloat(row.montant.replace(',', ''));
+                                    }, 0);
+                                    $('#total-montant').text(totalMontant.toLocaleString());
+                                }
+                            });
+                        });
+                    </script>
                 </div>
             </div>
             {{-- <button id="btnImprimer" class="w-100"><i class="ri ri-printer-fill"></i></button> --}}
@@ -200,84 +261,93 @@
 
     <script>
         $(document).ready(function() {
-            // Vérifiez si la DataTable est déjà initialisée
             if ($.fn.DataTable.isDataTable('#buttons-datatables')) {
-                // Si déjà initialisée, détruisez l'instance existante
-                $('#buttons-datatables').DataTable().destroy();
+                $('#buttons-datatables').DataTable().clear().destroy();
             }
 
-            // Initialisez la DataTable avec les options et le callback
-            var table = $('#buttons-datatables').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    // 'copy', 'csv', 'excel', 'print'
-
+            let table = $('#buttons-datatables').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('depense.index') }}",
+                    data: function(d) {
+                        d.date_debut = $('#date_debut').val();
+                        d.date_fin = $('#date_fin').val();
+                        d.categorie = $('#categorie').val();
+                        d.periode = $('#periode').val();
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
                     {
+                        data: 'categorie',
+                        name: 'categorie'
+                    },
+                    {
+                        data: 'libelle',
+                        name: 'libelle'
+                    },
+                    {
+                        data: 'montant',
+                        name: 'montant'
+                    },
+                    {
+                        data: 'user',
+                        name: 'user'
+                    },
+                    {
+                        data: 'date_depense',
+                        name: 'date_depense'
+                    },
+                    {
+                        data: 'actions',
+                        name: 'actions',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                dom: 'Bfrtip',
+                buttons: [{
                         extend: 'print',
-                        // text: 'Copier',
-                        // className: 'btn btn-primary',
+                        text: 'Imprimer',
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4, 5]
                         },
+                        messageTop: function() {
+                            return $('#filter').text().trim();
+                        },
+                        title: '',
+                        customize: function(win) {
+                            $(win.document.body)
+                                .css('text-align', 'center');
 
+                            $(win.document.body).find('h1')
+                                .css('text-align', 'center');
+                        }
                     },
+                    {
+                        extend: 'excel',
+                        text: 'Exporter Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        }
+                    }
                 ],
-
-                // Utilisez drawCallback pour exécuter delete_row après chaque redessin
-                drawCallback: function(settings) {
-                    var route = "depense"
-                    delete_row(route);
+                drawCallback: function() {
+                    var route = "depense";
+                    delete_row(route); // ta fonction pour la suppression
                 }
             });
 
-            // Imprimer la liste des dépenses
-
-
-            function imprimerRapport() {
-                // Créer une nouvelle fenêtre pour l'impression
-                var fenetreImpression = window.open('', '_blank');
-
-                // Contenu à imprimer
-                var contenuImprimer = `
-                    <html>
-                        <head>
-                            <title style="text-align: center;">Rapport de Vente</title>
-                            <style>
-                                body { font-family: Arial, sans-serif; }
-                                table { width: 100%; border-collapse: collapse; }
-                                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-                                th { background-color: #f2f2f2; }
-                            </style>
-                        </head>
-                        <body>
-                            <h2 style="text-align: center;">Rapport de Vente</h2>
-                            ${$('.divPrint').html()}
-                           
-                        </body>
-                    </html>
-                `;
-
-                // <footer style="position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 12px; margin-top: 20px;">
-                //                 <p>Imprimé le : ${new Date().toLocaleString()} par {{ Auth::user()->first_name }}</p>
-                //             </footer>
-
-                // Écrire le contenu dans la nouvelle fenêtre
-                fenetreImpression.document.write(contenuImprimer);
-
-                // Fermer le document
-                fenetreImpression.document.close();
-
-                // Imprimer la fenêtre
-                fenetreImpression.print();
-            }
-
-            // Ajouter un bouton d'impression
-            $('#btnImprimer')
-                .text('Imprimer le Rapport')
-                .addClass('btn btn-primary mt-3')
-                .on('click', imprimerRapport);
-            // .appendTo('.divPrint');
-
+            // Si tu utilises des filtres
+            $('#filtrer').on('click', function() {
+                table.draw();
+            });
         });
+    </script>
     </script>
 @endsection

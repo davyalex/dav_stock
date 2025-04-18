@@ -21,7 +21,8 @@
         "spatie/laravel-backup": "^9.2",
         "spatie/laravel-image-optimizer": "^1.8",
         "spatie/laravel-medialibrary": "^10.15",
-        "spatie/laravel-permission": "^6.7"
+        "spatie/laravel-permission": "^6.7",
+        "yajra/laravel-datatables": "^10.1"
     },
     "require-dev": {
         "deployer/deployer": "^7.4",
