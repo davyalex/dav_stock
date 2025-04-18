@@ -49,7 +49,16 @@ function initializeTables() {
     let buttonsDataTables = new DataTable('#buttons-datatables', {
         dom: 'Bfrtip',
         buttons: [
-            'copy', 'csv', 'excel', 'print',
+            // 'copy', 'csv', 'excel', 'print',
+            {
+                extend: 'print',
+                // text: 'Copier',
+                // className: 'btn btn-primary',
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4, 5]
+                },
+
+            },
         ]
     });
 

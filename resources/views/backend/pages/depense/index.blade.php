@@ -175,7 +175,7 @@
 
                 </div>
             </div>
-            <button id="btnImprimer" class="w-100"><i class="ri ri-printer-fill"></i></button>
+            {{-- <button id="btnImprimer" class="w-100"><i class="ri ri-printer-fill"></i></button> --}}
 
         </div>
     </div>
