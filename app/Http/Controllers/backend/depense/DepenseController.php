@@ -67,7 +67,7 @@ class DepenseController extends Controller
                 }
             }
 
-            $data_depense = $query->orderBy('created_at', 'desc')->get();
+            $data_depense = $query->orderBy('created_at', 'desc')->paginate(50);
 
             // dd($categorie_depense->toArray());
             return view('backend.pages.depense.index', compact('data_depense', 'categorie_depense', 'data_libelle_depense'));
