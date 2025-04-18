@@ -26,6 +26,14 @@ class DepenseController extends Controller
             $data_libelle_depense = LibelleDepense::OrderBy('created_at', 'ASC')->get();
             $categorie_depense = CategorieDepense::whereNotIn('slug', ['achats'])->get();
 
+
+            // Vérifier si aucune période ou date spécifique n'a été fournie
+            if (!$request->filled('periode') && !$request->filled('date_debut') && !$request->filled('date_fin')) {
+                $query->whereMonth('date_depense', Carbon::now()->month)
+                    ->whereYear('date_depense', Carbon::now()->year);
+            }
+
+            // sinon on applique le filtre des date et categorie
             $dateDebut = $request->input('date_debut');
             $dateFin = $request->input('date_fin');
             $categorie = $request->input('categorie');
@@ -67,7 +75,7 @@ class DepenseController extends Controller
                 }
             }
 
-            $data_depense = $query->orderBy('created_at', 'desc')->get();
+            $data_depense = $query->orderBy('created_at', 'desc')->get;
 
 
 
