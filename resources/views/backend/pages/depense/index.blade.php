@@ -80,28 +80,31 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 i class="card-title mb-0 filter" style="text-align: center">Liste des dépenses
+                        @if (request('date_debut') || request('date_fin') || request('categorie_depense') || request('periode'))
 
-                        @if (request()->has('categorie') && request('categorie') != null)
-                            -
-                            <strong>{{ ucfirst(App\Models\CategorieDepense::find(request('categorie'))->libelle) }}</strong>
-                        @endif
-
-                        @if (request()->has('periode') && request('periode') != null)
-                            -
-                            <strong>{{ request('periode') }}</strong>
-                        @endif
-
-                        @if (request('date_debut') || request('date_fin'))
-                            du
-                            @if (request('date_debut'))
-                                {{ \Carbon\Carbon::parse(request('date_debut'))->format('d/m/Y') }}
+                            @if (request()->has('categorie') && request('categorie') != null)
+                                -
+                                <strong>{{ ucfirst(App\Models\CategorieDepense::find(request('categorie'))->libelle) }}</strong>
                             @endif
-                            @if (request('date_fin'))
-                                au {{ \Carbon\Carbon::parse(request('date_fin'))->format('d/m/Y') }}
+
+                            @if (request()->has('periode') && request('periode') != null)
+                                -
+                                <strong>{{ request('periode') }}</strong>
                             @endif
-                            @else
+
+                            @if (request('date_debut') || request('date_fin'))
+                                du
+                                @if (request('date_debut'))
+                                    {{ \Carbon\Carbon::parse(request('date_debut'))->format('d/m/Y') }}
+                                @endif
+                                @if (request('date_fin'))
+                                    au {{ \Carbon\Carbon::parse(request('date_fin'))->format('d/m/Y') }}
+                                @endif
+                            @endif
+                        @else
                             du mois en cours - {{ \Carbon\Carbon::now()->translatedFormat('F Y') }}
                         @endif
+
                     </h5>
                     <a href="{{ route('depense.create') }}" class="btn btn-primary">
                         Créer une dépense
@@ -142,9 +145,8 @@
 
                                                     @if ($item['categorie_depense']['slug'] != 'achats')
                                                         <li>
-                                                            <a class="dropdown-item edit-item-btn" href="#"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#myModalEdit{{ $item['id'] }}">
+                                                            <a class="dropdown-item edit-item-btn"
+                                                                href="{{ route('depense.edit', $item['id']) }}">
                                                                 <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                                 Modifier
                                                             </a>
@@ -162,7 +164,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    @include('backend.pages.depense.edit')
+                                    {{-- @include('backend.pages.depense.edit') --}}
                                 @endforeach
 
                             </tbody>

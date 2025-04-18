@@ -23,8 +23,8 @@ class DepenseController extends Controller
         //
         try {
             $query = Depense::with(['libelle_depense', 'categorie_depense', 'user'])->OrderBy('created_at', 'DESC');
-            $data_libelle_depense = LibelleDepense::OrderBy('created_at', 'ASC')->get();
-            $categorie_depense = CategorieDepense::whereNotIn('slug', ['achats'])->get();
+            // $data_libelle_depense = LibelleDepense::OrderBy('created_at', 'ASC')->get();
+            // $categorie_depense = CategorieDepense::whereNotIn('slug', ['achats'])->get();
 
 
             // Vérifier si aucune période ou date spécifique n'a été fournie
@@ -80,7 +80,7 @@ class DepenseController extends Controller
 
 
             // dd($categorie_depense->toArray());
-            return view('backend.pages.depense.index', compact('data_depense', 'categorie_depense', 'data_libelle_depense'));
+            return view('backend.pages.depense.index', compact('data_depense',));
         } catch (\Throwable $th) {
             //throw $th;
             return $th->getMessage();
@@ -215,6 +215,15 @@ class DepenseController extends Controller
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
+    }
+
+    public function edit($id)
+    {
+        $data_depense = Depense::find($id);
+        $libelle_depense = LibelleDepense::OrderBy('created_at', 'ASC')->get();
+        $categorie_depense = CategorieDepense::with('libelleDepenses')->whereNotIn('slug', ['achats'])->get();
+        // dd($categorie_depense->toArray());
+        return view('backend.pages.depense.edit', compact('data_depense', 'categorie_depense', 'libelle_depense'));
     }
 
 
