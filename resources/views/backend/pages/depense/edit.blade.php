@@ -30,7 +30,7 @@
                                     <option disabled selected value="">Selectionner</option>
                                     @foreach ($categorie_depense as $data)
                                         <!-- Si la catégorie a des libelleDepenses, rendre l'option non cliquable -->
-                                        <option
+                                        <option style="font-weight:bold"
                                             {{ $data['id'] == $data_depense['categorie_depense_id'] ? 'selected' : '' }}value="{{ $data['id'] }}"
                                             class="categorie" >
                                             {{ strtoupper($data['libelle']) }}
