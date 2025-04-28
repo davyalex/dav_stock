@@ -85,7 +85,7 @@
                                     <select class="form-select" name="poste_id">
                                         <option value="">Choisir un poste</option>
                                         @foreach ($data_poste as $item)
-                                        <option value="{{$item->id}}">{{$item->poste}}</option>
+                                        <option value="{{$item->id}}">{{$item->libelle}}</option>
                                         @endforeach
                                     </select>
                                   

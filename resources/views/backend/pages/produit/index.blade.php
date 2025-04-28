@@ -26,7 +26,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des produits
+                    <h5 class="card-title mb-0 filter">Liste des produits
                         @if (request()->has('filter'))
                             - <b>{{ request('filter') }}</b>
                         @endif
@@ -56,7 +56,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    {{-- <th>ID</th> --}}
+                                    <th>Statut</th>
                                     <th>Code</th>
                                     <th>Image</th>
                                     <th>Nom</th>
@@ -72,12 +72,12 @@
                                 @foreach ($data_produit as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
-                                        {{-- <td>{{ $item['id'] }} --}}
-
-                                        <td>{{ $item['code'] }}
+                                        <td>
                                             <span
                                                 class="badge{{ $item->statut == 'desactive' ? ' bg-danger' : ' bg-success' }}">{{ $item['statut'] }}</span>
                                         </td>
+
+                                        <td>{{ $item['code'] }}</td>
                                         <td>
                                             <img class="rounded avatar-sm"
                                                 src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
@@ -166,88 +166,141 @@
     <script>
         $(document).ready(function() {
 
-            // Vérifiez si la DataTable est déjà initialisée
+            // // Vérifiez si la DataTable est déjà initialisée
+            // if ($.fn.DataTable.isDataTable('#buttons-datatables')) {
+            //     // Si déjà initialisée, détruisez l'instance existante
+            //     $('#buttons-datatables').DataTable().destroy();
+            // }
+
+            // // Initialisez la DataTable avec les options et le callback
+            // var table = $('#buttons-datatables').DataTable(
+            // {
+            //     dom: 'Bfrtip',
+            //     buttons: [
+            //         'copy', 'csv', 'excel', 'print'
+            //     ],
+
+            //     // Utilisez drawCallback pour exécuter delete_row après chaque redessin
+            //     drawCallback: function(settings) {
+            //         var route = "produit";
+            //         delete_row(route);
+            //     }
+            // });
+
+            // Détruire DataTable s’il existe déjà
             if ($.fn.DataTable.isDataTable('#buttons-datatables')) {
-                // Si déjà initialisée, détruisez l'instance existante
                 $('#buttons-datatables').DataTable().destroy();
             }
 
-            // Initialisez la DataTable avec les options et le callback
-            var table = $('#buttons-datatables').DataTable({
+            // Réinitialiser DataTable
+            $('#buttons-datatables').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
                     'copy', 'csv', 'excel', 'print'
                 ],
+                buttons: [{
+                        extend: 'print',
+                        text: 'Imprimer',
+                        className: 'btn btn-danger',
+                        exportOptions: {
+                            columns: [0, 2, 4, 5, 6, 8]
+                        },
+                        messageTop: function() {
+                            return $('.filter').text().trim();
+                        },
+                        title: '',
+                        customize: function(win) {
+                            $(win.document.body).css('text-align', 'center');
+                            $(win.document.body).find('h1').css('text-align',
+                                'center');
+                        }
+                    },
+                    // {
+                    //     extend: 'pdf',
+                    //     text: 'Pdf',
+                    //     className: 'btn btn-danger',
+                    //     exportOptions: {
+                    //         columns: [0, 1, 2, 3, 4, 5]
+                    //     },
+                    //     messageTop: function() {
+                    //         return $('.filter').text().trim();
+                    //     },
+                    //     title: '',
+                    //     // customize: function(win) {
+                    //     //     $(win.document.body).css('text-align', 'center');
+                    //     //     $(win.document.body).find('h1').css('text-align',
+                    //     //         'center');
+                    //     // }
+                    // },
 
-                // Utilisez drawCallback pour exécuter delete_row après chaque redessin
+                    {
+                        extend: 'csv',
+                        text: 'Csv',
+                        className: 'btn btn-danger',
+                        exportOptions: {
+                            columns: [0, 2, 4, 5, 6, 8]
+                        },
+                        messageTop: function() {
+                            return $('.filter').text().trim();
+                        },
+                        title: '',
+                        // customize: function(win) {
+                        //     $(win.document.body).css('text-align', 'center');
+                        //     $(win.document.body).find('h1').css('text-align',
+                        //         'center');
+                        // }
+                    },
+
+                    {
+                        extend: 'copy',
+                        text: 'Copy',
+                        className: 'btn btn-danger',
+                        exportOptions: {
+                            columns: [0, 2, 4, 5, 6, 8]
+                        },
+                        messageTop: function() {
+                            return $('.filter').text().trim();
+                        },
+                        title: '',
+                        // customize: function(win) {
+                        //     $(win.document.body).css('text-align', 'center');
+                        //     $(win.document.body).find('h1').css('text-align',
+                        //         'center');
+                        // }
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'Excel',
+                        className: 'btn btn-danger',
+                        exportOptions: {
+                            columns: [0, 2, 4, 5, 6, 8]
+                        },
+                        messageTop: function() {
+                            return $('.filter').text().trim();
+                        },
+                        title: '',
+                        // customize: function(win) {
+                        //     $(win.document.body).css('text-align', 'center');
+                        //     $(win.document.body).find('h1').css('text-align',
+                        //         'center');
+                        // }
+                    }
+
+
+
+
+
+                ],
                 drawCallback: function(settings) {
-                    var route = "produit";
-                    delete_row(route);
+                    let route = "produit";
+                    if (typeof delete_row === "function") {
+                        delete_row(route);
+                    }
                 }
             });
 
 
 
-            // // Vérifiez si la DataTable est déjà initialisée
-            // if ($.fn.dataTable.isDataTable('#buttons-datatables')) {
-            //     // Si déjà initialisée, détruisez l'instance existante
-            //     $('#buttons-datatables').DataTable().destroy();
-            // }
-
-            // // Initialisez la DataTable
-            // var table = $('#buttons-datatables').DataTable();
-
-            // // Callback après chaque redessin de la table (pagination, filtrage, tri, etc.)
-            // table.on('draw', function() {
-            //     var route = "produit";
-            //     delete_row(route);
-            // });
         });
     </script>
-    {{-- <script>
-        $(document).ready(function() {
-            $('.delete').on("click", function(e) {
-                e.preventDefault();
-                var Id = $(this).attr('data-id');
-                Swal.fire({
-                    title: 'Etes-vous sûr(e) de vouloir supprimer ?',
-                    text: "Cette action est irréversible!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Supprimer!',
-                    cancelButtonText: 'Annuler',
-                    customClass: {
-                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
-                        cancelButton: 'btn btn-danger w-xs mt-2',
-                    },
-                    buttonsStyling: false,
-                    showCloseButton: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            type: "GET",
-                            url: "/produit/delete/" + Id,
-                            dataType: "json",
-
-                            success: function(response) {
-                                if (response.status == 200) {
-                                    Swal.fire({
-                                        title: 'Supprimé!',
-                                        text: 'Votre fichier a été supprimé.',
-                                        icon: 'success',
-                                        customClass: {
-                                            confirmButton: 'btn btn-primary w-xs mt-2',
-                                        },
-                                        buttonsStyling: false
-                                    })
-
-                                    $('#row_' + Id).remove();
-                                }
-                            }
-                        });
-                    }
-                });
-            });
-        });
-    </script> --}}
 @endsection

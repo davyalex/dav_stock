@@ -211,61 +211,7 @@
                 $('#buttons-datatables').DataTable().destroy();
             }
 
-            // $.ajax({
-            //     url: "{{ route('depense.getList') }}",
-            //     type: "GET",
-            //     dataType: "json",
-            //     success: function(response) {
-            //         let getDepense = response.depense;
-            //         console.log(getDepense);
-
-            //         let tbody = document.getElementById('listDepense');
-            //         tbody.innerHTML = '';
-
-            //         getDepense.forEach((item, index) => {
-            //             const isAchats = item.categorie_depense?.slug === 'achats';
-
-            //             tbody.innerHTML += `
-        //     <tr id="row_${item.id}">
-        //         <td>${index + 1}</td>
-        //         <td>${item.categorie_depense?.libelle || ''}</td>
-        //         <td>${item.libelle_depense?.libelle || item.categorie_depense?.libelle}</td>
-        //         <td>${Number(item.montant).toLocaleString('fr-FR')}</td>
-        //         <td>${item.user.first_name}</td>
-        //         <td>${new Date(item.date_depense).toLocaleDateString('fr-FR')}</td>
-        //         <td>
-        //             <div class="dropdown d-inline-block">
-        //                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
-        //                     data-bs-toggle="dropdown" aria-expanded="false">
-        //                     <i class="ri-more-fill align-middle"></i>
-        //                 </button>
-        //                 <ul class="dropdown-menu dropdown-menu-end">
-        //                     ${!isAchats ? `
-            //                             <li>
-            //                                 <a class="dropdown-item edit-item-btn" href="#" data-bs-toggle="modal"
-            //                                     data-bs-target="#myModalEdit${item.id}">
-            //                                     <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Modifier
-            //                                 </a>
-            //                             </li>` : ''
-        //                     }
-        //                     <li>
-        //                         <a class="dropdown-item remove-item-btn delete" href="#" data-id="${item.id}">
-        //                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Supprimer
-        //                         </a>
-        //                     </li>
-        //                 </ul>
-        //             </div>
-        //         </td>
-        //     </tr>
-
-
-
-        // `;
-            // console.log(tbody.innerHTML);
-
-            //         });
-
-
+          
             // Réinitialiser DataTable
             $('#buttons-datatables').DataTable({
                 dom: 'Bfrtip',

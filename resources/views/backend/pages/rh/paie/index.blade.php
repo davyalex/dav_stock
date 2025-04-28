@@ -26,7 +26,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des paies</h5>
+                    <h5 class="card-title mb-0 filter">Liste des paies</h5>
                     <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#myModal">Créer
                         une nouveau employés</button>
                 </div>
@@ -134,8 +134,125 @@
 
     <script>
         $(document).ready(function() {
-            var route = "paie"
-            delete_row(route);
-        })
+            // Afficher la liste des depenses depuis la depense.getList
+            // Détruire DataTable s’il existe déjà
+            if ($.fn.DataTable.isDataTable('#buttons-datatables')) {
+                $('#buttons-datatables').DataTable().destroy();
+            }
+
+
+            // Réinitialiser DataTable
+            $('#buttons-datatables').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'print'
+                ],
+                buttons: [{
+                        extend: 'print',
+                        text: 'Imprimer',
+                        className: 'btn btn-danger',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5,6,7,8]
+                        },
+                        messageTop: function() {
+                            return $('.filter').text().trim();
+                        },
+                        title: '',
+                        customize: function(win) {
+                            $(win.document.body).css('text-align', 'center');
+                            $(win.document.body).find('h1').css('text-align',
+                                'center');
+                        }
+                    },
+                    // {
+                    //     extend: 'pdf',
+                    //     text: 'Pdf',
+                    //     className: 'btn btn-danger',
+                    //     exportOptions: {
+                    //         columns: [0, 1, 2, 3, 4, 5,6,7,8]
+                    //     },
+                    //     messageTop: function() {
+                    //         return $('.filter').text().trim();
+                    //     },
+                    //     title: '',
+                    //     // customize: function(win) {
+                    //     //     $(win.document.body).css('text-align', 'center');
+                    //     //     $(win.document.body).find('h1').css('text-align',
+                    //     //         'center');
+                    //     // }
+                    // },
+
+                    {
+                        extend: 'csv',
+                        text: 'Csv',
+                        className: 'btn btn-danger',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5,6,7,8]
+                        },
+                        messageTop: function() {
+                            return $('.filter').text().trim();
+                        },
+                        title: '',
+                        // customize: function(win) {
+                        //     $(win.document.body).css('text-align', 'center');
+                        //     $(win.document.body).find('h1').css('text-align',
+                        //         'center');
+                        // }
+                    },
+
+                    {
+                        extend: 'copy',
+                        text: 'Copy',
+                        className: 'btn btn-danger',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5,6,7,8]
+                        },
+                        messageTop: function() {
+                            return $('.filter').text().trim();
+                        },
+                        title: '',
+                        // customize: function(win) {
+                        //     $(win.document.body).css('text-align', 'center');
+                        //     $(win.document.body).find('h1').css('text-align',
+                        //         'center');
+                        // }
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'Excel',
+                        className: 'btn btn-danger',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5,6,7,8]
+                        },
+                        messageTop: function() {
+                            return $('.filter').text().trim();
+                        },
+                        title: '',
+                        // customize: function(win) {
+                        //     $(win.document.body).css('text-align', 'center');
+                        //     $(win.document.body).find('h1').css('text-align',
+                        //         'center');
+                        // }
+                    }
+
+
+
+
+
+                ],
+                drawCallback: function(settings) {
+                    let route = "paie";
+                    if (typeof delete_row === "function") {
+                        delete_row(route);
+                    }
+                }
+            });
+            // },
+            // error: function(xhr, status, error) {
+            // console.error("Erreur AJAX :", error);
+            // }
+            // });
+
+        });
     </script>
 @endsection

@@ -293,7 +293,6 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     Route::prefix('etat-stock')->controller(EtatStockController::class)->group(function () {
         route::get('', 'index')->name('etat-stock.index');
         route::get('suivi-stock', 'suiviStock')->name('etat-stock.suiviStock');
-
     });
 
     // stock -achat
@@ -453,8 +452,8 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     });
 
 
-     //RH paie
-     Route::prefix('paie')->controller(PaieController::class)->group(function () {
+    //RH paie
+    Route::prefix('paie')->controller(PaieController::class)->group(function () {
         route::get('', 'index')->name('paie.index');
         route::post('store', 'store')->name('paie.store');
         route::post('update/{id}', 'update')->name('paie.update');
