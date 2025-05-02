@@ -568,7 +568,7 @@
                     return item.id == productId;
                 });
 
-                //############stock theorique##############
+                //############stock theorique deplacé ##############
 
 
 
@@ -593,7 +593,7 @@
 
 
 
-                // #############stock theorique
+                // #############stock theorique deplacé içi ##############
 
                 var stockTheorique = stockActuel - stockVendu; // stock restant du produit
                 // if (product.categorie.famille == 'bar') {
