@@ -680,69 +680,185 @@ class RapportController extends Controller
         }
     }
 
+    // function miseAJourStockVente()
+    // {
+    //     // Récupération des ventes dont la catégorie famille est "bar"
+    //     $data = DB::table('produit_vente')
+    //         ->join('produits', 'produit_vente.produit_id', '=', 'produits.id')
+    //         ->join('categories', 'produits.categorie_id', '=', 'categories.id')
+    //         ->where('categories.famille', 'bar') // Filtrer uniquement les produits de la famille "bar"
+    //         ->select('produit_vente.id', 'produit_vente.produit_id', 'produit_vente.variante_id', 'produit_vente.quantite') // Sélectionner les champs nécessaires
+    //         ->get();
+
+    //     foreach ($data as $value) {
+    //         // Vérifier si produit_id, variante_id et quantite existent pour éviter une erreur
+    //         if (!isset($value->produit_id, $value->variante_id, $value->quantite)) {
+    //             continue; // Ignore cette ligne et passe à la suivante
+    //         }
+
+    //         // Récupération de la quantité de la variante
+    //         $quantite = DB::table('produit_variante')
+    //             ->where('produit_id', $value->produit_id)
+    //             ->where('variante_id', $value->variante_id)
+    //             ->value('quantite');
+
+    //         // Vérification pour éviter une division par zéro
+    //         if (is_null($quantite) || $quantite == 0) {
+    //             continue;
+    //         }
+
+    //         // Mise à jour de la quantité de bouteilles vendues dans la table produit_vente uniquement pour les produits de la catégorie "bar"
+    //         DB::table('produit_vente')
+    //             ->join('produits', 'produit_vente.produit_id', '=', 'produits.id')
+    //             ->join('categories', 'produits.categorie_id', '=', 'categories.id')
+    //             ->where('categories.famille', 'bar') // Se limiter aux produits de la famille "bar"
+    //             ->where('produit_vente.id', $value->id) // Condition sur l'ID du produit_vente
+    //             ->update([
+    //                 'quantite_bouteille' => round($value->quantite / $quantite, 2),
+    //             ]);
+    //     }
+    // }
+
     function miseAJourStockVente()
     {
-        // Récupération des ventes dont la catégorie famille est "bar"
+        // Récupération des ventes de produits de la famille "bar" avec les variantes en une seule requête
         $data = DB::table('produit_vente')
             ->join('produits', 'produit_vente.produit_id', '=', 'produits.id')
             ->join('categories', 'produits.categorie_id', '=', 'categories.id')
-            ->where('categories.famille', 'bar') // Filtrer uniquement les produits de la famille "bar"
-            ->select('produit_vente.id', 'produit_vente.produit_id', 'produit_vente.variante_id', 'produit_vente.quantite') // Sélectionner les champs nécessaires
+            ->join('produit_variante', function ($join) {
+                $join->on('produit_vente.produit_id', '=', 'produit_variante.produit_id')
+                    ->on('produit_vente.variante_id', '=', 'produit_variante.variante_id');
+            })
+            ->where('categories.famille', 'bar')
+            ->select(
+                'produit_vente.id',
+                'produit_vente.quantite',
+                'produit_variante.quantite as quantite_variante'
+            )
             ->get();
 
+        // Préparation des mises à jour en batch
         foreach ($data as $value) {
-            // Vérifier si produit_id, variante_id et quantite existent pour éviter une erreur
-            if (!isset($value->produit_id, $value->variante_id, $value->quantite)) {
-                continue; // Ignore cette ligne et passe à la suivante
+            if ($value->quantite_variante && $value->quantite_variante > 0) {
+                DB::table('produit_vente')
+                    ->where('id', $value->id)
+                    ->update([
+                        'quantite_bouteille' => round($value->quantite / $value->quantite_variante, 2),
+                    ]);
             }
-
-            // Récupération de la quantité de la variante
-            $quantite = DB::table('produit_variante')
-                ->where('produit_id', $value->produit_id)
-                ->where('variante_id', $value->variante_id)
-                ->value('quantite');
-
-            // Vérification pour éviter une division par zéro
-            if (is_null($quantite) || $quantite == 0) {
-                continue;
-            }
-
-            // Mise à jour de la quantité de bouteilles vendues dans la table produit_vente uniquement pour les produits de la catégorie "bar"
-            DB::table('produit_vente')
-                ->join('produits', 'produit_vente.produit_id', '=', 'produits.id')
-                ->join('categories', 'produits.categorie_id', '=', 'categories.id')
-                ->where('categories.famille', 'bar') // Se limiter aux produits de la famille "bar"
-                ->where('produit_vente.id', $value->id) // Condition sur l'ID du produit_vente
-                ->update([
-                    'quantite_bouteille' => round($value->quantite / $quantite, 2),
-                ]);
         }
     }
 
 
+
+    // public function miseAjourProduitInventaire()
+    // {
+    //     $data = DB::table('inventaire_produit')->get(); // Récupérer les données
+
+    //     foreach ($data as $value) {
+    //         // Calculer le stock théorique
+    //         $sth = ($value->stock_dernier_inventaire + $value->stock_initial) - $value->stock_vendu;
+
+    //         // Calculer l'écart
+    //         $ecart = $value->stock_physique - $sth;
+
+    //         // Déterminer l'état du stock
+    //         if ($sth == 0 && $value->stock_physique == 0) {
+    //             $etat = 'Rupture';
+    //         } elseif ($ecart < 0) {
+    //             $etat = 'Perte';
+    //         } elseif ($ecart > 0) {
+    //             $etat = 'Surplus';
+    //         } else {
+    //             $etat = 'Conforme';
+    //         }
+
+    //         // Mise à jour du stock théorique et de l'état
+    //         DB::table('inventaire_produit')
+    //             ->where('id', $value->id)
+    //             ->update([
+    //                 'stock_theorique' => $sth,
+    //                 'ecart' => $ecart,
+    //                 'etat' => $etat,
+    //             ]);
+    //     }
+
+
+
+
+    //     foreach ($data as $value) {
+    //         // Récupérer l'inventaire actuel
+    //         $inventaireActuel = Inventaire::with('produits')->find($value->inventaire_id);
+
+    //         if (!$inventaireActuel) {
+    //             continue; // Si l'inventaire actuel n'existe pas, on passe au suivant
+    //         }
+
+    //         // Récupérer l'inventaire précédent (le plus récent ayant un ID inférieur)
+    //         $inventairePrecedent = Inventaire::where('id', '<', $value->inventaire_id)
+    //             ->orderBy('id', 'desc')
+    //             ->first();
+
+    //         // Déterminer la plage de dates
+    //         $dateDebut = $inventairePrecedent ? $inventairePrecedent->date_inventaire : null;
+    //         $dateFin = $inventaireActuel->date_inventaire;
+
+    //         // Récupérer les produits avec la quantité vendue et utilisée
+    //         $data_produit = Produit::whereHas('categorie', function ($q) {
+    //             $q->whereIn('famille', ['restaurant', 'bar']);
+    //         })
+    //             ->withSum(['ventes as quantite_vendue' => function ($query) use ($dateDebut, $dateFin) {
+    //                 if ($dateDebut) {
+    //                     $query->whereBetween('ventes.date_vente', [$dateDebut, $dateFin]);
+    //                 } else {
+    //                     $query->where('ventes.date_vente', '<', $dateFin);
+    //                 }
+    //             }], 'produit_vente.quantite_bouteille')
+
+    //             ->withSum(['sorties as quantite_utilisee' => function ($query) use ($dateDebut, $dateFin) {
+    //                 if ($dateDebut) {
+    //                     $query->whereBetween('sorties.date_sortie', [$dateDebut, $dateFin]);
+    //                 } else {
+    //                     $query->where('sorties.date_sortie', '<', $dateFin);
+    //                 }
+    //             }], 'produit_sortie.quantite_utilise')
+
+    //             ->with('categorie')
+    //             ->where('id', $value->produit_id)
+    //             ->get();
+
+    //         // Vérifier s'il y a des produits avant de faire la mise à jour
+    //         if ($data_produit->isNotEmpty()) {
+    //             foreach ($data_produit as $produit) {
+    //                 DB::table('inventaire_produit')
+    //                     ->where('produit_id', $produit->id)
+    //                     ->where('inventaire_id', $value->inventaire_id)
+    //                     ->update([
+    //                         'stock_vendu' => ($produit->quantite_vendue ?? 0) + ($produit->quantite_utilisee ?? 0), // Assure que les valeurs null sont remplacées par 0
+    //                     ]);
+    //             }
+    //         }
+    //     }
+    // }
+
+
+
     public function miseAjourProduitInventaire()
     {
-        $data = DB::table('inventaire_produit')->get(); // Récupérer les données
+        $data = DB::table('inventaire_produit')->get();
 
+        // 1. Mise à jour stock théorique et état
         foreach ($data as $value) {
-            // Calculer le stock théorique
             $sth = ($value->stock_dernier_inventaire + $value->stock_initial) - $value->stock_vendu;
-
-            // Calculer l'écart
             $ecart = $value->stock_physique - $sth;
 
-            // Déterminer l'état du stock
-            if ($sth == 0 && $value->stock_physique == 0) {
-                $etat = 'Rupture';
-            } elseif ($ecart < 0) {
-                $etat = 'Perte';
-            } elseif ($ecart > 0) {
-                $etat = 'Surplus';
-            } else {
-                $etat = 'Conforme';
-            }
+            $etat = match (true) {
+                $sth == 0 && $value->stock_physique == 0 => 'Rupture',
+                $ecart < 0 => 'Perte',
+                $ecart > 0 => 'Surplus',
+                default => 'Conforme',
+            };
 
-            // Mise à jour du stock théorique et de l'état
             DB::table('inventaire_produit')
                 ->where('id', $value->id)
                 ->update([
@@ -752,63 +868,44 @@ class RapportController extends Controller
                 ]);
         }
 
-
-
+        // 2. Précharger tous les inventaires nécessaires
+        $inventaires = Inventaire::orderBy('id')->get()->keyBy('id');
 
         foreach ($data as $value) {
-            // Récupérer l'inventaire actuel
-            $inventaireActuel = Inventaire::with('produits')->find($value->inventaire_id);
+            $inventaireActuel = $inventaires[$value->inventaire_id] ?? null;
+            if (!$inventaireActuel) continue;
 
-            if (!$inventaireActuel) {
-                continue; // Si l'inventaire actuel n'existe pas, on passe au suivant
-            }
-
-            // Récupérer l'inventaire précédent (le plus récent ayant un ID inférieur)
-            $inventairePrecedent = Inventaire::where('id', '<', $value->inventaire_id)
-                ->orderBy('id', 'desc')
+            $inventairePrecedent = $inventaires
+                ->where('id', '<', $value->inventaire_id)
+                ->sortByDesc('id')
                 ->first();
 
-            // Déterminer la plage de dates
-            $dateDebut = $inventairePrecedent ? $inventairePrecedent->date_inventaire : null;
+            $dateDebut = $inventairePrecedent?->date_inventaire;
             $dateFin = $inventaireActuel->date_inventaire;
 
-            // Récupérer les produits avec la quantité vendue et utilisée
-            $data_produit = Produit::whereHas('categorie', function ($q) {
-                $q->whereIn('famille', ['restaurant', 'bar']);
-            })
+            $produit = Produit::where('id', $value->produit_id)
+                ->whereHas('categorie', function ($q) {
+                    $q->whereIn('famille', ['restaurant', 'bar']);
+                })
                 ->withSum(['ventes as quantite_vendue' => function ($query) use ($dateDebut, $dateFin) {
-                    if ($dateDebut) {
-                        $query->whereBetween('ventes.date_vente', [$dateDebut, $dateFin]);
-                    } else {
-                        $query->where('ventes.date_vente', '<', $dateFin);
-                    }
+                    $query->whereBetween('ventes.date_vente', [$dateDebut ?? '1900-01-01', $dateFin]);
                 }], 'produit_vente.quantite_bouteille')
-
                 ->withSum(['sorties as quantite_utilisee' => function ($query) use ($dateDebut, $dateFin) {
-                    if ($dateDebut) {
-                        $query->whereBetween('sorties.date_sortie', [$dateDebut, $dateFin]);
-                    } else {
-                        $query->where('sorties.date_sortie', '<', $dateFin);
-                    }
+                    $query->whereBetween('sorties.date_sortie', [$dateDebut ?? '1900-01-01', $dateFin]);
                 }], 'produit_sortie.quantite_utilise')
+                ->first();
 
-                ->with('categorie')
-                ->where('id', $value->produit_id)
-                ->get();
-
-            // Vérifier s'il y a des produits avant de faire la mise à jour
-            if ($data_produit->isNotEmpty()) {
-                foreach ($data_produit as $produit) {
-                    DB::table('inventaire_produit')
-                        ->where('produit_id', $produit->id)
-                        ->where('inventaire_id', $value->inventaire_id)
-                        ->update([
-                            'stock_vendu' => ($produit->quantite_vendue ?? 0) + ($produit->quantite_utilisee ?? 0), // Assure que les valeurs null sont remplacées par 0
-                        ]);
-                }
+            if ($produit) {
+                DB::table('inventaire_produit')
+                    ->where('produit_id', $produit->id)
+                    ->where('inventaire_id', $value->inventaire_id)
+                    ->update([
+                        'stock_vendu' => ($produit->quantite_vendue ?? 0) + ($produit->quantite_utilisee ?? 0),
+                    ]);
             }
         }
     }
+
 
     public function historique(Request $request)
     {

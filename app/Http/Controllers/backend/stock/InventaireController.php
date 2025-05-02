@@ -275,6 +275,7 @@ class InventaireController extends Controller
             }
         }
     }
+    
 
 
     /**

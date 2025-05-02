@@ -568,7 +568,34 @@
                     return item.id == productId;
                 });
 
-                var stockTheorique = product.stock;  // stock restant du produit
+                //############stock theorique##############
+
+
+
+
+
+                // form.find('.stockActuel').val(
+                //     ((product.stock_dernier_inventaire || 0) + (product.stock_initial || 0)).toFixed(2)
+                // );
+
+                let stockActuel = (product.stock_dernier_inventaire || 0) + (product.stock_initial || 0);
+                form.find('.stockActuel').val(stockActuel % 1 === 0 ? stockActuel : stockActuel.toFixed(2));
+
+
+
+                var stockVendu;
+                if (product.categorie.famille == 'bar') {
+                    var stockVendu = product.quantite_vendue;
+                } else {
+                    var stockVendu = product.quantite_utilisee;
+                }
+                form.find('.stockVendu').val(stockVendu ?? 0); // stock vendu
+
+
+
+                // #############stock theorique
+
+                var stockTheorique = stockActuel - stockVendu; // stock restant du produit
                 // if (product.categorie.famille == 'bar') {
                 //     var stockTheorique = product.stock - product.quantite_vendue;
                 // } else {
@@ -583,24 +610,6 @@
                     0; // stock disponible pendant le dernier inventaire
 
 
-
-                // form.find('.stockActuel').val(
-                //     ((product.stock_dernier_inventaire || 0) + (product.stock_initial || 0)).toFixed(2)
-                // );
-
-                let stockActuel = (product.stock_dernier_inventaire || 0) + (product.stock_initial || 0);
-                form.find('.stockActuel').val(stockActuel % 1 === 0 ? stockActuel : stockActuel.toFixed(2));
-
-
-
-
-                var stockVendu;
-                if (product.categorie.famille == 'bar') {
-                    var stockVendu = product.quantite_vendue;
-                } else {
-                    var stockVendu = product.quantite_utilisee;
-                }
-                form.find('.stockVendu').val(stockVendu ?? 0); // stock vendu
 
             }
 
