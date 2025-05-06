@@ -23,6 +23,57 @@
 
 
     <div class="row">
+
+        <!-- ========== Start filtre ========== -->
+        @if (!auth()->user()->hasRole('caisse'))
+            <form action="{{ route('vente.index') }}" method="GET">
+                <div class="row mb-3">
+
+
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label for="statut" class="form-label">Periodes</label>
+                            <select class="form-select" id="periode" name="periode">
+                                <option value="">Toutes les periodes</option>
+                                @foreach (['jour' => 'Jour', 'semaine' => 'Semaine', 'mois' => 'Mois', 'annee' => 'Année'] as $key => $value)
+                                    <option value="{{ $key }}" {{ request('periode') == $key ? 'selected' : '' }}>
+                                        {{ $value }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="date_debut" class="form-label">Date de début</label>
+                        <input type="date" value="{{ request('date_debut') }}" class="form-control" id="date_debut" name="date_debut">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="date_fin" class="form-label">Date de fin</label>
+                        <input type="date" value="{{ request('date_fin') }}" class="form-control" id="date_fin" name="date_fin">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="caisse" class="form-label">Caisse</label>
+                        <select class="form-select" id="caisse" name="caisse">
+                           
+                            <option value= " ">Toutes les caisses</option>
+                            @foreach ($caisses as $caisse)
+                                <option value="{{ $caisse->id }}"  {{ request('caisse') == $caisse->id ? 'selected' : ''}}>{{ $caisse->libelle }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-2 mt-4">
+                        <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+                    </div>
+                </div>
+            </form>
+        @endif
+        <!-- ========== End filtre ========== -->
+
+
+
+
         @if (Auth::user()->hasRole('caisse'))
             <div class="col-lg-12">
                 <div class="alert alert-info alert-dismissible fade show d-flex justify-content-center align-items-center"
@@ -46,9 +97,47 @@
                 </div>
         @endif
 
+
+
+
+
         <div class="card">
             <div class="card-header d-flex justify-content-between">
-                <h5 class="card-title mb-0">Liste des ventes </strong></h5>
+
+
+                <!-- ========== Start filter result libellé ========== -->
+                <h5 class="card-title mb-0 filter" style="text-align: center">Liste des ventes
+                    @if (request('date_debut') || request('date_fin') || request('caisse') || request('periode'))
+
+                       
+
+                        @if (request()->has('periode') && request('periode') != null)
+                            -
+                            <strong>{{ request('periode') }}</strong>
+                        @endif
+
+                        @if (request('date_debut') || request('date_fin'))
+                            du
+                            @if (request('date_debut'))
+                                {{ \Carbon\Carbon::parse(request('date_debut'))->format('d/m/Y') }}
+                            @endif
+                            @if (request('date_fin'))
+                                au {{ \Carbon\Carbon::parse(request('date_fin'))->format('d/m/Y') }}
+                            @endif
+                        @endif
+
+                        @if (request()->has('caisse') && request('caisse') != null)
+                        -
+                        <strong>{{ ucfirst(App\Models\Caisse::find(request('caisse'))->libelle) }}</strong>
+                    @endif
+                    @else
+                        du mois en cours - {{ \Carbon\Carbon::now()->translatedFormat('F Y') }}
+                    @endif
+
+                </h5>
+                <!-- ========== End filter result libellé ========== -->
+
+
                 @if (auth()->user()->hasRole('caisse'))
                     @if ($sessionDate != null)
                         <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">
@@ -58,36 +147,6 @@
                             Nouvelle vente
                         </button>
                     @endif
-                @endif
-
-
-
-                @if (!auth()->user()->hasRole('caisse'))
-                    <form action="{{ route('vente.index') }}" method="GET">
-                        <div class="row mb-3">
-                            <div class="col-md-3">
-                                <label for="date_debut" class="form-label">Date de début</label>
-                                <input type="date" class="form-control" id="date_debut" name="date_debut">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="date_fin" class="form-label">Date de fin</label>
-                                <input type="date" class="form-control" id="date_fin" name="date_fin">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="caisse" class="form-label">Caisse</label>
-                                <select class="form-select" id="caisse" name="caisse">
-                                    <option value="">Toutes les caisses</option>
-                                    @foreach ($caisses as $caisse)
-                                        <option value="{{ $caisse->id }}">{{ $caisse->libelle }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="col-md-3 mt-4">
-                                <button type="submit" class="btn btn-primary">Filtrer</button>
-                            </div>
-                        </div>
-                    </form>
                 @endif
 
             </div>
@@ -144,9 +203,9 @@
                                 <th>Vendu le</th>
                                 <th>Vendu par</th>
                                 <th>Caisse</th>
-                               @role('developpeur') 
-                               <th>Action</th>
-                               @endrole
+                                @role('developpeur')
+                                    <th>Action</th>
+                                @endrole
                             </tr>
                         </thead>
                         <tbody>

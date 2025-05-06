@@ -65,15 +65,43 @@ class VenteController extends Controller
     {
         try {
 
-            // $data_vente = Vente::with('produits')
-            //     ->where('caisse_id', auth()->user()->caisse_id)
-            //     ->where('user_id', auth()->user()->id)
-            //     ->whereDate('created_at', today())
-            //     ->whereStatut('confirmée',)
-            //     ->where('statut_cloture', false)
-            //     ->orderBy('created_at', 'desc')
-            //     ->get();
             $caisses = Caisse::all();
+
+            // ##Filtres de recherche
+            // $query = Vente::with('produits')
+            //     ->whereStatut('confirmée')
+            //     ->orderBy('date_vente', 'desc');
+
+            // // Filtre par date
+            // if ($request->filled('date_debut') && $request->filled('date_fin')) {
+            //     $query->whereBetween('date_vente', [$request->date_debut, $request->date_fin]);
+            // } elseif ($request->filled('date_debut')) {
+            //     $query->whereDate('date_vente', '>=', $request->date_debut);
+            // } elseif ($request->filled('date_fin')) {
+            //     $query->whereDate('date_vente', '<=', $request->date_fin);
+            // }
+
+            // // Filtre par caisse
+            // if ($request->filled('caisse')) {
+            //     $query->where('caisse_id', $request->caisse);
+            // }
+
+            // if ($request->user()->hasRole('caisse')) {
+            //     $query->where('caisse_id', auth()->user()->caisse_id)
+            //         ->where('user_id', auth()->user()->id)
+            //         ->where('statut_cloture', false);
+            // }
+
+            // $data_vente = $query->get();
+            // // dd($data_vente->toArray());
+
+
+
+
+
+
+
+
 
 
 
@@ -82,16 +110,34 @@ class VenteController extends Controller
                 ->whereStatut('confirmée')
                 ->orderBy('date_vente', 'desc');
 
-            // Filtre par date
-            if ($request->filled('date_debut') && $request->filled('date_fin')) {
-                $query->whereBetween('date_vente', [$request->date_debut, $request->date_fin]);
-            } elseif ($request->filled('date_debut')) {
-                $query->whereDate('date_vente', '>=', $request->date_debut);
-            } elseif ($request->filled('date_fin')) {
-                $query->whereDate('date_vente', '<=', $request->date_fin);
+
+            // Vérifier si aucune période ou date spécifique n'a été fournie
+            if (!$request->filled('periode') && !$request->filled('date_debut') && !$request->filled('date_fin')) {
+                $query->whereMonth('date_vente', Carbon::now()->month)
+                    ->whereYear('date_vente', Carbon::now()->year);
             }
 
-            // Filtre par caisse
+            // sinon on applique le filtre des date et caisse
+            $dateDebut = $request->input('date_debut');
+            $dateFin = $request->input('date_fin');
+            $caisse = $request->input('caisse');
+            $periode = $request->input('periode');
+
+
+            // Formatage des dates
+            $dateDebut = $request->filled('date_debut') ? Carbon::parse($dateDebut)->format('Y-m-d') : null;
+            $dateFin = $request->filled('date_fin') ? Carbon::parse($dateFin)->format('Y-m-d') : null;
+
+            // Application des filtres de date
+            if ($dateDebut && $dateFin) {
+                $query->whereBetween('date_vente', [$dateDebut, $dateFin]);
+            } elseif ($dateDebut) {
+                $query->where('date_vente', '>=', $dateDebut);
+            } elseif ($dateFin) {
+                $query->where('date_vente', '<=', $dateFin);
+            }
+
+            // Application du filtre de caiise
             if ($request->filled('caisse')) {
                 $query->where('caisse_id', $request->caisse);
             }
@@ -101,12 +147,30 @@ class VenteController extends Controller
                     ->where('user_id', auth()->user()->id)
                     ->where('statut_cloture', false);
             }
+            // Application du filtre de periode
+            // periode=> jour, semaine, mois, année
+            if ($request->filled('periode')) {
+                $periode = $request->periode; // Ajout de cette ligne pour récupérer la période
+
+                if ($periode == 'jour') {
+                    $query->whereDate('date_vente', Carbon::today());
+                } elseif ($periode == 'semaine') {
+                    $query->whereBetween('date_vente', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                } elseif ($periode == 'mois') {
+                    $query->whereMonth('date_vente', Carbon::now()->month)
+                        ->whereYear('date_vente', Carbon::now()->year); // Ajout pour éviter d'avoir des résultats de plusieurs années
+                } elseif ($periode == 'annee') {
+                    $query->whereYear('date_vente', Carbon::now()->year);
+                }
+            }
 
             $data_vente = $query->get();
-            // dd($data_vente->toArray());
 
 
-            //session de la date manuelle
+            ## fin du filtre de recherche
+
+
+            //Recuperer la session de la date vente manuelle
             $sessionDate = null;
             if ($request->user()->hasRole('caisse')) {
                 $sessionDate = Caisse::find(Auth::user()->caisse_id);

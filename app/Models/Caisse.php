@@ -18,6 +18,7 @@ class Caisse extends Model
         'libelle',
         'description',
         'statut',
+        'session_date_vente',
         'created_at',
         'updated_at'
     ];
@@ -33,18 +34,13 @@ class Caisse extends Model
     }
 
     public function user()
-{
-    return $this->hasMany(User::class);
-}
+    {
+        return $this->hasMany(User::class);
+    }
 
 
-public function commandes()
-{
-    return $this->hasMany(Commande::class);
-}
-
-    
-
-
-
+    public function commandes()
+    {
+        return $this->hasMany(Commande::class);
+    }
 }

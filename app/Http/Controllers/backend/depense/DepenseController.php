@@ -22,7 +22,7 @@ class DepenseController extends Controller
     {
         //
         try {
-            $query = Depense::with(['libelle_depense', 'categorie_depense', 'user'])->OrderBy('created_at', 'DESC');
+            $query = Depense::with(['libelle_depense', 'categorie_depense', 'user'])->OrderBy('date_depense', 'DESC');
             // $data_libelle_depense = LibelleDepense::OrderBy('created_at', 'ASC')->get();
             // $categorie_depense = CategorieDepense::whereNotIn('slug', ['achats'])->get();
 
@@ -46,11 +46,11 @@ class DepenseController extends Controller
 
             // Application des filtres de date
             if ($dateDebut && $dateFin) {
-                $query->whereBetween('created_at', [$dateDebut, $dateFin]);
+                $query->whereBetween('date_depense', [$dateDebut, $dateFin]);
             } elseif ($dateDebut) {
-                $query->where('created_at', '>=', $dateDebut);
+                $query->where('date_depense', '>=', $dateDebut);
             } elseif ($dateFin) {
-                $query->where('created_at', '<=', $dateFin);
+                $query->where('date_depense', '<=', $dateFin);
             }
 
             // Application du filtre de statut
@@ -64,18 +64,18 @@ class DepenseController extends Controller
                 $periode = $request->periode; // Ajout de cette ligne pour récupérer la période
 
                 if ($periode == 'jour') {
-                    $query->whereDate('created_at', Carbon::today());
+                    $query->whereDate('date_depense', Carbon::today());
                 } elseif ($periode == 'semaine') {
-                    $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                    $query->whereBetween('date_depense', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
                 } elseif ($periode == 'mois') {
-                    $query->whereMonth('created_at', Carbon::now()->month)
-                        ->whereYear('created_at', Carbon::now()->year); // Ajout pour éviter d'avoir des résultats de plusieurs années
+                    $query->whereMonth('date_depense', Carbon::now()->month)
+                        ->whereYear('date_depense', Carbon::now()->year); // Ajout pour éviter d'avoir des résultats de plusieurs années
                 } elseif ($periode == 'annee') {
-                    $query->whereYear('created_at', Carbon::now()->year);
+                    $query->whereYear('date_depense', Carbon::now()->year);
                 }
             }
 
-            $data_depense = $query->orderBy('created_at', 'desc')->get();
+            $data_depense = $query->get();
 
 
 

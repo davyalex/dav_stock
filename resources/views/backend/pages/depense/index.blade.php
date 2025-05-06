@@ -79,7 +79,7 @@
             </form>
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 i class="card-title mb-0 filter" style="text-align: center">Liste des dépenses
+                    <h5 class="card-title mb-0 filter" style="text-align: center">Liste des dépenses
                         @if (request('date_debut') || request('date_fin') || request('categorie_depense') || request('periode'))
 
                             @if (request()->has('categorie') && request('categorie') != null)
@@ -211,7 +211,7 @@
                 $('#buttons-datatables').DataTable().destroy();
             }
 
-          
+
             // Réinitialiser DataTable
             $('#buttons-datatables').DataTable({
                 dom: 'Bfrtip',
