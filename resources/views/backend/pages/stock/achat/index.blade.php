@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-   Stock
+    Stock
 @endsection
 @section('css')
     <!--datatable css-->
@@ -13,10 +13,10 @@
 @section('content')
     @component('backend.components.breadcrumb')
         @slot('li_1')
-           Gestion de stock
+            Gestion de stock
         @endslot
         @slot('title')
-        Liste des facture
+            Liste des facture
         @endslot
     @endcomponent
 
@@ -49,7 +49,9 @@
                                 @foreach ($data_facture as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
-                                        <td> <a class="fw-bold" href="{{route('achat.show' , $item->id)}}">{{ $item['numero_facture'] }}</a> </td>
+                                        <td> <a class="fw-bold"
+                                                href="{{ route('achat.show', $item->id) }}">{{ $item['numero_facture'] }}</a>
+                                        </td>
                                         <td>{{ $item['type'] }}</td>
                                         <td>{{ $item['fournisseur']['nom'] ?? 'N/A' }}</td>
                                         <td> {{ $item['montant'] }} </td>
@@ -67,7 +69,8 @@
                                                                 class=" ri-exchange-fill align-bottom me-2 text-muted"></i>
                                                             Ajustement</a>
                                                     </li> --}}
-                                                    <li><a href="{{route('achat.show' , $item->id)}}" class="dropdown-item"><i
+                                                    <li><a href="{{ route('achat.show', $item->id) }}"
+                                                            class="dropdown-item"><i
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                             Details</a>
                                                     </li>
@@ -75,13 +78,17 @@
                                                             class="dropdown-item edit-item-btn"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             Edit</a></li> --}}
-                                                    <li>
-                                                        <a href="#" class="dropdown-item remove-item-btn delete"
-                                                            data-id={{ $item['id'] }}>
-                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Supprimer
-                                                        </a>
-                                                    </li>
+
+
+                                                    @role('developpeur')
+                                                        <li>
+                                                            <a href="#" class="dropdown-item remove-item-btn delete"
+                                                                data-id={{ $item['id'] }}>
+                                                                <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                                Supprimer
+                                                            </a>
+                                                        </li>
+                                                    @endrole
                                                 </ul>
                                             </div>
                                         </td>
@@ -119,8 +126,8 @@
 
     <script>
         $(document).ready(function() {
-             // Vérifiez si la DataTable est déjà initialisée
-             if ($.fn.DataTable.isDataTable('#buttons-datatables')) {
+            // Vérifiez si la DataTable est déjà initialisée
+            if ($.fn.DataTable.isDataTable('#buttons-datatables')) {
                 // Si déjà initialisée, détruisez l'instance existante
                 $('#buttons-datatables').DataTable().destroy();
             }

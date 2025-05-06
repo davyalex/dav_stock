@@ -217,38 +217,63 @@ class VenteController extends Controller
      *
      * @return void
      */
-    public function miseAJourStock($id) // Mise a jour des stock variante
+    // public function miseAJourStock($id) // Mise a jour des stock variante
+    // {
+    //     $produit = Produit::find($id);
+
+    //     if (!$produit) {
+    //         return; // Arrête l'exécution si le produit n'existe pas
+    //     }
+
+    //     // Récupérer toutes les variantes associées au produit
+    //     $variantes = DB::table('produit_variante')
+    //         ->where('produit_id', $produit->id)
+    //         ->get();
+
+    //     foreach ($variantes as $variante) {
+    //         // Récupérer la quantité disponible actuelle
+    //         $quantite_disponible_actuelle = DB::table('produit_variante')
+    //             ->where('produit_id', $produit->id)
+    //             ->where('variante_id', $variante->variante_id)
+    //             ->value('quantite_disponible');
+
+    //         // Calculer la nouvelle quantité disponible
+    //         $nouvelle_quantite = $quantite_disponible_actuelle + ($produit->stock * $variante->quantite);
+
+    //         // Mettre à jour la quantité disponible
+    //         DB::table('produit_variante')
+    //             ->where('produit_id', $produit->id)
+    //             ->where('variante_id', $variante->variante_id)
+    //             ->update([
+    //                 'quantite_disponible' => $nouvelle_quantite,
+    //             ]);
+    //     }
+    // }
+
+    public function miseAJourStock($id)
     {
         $produit = Produit::find($id);
 
         if (!$produit) {
-            return; // Arrête l'exécution si le produit n'existe pas
+            return; // Le produit n'existe pas
         }
 
-        // Récupérer toutes les variantes associées au produit
+        // Récupérer toutes les variantes du produit
         $variantes = DB::table('produit_variante')
             ->where('produit_id', $produit->id)
             ->get();
 
         foreach ($variantes as $variante) {
-            // Récupérer la quantité disponible actuelle
-            $quantite_disponible_actuelle = DB::table('produit_variante')
-                ->where('produit_id', $produit->id)
-                ->where('variante_id', $variante->variante_id)
-                ->value('quantite_disponible');
+            // Calculer directement la nouvelle quantité disponible
+            $nouvelle_quantite = $produit->stock * $variante->quantite;
 
-            // Calculer la nouvelle quantité disponible
-            $nouvelle_quantite = $quantite_disponible_actuelle + ($produit->stock * $variante->quantite);
-
-            // Mettre à jour la quantité disponible
+            // Mettre à jour la variante
             DB::table('produit_variante')
-                ->where('produit_id', $produit->id)
-                ->where('variante_id', $variante->variante_id)
-                ->update([
-                    'quantite_disponible' => $nouvelle_quantite,
-                ]);
+                ->where('id', $variante->id)
+                ->update(['quantite_disponible' => round($nouvelle_quantite, 2)]);
         }
     }
+
 
 
 
@@ -262,44 +287,77 @@ class VenteController extends Controller
      *
      * @return void
      */
+    // function miseAJourStockVente()
+    // {
+    //     // Récupération des ventes dont la catégorie famille est "bar"
+    //     $data = DB::table('produit_vente')
+    //         ->join('produits', 'produit_vente.produit_id', '=', 'produits.id')
+    //         ->join('categories', 'produits.categorie_id', '=', 'categories.id')
+    //         ->where('categories.famille', 'bar') // Filtrer uniquement les produits de la famille "bar"
+    //         ->select('produit_vente.id', 'produit_vente.produit_id', 'produit_vente.variante_id', 'produit_vente.quantite') // Sélectionner les champs nécessaires
+    //         ->get();
+
+    //     foreach ($data as $value) {
+    //         // Vérifier si produit_id, variante_id et quantite existent pour éviter une erreur
+    //         if (!isset($value->produit_id, $value->variante_id, $value->quantite)) {
+    //             continue; // Ignore cette ligne et passe à la suivante
+    //         }
+
+    //         // Récupération de la quantité de la variante
+    //         $quantite = DB::table('produit_variante')
+    //             ->where('produit_id', $value->produit_id)
+    //             ->where('variante_id', $value->variante_id)
+    //             ->value('quantite');
+
+    //         // Vérification pour éviter une division par zéro
+    //         if (is_null($quantite) || $quantite == 0) {
+    //             continue;
+    //         }
+
+    //         // Mise à jour de la quantité de bouteilles vendues dans la table produit_vente uniquement pour les produits de la catégorie "bar"
+    //         DB::table('produit_vente')
+    //             ->join('produits', 'produit_vente.produit_id', '=', 'produits.id')
+    //             ->join('categories', 'produits.categorie_id', '=', 'categories.id')
+    //             ->where('categories.famille', 'bar') // Se limiter aux produits de la famille "bar"
+    //             ->where('produit_vente.id', $value->id) // Condition sur l'ID du produit_vente
+    //             ->update([
+    //                 'quantite_bouteille' => round($value->quantite / $quantite, 2),
+    //             ]);
+    //     }
+    // }
+
+
     function miseAJourStockVente()
     {
-        // Récupération des ventes dont la catégorie famille est "bar"
+        // Récupérer tous les enregistrements nécessaires en une seule requête
         $data = DB::table('produit_vente')
             ->join('produits', 'produit_vente.produit_id', '=', 'produits.id')
             ->join('categories', 'produits.categorie_id', '=', 'categories.id')
-            ->where('categories.famille', 'bar') // Filtrer uniquement les produits de la famille "bar"
-            ->select('produit_vente.id', 'produit_vente.produit_id', 'produit_vente.variante_id', 'produit_vente.quantite') // Sélectionner les champs nécessaires
+            ->join('produit_variante', function ($join) {
+                $join->on('produit_vente.produit_id', '=', 'produit_variante.produit_id')
+                    ->on('produit_vente.variante_id', '=', 'produit_variante.variante_id');
+            })
+            ->where('categories.famille', 'bar')
+            ->select(
+                'produit_vente.id',
+                'produit_vente.quantite',
+                'produit_variante.quantite as quantite_variante'
+            )
             ->get();
 
-        foreach ($data as $value) {
-            // Vérifier si produit_id, variante_id et quantite existent pour éviter une erreur
-            if (!isset($value->produit_id, $value->variante_id, $value->quantite)) {
-                continue; // Ignore cette ligne et passe à la suivante
+        foreach ($data as $item) {
+            if ($item->quantite_variante == 0) {
+                continue; // éviter la division par zéro
             }
 
-            // Récupération de la quantité de la variante
-            $quantite = DB::table('produit_variante')
-                ->where('produit_id', $value->produit_id)
-                ->where('variante_id', $value->variante_id)
-                ->value('quantite');
+            $quantite_bouteille = round($item->quantite / $item->quantite_variante, 2);
 
-            // Vérification pour éviter une division par zéro
-            if (is_null($quantite) || $quantite == 0) {
-                continue;
-            }
-
-            // Mise à jour de la quantité de bouteilles vendues dans la table produit_vente uniquement pour les produits de la catégorie "bar"
             DB::table('produit_vente')
-                ->join('produits', 'produit_vente.produit_id', '=', 'produits.id')
-                ->join('categories', 'produits.categorie_id', '=', 'categories.id')
-                ->where('categories.famille', 'bar') // Se limiter aux produits de la famille "bar"
-                ->where('produit_vente.id', $value->id) // Condition sur l'ID du produit_vente
-                ->update([
-                    'quantite_bouteille' => round($value->quantite / $quantite, 2),
-                ]);
+                ->where('id', $item->id)
+                ->update(['quantite_bouteille' => $quantite_bouteille]);
         }
     }
+
 
 
 
@@ -721,5 +779,82 @@ class VenteController extends Controller
         } catch (\Throwable $th) {
             return $th->getMessage();
         }
+    }
+
+
+
+
+
+
+    // suprimer une vente
+    // public function delete($id)
+    // {
+    //     // Récupérer tous les produits liés à la  ventes
+    //     $vente = Vente::find($id);
+
+    //     if ($vente->isEmpty()) {
+    //         return response()->json(['message' => 'Aucune vente trouvé'], 404);
+    //     }
+
+    //     foreach ($vente->produits as $produit) {
+    //         // Récupérer le produit lié à la vente
+    //         $produitVente = Produit::find($produit->id);
+    //         if (!$produitVente) {
+    //             continue; // On saute si le produit n'existe pas
+    //         } else {
+    //             // Mettre à jour le stock du produit
+    //             $produitVente->stock += $produit->pivot->quantite_bouteille;
+    //             $produitVente->save();
+    //         }
+
+    //         // Mettre les variantes à 0 (si nécessaire)
+    //         DB::table('produit_variante')
+    //             ->where('produit_id', $produit->id)
+    //             ->update(['quantite_disponible' => 0]);
+
+    //         // Mise à jour du stock
+    //         $this->miseAJourStock($produit->id);
+    //     }
+
+    //     // Supprimer la vente
+    //     Vente::find($id)->forceDelete();
+
+    //     return response()->json(['status' => 200]);
+    // }
+
+
+    public function delete($id)
+    {
+        // Récupérer la vente avec ses produits
+        $vente = Vente::with('produits')->find($id);
+
+        if (!$vente) {
+            return response()->json(['message' => 'Vente non trouvée'], 404);
+        }
+
+        foreach ($vente->produits as $produit) {
+            // Vérifier si le produit existe réellement
+            $produitVente = Produit::find($produit->id);
+            if (!$produitVente) {
+                continue;
+            }
+
+            // Réajouter la quantité vendue au stock du produit
+            $produitVente->stock += $produit->pivot->quantite_bouteille;
+            $produitVente->save();
+
+            // Remettre la quantité des variantes à 0 (optionnel selon ta logique métier)
+            DB::table('produit_variante')
+                ->where('produit_id', $produit->id)
+                ->update(['quantite_disponible' => 0]);
+
+            // Recalcul du stock (si nécessaire)
+            $this->miseAJourStock($produit->id);
+        }
+
+        // Supprimer la vente
+        $vente->forceDelete();
+
+        return response()->json(['status' => 200]);
     }
 }

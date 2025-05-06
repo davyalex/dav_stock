@@ -347,6 +347,9 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         ##vente menu
         route::get('create-menu', 'createVenteMenu')->name('vente.menu.create'); //vue de la page de vente menu
         route::post('store-menu', 'storeVenteMenu')->name('vente.menu.store');
+
+        ##supprimer une vente
+        route::get('delete/{id}', 'delete')->name('vente.delete');
     });
 
     // Commande

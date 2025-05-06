@@ -144,6 +144,9 @@
                                 <th>Vendu le</th>
                                 <th>Vendu par</th>
                                 <th>Caisse</th>
+                               @role('developpeur') 
+                               <th>Action</th>
+                               @endrole
                             </tr>
                         </thead>
                         <tbody>
@@ -165,6 +168,26 @@
                                     <td> {{ $item['created_at']->format('d-m-Y à H:i') }} </td>
                                     <td> {{ $item['user']['first_name'] }} {{ $item['user']['last_name'] }} </td>
                                     <td> {{ $item['caisse']['libelle'] ?? '' }} </td>
+
+                                    @role('developpeur')
+                                        <td class="d-block">
+                                            <div class="dropdown d-inline-block">
+                                                <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="ri-more-fill align-middle"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li>
+                                                        <a href="#" class="dropdown-item remove-item-btn delete"
+                                                            data-id={{ $item['id'] }}>
+                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                            Supprimer
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    @endrole
                                 </tr>
                             @empty
                                 <tr>
@@ -215,6 +238,28 @@
                     // cancelButtonText: 'Annuler'
                 })
             })
+
+
+            // Vérifiez si la DataTable est déjà initialisée
+            if ($.fn.DataTable.isDataTable('#buttons-datatables')) {
+                // Si déjà initialisée, détruisez l'instance existante
+                $('#buttons-datatables').DataTable().destroy();
+            }
+
+            // Initialisez la DataTable avec les options et le callback
+            var table = $('#buttons-datatables').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'print'
+                ],
+
+                // Utilisez drawCallback pour exécuter delete_row après chaque redessin
+                drawCallback: function(settings) {
+                    var route = "vente"
+                    delete_row(route);
+                }
+            });
+
 
 
             // $('.btnCloturer').click(function(e) {

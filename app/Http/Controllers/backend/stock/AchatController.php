@@ -565,42 +565,82 @@ class AchatController extends Controller
 
 
 
+    // public function delete($id)
+    // {
+    //     // Récupérer l'achat lié à la facture
+    //     $achat = Achat::where('facture_id', $id)->first();
+
+    //     if (!$achat) {
+    //         return response()->json(['message' => 'Achat non trouvé'], 404);
+    //     }
+
+    //     // Récupérer le produit lié à l'achat
+    //     $produit = Produit::find($achat->produit_id);
+    //     if (!$produit) {
+    //         return response()->json(['message' => 'Produit non trouvé'], 404);
+    //     }
+
+    //     // Récupérer la quantité stockable de l'achat
+    //     $quantite = $achat->quantite_stocke;
+
+    //     // Mettre à jour le stock du produit
+    //     $produit->stock -= $quantite;
+    //     $produit->stock_initial -= $quantite;
+    //     $produit->save();
+
+    //     // Mettre à jour la quantité disponible des variantes du produit
+    //     DB::table('produit_variante')
+    //         ->where('produit_id', $produit->id)
+    //         ->update(['quantite_disponible' => 0]);
+
+    //     // Appeler la fonction miseAJourStock
+    //     $this->miseAJourStock($produit->id);
+
+    //     // Supprimer la facture
+    //     Facture::find($id)->forceDelete();
+
+    //     return response()->json(['status' => 200]);
+    // }
+
+
     public function delete($id)
     {
-        // Récupérer l'achat lié à la facture
-        $achat = Achat::where('facture_id', $id)->first();
+        // Récupérer tous les achats liés à la facture
+        $achats = Achat::where('facture_id', $id)->get();
 
-        if (!$achat) {
-            return response()->json(['message' => 'Achat non trouvé'], 404);
+        if ($achats->isEmpty()) {
+            return response()->json(['message' => 'Aucun achat trouvé pour cette facture'], 404);
         }
 
-        // Récupérer le produit lié à l'achat
-        $produit = Produit::find($achat->produit_id);
-        if (!$produit) {
-            return response()->json(['message' => 'Produit non trouvé'], 404);
+        foreach ($achats as $achat) {
+            // Récupérer le produit lié à l'achat
+            $produit = Produit::find($achat->produit_id);
+            if (!$produit) {
+                continue; // On saute si le produit n'existe pas
+            }
+
+            // Réduction du stock
+            $quantite = $achat->quantite_stocke;
+            $produit->stock -= $quantite;
+            $produit->stock_initial -= $quantite;
+            $produit->save();
+
+            // Mettre les variantes à 0 (si nécessaire)
+            DB::table('produit_variante')
+                ->where('produit_id', $produit->id)
+                ->update(['quantite_disponible' => 0]);
+
+            // Mise à jour du stock
+            $this->miseAJourStock($produit->id);
         }
 
-        // Récupérer la quantité stockable de l'achat
-        $quantite = $achat->quantite_stocke;
-
-        // Mettre à jour le stock du produit
-        $produit->stock -= $quantite;
-        $produit->stock_initial -= $quantite;
-        $produit->save();
-
-        // Mettre à jour la quantité disponible des variantes du produit
-        DB::table('produit_variante')
-            ->where('produit_id', $produit->id)
-            ->update(['quantite_disponible' => 0]);
-
-        // Appeler la fonction miseAJourStock
-        $this->miseAJourStock($produit->id);
-
-        // Supprimer la facture
+        // Supprimer la facture (et potentiellement ses achats si liés par cascade)
         Facture::find($id)->forceDelete();
 
         return response()->json(['status' => 200]);
     }
+
+
 
 
     // public function miseAJourStock($id)
