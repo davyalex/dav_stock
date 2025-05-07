@@ -69,7 +69,10 @@
                                     <th>#</th>
                                     <th>Code</th>
                                     <th>Nom</th>
-                                    <th>Stock Théorique</th>
+                                    @role('developpeur')
+                                        <th>Stock</th>
+                                    @endrole
+
                                     <th>Stock Physique</th>
                                 </tr>
                             </thead>
@@ -82,7 +85,9 @@
                                         <td>{{ ++$key }}</td>
                                         <td>{{ $item['code'] }}</td>
                                         <td>{{ $item['nom'] }} {{ $item['valeur_unite'] ?? '' }}</td>
-                                        <td>{{ $item['stock'] }}</td>
+                                        @role('developpeur')
+                                            <td>{{ $item['stock'] }}</td>
+                                        @endrole
                                         <td></td>
                                     </tr>
                                 @endforeach
