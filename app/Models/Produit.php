@@ -168,7 +168,22 @@ class Produit extends Model implements HasMedia
     }
 
 
-    // ScopeActive produits
+    public function variantes(): BelongsToMany
+    {
+        return $this->belongsToMany(Variante::class, 'produit_variante')->withPivot([
+            'quantite',
+            'prix',
+            'total',
+            // 'quantite_stocke',
+            'quantite_disponible',
+            'quantite_vendu',
+            'bouteille_vendu'
+        ])->withTimestamps();
+    }
+
+
+
+        // ScopeActive produits
 
     /**
      * Scope to retrieve only active products.
@@ -186,16 +201,9 @@ class Produit extends Model implements HasMedia
 
 
 
-    public function variantes(): BelongsToMany
+    // scope pour trier les produits par ordre alphabétique
+    public function scopeAlphabetique($query)
     {
-        return $this->belongsToMany(Variante::class, 'produit_variante')->withPivot([
-            'quantite',
-            'prix',
-            'total',
-            // 'quantite_stocke',
-            'quantite_disponible',
-            'quantite_vendu',
-            'bouteille_vendu'
-        ])->withTimestamps();
-    }
+        return $query->orderBy('nom', 'asc');
+    }   
 }
