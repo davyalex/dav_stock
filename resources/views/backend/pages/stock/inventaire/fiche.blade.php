@@ -69,6 +69,7 @@
                                     <th>#</th>
                                     <th>Code</th>
                                     <th>Nom</th>
+                                    <th>Stock Théorique</th>
                                     <th>Stock Physique</th>
                                 </tr>
                             </thead>
@@ -80,7 +81,8 @@
                                     <tr id="row_{{ $item['id'] }}">
                                         <td>{{ ++$key }}</td>
                                         <td>{{ $item['code'] }}</td>
-                                        <td>{{ $item['nom'] }} {{ $item['valeur_unite'] ?? '' }}
+                                        <td>{{ $item['nom'] }} {{ $item['valeur_unite'] ?? '' }}</td>
+                                        <td>{{ $item['stock'] }}</td>
                                         <td></td>
                                     </tr>
                                 @endforeach
