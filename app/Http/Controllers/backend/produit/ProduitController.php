@@ -69,36 +69,69 @@ class ProduitController extends Controller
     // }
 
 
+    // public function calculeQteVarianteProduit()
+    // {
+    //     // Récupérer les produits appartenant à la famille "bar"
+    //     $data_produit_bar = Produit::withWhereHas('categorie', fn($q) => $q->where('famille', 'bar'))
+    //         ->orderBy('created_at', 'DESC')
+    //         ->get();
+
+    //     foreach ($data_produit_bar as $produit) {
+    //         // Mettre à zéro toutes les quantités disponibles des variantes du produit
+    //         DB::table('produit_variante')
+    //             ->where('produit_id', $produit->id)
+    //             ->update(['quantite_disponible' => 0]);
+
+    //         // Récupérer toutes les variantes associées au produit
+    //         $variantes = DB::table('produit_variante')
+    //             ->where('produit_id', $produit->id)
+    //             ->get();
+
+    //         foreach ($variantes as $variante) {
+    //             // Calculer la nouvelle quantité disponible
+    //             $nouvelle_quantite = $produit->stock * $variante->quantite;
+
+    //             // Mettre à jour la quantité disponible
+    //             DB::table('produit_variante')
+    //                 ->where('produit_id', $produit->id)
+    //                 ->where('variante_id', $variante->variante_id)
+    //                 ->update(['quantite_disponible' => $nouvelle_quantite]);
+    //         }
+    //     }
+    // }
+
+
     public function calculeQteVarianteProduit()
     {
-        // Récupérer les produits appartenant à la famille "bar"
-        $data_produit_bar = Produit::withWhereHas('categorie', fn($q) => $q->where('famille', 'bar'))
-            ->orderBy('created_at', 'DESC')
+        $produits = Produit::withWhereHas('categorie', fn($q) => $q->where('famille', 'bar'))
+            ->orderByDesc('created_at')
             ->get();
 
-        foreach ($data_produit_bar as $produit) {
-            // Mettre à zéro toutes les quantités disponibles des variantes du produit
+        foreach ($produits as $produit) {
+            // Réinitialiser les quantités à 0 en une seule requête
             DB::table('produit_variante')
                 ->where('produit_id', $produit->id)
                 ->update(['quantite_disponible' => 0]);
 
-            // Récupérer toutes les variantes associées au produit
+            // Préparation des mises à jour en une seule passe
             $variantes = DB::table('produit_variante')
                 ->where('produit_id', $produit->id)
                 ->get();
 
             foreach ($variantes as $variante) {
-                // Calculer la nouvelle quantité disponible
-                $nouvelle_quantite = $produit->stock * $variante->quantite;
+                $quantite = $produit->stock * $variante->quantite;
 
-                // Mettre à jour la quantité disponible
+                // Éviter de faire plusieurs appels au même WHERE
                 DB::table('produit_variante')
-                    ->where('produit_id', $produit->id)
-                    ->where('variante_id', $variante->variante_id)
-                    ->update(['quantite_disponible' => $nouvelle_quantite]);
+                    ->where([
+                        ['produit_id', '=', $produit->id],
+                        ['variante_id', '=', $variante->variante_id],
+                    ])
+                    ->update(['quantite_disponible' => $quantite]);
             }
         }
     }
+
 
 
 
@@ -114,11 +147,13 @@ class ProduitController extends Controller
         $data_produit = Produit::withWhereHas('typeProduit', fn($q) => $q->whereIn('type', ['restaurant', 'bar']))
             ->when($filter, function ($query) use ($filter) {
                 return $query->withWhereHas('typeProduit', fn($q) => $q->where('type', $filter));
-            })->orderBy('created_at', 'DESC')->get();
+            })->orderBy('created_at', 'DESC')
+            ->with(['variantes' ,'categorie' ])
+            ->get();
         // $data_produit = Produit::withWhereHas('typeProduit', fn($q) => $q->whereIn('type', ['restaurant', 'bar']))
         //     ->orderBy('created_at', 'DESC')->get();
 
-
+        // dd($data_produit->toArray());
 
 
         // Appeler la fonction calculeQteVarianteProduit

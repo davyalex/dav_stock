@@ -86,7 +86,19 @@
                                         <td>{{ $item['code'] }}</td>
                                         <td>{{ $item['nom'] }} {{ $item['valeur_unite'] ?? '' }}</td>
                                         @role('developpeur')
-                                            <td>{{ $item['stock'] }}</td>
+                                            @if ($item->categorie->famille == 'bar')
+                                                <td>
+                                                    <ul>
+                                                        @foreach ($item->variantes->sortBy('libelle') as $variantes)
+                                                        <li>{{ $variantes->libelle }} : {{ $variantes->pivot->quantite_disponible }}</li>
+                                                    @endforeach
+                                                    
+                                                    </ul>
+
+                                                </td>
+                                            @else
+                                                <td>{{ $item['stock'] }}</td>
+                                            @endif
                                         @endrole
                                         <td></td>
                                     </tr>

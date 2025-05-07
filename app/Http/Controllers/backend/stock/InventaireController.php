@@ -275,7 +275,7 @@ class InventaireController extends Controller
             }
         }
     }
-    
+
 
 
     /**
@@ -477,35 +477,59 @@ class InventaireController extends Controller
 
 
     // Fiche inventaire
-    public function ficheInventaire(Request $request)
-    { // alphabetique=> scope pour trier les produits par ordre alphabetique
-        try {
-            // recuperer tous les produit en les groupant par categorie bar et restaurant
-            $type = $request->query('type'); // Récupère le paramètre 'type' de l'URL
+    // public function ficheInventaire(Request $request)
+    // { // alphabetique=> scope pour trier les produits par ordre alphabetique
+    //     try {
+    //         // recuperer tous les produit en les groupant par categorie bar et restaurant
+    //         $type = $request->query('type'); // Récupère le paramètre 'type' de l'URL
 
-            if ($type == 'bar') {
-                $produits = Produit::alphabetique()->whereHas('categorie', function ($q) {
-                    $q->where('famille', 'bar');
-                })->get();
-            } elseif ($type == 'restaurant') {
-                $produits = Produit::alphabetique()->whereHas('categorie', function ($q) {
-                    $q->where('famille', 'restaurant');
-                })->get();
+    //         if ($type == 'bar') {
+    //             $produits = Produit::alphabetique()->whereHas('categorie', function ($q) {
+    //                 $q->where('famille', 'bar');
+    //             })->get();
+    //         } elseif ($type == 'restaurant') {
+    //             $produits = Produit::alphabetique()->whereHas('categorie', function ($q) {
+    //                 $q->where('famille', 'restaurant');
+    //             })->get();
+    //         } else {
+    //             // Récupère les produits des familles 'bar' et 'restaurant' et les groupe par famille
+    //             $produits = Produit::alphabetique()->with('categorie')
+    //                 ->whereHas('categorie', function ($q) {
+    //                     $q->whereIn('famille', ['bar', 'restaurant']);
+    //                 })
+    //                 ->get();
+    //             // ->groupBy('categorie.famille'); // Groupe les produits par famille
+    //         }
+
+    //         dd($produits->toArray());
+
+    //         return view('backend.pages.stock.inventaire.fiche', compact('produits'));
+    //     } catch (\Throwable $e) {
+    //         return $e->getMessage();
+    //     }
+    // }
+
+
+    public function ficheInventaire(Request $request)
+    {
+        try {
+            $type = $request->query('type'); // 'bar', 'restaurant' ou null
+
+            $query = Produit::alphabetique()->with(['categorie' , 'variantes']);
+
+            if (in_array($type, ['bar', 'restaurant'])) {
+                $query->whereHas('categorie', fn($q) => $q->where('famille', $type));
             } else {
-                // Récupère les produits des familles 'bar' et 'restaurant' et les groupe par famille
-                $produits = Produit::alphabetique()->with('categorie')
-                    ->whereHas('categorie', function ($q) {
-                        $q->whereIn('famille', ['bar', 'restaurant']);
-                    })
-                    ->get();
-                // ->groupBy('categorie.famille'); // Groupe les produits par famille
+                $query->whereHas('categorie', fn($q) => $q->whereIn('famille', ['bar', 'restaurant']));
             }
 
-            // dd($produits->toArray());
+            $produits = $query->get();
+
+            // dd($produits->toArray()); // Pour test si nécessaire
 
             return view('backend.pages.stock.inventaire.fiche', compact('produits'));
         } catch (\Throwable $e) {
-            return $e->getMessage();
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 }

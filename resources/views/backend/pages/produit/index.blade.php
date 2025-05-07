@@ -94,7 +94,26 @@
                                         <td>{{ $item['categorie']['famille'] ?? '' }}({{ $item['categorie']['name'] ?? '' }})
                                         </td>
                                         {{-- <td>{{ $item['typeProduit']['name'] }}  </td> --}}
-                                        <td>{{ $item['stock'] }} {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
+                                        @if ($item->categorie->famille == 'bar')
+                                            <td>
+                                                <ol class="list-unstyled mb-0">
+                                                    @foreach ($item->variantes->sortBy('libelle') as $variantes)
+                                                        <li>{{ $variantes->libelle }} :
+                                                          <b>  {{ $variantes->pivot->quantite_disponible }}</b></li>
+                                                    @endforeach
+
+                                                </ol>
+
+                                            </td>
+                                        @else
+                                            <td><b>{{ $item['stock'] }}</b>
+                                                {{ $item['uniteSortie']['abreviation'] ?? '' }}</td>
+                                            </td>
+                                        @endif
+
+
+
+                                        {{-- <td>{{ $item['stock'] }} {{ $item['uniteSortie']['libelle'] ?? '' }}</td> --}}
                                         <td>{{ $item['stock_alerte'] }} {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
                                         <td> {{ $item['created_at'] }} </td>
                                         <td>
