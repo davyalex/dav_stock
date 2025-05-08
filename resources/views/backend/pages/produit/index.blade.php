@@ -99,9 +99,9 @@
                                                 <ol class="list-unstyled mb-0">
                                                     @foreach ($item->variantes->sortBy('libelle') as $variantes)
                                                         <li>{{ $variantes->libelle }} :
-                                                          <b>  {{ $variantes->pivot->quantite_disponible }}</b></li>
+                                                            <b> {{ $variantes->pivot->quantite_disponible }}</b>
+                                                        </li>
                                                     @endforeach
-
                                                 </ol>
 
                                             </td>
