@@ -63,7 +63,7 @@
                                     <th>Mois d'inventaire</th>
                                     <th>Date de création </th>
                                     <th>Crée par</th>
-                                    <th class="d-none">Actions</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -81,9 +81,8 @@
                                         </td>
                                         <td> {{ \Carbon\Carbon::parse($item['created_at'])->format('d-m-Y à H:i') }} </td>
                                         <td> {{ $item['user']['first_name'] }} </td>
-                                        <td class="d-none">
                                             <!-- Actions si nécessaire -->
-                                            <td class="d-block">
+                                        <td class="d-block">
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -118,7 +117,7 @@
                                                 </ul>
                                             </div>
                                         </td>
-                                        </td>
+                                        
                                     </tr>
                                 @endforeach
                             </tbody>
