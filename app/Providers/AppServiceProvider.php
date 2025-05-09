@@ -263,7 +263,7 @@ class AppServiceProvider extends ServiceProvider
 
 
         // appel de la fonction helpers qui met a jour le stock des produits qui ne sont pas dans l'inventaire du mois
-        productsNotInInventaire();
+        // productsNotInInventaire();
 
 
         ##END
