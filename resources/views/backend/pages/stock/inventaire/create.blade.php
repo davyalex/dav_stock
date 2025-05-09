@@ -845,6 +845,24 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
             // script for quantity stock increase and dicrease
             function increaseValue() {
                 var input = document.getElementById("qteStockable");

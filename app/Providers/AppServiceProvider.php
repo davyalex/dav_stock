@@ -207,23 +207,23 @@ class AppServiceProvider extends ServiceProvider
             ->whereMonth('created_at', Carbon::now()->month)
             ->exists();
 
-        ##START
-        /// fonction pour mettre le stock des produit qui ne sont pas dans l'inventaire du mois a 0
-        $produits = Produit::whereHas('inventaires', function ($query) {
-            $query->where('inventaires.created_at', '<', Carbon::now()->startOfMonth());
-        })->get();
+        // ##START
+        // /// fonction pour mettre le stock des produit qui ne sont pas dans l'inventaire du mois a 0
+        // $produits = Produit::whereHas('inventaires', function ($query) {
+        //     $query->where('inventaires.created_at', '<', Carbon::now()->startOfMonth());
+        // })->get();
 
 
-        // dd($produits->toArray());
+        // // dd($produits->toArray());
 
 
-        foreach ($produits as $produit) {
-            $produit->update([
-                'stock' => 0,
-                'stock_dernier_inventaire' => 0,
-                'stock_initial' =>0 ,
-            ]);
-        }
+        // foreach ($produits as $produit) {
+        //     $produit->update([
+        //         'stock' => 0,
+        //         'stock_dernier_inventaire' => 0,
+        //         'stock_initial' =>0 ,
+        //     ]);
+        // }
 
         ##END
 
