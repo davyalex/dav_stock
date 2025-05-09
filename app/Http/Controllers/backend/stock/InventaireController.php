@@ -465,6 +465,7 @@ class InventaireController extends Controller
     public function update(Request $request, Inventaire $inventaire)
     {
         //
+        
     }
 
     /**

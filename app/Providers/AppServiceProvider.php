@@ -207,23 +207,64 @@ class AppServiceProvider extends ServiceProvider
             ->whereMonth('created_at', Carbon::now()->month)
             ->exists();
 
-        // ##START
-        // /// fonction pour mettre le stock des produit qui ne sont pas dans l'inventaire du mois a 0
-        // $produits = Produit::whereHas('inventaires', function ($query) {
-        //     $query->where('inventaires.created_at', '<', Carbon::now()->startOfMonth());
-        // })->get();
 
 
-        // // dd($produits->toArray());
+        function productsNotInInventaire()
+        {
+            // ##START FONCTION POUR METTRE A JOUR LE STOCK DES PRODUITS QUI NE SONT PAS DANS L'INVENTAIRE DU MOIS
 
 
-        // foreach ($produits as $produit) {
-        //     $produit->update([
-        //         'stock' => 0,
-        //         'stock_dernier_inventaire' => 0,
-        //         'stock_initial' =>0 ,
-        //     ]);
-        // }
+            // recuperer l'inventaire du mois 
+            $inventaire_mois = Inventaire::whereYear('created_at', Carbon::now()->year)
+                ->whereMonth('created_at', Carbon::now()->month)
+                ->first();
+
+            // recuperer les produits de l'inventaire du mois
+            $produits_inventaire = Produit::whereHas('inventaires', function ($query) use ($inventaire_mois) {
+                $query->where('inventaires.id', $inventaire_mois->id);
+            })->get();
+
+
+            //recuperer les produits où la categorie famille est restaurant et  bar qui ne sont pas dans l'inventaire du mois
+            $produits_not_inventaire = Produit::whereDoesntHave('inventaires', function ($query) use ($inventaire_mois) {
+                $query->where('inventaires.id', $inventaire_mois->id);
+            })->whereHas('categorie', function ($query) {
+                $query->whereIn('famille', ['restaurant', 'bar']);
+            })->get();
+
+            // mettre le stock des produits qui ne sont pas dans l'inventaire du mois à 0
+            foreach ($produits_not_inventaire as $produit) {
+                $produit->update([
+                    'stock' => 0,
+                    'stock_dernier_inventaire' => 0,
+                    'stock_initial' => 0,
+                ]);
+            }
+
+            // dd($produits_not_inventaire->toArray());
+
+            ##END
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        // ##START FONCTION POUR METTRE A JOUR LE STOCK DES PRODUITS QUI NE SONT PAS DANS L'INVENTAIRE DU MOIS
+
+
+        // appel de la fonction helpers qui met a jour le stock des produits qui ne sont pas dans l'inventaire du mois
+        productsNotInInventaire();
+
 
         ##END
 
