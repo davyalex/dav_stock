@@ -332,6 +332,9 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('create', 'create')->name('inventaire.create');
         route::post('store', 'store')->name('inventaire.store');
         route::get('fiche-inventaire', 'ficheInventaire')->name('inventaire.fiche-inventaire');
+        route::get('delete/{id}', 'delete')->name('inventaire.delete');
+
+
     });
 
 
