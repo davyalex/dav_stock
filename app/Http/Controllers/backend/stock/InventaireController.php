@@ -45,10 +45,10 @@ class InventaireController extends Controller
                 ->whereMonth('date_inventaire', Carbon::now()->month - 1)
                 ->exists();
             if ($inventaire_existe == true) {
-                echo "un inventaire du mois precedent existe deja.";
+                return back()->with('error', 'Un inventaire du mois precedent existe deja');
             } else {
                 // si pas d'inventaire du mois precedent
-                echo "pas d'inventaire du mois precedent";
+                return back()->with('error', 'Aucun inventaire du mois precedent n\'existe');
             }
 
             // Récupérer la date du dernier inventaire
@@ -470,9 +470,18 @@ class InventaireController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Inventaire $inventaire)
+
+    public function delete($id)
     {
-        //
+
+        try {
+            Inventaire::find($id)->forceDelete();
+            return response()->json([
+                'status' => 200,
+            ]);
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
     }
 
 
@@ -515,7 +524,7 @@ class InventaireController extends Controller
         try {
             $type = $request->query('type'); // 'bar', 'restaurant' ou null
 
-            $query = Produit::alphabetique()->with(['categorie' , 'variantes']);
+            $query = Produit::alphabetique()->with(['categorie', 'variantes']);
 
             if (in_array($type, ['bar', 'restaurant'])) {
                 $query->whereHas('categorie', fn($q) => $q->where('famille', $type));
