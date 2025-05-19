@@ -5,8 +5,8 @@
             <th>Produit</th>
             <th>Date achat</th>
             <th>Quantité acheté</th>
-            {{-- <th>Prix unitaire</th>
-            <th>total</th> --}}
+            <th>Montant</th>
+            {{-- <th>total</th> --}}
         </tr>
     </thead>
     <tbody>
@@ -20,9 +20,9 @@
                 <td>{{ \Carbon\Carbon::parse($item['date_achat'])->format('d-m-Y à H:i') }}</td>
                 <td><b> {{ $item['quantite_stocke'] ?? 0 }}
                         {{ $item['produit']['uniteSortie']['libelle'] ?? '' }} </b> </td>
-                {{-- <td>{{ number_format($item['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
-                <td>{{ number_format($item['total'], 0, ',', ' ') }}
-                    FCFA</td> --}}
+                {{-- <td>{{ number_format($item['prix_unitaire'], 0, ',', ' ') }} FCFA</td> --}}
+                <td>{{ number_format($item['prix_total_format'], 0, ',', ' ') }}
+                    FCFA</td>
             </tr>
         @empty
             <tr>

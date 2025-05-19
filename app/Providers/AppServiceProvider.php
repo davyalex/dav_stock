@@ -253,12 +253,6 @@ class AppServiceProvider extends ServiceProvider
 
 
 
-
-
-
-
-
-
         // ##START FONCTION POUR METTRE A JOUR LE STOCK DES PRODUITS QUI NE SONT PAS DANS L'INVENTAIRE DU MOIS
 
 
