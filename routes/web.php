@@ -89,7 +89,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
 
     //Dashboard
     Route::controller(DashboardController::class)->group(function () {
-        route::get('', 'index')->name('dashboard.index')->middleware('can:voir-tableau de bord '); // dashboard
+        route::get('', 'index')->name('dashboard.index'); // dashboard
     });
 
     //register client

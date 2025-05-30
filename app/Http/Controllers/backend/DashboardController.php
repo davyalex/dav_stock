@@ -29,12 +29,14 @@ class DashboardController extends Controller
         }
     }
 
+    
+
 
     //
     public function index(Request $request)
     {
         // Vérifier si l'utilisateur a le rôle 'caisse'
-        if ($request->user()->hasRole('caisse')) {
+        if ($request->user()->hasRole(['caisse', 'supercaisse'])) {
             // Vérifier si l'utilisateur n'a pas sélectionné de caisse
             if (Auth::user()->caisse_id === null) {
                 // Rediriger vers la page de sélection de caisse

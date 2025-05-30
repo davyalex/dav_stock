@@ -16,6 +16,21 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class AdminController extends Controller
 {
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    //     // Vérifier si l'utilisateur a le rôle 'caisse' ou 'supercaisse'
+    //     $this->middleware(function ($request, $next) {
+    //         if ($request->user()->hasRole(['caisse', 'supercaisse'])) {
+    //             // Vérifier si l'utilisateur n'a pas sélectionné de caisse
+    //             if (Auth::user()->caisse_id === null) {
+    //                 // Rediriger vers la page de sélection de caisse
+    //                 return redirect()->route('caisse.select')->with('warning', 'Veuillez sélectionner une caisse avant d\'accéder à l\'application.');
+    //             }
+    //         }
+    //         return $next($request);
+    //     });
+    // }
     //
     public function login(Request $request)
     {
@@ -54,7 +69,7 @@ class AdminController extends Controller
         }
 
 
-        
+
 
         // Si l'utilisateur a une caisse active, la désactiver
         if ($user->caisse_id) {
