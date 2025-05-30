@@ -142,7 +142,7 @@ class VenteController extends Controller
                 $query->where('caisse_id', $request->caisse);
             }
 
-            if ($request->user()->hasRole('caisse')) {
+            if ($request->user()->hasRole(['caisse' , 'supercaisse'])) {
                 $query->where('caisse_id', auth()->user()->caisse_id)
                     ->where('user_id', auth()->user()->id)
                     ->where('statut_cloture', false);
@@ -172,7 +172,7 @@ class VenteController extends Controller
 
             //Recuperer la session de la date vente manuelle
             $sessionDate = null;
-            if ($request->user()->hasRole('caisse')) {
+            if ($request->user()->hasRole(['caisse' , 'supercaisse'])) {
                 $sessionDate = Caisse::find(Auth::user()->caisse_id);
                 $sessionDate = $sessionDate->session_date_vente;
             }
@@ -687,7 +687,7 @@ class VenteController extends Controller
             ];
 
 
-            if ($request->user()->hasRole('caisse')) {
+            if ($request->user()->hasRole(['caisse' , 'supercaisse'])) {
                 $totalVente = Vente::where('caisse_id', auth()->user()->caisse_id)
                     ->where('user_id', auth()->user()->id)
                     ->where('statut_cloture', false)->sum('montant_total');

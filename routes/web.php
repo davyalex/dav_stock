@@ -89,15 +89,15 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
 
     //Dashboard
     Route::controller(DashboardController::class)->group(function () {
-        route::get('', 'index')->name('dashboard.index');
+        route::get('', 'index')->name('dashboard.index')->middleware('can:voir-tableau de bord '); // dashboard
     });
 
     //register client
     Route::prefix('client')->controller(ClientController::class)->group(function () {
-        route::get('', 'index')->name('client.index');
-        route::post('store', 'store')->name('client.store');
-        route::post('update/{id}', 'update')->name('client.update');
-        route::get('delete/{id}', 'delete')->name('client.delete');
+        route::get('', 'index')->name('client.index'); // liste des client
+        route::post('store', 'store')->name('client.store'); // ajouter client
+        route::post('update/{id}', 'update')->name('client.update'); // modifier client
+        route::get('delete/{id}', 'delete')->name('client.delete'); // supprimer client
         route::get('profil/{id}', 'profil')->name('client.profil');
         route::post('change-password', 'changePassword')->name('client.new-password');
     });
@@ -193,7 +193,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         '/enable-maintenance-mode',
         function () {
             Artisan::call('down', [
-                '--secret' => 'admin@2024',
+                '--secret' => 'admin@',
                 '--render' => 'backend.pages.maintenance-mode-view',
             ]);
             Maintenance::create([
@@ -233,9 +233,9 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('', 'index')->name('caisse.index');
         route::post('store', 'store')->name('caisse.store');
         route::post('update/{id}', 'update')->name('caisse.update');
-        route::get('select', 'selectCaisse')->name('caisse.select')->middleware('role:caisse');
-        route::post('select', 'selectCaisse')->name('caisse.select.post')->middleware('role:caisse');
-        route::post('session-date-vente', 'sessionDate')->name('vente.session-date')->middleware('role:caisse');  // definir manuellement une session date pour la vente
+        route::get('select', 'selectCaisse')->name('caisse.select')->middleware('role:caisse|supercaisse');
+        route::post('select', 'selectCaisse')->name('caisse.select.post')->middleware('role:caisse|supercaisse');
+        route::post('session-date-vente', 'sessionDate')->name('vente.session-date')->middleware('role:caisse|supercaisse');  // definir manuellement une session date pour la vente
 
 
         // route::get('delete/{id}', 'delete')->name('caisse.delete');
@@ -280,13 +280,13 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
 
     // produit
     Route::prefix('produit')->controller(ProduitController::class)->group(function () {
-        route::get('', 'index')->name('produit.index');
-        route::get('create', 'create')->name('produit.create');
-        route::post('store', 'store')->name('produit.store');
-        route::get('show/{id}', 'show')->name('produit.show');
-        route::get('edit/{id}', 'edit')->name('produit.edit');
-        route::post('update/{id}', 'update')->name('produit.update');
-        route::get('delete/{id}', 'delete')->name('produit.delete');
+        route::get('', 'index')->name('produit.index')->middleware('can:voir-produit'); // liste des produit
+        route::get('create', 'create')->name('produit.create')->middleware('can:creer-produit'); // vue de la page de creation produit
+        route::post('store', 'store')->name('produit.store')->middleware('can:creer-produit'); // ajouter produit
+        route::get('show/{id}', 'show')->name('produit.show')->middleware('can:voir-produit'); // detail produit
+        route::get('edit/{id}', 'edit')->name('produit.edit')->middleware('can:modifier-produit');
+        route::post('update/{id}', 'update')->name('produit.update')->middleware('can:modifier-produit');
+        route::get('delete/{id}', 'delete')->name('produit.delete')->middleware('can:supprimer-produit'); // supprimer produit
     });
 
     //etat stock
@@ -333,26 +333,24 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::post('store', 'store')->name('inventaire.store');
         route::get('fiche-inventaire', 'ficheInventaire')->name('inventaire.fiche-inventaire');
         route::get('delete/{id}', 'delete')->name('inventaire.delete');
-
-
     });
 
 
     // vente
     Route::prefix('vente')->controller(VenteController::class)->group(function () {
-        route::get('', 'index')->name('vente.index');
-        route::get('show/{id}', 'show')->name('vente.show');
-        route::get('create', 'create')->name('vente.create');
-        route::post('store', 'store')->name('vente.store');
-        route::get('cloture-caisse', 'clotureCaisse')->name('vente.cloture-caisse');
-        route::get('billeterie-caisse', 'billeterieCaisse')->name('vente.billeterie-caisse');
+        route::get('', 'index')->name('vente.index')->middleware('can:voir-vente');
+        route::get('show/{id}', 'show')->name('vente.show')->middleware('can:voir-vente'); // detail vente
+        route::get('create', 'create')->name('vente.create')->middleware('can:creer-vente'); // vue de la page de creation vente
+        route::post('store', 'store')->name('vente.store')->middleware('can:creer-vente'); // ajouter vente
+        route::get('cloture-caisse', 'clotureCaisse')->name('vente.cloture-caisse')->middleware('can:voir-vente'); // cloture caisse
+        route::get('billeterie-caisse', 'billeterieCaisse')->name('vente.billeterie-caisse')->middleware('can:voir-vente'); // billeterie caisse
 
         ##vente menu
-        route::get('create-menu', 'createVenteMenu')->name('vente.menu.create'); //vue de la page de vente menu
-        route::post('store-menu', 'storeVenteMenu')->name('vente.menu.store');
+        route::get('create-menu', 'createVenteMenu')->name('vente.menu.create')->middleware('can:creer-vente'); //vue de la page de vente menu
+        route::post('store-menu', 'storeVenteMenu')->name('vente.menu.store')->middleware('can:creer-vente'); // ajouter vente menu
 
         ##supprimer une vente
-        route::get('delete/{id}', 'delete')->name('vente.delete');
+        route::get('delete/{id}', 'delete')->name('vente.delete')->middleware('can:supprimer-vente'); // supprimer vente
     });
 
     // Commande

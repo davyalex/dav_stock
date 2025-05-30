@@ -125,12 +125,15 @@
                    <h6>Total Net : <span id="totalNet">0</span> FCFA</h6>
 
 
-                <h5>Remise: <span id="discount-amount">0</span> FCFA</h5>
+                @can('voir-remise' )
+                    <h5>Remise: <span id="discount-amount">0</span> FCFA</h5>
+                @endcan
                 <h4>Total à payer : <span id="total-after-discount">0</span> FCFA</h4>
             </div>
 
-            <!-- Seleção do tipo de remise e remise -->
-            <div class="row mt-3">
+            <!-- type de remise e remise -->
+          @can('voir-remise' )
+                <div class="row mt-3">
                 <div class="col-md-6">
                     <label for="discount-type">Type de remise</label>
                     <select id="discount-type" class="form-select" name="discount_type">
@@ -146,6 +149,7 @@
                         value="0" min="0">
                 </div>
             </div>
+          @endcan
 
 
             <!-- Numéro de table et nombre de couverts -->

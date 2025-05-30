@@ -71,11 +71,11 @@ class DashboardController extends Controller
 
         // Montant total des ventes
         $montantTotalVentes = Vente::whereYear('created_at', Carbon::now()->year)
-        ->sum('montant_total');
+            ->sum('montant_total');
 
         // Montant total des dépenses
         $montantTotalDepenses = Depense::whereYear('created_at', Carbon::now()->year)
-        ->sum('montant');
+            ->sum('montant');
 
         // Produits en alerte
         $produitsEnAlerte = Produit::where('stock', '=', 'stock_alerte')->get()->count();

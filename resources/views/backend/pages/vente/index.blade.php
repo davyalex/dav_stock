@@ -25,7 +25,7 @@
     <div class="row">
 
         <!-- ========== Start filtre ========== -->
-        @if (!auth()->user()->hasRole('caisse'))
+        @if (!auth()->user()->hasRole(['caisse', 'supercaisse']))
             <form action="{{ route('vente.index') }}" method="GET">
                 <div class="row mb-3">
 
@@ -46,19 +46,22 @@
 
                     <div class="col-md-3">
                         <label for="date_debut" class="form-label">Date de début</label>
-                        <input type="date" value="{{ request('date_debut') }}" class="form-control" id="date_debut" name="date_debut">
+                        <input type="date" value="{{ request('date_debut') }}" class="form-control" id="date_debut"
+                            name="date_debut">
                     </div>
                     <div class="col-md-3">
                         <label for="date_fin" class="form-label">Date de fin</label>
-                        <input type="date" value="{{ request('date_fin') }}" class="form-control" id="date_fin" name="date_fin">
+                        <input type="date" value="{{ request('date_fin') }}" class="form-control" id="date_fin"
+                            name="date_fin">
                     </div>
                     <div class="col-md-2">
                         <label for="caisse" class="form-label">Caisse</label>
                         <select class="form-select" id="caisse" name="caisse">
-                           
+
                             <option value= " ">Toutes les caisses</option>
                             @foreach ($caisses as $caisse)
-                                <option value="{{ $caisse->id }}"  {{ request('caisse') == $caisse->id ? 'selected' : ''}}>{{ $caisse->libelle }}</option>
+                                <option value="{{ $caisse->id }}"
+                                    {{ request('caisse') == $caisse->id ? 'selected' : '' }}>{{ $caisse->libelle }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -74,7 +77,7 @@
 
 
 
-        @if (Auth::user()->hasRole('caisse'))
+        @if (Auth::user()->hasRole(['caisse', 'supercaisse']))
             <div class="col-lg-12">
                 <div class="alert alert-info alert-dismissible fade show d-flex justify-content-center align-items-center"
                     role="alert">
@@ -109,7 +112,7 @@
                 <h5 class="card-title mb-0 filter" style="text-align: center">Liste des ventes
                     @if (request('date_debut') || request('date_fin') || request('caisse') || request('periode'))
 
-                       
+
 
                         @if (request()->has('periode') && request('periode') != null)
                             -
@@ -127,9 +130,9 @@
                         @endif
 
                         @if (request()->has('caisse') && request('caisse') != null)
-                        -
-                        <strong>{{ ucfirst(App\Models\Caisse::find(request('caisse'))->libelle) }}</strong>
-                    @endif
+                            -
+                            <strong>{{ ucfirst(App\Models\Caisse::find(request('caisse'))->libelle) }}</strong>
+                        @endif
                     @else
                         du mois en cours - {{ \Carbon\Carbon::now()->translatedFormat('F Y') }}
                     @endif
@@ -138,7 +141,7 @@
                 <!-- ========== End filter result libellé ========== -->
 
 
-                @if (auth()->user()->hasRole('caisse'))
+                @if (auth()->user()->hasRole(['caisse', 'supercaisse']))
                     @if ($sessionDate != null)
                         <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">
                             Nouvelle vente</a>
@@ -151,7 +154,7 @@
 
             </div>
 
-            @if (auth()->user()->hasRole('caisse'))
+            @if (auth()->user()->hasRole(['caisse', 'supercaisse']))
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="card">
@@ -203,9 +206,11 @@
                                 <th>Vendu le</th>
                                 <th>Vendu par</th>
                                 <th>Caisse</th>
-                                @role('developpeur')
+                                @if (auth()->user()->can('modifier-vente') || auth()->user()->can('supprimer-vente'))
                                     <th>Action</th>
-                                @endrole
+                                @endif
+
+
                             </tr>
                         </thead>
                         <tbody>
@@ -228,7 +233,7 @@
                                     <td> {{ $item['user']['first_name'] }} {{ $item['user']['last_name'] }} </td>
                                     <td> {{ $item['caisse']['libelle'] ?? '' }} </td>
 
-                                    @role('developpeur')
+                                    @if (auth()->user()->can('modifier-vente') || auth()->user()->can('supprimer-vente'))
                                         <td class="d-block">
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
@@ -246,7 +251,8 @@
                                                 </ul>
                                             </div>
                                         </td>
-                                    @endrole
+                                    @endif
+
                                 </tr>
                             @empty
                                 <tr>
