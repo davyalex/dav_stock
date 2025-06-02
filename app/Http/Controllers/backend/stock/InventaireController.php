@@ -41,14 +41,16 @@ class InventaireController extends Controller
         try {
 
             // verifier si un inventaire du mois precedent existe
-            $inventaire_existe = Inventaire::whereYear('date_inventaire', Carbon::now()->year)
-                ->whereMonth('date_inventaire', Carbon::now()->month - 1)
+            $moisPrecedent = Carbon::now()->subMonth();
+
+            $inventaire_existe = Inventaire::whereYear('date_inventaire', $moisPrecedent->year)
+                ->whereMonth('date_inventaire', $moisPrecedent->month)
                 ->exists();
-            if ($inventaire_existe == true) {
-                return back()->with('error', 'Un inventaire du mois precedent existe deja');
+
+            if ($inventaire_existe) {
+                return back()->with('error', 'Un inventaire du mois précédent existe déjà');
             } else {
-                // si pas d'inventaire du mois precedent
-                return back()->with('error', 'Aucun inventaire du mois precedent n\'existe');
+                return back()->with('error', 'Aucun inventaire du mois précédent n\'existe');
             }
 
             // Récupérer la date du dernier inventaire
@@ -56,13 +58,8 @@ class InventaireController extends Controller
                 ->orderBy('date_inventaire', 'desc')
                 ->first();
 
-            // // recuperer le mois passé en fonction de du mois actuel
-            // $mois = Carbon::now()->month - 1;
-            // $annee = Carbon::now()->year;
 
-            // // recuperer le jour 1er et le dernier jour du mois
-            // $debut_jour = Carbon::create($annee, $mois, 1); // 1er jour du mois
-            // $dernier_jour = Carbon::create($annee, $mois + 1, 1)->subDay(); //dernier jour du mois
+
 
 
             $jour_mois_actuel = Carbon::now()->startOfMonth(); // 1er jour du mois actuel (1er avril)
@@ -71,29 +68,21 @@ class InventaireController extends Controller
             $debut_jour = $jour_mois_precedent;
             $dernier_jour = $jour_mois_actuel;
 
-            // dd(
-            //     $jour_mois_actuel,
-            //     $jour_mois_precedent
-            // );
 
 
 
-
-            //## on va recuperer les données en foction du mois passé de l'année actuelle
-
-            // Récupérer les produits avec le nombre de ventes entre la date du permier jour du mois et la date du dernier jour du mois passé en fonction du mois actuel
             // $data_produit = Produit::whereHas('categorie', function ($q) {
             //     $q->whereIn('famille', ['restaurant', 'bar']);
             // })
-            //     ->withSum(['ventes as quantite_vendue' => function ($query) use ($debut_jour, $dernier_jour) {
+            //     ->withSum(['ventes as quantite_vendue' => function ($query) {
             //         // Filtrer les ventes entre la date du dernier inventaire et la date du jour
-            //         $query->whereBetween('ventes.date_vente', [$debut_jour, $dernier_jour]);
+            //         $query->whereMonth('ventes.date_vente', Carbon::now()->month - 1);
             //     }], 'produit_vente.quantite_bouteille') // Somme de la quantité vendue dans le pivot produit_vente
 
 
-            //     ->withSum(['sorties as quantite_utilisee' => function ($query) use ($debut_jour, $dernier_jour) {
+            //     ->withSum(['sorties as quantite_utilisee' => function ($query) {
             //         // Filtrer les sorties entre la date du dernier inventaire et la date du jour
-            //         $query->whereBetween('sorties.date_sortie', [$debut_jour, $dernier_jour]);
+            //         $query->whereMonth('sorties.date_sortie', Carbon::now()->month - 1);
             //     }], 'produit_sortie.quantite_utilise') // Somme de la quantité utilisée dans le pivot produit_sortie
 
             //     ->with('categorie')
@@ -101,19 +90,22 @@ class InventaireController extends Controller
 
 
 
+
+            $anneePrecedente = $moisPrecedent->year;
+            $mois = $moisPrecedent->month;
+
             $data_produit = Produit::whereHas('categorie', function ($q) {
                 $q->whereIn('famille', ['restaurant', 'bar']);
             })
-                ->withSum(['ventes as quantite_vendue' => function ($query) {
-                    // Filtrer les ventes entre la date du dernier inventaire et la date du jour
-                    $query->whereMonth('ventes.date_vente', Carbon::now()->month - 1);
-                }], 'produit_vente.quantite_bouteille') // Somme de la quantité vendue dans le pivot produit_vente
+                ->withSum(['ventes as quantite_vendue' => function ($query) use ($anneePrecedente, $mois) {
+                    $query->whereYear('ventes.date_vente', $anneePrecedente)
+                        ->whereMonth('ventes.date_vente', $mois);
+                }], 'produit_vente.quantite_bouteille')
 
-
-                ->withSum(['sorties as quantite_utilisee' => function ($query) {
-                    // Filtrer les sorties entre la date du dernier inventaire et la date du jour
-                    $query->whereMonth('sorties.date_sortie', Carbon::now()->month - 1);
-                }], 'produit_sortie.quantite_utilise') // Somme de la quantité utilisée dans le pivot produit_sortie
+                ->withSum(['sorties as quantite_utilisee' => function ($query) use ($anneePrecedente, $mois) {
+                    $query->whereYear('sorties.date_sortie', $anneePrecedente)
+                        ->whereMonth('sorties.date_sortie', $mois);
+                }], 'produit_sortie.quantite_utilise')
 
                 ->with('categorie')
                 ->get();
@@ -122,40 +114,6 @@ class InventaireController extends Controller
 
 
 
-
-
-            // dd($data_produit->toArray());
-
-
-            #####################################################################################################################################
-            // Récupérer la date du dernier inventaire
-            // $date_dernier_inventaire = Inventaire::select('date_inventaire')
-            //     ->orderBy('date_inventaire', 'desc')
-            //     ->first();
-            // $date_dernier_inventaire = $date_dernier_inventaire ? $date_dernier_inventaire->date_inventaire : Carbon::now()->startOfDay();
-
-            // // Date du jour
-            // $date_jour = Carbon::now();
-
-
-
-            // // Récupérer les produits avec le nombre de ventes entre la date du dernier inventaire et la date du jour
-            // $data_produit = Produit::whereHas('categorie', function ($q) {
-            //     $q->whereIn('famille', ['restaurant', 'bar']);
-            // })
-            //     ->withSum(['ventes as quantite_vendue' => function ($query) use ($date_dernier_inventaire, $date_jour) {
-            //         // Filtrer les ventes entre la date du dernier inventaire et la date du jour
-            //         $query->whereBetween('ventes.date_vente', [$date_dernier_inventaire, $date_jour]);
-            //     }], 'produit_vente.quantite_bouteille') // Somme de la quantité vendue dans le pivot produit_vente
-
-
-            //     ->withSum(['sorties as quantite_utilisee' => function ($query) use ($date_dernier_inventaire, $date_jour) {
-            //         // Filtrer les sorties entre la date du dernier inventaire et la date du jour
-            //         $query->whereBetween('sorties.date_sortie', [$date_dernier_inventaire, $date_jour]);
-            //     }], 'produit_sortie.quantite_utilise') // Somme de la quantité utilisée dans le pivot produit_sortie
-
-            //     ->with('categorie')
-            //     ->get();
 
 
             // recuperer les familles de categories bar et restaurant
@@ -465,7 +423,7 @@ class InventaireController extends Controller
     public function update(Request $request, Inventaire $inventaire)
     {
         //
-        
+
     }
 
     /**
