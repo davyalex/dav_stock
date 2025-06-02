@@ -36,6 +36,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
 
+        // Set the locale for Carbon
+        \Carbon\Carbon::setLocale('fr');
         //
         Schema::defaultStringLength(191);
 
@@ -202,7 +204,7 @@ class AppServiceProvider extends ServiceProvider
             ->orderBy('position', 'DESC')
             ->get();
 
-       
+
 
         // function productsNotInInventaire()
         // {

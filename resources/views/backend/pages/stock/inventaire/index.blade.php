@@ -68,9 +68,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($data_inventaire as $key => $item)
-                                    @php
-                                        \Carbon\Carbon::setLocale('fr');
-                                    @endphp
+                                  
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
                                         <td> <a class="fw-bold"

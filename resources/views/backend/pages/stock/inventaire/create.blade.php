@@ -93,8 +93,8 @@
 
 
             {{-- @if ($inventaire_existe == true) --}}
-                <!-- Danger Alert -->
-                {{-- <div class="alert alert-danger alert-dismissible bg-danger text-white alert-label-icon fade show material-shadow"
+            <!-- Danger Alert -->
+            {{-- <div class="alert alert-danger alert-dismissible bg-danger text-white alert-label-icon fade show material-shadow"
                     role="alert">
                     <i class="ri-error-warning-line label-icon"></i><strong>Attention !</strong> - Vous avez
                     déjà effectué un inventaire pour le moi passé. <br> Le prochain inventaire prévu pour la fin
@@ -103,46 +103,46 @@
                         aria-label="Close"></button>
                 </div> --}}
             {{-- @else --}}
-                <form id="myForm" method="POST" action="{{ route('inventaire.store') }}" autocomplete="off" novalidate
-                    enctype="multipart/form-data">
-                    @csrf
+            <form id="myForm" method="POST" action="{{ route('inventaire.store') }}" autocomplete="off" novalidate
+                enctype="multipart/form-data">
+                @csrf
 
-                    <div class="row">
-                        <div class="col-lg-12">
-                            {{-- <div class="card">
+                <div class="row">
+                    <div class="col-lg-12">
+                        {{-- <div class="card">
                                     <div class="card-body"> --}}
 
 
-                            <div class="row mb-3">
+                        <div class="row mb-3">
 
-                                <div id="form-container">
-                                    <!-- ========== Start form duplicate ========== -->
-                                    <!-- Formulaire modèle (caché) -->
-                                    <!-- ========== End form duplicate ========== -->
-                                </div>
-
-                                <!-- Bouton "Plus" -->
-                                <div class="mb-3">
-                                    <button type="button" id="add-more" class="btn btn-primary">Ajouter
-                                        un produit <produit class=""></produit> <i
-                                            class="ri ri-add-circle-line"></i></button>
-                                </div>
-
+                            <div id="form-container">
+                                <!-- ========== Start form duplicate ========== -->
+                                <!-- Formulaire modèle (caché) -->
+                                <!-- ========== End form duplicate ========== -->
                             </div>
 
-
+                            <!-- Bouton "Plus" -->
+                            <div class="mb-3">
+                                <button type="button" id="add-more" class="btn btn-primary">Ajouter
+                                    un produit <produit class=""></produit> <i
+                                        class="ri ri-add-circle-line"></i></button>
+                            </div>
 
                         </div>
-                        <!-- end col -->
+
+
 
                     </div>
-                    <!-- end row -->
-                    <!-- end card -->
-                    <div class="text-end mb-3">
-                        <button type="submit" id="save" class="btn btn-success w-lg btn-save"
-                            disabled>Enregistrer</button>
-                    </div>
-                </form>
+                    <!-- end col -->
+
+                </div>
+                <!-- end row -->
+                <!-- end card -->
+                <div class="text-end mb-3">
+                    <button type="submit" id="save" class="btn btn-success w-lg btn-save"
+                        disabled>Enregistrer</button>
+                </div>
+            </form>
             {{-- @endif --}}
 
 
@@ -579,7 +579,7 @@
                 // );
 
                 let stockActuel = (product.stock_dernier_inventaire || 0) + (product.stock_initial || 0);
-                form.find('.stockActuel').val(stockActuel % 1 === 0 ? stockActuel : stockActuel.toFixed(2));
+                form.find('.stockActuel').val(stockActuel % 1 === 0 ? stockActuel : stockActuel.toFixed(2) ?? 0);
 
 
 
@@ -589,7 +589,7 @@
                 } else {
                     var stockVendu = product.quantite_utilisee;
                 }
-                form.find('.stockVendu').val(stockVendu ?? 0); // stock vendu
+                form.find('.stockVendu').val((stockVendu  % 1 === 0 ? stockVendu : stockVendu.toFixed(2)) ?? 0); // stock vendu
 
 
 
@@ -845,22 +845,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
 
 
             // script for quantity stock increase and dicrease

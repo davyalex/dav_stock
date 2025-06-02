@@ -108,6 +108,7 @@ class InventaireController extends Controller
                 }], 'produit_sortie.quantite_utilise')
 
                 ->with('categorie')
+                ->alphabetique()
                 ->get();
 
 
