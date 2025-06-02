@@ -16,6 +16,8 @@ class Inventaire extends Model
     protected $fillable = [
         'code',
         'date_inventaire',
+        'mois_concerne',
+        'annee_concerne',
         'user_id',
     ];
 

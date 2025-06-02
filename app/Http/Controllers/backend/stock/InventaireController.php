@@ -43,8 +43,8 @@ class InventaireController extends Controller
             // verifier si un inventaire du mois precedent existe
             $moisPrecedent = Carbon::now()->subMonth();
 
-            $inventaire_existe = Inventaire::whereYear('date_inventaire', $moisPrecedent->year)
-                ->whereMonth('date_inventaire', $moisPrecedent->month)
+            $inventaire_existe = Inventaire::where('mois_concerne', $moisPrecedent->month)
+                ->where('annee_concerne', $moisPrecedent->year)
                 ->exists();
 
             if ($inventaire_existe) {
@@ -294,13 +294,20 @@ class InventaireController extends Controller
                 'observation.*' => 'nullable',
             ]);
 
-            // enregistrer la sortie
-            $inventaire = new Inventaire();
-            $inventaire->code = 'IN-' . strtoupper(Str::random(8));
-            $inventaire->date_inventaire = Carbon::now();
-            $inventaire->user_id = Auth::id();
-            $inventaire->save();
+            // enregistrer l'inventaire
+            $moisPrecedent = Carbon::now()->subMonth();
 
+            $inventaire = Inventaire::firstOrCreate(
+                [
+                    'mois_concerne' => $moisPrecedent->month,
+                    'annee_concerne' => $moisPrecedent->year,
+                ],
+                [
+                    'code' => 'IN-' . strtoupper(Str::random(8)),
+                    'date_inventaire' => Carbon::now(), // date réelle de création
+                    'user_id' => Auth::id(),
+                ]
+            );
             // enregistrer les produits de la sortie
             foreach ($request->produit_id as $key => $produit_id) {
                 // Trouver l'unité correspondante pour ce produit
