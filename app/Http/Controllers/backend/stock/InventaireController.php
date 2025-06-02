@@ -47,11 +47,11 @@ class InventaireController extends Controller
                 ->where('annee_concerne', $moisPrecedent->year)
                 ->exists();
 
+                // dd($inventaire_existe);
+
             if ($inventaire_existe) {
                 return back()->with('error', 'Un inventaire du mois précédent existe déjà');
-            } else {
-                return back()->with('error', 'Aucun inventaire du mois précédent n\'existe');
-            }
+            } 
 
             // Récupérer la date du dernier inventaire
             $date_dernier_inventaire = Inventaire::select('date_inventaire')

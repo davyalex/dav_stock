@@ -202,12 +202,7 @@ class AppServiceProvider extends ServiceProvider
             ->orderBy('position', 'DESC')
             ->get();
 
-        // verifier si un inventaire du mois precedent existe
-        $inventaire_existe = Inventaire::whereYear('created_at', Carbon::now()->year)
-            ->whereMonth('created_at', Carbon::now()->month)
-            ->exists();
-
-
+       
 
         // function productsNotInInventaire()
         // {
@@ -266,7 +261,6 @@ class AppServiceProvider extends ServiceProvider
             'setting' => $data_setting,
             'menu_link' => $menu_link,
             'categories' => $categories,
-            'inventaire_existe' => $inventaire_existe
         ]);
     }
 }

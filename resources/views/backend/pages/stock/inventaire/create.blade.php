@@ -92,17 +92,17 @@
                 <div class="card-body"> --}}
 
 
-            @if ($inventaire_existe == true)
+            {{-- @if ($inventaire_existe == true) --}}
                 <!-- Danger Alert -->
-                <div class="alert alert-danger alert-dismissible bg-danger text-white alert-label-icon fade show material-shadow"
+                {{-- <div class="alert alert-danger alert-dismissible bg-danger text-white alert-label-icon fade show material-shadow"
                     role="alert">
                     <i class="ri-error-warning-line label-icon"></i><strong>Attention !</strong> - Vous avez
                     déjà effectué un inventaire pour le moi passé. <br> Le prochain inventaire prévu pour la fin
                     du moi en cours
-                    {{-- <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
-                        aria-label="Close"></button> --}}
-                </div>
-            @else
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
+                        aria-label="Close"></button>
+                </div> --}}
+            {{-- @else --}}
                 <form id="myForm" method="POST" action="{{ route('inventaire.store') }}" autocomplete="off" novalidate
                     enctype="multipart/form-data">
                     @csrf
@@ -143,7 +143,7 @@
                             disabled>Enregistrer</button>
                     </div>
                 </form>
-            @endif
+            {{-- @endif --}}
 
 
             <!-- start form duplicate-->
