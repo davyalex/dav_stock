@@ -351,6 +351,7 @@ class InventaireController extends Controller
 
             //Appeler la methode miseAJourStockVariante
             // $this->miseAjourProduitInventaire();
+        // productsNotInInventaire();
 
 
 

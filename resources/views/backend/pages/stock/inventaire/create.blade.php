@@ -589,7 +589,8 @@
                 } else {
                     var stockVendu = product.quantite_utilisee;
                 }
-                form.find('.stockVendu').val((stockVendu  % 1 === 0 ? stockVendu : stockVendu.toFixed(2)) ?? 0); // stock vendu
+                form.find('.stockVendu').val((stockVendu % 1 === 0 ? stockVendu : stockVendu.toFixed(2)) ??
+                    0); // stock vendu
 
 
 
