@@ -24,14 +24,14 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        Détail des Achats 
-                        @if($dateDebut || $dateFin)
-                            du 
-                            @if($dateDebut)
+                    <h5 class="card-title mb-0 filter">
+                        Détail des Achats
+                        @if ($dateDebut || $dateFin)
+                            du
+                            @if ($dateDebut)
                                 {{ \Carbon\Carbon::parse($dateDebut)->format('d/m/Y') }}
                             @endif
-                            @if($dateFin)
+                            @if ($dateFin)
                                 au {{ \Carbon\Carbon::parse($dateFin)->format('d/m/Y') }}
                             @endif
                         @endif
@@ -51,13 +51,13 @@
                             </thead>
                             <tbody>
                                 @foreach ($produitsGroupes as $key => $produit)
-                                <tr>
-                                    <td>{{ ++$key }}</td>
-                                    <td> <a href="">{{ $produit['nom'] }}</a> </td>
-                                    <td>{{ $produit['quantite_achat'] }}</td>
-                                    <td>{{ $produit['prix_total_format'] }}</td>
-                                    <td>{{ $produit['stock_restant'] }}</td>
-                                </tr>
+                                    <tr>
+                                        <td>{{ ++$key }}</td>
+                                        <td> <a href="">{{ $produit['nom'] }}</a> </td>
+                                        <td>{{ $produit['quantite_achat'] }}</td>
+                                        <td>{{ $produit['prix_total_format'] }}</td>
+                                        <td>{{ $produit['stock_restant'] }}</td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                             {{-- <tfoot>
@@ -97,4 +97,131 @@
     <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
 
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
+
+
+    <script>
+        $(document).ready(function() {
+            alert('ok');
+            // Afficher la liste des depenses depuis la depense.getList
+            // Détruire DataTable s’il existe déjà
+            if ($.fn.DataTable.isDataTable('#buttons-datatables')) {
+                $('#buttons-datatables').DataTable().destroy();
+            }
+
+
+            // Réinitialiser DataTable
+            $('#buttons-datatables').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'print'
+                ],
+                buttons: [{
+                        extend: 'print',
+                        text: 'Imprimer',
+                        className: 'btn btn-danger',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        messageTop: function() {
+                            return $('.filter').text().trim();
+                        },
+                        title: '',
+                        customize: function(win) {
+                            $(win.document.body).css('text-align', 'center');
+                            $(win.document.body).find('h1').css('text-align',
+                                'center');
+                        }
+                    },
+                    // {
+                    //     extend: 'pdf',
+                    //     text: 'Pdf',
+                    //     className: 'btn btn-danger',
+                    //     exportOptions: {
+                    //         columns: [0, 1, 2, 3, 4, 5]
+                    //     },
+                    //     messageTop: function() {
+                    //         return $('.filter').text().trim();
+                    //     },
+                    //     title: '',
+                    //     // customize: function(win) {
+                    //     //     $(win.document.body).css('text-align', 'center');
+                    //     //     $(win.document.body).find('h1').css('text-align',
+                    //     //         'center');
+                    //     // }
+                    // },
+
+                    {
+                        extend: 'csv',
+                        text: 'Csv',
+                        className: 'btn btn-danger',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        messageTop: function() {
+                            return $('.filter').text().trim();
+                        },
+                        title: '',
+                        // customize: function(win) {
+                        //     $(win.document.body).css('text-align', 'center');
+                        //     $(win.document.body).find('h1').css('text-align',
+                        //         'center');
+                        // }
+                    },
+
+                    {
+                        extend: 'copy',
+                        text: 'Copy',
+                        className: 'btn btn-danger',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        messageTop: function() {
+                            return $('.filter').text().trim();
+                        },
+                        title: '',
+                        // customize: function(win) {
+                        //     $(win.document.body).css('text-align', 'center');
+                        //     $(win.document.body).find('h1').css('text-align',
+                        //         'center');
+                        // }
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'Excel',
+                        className: 'btn btn-danger',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        messageTop: function() {
+                            return $('.filter').text().trim();
+                        },
+                        title: '',
+                        // customize: function(win) {
+                        //     $(win.document.body).css('text-align', 'center');
+                        //     $(win.document.body).find('h1').css('text-align',
+                        //         'center');
+                        // }
+                    }
+
+
+
+
+
+                ],
+                // drawCallback: function(settings) {
+                //     let route = "depense";
+                //     if (typeof delete_row === "function") {
+                //         delete_row(route);
+                //     }
+                // }
+            });
+            // },
+            // error: function(xhr, status, error) {
+            // console.error("Erreur AJAX :", error);
+            // }
+            // });
+
+        });
+    </script>
 @endsection

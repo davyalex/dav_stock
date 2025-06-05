@@ -51,7 +51,8 @@
                     <div class="row">
                         <div class="col-md-4">
                             <p><strong>N° vente :</strong> #{{ $vente->code }}</p>
-                            <p><strong>Date :</strong> {{ \Carbon\Carbon::parse($vente['date_vente'])->format('d-m-Y') }}</p>
+                            <p><strong>Date :</strong> {{ \Carbon\Carbon::parse($vente['date_vente'])->format('d-m-Y') }}
+                            </p>
                             @if ($vente->type_vente == 'commande')
                                 <p><strong>Type de vente :</strong> <a
                                         href="{{ route('commande.show', $vente->commande->id) }}"> {{ $vente->type_vente }};
@@ -87,11 +88,12 @@
 
                     <div class="d-flex justify-content-end">
                         <button id="btnImprimerTicket" class="btn btn-info me-2 flot-end"> <i
-                                class="ri-printer-line align-bottom me-1"></i> Imprimer la fature</button>
+                                class="ri-printer-line align-bottom me-1"></i> Imprimer le reçu</button>
 
-                        @role('caisse')
+                        @can('creer-vente')
                             <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">Nouvelle vente</a>
-                        @endrole
+                        @endcan
+
                     </div>
                 </div>
 
@@ -192,19 +194,30 @@
                     <h4 style="margin: 0;">RESTAURANT LOUNGE</h4>
                     <h5 style="margin: 5px 0;">AFRICAIN ET EUROPEEN</h5>
                     <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
-                    <p>
-                        <strong>Vente:</strong> #{{ $vente->code }}<br>
-                        <strong>Date:</strong> {{ $vente->created_at->format('d/m/Y à H:i') }}
-                    </p>
+
+                    <table class="header">
+                        <tr style="text-align: left;">
+                            <td>Table <strong>N°: {{ $vente->numero_table ?? '' }}</strong> </td>
+                            <td>Couvert(s) <strong> : {{ $vente->nombre_couverts ?? '' }}</strong> </td>
+                        </tr>
+
+                        <tr style="text-align: left;">
+                            <td>Caissier: <strong> {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</strong>
+                            </td>
+                            <td>Caisse: <strong> {{ Auth::user()->caisse->libelle ?? 'Non définie' }}</strong> </td>
+                        </tr>
+
+                        <tr style="text-align: left;">
+                            <td>Ticket <strong>N°: {{ $vente->code }}</strong> </td>
+
+                            <td>émis: <strong> {{ $vente->created_at->format('d/m/Y à H:i') }}</strong> </td>
+                        </tr>
+
+                    </table>
+
                 </div>
 
-                <div class="ticket-info" style="margin-bottom: 10px;">
-                    <p>
-                        <strong>Caisse:</strong> {{ Auth::user()->caisse->libelle ?? 'Non définie' }}<br>
-                        <strong>Caissier:</strong> {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
-                    </p>
-                    <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
-                </div>
+
 
                 <div class="ticket-products">
                     <table style="width: 100%; font-size: 12px; border-collapse: collapse; margin-bottom: 10px;">
@@ -218,14 +231,14 @@
                         <tbody>
                             @foreach ($vente->produits as $produit)
                                 <tr>
-                                    <td>{{ $produit->nom }} x{{ $produit->pivot->quantite }}
+                                    <td>{{ $produit->nom }} x <b>{{ $produit->pivot->quantite }}</b>
                                         @if ($produit->categorie->famille == 'bar' && isset($produit['pivot']['variante_id']))
                                             @php
                                                 $variante = \App\Models\Variante::find(
                                                     $produit['pivot']['variante_id'],
                                                 );
                                             @endphp
-                                            {{ $variante ? $variante->libelle : 'Aucune variante' }}
+                                            {{ $variante ? $variante->libelle : '' }}
                                         @endif
 
                                     </td>
@@ -271,18 +284,63 @@
                     <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
                 </div>
 
-                <div class="ticket-total" style="text-align: right; margin-bottom: 10px;">
-                    <strong>Total:</strong> {{ number_format($vente->montant_total, 0, ',', ' ') }} FCFA
-                </div>
+                <table style="width: 100%; font-size: 12px; margin-bottom: 10px;">
+                    @if ($vente->valeur_remise > 0)
+                        <tr>
+                            <td><strong>Total facture:</strong></td>
+                            <td style="text-align: right;">
+                                <strong>{{ number_format($vente->montant_avant_remise, 0, ',', ' ') }} FCFA</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Remise appliquée:</td>
+                            <td style="text-align: right;">
+                                {{ $vente->valeur_remise }} {{ $vente->type_remise == 'amount' ? 'FCFA' : '%' }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total à payer:</strong></td>
+                            <td style="text-align: right;"><strong>{{ number_format($vente->montant_total, 0, ',', ' ') }}
+                                    FCFA</strong></td>
+                        </tr>
+                    @else
+                        <tr>
+                            <td><strong>Total facture:</strong></td>
+                            <td style="text-align: right;"><strong>{{ number_format($vente->montant_total, 0, ',', ' ') }}
+                                    FCFA</strong></td>
+                        </tr>
+                    @endif
+                </table>
+
+                <hr style="border-top: 1px dashed black; margin: 5px 0;">
+
+                <table style="width: 100%; font-size: 12px;">
+                    <tr>
+                        <td><strong>Règlement le :</strong></td>
+                        <td style="text-align: right;">{{ $vente->created_at->format('d/m/Y à H:i') }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reçu ({{ $vente->mode_paiement }}):</strong></td>
+                        <td style="text-align: right;">
+                            {{ $vente->montant_recu ? number_format($vente->montant_recu, 0, ',', ' ') : '0' }} FCFA
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rendu:</strong></td>
+                        <td style="text-align: right;">
+                            {{ $vente->montant_rendu ? number_format($vente->montant_rendu, 0, ',', ' ') : '0' }} FCFA
+                        </td>
+                    </tr>
+                </table>
 
 
+                <hr style="border-top: 1px dashed black; margin: 5px 0;">
 
-                <div class="ticket-footer" style="text-align: center; font-size: 10px;">
-                    <p>MERCI DE VOTRE VISITE</p>
-                    <p>AU REVOIR ET À BIENTÔT</p>
-                    <p>RESERVATIONS: 07-49-88-95-18</p>
-                    <p>www.chezjeanne.ci</p>
 
+                <div class="ticket-footer" style="text-align: center; font-size: 10px; font-weight: bold;">
+                    <span>MERCI DE VOTRE VISITE</span><br>
+                    <span>AU REVOIR ET À BIENTÔT</span><br>
+                    <span>RESERVATIONS: 07-49-88-95-18</span><br>
+                    <span>www.chezjeanne.ci</span>
                 </div>
             </div>
 

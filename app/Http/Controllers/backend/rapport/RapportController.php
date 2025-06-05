@@ -492,13 +492,20 @@ class RapportController extends Controller
                         'achats' => $groupe->flatMap->achats,
                         'quantite_achat' => $groupe->flatMap->achats->sum('quantite_stocke'),
 
-                        'prix_total_format' => number_format($groupe->flatMap->achats->sum(function ($achat) {
+                        'prix_total_format' => $groupe->flatMap->achats->sum(function ($achat) {
                             return $achat->prix_total_format;
-                        }), 0, ',', ' ') . ' FCFA'
+                        })
                     ];
                 })->values();
 
-                return view('backend.pages.rapport.detail_achat', compact('produitsGroupes', 'dateDebut', 'dateFin'));
+                // total des somme prix_total_format achats
+                $totalAchats = $produitsGroupes->sum(function ($achat) {
+                    return $achat['prix_total_format'];
+                });
+
+                // dd($totalAchats);
+
+                return view('backend.pages.rapport.detail_achat', compact('produitsGroupes', 'dateDebut', 'dateFin', 'totalAchats'));
             } else {
                 // Récupération des dépenses de la catégorie sélectionnée dans la période spécifiée
                 $depenses = Depense::where('categorie_depense_id', $categorieDepense)

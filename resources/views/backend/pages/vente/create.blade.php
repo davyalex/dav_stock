@@ -197,6 +197,15 @@
             <div class="mt-3">
                 <button type="button" id="validate-sale"  class="btn btn-primary w-100">Valider la vente</button>
             </div>
+
+            {{-- <div class="mt-3">
+                <button type="button" id="validate-sale" class="btn btn-primary w-100">
+                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" id="sale-spinner"></span>
+                    <span id="sale-text">Valider la vente</span>
+                    
+                </button>
+</div> --}}
+
          </div>
        </div>
         <!-- ========== End Total  ========== -->
@@ -617,6 +626,19 @@
             //////### END FONCTION POUR LA VALIDATION MENU  ##########/////
 
             $('#validate-sale').click(function(e) {
+              //recuperer le bouton de soumission
+                let submitButton = $(this);
+
+                // Ajouter le spinner et désactiver le bouton
+                submitButton.prop('disabled', true).html(`
+                    <span class="d-flex align-items-center">
+                        <span class="spinner-border flex-shrink-0" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </span>
+                        <span class="flex-grow-1 ms-2">Enregistrement en cours...</span>
+                    </span>
+                `);
+
 
 
               
@@ -624,6 +646,8 @@
              let panier = []; // panier vente menu
 
         let validationEchouee = false;
+
+   
 
         plats.forEach((plat) => {
             const platId = plat.value;
@@ -752,6 +776,7 @@
        
                 
         if (validationEchouee) {
+            submitButton.prop('disabled', false).html('Valider la vente');
             return; // Stopper l'exécution si une validation échoue
         }
         
@@ -775,6 +800,10 @@
                         text: 'Vous devez ajouter au moins un produit au panier.',
                         icon: 'error',
                     });
+
+                    // Restaurer le bouton de soumission et arreter le spinner
+           submitButton.prop('disabled', false).html('Valider la vente');
+                    
                     return;
                 }
 
@@ -784,6 +813,9 @@
                         text: 'Le montant reçu est inférieur au montant à payer.',
                         icon: 'error',
                     });
+
+                    // Restaurer le bouton de soumission et arreter le spinner
+                    submitButton.prop('disabled', false).html('Valider la vente');
                     return;
                 }
 
@@ -812,6 +844,8 @@
                             title: 'Vente validée avec succès !',
                             text: response.message,
                             icon: 'success',
+                             confirmButtonText: 'Voir la vente', // 👈 change "OK" en "Fermer"
+
                         }).then(() => {
                             // Réinitialiser le panier après la vente réussie
                             cart = []; // Réinitialiser le panier après validation
@@ -823,6 +857,9 @@
 
                                 window.location.href = '{{ route('vente.show', ':idVente') }}'
                                     .replace(':idVente', response.idVente);
+
+                            // Restaurer le bouton de soumission et arreter le spinner
+                            submitButton.prop('disabled', false).html('Valider la vente');
                         });
                     },
                     error: function(xhr) {
@@ -832,6 +869,9 @@
                                 'Une erreur s\'est produite lors de la validation de la vente.',
                             icon: 'error',
                         });
+
+    // Restaurer le bouton de soumission et arreter le spinner
+           submitButton.prop('disabled', false).html('Valider la vente');
                     }
                 });
             });
