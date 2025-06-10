@@ -77,4 +77,9 @@ class Vente extends Model
             ->withPivot('quantite', 'prix_unitaire', 'total', 'complement', 'garniture')
             ->withTimestamps();
     }
+
+    public function billetteries()
+    {
+        return $this->hasMany(Billetterie::class);
+    }    
 }

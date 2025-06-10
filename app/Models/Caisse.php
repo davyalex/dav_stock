@@ -38,9 +38,26 @@ class Caisse extends Model
         return $this->hasMany(User::class);
     }
 
+    // recuperer l'historique des caisses
+    public function historiqueCaisse(){
+        return $this->hasMany(HistoriqueCaisse::class);
+    }
+
+//     // utilisateurs de la caisse active
+//    public function scopeUserCaisseActive($query)
+//     {
+//        return $query->where('statut', 'active');
+//    }
+
 
     public function commandes()
     {
         return $this->hasMany(Commande::class);
+    }
+
+    // billetteries
+    public function billetteries()
+    {
+        return $this->hasMany(Billetterie::class);
     }
 }

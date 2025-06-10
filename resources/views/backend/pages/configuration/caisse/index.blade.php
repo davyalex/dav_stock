@@ -36,7 +36,10 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Statut</th>
                                     <th>Libelle</th>
+                                    <th>Utilisateur en cours</th>
+                                    {{-- <th>Date ouverture</th> --}}
                                     <th>Date creation</th>
                                     <th>Actions</th>
                                 </tr>
@@ -45,7 +48,12 @@
                                 @foreach ($data_caisse as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
+                                        <td>
+                                            <span class="badge bg-{{ $item['statut'] == 'active' ? 'success' : 'info' }}">{{ $item['statut'] }}</span>
+                                        </td>
                                         <td>{{ $item['libelle'] }}</td>
+                                        <td> {{ \App\Models\User::where('caisse_id', $item->id)->first()->first_name ?? 'En attente d\'utilisateur'}} </td>
+                                       
                                         <td> {{ $item['created_at'] }} </td>
                                         <td>
                                             <div class="dropdown d-inline-block">

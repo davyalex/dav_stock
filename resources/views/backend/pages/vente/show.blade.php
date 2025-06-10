@@ -220,7 +220,8 @@
 
 
                 <div class="ticket-products">
-                    <table style="width: 100%; font-size: 14px; border-collapse: collapse; margin-bottom: 10px; font-weight:600;">
+                    <table
+                        style="width: 100%; font-size: 14px; border-collapse: collapse; margin-bottom: 10px; font-weight:600;">
                         <thead style="border-bottom: 1px dashed black;">
                             <tr>
                                 <th style="text-align: left;">DESIGNATION</th>
@@ -289,7 +290,8 @@
                         <tr>
                             <td><strong>TOTAL FACTURE:</strong></td>
                             <td style="text-align: right;">
-                                <strong>{{ number_format($vente->montant_avant_remise, 0, ',', ' ') }} FCFA</strong></td>
+                                <strong>{{ number_format($vente->montant_avant_remise, 0, ',', ' ') }} FCFA</strong>
+                            </td>
                         </tr>
                         <tr>
                             <td>Remise appliquée:</td>

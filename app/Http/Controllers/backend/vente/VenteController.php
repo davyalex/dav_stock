@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Vente;
 use App\Models\Caisse;
 use App\Models\Produit;
+use App\Models\Categorie;
+use App\Models\Billetterie;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ClotureCaisse;
@@ -137,16 +139,12 @@ class VenteController extends Controller
                 $query->where('date_vente', '<=', $dateFin);
             }
 
-            // Application du filtre de caiise
+            // Application du filtre de caisse
             if ($request->filled('caisse')) {
                 $query->where('caisse_id', $request->caisse);
             }
 
-            if ($request->user()->hasRole(['caisse' , 'supercaisse'])) {
-                $query->where('caisse_id', auth()->user()->caisse_id)
-                    ->where('user_id', auth()->user()->id)
-                    ->where('statut_cloture', false);
-            }
+
             // Application du filtre de periode
             // periode=> jour, semaine, mois, année
             if ($request->filled('periode')) {
@@ -164,6 +162,14 @@ class VenteController extends Controller
                 }
             }
 
+            //si l'utilisateur a le rôle 'caisse' ou 'supercaisse' on affiche les ventes de la caisse actuelle
+            if ($request->user()->hasRole(['caisse', 'supercaisse'])) {
+                $query->where('caisse_id', auth()->user()->caisse_id)
+                    ->where('user_id', auth()->user()->id)
+                    ->where('statut_cloture', false);
+            }
+
+
             $data_vente = $query->get();
 
 
@@ -172,7 +178,7 @@ class VenteController extends Controller
 
             //Recuperer la session de la date vente manuelle
             $sessionDate = null;
-            if ($request->user()->hasRole(['caisse' , 'supercaisse'])) {
+            if ($request->user()->hasRole(['caisse', 'supercaisse'])) {
                 $sessionDate = Caisse::find(Auth::user()->caisse_id);
                 $sessionDate = $sessionDate->session_date_vente;
             }
@@ -585,7 +591,12 @@ class VenteController extends Controller
     }
 
 
-    public function clotureCaisse()
+    /**
+     * Cloture la caisse courante, enregistre l'historique et se déconnecte
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function clotureCaisse(Request $request)
     {
         try {
             $user = Auth::user();
@@ -693,7 +704,7 @@ class VenteController extends Controller
             ];
 
 
-            if ($request->user()->hasRole(['caisse' , 'supercaisse'])) {
+            if ($request->user()->hasRole(['caisse', 'supercaisse'])) {
                 $totalVente = Vente::where('caisse_id', auth()->user()->caisse_id)
                     ->where('user_id', auth()->user()->id)
                     ->where('statut_cloture', false)->sum('montant_total');
@@ -705,6 +716,184 @@ class VenteController extends Controller
         } catch (\Throwable $th) {
 
             return $th->getMessage();
+        }
+    }
+
+    public function storeBilleterie(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $caisse = $user->caisse;
+
+            // enregistrer la billetterie
+            foreach ($request->input('variantes', []) as $variante) {
+                Billetterie::create([
+                    'mode' => $variante['mode'],
+                    'type_monnaie' => $variante['type_monnaie'] ?? null,
+                    'quantite' => $variante['quantite'] ?? null,
+                    'valeur' => $variante['valeur'] ?? null,
+                    'type_mobile_money' => $variante['type_mobile_money'] ?? null,
+                    'montant' => $variante['montant'] ?? null,
+                    'total' => $variante['total'],
+                    'caisse_id' => $caisse->id,
+                    'user_id' => $user->id,
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
+    //Rapport de vente de la caisse
+    public function rapportVente(Request $request)
+    {
+        try {
+            // $dateDebut = $request->input('date_debut');
+            // $dateFin = $request->input('date_fin');
+            // $caisseId = $request->input('caisse_id');
+            $categorieFamille = $request->input('categorie_famille');
+            // $periode = $request->input('periode');
+            // $categorieMenu = 'plat_menu';
+
+
+            //Pour les vente bar et restaurant
+            $query = Vente::with(['produits.categorie', 'plats.categorieMenu', 'caisse']);
+
+            // pour la vente des plats menu
+            $queryMenu = Vente::with(['plats.categorieMenu', 'caisse']);
+
+
+            // if ($dateDebut && $dateFin) {
+            //     $query->whereBetween('date_vente', [$dateDebut, $dateFin]);
+            //     $queryMenu->whereBetween('date_vente', [$dateDebut, $dateFin]);
+            // } elseif ($dateDebut) {
+            //     $query->where('date_vente', '>=', $dateDebut);
+            //     $queryMenu->where('date_vente', '>=', $dateDebut);
+            // } elseif ($dateFin) {
+            //     $query->where('date_vente', '<=', $dateFin);
+            //     $queryMenu->where('date_vente', '<=', $dateFin);
+            // }
+
+            // if ($categorieFamille== 'plat_menu') {
+            //     $queryMenu = Vente::with(['plats.categorieMenu', 'caisse']);
+            // }elseif ($categorieFamille== 'bar' || $categorieFamille== 'menu') {
+            //     $query = Vente::with(['plats.categorieMenu', 'caisse']);
+
+            // }
+
+            // if ($caisseId) {
+            //     $query->where('caisse_id', $caisseId);
+            //     $queryMenu->where('caisse_id', $caisseId);
+            // }
+
+
+            // Application du filtre de periode
+            // periode=> jour, semaine, mois, année
+            // if ($request->filled('periode')) {
+            //     $dates = match ($periode) {
+            //         'jour' => [Carbon::today(), Carbon::today()],
+            //         'semaine' => [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()],
+            //         'mois' => [Carbon::now()->month, Carbon::now()->year], // Stocke mois et année pour `whereMonth`
+            //         'annee' => Carbon::now()->year, // Stocke année pour `whereYear`
+            //         default => null,
+            //     };
+
+            //     if ($dates) {
+            //         if ($periode == 'jour') {
+            //             $query->whereDate('date_vente', $dates[0]);
+            //             $queryMenu->whereDate('date_vente', $dates[1]);
+            //         } elseif ($periode == 'semaine') {
+            //             $query->whereBetween('date_vente', $dates);
+            //             $queryMenu->whereBetween('date_vente', $dates);
+            //         } elseif ($periode == 'mois') {
+            //             $query->whereMonth('date_vente', $dates[0])->whereYear('date_vente', $dates[1]);
+            //             $queryMenu->whereMonth('date_vente', $dates[0])->whereYear('date_vente', $dates[1]);
+            //         } elseif ($periode == 'annee') {
+            //             $query->whereYear('date_vente', $dates);
+            //             $queryMenu->whereYear('date_vente', $dates);
+            //         }
+            //     }
+            // }
+
+
+            // pour les vente bar et restaurant
+            $ventes = $query
+                ->where('caisse_id', auth()->user()->caisse_id)
+                ->where('user_id', auth()->user()->id)
+                ->where('statut_cloture', false)
+                ->get();
+
+
+            // pour la vente des plats menu
+            $ventesMenu = $queryMenu
+                ->where('caisse_id', auth()->user()->caisse_id)
+                ->where('user_id', auth()->user()->id)
+                ->where('statut_cloture', false)
+                ->get();
+
+
+            // pour les produits restaurant et bar
+            $produitsVendus = $ventes->flatMap(function ($vente) {
+                return $vente->produits;
+            })->groupBy('id')->map(function ($groupe) use ($categorieFamille) {
+                $produit = $groupe->first();
+                if ($categorieFamille && $produit->categorie->famille !== $categorieFamille) {
+                    return null;
+                }
+                return [
+                    'details' => $groupe, // recuperer les details groupés par produit
+                    'id' => $produit->id,
+                    'code' => $produit->code,
+                    'stock' => $produit->stock,
+                    'designation' => $produit->nom,
+                    'categorie' => $produit->categorie->name,
+                    'famille' => $produit->categorie->famille,
+                    'quantite_vendue' => $groupe->sum('pivot.quantite'),
+                    'variante' => $groupe->first()->pivot->variante_id,
+                    'prix_vente' => $groupe->first()->pivot->prix_unitaire,
+                    'montant_total' => $groupe->sum(function ($item) {
+                        return $item->pivot->quantite * $item->pivot->prix_unitaire;
+                    }),
+                ];
+            })->filter()->values();
+
+            // dd($produitsVendus->toArray());
+
+
+            //pour les plats menu
+            $platsVendus = $ventesMenu->flatMap(function ($vente) {
+                return $vente->plats;
+            })->groupBy('id')->map(function ($groupe) {
+                $plat = $groupe->first();
+
+                return [
+                    'id' => $plat->id,
+                    'code' => $plat->code,
+                    'stock' => 100,
+                    'designation' => $plat->nom,
+                    'categorie' => $plat->categorieMenu->nom,
+                    'famille' => 'Menu',
+                    'quantite_vendue' => $groupe->sum('pivot.quantite'),
+                    'prix_vente' => $groupe->first()->pivot->prix_unitaire,
+                    'montant_total' => $groupe->sum(function ($item) {
+                        return $item->pivot->quantite * $item->pivot->prix_unitaire;
+                    }),
+                ];
+            })->filter()->values();
+
+
+            $produitsVendus =  $produitsVendus->concat($platsVendus);
+
+            // dd($produitsVendus->toArray());
+
+
+            $caisses = Caisse::all();
+            $famille = Categorie::whereNull('parent_id')->whereIn('type', ['bar', 'menu'])->orderBy('name', 'DESC')->get();
+
+
+            return view('backend.pages.vente.rapportVente', compact('platsVendus', 'produitsVendus', 'caisses', 'categorieFamille', 'famille'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Une erreur s\'est produite : ' . $e->getMessage());
         }
     }
 

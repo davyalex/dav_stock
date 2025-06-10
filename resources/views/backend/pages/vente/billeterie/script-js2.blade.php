@@ -148,81 +148,34 @@
                     text: 'Le total de la billeterie doit être égal au total de vente !',
                 })
                 return;
-            } 
-            
-            
-            // enregistrer la billeterie
-
-             // Récupère le formulaire
-        const form = document.getElementById('formSend');
-        const formData = new FormData(form);
-
-        console.log(formData);
-        
-
-        $.ajax({
-            url: '{{ route("vente.billeterie-caisse-store") }}',
-            type: 'POST',
-            data: formData,
-            contentType: false, // Important pour FormData
-            processData: false, // Important pour FormData
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            success: function(response) {
-                // Si tout s'est bien passé, on peut rediriger ou afficher un message
+            } else {
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Clôture réussie',
-                    text: 'Vous allez être redirigé.',
-                    timer: 1500,
-                    showConfirmButton: false
-                }).then(() => {
-                    window.location.href = '{{ route('vente.rapport-caisse') }}';
-                });
-            },
-            error: function(xhr) {
-                // Affiche l’erreur si la requête échoue
-                console.error(xhr.responseText);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Erreur',
-                    text: 'Un problème est survenu lors de la clôture de la caisse.'
+                    title: 'Confirmer la clôture de la caisse',
+                    text: "Vous êtes sur le point de clôturer la caisse. Cette action est irréversible.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Oui, clôturer la caisse',
+                    cancelButtonText: 'Annuler'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Caisse clôturée avec succès',
+                            text: 'Déconnexion automatique.',
+                            icon: 'success',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didOpen: () => {
+                                Swal.showLoading()
+                            },
+                            willClose: () => {
+                                window.location.href = '{{ route('vente.cloture-caisse') }}';
+                            }
+                        });
+                    }
                 });
             }
-        });
-            
-            
-            
-            
-            // else {
-            //     Swal.fire({
-            //         title: 'Confirmer la clôture de la caisse',
-            //         text: "Vous êtes sur le point de clôturer la caisse. Cette action est irréversible.",
-            //         icon: 'warning',
-            //         showCancelButton: true,
-            //         confirmButtonColor: '#3085d6',
-            //         cancelButtonColor: '#d33',
-            //         confirmButtonText: 'Oui, clôturer la caisse',
-            //         cancelButtonText: 'Annuler'
-            //     }).then((result) => {
-            //         if (result.isConfirmed) {
-            //             Swal.fire({
-            //                 title: 'Caisse clôturée avec succès',
-            //                 text: 'Déconnexion automatique.',
-            //                 icon: 'success',
-            //                 timer: 2000,
-            //                 timerProgressBar: true,
-            //                 didOpen: () => {
-            //                     Swal.showLoading()
-            //                 },
-            //                 willClose: () => {
-            //                     window.location.href = '{{ route('vente.cloture-caisse') }}';
-            //                 }
-            //             });
-            //         }
-            //     });
-            // }
         });
     });
 </script>

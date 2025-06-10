@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-   Billeterie
+    Billeterie
 @endsection
 @section('content')
     @component('backend.components.breadcrumb')
@@ -29,11 +29,15 @@
                                             <span class="fw-bold">Gestion de la billetterie</span>
                                             <p>-------------------------------</p>
                                         </div> --}}
-                                        <div class="alert alert-primary">
+                                        <div class="alert alert-primary fs-5">
                                             <strong>Important !</strong> Veuillez effectuer la billetterie pour vérifier si
                                             le montant physique en caisse correspond à votre montant de vente qui est de
                                             <strong>{{ number_format($totalVente, 0, ',', ' ') }} FCFA</strong>.
                                         </div>
+
+                                        <a href="{{ route('vente.rapport-caisse') }}" class="btn btn-primary">Rapport de
+                                            vente</a>
+
                                         <div id="variantes-container">
                                             <div class="row variante-row mb-4">
                                                 {{-- <div class="col-3">
@@ -564,8 +568,7 @@
         });
     </script> --}}
 
-   @include('backend.pages.vente.billeterie.script-js')
-    
+    @include('backend.pages.vente.billeterie.script-js')
 @endsection
 
 

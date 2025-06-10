@@ -184,8 +184,6 @@
                                             caisse</button>
                                     @endif
                                 </p>
-
-
                             </div>
                         </div>
                     </div>

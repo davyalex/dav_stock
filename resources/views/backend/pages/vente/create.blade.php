@@ -172,12 +172,12 @@
                 <div class="col-md-6">
                     <label for="payment-method">Mode du réglement</label>
                     <select id="payment-method" name="mode_reglement" class="form-select" required>
-                        <option value="orange money">Orange Money</option>
+                        {{-- <option value="orange money">Orange Money</option>
                         <option value="moov money">Moov Money</option>
                         <option value="mtn money">MTN Money</option>
                         <option value="wave">Wave</option>
                         <option value="visa">Visa</option>
-                        <option value="mastercard">MasterCard</option>
+                        <option value="mastercard">MasterCard</option> --}}
                         <option value="espece" selected>Espèce</option>
                     </select>
                 </div>
