@@ -188,10 +188,10 @@
 
             <!-- ========== Start facture generé ========== -->
             <div class="ticket-container"
-                style="font-family: 'Courier New', monospace; font-size: 12px; width: 300px; margin: 0 auto;">
+                style="font-family: 'Courier New', monospace; font-size: 14px; width: 300px; margin: 0 auto;">
                 <div class="ticket-header" style="text-align: center; margin-bottom: 10px;">
                     <h3 style="margin: 0;">CHEZ JEANNE</h3>
-                    <h4 style="margin: 0;">RESTAURANT LOUNGE</h4>
+                    <h5 style="margin: 0;">RESTAURANT LOUNGE</h5>
                     <h5 style="margin: 5px 0;">AFRICAIN ET EUROPEEN</h5>
                     <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
 
@@ -220,7 +220,7 @@
 
 
                 <div class="ticket-products">
-                    <table style="width: 100%; font-size: 12px; border-collapse: collapse; margin-bottom: 10px;">
+                    <table style="width: 100%; font-size: 14px; border-collapse: collapse; margin-bottom: 10px;">
                         <thead style="border-bottom: 1px dashed black;">
                             <tr>
                                 <th style="text-align: left;">Désignation</th>
@@ -284,7 +284,7 @@
                     <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
                 </div>
 
-                <table style="width: 100%; font-size: 12px; margin-bottom: 10px;">
+                <table style="width: 100%; font-size: 13px; margin-bottom: 10px;">
                     @if ($vente->valeur_remise > 0)
                         <tr>
                             <td><strong>Total facture:</strong></td>
@@ -313,7 +313,7 @@
 
                 <hr style="border-top: 1px dashed black; margin: 5px 0;">
 
-                <table style="width: 100%; font-size: 12px;">
+                <table style="width: 100%; font-size: 14px;">
                     <tr>
                         <td><strong>Règlement le :</strong></td>
                         <td style="text-align: right;">{{ $vente->created_at->format('d/m/Y à H:i') }}</td>
@@ -336,7 +336,7 @@
                 <hr style="border-top: 1px dashed black; margin: 5px 0;">
 
 
-                <div class="ticket-footer" style="text-align: center; font-size: 10px; font-weight: bold;">
+                <div class="ticket-footer" style="text-align: center; font-size: 12px; font-weight: bold;">
                     <span>MERCI DE VOTRE VISITE</span><br>
                     <span>AU REVOIR ET À BIENTÔT</span><br>
                     <span>RESERVATIONS: 07-49-88-95-18</span><br>

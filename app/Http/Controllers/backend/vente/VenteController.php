@@ -660,6 +660,12 @@ class VenteController extends Controller
                 1 => 'Moov money',
                 2 => 'Orange Money',
                 3 => 'MTN money',
+                4 => 'MasterCard',
+                5 => 'Visa',
+
+
+
+
             ];
 
             $type_monnaies = [
