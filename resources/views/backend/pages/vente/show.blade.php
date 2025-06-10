@@ -220,12 +220,12 @@
 
 
                 <div class="ticket-products">
-                    <table style="width: 100%; font-size: 14px; border-collapse: collapse; margin-bottom: 10px;">
+                    <table style="width: 100%; font-size: 14px; border-collapse: collapse; margin-bottom: 10px; font-weight:600;">
                         <thead style="border-bottom: 1px dashed black;">
                             <tr>
-                                <th style="text-align: left;">Désignation</th>
+                                <th style="text-align: left;">DESIGNATION</th>
                                 <th style="text-align: right;">P.U.</th>
-                                <th style="text-align: right;">Total</th>
+                                <th style="text-align: right;">TOTAL</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -284,10 +284,10 @@
                     <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
                 </div>
 
-                <table style="width: 100%; font-size: 13px; margin-bottom: 10px;">
+                <table style="width: 100%; font-size: 14px; margin-bottom: 10px; font-weight:bold;">
                     @if ($vente->valeur_remise > 0)
                         <tr>
-                            <td><strong>Total facture:</strong></td>
+                            <td><strong>TOTAL FACTURE:</strong></td>
                             <td style="text-align: right;">
                                 <strong>{{ number_format($vente->montant_avant_remise, 0, ',', ' ') }} FCFA</strong></td>
                         </tr>
@@ -298,13 +298,13 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><strong>Total à payer:</strong></td>
+                            <td><strong>TOTAL A PAYER:</strong></td>
                             <td style="text-align: right;"><strong>{{ number_format($vente->montant_total, 0, ',', ' ') }}
                                     FCFA</strong></td>
                         </tr>
                     @else
                         <tr>
-                            <td><strong>Total facture:</strong></td>
+                            <td><strong>TOTAL A PAYER:</strong></td>
                             <td style="text-align: right;"><strong>{{ number_format($vente->montant_total, 0, ',', ' ') }}
                                     FCFA</strong></td>
                         </tr>
@@ -313,7 +313,7 @@
 
                 <hr style="border-top: 1px dashed black; margin: 5px 0;">
 
-                <table style="width: 100%; font-size: 14px;">
+                <table style="width: 100%; font-size: 14px; font-weight:bold;">
                     <tr>
                         <td><strong>Règlement le :</strong></td>
                         <td style="text-align: right;">{{ $vente->created_at->format('d/m/Y à H:i') }}</td>
