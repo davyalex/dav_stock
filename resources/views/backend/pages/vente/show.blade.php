@@ -67,6 +67,8 @@
                                     {{ $vente->type_remise == 'amount' ? 'FCFA' : '%' }}</p>
                             @endif
                             <p><strong>Montant vente :</strong> {{ $vente->montant_total }}</p>
+                            <p><strong>Caissier(e) :</strong> {{ $vente->user->first_name }} {{ $vente->user->last_name }}</p>
+                            <p><strong>Caisse :</strong> {{ $vente->caisse->libelle }}</p>
                         </div>
                         {{-- @if ($vente->type_vente != 'commande') --}}
                         <div class="col-md-4">
@@ -202,9 +204,9 @@
                         </tr>
 
                         <tr style="text-align: left;">
-                            <td>Caissier: <strong> {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</strong>
+                            <td>Caissier: <strong> {{ $vente->user->first_name }} {{ $vente->user->last_name }}</strong>
                             </td>
-                            <td>Caisse: <strong> {{ Auth::user()->caisse->libelle ?? 'Non définie' }}</strong> </td>
+                            <td>Caisse: <strong> {{ $vente->caisse->libelle ?? 'Non définie' }}</strong> </td>
                         </tr>
 
                         <tr style="text-align: left;">

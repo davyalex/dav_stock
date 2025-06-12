@@ -111,7 +111,7 @@
                 <div class="card-header">
                     <h5 class="card-title mb-0 " style="text-align: center";>
                        {{-- Rapport des ventes --}}
-                      
+                      Vente
                         @if (request('caisse_id'))
                             <strong> {{ $caisses->find(request('caisse_id'))->libelle }}</strong>
                         @endif
@@ -286,13 +286,20 @@
                         </div>
                     @endforeach
 
-                    <div class="mt-4">
+                    {{-- <div class="mt-4">
                         <h3>Résumé global</h3>
 
                         <p>Montant total des ventes :
                             <span class="fw-bold fs-4">{{ number_format($montantTotalVente, 0, ',', ' ') }} FCFA</span>
                         </p>
-                    </div>
+                    </div> --}}
+
+                     <!-- Total général -->
+                        <div class="alert alert-dark mt-4 text-center fs-5">
+                            <b>💰 Montant total de vente :</b>
+                            <span class="fw-bold fs-4 text-primary">{{ number_format($montantTotalVente, 0, ',', ' ') }}
+                                FCFA</span>
+                        </div>
                 </div>
             </div>
 
