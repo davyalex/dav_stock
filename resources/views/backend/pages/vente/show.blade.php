@@ -67,7 +67,8 @@
                                     {{ $vente->type_remise == 'amount' ? 'FCFA' : '%' }}</p>
                             @endif
                             <p><strong>Montant vente :</strong> {{ $vente->montant_total }}</p>
-                            <p><strong>Caissier(e) :</strong> {{ $vente->user->first_name }} {{ $vente->user->last_name }}</p>
+                            <p><strong>Caissier(e) :</strong> {{ $vente->user->first_name }} {{ $vente->user->last_name }}
+                            </p>
                             <p><strong>Caisse :</strong> {{ $vente->caisse->libelle }}</p>
                         </div>
                         {{-- @if ($vente->type_vente != 'commande') --}}
@@ -281,8 +282,6 @@
                             @endforeach
                         </tbody>
                     </table>
-
-
 
                     <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
                 </div>
