@@ -204,7 +204,7 @@
                         </tr>
 
                         <tr style="text-align: left;">
-                            <td>Caissier: <strong> {{ $vente->user->first_name }} {{ $vente->user->last_name }}</strong>
+                            <td>Caissier: <strong> {{ $vente->user->first_name }}</strong>
                             </td>
                             <td>Caisse: <strong> {{ $vente->caisse->libelle ?? 'Non définie' }}</strong> </td>
                         </tr>
