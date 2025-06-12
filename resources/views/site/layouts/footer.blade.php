@@ -1,4 +1,4 @@
-   <div class="footer-area black-bg-2 pt-70">
+   {{-- <div class="footer-area black-bg-2 pt-70">
        <div class="footer-top-area pb-18">
            <div class="container">
                <div class="row">
@@ -24,31 +24,10 @@
                              
                            </div>
                        
-                           {{-- <div class="payment-img">
-                                <a href="#">
-                                    <img src="assets/img/icon-img/payment.png" alt="">
-                                </a>
-                            </div> --}}
+                          
                        </div>
                    </div>
-                   {{-- <div class="col-lg-2 col-md-6 col-sm-6">
-                       <div class="footer-widget mb-40">
-                           <div class="footer-title mb-22">
-                               <h4>A propos de nous</h4>
-
-                           </div>
-                           <div class="footer-content">
-                               <ul>
-                                   <li><a href="#">À propos de nous</a></li>
-                                   <li><a href="#">Informations de livraison</a></li>
-                                   <li><a href="#">Politique de confidentialité</a></li>
-                                   <li><a href="#">Conditions générales</a></li>
-                                   <li><a href="#">Service client</a></li>
-                                   <li><a href="#">Politique de retour</a></li>
-                               </ul>
-                           </div>
-                       </div>
-                   </div> --}}
+                   
                    <div class="col-lg-2 col-md-6 col-sm-6">
                        <div class="footer-widget mb-40">
                            <div class="footer-title mb-22">
@@ -79,9 +58,7 @@
                                    <li>Email: <a href="#">{{ $setting->email1 ?? 'Info@example.com' }}</a></li>
                                </ul>
                            </div>
-                           {{-- <div class="mt-35 footer-title mb-22">
-                               <h4>Horaires d'ouverture</h4>
-                           </div> --}}
+                          
                            <div class="footer-time mt-3">
                                <ul>
                                    <li>Ouverture: <span>{{ $setting->horaire_ouverture ?? '11:00' }}</span> - Fermeture:
@@ -110,18 +87,18 @@
                        <div class="footer-social">
                            <ul>
                                <li><a href=" {{ $setting->facebook_link ?? '#' }}" target="_blank"><i class="ion-social-facebook"></i></a></li>
-                               {{-- <li><a href="#"><i class="ion-social-twitter"></i></a></li>
+                               <li><a href="#"><i class="ion-social-twitter"></i></a></li>
                                <li><a href="#"><i class="ion-social-instagram-outline"></i></a></li>
                                <li><a href="#"><i class="ion-social-googleplus-outline"></i></a></li>
                                <li><a href="#"><i class="ion-social-rss"></i></a></li>
-                               <li><a href="#"><i class="ion-social-dribbble-outline"></i></a></li> --}}
+                               <li><a href="#"><i class="ion-social-dribbble-outline"></i></a></li>
                            </ul>
                        </div>
                    </div>
                </div>
            </div>
        </div>
-   </div>
+   </div> --}}
    <!-- Modal -->
  
    <!-- Modal end -->

@@ -102,12 +102,6 @@ class VenteController extends Controller
 
 
 
-
-
-
-
-
-
             $query = Vente::with('produits')
                 ->whereStatut('confirmée')
                 ->orderBy('date_vente', 'desc');
@@ -183,8 +177,14 @@ class VenteController extends Controller
                 $sessionDate = $sessionDate->session_date_vente;
             }
 
+            // verifier si la caisse actuelle a effectuer des vente clotureé aujourd'hui
+            $venteCaisseCloture = Vente::where('caisse_id', auth()->user()->caisse_id)
+                ->where('user_id', auth()->user()->id)
+                ->where('statut_cloture', true)
+                ->whereDate('date_vente', Carbon::today()) // ✅ Compare seulement la date
+                ->count();
 
-            return view('backend.pages.vente.index', compact('data_vente', 'caisses', 'sessionDate'));
+            return view('backend.pages.vente.index', compact('data_vente', 'caisses', 'sessionDate', 'venteCaisseCloture'));
         } catch (\Exception $e) {
             Alert::error('Erreur', 'Une erreur est survenue lors du chargement des ventes : ' . $e->getMessage());
             return back();
@@ -591,6 +591,7 @@ class VenteController extends Controller
     }
 
 
+
     /**
      * Cloture la caisse courante, enregistre l'historique et se déconnecte
      *
@@ -613,15 +614,60 @@ class VenteController extends Controller
                 'date_cloture' => now()
             ]);
 
-            //desactive la caisse
-            $caisse->statut = 'desactive';
-            $caisse->save();
 
 
-            //mettre statut_cloture a true
+            //mettre statut_cloture a true dans les ventes de la caisse
             Vente::where('caisse_id', $caisse->id)->update([
                 'statut_cloture' => true,
             ]);
+
+            // //desactive la caisse
+            // $caisse->statut = 'desactive';
+            // $caisse->save();
+
+            // //deconnecter l'utilisateur et enregistrer l'historique caisse
+            // // Si l'utilisateur a une caisse active, la désactiver
+            // if ($user->caisse_id) {
+
+            //     // niveau caisse
+            //     $caisse = Caisse::find($user->caisse_id);
+            //     $caisse->statut = 'desactive';
+            //     $caisse->session_date_vente = null;
+            //     $caisse->save();
+            //     // mettre caisse_id a null
+            //     User::whereId($user->id)->update([
+            //         'caisse_id' => null,
+            //     ]);
+
+            //     //mise a jour dans historiquecaisse pour fermeture de caisse
+            //     HistoriqueCaisse::where('user_id', $user->id)
+            //         ->where('caisse_id', $user->caisse_id)
+            //         ->whereNull('date_fermeture')
+            //         ->update([
+            //             'date_fermeture' => now(),
+            //         ]);
+            // }
+
+
+            // Auth::logout();
+            Alert::success('Succès', 'Caisse cloturée avec succès');
+            return redirect()->route('vente.rapport-caisse');
+        } catch (\Exception $e) {
+            Alert::error('Erreur', 'Une erreur est survenue lors de la cloture de la caisse : ' . $e->getMessage());
+            return back();
+        }
+    }
+
+
+    /***Fonction pour fermer la caisse */
+    public function fermerCaisse(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $caisse = $user->caisse;
+            //desactive la caisse
+            // $caisse->statut = 'desactive';
+            // $caisse->save();
 
             //deconnecter l'utilisateur et enregistrer l'historique caisse
             // Si l'utilisateur a une caisse active, la désactiver
@@ -632,7 +678,8 @@ class VenteController extends Controller
                 $caisse->statut = 'desactive';
                 $caisse->session_date_vente = null;
                 $caisse->save();
-                // mettre caisse_id a null
+                
+                // mettre caisse_id a null du user connecté
                 User::whereId($user->id)->update([
                     'caisse_id' => null,
                 ]);
@@ -644,15 +691,14 @@ class VenteController extends Controller
                     ->update([
                         'date_fermeture' => now(),
                     ]);
+
+
+                Auth::logout();
+                Alert::success('Succès', 'Caisse Fermée avec succès');
+                return Redirect()->route('admin.login');
             }
-
-
-            Auth::logout();
-            Alert::success('Succès', 'Caisse cloturée avec succès');
-            return redirect()->route('admin.login');
         } catch (\Exception $e) {
-            Alert::error('Erreur', 'Une erreur est survenue lors de la cloture de la caisse : ' . $e->getMessage());
-            return back();
+            return redirect()->route('vente.index')->with('error', "Une erreur s'est produite. Veuillez réessayer.");
         }
     }
 
@@ -739,6 +785,9 @@ class VenteController extends Controller
                     'user_id' => $user->id,
                 ]);
             }
+
+            // si il il n'y a pas d'erreur lors de l'enregistrement de billetterie appel a fonction clotureCaisse
+            return $this->clotureCaisse($request);
         } catch (\Throwable $th) {
             return $th->getMessage();
         }
@@ -817,10 +866,12 @@ class VenteController extends Controller
 
 
             // pour les vente bar et restaurant
+
             $ventes = $query
                 ->where('caisse_id', auth()->user()->caisse_id)
                 ->where('user_id', auth()->user()->id)
-                ->where('statut_cloture', false)
+                ->where('statut_cloture', true)
+                ->whereDate('date_vente', Carbon::today()) // ✅ Compare seulement la date
                 ->get();
 
 
@@ -828,7 +879,8 @@ class VenteController extends Controller
             $ventesMenu = $queryMenu
                 ->where('caisse_id', auth()->user()->caisse_id)
                 ->where('user_id', auth()->user()->id)
-                ->where('statut_cloture', false)
+                ->where('statut_cloture', true)
+                ->whereDate('date_vente', Carbon::today())
                 ->get();
 
 

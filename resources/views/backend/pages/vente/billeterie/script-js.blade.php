@@ -149,6 +149,11 @@
                 })
                 return;
             } 
+
+
+            else {
+                // Envoi de la requête
+            }
             
             
             // enregistrer la billeterie
@@ -157,32 +162,53 @@
         const form = document.getElementById('formSend');
         const formData = new FormData(form);
 
-        console.log(formData);
+        // console.log(formData);
         
 
+      Swal.fire({
+    title: 'Confirmer la clôture de la caisse',
+    text: "Vous êtes sur le point de clôturer la caisse. Cette action est irréversible.",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Oui, clôturer la caisse',
+    cancelButtonText: 'Annuler'
+}).then((result) => {
+    if (result.isConfirmed) {
+        // Afficher un chargement pendant le traitement
+        Swal.fire({
+            title: 'Traitement en cours...',
+            text: 'Veuillez patienter',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        // Exécution de la requête AJAX
         $.ajax({
             url: '{{ route("vente.billeterie-caisse-store") }}',
             type: 'POST',
             data: formData,
-            contentType: false, // Important pour FormData
-            processData: false, // Important pour FormData
+            contentType: false,
+            processData: false,
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             success: function(response) {
-                // Si tout s'est bien passé, on peut rediriger ou afficher un message
                 Swal.fire({
                     icon: 'success',
                     title: 'Clôture réussie',
-                    text: 'Vous allez être redirigé.',
+                    text: 'Vous allez être redirigé vers le rapport de caisse.',
                     timer: 1500,
                     showConfirmButton: false
                 }).then(() => {
-                    window.location.href = '{{ route('vente.rapport-caisse') }}';
+                    window.location.href = '{{ route("vente.rapport-caisse") }}';
                 });
             },
             error: function(xhr) {
-                // Affiche l’erreur si la requête échoue
                 console.error(xhr.responseText);
                 Swal.fire({
                     icon: 'error',
@@ -191,7 +217,9 @@
                 });
             }
         });
-            
+    }
+});
+
             
             
             

@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer('annee'); // Stocke l'année (ex: 2024)
             $table->foreignId('type_paie')->nullable()->constrained('libelle_depenses')->onDelete('cascade')->onUpdate('cascade');
             // foreignId employeId
+           
+           
             $table->foreignId('employe_id')->nullable()->constrained('employes')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });

@@ -635,7 +635,24 @@ class RapportController extends Controller
                 if ($categorieFamille && $produit->categorie->famille !== $categorieFamille) {
                     return null;
                 }
+                // return [
+
+                //     'id' => $produit->id,
+                //     'code' => $produit->code,
+                //     'stock' => $produit->stock,
+                //     'designation' => $produit->nom,
+                //     'categorie' => $produit->categorie->name,
+                //     'famille' => $produit->categorie->famille,
+                //     'quantite_vendue' => $groupe->sum('pivot.quantite'),
+                //     'variante' => $groupe->first()->pivot->variante_id,
+                //     'prix_vente' => $groupe->first()->pivot->prix_unitaire,
+                //     'montant_total' => $groupe->sum(function ($item) {
+                //         return $item->pivot->quantite * $item->pivot->prix_unitaire;
+                //     }),
+                // ];
+
                 return [
+                    'details' => $groupe, // recuperer les details groupés par produit
                     'id' => $produit->id,
                     'code' => $produit->code,
                     'stock' => $produit->stock,
@@ -643,6 +660,7 @@ class RapportController extends Controller
                     'categorie' => $produit->categorie->name,
                     'famille' => $produit->categorie->famille,
                     'quantite_vendue' => $groupe->sum('pivot.quantite'),
+                    'variante' => $groupe->first()->pivot->variante_id,
                     'prix_vente' => $groupe->first()->pivot->prix_unitaire,
                     'montant_total' => $groupe->sum(function ($item) {
                         return $item->pivot->quantite * $item->pivot->prix_unitaire;

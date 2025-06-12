@@ -104,6 +104,11 @@
 
 
 
+ 
+      
+
+
+
         <div class="card">
             <div class="card-header d-flex justify-content-between">
 
@@ -190,6 +195,16 @@
                 </div>
             @endif
             @include('backend.components.alertMessage')
+
+
+                 <!-- ========== Start Si il y a des ventes dejà realisé et cloturé par la caisse connecté ========== -->
+        @if ($venteCaisseCloture > 0)
+            <div class="alert alert-danger fs-5 text-center">
+                <strong>Attention ! Vous avez des ventes cloturées !</strong>
+                <a href="{{ route('vente.rapport-caisse') }}" class="btn btn-danger btn-lg">Voir le rapport de caisse</a>
+            </div>
+        @endif
+      <!-- ========== End Section ========== -->
 
             <div class="card-body">
                 <div class="table-responsive">

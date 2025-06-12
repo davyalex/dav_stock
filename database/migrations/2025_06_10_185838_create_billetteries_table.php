@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('caisse_id')->nullable()->constrained('caisses')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('mode'); // 0: Espèce, 1: Mobile Money
+            $table->string('mode'); // 0: Espèce, 1: Mobile Money
             $table->string('type_monnaie')->nullable(); // Billets ou Pièces (si espèce)
             $table->integer('quantite')->nullable();
             $table->double('valeur')->nullable();

@@ -345,6 +345,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('cloture-caisse', 'clotureCaisse')->name('vente.cloture-caisse')->middleware('can:voir-vente'); // cloture caisse
         route::get('billeterie-caisse', 'billeterieCaisse')->name('vente.billeterie-caisse')->middleware('can:voir-vente'); // billeterie caisse
         route::post('billeterie-caisse-store', 'storeBilleterie')->name('vente.billeterie-caisse-store')->middleware('can:voir-vente'); // billeterie caisse
+        route::get('fermer-caisse', 'fermerCaisse')->name('vente.fermer-caisse')->middleware('can:voir-vente'); // cloture caisse
 
         route::get('rapport', 'rapportVente')->name('vente.rapport-caisse')->middleware('can:voir-vente'); // rapport de vente caisse
 

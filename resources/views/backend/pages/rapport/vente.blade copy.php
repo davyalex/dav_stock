@@ -110,8 +110,7 @@
             <div class="card divPrint">
                 <div class="card-header">
                     <h5 class="card-title mb-0 " style="text-align: center";>
-                       {{-- Rapport des ventes --}}
-                      
+                        Rapport des ventes
                         @if (request('caisse_id'))
                             <strong> {{ $caisses->find(request('caisse_id'))->libelle }}</strong>
                         @endif
@@ -162,11 +161,6 @@
                         $produitsVendus = $produitsVendus->map(function ($produits, $famille) {
                             return $produits;
                         });
-
-                        // montant total globale de toutes les familles
-                        $montantTotalVente = $produitsVendus->sum(function ($produits) {
-                            return $produits->sum('montant_total');
-                        });
                     @endphp
                     @foreach ($produitsVendus as $famille => $produits)
                         <h3>
@@ -185,88 +179,24 @@
                                         <th>Code</th>
                                         <th>Designation</th>
                                         <th>Catégorie</th>
-                                        @if ($famille == 'bar')
-                                            <th>Quantité vendue</th>
-                                            <th>Montant total</th>
-                                        @else
-                                            <th>Quantité vendue</th>
-                                            <th>Prix de vente</th>
-                                            <th>Montant total</th>
-                                        @endif
-
+                                        <th>Quantité vendue</th>
+                                        <th>Prix de vente</th>
+                                        <th>Montant total</th>
+                                        <th>Stock disponible</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($produits as $produit)
+                                    @foreach ($produits as $produit)
                                         <tr>
                                             <td>{{ $produit['code'] }}</td>
                                             <td>{{ $produit['designation'] }}</td>
                                             <td>{{ $produit['categorie'] }}</td>
-
-                                            <!-- ========== Start si famille est bar on affiche les details quantité et variante ========== -->
-                                            {{-- @if ($famille == 'bar')
-                                                <td>
-                                                    @foreach ($produit['details'] as $item)
-                                                        {{ $item->pivot->quantite }}
-                                                        {{ \App\Models\Variante::find($item->pivot->variante_id)->libelle ?? '' }}
-                                                        :
-
-                                                        {{ $item->pivot->prix_unitaire }}
-                                                        <br>
-                                                    @endforeach
-                                                </td>
-                                            @else
-                                                <td>{{ $produit['quantite_vendue'] }} </td>
-                                            @endif --}}
-
-                                            @if ($famille == 'bar')
-                                                @php
-                                                    $details = $produit['details'];
-                                                    $variantes = $details->pluck('pivot.variante_id')->unique();
-
-                                                    // Préchargement facultatif pour éviter requêtes multiples
-                                                    $varianteLibelles = \App\Models\Variante::whereIn('id', $variantes)
-                                                        ->get()
-                                                        ->keyBy('id');
-                                                @endphp
-
-                                                <td>
-                                                    @php
-                                                        // Regrouper les détails par variante_id et prix_unitaire
-                                                        $groupes = $details->groupBy(function ($item) {
-                                                            return $item->pivot->variante_id .
-                                                                '_' .
-                                                                $item->pivot->prix_unitaire;
-                                                        });
-                                                    @endphp
-
-                                                    @foreach ($groupes as $groupe)
-                                                        @php
-                                                            $quantiteTotale = $groupe->sum('pivot.quantite');
-                                                            $varianteId = $groupe->first()->pivot->variante_id;
-                                                            $varianteNom =
-                                                                $varianteLibelles[$varianteId]->libelle ?? 'Inconnue';
-                                                            $prixUnitaire = $groupe->first()->pivot->prix_unitaire;
-                                                        @endphp
-                                                        {{ $quantiteTotale }} {{ $varianteNom }} x
-                                                        {{ number_format($prixUnitaire, 0, ',', ' ') }} FCFA<br>
-                                                    @endforeach
-                                                </td>
-                                                <td>{{ number_format($produit['montant_total'], 0, ',', ' ') }} FCFA</td>
-                                            @else
-                                                <!-- ========== End si famille est bar on affiche les details quantité et variante ========== -->
-                                                <td>{{ $produit['quantite_vendue'] }} </td>
-                                                <td>{{ number_format($produit['prix_vente'], 0, ',', ' ') }} FCFA</td>
-                                                <td>{{ number_format($produit['montant_total'], 0, ',', ' ') }} FCFA</td>
-                                            @endif
-
+                                            <td>{{ $produit['quantite_vendue'] }}</td>
+                                            <td>{{ number_format($produit['prix_vente'], 0, ',', ' ') }} FCFA</td>
+                                            <td>{{ number_format($produit['montant_total'], 0, ',', ' ') }} FCFA</td>
+                                            <td>{{ $produit['stock'] }}</td>
                                         </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="7" class="text-center">Pas de produits vendus dans cette famille
-                                            </td>
-                                        </tr>
-                                    @endforelse
+                                    @endforeach
                                 </tbody>
                                 <tfoot>
                                     <tr>
@@ -281,22 +211,20 @@
                                         </th>
                                     </tr>
                                 </tfoot>
-
                             </table>
                         </div>
                     @endforeach
 
-                    <div class="mt-4">
+                    {{-- <div class="mt-4">
                         <h3>Résumé global</h3>
-
+                        <p>Nombre total de produits vendus : {{ $produitsVendus->sum('quantite_vendue') }}</p>
                         <p>Montant total des ventes :
-                            <span class="fw-bold fs-4">{{ number_format($montantTotalVente, 0, ',', ' ') }} FCFA</span>
-                        </p>
-                    </div>
+                            {{ number_format($produitsVendus->sum('montant_total'), 0, ',', ' ') }} FCFA</p>
+                    </div> --}}
                 </div>
             </div>
 
-            <button id="btnImprimer" class="w-100 "><i class="ri ri-printer-fill"></i></button>
+            <button id="btnImprimer" class="w-100"><i class="ri ri-printer-fill"></i></button>
 
         </div>
     </div>
@@ -321,7 +249,7 @@
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
 
-    {{-- <script>
+    <script>
         $(document).ready(function() {
             // Fonction pour imprimer le rapport
             function imprimerRapport() {
@@ -368,52 +296,6 @@
                 .addClass('btn btn-primary mt-3')
                 .on('click', imprimerRapport);
             // .appendTo('.divPrint');
-        });
-    </script> --}}
-
-    <script>
-        $(document).ready(function() {
-            function imprimerRapport() {
-                // Sauvegarder le contenu original de la page
-                var contenuOriginal = $('body').html();
-
-                // Récupérer uniquement la section à imprimer
-                var contenuImprimer = `
-                <html>
-                    <head>
-                        <title>Rapport de Vente</title>
-                        <style>
-                            body { font-family: Arial, sans-serif; }
-                            table { width: 100%; border-collapse: collapse; }
-                            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-                            th { background-color: #f2f2f2; }
-                        </style>
-                    </head>
-                    <body>
-                        <h2 style="text-align: center;">Rapport de Vente</h2>
-                        ${$('.divPrint').html()}
-                    </body>
-                </html>
-            `;
-
-                // Remplacer le contenu de la page par celui à imprimer
-                $('body').html(contenuImprimer);
-
-                // Lancer l'impression
-                window.print();
-
-                // Recharger la page pour retrouver l'affichage original
-                location.reload(); // ou $('body').html(contenuOriginal); si tu veux éviter le reload
-            }
-
-            $('#btnImprimer')
-                .text('Imprimer le Rapport')
-                .addClass('btn btn-primary mt-3')
-                .on('click', imprimerRapport);
-
-
-
-           
         });
     </script>
 @endsection

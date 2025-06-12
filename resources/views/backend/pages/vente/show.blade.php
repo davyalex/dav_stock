@@ -195,7 +195,7 @@
                     <h5 style="margin: 5px 0;">AFRICAIN ET EUROPEEN</h5>
                     <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
 
-                    <table class="header">
+                    <table class="header" style="font-size: 16px">
                         <tr style="text-align: left;">
                             <td>Table <strong>N°: {{ $vente->numero_table ?? '' }}</strong> </td>
                             <td>Couvert(s) <strong> : {{ $vente->nombre_couverts ?? '' }}</strong> </td>
@@ -221,7 +221,7 @@
 
                 <div class="ticket-products">
                     <table
-                        style="width: 100%; font-size: 14px; border-collapse: collapse; margin-bottom: 10px; font-weight:600;">
+                        style="width: 100%; font-size: 18px; border-collapse: collapse; margin-bottom: 10px; font-weight:600;">
                         <thead style="border-bottom: 1px dashed black;">
                             <tr>
                                 <th style="text-align: left;">DESIGNATION</th>
@@ -285,7 +285,7 @@
                     <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
                 </div>
 
-                <table style="width: 100%; font-size: 14px; margin-bottom: 10px; font-weight:bold;">
+                <table style="width: 100%; font-size: 18px; margin-bottom: 10px; font-weight:bold;">
                     @if ($vente->valeur_remise > 0)
                         <tr>
                             <td><strong>TOTAL FACTURE:</strong></td>
@@ -315,13 +315,13 @@
 
                 <hr style="border-top: 1px dashed black; margin: 5px 0;">
 
-                <table style="width: 100%; font-size: 14px; font-weight:bold;">
+                <table style="width: 100%; font-size: 18px; font-weight:bold;">
                     <tr>
                         <td><strong>Règlement le :</strong></td>
                         <td style="text-align: right;">{{ $vente->created_at->format('d/m/Y à H:i') }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Reçu ({{ $vente->mode_paiement }}):</strong></td>
+                        <td><strong>Reçu :</strong></td>
                         <td style="text-align: right;">
                             {{ $vente->montant_recu ? number_format($vente->montant_recu, 0, ',', ' ') : '0' }} FCFA
                         </td>

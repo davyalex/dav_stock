@@ -20,6 +20,10 @@
         @endslot
     @endcomponent
 
+    <div class="alert alert-danger fs-5">
+        <strong>Important !</strong> Veuillez fermer la caisse <strong>Après avoir imprimé le rapport</strong> Merci.
+        <a href="#" class="btn btn-danger btn-lg fermerCaisse">Fermer la caisse</a>
+    </div>
     {{-- <div class="row">
         <div class="col-lg-12">
             <div class="card">
@@ -110,7 +114,7 @@
             <div class="card divPrint">
                 <div class="card-header">
                     <h5 class="card-title mb-0 " style="text-align: center";>
-                        <span class="fw-bold fs-3"> Rapport des ventes journalieres</span>
+                        {{-- <span class="fw-bold fs-3"> Rapport des ventes journalieres</span> --}}
                         <div>
                             <span> Réalisé par : {{ auth()->user()->first_name }}</span>
                             <span>- {{ auth()->user()->caisse->libelle }}</span>
@@ -155,9 +159,9 @@
                             'plat_du_menu' => 3, // Plat du menu
 
                             // Ajoute d'autres familles si nécessaire avec des numéros plus grands
-];
+                        ];
 
-// Trier les familles en fonction de l'ordre personnalisé
+                        // Trier les familles en fonction de l'ordre personnalisé
                         $produitsVendus = $produitsVendus
                             ->groupBy('famille')
                             ->sortBy(function ($produits, $famille) use ($ordreFamilles) {
@@ -237,28 +241,26 @@
                                                 @endphp
 
                                                 <td>
-                                                    @if ($variantes->count() === 1)
+                                                    @php
+                                                        // Regrouper les détails par variante_id et prix_unitaire
+                                                        $groupes = $details->groupBy(function ($item) {
+                                                            return $item->pivot->variante_id .
+                                                                '_' .
+                                                                $item->pivot->prix_unitaire;
+                                                        });
+                                                    @endphp
+
+                                                    @foreach ($groupes as $groupe)
                                                         @php
-                                                            $quantiteTotale = $details->sum('pivot.quantite');
-                                                            $varianteId = $variantes->first();
+                                                            $quantiteTotale = $groupe->sum('pivot.quantite');
+                                                            $varianteId = $groupe->first()->pivot->variante_id;
                                                             $varianteNom =
                                                                 $varianteLibelles[$varianteId]->libelle ?? 'Inconnue';
-                                                            $prixUnitaire = $details->first()->pivot->prix_unitaire;
+                                                            $prixUnitaire = $groupe->first()->pivot->prix_unitaire;
                                                         @endphp
-                                                        {{ $quantiteTotale }} x {{ $varianteNom }} :
-                                                        {{ number_format($prixUnitaire, 0, ',', ' ') }} FCFA
-                                                    @else
-                                                        @foreach ($details as $item)
-                                                            @php
-                                                                $varianteNom =
-                                                                    $varianteLibelles[$item->pivot->variante_id]
-                                                                        ->libelle ?? 'Inconnue';
-                                                            @endphp
-                                                            {{ $item->pivot->quantite }} x {{ $varianteNom }} :
-                                                            {{ number_format($item->pivot->prix_unitaire, 0, ',', ' ') }}
-                                                            FCFA<br>
-                                                        @endforeach
-                                                    @endif
+                                                        {{ $quantiteTotale }} {{ $varianteNom }} x
+                                                        {{ number_format($prixUnitaire, 0, ',', ' ') }} FCFA<br>
+                                                    @endforeach
                                                 </td>
                                                 <td>{{ number_format($produit['montant_total'], 0, ',', ' ') }} FCFA</td>
                                             @else
@@ -308,7 +310,7 @@
                 </div>
             </div>
 
-            <button id="btnImprimer" class="w-100"><i class="ri ri-printer-fill"></i></button>
+            <button id="btnImprimer" class="w-100 "><i class="ri ri-printer-fill"></i></button>
 
         </div>
     </div>
@@ -333,7 +335,7 @@
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
 
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             // Fonction pour imprimer le rapport
             function imprimerRapport() {
@@ -380,6 +382,89 @@
                 .addClass('btn btn-primary mt-3')
                 .on('click', imprimerRapport);
             // .appendTo('.divPrint');
+
+
+            // //fermer la caisse en executant une route avec un compteur
+            // $('.fermerCaisse').on('click', function() {
+
+            //     window.location.href = "{{ route('vente.fermer-caisse') }}";
+
+            // })
+        });
+    </script> --}}
+
+    <script>
+        $(document).ready(function() {
+            function imprimerRapport() {
+                // Sauvegarder le contenu original de la page
+                var contenuOriginal = $('body').html();
+
+                // Récupérer uniquement la section à imprimer
+                var contenuImprimer = `
+                <html>
+                    <head>
+                        <title>Rapport de Vente</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; }
+                            table { width: 100%; border-collapse: collapse; }
+                            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                            th { background-color: #f2f2f2; }
+                        </style>
+                    </head>
+                    <body>
+                        <h2 style="text-align: center;">Rapport de Vente</h2>
+                        ${$('.divPrint').html()}
+                    </body>
+                </html>
+            `;
+
+                // Remplacer le contenu de la page par celui à imprimer
+                $('body').html(contenuImprimer);
+
+                // Lancer l'impression
+                window.print();
+
+                // Recharger la page pour retrouver l'affichage original
+                location.reload(); // ou $('body').html(contenuOriginal); si tu veux éviter le reload
+            }
+
+            $('#btnImprimer')
+                .text('Imprimer le Rapport')
+                .addClass('btn btn-primary mt-3')
+                .on('click', imprimerRapport);
+
+
+
+            //fermer la caisse en executant une route avec un compteur
+            $('.fermerCaisse').on('click', function() {
+                Swal.fire({
+                    title: 'Confirmer la fermeture de la caisse',
+                    text: "Vous êtes sur le point de fermer la caisse. Cette action est irréversible.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Oui, clôturer la caisse',
+                    cancelButtonText: 'Annuler'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Caisse clôturée avec succès',
+                            text: 'Déconnexion automatique.',
+                            icon: 'success',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didOpen: () => {
+                                Swal.showLoading()
+                            },
+                            willClose: () => {
+                                window.location.href =
+                                    '{{ route('vente.fermer-caisse') }}';
+                            }
+                        });
+                    }
+                });
+            })
         });
     </script>
 @endsection

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('code')->unique()->nullable();
             $table->dateTime('date_inventaire')->nullable();
-            $table->unsignedTinyInteger('mois_concerne')->after('date_inventaire');
-            $table->unsignedSmallInteger('annee_concerne')->after('mois_concerne');
+            $table->integer('mois_concerne');
+            $table->integer('annee_concerne');
 
             $table->foreignId('user_id')
                 ->nullable()

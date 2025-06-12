@@ -39,7 +39,7 @@
 
 <body>
 
-    @include('site.layouts.header') <!-- header start -->
+    {{-- @include('site.layouts.header') <!-- header start --> --}}
 
     @if (!Request::routeIs('accueil'))
         @include('site.components.breadcrumb')

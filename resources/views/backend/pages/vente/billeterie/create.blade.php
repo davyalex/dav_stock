@@ -35,8 +35,8 @@
                                             <strong>{{ number_format($totalVente, 0, ',', ' ') }} FCFA</strong>.
                                         </div>
 
-                                        <a href="{{ route('vente.rapport-caisse') }}" class="btn btn-primary">Rapport de
-                                            vente</a>
+                                        {{-- <a href="{{ route('vente.rapport-caisse') }}" class="btn btn-primary">Rapport de
+                                            vente</a> --}}
 
                                         <div id="variantes-container">
                                             <div class="row variante-row mb-4">
