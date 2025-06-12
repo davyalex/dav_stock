@@ -159,9 +159,9 @@
                             'plat_du_menu' => 3, // Plat du menu
 
                             // Ajoute d'autres familles si nécessaire avec des numéros plus grands
-                        ];
+];
 
-                        // Trier les familles en fonction de l'ordre personnalisé
+// Trier les familles en fonction de l'ordre personnalisé
                         $produitsVendus = $produitsVendus
                             ->groupBy('famille')
                             ->sortBy(function ($produits, $famille) use ($ordreFamilles) {
@@ -300,13 +300,53 @@
                         </div>
                     @endforeach
 
+                    <!-- ========== Start Resultat & billetterie ========== -->
                     <div class="mt-4">
-                        <h3>Résumé global</h3>
+                        <h3 class="mb-4"> <i class="ri ri-file-list-3-line"></i> Résumé global</h3>
 
-                        <p>Montant total des ventes :
-                            <span class="fw-bold fs-4">{{ number_format($montantTotalVente, 0, ',', ' ') }} FCFA</span>
-                        </p>
+                        <div class="row">
+                            <!-- Mode 0 : Espèce -->
+                            <div class="col-md-6 mb-4">
+                                <div class="card shadow-sm border-left-success">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-success">{{ $modes[0] }}</h5>
+                                        <p class="card-text fs-5 fw-bold">
+                                            {{ number_format($resultats['mode_0'], 0, ',', ' ') }} FCFA
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Mode 1 : Mobile Money -->
+                            <div class="col-md-6 mb-4">
+                                <div class="card shadow-sm border-left-info">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-info">{{ $modes[1] }}</h5>
+                                        <ul class="list-group list-group-flush">
+                                            @foreach ($resultats['mode_1'] as $type => $montant)
+                                                <li
+                                                    class="list-group-item d-flex justify-content-between align-items-center">
+                                                    {{ $type_mobile_money[$type] ?? 'Inconnu' }}
+                                                    <span class="fw-bold">{{ number_format($montant, 0, ',', ' ') }}
+                                                        FCFA</span>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total général -->
+                        <div class="alert alert-dark mt-4 text-center fs-5">
+                            <b>💰 Montant total de vente :</b>
+                            <span class="fw-bold fs-4 text-primary">{{ number_format($montantTotalVente, 0, ',', ' ') }}
+                                FCFA</span>
+                        </div>
                     </div>
+                    <!-- ========== End Resultat & billetterie ========== -->
+
+
                 </div>
             </div>
 

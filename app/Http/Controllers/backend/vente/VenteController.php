@@ -678,7 +678,7 @@ class VenteController extends Controller
                 $caisse->statut = 'desactive';
                 $caisse->session_date_vente = null;
                 $caisse->save();
-                
+
                 // mettre caisse_id a null du user connecté
                 User::whereId($user->id)->update([
                     'caisse_id' => null,
@@ -719,10 +719,6 @@ class VenteController extends Controller
                 3 => 'MTN money',
                 4 => 'MasterCard',
                 5 => 'Visa',
-
-
-
-
             ];
 
             $type_monnaies = [
@@ -783,6 +779,7 @@ class VenteController extends Controller
                     'total' => $variante['total'],
                     'caisse_id' => $caisse->id,
                     'user_id' => $user->id,
+                    'date_save' => Auth::user()->caisse->session_date_vente,
                 ]);
             }
 
@@ -939,11 +936,55 @@ class VenteController extends Controller
             // dd($produitsVendus->toArray());
 
 
+            /**Recuperer les billetteries */
+            $billetterie = Billetterie::where('caisse_id', auth()->user()->caisse_id)
+                ->where('user_id', auth()->user()->id)
+                ->whereDate('date_save', Carbon::today())
+                ->get();
+
+
+            // Tableau pour stocker les résultats
+            $resultats = [
+                'mode_0' => 0,
+                'mode_1' => []
+            ];
+
+            // Regrouper et additionner les totaux
+            foreach ($billetterie as $item) {
+                if ($item->mode == 0) {
+                    $resultats['mode_0'] += $item->total;
+                } elseif ($item->mode == 1) {
+                    $type = $item->type_mobile_money ?? 0;
+                    if (!isset($resultats['mode_1'][$type])) {
+                        $resultats['mode_1'][$type] = 0;
+                    }
+                    $resultats['mode_1'][$type] += $item->total;
+                }
+            }
+
+            // Libellés
+            $modes = [
+                0 => 'Espèce',
+                1 => 'Mobile money',
+            ];
+
+            $type_mobile_money = [
+                0 => 'Wave',
+                1 => 'Moov money',
+                2 => 'Orange Money',
+                3 => 'MTN money',
+                4 => 'MasterCard',
+                5 => 'Visa',
+            ];
+
+            /** End Afficher les billetteries */
+            // dd($billetterie->toArray());
+
             $caisses = Caisse::all();
             $famille = Categorie::whereNull('parent_id')->whereIn('type', ['bar', 'menu'])->orderBy('name', 'DESC')->get();
 
 
-            return view('backend.pages.vente.rapportVente', compact('platsVendus', 'produitsVendus', 'caisses', 'categorieFamille', 'famille'));
+            return view('backend.pages.vente.rapportVente', compact('platsVendus', 'produitsVendus', 'caisses', 'categorieFamille', 'famille', 'modes', 'type_mobile_money', 'resultats'));
         } catch (\Exception $e) {
             return back()->with('error', 'Une erreur s\'est produite : ' . $e->getMessage());
         }

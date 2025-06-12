@@ -23,6 +23,7 @@ class Billetterie extends Model
         'total',
         'caisse_id',
         'user_id',
+        'date_save',
     ];
 
 
