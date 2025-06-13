@@ -153,9 +153,8 @@
 
             else {
                 // Envoi de la requête
-            }
-            
-            
+
+                           
             // enregistrer la billeterie
 
              // Récupère le formulaire
@@ -220,6 +219,9 @@
     }
 });
 
+            }
+            
+ 
             
             
             

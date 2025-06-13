@@ -92,7 +92,7 @@
                     @if ($data_vente->sum('montant_total') == 0)
                         <button type="button" class="btn btn-info ms-3" data-bs-toggle="modal"
                             data-bs-target="#dateSessionVenteModal">
-                            {{ $sessionDate != null ? 'Modifier la date de la session de vente' : ' Choisir une date pour la session vente' }}
+                            {{ $sessionDate != null ? 'Modifier la date de la session vente' : ' Choisir une date pour la session vente' }}
                         </button>
                     @endif
 
@@ -104,8 +104,8 @@
 
 
 
- 
-      
+
+
 
 
 
@@ -147,15 +147,41 @@
 
 
                 @if (auth()->user()->hasRole(['caisse', 'supercaisse']))
-                    @if ($sessionDate != null)
-                        <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">
-                            Nouvelle vente</a>
+                    <!-- ========== Start cloture caisse button ========== -->
+                    @if ($data_vente->sum('montant_total') > 0)
+                        <a href="{{ route('vente.billeterie-caisse') }}" class="btn btn-danger btn-lg ">Procéder a
+                            la Clóturer
+                            la caisse <i class="ri ri-bill"></i></a>
                     @else
-                        <button type="button" class="btn btn-info ms-3 btnChoiceDate">
-                            Nouvelle vente
+                        <button class="btn btn-danger btn-lg" disabled>Procéder a la Clóture la
+                            caisse <i class="ri ri-lock-line"></i></button>
+                    @endif
+                    <!-- ========== End cloture caisse button ========== -->
+
+
+                    <!-- ========== Start rapport caisse button ========== -->
+                    <!-- ========== Start Si il y a des ventes dejà realisé et cloturé par la caisse connecté ========== -->
+                    @if ($venteCaisseCloture > 0)
+                        <a href="{{ route('vente.rapport-caisse') }}" class="btn btn-success btn-lg">Voir le rapport de
+                            caisse <i class="ri ri-file-list-3-line"></i></a>
+                    @endif
+                    <!-- ========== End Section ========== -->
+                    <!-- ========== End rapport caisse button ========== -->
+
+                    <!-- ========== Start nouvelle vente button ========== -->
+                    @if ($sessionDate != null)
+                        <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary btn-lg">
+                            Nouvelle vente 🛒</a>
+                    @else
+                        <button type="button" class="btn btn-info ms-2 btnChoiceDate btn-lg">
+                            Nouvelle vente 🛒
                         </button>
                     @endif
+                    <!-- ========== End nouvelle vente button ========== -->
                 @endif
+
+
+
 
             </div>
 
@@ -180,14 +206,14 @@
                                 <p class="card-text h3 text-success">
 
 
-                                    @if ($data_vente->sum('montant_total') > 0)
+                                    {{-- @if ($data_vente->sum('montant_total') > 0)
                                         <a href="{{ route('vente.billeterie-caisse') }}" class="btn btn-danger ">Procéder a
                                             la Clóturer
                                             la caisse</a>
                                     @else
                                         <button class="btn btn-danger" disabled>Procéder a la Clóturer la
                                             caisse</button>
-                                    @endif
+                                    @endif --}}
                                 </p>
                             </div>
                         </div>
@@ -197,14 +223,7 @@
             @include('backend.components.alertMessage')
 
 
-                 <!-- ========== Start Si il y a des ventes dejà realisé et cloturé par la caisse connecté ========== -->
-        @if ($venteCaisseCloture > 0)
-            <div class="alert alert-danger fs-5 text-center">
-                <strong>Attention ! Vous avez des ventes cloturées !</strong>
-                <a href="{{ route('vente.rapport-caisse') }}" class="btn btn-danger btn-lg">Voir le rapport de caisse</a>
-            </div>
-        @endif
-      <!-- ========== End Section ========== -->
+
 
             <div class="card-body">
                 <div class="table-responsive">

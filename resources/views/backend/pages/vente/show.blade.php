@@ -94,7 +94,9 @@
                                 class="ri-printer-line align-bottom me-1"></i> Imprimer le reçu</button>
 
                         @can('creer-vente')
-                            <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary">Nouvelle vente</a>
+                            {{-- <a href="{{ route('vente.create') }}" type="button" class="btn btn-success me-2"> 💷 Règlément</a> --}}
+
+                            <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary"><i class="ri-add-circle-line align-bottom me-1"></i> Nouvelle vente</a>
                         @endcan
 
                     </div>

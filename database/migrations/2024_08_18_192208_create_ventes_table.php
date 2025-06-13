@@ -46,7 +46,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->enum('statut', ['en attente', 'confirmée', 'livrée', 'annulée'])->nullable();
+            $table->enum('statut', ['en attente', 'confirmée', 'livrée', 'annulée'])->nullable(); // statut de la vente
 
             $table->boolean('statut_cloture')->default(false);
             $table->enum('type_vente', ['normale', 'commande'])->nullable();

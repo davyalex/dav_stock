@@ -104,7 +104,7 @@ class VenteController extends Controller
 
             $query = Vente::with('produits')
                 ->whereStatut('confirmée')
-                ->orderBy('date_vente', 'desc');
+                ->orderBy('created_at', 'desc');
 
 
             // Vérifier si aucune période ou date spécifique n'a été fournie
@@ -160,7 +160,8 @@ class VenteController extends Controller
             if ($request->user()->hasRole(['caisse', 'supercaisse'])) {
                 $query->where('caisse_id', auth()->user()->caisse_id)
                     ->where('user_id', auth()->user()->id)
-                    ->where('statut_cloture', false);
+                    ->where('statut_cloture', false)
+                    ->whereDate('date_vente',auth()->user()->caisse->session_date_vente); // ✅ Compare seulement la date
             }
 
 
@@ -177,11 +178,11 @@ class VenteController extends Controller
                 $sessionDate = $sessionDate->session_date_vente;
             }
 
-            // verifier si la caisse actuelle a effectuer des vente clotureé aujourd'hui
+            // verifier si la caisse actuelle a effectuer des vente clotureé  a sa date de vente
             $venteCaisseCloture = Vente::where('caisse_id', auth()->user()->caisse_id)
                 ->where('user_id', auth()->user()->id)
                 ->where('statut_cloture', true)
-                ->whereDate('date_vente', Carbon::today()) // ✅ Compare seulement la date
+                ->whereDate('date_vente',auth()->user()->caisse->session_date_vente) // ✅ Compare seulement la date
                 ->count();
 
             return view('backend.pages.vente.index', compact('data_vente', 'caisses', 'sessionDate', 'venteCaisseCloture'));
@@ -868,7 +869,7 @@ class VenteController extends Controller
                 ->where('caisse_id', auth()->user()->caisse_id)
                 ->where('user_id', auth()->user()->id)
                 ->where('statut_cloture', true)
-                ->whereDate('date_vente', Carbon::today()) // ✅ Compare seulement la date
+                ->whereDate('date_vente', auth()->user()->caisse->session_date_vente) // ✅ Compare seulement la date
                 ->get();
 
 
@@ -877,7 +878,7 @@ class VenteController extends Controller
                 ->where('caisse_id', auth()->user()->caisse_id)
                 ->where('user_id', auth()->user()->id)
                 ->where('statut_cloture', true)
-                ->whereDate('date_vente', Carbon::today())
+                ->whereDate('date_vente', auth()->user()->caisse->session_date_vente) 
                 ->get();
 
 
@@ -939,7 +940,7 @@ class VenteController extends Controller
             /**Recuperer les billetteries */
             $billetterie = Billetterie::where('caisse_id', auth()->user()->caisse_id)
                 ->where('user_id', auth()->user()->id)
-                ->whereDate('date_save', Carbon::today())
+                ->whereDate('date_save', auth()->user()->caisse->session_date_vente)
                 ->get();
 
 
