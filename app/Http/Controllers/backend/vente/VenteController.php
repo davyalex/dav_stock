@@ -161,7 +161,7 @@ class VenteController extends Controller
                 $query->where('caisse_id', auth()->user()->caisse_id)
                     ->where('user_id', auth()->user()->id)
                     ->where('statut_cloture', false)
-                    ->whereDate('date_vente',auth()->user()->caisse->session_date_vente); // ✅ Compare seulement la date
+                    ->whereDate('date_vente', auth()->user()->caisse->session_date_vente); // ✅ Compare seulement la date
             }
 
 
@@ -171,19 +171,25 @@ class VenteController extends Controller
             ## fin du filtre de recherche
 
 
-            //Recuperer la session de la date vente manuelle
+            //Recuperer la session de la date vente manuelle et verifier si la caisse actuelle a effectuer des vente clotureé  a sa date de vente
             $sessionDate = null;
+            $venteCaisseCloture = null;
             if ($request->user()->hasRole(['caisse', 'supercaisse'])) {
+
+                //Recuperer la session de la date vente manuelle
                 $sessionDate = Caisse::find(Auth::user()->caisse_id);
                 $sessionDate = $sessionDate->session_date_vente;
+
+
+                // verifier si la caisse actuelle a effectuer des vente clotureé  a sa date de vente
+                $venteCaisseCloture = Vente::where('caisse_id', auth()->user()->caisse_id)
+                    ->where('user_id', auth()->user()->id)
+                    ->where('statut_cloture', true)
+                    ->whereDate('date_vente', auth()->user()->caisse->session_date_vente) // ✅ Compare seulement la date
+                    ->count();
             }
 
-            // verifier si la caisse actuelle a effectuer des vente clotureé  a sa date de vente
-            $venteCaisseCloture = Vente::where('caisse_id', auth()->user()->caisse_id)
-                ->where('user_id', auth()->user()->id)
-                ->where('statut_cloture', true)
-                ->whereDate('date_vente',auth()->user()->caisse->session_date_vente) // ✅ Compare seulement la date
-                ->count();
+
 
             return view('backend.pages.vente.index', compact('data_vente', 'caisses', 'sessionDate', 'venteCaisseCloture'));
         } catch (\Exception $e) {
@@ -878,7 +884,7 @@ class VenteController extends Controller
                 ->where('caisse_id', auth()->user()->caisse_id)
                 ->where('user_id', auth()->user()->id)
                 ->where('statut_cloture', true)
-                ->whereDate('date_vente', auth()->user()->caisse->session_date_vente) 
+                ->whereDate('date_vente', auth()->user()->caisse->session_date_vente)
                 ->get();
 
 
