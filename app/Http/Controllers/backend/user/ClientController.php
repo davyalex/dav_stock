@@ -29,7 +29,7 @@ class ClientController extends Controller
             $validatedData = $request->validate([
                 'last_name' => 'required|string|max:255',
                 'first_name' => 'required|string|max:255',
-                'phone' => 'required',
+                'phone' => '',
             ]);
 
             // Vérifier si le numéro de téléphone existe déjà
@@ -57,7 +57,7 @@ class ClientController extends Controller
             $user->assignRole('client');
             Alert::success('Succès', 'Client créé avec succès');
 
-            return redirect()->route('client.index')->with('success', 'Client créé avec succès');
+            return back()->with('success', 'Client créé avec succès');
         } catch (\Throwable $th) {
             Alert::error('Erreur', $th->getMessage());
             return redirect()->back()->with('error', $th->getMessage());
