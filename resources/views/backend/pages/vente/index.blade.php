@@ -149,12 +149,9 @@
                 @if (auth()->user()->hasRole(['caisse', 'supercaisse']))
                     <!-- ========== Start cloture caisse button ========== -->
                     @if ($data_vente->sum('montant_total') > 0)
-                        <a href="{{ route('vente.billeterie-caisse') }}" class="btn btn-danger btn-lg ">Procéder a
-                            la Clóturer
-                            la caisse <i class="ri ri-bill"></i></a>
+                        <a href="{{ route('vente.billeterie-caisse') }}" class="btn btn-danger btn-lg ">Clôturer la caisse <i class="ri ri-bill"></i></a>
                     @else
-                        <button class="btn btn-danger btn-lg" disabled>Procéder a la Clóture la
-                            caisse <i class="ri ri-lock-line"></i></button>
+                        <button class="btn btn-danger btn-lg" disabled>Clôturer la caisse <i class="ri ri-lock-line"></i></button>
                     @endif
                     <!-- ========== End cloture caisse button ========== -->
 
