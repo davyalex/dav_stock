@@ -243,7 +243,6 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
 
     //categorie
     Route::prefix('categorie')->controller(CategorieController::class)->group(function () {
-        // route::get('', 'index')->name('menu.index');
         route::get('create', 'create')->name('categorie.create');
         route::post('store', 'store')->name('categorie.store');
         route::get('add-subCat/{id}', 'addSubCat')->name('categorie.add-subCat'); // add subCategorie

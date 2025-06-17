@@ -22,7 +22,7 @@ class PlatMenuController extends Controller
         try {
 
             $data_plat = Plat::with('categorieMenu')
-                ->orderBy('nom', 'ASC')
+                ->orderBy('created_at', 'DESC')
                 ->get();
             // dd($data_plat->toArray());
             return view('backend.pages.menu.plat-menu.index', compact('data_plat'));
@@ -50,37 +50,42 @@ class PlatMenuController extends Controller
 
             // dd($request->all());
             //request validation
-            $request->validate([
-                'nom' => 'required|unique:plats',
-                'description' => '',
-                'categorie' => 'required',
-                'prix' => '',
-                'statut' => '',
-            ]);
+            $request->validate(
+                [
+                    'nom' => 'required|unique:plats',
+                    'description' => '',
+                    'categorie' => 'required',
+                    'prix' => 'required',
+                    'statut' => '',
+                ],
+                [
+                    'nom.required' => 'Le nom du plat est obligatoire.',
+                    'nom.unique' => 'Le nom du plat existe déjà.',
+                    'categorie.required' => 'La catégorie est obligatoire.',
+                    'prix.numeric' => 'Le prix doit être un nombre.',
+                    'prix.required' => 'Le prix est obligatoire.',
+                ]
 
-            //statut stock libelle active ? desactive
-            // $statut = '';
-            // if ($request['statut'] == 'on') {
-            //     $statut = 'active';
-            // } else {
-            //     $statut = 'desactive';
-            // }
+            );
+
+
             $statut = $request['statut'] == 'on' ? 'active' : 'desactive';
 
 
             //get principal category of categorie request
 
-
             $sku = 'PM-' . strtoupper(Str::random(8));
-            $plat = Plat::firstOrCreate([
-                'nom' => $request['nom'],
-                'code' =>  $sku,
-                'description' => $request['description'],
-                'categorie_menu_id' => $request['categorie'],
-                'prix' => $request['prix'],
-                'statut' => $statut,
-                'user_id' => Auth::id(),
-            ]);
+            $plat = Plat::firstOrCreate(
+                ['nom' => $request['nom']],
+                [
+                    'code' =>  $sku,
+                    'description' => $request['description'],
+                    'categorie_menu_id' => $request['categorie'],
+                    'prix' => $request['prix'],
+                    'statut' => $statut,
+                    'user_id' => Auth::id(),
+                ]
+            );
 
             if (request()->hasFile('imagePrincipale')) {
                 $plat->addMediaFromRequest('imagePrincipale')->toMediaCollection('ProduitImage');
@@ -109,13 +114,16 @@ class PlatMenuController extends Controller
 
             return response([
                 'message' => 'operation reussi',
-                'plat' => $plat
+                'plat' => $plat,
+                'exist' => false, // le plat n'existe pas
+                'success' => true,
 
-            ]);
+
+            ], 200);
         } catch (\Throwable $e) {
             return response([
-                'message' => $e->getMessage()
-            ]);
+                'message' => $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -173,7 +181,7 @@ class PlatMenuController extends Controller
                 'nom' => 'required',
                 'description' => '',
                 'categorie' => 'required',
-                'prix' => '',
+                'prix' => 'required',
                 'statut' => '',
             ]);
 

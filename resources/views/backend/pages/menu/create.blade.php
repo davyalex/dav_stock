@@ -308,44 +308,6 @@
                 }
 
 
-                // function filterPlatsByCategorie(categorieId) {
-                //     // let platsSelect = $(this).closest('.variante-row').find('.plats-select');
-                //     // platsSelect.html('');
-                //     // platsSelect.append(`<option value="">Sélectionner un plat</option>`);
-                //     // plats.forEach(item => {
-                //     //     if (item.categorie_menu_id == categorieId) {
-                //     //         platsSelect.append(`<option value="${item.id}">${item.nom}</option>`);
-                //     //     }
-                //     // });
-
-
-                //     // Ajouter un événement pour filtrer les plats en fonction de la catégorie
-                //     $('.categorie').on('change', function() {
-                //         let categorieId = $(this).val();
-                //         let platsSelect = $(this).closest('.variante-row').find('.plats-select');
-                //         platsSelect.html('');
-                //         platsSelect.append(`<option value="">Sélectionner un plat</option>`);
-                //         plats.forEach(item => {
-                //             if (item.categorie_menu_id == categorieId) {
-                //                 platsSelect.append(`<option value="${item.id}">${item.nom}</option>`);
-                //             }
-                //         });
-                //     });
-
-                //     // Ajouter un événement pour filtrer les plats en fonction de la catégorie pour toutes les variantes
-                //     $('.variante-row').each(function() {
-                //         let categorieId = $(this).find('.categorie').val();
-                //         let platsSelect = $(this).find('.plats-select');
-                //         platsSelect.html('');
-                //         platsSelect.append(`<option value="">Sélectionner un plat</option>`);
-                //         plats.forEach(item => {
-                //             if (item.categorie_menu_id == categorieId) {
-                //                 platsSelect.append(`<option value="${item.id}">${item.nom}</option>`);
-                //             }
-                //         });
-                //     });
-                // }
-
 
                 // // Initialiser au chargement de la page
                 $(document).ready(function() {
@@ -361,92 +323,77 @@
                     // publier la function
                     loadAllOptions();
 
-                    // Ajouter un événement pour filtrer les plats en fonction de la catégorie
-                    // $('.categorie').on('change', function() {
-                    //     let categorieId = $(this).val();
-                    //     let platsSelect = $(this).closest('.variante-row').find(
-                    //         '.plats-select');
-                    //     platsSelect.html('');
-                    //     platsSelect.append(
-                    //         `<option value="">Sélectionner un plat</option>`);
-                    //     response.plats.forEach(item => {
-                    //         if (item.categorie_menu_id == categorieId) {
-                    //             platsSelect.append(
-                    //                 `<option value="${item.id}">${item.nom}</option>`
-                    //             );
-                    //         }
-                    //     });
-                    // });
+
 
                     const container = document.getElementById('variantes-container');
                     const newRow = document.createElement('div');
                     newRow.classList.add('row', 'variante-row', 'mb-4');
 
                     newRow.innerHTML = `
-       <div class="col-2">
-    <label for="variante">Catégorie :</label>
-    <div class="d-flex">
-        <select name="plats[${varianteIndex}][categorie_id]" class="form-control js-example-basic-single categorie" required>
-            <option value="" selected>Sélectionner</option>
-            @foreach ($categorie_menu as $categorie)
-                <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
-            @endforeach
-        </select>
-    </div>
-</div>
+                                    <div class="col-2">
+                                    <label for="variante">Catégorie :</label>
+                                    <div class="d-flex">
+                                        <select name="plats[${varianteIndex}][categorie_id]" class="form-control js-example-basic-single categorie" required>
+                                            <option value="" selected>Sélectionner</option>
+                                            @foreach ($categorie_menu as $categorie)
+                                                <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
 
-<div class="col-3">
-    <label for="variante">Libellé :</label>
-    <div class="d-flex">
-        <select name="plats[${varianteIndex}][plat_selected]" class="form-control js-example-basic-single plats-select" required>
-            <option value="" selected> Sélectionner</option>
-            @foreach ($plats as $plat)
-                <option value="{{ $plat->id }}">{{ $plat->nom }}</option>
-            @endforeach
-        </select>
-        <button type="button" class="btn btn-primary ml-2 btn-sm" data-bs-toggle="modal" data-bs-target="#createPlatModal">
-            <i class="mdi mdi-plus"></i>
-        </button>
-    </div>
-</div>
+                                <div class="col-3">
+                                    <label for="variante">Libellé :</label>
+                                    <div class="d-flex">
+                                        <select name="plats[${varianteIndex}][plat_selected]" class="form-control js-example-basic-single plats-select" required>
+                                            <option value="" selected> Sélectionner</option>
+                                            @foreach ($plats as $plat)
+                                                <option value="{{ $plat->id }}">{{ $plat->nom }}</option>
+                                            @endforeach
+                                        </select>
+                                        <button type="button" class="btn btn-primary ml-2 btn-sm" data-bs-toggle="modal" data-bs-target="#createPlatModal">
+                                            <i class="mdi mdi-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
 
-<div class="col-3">
-    <label for="variante">Compléments :</label>
-    <div class="d-flex">
-        <select name="plats[${varianteIndex}][complements][]" class="form-control js-example-basic-single complements-select" multiple>
-            <option value=""> Sélectionner</option>
-            @foreach ($plats_complements as $complement)
-                <option value="{{ $complement->id }}">{{ $complement->nom }}</option>
-            @endforeach
-        </select>
-        <button type="button" class="btn btn-primary ml-2 btn-sm" data-bs-toggle="modal" data-bs-target="#createComplementModal">
-            <i class="mdi mdi-plus"></i>
-        </button>
-    </div>
-</div>
+                                <div class="col-3">
+                                    <label for="variante">Compléments :</label>
+                                    <div class="d-flex">
+                                        <select name="plats[${varianteIndex}][complements][]" class="form-control js-example-basic-single complements-select" multiple>
+                                            <option value=""> Sélectionner</option>
+                                            @foreach ($plats_complements as $complement)
+                                                <option value="{{ $complement->id }}">{{ $complement->nom }}</option>
+                                            @endforeach
+                                        </select>
+                                        <button type="button" class="btn btn-primary ml-2 btn-sm" data-bs-toggle="modal" data-bs-target="#createComplementModal">
+                                            <i class="mdi mdi-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
 
-<div class="col-3">
-    <label for="variante">Garnitures :</label>
-    <div class="d-flex">
-        <select name="plats[${varianteIndex}][garnitures][]" class="form-control js-example-basic-single garnitures-select" multiple>
-            <option value=""> Sélectionner</option>
-            @foreach ($plats_garnitures as $garniture)
-                <option value="{{ $garniture->id }}">{{ $garniture->nom }}</option>
-            @endforeach
-        </select>
-        <button type="button" class="btn btn-primary ml-2 btn-sm" data-bs-toggle="modal" data-bs-target="#createGarnitureModal">
-            <i class="mdi mdi-plus"></i>
-        </button>
-    </div>
-</div>
+                                <div class="col-3">
+                                    <label for="variante">Garnitures :</label>
+                                    <div class="d-flex">
+                                        <select name="plats[${varianteIndex}][garnitures][]" class="form-control js-example-basic-single garnitures-select" multiple>
+                                            <option value=""> Sélectionner</option>
+                                            @foreach ($plats_garnitures as $garniture)
+                                                <option value="{{ $garniture->id }}">{{ $garniture->nom }}</option>
+                                            @endforeach
+                                        </select>
+                                        <button type="button" class="btn btn-primary ml-2 btn-sm" data-bs-toggle="modal" data-bs-target="#createGarnitureModal">
+                                            <i class="mdi mdi-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
 
-<div class="col-1 mt-2">
-    <button type="button" class="btn btn-danger remove-variante mt-3">
-        <i class="mdi mdi-delete remove-variante"></i>
-    </button>
-</div>
+                                <div class="col-1 mt-2">
+                                    <button type="button" class="btn btn-danger remove-variante mt-3">
+                                        <i class="mdi mdi-delete remove-variante"></i>
+                                    </button>
+                                </div>
 
-    `;
+                        `;
 
                     container.appendChild(newRow);
 
@@ -524,7 +471,6 @@
 
 
 
-
                     var formData = new FormData(this);
 
                     $('#imageTableBody div').each(function() {
@@ -588,6 +534,11 @@
 
 
                 });
+
+
+
+
+                
 
                 //si je clique sur le boutton valider
                 $('#btnSubmit').on('click', function(e) {

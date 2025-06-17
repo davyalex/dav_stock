@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-   Menu
+    Menu
 @endsection
 @section('content')
     @component('backend.components.breadcrumb')
@@ -229,6 +229,8 @@
                 processData: false,
                 success: function(response) {
                     $('#imageTableBody').empty();
+                    
+console.log(response);
 
                     if (response.message == 'operation reussi') {
                         Swal.fire({
@@ -246,9 +248,16 @@
                         var url = "{{ route('plat-menu.index') }}" // redirect route stock
 
                         window.location.replace(url);
-                    } else if (response == 'The nom has already been taken.') {
-                        Swal.fire({
-                            title: 'Ce plat existe déjà ?',
+                    } 
+
+                },
+                // afficher l'erreur si il y en a une
+                error: function(xhr, status, error , response) {
+
+                    console.log(response);
+                    
+                     Swal.fire({
+                            title: xhr.responseText,
                             text: $('#nom').val(),
                             icon: 'warning',
                             customClass: {
@@ -258,9 +267,9 @@
                             buttonsStyling: false,
                             showCloseButton: true
                         })
-                    }
+                    // alert("Une erreur s'est produite lors de l'ajout du plat." + xhr.responseText);
+                }
 
-                },
 
             });
 
