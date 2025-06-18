@@ -27,7 +27,7 @@ return new class extends Migration
             $table->double('montant_remise')->nullable();
             $table->double('montant_total')->nullable();
 
-            $table->foreignId('client_id')  // client qui a fait la vente
+            $table->foreignId('client_id')  // client qui passe la vente
                 ->nullable()
                 ->constrained('users')
                 ->onUpdate('cascade')
@@ -50,6 +50,14 @@ return new class extends Migration
 
             $table->boolean('statut_cloture')->default(false);
             $table->enum('type_vente', ['normale', 'commande'])->nullable();
+
+
+            // new fields reglement
+            $table->enum('statut_paiement', ['paye', 'impaye'])->nullable();
+            $table->double('montant_restant')->nullable(); //montant restant de la vente
+
+
+
 
             // $table->foreignId('commande_id')  // commande qui a fait la vente
             //     ->nullable()

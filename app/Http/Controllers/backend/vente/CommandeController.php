@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\backend\vente;
 
+use Exception;
 use Carbon\Carbon;
 use App\Models\Vente;
 use App\Models\Commande;
@@ -72,7 +73,7 @@ class CommandeController extends Controller
 
             // dd( $filter);
             return view('backend.pages.vente.commande.index', compact('commandes', 'statut'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Alert::error('Erreur', 'Une erreur est survenue lors de la récupération des commandes : ' . $e->getMessage());
             return back();
         }

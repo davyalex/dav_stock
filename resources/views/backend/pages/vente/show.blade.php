@@ -70,6 +70,10 @@
                             <p><strong>Caissier(e) :</strong> {{ $vente->user->first_name }} {{ $vente->user->last_name }}
                             </p>
                             <p><strong>Caisse :</strong> {{ $vente->caisse->libelle }}</p>
+                            <p><strong>Table :</strong> {{ $vente->numero_table ?? 'Non definie' }}</p>
+                            <p><strong>Couverts :</strong> {{ $vente->nombre_couverts ?? 'Non definie' }}</p>
+
+
                         </div>
                         {{-- @if ($vente->type_vente != 'commande') --}}
                         <div class="col-md-4">
@@ -94,9 +98,11 @@
                                 class="ri-printer-line align-bottom me-1"></i> Imprimer le reçu</button>
 
                         @can('creer-vente')
-                            <button  class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#reglementModal{{ $vente->id }}"> 💷 Règlément</button>
+                            <button class="btn btn-success me-2" data-bs-toggle="modal"
+                                data-bs-target="#reglementModal{{ $vente->id }}"> 💷 Règlément</button>
                             @include('backend.pages.vente.reglement')
-                            <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary"><i class="ri-add-circle-line align-bottom me-1"></i> Nouvelle vente</a>
+                            <a href="{{ route('vente.create') }}" type="button" class="btn btn-primary"><i
+                                    class="ri-add-circle-line align-bottom me-1"></i> Nouvelle vente</a>
                         @endcan
 
                     </div>
@@ -385,4 +391,50 @@
     <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
 
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
+
+
+    <script>
+        // script pour le reglement
+        $(document).ready(function() {
+
+            // par default cacher la div de client 
+            $('#client').hide();
+
+            // calcul du montant rendu
+            function updateChangeAmount() {
+                let montantRecu = parseFloat($('#montantRecu').val() || 0); // montant reçu
+                let montantTotalVente = parseFloat($('#montantTotalVente').val() || 0); // montant total de la vente
+
+                // montant rendu
+                let montantRendu = montantRecu - montantTotalVente;;
+                $('#montantRendu').val(montantRendu < 0 ? 0 : montantRendu);
+
+                // montant restant
+                let montantRestant = montantTotalVente - montantRecu;
+                $('#montantRestant').val(montantRestant > 0 ? montantRestant : 0);
+
+                // gestion des status
+                if (montantRecu >= montantTotalVente) {
+                    $('#statutPaiement').text('Payé').css('color', 'green');
+
+                    // cacher la div de client
+                    $('#client').hide(500);
+                } else if (montantRecu < montantTotalVente) {
+                    $('#statutPaiement').text('Impayé').css('color', 'red');
+
+                    // afficher la div de client
+                    $('#client').show(500);
+                }
+            }
+
+            // appel de la fonction au chargement de la page
+            updateChangeAmount();
+
+            // appel de la fonction lorsqu'on modifie le montant reçu
+            $('#montantRecu').on('input', function() {
+                updateChangeAmount();
+            });
+        })
+    </script>
 @endsection

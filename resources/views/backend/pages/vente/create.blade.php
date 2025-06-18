@@ -156,14 +156,26 @@
             <div class="row mt-3">
                 <div class="col-md-6">
                     <label for="table-number">Numéro de table</label>
-                    <input type="number" name="numero_table" id="table-number" class="form-control"
-                        placeholder="Numéro de table" min="1">
+                    <select class="form-select" name="numero_table" id="table-number">
+                        <option selected disabled value="">Selectionner</option>
+                        @for ($i = 1; $i < 21; $i++)
+                           <option value="{{ $i }}">{{ $i }}</option> 
+                        @endfor
+                    </select>
+                    {{-- <input type="number" name="numero_table" id="table-number" class="form-control"
+                        placeholder="Numéro de table" min="1"> --}}
                 </div>
 
                 <div class="col-md-6">
                     <label for="number-covers">Nombre de couverts</label>
-                    <input type="number" name="nombre_couverts" id="number-covers" class="form-control"
-                        value="1" min="1">
+                    <select class="form-select" name="nombre_couverts" id=" number-covers">
+                        <option selected disabled value="">Selectionner</option>
+                        @for ($i = 1; $i < 21; $i++)
+                           <option value="{{ $i }}">{{ $i }}</option> 
+                        @endfor
+                    </select>
+                    {{-- <input type="number" name="nombre_couverts" id="number-covers" class="form-control"
+                        value="1" min="1"> --}}
                 </div>
             </div>
 
@@ -171,7 +183,7 @@
             <div class="row mt-3">
                 <div class="col-md-6">
                     <label for="payment-method">Mode du réglement</label>
-                    <select id="payment-method" name="mode_reglement" class="form-select" required>
+                    <select id="payment-method" name="mode_paiement" class="form-select" required>
                         {{-- <option value="orange money">Orange Money</option>
                         <option value="moov money">Moov Money</option>
                         <option value="mtn money">MTN Money</option>
