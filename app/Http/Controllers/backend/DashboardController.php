@@ -29,7 +29,7 @@ class DashboardController extends Controller
         }
     }
 
-    
+
 
 
     //
@@ -71,12 +71,20 @@ class DashboardController extends Controller
         // Nombre de commandes
         $nombreCommandes = Commande::count();
 
-        // Montant total des ventes
-        $montantTotalVentes = Vente::whereYear('created_at', Carbon::now()->year)
+        // Montant total des ventes annee en cours
+        $montantTotalVentes = Vente::whereYear('date_vente', Carbon::now()->year)
             ->sum('montant_total');
 
-        // Montant total des dépenses
-        $montantTotalDepenses = Depense::whereYear('created_at', Carbon::now()->year)
+        // Montant total des dépenses annee en cours
+        $montantTotalDepenses = Depense::whereYear('date_depense', Carbon::now()->year)
+            ->sum('montant');
+
+        /// Montant total des ventes mois en cours 
+        $montantTotalVentesMois = Vente::whereMonth('date_vente', Carbon::now()->month)
+            ->sum('montant_total');
+
+        // Montant total des ventes annee en cours
+        $montantTotalDepensesMois = Depense::whereMonth('date_depense', Carbon::now()->month)
             ->sum('montant');
 
         // Produits en alerte
@@ -118,8 +126,10 @@ class DashboardController extends Controller
             'commandesEnAttente',
             'produitsLesPlusVendus',
             'nombreCommandes',
-            'montantTotalVentes',
-            'montantTotalDepenses',
+            'montantTotalVentes', // Montant total des ventes annee en cours
+            'montantTotalDepenses', // Montant total des depenses annee en cours
+            'montantTotalVentesMois', // Montant total des ventes mois en cours
+            'montantTotalDepensesMois',// Montant total des depenses mois en cours
             'produitsEnAlerte',
 
             // 'chiffreAffaireParMois',
