@@ -663,10 +663,12 @@ class RapportController extends Controller
                     'variante' => $groupe->first()->pivot->variante_id,
                     'prix_vente' => $groupe->first()->pivot->prix_unitaire,
                     'montant_total' => $groupe->sum(function ($item) {
-                        return $item->pivot->quantite * $item->pivot->prix_unitaire;
+                        return $item->pivot->quantite * $item->pivot->prix_unitaire; // total vente = quantite * prix_unitaire
                     }),
                 ];
             })->filter()->values();
+
+
 
             //pour les plats menu
             $platsVendus = $ventesMenu->flatMap(function ($vente) {
@@ -694,12 +696,23 @@ class RapportController extends Controller
 
             // dd($produitsVendus->toArray());
 
+            // recuperer les montants des ventes
+            $ventesMontant = $ventes->concat($ventesMenu)->flatMap(function ($vente) {
+                return [
+                    'montant_avant_remise' => $vente->sum('montant_avant_remise'),
+                    'montant_apres_remise' => $vente->sum('montant_total'),
+                    'montant_remise' => $vente->sum('montant_remise'),
+                ];
+            });
+
+            // dd($ventesMontant->toArray());
+
 
             $caisses = Caisse::all();
             $famille = Categorie::whereNull('parent_id')->whereIn('type', ['bar', 'menu'])->orderBy('name', 'DESC')->get();
 
 
-            return view('backend.pages.rapport.vente', compact('platsVendus', 'produitsVendus', 'caisses', 'dateDebut', 'dateFin', 'caisseId', 'categorieFamille', 'famille'));
+            return view('backend.pages.rapport.vente', compact('ventesMontant', 'platsVendus', 'produitsVendus', 'caisses', 'dateDebut', 'dateFin', 'caisseId', 'categorieFamille', 'famille'));
         } catch (\Exception $e) {
             return back()->with('error', 'Une erreur s\'est produite : ' . $e->getMessage());
         }
@@ -989,7 +1002,6 @@ class RapportController extends Controller
                 // Récupération des données
                 $vente = $vente->get();
             }
-
 
             // achat
             if ($type == 'achat') {
