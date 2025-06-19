@@ -627,6 +627,8 @@ class RapportController extends Controller
             $ventesMenu = $queryMenu->get();
 
 
+
+
             // pour les produits restaurant et bar
             $produitsVendus = $ventes->flatMap(function ($vente) {
                 return $vente->produits;
@@ -635,21 +637,6 @@ class RapportController extends Controller
                 if ($categorieFamille && $produit->categorie->famille !== $categorieFamille) {
                     return null;
                 }
-                // return [
-
-                //     'id' => $produit->id,
-                //     'code' => $produit->code,
-                //     'stock' => $produit->stock,
-                //     'designation' => $produit->nom,
-                //     'categorie' => $produit->categorie->name,
-                //     'famille' => $produit->categorie->famille,
-                //     'quantite_vendue' => $groupe->sum('pivot.quantite'),
-                //     'variante' => $groupe->first()->pivot->variante_id,
-                //     'prix_vente' => $groupe->first()->pivot->prix_unitaire,
-                //     'montant_total' => $groupe->sum(function ($item) {
-                //         return $item->pivot->quantite * $item->pivot->prix_unitaire;
-                //     }),
-                // ];
 
                 return [
                     'details' => $groupe, // recuperer les details groupés par produit
@@ -696,15 +683,24 @@ class RapportController extends Controller
 
             // dd($produitsVendus->toArray());
 
-            // recuperer les montants des ventes
-            $ventesMontant = $ventes->concat($ventesMenu)->flatMap(function ($vente) {
-                return [
-                    'montant_avant_remise' => $vente->sum('montant_avant_remise'),
-                    'montant_apres_remise' => $vente->sum('montant_total'),
-                    'montant_remise' => $vente->sum('montant_remise'),
-                ];
-            });
 
+
+
+
+            // Fusionner toutes les ventes
+            $ventesToutesFamille = $ventes->concat($ventesMenu);
+
+            // Calculer les montants
+            $montantAvantRemise = $ventesToutesFamille->sum('montant_avant_remise');
+            $montantApresRemise = $ventesToutesFamille->sum('montant_total');
+            $montantRemise = $ventesToutesFamille->sum('montant_remise');
+
+            // Retourner les résultats ensemble (facultatif)
+            $ventesMontant = [
+                'montant_avant_remise' => $montantAvantRemise,
+                'montant_apres_remise' => $montantApresRemise,
+                'montant_remise' => $montantRemise,
+            ];
             // dd($ventesMontant->toArray());
 
 
