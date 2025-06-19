@@ -53,8 +53,8 @@ return new class extends Migration
 
 
             // new fields reglement
-            $table->enum('statut_paiement', ['paye', 'impaye'])->nullable();
-            $table->double('montant_restant')->nullable(); //montant restant de la vente
+            // $table->enum('statut_paiement', ['paye', 'impaye'])->nullable();
+            // $table->double('montant_restant')->nullable(); //montant restant de la vente
 
 
 

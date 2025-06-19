@@ -110,8 +110,8 @@
             <div class="card divPrint">
                 <div class="card-header">
                     <h5 class="card-title mb-0 " style="text-align: center";>
-                        {{-- Rapport des ventes --}}
-                        Vente
+                       {{-- Rapport des ventes --}}
+                      Vente
                         @if (request('caisse_id'))
                             <strong> {{ $caisses->find(request('caisse_id'))->libelle }}</strong>
                         @endif
@@ -167,9 +167,6 @@
                         $montantTotalVente = $produitsVendus->sum(function ($produits) {
                             return $produits->sum('montant_total');
                         });
-
-                        // total des vente avant remise
-
                     @endphp
                     @foreach ($produitsVendus as $famille => $produits)
                         <h3>
@@ -297,28 +294,12 @@
                         </p>
                     </div> --}}
 
-                    <!-- Total général -->
-                    <div class="alert alert-dark mt-4 text-center fs-5">
-
-                        <div>
-                         <b>💷 Total  :</b>
-                        <span class="fw-bold fs-4 text-primary">
-                            {{ number_format($ventesMontant['montant_avant_remise'], 0, ',', ' ') }} FCFA</span>
-                       </div>
-                       <div>
-                         <b>💷 Remise :</b>
-                        <span class="fw-bold fs-4 text-primary">
-                            - {{ number_format($ventesMontant['montant_remise'], 0, ',', ' ') }} FCFA</span>
-                       </div>
-
-                        <div>
-                         <b class="text-uppercase">💰 Montant total de vente :</b>
-                        <span class="fw-bold fs-4 text-primary">
-                            {{ number_format($ventesMontant['montant_apres_remise'], 0, ',', ' ') }} FCFA</span>
-                       </div>
-
-                            
-                    </div>
+                     <!-- Total général -->
+                        <div class="alert alert-dark mt-4 text-center fs-5">
+                            <b>💰 Montant total de vente :</b>
+                            <span class="fw-bold fs-4 text-primary">{{ number_format($montantTotalVente, 0, ',', ' ') }}
+                                FCFA</span>
+                        </div>
                 </div>
             </div>
 
@@ -439,7 +420,7 @@
 
 
 
-
+           
         });
     </script>
 @endsection

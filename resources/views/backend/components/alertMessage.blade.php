@@ -24,7 +24,7 @@
         </strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-
+  
 <!-- Success Alert 2 -->
     <div class="alert alert-success alert-dismissible bg-success text-white alert-label-icon fade show material-shadow"
         role="alert">

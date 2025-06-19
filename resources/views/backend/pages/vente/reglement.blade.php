@@ -125,7 +125,6 @@
 
 
                                 <!-- ========== Start Client si impayé ========== -->
-
                                 <div class="row" id="client">
                                     <h4 class="fw-bold my-3 text-center ">Informations sur le client</h4>
 
@@ -153,18 +152,11 @@
                                         </div>
                                     </div>
 
-
                                 </div>
                                 <!-- ========== End Client si impayé ========== -->
-
-
-
-
                                 <div class="mt-3">
                                     <button class="btn btn-success w-100" type="submit">Valider</button>
                                 </div>
-
-
                             </form>
                         </div><!-- /.modal-content -->
                     </div><!-- /.modal-dialog -->

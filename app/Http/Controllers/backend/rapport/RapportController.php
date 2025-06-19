@@ -627,8 +627,6 @@ class RapportController extends Controller
             $ventesMenu = $queryMenu->get();
 
 
-
-
             // pour les produits restaurant et bar
             $produitsVendus = $ventes->flatMap(function ($vente) {
                 return $vente->produits;
@@ -637,6 +635,21 @@ class RapportController extends Controller
                 if ($categorieFamille && $produit->categorie->famille !== $categorieFamille) {
                     return null;
                 }
+                // return [
+
+                //     'id' => $produit->id,
+                //     'code' => $produit->code,
+                //     'stock' => $produit->stock,
+                //     'designation' => $produit->nom,
+                //     'categorie' => $produit->categorie->name,
+                //     'famille' => $produit->categorie->famille,
+                //     'quantite_vendue' => $groupe->sum('pivot.quantite'),
+                //     'variante' => $groupe->first()->pivot->variante_id,
+                //     'prix_vente' => $groupe->first()->pivot->prix_unitaire,
+                //     'montant_total' => $groupe->sum(function ($item) {
+                //         return $item->pivot->quantite * $item->pivot->prix_unitaire;
+                //     }),
+                // ];
 
                 return [
                     'details' => $groupe, // recuperer les details groupés par produit
@@ -650,12 +663,10 @@ class RapportController extends Controller
                     'variante' => $groupe->first()->pivot->variante_id,
                     'prix_vente' => $groupe->first()->pivot->prix_unitaire,
                     'montant_total' => $groupe->sum(function ($item) {
-                        return $item->pivot->quantite * $item->pivot->prix_unitaire; // total vente = quantite * prix_unitaire
+                        return $item->pivot->quantite * $item->pivot->prix_unitaire;
                     }),
                 ];
             })->filter()->values();
-
-
 
             //pour les plats menu
             $platsVendus = $ventesMenu->flatMap(function ($vente) {
@@ -684,31 +695,11 @@ class RapportController extends Controller
             // dd($produitsVendus->toArray());
 
 
-
-
-
-            // Fusionner toutes les ventes
-            $ventesToutesFamille = $ventes->concat($ventesMenu);
-
-            // Calculer les montants
-            $montantAvantRemise = $ventesToutesFamille->sum('montant_avant_remise');
-            $montantApresRemise = $ventesToutesFamille->sum('montant_total');
-            $montantRemise = $ventesToutesFamille->sum('montant_remise');
-
-            // Retourner les résultats ensemble (facultatif)
-            $ventesMontant = [
-                'montant_avant_remise' => $montantAvantRemise,
-                'montant_apres_remise' => $montantApresRemise,
-                'montant_remise' => $montantRemise,
-            ];
-            // dd($ventesMontant->toArray());
-
-
             $caisses = Caisse::all();
             $famille = Categorie::whereNull('parent_id')->whereIn('type', ['bar', 'menu'])->orderBy('name', 'DESC')->get();
 
 
-            return view('backend.pages.rapport.vente', compact('ventesMontant', 'platsVendus', 'produitsVendus', 'caisses', 'dateDebut', 'dateFin', 'caisseId', 'categorieFamille', 'famille'));
+            return view('backend.pages.rapport.vente', compact('platsVendus', 'produitsVendus', 'caisses', 'dateDebut', 'dateFin', 'caisseId', 'categorieFamille', 'famille'));
         } catch (\Exception $e) {
             return back()->with('error', 'Une erreur s\'est produite : ' . $e->getMessage());
         }
@@ -998,6 +989,7 @@ class RapportController extends Controller
                 // Récupération des données
                 $vente = $vente->get();
             }
+
 
             // achat
             if ($type == 'achat') {
