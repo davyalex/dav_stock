@@ -97,13 +97,9 @@
                             aria-controls="sidebarConfiguration">
                             <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
                         </a>
-                        <div class="collapse menu-dropdown {{ Route::is('categorie.*') || Route::is('produit.*') || Route::is('mode_paiement.*') || Route::is('caisse.*') || Route::is('magasin.*')  ? 'show' : '' }}"
+                        <div class="collapse menu-dropdown {{ Route::is('categorie.*') || Route::is('produit.*') || Route::is('mode_paiement.*') || Route::is('caisse.*') || Route::is('magasin.*') ? 'show' : '' }}"
                             id="sidebarConfiguration">
                             <ul class="nav nav-sm flex-column">
-
-                               
-
-                                
 
                                 <li class="nav-item active">
                                     <a href="{{ route('caisse.index') }}"
@@ -112,13 +108,14 @@
                                 </li>
 
 
-                                  <li class="nav-item active">
+                                <li class="nav-item active">
                                     <a href="{{ route('mode_paiement.index') }}"
-                                        class="nav-link {{ Route::is('mode_paiement.*') ? 'active' : '' }}">Mode de paiement
+                                        class="nav-link {{ Route::is('mode_paiement.*') ? 'active' : '' }}">Mode de
+                                        paiement
                                     </a>
                                 </li>
 
-                               
+
 
                                 <li class="nav-item active">
                                     <a href="{{ route('categorie.create') }}"
@@ -157,6 +154,12 @@
                                     <a href="{{ route('entree.index') }}"
                                         class="nav-link {{ Route::is('entree.*') ? 'active' : '' }}">entree de stock</a>
                                 </li>
+
+                                <li class="nav-item active">
+                                    <a href="{{ route('etat-stock.index') }}"
+                                        class="nav-link {{ Route::is('etat-stock.*') ? 'active' : '' }}">Etat du stock</a>
+                                </li>
+
 
                                 {{-- <li class="nav-item active">
                                     <a href="{{ route('inventaire.index') }}"
@@ -219,16 +222,13 @@
                                     <a href="{{ route('vente.index') }}"
                                         class="nav-link {{ Route::is('vente.*') ? 'active' : '' }}">Ventes</a>
                                 </li>
-
-                           
-
                             </ul>
                         </div>
                     </li>
                 @endcan
 
 
-             
+
 
                 @can('voir-rapport')
                     <li class="nav-item">
@@ -243,10 +243,10 @@
                                 <li class="nav-item active">
                                     <a href="{{ route('rapport.historique') }}"
                                         class="nav-link {{ Route::is('rapport.historique') ? 'active' : '' }}">Historiques
-                                       </a>
+                                    </a>
                                 </li>
 
-                              
+
                                 <li class="nav-item active">
                                     <a href="{{ route('rapport.vente') }}"
                                         class="nav-link {{ Route::is('rapport.vente') ? 'active' : '' }}">
@@ -261,9 +261,7 @@
                     </li>
                 @endcan
 
-              
 
-             
 
 
                 @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur' || Auth::user()->can('voir-parametre'))

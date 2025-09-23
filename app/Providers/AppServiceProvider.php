@@ -73,7 +73,7 @@ class AppServiceProvider extends ServiceProvider
 
         //get setting data
         if (Schema::hasTable('settings')) {
-            $data_setting = Setting::first();
+            $data_setting = Setting::with('media')->first();
         } else {
             $data_setting = [];
         }

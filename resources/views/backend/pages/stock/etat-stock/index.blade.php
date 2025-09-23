@@ -23,32 +23,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des produits en stock
-                        @if (request()->has('statut'))
-                            - <b>{{ request('statut') }}</b>
-                        @endif
-                        @if (request()->has('filter'))
-                            - <b>{{ request('filter') }}</b>
-                        @endif
-                    </h5>
-
-                    <div class="dropdown">
-                        <button class="btn btn-primary">Suivi de stock</button>
-
-                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class=" ri ri-filter-2-fill"></i> Filtrer par categorie
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="/admin/etat-stock?filter=Restaurant">Restaurant</a></li>
-                            <li><a class="dropdown-item" href="/admin/etat-stock?filter=Bar">Bar</a></li>
-                            <li><a class="dropdown-item" href="/admin/etat-stock">Toutes les categories</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-
+               
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
@@ -70,24 +45,20 @@
                                         <td>
 
                                             <img class="rounded avatar-sm"
-                                                src="{{ $produit->hasMedia('ProduitImage') ? $produit->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
+                                                src="{{ $produit->hasMedia('ProduitImage') ? $produit->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo.jpg') }}"
                                                 width="50px" alt="{{ $produit['nom'] }}">
                                         </td>
                                         <td>{{ $produit->nom }}
-                                            <p> {{ $produit['valeur_unite'] ?? '' }}
-                                                {{ $produit['unite']['libelle'] ?? '' }}
-                                                {{ $produit->unite ? '(' . $produit['unite']['abreviation'] . ')' : '' }}
-                                            </p>
+                                           
                                         </td>
                                         <td>{{ $produit->categorie->name }}</td>
                                         <td>
-                                            {{ $produit->stock }} {{ $produit->uniteSortie?->libelle ?? '' }}
-                                            {{ $produit->uniteSortie?->abreviation ? '(' . $produit->uniteSortie?->abreviation . ')' : '' }}
+                                            {{ $produit->stock }} 
+                                           
                                         </td>
 
                                         <td>
-                                            {{ $produit->stock_alerte }} {{ $produit->uniteSortie?->libelle ?? '' }}
-                                            {{ $produit->uniteSortie?->abreviation ? '(' . $produit->uniteSortie?->abreviation . ')' : '' }}
+                                            {{ $produit->stock_alerte }}
                                         </td>
                                         
                                         <td>

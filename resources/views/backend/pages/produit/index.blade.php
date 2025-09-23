@@ -63,7 +63,7 @@
                                         <td> {{ ++$key }} </td>
                                          <td>
                                             <img class="rounded avatar-sm"
-                                                src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : '' }}"
+                                                src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo.jpg') }}"
                                                 width="50px" alt="{{ $item['nom'] }}">
                                         </td>
                                         <td>

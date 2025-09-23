@@ -16,7 +16,7 @@ class SettingController extends Controller
     //get infos of setting
     public function index()
     {
-        $data_setting = Setting::first();
+        $data_setting = Setting::with('media')->first();
 
         //get status mode maintenance
         $data_maintenance = Maintenance::latest()->select('type')->first();
@@ -26,7 +26,7 @@ class SettingController extends Controller
         $backup = Storage::disk('local')->files('' . $appName . '/');
 
 
-        // dd($backup_db);
+        // dd($data_setting->toArray());
         return view('backend.pages.setting.index', compact('data_setting', 'data_maintenance' , 'backup'));
     }
 
