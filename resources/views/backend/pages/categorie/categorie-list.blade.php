@@ -1,112 +1,4 @@
-<div class="col-lg-10 m-auto">
-    <div class="card category-list-card">
-        <div class="card-header bg-transparent border-0">
-            <div class="d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">
-                    <i class="ri-folder-line me-2"></i>
-                    Arborescence des Catégories
-                </h5>
-                <div class="d-flex gap-2">
-                    <button class="btn btn-outline-secondary btn-sm" id="expandAll">
-                        <i class="ri-add-box-line me-1"></i>
-                        Tout Développer
-                    </button>
-                    <button class="btn btn-outline-secondary btn-sm" id="collapseAll">
-                        <i class="ri-subtract-line me-1"></i>
-                        Tout Réduire
-                    </button>
-                    <a href="{{ route('categorie.create') }}" class="btn btn-primary btn-sm">
-                        <i class="ri-add-fill me-1"></i>
-                        Ajouter
-                    </a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="card-body">
-            @if($data_categorie->count() > 0)
-                <div class="category-tree">
-                    @foreach ($data_categorie as $key => $categorie)
-                        <div class="category-item level-0" data-category-id="{{ $categorie->id }}">
-                            <div class="category-content">
-                                <div class="category-info">
-                                    <div class="category-toggle">
-                                        @if($categorie->children->count() > 0)
-                                            <i class="ri-arrow-right-s-line toggle-icon"></i>
-                                        @else
-                                            <i class="ri-circle-fill empty-icon"></i>
-                                        @endif
-                                    </div>
-                                    
-                                    <div class="category-icon">
-                                        <i class="ri-folder-2-fill text-warning"></i>
-                                    </div>
-                                    
-                                    <div class="category-details">
-                                        <h6 class="category-name mb-1">{{ $categorie->name }}</h6>
-                                        <div class="category-meta">
-                                            <span class="badge badge-{{ $categorie->status === 'active' ? 'success' : 'secondary' }} me-2">
-                                                {{ $categorie->status === 'active' ? 'Actif' : 'Inactif' }}
-                                            </span>
-                                            @if($categorie->children->count() > 0)
-                                                <small class="text-muted">
-                                                    {{ $categorie->children->count() }} sous-catégorie(s)
-                                                </small>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="category-actions">
-                                    <div class="btn-group" role="group">
-                                        <a href="{{ route('categorie.edit', $categorie->id) }}" 
-                                           class="btn btn-outline-success btn-sm" 
-                                           title="Modifier">
-                                            <i class="ri-edit-2-line"></i>
-                                        </a>
-                                        
-                                        <a href="{{ route('categorie.add-subCat', $categorie->id) }}" 
-                                           class="btn btn-outline-primary btn-sm" 
-                                           title="Ajouter une sous-catégorie">
-                                            <i class="ri-add-circle-line"></i>
-                                        </a>
-                                        
-                                        @if ($categorie->children->count() == 0)
-                                            <button class="btn btn-outline-danger btn-sm delete" 
-                                                    data-id="{{ $categorie->id }}" 
-                                                    title="Supprimer">
-                                                <i class="ri-delete-bin-2-line"></i>
-                                            </button>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            @if ($categorie->children->count() > 0)
-                                <div class="category-children" style="display: none;">
-                                    @include('backend.pages.categorie.partials.subcategorie-modern', [
-                                        'categories_child' => $categorie->children,
-                                        'level' => 1
-                                    ])
-                                </div>
-                            @endif
-                        </div>
-                    @endforeach
-                </div>
-            @else
-                <div class="empty-state text-center py-5">
-                    <i class="ri-folder-open-line text-muted" style="font-size: 4rem;"></i>
-                    <h5 class="text-muted mt-3">Aucune catégorie trouvée</h5>
-                    <p class="text-muted">Commencez par créer votre première catégorie</p>
-                    <a href="{{ route('categorie.create') }}" class="btn btn-primary">
-                        <i class="ri-add-fill me-1"></i>
-                        Créer une catégorie
-                    </a>
-                </div>
-            @endif
-        </div>
-    </div>
-</div>
+
 
 <style>
     .category-list-card {
@@ -281,9 +173,128 @@
 
 
 
+
+
+
+<div class="col-lg-10 m-auto">
+    <div class="card category-list-card">
+        <div class="card-header bg-transparent border-0">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="ri-folder-line me-2"></i>
+                    Arborescence des Catégories
+                </h5>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary btn-sm" id="expandAll">
+                        <i class="ri-add-box-line me-1"></i>
+                        Tout Développer
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" id="collapseAll">
+                        <i class="ri-subtract-line me-1"></i>
+                        Tout Réduire
+                    </button>
+                    <a href="{{ route('categorie.create') }}" class="btn btn-primary btn-sm">
+                        <i class="ri-add-fill me-1"></i>
+                        Ajouter une categorie principale
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-body">
+            @if($data_categorie->count() > 0)
+                <div class="category-tree">
+                    @foreach ($data_categorie as $key => $categorie)
+                        <div class="category-item level-0" data-category-id="{{ $categorie->id }}">
+                            <div class="category-content">
+                                <div class="category-info">
+                                    <div class="category-toggle">
+                                        @if($categorie->children->count() > 0)
+                                            <i class="ri-arrow-right-s-line toggle-icon"></i>
+                                        @else
+                                            <i class="ri-circle-fill empty-icon"></i>
+                                        @endif
+                                    </div>
+                                    
+                                    <div class="category-icon">
+                                        <i class="ri-folder-2-fill text-warning"></i>
+                                    </div>
+                                    
+                                    <div class="category-details">
+                                        <h6 class="category-name mb-1">{{ $categorie->name }}</h6>
+                                        <div class="category-meta">
+                                            <span class="badge badge-{{ $categorie->status === 'active' ? 'success' : 'secondary' }} me-2">
+                                                {{ $categorie->status === 'active' ? 'Actif' : 'Inactif' }}
+                                            </span>
+                                            @if($categorie->children->count() > 0)
+                                                <small class="text-muted">
+                                                    {{ $categorie->children->count() }} sous-catégorie(s)
+                                                </small>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="category-actions">
+                                    <div class="btn-group" role="group">
+                                        <a href="{{ route('categorie.edit', $categorie->id) }}" 
+                                           class="btn btn-outline-success btn-sm" 
+                                           title="Modifier">
+                                            <i class="ri-edit-2-line"></i>
+                                        </a>
+                                        
+                                        <a href="{{ route('categorie.add-subCat', $categorie->id) }}" 
+                                           class="btn btn-outline-primary btn-sm" 
+                                           title="Ajouter une sous-catégorie">
+                                            <i class="ri-add-circle-line"></i>
+                                        </a>
+                                        
+                                        @if ($categorie->children->count() == 0)
+                                            <button class="btn btn-outline-danger btn-sm delete" 
+                                                    data-id="{{ $categorie->id }}" 
+                                                    title="Supprimer">
+                                                <i class="ri-delete-bin-2-line"></i>
+                                            </button>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            @if ($categorie->children->count() > 0)
+                                <div class="category-children" style="display: none;">
+                                    @include('backend.pages.categorie.partials.subcategorie-modern', [
+                                        'categories_child' => $categorie->children,
+                                        'level' => 1
+                                    ])
+                                </div>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="empty-state text-center py-5">
+                    <i class="ri-folder-open-line text-muted" style="font-size: 4rem;"></i>
+                    <h5 class="text-muted mt-3">Aucune catégorie trouvée</h5>
+                    <p class="text-muted">Commencez par créer votre première catégorie</p>
+                    <a href="{{ route('categorie.create') }}" class="btn btn-primary">
+                        <i class="ri-add-fill me-1"></i>
+                        Créer une catégorie
+                    </a>
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+
+
+
+
+
 @section('script')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
     <script>
         $(document).ready(function() {

@@ -21,7 +21,7 @@
                     <form class="row g-3 needs-validation" method="post" action="{{route('categorie.add-subCat-store')}}" novalidate>
                         @csrf
                         <div class="col-md-12">
-                            <h5>Categorie selectionée : <strong class="text-primary">{{$data_categorie_parent['name']}}</strong></h5>
+                            <h5>Categorie parent selectionnée : <strong class="text-primary">{{$data_categorie_parent['name']}}</strong></h5>
                             <input readonly type="text" name="categorie_parent" value="{{$data_categorie_parent['id']}}" class="form-control" id="validationCustom01"
                                 placeholder="categorie1" hidden>
                             <div class="valid-feedback">
@@ -31,6 +31,10 @@
 
                         <div class="col-md-8">
                             <label for="validationCustom01" class="form-label">Nom de la sous categorie</label>
+                            <small class="text-muted">
+                                    <i class="ri-information-line me-1"></i>
+                                    La nouvelle catégorie sera créée sous : <span>{{$data_categorie_parent['name']}}</span>
+                                </small>
                             <input type="text" name="name" class="form-control" id="validationCustom01"
                                 required>
                             <div class="valid-feedback">
@@ -89,9 +93,14 @@
     <!--end row-->
 
 @section('script')
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
     <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
     <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
     <script src="{{ URL::asset('build/js/pages/modal.init.js') }}"></script>
+    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
     {{-- <script src="{{ URL::asset('build/js/pages/form-editor.init.js') }}"></script> --}}
 @endsection
 @endsection
