@@ -356,5 +356,4 @@
             });
         });
     </script>
-    <script src="{{ URL::asset('myJs/js/create-vente-menu.js') }}"></script>
 @endsection

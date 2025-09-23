@@ -33,8 +33,6 @@
                     </h5>
 
 
-                
-
                     @can('creer-produit')
                         <a href="{{ route('produit.create') }}" type="button" class="btn btn-primary ">Créer
                             un produit</a>
@@ -51,6 +49,7 @@
                                     <th>Code</th>
                                     <th>Nom</th>
                                     <th>Categorie </th>
+                                    <th>Prix</th>
                                     <th>Stock</th>
                                     <th>Stock alerte</th>
                                     <th>Date creation</th>
@@ -76,7 +75,8 @@
                                         <td>{{ $item['nom'] }}
                                         </td>
                                         <td>{{ $item['categorie']['name'] ?? '' }}
-                                        </td>       
+                                        </td>
+                                        <td>{{ number_format($item['prix'], 0, ',', ' ') }} FCFA</td>       
                                         <td>{{ $item['stock'] }} </td>
                                         <td>{{ $item['stock_alerte'] }}</td>
                                         <td> {{ $item['created_at'] }} </td>

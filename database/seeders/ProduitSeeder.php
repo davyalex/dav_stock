@@ -29,6 +29,12 @@ class ProduitSeeder extends Seeder
         $categories = DB::table('categories')->pluck('id')->toArray();
         $now = Carbon::now();
 
+        // Définir des prix réalistes
+        $prixPossibles = [
+            500, 750, 1000, 1250, 1500, 2000, 2500, 3000, 3500, 4000,
+            4500, 5000, 6000, 7500, 8000, 10000, 12000, 15000, 20000, 25000
+        ];
+
         // Ajouter 20 produits
         for ($i = 1; $i <= 20; $i++) {
             DB::table('produits')->insert([
@@ -36,7 +42,7 @@ class ProduitSeeder extends Seeder
                 'nom' => 'Produit ' . $i,
                 'slug' => Str::slug('Produit ' . $i),
                 'description' => 'Description du produit ' . $i,
-                'prix' => rand(100, 500) / 10,
+                'prix' => $prixPossibles[array_rand($prixPossibles)], // Prix entiers réalistes
                 'stock_initial' => rand(10, 50),
                 'stock' => rand(5, 40),
                 'stock_dernier_inventaire' => rand(5, 40),
