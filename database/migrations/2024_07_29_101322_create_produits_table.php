@@ -52,26 +52,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->double('valeur_unite')->nullable(); //quantite unite mesure
-            $table->foreignId('unite_id')
-                ->nullable()
-                ->constrained('unites')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
-
-            $table->double('valeur_format')->nullable(); //quantite du format
-            $table->foreignId('format_id') // format du produit
-                ->nullable()
-                ->constrained('formats')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
-            $table->foreignId('unite_sortie_id')  //unite du stock sortie
-                ->nullable()
-                ->constrained('unites')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+         
 
             $table->softDeletes();
 

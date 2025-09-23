@@ -33,11 +33,13 @@ class CaisseController extends Controller
                 'libelle' => 'required',
             ]);
             $data_caisse = Caisse::firstOrCreate([
-                'code' => 'C-' . strtoupper(Str::random(5)),
+
                 'libelle' => $request['libelle'],
+
+            ], [
+                'code' => 'C-' . strtoupper(Str::random(5)),
                 'description' => $request['description'],
                 'statut' => 'desactive',
-
             ]);
 
             Alert::success('Operation réussi', 'Success Message');
@@ -65,17 +67,6 @@ class CaisseController extends Controller
     }
 
 
-    // public function delete($id)
-    // {
-    //     try {
-    //         Caisse::find($id)->delete();
-    //         return response()->json([
-    //             'status' => 200,
-    //         ]);
-    //     } catch (\Throwable $e) {
-    //         $e->getMessage();
-    //     }
-    // }
 
 
     public function selectCaisse(Request $request)
@@ -115,7 +106,7 @@ class CaisseController extends Controller
                     ]);
 
                     Alert::success('Connexion réussi,  Bienvenue  ' . Auth::user()->first_name, 'Success Message');
-                    return redirect()->route('dashboard.index');
+                    return redirect()->route('vente.index');
                 }
             }
         } catch (\Throwable $th) {

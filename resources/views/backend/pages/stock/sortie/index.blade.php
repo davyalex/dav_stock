@@ -47,37 +47,23 @@
                                         <td> {{ ++$key }} </td>
                                         <td> <a class="fw-bold" href="{{route('sortie.show' , $item->id)}}">#{{ $item['code'] }}</a> </td>
                                         <td> {{ \Carbon\Carbon::parse($item['date_sortie'])->format('d-m-Y à H:i') }} </td>
-                                        <td> {{ $item['user']['first_name'] }} </td>
-                                        {{-- <td class="d-none">
-                                            <div class="dropdown d-inline-block">
-                                                <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
-                                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="ri-more-fill align-middle"></i>
+                                        <td> {{ $item['user']['first_name'] }} </td>  
+                                        
+                                        <td class="">
+                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                <a href="{{ route('sortie.show', $item['id']) }}"
+                                                    class="btn btn-outline-info btn-sm" title="Voir">
+                                                    <i class="ri-eye-line"></i>
+                                                </a>
+                                                {{-- <a href="{{ route('sortie.edit', $item['id']) }}"
+                                                    class="btn btn-outline-success btn-sm" title="Modifier">
+                                                    <i class="ri-edit-2-line"></i>
+                                                </a> --}}
+                                                <button class="btn btn-outline-danger btn-sm delete"
+                                                    data-id="{{ $item['id'] }}" title="Supprimer">
+                                                    <i class="ri-delete-bin-2-line"></i>
                                                 </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a href="{{ route('ajustement.create', $item['id']) }}"
-                                                            class="dropdown-item"><i
-                                                                class=" ri-exchange-fill align-bottom me-2 text-muted"></i>
-                                                            Ajustement</a>
-                                                    </li>
-                                                    <li><a href="#!" class="dropdown-item"><i
-                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            View</a>
-                                                    </li>
-                                                    <li><a href="{{ route('sortie.edit', $item['id']) }}" type="button"
-                                                            class="dropdown-item edit-item-btn"><i
-                                                                class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Edit</a></li>
-                                                    <li>
-                                                        <a href="#" class="dropdown-item remove-item-btn delete"
-                                                            data-id={{ $item['id'] }}>
-                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Delete
-                                                        </a>
-                                                    </li>
-                                                </ul>
                                             </div>
-                                        </td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>

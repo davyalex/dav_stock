@@ -97,25 +97,13 @@
                             aria-controls="sidebarConfiguration">
                             <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
                         </a>
-                        <div class="collapse menu-dropdown {{ Route::is('categorie.*') || Route::is('produit.*') || Route::is('fournisseur.*') || Route::is('caisse.*') || Route::is('magasin.*') || Route::is('unite.*') || Route::is('format.*') ? 'show' : '' }}"
+                        <div class="collapse menu-dropdown {{ Route::is('categorie.*') || Route::is('produit.*') || Route::is('mode_paiement.*') || Route::is('caisse.*') || Route::is('magasin.*')  ? 'show' : '' }}"
                             id="sidebarConfiguration">
                             <ul class="nav nav-sm flex-column">
 
-                                {{-- <li class="nav-item active">
-                                    <a href="{{ route('magasin.index') }}"
-                                        class="nav-link {{ Route::is('magasin.*') ? 'active' : '' }}">Magasin</a>
-                                </li> --}}
+                               
 
-                                <li class="nav-item active">
-                                    <a href="{{ route('unite.index') }}"
-                                        class="nav-link {{ Route::is('unite.*') ? 'active' : '' }}">Unité de mesure</a>
-                                </li>
-
-                                <li class="nav-item active">
-                                    <a href="{{ route('format.index') }}"
-                                        class="nav-link {{ Route::is('format.*') ? 'active' : '' }}">Format /
-                                        Emballage</a>
-                                </li>
+                                
 
                                 <li class="nav-item active">
                                     <a href="{{ route('caisse.index') }}"
@@ -123,11 +111,14 @@
                                     </a>
                                 </li>
 
-                                <li class="nav-item active">
-                                    <a href="{{ route('fournisseur.index') }}"
-                                        class="nav-link {{ Route::is('fournisseur.*') ? 'active' : '' }}">Fournisseurs
+
+                                  <li class="nav-item active">
+                                    <a href="{{ route('mode_paiement.index') }}"
+                                        class="nav-link {{ Route::is('mode_paiement.*') ? 'active' : '' }}">Mode de paiement
                                     </a>
                                 </li>
+
+                               
 
                                 <li class="nav-item active">
                                     <a href="{{ route('categorie.create') }}"
@@ -153,45 +144,30 @@
                             aria-controls="sidebarStock">
                             <i class="ri ri-box-1-fill"></i> <span>GESTION DE STOCK</span>
                         </a>
-                        <div class="collapse menu-dropdown {{ Route::is('etat-stock.*') || Route::is('inventaire.*') || Route::is('sortie.*') || Route::is('ajustement.*') || Route::is('achat.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : '' }}"
+                        <div class="collapse menu-dropdown {{ Route::is('etat-stock.*') || Route::is('inventaire.*') || Route::is('sortie.*') || Route::is('entree.*') || Route::is('achat.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : '' }}"
                             id="sidebarStock">
                             <ul class="nav nav-sm flex-column">
-
-                                <li class="nav-item active">
-                                    <a href="{{ route('achat.index') }}"
-                                        class="nav-link {{ Route::is('achat.*') ? 'active' : '' }}">Reception de stock</a>
-                                </li>
-
-
 
                                 <li class="nav-item active">
                                     <a href="{{ route('sortie.index') }}"
                                         class="nav-link {{ Route::is('sortie.*') ? 'active' : '' }}">Sortie de stock</a>
                                 </li>
 
-
                                 <li class="nav-item active">
+                                    <a href="{{ route('entree.index') }}"
+                                        class="nav-link {{ Route::is('entree.*') ? 'active' : '' }}">entree de stock</a>
+                                </li>
+
+                                {{-- <li class="nav-item active">
                                     <a href="{{ route('inventaire.index') }}"
                                         class="nav-link {{ Route::is('inventaire.*') ? 'active' : '' }}">Inventaire</a>
-                                </li>
-
-                                <li class="nav-item active">
-                                    <a href="{{ route('etat-stock.index') }}"
-                                        class="nav-link {{ Route::is('etat-stock.*') ? 'active' : '' }}">Etat du stock</a>
-                                </li>
-
-                                <li class="nav-item active">
-                                    <a href="{{ route('etat-stock.suiviStock') }}"
-                                        class="nav-link {{ Route::is('suivi-stock.*') ? 'active' : '' }}">Suivi du stock</a>
-                                </li>
-
-
+                                </li> --}}
                             </ul>
                         </div>
                     </li>
                 @endcan
 
-                @can('voir-depense')
+                {{-- @can('voir-depense')
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarDepense" data-bs-toggle="collapse" role="button"
                             aria-controls="sidebarDepense">
@@ -221,7 +197,7 @@
                             </ul>
                         </div>
                     </li>
-                @endcan
+                @endcan --}}
 
                 @can('voir-vente')
                     <li class="nav-item">
@@ -233,10 +209,10 @@
                             id="sideBarVente">
                             <ul class="nav nav-sm flex-column">
 
-                                <li class="nav-item active">
+                                {{-- <li class="nav-item active">
                                     <a href="{{ route('client.index') }}"
                                         class="nav-link {{ Route::is('client.*') ? 'active' : '' }}">Clients</a>
-                                </li>
+                                </li> --}}
 
 
                                 <li class="nav-item active">
@@ -244,54 +220,15 @@
                                         class="nav-link {{ Route::is('vente.*') ? 'active' : '' }}">Ventes</a>
                                 </li>
 
-                                {{-- <li class="nav-item active">
-                                    <a href="{{ route('vente.index') }}"
-                                        class="nav-link {{ Route::is('vente.*') ? 'active' : '' }}">Liste des Ventes</a>
-                                </li> --}}
+                           
 
-                                <li class="nav-item active">
-                                    <a href="{{ route('commande.index', ['filter' => 'en attente']) }}"
-                                        class="nav-link {{ Route::is('commande.*') ? 'active' : '' }}">Commandes</a>
-                                </li>
                             </ul>
                         </div>
                     </li>
                 @endcan
 
 
-                @can('voir-menu')
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sideBarMenu" data-bs-toggle="collapse" role="button"
-                            aria-controls="sideBarMenu">
-                            <i class="ri ri-file-list-line"></i> <span>PLATS & MENU</span>
-                        </a>
-                        <div class="collapse menu-dropdown {{ Route::is('menu.*') || Route::is('plat.*') || Route::is('plat-menu.*') || Route::is('categorie-menu.*') ? 'show' : '' }}"
-                            id="sideBarMenu">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item active">
-                                    <a href="{{ route('categorie-menu.index') }}"
-                                        class="nav-link {{ Route::is('categorie-menu') ? 'active' : '' }}">
-                                        Categories</a>
-                                </li>
-
-                                <li class="nav-item active">
-                                    <a href="{{ route('plat.index') }}"
-                                        class="nav-link {{ Route::is('plat.*') ? 'active' : '' }}">Plats Quotidiens</a>
-                                </li>
-
-                                <li class="nav-item active">
-                                    <a href="{{ route('plat-menu.index') }}"
-                                        class="nav-link {{ Route::is('plat-menu.*') ? 'active' : '' }}">Plats Menu </a>
-                                </li>
-
-                                <li class="nav-item active">
-                                    <a href="{{ route('menu.index') }}"
-                                        class="nav-link {{ Route::is('menu.*') ? 'active' : '' }}">Menu du jour</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                @endcan
+             
 
                 @can('voir-rapport')
                     <li class="nav-item">
@@ -309,12 +246,7 @@
                                        </a>
                                 </li>
 
-                                {{-- <li class="nav-item active">
-                                    <a href="{{ route('rapport.produit') }}"
-                                        class="nav-link {{ Route::is('rapport.produit') ? 'active' : '' }}">Chiffre
-                                        d'affaire par
-                                        produit</a>
-                                </li> --}}
+                              
                                 <li class="nav-item active">
                                     <a href="{{ route('rapport.vente') }}"
                                         class="nav-link {{ Route::is('rapport.vente') ? 'active' : '' }}">
@@ -329,53 +261,9 @@
                     </li>
                 @endcan
 
-                @can('voir-site')
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sidebarSite" data-bs-toggle="collapse" role="button"
-                            aria-controls="sidebarSite">
-                            <i class="ri ri-global-fill"></i> <span>SITE</span>
-                        </a>
-                        <div class="collapse menu-dropdown {{ Route::is('slide.*') ? 'show' : '' }}" id="sidebarSite">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item active">
-                                    <a href="{{ route('slide.index') }}"
-                                        class="nav-link {{ Route::is('slide.*') ? 'active' : '' }}">Slides</a>
-                                </li>
+              
 
-
-                            </ul>
-                        </div>
-                    </li>
-                @endcan
-
-                @can('voir-ressource humaine')
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sidebarRh" data-bs-toggle="collapse" role="button"
-                            aria-controls="sidebarRh">
-                            <i class="ri ri-home-office-fill"></i> <span>RESSOURCES HUMAINES</span>
-                        </a>
-                        <div class="collapse menu-dropdown {{ Route::is('poste.*') || Route::is('employe.*') || Route::is('paie.*') ? 'show' : '' }}"
-                            id="sidebarRh">
-                            <ul class="nav nav-sm flex-column">
-
-                                <li class="nav-item active">
-                                    <a href="{{ route('poste.index') }}"
-                                        class="nav-link {{ Route::is('poste.*') ? 'active' : '' }}">Postes</a>
-                                </li>
-
-                                <li class="nav-item active">
-                                    <a href="{{ route('employe.index') }}"
-                                        class="nav-link {{ Route::is('employe.*') ? 'active' : '' }}">Employés</a>
-                                </li>
-
-                                <li class="nav-item active">
-                                    <a href="{{ route('paie.index') }}"
-                                        class="nav-link {{ Route::is('paie.*') ? 'active' : '' }}">Paie</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                @endcan
+             
 
 
                 @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur' || Auth::user()->can('voir-parametre'))

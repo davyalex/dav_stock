@@ -33,17 +33,7 @@
                     </h5>
 
 
-                    <div class="dropdown">
-                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class=" ri ri-filter-2-fill"></i> Filtrer par categorie
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="/admin/produit?filter=Restaurant">Restaurant</a></li>
-                            <li><a class="dropdown-item" href="/admin/produit?filter=Bar">Bar</a></li>
-                            <li><a class="dropdown-item" href="/admin/produit">Toutes les categories</a></li>
-                        </ul>
-                    </div>
+                
 
                     @can('creer-produit')
                         <a href="{{ route('produit.create') }}" type="button" class="btn btn-primary ">Créer
@@ -56,12 +46,11 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Image</th>
                                     <th>Statut</th>
                                     <th>Code</th>
-                                    <th>Image</th>
                                     <th>Nom</th>
-                                    <th>Categorie (Famille)</th>
-                                    {{-- <th>Type de produit</th> --}}
+                                    <th>Categorie </th>
                                     <th>Stock</th>
                                     <th>Stock alerte</th>
                                     <th>Date creation</th>
@@ -72,49 +61,24 @@
                                 @foreach ($data_produit as $key => $item)
                                     <tr id="row_{{ $item['id'] }}">
                                         <td> {{ ++$key }} </td>
+                                         <td>
+                                            <img class="rounded avatar-sm"
+                                                src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : '' }}"
+                                                width="50px" alt="{{ $item['nom'] }}">
+                                        </td>
                                         <td>
                                             <span
                                                 class="badge{{ $item->statut == 'desactive' ? ' bg-danger' : ' bg-success' }}">{{ $item['statut'] }}</span>
                                         </td>
 
                                         <td>{{ $item['code'] }}</td>
-                                        <td>
-                                            <img class="rounded avatar-sm"
-                                                src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo_Chez-jeanne.jpg') }}"
-                                                width="50px" alt="{{ $item['nom'] }}">
-                                        </td>
+                                       
                                         <td>{{ $item['nom'] }}
-                                            <p> {{ $item['valeur_unite'] ?? '' }}
-                                                {{ $item['unite']['libelle'] ?? '' }}</p>
-
-                                            {{-- <p>{{ $item['format']['libelle'] ?? '' }} de
-                                                {{ $item['valeur_format'] ?? '' }}</p> --}}
-
                                         </td>
-                                        <td>{{ $item['categorie']['famille'] ?? '' }}({{ $item['categorie']['name'] ?? '' }})
-                                        </td>
-                                        {{-- <td>{{ $item['typeProduit']['name'] }}  </td> --}}
-                                        @if ($item->categorie->famille == 'bar')
-                                            <td>
-                                                <ol class="list-unstyled mb-0">
-                                                    @foreach ($item->variantes->sortBy('libelle') as $variantes)
-                                                        <li>{{ $variantes->libelle }} :
-                                                            <b> {{ $variantes->pivot->quantite_disponible }}</b>
-                                                        </li>
-                                                    @endforeach
-                                                </ol>
-
-                                            </td>
-                                        @else
-                                            <td><b>{{ $item['stock'] }}</b>
-                                                {{ $item['uniteSortie']['abreviation'] ?? '' }}</td>
-                                            </td>
-                                        @endif
-
-
-
-                                        {{-- <td>{{ $item['stock'] }} {{ $item['uniteSortie']['libelle'] ?? '' }}</td> --}}
-                                        <td>{{ $item['stock_alerte'] }} {{ $item['uniteSortie']['libelle'] ?? '' }}</td>
+                                        <td>{{ $item['categorie']['name'] ?? '' }}
+                                        </td>       
+                                        <td>{{ $item['stock'] }} </td>
+                                        <td>{{ $item['stock_alerte'] }}</td>
                                         <td> {{ $item['created_at'] }} </td>
                                         <td>
                                             <div class="dropdown d-inline-block">

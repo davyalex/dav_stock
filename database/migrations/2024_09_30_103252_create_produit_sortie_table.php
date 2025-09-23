@@ -27,8 +27,8 @@ return new class extends Migration
                 ->onDelete('cascade');
 
 
-            $table->double('quantite_existant')->nullable();
-            $table->double('quantite_utilise')->nullable();
+            $table->integer('stock_disponible')->nullable();
+            $table->integer('stock_sortie')->nullable();
 
             $table->timestamps();
         });

@@ -13,67 +13,59 @@
     @endcomponent
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
+            <div class="card shadow-sm mb-4">
                 <div class="card-body">
-                    {{-- <h4 class="card-title mb-4">Sélectionner des produits</h4> --}}
-                    <div class="row">
-                        <div class="col-md-10">
-                            <label for="date_debut" class="form-label">Produit</label>
+                    <h4 class="card-title mb-4 fw-bold text-primary">Sélectionner des produits</h4>
+                    <div class="row align-items-end">
+                        <div class="col-md-8 mb-3">
+                            <label for="product-select" class="form-label fw-semibold">Produit</label>
                             <select id="product-select" name="produit_id" class="form-select js-example-basic-single">
                                 <option value="">Sélectionnez un produit</option>
                                 @foreach ($data_produit as $produit)
                                     <option value="{{ $produit->id }}" data-stock="{{ $produit->stock }}">
-                                        {{ $produit->nom }} {{ $produit->valeur_unite ?? '' }}
-                                        {{ $produit->unite->libelle ?? '' }}
-                                        {{ $produit->unite->abreviation ?? '' }}
+                                        {{ $produit->nom }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
-
-
-                        <div class="col-md-2 mb-3">
-                            <label class="form-label" for="meta-title-input">Date de sortie <span
-                                    class="text-danger">*</span>
-                            </label>
-                            <input type="datetime-local" id="currentDate" value="<?php echo date('Y-m-d H:i:s'); ?>" name="date_sortie"
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-semibold" for="currentDate">Date de sortie <span class="text-danger">*</span></label>
+                            <input type="datetime-local" id="currentDate" value="{{ date('Y-m-d\TH:i') }}" name="date_sortie"
                                 class="form-control" required>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
 
         <div class="col-lg-12">
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-body">
-                    <h4 class="card-title mb-4">Listes des produits </h4>
+                    <h4 class="card-title mb-4 fw-bold text-primary">Liste des produits à sortir</h4>
                     <div class="table-responsive">
                         <div class="alert alert-danger d-none" role="alert">
                             <span id="errorMessage"></span>
                         </div>
-                        <table class="table table-bordered" id="cart-table">
-                            <thead>
+                        <table class="table table-bordered align-middle" id="cart-table">
+                            <thead class="table-light">
                                 <tr>
                                     <th>Produit</th>
-                                    <th>Stock actuel</th>
-                                    <th>Quantité utilisée</th>
+                                    <th>Stock disponible</th>
+                                    <th>Quantité à sortir</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <!-- Dynamique JS -->
                             </tbody>
                         </table>
                     </div>
-
-
-
-                    <!-- Bouton de validation -->
-                    <div class="mt-5">
-                        <button type="button" id="validate" class="btn btn-primary w-100">Enregistrer</button>
+                    <div class="mt-4">
+                        <button type="button" id="validate" class="btn btn-success w-100 fw-bold">
+                            <span id="spinner" class="spinner-border spinner-border-sm d-none me-2"></span>
+                            Enregistrer la sortie
+                        </button>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -82,226 +74,103 @@
 
 @section('script')
     <script>
-        $(document).ready(function() {
-            let cart = []; // table des produits
+        $(function() {
+            let cart = [];
+            const dataProduit = @json($data_produit);
 
-            //recuperer les informations du produit
             $('#product-select').change(function() {
-                let productId = $(this).val();
-
-                //filtrer les informations du produit
-                var dataProduit = @json($data_produit);
-                var getProductInfo = dataProduit.find(item => item.id == productId)
-
-
-                let productName = $(this).find('option:selected').text();
-                let productStock = getProductInfo.stock;
-                let productUniteSortie = getProductInfo.unite_sortie.libelle;
-                // let productStockAlert = getProductInfo.stock_alerte;
-
-                if (productId) {
-                    addToCart(productId, productName, productStock, productUniteSortie);
-                    updateCartTable();
-                    verifyQty();
-                    // $(this).val(null).trigger('change'); // Réinitialise Select2
-
-
+                const id = $(this).val();
+                if (!id) return;
+                const prod = dataProduit.find(p => p.id == id);
+                if (!cart.find(item => item.id == id)) {
+                    cart.push({ id, name: prod.nom, stock: prod.stock, quantity: 1 });
+                    renderCart();
+                    hideError();
                 }
             });
 
-
-            function addToCart(id, name, stock, uniteSortie) {
-                let existingItem = cart.find(item => item.id === id);
-                if (existingItem) {
-                    existingItem.quantity += 1;
-                } else {
-                    cart.push({
-                        id: id,
-                        name: name,
-                        stock: stock,
-                        quantity: 1,
-                        uniteSortie: uniteSortie
-                    });
-                }
-            }
-
-            function updateCartTable() {
-                let tbody = $('#cart-table tbody');
+            function renderCart() {
+                const tbody = $('#cart-table tbody');
                 tbody.empty();
-                cart.forEach((item, index) => {
+                cart.forEach((item, i) => {
                     tbody.append(`
                         <tr>
-                            <td>${item.name}</td>
-                            <td>${item.stock} ${item.uniteSortie}</td>
+                            <td class="fw-semibold">${item.name}</td>
+                            <td>${item.stock}</td>
                             <td>
-                                <button class="btn btn-secondary btn-sm decrease-qty" data-index="${index}">-</button>
-                                <input  type="number" class="form-control quantity-input d-inline-block text-center" value="${item.quantity}" min="0" step="any" style="width: 60px;" data-index="${index}">
-                                <button class="btn btn-secondary btn-sm increase-qty" data-index="${index}">+</button>
+                                <div class="input-group input-group-sm" style="max-width:140px;">
+                                    <button class="btn btn-outline-secondary minus" data-i="${i}">-</button>
+                                    <input type="number" class="form-control qty text-center" value="${item.quantity}" min="1" max="${item.stock}" data-i="${i}" style="width:70px;">
+                                    <button class="btn btn-outline-secondary plus" data-i="${i}">+</button>
+                                </div>
                             </td>
-                           
-                            <td><button class="btn btn-danger btn-sm remove-item" data-index="${index}">Supprimer</button></td>
+                            <td><button class="btn btn-danger btn-sm remove" data-i="${i}"><i class="ri-delete-bin-6-line"></i></button></td>
                         </tr>
                     `);
                 });
             }
 
-
-
-            $(document).on('click', '.increase-qty', function() {
-                let index = $(this).data('index');
-                cart[index].quantity += 1;
-                updateCartTable();
-                verifyQty();
+            $(document).on('click', '.plus', function() {
+                let i = $(this).data('i');
+                if (cart[i].quantity < cart[i].stock) cart[i].quantity++;
+                renderCart();
+                hideError();
+            });
+            $(document).on('click', '.minus', function() {
+                let i = $(this).data('i');
+                if (cart[i].quantity > 1) cart[i].quantity--;
+                renderCart();
+                hideError();
+            });
+            $(document).on('input', '.qty', function() {
+                let i = $(this).data('i');
+                let val = parseInt($(this).val());
+                if (val > 0 && val <= cart[i].stock) cart[i].quantity = val;
+                else $(this).val(cart[i].quantity);
+                hideError();
+            });
+            $(document).on('click', '.remove', function() {
+                let i = $(this).data('i');
+                cart.splice(i, 1);
+                renderCart();
+                hideError();
             });
 
-            $(document).on('click', '.decrease-qty', function() {
-                let index = $(this).data('index');
-                if (cart[index].quantity > 1) {
-                    cart[index].quantity -= 1;
-                    updateCartTable();
-                    verifyQty();
-                }
-            });
-
-            // ajouter la quantité manuellement
-            $(document).on('input', '.quantity-input', function() {
-                let index = $(this).data('index');
-                let value = $(this).val();
-                if (value > 0) {
-                    cart[index].quantity = parseFloat(value);
-                    // updateCartTable();
-                    verifyQty();
-                }
-
-            });
-
-            // $(document).on('change', '.quantity-input', function() {
-            //     let index = $(this).data('index');
-            //     let newQuantity = parseInt($(this).val());
-            //     if (newQuantity >= 1) {
-            //         cart[index].quantity = newQuantity;
-            //         updateCartTable();
-            //     }
-            // });
-
-            // verifier la quantité pour voir si elle ne depasse pas la quantité du stock
-            // function verifyQty() {
-            //     var dataProduct = @json($data_produit); // Données du contrôleur
-
-            //     cart.forEach((item, index) => {
-            //         // Trouver le produit dans dataProduct basé sur l'ID du produit dans le panier
-            //         var product = dataProduct.find(function(dataItem) {
-            //             return dataItem.id == item.id;
-            //         });
-
-            //         if (item.quantity > product.stock) {
-            //             //swalfire
-            //             Swal.fire({
-            //                 title: 'Erreur',
-            //                 text: 'La quantité entrée dépasse la quantité en stock pour le produit "' +
-            //                     item.name + '"',
-            //                 icon: 'error',
-            //             });
-
-            //             //mettre le button save en disabled
-            //             $('#validate').prop('disabled', true);
-            //         } else {
-            //             //mettre le button save en enable
-            //             $('#validate').prop('disabled', false);
-            //         }
-            //     });
-            // }
-
-            function verifyQty() {
-                var dataProduct = @json($data_produit);
-                var allQuantitiesValid = true; // Pour suivre si toutes les quantités sont valides
-
-                cart.forEach((item) => {
-                    var product = dataProduct.find(dataItem => dataItem.id == item.id);
-
-                    if (item.quantity > product.stock) {
-                        $('#errorMessage').text(
-                            'La quantité entrée dépasse la quantité en stock pour le produit "' + item
-                            .name + '"'
-                        );
-                        $('.alert').removeClass('d-none');
-
-                        allQuantitiesValid =
-                            false; // Marquer comme invalide si une quantité dépasse le stock
-                    }
-                });
-
-                // Si toutes les quantités sont valides, masquer l'alerte
-                if (allQuantitiesValid) {
-                    $('.alert').addClass('d-none');
-                }
-
-                // Activer ou désactiver le bouton selon la validité des quantités
-                $('#validate').prop('disabled', !allQuantitiesValid);
+            function hideError() {
+                $('.alert').addClass('d-none');
+                $('#validate').prop('disabled', false);
             }
 
-
-
-            $(document).on('click', '.remove-item', function() {
-                let index = $(this).data('index');
-                cart.splice(index, 1);
-                updateCartTable();
-                verifyQty()
-            });
-
-          
-
-            $('#validate').click(function(e) {
-
-                if (cart.length === 0) {
-                    Swal.fire({
-                        title: 'Erreur',
-                        text: 'Aucun produit n\'a été ajouté',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-
-                } else {
-                    let currentDate = $('#currentDate').val();
-
-                    let data = {
-                        date_sortie: currentDate,
-                        cart: cart,
-                        _token: '{{ csrf_token() }}' // N'oubliez pas d'ajouter le token CSRF
-
-                    }
-                    // Envoi des données au contrôleur via AJAX
-                    $.ajax({
-                        url: '{{ route('sortie.store') }}', // Remplacez par votre route
-                        method: 'POST',
-                        data: data,
-
-                        success: function(response) {
-                            if (response.status == 'success') {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Succès',
-                                    text: 'Vente validée avec succès !',
-                                });
-
-                                window.location.href = '{{ route('sortie.index') }}';
-                            }
-
-
-                        },
-                        error: function(xhr, status, error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Erreur lors de la validation de la vente. Veuillez réessayer.',
-                            });
-                        }
-                    });
+            $('#validate').click(function() {
+                if (!cart.length) {
+                    $('#errorMessage').text('Aucun produit ajouté').parent().removeClass('d-none');
+                    return;
                 }
+                let currentDate = $('#currentDate').val();
+                let data = { date_sortie: currentDate, cart, _token: '{{ csrf_token() }}' };
+                $('#spinner').removeClass('d-none');
+                $('#validate').prop('disabled', true);
+                $.ajax({
+                    url: '{{ route('sortie.store') }}',
+                    method: 'POST',
+                    data,
+                    success: function(response) {
+                        $('#spinner').addClass('d-none');
+                        $('#validate').prop('disabled', false);
+                        if (response.status == 'success') {
+                            window.location.href = '{{ route('sortie.index') }}';
+                        } else {
+                            $('#errorMessage').text(response.message || 'Erreur lors de la validation.').parent().removeClass('d-none');
+                        }
+                    },
+                    error: function(xhr) {
+                        $('#spinner').addClass('d-none');
+                        $('#validate').prop('disabled', false);
+                        let msg = xhr.responseJSON?.message || 'Erreur lors de la validation.';
+                        $('#errorMessage').text(msg).parent().removeClass('d-none');
+                    }
+                });
             });
-
-
-
         });
     </script>
 @endsection

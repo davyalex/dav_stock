@@ -44,20 +44,11 @@ class Caisse extends Model
     }
 
 //     // utilisateurs de la caisse active
-//    public function scopeUserCaisseActive($query)
-//     {
-//        return $query->where('statut', 'active');
-//    }
-
-
-    public function commandes()
+   public function scopeActive($query)
     {
-        return $this->hasMany(Commande::class);
-    }
+       return $query->where('statut', 'active');
+   }
 
-    // billetteries
-    public function billetteries()
-    {
-        return $this->hasMany(Billetterie::class);
-    }
+
+   
 }

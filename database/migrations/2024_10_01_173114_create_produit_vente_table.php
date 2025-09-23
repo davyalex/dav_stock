@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('produit_vente', function (Blueprint $table) {
             $table->id();
             $table->integer('quantite')->nullable(); // quantite du produit
-            $table->double('quantite_bouteille')->nullable(); // quantite du produit bar bouteille vendu
             $table->double('prix_unitaire')->nullable(); //prix  unitaire
             $table->double('total')->nullable(); // total quantite * prix unitaire
 
@@ -32,18 +31,8 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-                $table->foreignId('unite_vente_id')
-                ->nullable()
-                ->constrained('unites')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
 
-                // $table->foreignId('variante_id') // colone out delete after
-                // ->nullable()
-                // ->constrained('variantes')
-                // ->onUpdate('cascade')
-                // ->onDelete('cascade');
-
+                
             $table->timestamps();
         });
     }

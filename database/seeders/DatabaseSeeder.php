@@ -23,14 +23,9 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionsTableSeeder::class);
         $this->call(RoleHasPermissionsTableSeeder::class);
 
-        $this->call(FormatsTableSeeder::class);
-        $this->call(FournisseursTableSeeder::class);
-        $this->call(UnitesTableSeeder::class);
-        $this->call(CategorieDepensesTableSeeder::class);
+      
         $this->call(CategoriesTableSeeder::class);
-        $this->call(LibelleDepensesTableSeeder::class);
-        $this->call(MagasinsTableSeeder::class);
         $this->call(CaissesTableSeeder::class);
-        $this->call(VarianteSeeder::class);
-    }
+        $this->call(ProduitSeeder::class);
+        }
 }

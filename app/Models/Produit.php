@@ -49,16 +49,11 @@ class Produit extends Model implements HasMedia
         'stock_dernier_inventaire', // stock du dernier inventaire
         'stock_alerte', // stock de securite
         'categorie_id',
-        'categorie_menu_id',
-        'type_id', // type produit
+        'type_id', // categorie principale famille de produit
         'statut', // active , desactive
         'user_id',
         // 'magasin_id',
-        'valeur_unite', // qté unite de mesure
-        'unite_id', // unite du produit
-        'format_id', // format du produit
-        'valeur_format', // valeur du format
-        'unite_sortie_id', // unite de sortie ou vente
+      
     ];
 
 
@@ -87,14 +82,11 @@ class Produit extends Model implements HasMedia
     {
         return $this->belongsTo(Categorie::class, 'categorie_id');
     }
-    public function categorieMenu() // categorie du menu
-    {
-        return $this->belongsTo(CategorieMenu::class, 'categorie_menu_id');
-    }
+   
 
     public function typeProduit()
     {
-        return $this->belongsTo(Categorie::class, 'type_id');  // famille de produit Bar et restaurant
+        return $this->belongsTo(Categorie::class, 'type_id');  // famille de produit categorie principale
     }
 
     public function user()
@@ -102,57 +94,13 @@ class Produit extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
-    public function unite()
-    {
-        return $this->belongsTo(Unite::class, 'unite_id');
-    }
+   
 
-    public function format()
-    {
-        return $this->belongsTo(Format::class, 'format_id');
-    }
-
-    public function uniteSortie()
-    {
-        return $this->belongsTo(Unite::class, 'unite_sortie_id');
-    }
-
-    public function magasin()
-    {
-        return $this->belongsTo(Magasin::class);
-    }
-
-    public function achats() // 
-    {
-        return $this->hasMany(Achat::class);
-    }
-
-
-    public function menus()
-    {
-        return $this->belongsToMany(Menu::class, 'menu_produit')
-            ->withPivot('categorie_menu_id')
-            ->withTimestamps();
-    }
-
-
-    // Relation avec les compléments
-    public function complements()
-    {
-        return $this->belongsToMany(Produit::class, 'produit_complement', 'produit_id', 'complement_id')
-            ->withPivot('menu_id')
-            ->withTimestamps();
-    }
-
-
-    public function commandes(): BelongsToMany
-    {
-        return $this->belongsToMany(Commande::class)->withPivot(['quantite', 'prix_unitaire', 'total'])->withTimestamps();
-    }
+  
 
     public function sorties()
     { // sortie de stock
-        return $this->belongsToMany(Sortie::class)->withPivot(['quantite_existant', 'quantite_utilise'])->withTimestamps();
+        return $this->belongsToMany(Sortie::class , 'produit_sortie', 'produit_id', 'sortie_id')->withPivot(['stock_disponible', 'stock_sortie'])->withTimestamps();
     }
 
     public function inventaires()
@@ -163,23 +111,12 @@ class Produit extends Model implements HasMedia
     public function ventes()
     {
         return $this->belongsToMany(Vente::class, 'produit_vente')
-            ->withPivot('quantite', 'quantite_bouteille', 'prix_unitaire', 'total', 'unite_vente_id', 'variante_id')
+            ->withPivot('quantite',  'prix_unitaire', 'total')
             ->withTimestamps();
     }
 
 
-    public function variantes(): BelongsToMany
-    {
-        return $this->belongsToMany(Variante::class, 'produit_variante')->withPivot([
-            'quantite',
-            'prix',
-            'total',
-            // 'quantite_stocke',
-            'quantite_disponible',
-            'quantite_vendu',
-            'bouteille_vendu'
-        ])->withTimestamps();
-    }
+  
 
 
 

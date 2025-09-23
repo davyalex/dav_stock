@@ -37,21 +37,19 @@ class DashboardController extends Controller
     {
         // Vérifier si l'utilisateur a le rôle 'caisse'
         if ($request->user()->hasRole(['caisse', 'supercaisse'])) {
-            // Vérifier si l'utilisateur n'a pas sélectionné de caisse
-            if (Auth::user()->caisse_id === null) {
-                // Rediriger vers la page de sélection de caisse
-                return redirect()->route('caisse.select')->with('warning', 'Veuillez sélectionner une caisse avant d\'accéder à l\'application.');
-            }
-            // Rediriger vers la page de vente si une caisse est sélectionnée
-            return redirect()->route('vente.index');
+            try {
+                // Vérifier si l'utilisateur n'a pas sélectionné de caisse
+                if (Auth::user()->caisse_id === null) {
+                    // Rediriger vers la page de sélection de caisse
+                    return redirect()->route('caisse.select')->with('error', 'Veuillez sélectionner une caisse avant d\'accéder à l\'application.');
+                }
+                // Rediriger vers la page de vente si une caisse est sélectionnée
+                return redirect()->route('vente.index');
+            } catch (\Throwable $th) {
+                return $th->getMessage();}
         }
 
         ## statistique Liste des ventes
-        // Liste des commandes en attente
-        $commandesEnAttente = Commande::where('statut', 'en attente')
-            ->orderBy('created_at', 'desc')
-            ->take(10)
-            ->get();
 
 
         //Liste des produit les plus vendus
@@ -68,41 +66,22 @@ class DashboardController extends Controller
             });
 
         // statistique chiffre pour card
-        // Nombre de commandes
-        $nombreCommandes = Commande::count();
+
 
         // Montant total des ventes annee en cours
         $montantTotalVentes = Vente::whereYear('date_vente', Carbon::now()->year)
             ->sum('montant_total');
 
-        // Montant total des dépenses annee en cours
-        $montantTotalDepenses = Depense::whereYear('date_depense', Carbon::now()->year)
-            ->sum('montant');
-
+      
         /// Montant total des ventes mois en cours 
         $montantTotalVentesMois = Vente::whereMonth('date_vente', Carbon::now()->month)
             ->sum('montant_total');
 
-        // Montant total des ventes annee en cours
-        $montantTotalDepensesMois = Depense::whereMonth('date_depense', Carbon::now()->month)
-            ->sum('montant');
-
+     
         // Produits en alerte
         $produitsEnAlerte = Produit::where('stock', '=', 'stock_alerte')->get()->count();
 
-        // dd($montantTotalVentes);
 
-        // Chiffre d'affaire par mois avec apexchart
-        // $chiffreAffaireParMois = Vente::selectRaw('EXTRACT(MONTH FROM date_vente) as mois, SUM(montant_total) as chiffre_affaire')
-        //     ->groupBy('mois')
-        //     ->pluck('chiffre_affaire', 'mois');
-        // dd($chiffreAffaireParMois);
-
-        // $revenus = DB::table('ventes')
-        //     ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as mois, SUM(montant_total) as total_revenu")
-        //     ->groupBy('mois')
-        //     ->orderBy('mois')
-        //     ->get();
 
         $revenus = DB::table('ventes')
             ->selectRaw("MONTHNAME(date_vente) as mois, MONTH(date_vente) as mois_num, SUM(montant_total) as total_revenu")
@@ -123,13 +102,9 @@ class DashboardController extends Controller
 
         // dd($produitsLesPlusVendus->toArray());
         return view('backend.pages.index', compact(
-            'commandesEnAttente',
             'produitsLesPlusVendus',
-            'nombreCommandes',
             'montantTotalVentes', // Montant total des ventes annee en cours
-            'montantTotalDepenses', // Montant total des depenses annee en cours
             'montantTotalVentesMois', // Montant total des ventes mois en cours
-            'montantTotalDepensesMois',// Montant total des depenses mois en cours
             'produitsEnAlerte',
 
             // 'chiffreAffaireParMois',

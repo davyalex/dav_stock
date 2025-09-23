@@ -60,15 +60,13 @@ class AdminController extends Controller
     {
         $user = Auth::user();
 
-        //on verifie si l'utilisateur a une caisse non cloturer si oui la cloturer avant de se deconnecter
-        $ventes = $user->ventes->where('user_id', $user->id)->where('caisse_id', $user->caisse_id)->where('statut_cloture', false)->first();
-        if ($ventes) {
-            Alert::success('Vous devez cloturer la caisse avant de vous deconnecter', 'warning Message');
+        // //on verifie si l'utilisateur a une caisse non cloturer si oui la cloturer avant de se deconnecter
+        // $ventes = $user->ventes->where('user_id', $user->id)->where('caisse_id', $user->caisse_id)->where('statut_cloture', false)->first();
+        // if ($ventes) {
+        //     Alert::success('Vous devez cloturer la caisse avant de vous deconnecter', 'warning Message');
 
-            return Redirect()->route('vente.index');
-        }
-
-
+        //     return Redirect()->route('vente.index');
+        // }
 
 
         // Si l'utilisateur a une caisse active, la désactiver
@@ -79,10 +77,7 @@ class AdminController extends Controller
                 'statut' => 'desactive',
                 'session_date_vente' => null
             ]);
-            // $caisse = Caisse::find($user->caisse_id);
-            // $caisse->statut = 'desactive';
-            // $caisse->session_date_vente = null;
-            // $caisse->save();
+            
             // mettre caisse_id a null
             User::whereId($user->id)->update([
                 'caisse_id' => null,
@@ -99,13 +94,7 @@ class AdminController extends Controller
 
 
         Auth::logout();
-        // Supprimer toutes les sessions de connexion
-
-        // $request->session()->invalidate();
-        // $request->session()->regenerateToken();
-
-
-        // Session::forget('user_auth');
+       
         Alert::success('Vous etes deconnecté', 'Success Message');
         return Redirect()->route('admin.login');
     }

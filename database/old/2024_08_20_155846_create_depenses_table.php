@@ -35,11 +35,7 @@ return new class extends Migration
                 ->onDelete('cascade');
 
                 
-            $table->foreignId('facture_id')
-            ->nullable()
-            ->constrained('factures')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
+          
 
             // $table->foreignId('paie_id')
             // ->nullable()

@@ -49,16 +49,12 @@ class SortieController extends Controller
     {
 
         try {
-            $data_produit = Produit::whereHas('categorie', function ($q) {
-                $q->where('famille', 'restaurant');
-            })->where('stock', '>', 0)
-                ->with(['unite', 'uniteSortie'])
+            $data_produit = Produit::where('stock', '>', 0)->active()->alphabetique()
                 ->get();
 
-            $data_unite = Unite::all();
 
             // dd($data_produit->toArray());
-            return view('backend.pages.stock.sortie.create', compact('data_produit', 'data_unite'));
+            return view('backend.pages.stock.sortie.create', compact('data_produit'));
         } catch (\Throwable $e) {
             return  $e->getMessage();
         }
@@ -67,18 +63,16 @@ class SortieController extends Controller
 
     public function store(Request $request)
     {
-
         try {
+            // Validation stricte
+            $request->validate([
+                'date_sortie' => 'required|date',
+                'cart' => 'required|array|min:1',
+                'cart.*.id' => 'required|exists:produits,id',
+                'cart.*.quantity' => 'required|integer|min:1',
+            ]);
 
-
-            // dd($request->all());
-            // $request->validate([
-            //     'produit_id.*' => 'required',
-            //     'quantite_utilise.*' => 'required|numeric',
-            //     'unite_id.*' => 'required',
-            // ]);
-
-            // enregistrer la sortie
+            // Création de la sortie
             $sortie = new Sortie();
             $sortie->code = 'SO-' . strtoupper(Str::random(8));
             $sortie->date_sortie = $request->date_sortie;
@@ -88,49 +82,57 @@ class SortieController extends Controller
             $cart = $request->input('cart');
 
             foreach ($cart as $item) {
-                // Attachement des produits à la vente
-                $sortie->produits()->attach($item['id'], [
-                    'quantite_utilise' => $item['quantity'],
-                    'quantite_existant' => $item['stock'],
+                $produit = Produit::find($item['id']);
+
+                // Sécurité : ne pas sortir plus que le stock disponible
+                $qtySortie = min($item['quantity'], $produit->stock);
+
+                // Attacher le produit à la sortie
+                $sortie->produits()->attach($produit->id, [
+                    'stock_sortie' => $qtySortie,
+                    'stock_disponible' => $produit->stock,
                 ]);
 
-                // mettre la quantité utilisée dans le stock de chaque produit
-                $produit = Produit::find($item['id']);
-                $produit->stock -= $item['quantity'];
+                // Mise à jour du stock
+                $produit->stock -= $qtySortie;
                 $produit->save();
             }
 
-            // // enregistrer les produits de la sortie
-            // foreach ($request->produit_id as $key => $produit_id) {
-            //     // Trouver l'unité correspondante pour ce produit
-            //     $produit = Produit::find($produit_id);
-
-            //     // Attacher le produit à la sortie avec les informations associées
-            //     $sortie->produits()->attach($produit_id, [
-            //         'quantite_utilise' => $request->quantite_utilise[$key],
-            //         'quantite_existant' => $produit->stock,
-            //         'unite_id' => $request->unite_id[$key],
-            //         'unite_sortie' => $request->unite_libelle[$key],
-            //     ]);
-
-            //     // Retirer la quantité utilisée dans le stock de chaque produit
-            //     $produit->stock -= $request->quantite_utilise[$key];
-            //     $produit->save();
-            // }
-
-
-            // retur response
             return response()->json([
-                'message' => 'Sortie de stock enregistré avec succès.',
+                'message' => 'Sortie de stock enregistrée avec succès.',
                 'status' => 'success',
             ], 200);
         } catch (\Throwable $e) {
-
             return response()->json([
                 'message' => $e->getMessage(),
-                'statut' => 'error',
+                'status' => 'error',
             ], 500);
-            // return $e->getMessage();
         }
+    }
+
+
+
+
+      public function delete($id)
+    {
+        $sortie = Sortie::with('produits')->find($id);
+
+        if (!$sortie) {
+            return response()->json(['message' => 'Sortie non trouvée'], 404);
+        }
+
+        foreach ($sortie->produits as $produit) {
+            $produitSortie = Produit::find($produit->id);
+            if (!$produitSortie) {
+                continue;
+            }
+            // récupérer la quantité sortie via la table pivot
+            $produitSortie->stock += $produit->pivot->stock_sortie;
+            $produitSortie->save();
+        }
+
+        $sortie->forceDelete();
+
+        return response()->json(['status' => 200]);
     }
 }

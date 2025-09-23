@@ -23,6 +23,7 @@ use App\Http\Controllers\backend\slide\SlideController;
 use App\Http\Controllers\backend\stock\AchatController;
 use App\Http\Controllers\backend\user\ClientController;
 use App\Http\Controllers\backend\vente\VenteController;
+use App\Http\Controllers\backend\stock\EntreeController;
 use App\Http\Controllers\backend\stock\SortieController;
 use App\Http\Controllers\backend\menu\PlatMenuController;
 use App\Http\Controllers\backend\module\ModuleController;
@@ -45,6 +46,7 @@ use App\Http\Controllers\backend\depense\LibelleDepenseController;
 use App\Http\Controllers\backend\fournisseur\FournisseurController;
 use App\Http\Controllers\backend\depense\CategorieDepenseController;
 use App\Http\Controllers\backend\configuration\UniteMesureController;
+use App\Http\Controllers\backend\configuration\ModePaiementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -241,6 +243,14 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         // route::get('delete/{id}', 'delete')->name('caisse.delete');
     });
 
+    //mode paiement
+    Route::prefix('mode-paiement')->controller(ModePaiementController::class)->group(function () {
+        route::get('', 'index')->name('mode_paiement.index');
+        route::post('store', 'store')->name('mode_paiement.store');
+        route::post('update/{id}', 'update')->name('mode_paiement.update');
+        route::get('delete/{id}', 'delete')->name('mode_paiement.delete');
+    });
+
     //categorie
     Route::prefix('categorie')->controller(CategorieController::class)->group(function () {
         route::get('create', 'create')->name('categorie.create');
@@ -250,6 +260,10 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('edit/{id}', 'edit')->name('categorie.edit');
         route::post('update/{id}', 'update')->name('categorie.update');
         route::get('delete/{id}', 'delete')->name('categorie.delete');
+        
+        // Nouvelles routes pour les fonctionnalités avancées
+        route::post('reorder', 'reorder')->name('categorie.reorder'); // Drag & drop
+        route::post('quick-update/{id}', 'quickUpdate')->name('categorie.quick-update'); // Édition rapide
     });
 
 
@@ -284,7 +298,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::post('store', 'store')->name('produit.store')->middleware('can:creer-produit'); // ajouter produit
         route::get('show/{id}', 'show')->name('produit.show')->middleware('can:voir-produit'); // detail produit
         route::get('edit/{id}', 'edit')->name('produit.edit')->middleware('can:modifier-produit');
-        route::post('update/{id}', 'update')->name('produit.update')->middleware('can:modifier-produit');
+        route::put('update/{id}', 'update')->name('produit.update')->middleware('can:modifier-produit');
         route::get('delete/{id}', 'delete')->name('produit.delete')->middleware('can:supprimer-produit'); // supprimer produit
     });
 
@@ -321,7 +335,18 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('show/{id}', 'show')->name('sortie.show');
         route::get('create', 'create')->name('sortie.create');
         route::post('store', 'store')->name('sortie.store');
+        route::get('delete/{id}', 'delete')->name('sortie.delete');
+
     });
+
+        // stock -entree
+        Route::prefix('entree')->controller(EntreeController::class)->group(function () {
+            route::get('', 'index')->name('entree.index');
+            route::get('show/{id}', 'show')->name('entree.show');
+            route::get('create', 'create')->name('entree.create');
+            route::post('store', 'store')->name('entree.store');
+            route::get('delete/{id}', 'delete')->name('entree.delete');
+        });
 
 
     // stock -inventaire

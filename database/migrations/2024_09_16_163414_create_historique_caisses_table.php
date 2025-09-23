@@ -27,6 +27,8 @@ return new class extends Migration
 
             $table->dateTime('date_ouverture')->nullable();
             $table->dateTime('date_fermeture')->nullable();
+            
+            $table->date('session_date_vente')->nullable();
 
 
             $table->timestamps();

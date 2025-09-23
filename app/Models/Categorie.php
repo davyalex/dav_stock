@@ -21,10 +21,6 @@ class Categorie extends Model
         'url',
         'position',
         'parent_id',
-        'type', // menu, bar , restaurant
-        'famille' // menu, bar , restaurant
-
-
     ];
 
     public static function boot()
@@ -82,19 +78,8 @@ class Categorie extends Model
     }
 
 
-    // public function typeProduit() // BAR ? RESTAURANT
-    // {
-    //     return $this->belongsTo(TypeProduit::class, 'type_id');
-    // }
+    
 
 
-    public function achats() // BAR ? RESTAURANT
-    {
-        return $this->hasMany(Achat::class);
-    }
-
-    // public function produitMenus() 
-    // {
-    //     return $this->hasMany(Produit::class)->with('');
-    // }
+   
 }

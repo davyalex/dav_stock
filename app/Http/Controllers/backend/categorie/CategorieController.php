@@ -29,13 +29,13 @@ class CategorieController extends Controller
 
 
 
-    public function store(Request $request)
+     public function store(Request $request)
     {
 
         try {
             //request validation ......
             $request->validate([
-                'name' => 'required|unique:categories',
+                'name' => 'required:categories',
             ]);
 
 
@@ -95,13 +95,13 @@ class CategorieController extends Controller
                 'status' => $request['status'],
                 'url' => $request['url'],
                 'position' => $data_count + 1,
-                'famille' =>  $categorie_parent['famille'],
             ]);
 
             Alert::success('Operation réussi', 'Success Message');
             return redirect()->route('categorie.create');
         } catch (\Throwable $e) {
-            Alert::success($e->getMessage(), 'Une erreur s\'est produite');
+            Alert::error($e->getMessage(), 'Une erreur s\'est produite');
+            return back()->withInput();
         }
     }
 
@@ -172,6 +172,81 @@ class CategorieController extends Controller
             ]);
         } catch (\Throwable $e) {
             Alert::success($e->getMessage(), 'Une erreur s\'est produite');
+        }
+    }
+
+    /**
+     * Réorganiser les catégories (drag & drop)
+     */
+    public function reorder(Request $request)
+    {
+        try {
+            $request->validate([
+                'category_id' => 'required|exists:categories,id',
+                'parent_id' => 'nullable|exists:categories,id',
+                'position' => 'required|integer|min:1'
+            ]);
+
+            $category = Categorie::find($request->category_id);
+            $oldParentId = $category->parent_id;
+            $newParentId = $request->parent_id;
+
+            // Mettre à jour la catégorie
+            $category->update([
+                'parent_id' => $newParentId,
+                'position' => $request->position
+            ]);
+
+            // Réorganiser les positions des autres catégories
+            $this->reorganizePositions($oldParentId);
+            if ($oldParentId !== $newParentId) {
+                $this->reorganizePositions($newParentId);
+            }
+
+            return response()->json(['success' => true]);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Mise à jour rapide du nom de catégorie
+     */
+    public function quickUpdate(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255|unique:categories,name,' . $id
+            ]);
+
+            $category = Categorie::find($id);
+            if (!$category) {
+                return response()->json(['success' => false, 'message' => 'Catégorie non trouvée']);
+            }
+
+            $category->update([
+                'name' => Str::lower($request->name)
+            ]);
+
+            return response()->json(['success' => true]);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Réorganiser les positions après déplacement
+     */
+    private function reorganizePositions($parentId)
+    {
+        $categories = Categorie::where('parent_id', $parentId)
+            ->orderBy('position')
+            ->get();
+
+        foreach ($categories as $index => $category) {
+            $category->update(['position' => $index + 1]);
         }
     }
 }

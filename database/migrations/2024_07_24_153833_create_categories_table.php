@@ -26,9 +26,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->enum('type', ['bar', 'restaurant', 'menu'])->nullable(); // recuperer les categories principales
-            $table->enum('famille', ['bar', 'restaurant', 'menu'])->nullable();
-
+        
 
             $table->softDeletes();
             $table->timestamps();
