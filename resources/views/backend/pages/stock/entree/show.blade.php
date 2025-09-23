@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-   Entrée
+    Entrée
 @endsection
 @section('css')
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
@@ -32,7 +32,8 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="buttons-datatables" class="table table-bordered table-hover align-middle" style="width:100%">
+                        <table id="buttons-datatables" class="table table-bordered table-hover align-middle"
+                            style="width:100%">
                             <thead class="table-light">
                                 <tr>
                                     <th>#</th>
@@ -49,8 +50,8 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>
-                                            <img class="rounded avatar-sm"
-                                                src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : 'pas d image' }}"
+                                              <img class="rounded avatar-sm"
+                                                src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo.jpg') }}"
                                                 width="50" alt="Image produit">
                                         </td>
                                         <td>
@@ -77,6 +78,10 @@
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script src="{{ URL::asset('build/js/app.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('#buttons-datatables').DataTable();

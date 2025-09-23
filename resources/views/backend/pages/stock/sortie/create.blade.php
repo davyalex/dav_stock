@@ -29,9 +29,10 @@
                             </select>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label class="form-label fw-semibold" for="currentDate">Date de sortie <span class="text-danger">*</span></label>
-                            <input type="datetime-local" id="currentDate" value="{{ date('Y-m-d\TH:i') }}" name="date_sortie"
-                                class="form-control" required>
+                            <label class="form-label fw-semibold" for="currentDate">Date de sortie <span
+                                    class="text-danger">*</span></label>
+                            <input type="datetime-local" id="currentDate" value="{{ date('Y-m-d\TH:i') }}"
+                                name="date_sortie" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -73,6 +74,10 @@
 @endsection
 
 @section('script')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script src="{{ URL::asset('build/js/app.js') }}"></script>
     <script>
         $(function() {
             let cart = [];
@@ -83,7 +88,12 @@
                 if (!id) return;
                 const prod = dataProduit.find(p => p.id == id);
                 if (!cart.find(item => item.id == id)) {
-                    cart.push({ id, name: prod.nom, stock: prod.stock, quantity: 1 });
+                    cart.push({
+                        id,
+                        name: prod.nom,
+                        stock: prod.stock,
+                        quantity: 1
+                    });
                     renderCart();
                     hideError();
                 }
@@ -147,7 +157,11 @@
                     return;
                 }
                 let currentDate = $('#currentDate').val();
-                let data = { date_sortie: currentDate, cart, _token: '{{ csrf_token() }}' };
+                let data = {
+                    date_sortie: currentDate,
+                    cart,
+                    _token: '{{ csrf_token() }}'
+                };
                 $('#spinner').removeClass('d-none');
                 $('#validate').prop('disabled', true);
                 $.ajax({
@@ -160,7 +174,9 @@
                         if (response.status == 'success') {
                             window.location.href = '{{ route('sortie.index') }}';
                         } else {
-                            $('#errorMessage').text(response.message || 'Erreur lors de la validation.').parent().removeClass('d-none');
+                            $('#errorMessage').text(response.message ||
+                                'Erreur lors de la validation.').parent().removeClass(
+                                'd-none');
                         }
                     },
                     error: function(xhr) {

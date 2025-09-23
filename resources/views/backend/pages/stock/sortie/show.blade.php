@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-   Sortie
+    Sortie
 @endsection
 @section('css')
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
@@ -33,7 +33,8 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="buttons-datatables" class="table table-bordered table-hover align-middle" style="width:100%">
+                        <table id="buttons-datatables" class="table table-bordered table-hover align-middle"
+                            style="width:100%">
                             <thead class="table-light">
                                 <tr>
                                     <th>#</th>
@@ -51,27 +52,27 @@
                                         <td>{{ $key + 1 }}</td>
                                         <td>
                                             <img class="rounded avatar-sm"
-                                                src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : 'pas d image' }}"
+                                                src="{{ $item->hasMedia('ProduitImage') ? $item->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo.jpg') }}"
                                                 width="50" alt="Image produit">
                                         </td>
                                         <td>
                                             <span class="fw-semibold">{{ $item->nom }}</span>
-                                           
+
                                         </td>
                                         <td>
                                             {{ $item['pivot']['stock_disponible'] }}
-                                            
+
                                         </td>
                                         <td>
                                             <span class="text-danger fw-bold">{{ $item['pivot']['stock_sortie'] }}</span>
-                                           
+
                                         </td>
                                         <td>
                                             <span class="fw-bold">{{ $item['stock'] }}</span>
                                         </td>
                                         <td>
                                             <span class="badge bg-warning text-dark">{{ $item['stock_alerte'] }}</span>
-                                            @if(!empty($item['uniteSortie']['libelle']))
+                                            @if (!empty($item['uniteSortie']['libelle']))
                                                 <span class="text-muted">{{ $item['uniteSortie']['libelle'] }}</span>
                                             @endif
                                         </td>
@@ -96,6 +97,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+   
+    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
     <script>
         $(document).ready(function() {
             $('#buttons-datatables').DataTable({
