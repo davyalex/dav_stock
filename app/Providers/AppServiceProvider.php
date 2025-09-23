@@ -9,6 +9,8 @@ use App\Models\Setting;
 use App\Models\Categorie;
 use App\Models\Inventaire;
 use App\Models\ProduitVente;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Request;
@@ -45,18 +47,25 @@ class AppServiceProvider extends ServiceProvider
 
 
 
-        $this->app->booted(function () {
-            $permissions = \Spatie\Permission\Models\Permission::pluck('id')->toArray();
+       $this->app->booted(function () {
+            try {
+                if (Schema::hasTable('permissions') && Schema::hasTable('roles')) {
+                    $permissions = Permission::pluck('id')->toArray();
 
-            $developpeurRole = \Spatie\Permission\Models\Role::where('name', 'developpeur')->first();
-            $superadminRole = \Spatie\Permission\Models\Role::where('name', 'superadmin')->first();
+                    $developpeurRole = Role::where('name', 'developpeur')->first();
+                    $superadminRole = Role::where('name', 'superadmin')->first();
 
-            if ($developpeurRole) {
-                $developpeurRole->permissions()->sync($permissions);
-            }
+                    if ($developpeurRole) {
+                        $developpeurRole->permissions()->sync($permissions);
+                    }
 
-            if ($superadminRole) {
-                $superadminRole->permissions()->sync($permissions);
+                    if ($superadminRole) {
+                        $superadminRole->permissions()->sync($permissions);
+                    }
+                }
+            } catch (\Exception $e) {
+                // Optionnel : log de l'erreur si besoin
+                return back()->withErrors('Une erreur est survenue lors de la synchronisation des permissions.', 'Message d\'erreur:' . $e->getMessage());
             }
         });
 

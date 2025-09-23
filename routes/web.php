@@ -1,51 +1,31 @@
 <?php
 
 use App\Models\Optimize;
-use App\Models\Inventaire;
 use App\Models\Maintenance;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PaieController;
-use RealRashid\SweetAlert\Facades\Alert;
-use App\Http\Controllers\PosteController;
-use App\Http\Controllers\EmployeController;
-use App\Http\Controllers\site\SiteController;
-use App\Http\Controllers\site\PanierController;
-use App\Http\Controllers\site\AuthUserController;
-use App\Http\Controllers\site\PanierMenuController;
+
 use App\Http\Controllers\backend\DashboardController;
-use App\Http\Controllers\backend\menu\MenuController;
-use App\Http\Controllers\backend\menu\PlatController;
 use App\Http\Controllers\backend\user\AdminController;
-use App\Http\Controllers\backend\slide\SlideController;
-use App\Http\Controllers\backend\stock\AchatController;
 use App\Http\Controllers\backend\user\ClientController;
 use App\Http\Controllers\backend\vente\VenteController;
 use App\Http\Controllers\backend\stock\EntreeController;
 use App\Http\Controllers\backend\stock\SortieController;
-use App\Http\Controllers\backend\menu\PlatMenuController;
 use App\Http\Controllers\backend\module\ModuleController;
-use App\Http\Controllers\backend\vente\CommandeController;
 use App\Http\Controllers\backend\depense\DepenseController;
 use App\Http\Controllers\backend\permission\RoleController;
 use App\Http\Controllers\backend\produit\ProduitController;
 use App\Http\Controllers\backend\rapport\RapportController;
 use App\Http\Controllers\backend\stock\EtatStockController;
-use App\Http\Controllers\backend\stock\AjustementController;
 use App\Http\Controllers\backend\stock\InventaireController;
 use App\Http\Controllers\backend\parametre\SettingController;
-use App\Http\Controllers\backend\menu\CategorieMenuController;
 use App\Http\Controllers\backend\categorie\CategorieController;
 use App\Http\Controllers\backend\configuration\CaisseController;
-use App\Http\Controllers\backend\configuration\FormatController;
 use App\Http\Controllers\backend\configuration\MagasinController;
 use App\Http\Controllers\backend\permission\PermissionController;
 use App\Http\Controllers\backend\depense\LibelleDepenseController;
-use App\Http\Controllers\backend\fournisseur\FournisseurController;
 use App\Http\Controllers\backend\depense\CategorieDepenseController;
-use App\Http\Controllers\backend\configuration\UniteMesureController;
 use App\Http\Controllers\backend\configuration\ModePaiementController;
 
 /*
@@ -154,15 +134,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     });
 
 
-    #############  SLIDER  #####################
-
-    //slider of basic site
-    Route::prefix('slide')->controller(SlideController::class)->group(function () {
-        route::get('', 'index')->name('slide.index');
-        route::post('store', 'store')->name('slide.store');
-        route::post('update/{id}', 'update')->name('slide.update');
-        route::get('delete/{id}', 'delete')->name('slide.delete');
-    });
+  
 
 
 
@@ -267,29 +239,8 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     });
 
 
-    //fournisseur
-    Route::prefix('fournisseur')->controller(FournisseurController::class)->group(function () {
-        route::get('', 'index')->name('fournisseur.index');
-        route::post('store', 'store')->name('fournisseur.store');
-        route::post('update/{id}', 'update')->name('fournisseur.update');
-        route::get('delete/{id}', 'delete')->name('fournisseur.delete');
-    });
+  
 
-    // unite de mesure
-    Route::prefix('unite')->controller(UniteMesureController::class)->group(function () {
-        route::get('', 'index')->name('unite.index');
-        route::post('store', 'store')->name('unite.store');
-        route::post('update/{id}', 'update')->name('unite.update');
-        route::get('delete/{id}', 'delete')->name('unite.delete');
-    });
-
-    // format
-    Route::prefix('format')->controller(FormatController::class)->group(function () {
-        route::get('', 'index')->name('format.index');
-        route::post('store', 'store')->name('format.store');
-        route::post('update/{id}', 'update')->name('format.update');
-        route::get('delete/{id}', 'delete')->name('format.delete');
-    });
 
     // produit
     Route::prefix('produit')->controller(ProduitController::class)->group(function () {
@@ -308,26 +259,8 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('suivi-stock', 'suiviStock')->name('etat-stock.suiviStock');
     });
 
-    // stock -achat
-    Route::prefix('achat')->controller(AchatController::class)->group(function () {
-        route::get('index', 'index')->name('achat.index');  // liste des facture
-        route::get('show/{id}', 'show')->name('achat.show');
-        route::get('create', 'create')->name('achat.create');
-        route::post('store', 'store')->name('achat.store');
-        route::get('edit/{id}', 'edit')->name('achat.edit');
-        route::post('update/{id}', 'update')->name('achat.update');
-        route::get('delete/{id}', 'delete')->name('achat.delete');
-        route::post('check-facture', 'checkFactureExist')->name('achat.check-facture');
-        route::post('check-montant', 'verifiyMontant')->name('achat.check-montant');  // check montant facture
 
-    });
 
-    // stock -ajustement
-    Route::prefix('ajustement')->controller(AjustementController::class)->group(function () {
-        route::get('', 'index')->name('ajustement.index');
-        route::get('create/{id}', 'create')->name('ajustement.create');
-        route::post('store', 'store')->name('ajustement.store');
-    });
 
     // stock -sortie
     Route::prefix('sortie')->controller(SortieController::class)->group(function () {
@@ -366,28 +299,13 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('show/{id}', 'show')->name('vente.show')->middleware('can:voir-vente'); // detail vente
         route::get('create', 'create')->name('vente.create')->middleware('can:creer-vente'); // vue de la page de creation vente
         route::post('store', 'store')->name('vente.store')->middleware('can:creer-vente'); // ajouter vente
-        route::get('cloture-caisse', 'clotureCaisse')->name('vente.cloture-caisse')->middleware('can:voir-vente'); // cloture caisse
-        route::get('billeterie-caisse', 'billeterieCaisse')->name('vente.billeterie-caisse')->middleware('can:voir-vente'); // billeterie caisse
-        route::post('billeterie-caisse-store', 'storeBilleterie')->name('vente.billeterie-caisse-store')->middleware('can:voir-vente'); // billeterie caisse
         route::get('fermer-caisse', 'fermerCaisse')->name('vente.fermer-caisse')->middleware('can:voir-vente'); // cloture caisse
-
         route::get('rapport', 'rapportVente')->name('vente.rapport-caisse')->middleware('can:voir-vente'); // rapport de vente caisse
 
-        ##vente menu
-        route::get('create-menu', 'createVenteMenu')->name('vente.menu.create')->middleware('can:creer-vente'); //vue de la page de vente menu
-        route::post('store-menu', 'storeVenteMenu')->name('vente.menu.store')->middleware('can:creer-vente'); // ajouter vente menu
-
+     
         ##supprimer une vente
         route::get('delete/{id}', 'delete')->name('vente.delete')->middleware('can:supprimer-vente'); // supprimer vente
     });
-
-    // Commande
-    Route::prefix('commande')->controller(CommandeController::class)->group(function () {
-        route::get('', 'index')->name('commande.index');
-        route::get('show/{id}', 'show')->name('commande.show');
-        route::post('statut', 'changerStatut')->name('commande.statut');
-    });
-
 
     Route::prefix('categorie-depense')->controller(CategorieDepenseController::class)->group(function () {
         route::get('', 'index')->name('categorie-depense.index');
@@ -421,138 +339,17 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     });
 
 
-    // produit restaurant
-    Route::prefix('plat')->controller(PlatController::class)->group(function () {
-        route::get('', 'index')->name('plat.index');
-        route::get('create', 'create')->name('plat.create');
-        route::post('store', 'store')->name('plat.store');
-        route::get('show/{id}', 'show')->name('plat.show');
-        route::get('edit/{id}', 'edit')->name('plat.edit');
-        route::post('update/{id}', 'update')->name('plat.update');
-        route::get('delete/{id}', 'delete')->name('plat.delete');
-    });
 
 
 
-    Route::prefix('plat-menu')->controller(PlatMenuController::class)->group(function () {
-        route::get('', 'index')->name('plat-menu.index');
-        route::get('create', 'create')->name('plat-menu.create');
-        route::post('store', 'store')->name('plat-menu.store');
-        route::get('show/{id}', 'show')->name('plat-menu.show');
-        route::get('edit/{id}', 'edit')->name('plat-menu.edit');
-        route::post('update/{id}', 'update')->name('plat-menu.update');
-        route::get('delete/{id}', 'delete')->name('plat-menu.delete');
-    });
 
 
-    //  menu
-    Route::prefix('menu')->controller(MenuController::class)->group(function () {
-        route::get('', 'index')->name('menu.index');
-        route::get('create', 'create')->name('menu.create');
-        route::get('getOptions', 'getOptions')->name('menu.options'); // recuperer en temps reel les nouvel enregistrements plat , complemet .....
-        route::post('store', 'store')->name('menu.store');
-        route::get('show/{id}', 'show')->name('menu.show');
-        route::get('edit/{id}', 'edit')->name('menu.edit');
-        route::post('update/{id}', 'update')->name('menu.update');
-        route::get('delete/{id}', 'delete')->name('menu.delete');
-    });
-
-    // categorie menu
-    Route::prefix('categorie-menu')->controller(CategorieMenuController::class)->group(function () {
-        route::get('', 'index')->name('categorie-menu.index');
-        route::post('store', 'store')->name('categorie-menu.store');
-        route::post('update/{id}', 'update')->name('categorie-menu.update');
-        route::get('delete/{id}', 'delete')->name('categorie-menu.delete');
-    });
 
 
-    //RH poste
-    Route::prefix('poste')->controller(PosteController::class)->group(function () {
-        route::get('', 'index')->name('poste.index');
-        route::post('store', 'store')->name('poste.store');
-        route::post('update/{id}', 'update')->name('poste.update');
-        route::get('delete/{id}', 'delete')->name('poste.delete');
-    });
 
 
-    //RH employe
-    Route::prefix('employe')->controller(EmployeController::class)->group(function () {
-        route::get('', 'index')->name('employe.index');
-        route::post('store', 'store')->name('employe.store');
-        route::post('update/{id}', 'update')->name('employe.update');
-        route::get('delete/{id}', 'delete')->name('employe.delete');
-    });
-
-
-    //RH paie
-    Route::prefix('paie')->controller(PaieController::class)->group(function () {
-        route::get('', 'index')->name('paie.index');
-        route::post('store', 'store')->name('paie.store');
-        route::post('update/{id}', 'update')->name('paie.update');
-        route::get('delete/{id}', 'delete')->name('paie.delete');
-    });
 });
 
 ######################      END BACKEND ROUTE         ###########################################################
-
-
-
-
-
-
-######################      START FRONT ROUTE         ###########################################################
-//User Login
-Route::controller(AuthUserController::class)->group(function () {
-    route::get('connexion', 'login')->name('user.login');
-    route::post('connexion', 'login')->name('user.login.post');
-    route::get('inscription', 'register')->name('user.register');
-    route::post('inscription', 'register')->name('user.register.post');
-    route::get('logout', 'logout')->name('user.logout');
-    route::get('profile', 'profile')->name('user.profile');
-    route::get('mes-commandes', 'commande')->name('user.commande');
-});
-
-//site
-Route::controller(SiteController::class)->group(function () {
-    route::get('', 'accueil')->name('accueil');
-    route::get('nous-contacter', 'nousContacter')->name('nous-contactez');
-    route::post('contacter-mail', 'sendMailContacter')->name('email-nous-contactez'); // envoie de email nous contacter
-
-
-    route::get('/categorie/{id}', 'produit')->name('produit'); // get product of categorie selected
-    route::get('/menu', 'menu')->name('menu');
-    route::get('/produit/detail/{slug}', 'produitDetail')->name('produit.detail');
-
-    //search
-    route::get('/recherche', 'recherche')->name('recherche');
-});
-
-//panier
-Route::controller(PanierController::class)->group(function () {
-    route::get('panier', 'index')->name('panier');
-    route::get('add/{id}', 'add')->name('cart.add');
-    route::post('update', 'update')->name('cart.update');
-    route::post('remove', 'remove')->name('cart.remove');
-    route::get('caisse', 'checkout')->name('cart.checkout')->middleware('auth'); // caisse infos commande
-    route::post('order', 'saveOrder')->name('cart.save-order')->middleware('auth'); // enregistrer la commande
-    // route::get('clear', 'clear')->name('cart.clear');
-});
-
-// pânier Menu
-Route::controller(PanierMenuController::class)->group(function () {
-    // route::get('panier', 'index')->name('panier');
-    route::post('add-menu', 'add')->name('cart.add-menu');
-    route::post('update-menu', 'update')->name('cart.update-menu');
-    route::post('remove-menu', 'remove')->name('cart.remove-menu');
-    route::get('getInfoData', 'getCartDataMenu')->name('cart.getInfo-menu');
-});
-
-
-
-  
-  
-
-    
-
 
     ######################      END FRONT ROUTE         ###########################################################

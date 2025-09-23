@@ -3,17 +3,15 @@
 namespace App\Http\Controllers\backend\vente;
 
 use Carbon\Carbon;
-use App\Models\Menu;
 use App\Models\User;
 use App\Models\Vente;
 use App\Models\Caisse;
 use App\Models\Produit;
 use App\Models\Categorie;
-use App\Models\Billetterie;
+
 use Illuminate\Support\Str;
 use App\Models\ModePaiement;
 use Illuminate\Http\Request;
-use App\Models\ClotureCaisse;
 use App\Models\HistoriqueCaisse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\RouteAction;
