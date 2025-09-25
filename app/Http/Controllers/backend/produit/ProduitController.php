@@ -165,7 +165,7 @@ class ProduitController extends Controller
                 'categorie_id' => 'required|exists:categories,id',
                 'stock_alerte' => 'required|integer|min:0',
                 'prix' => 'required|numeric|min:0',
-                'imagePrincipale' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             ]);
 
         
@@ -184,9 +184,9 @@ class ProduitController extends Controller
             ]);
 
             // Mise à jour de l'image principale
-            if ($request->hasFile('imagePrincipale')) {
+            if ($request->hasFile('image')) {
                 $data_produit->clearMediaCollection('ProduitImage');
-                $media = $data_produit->addMediaFromRequest('imagePrincipale')->toMediaCollection('ProduitImage');
+                $media = $data_produit->addMediaFromRequest('image')->toMediaCollection('ProduitImage');
                 \Spatie\ImageOptimizer\OptimizerChainFactory::create()->optimize($media->getPath());
             }
 

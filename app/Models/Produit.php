@@ -103,6 +103,19 @@ class Produit extends Model implements HasMedia
         return $this->belongsToMany(Sortie::class , 'produit_sortie', 'produit_id', 'sortie_id')->withPivot(['stock_disponible', 'stock_sortie'])->withTimestamps();
     }
 
+       public function entrees()
+    { // sortie de stock
+        return $this->belongsToMany(Entree::class , 'produit_entree', 'produit_id', 'entree_id')->withPivot(['stock_disponible', 'stock_entree'])->withTimestamps();
+    }
+
+
+       public function ajustements()
+    {
+        return $this->belongsToMany(Produit::class, 'ajustement_produit', 'produit_id', 'ajustement_id')
+            ->withPivot('stock_disponible', 'stock_ajuste', 'type_ajustement')
+            ->withTimestamps();
+    }
+
     public function inventaires()
     {
         return $this->belongsToMany(Inventaire::class)->withPivot(['stock_initial', 'stock_vendu', 'stock_theorique', 'stock_physique', 'ecart', 'etat', 'observation', 'stock_dernier_inventaire'])->withTimestamps();

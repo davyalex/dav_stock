@@ -97,7 +97,7 @@
                             aria-controls="sidebarConfiguration">
                             <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
                         </a>
-                        <div class="collapse menu-dropdown {{ Route::is('categorie.*') || Route::is('produit.*') || Route::is('mode_paiement.*') || Route::is('caisse.*') || Route::is('magasin.*') ? 'show' : '' }}"
+                        <div class="collapse menu-dropdown {{ Route::is('categorie.*') || Route::is('produit.*') || Route::is('mode_paiement.*') || Route::is('caisse.*') || Route::is('magasin.*')|| Route::is('intrant.*') ? 'show' : '' }}"
                             id="sidebarConfiguration">
                             <ul class="nav nav-sm flex-column">
 
@@ -129,6 +129,15 @@
                                         </a>
                                     </li>
                                 @endcan
+
+
+                                  @can('voir-produit')
+                                    <li class="nav-item active">
+                                        <a href="{{ route('intrant.index') }}"
+                                            class="nav-link {{ Route::is('intrant.*') ? 'active' : '' }}">Intrants
+                                        </a>
+                                    </li>
+                                @endcan
                             </ul>
                         </div>
                     </li>
@@ -141,7 +150,7 @@
                             aria-controls="sidebarStock">
                             <i class="ri ri-box-1-fill"></i> <span>GESTION DE STOCK</span>
                         </a>
-                        <div class="collapse menu-dropdown {{ Route::is('etat-stock.*') || Route::is('inventaire.*') || Route::is('sortie.*') || Route::is('entree.*') || Route::is('achat.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : '' }}"
+                        <div class="collapse menu-dropdown {{ Route::is('etat-stock.*') || Route::is('inventaire.*') || Route::is('sortie.*') || Route::is('entree.*') || Route::is('ajustement.*') || Route::is('produit.*') || Route::is('fournisseur.*') ? 'show' : '' }}"
                             id="sidebarStock">
                             <ul class="nav nav-sm flex-column">
 
@@ -155,10 +164,17 @@
                                         class="nav-link {{ Route::is('entree.*') ? 'active' : '' }}">entree de stock</a>
                                 </li>
 
+                                 <li class="nav-item active">
+                                    <a href="{{ route('ajustement.index') }}"
+                                        class="nav-link {{ Route::is('ajustement.*') ? 'active' : '' }}">Ajustement de stock</a>
+                                </li>
+
                                 <li class="nav-item active">
                                     <a href="{{ route('etat-stock.index') }}"
                                         class="nav-link {{ Route::is('etat-stock.*') ? 'active' : '' }}">Etat du stock</a>
                                 </li>
+
+                                
 
 
                                 {{-- <li class="nav-item active">

@@ -4,10 +4,10 @@
     @component('backend.components.breadcrumb')
         <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
         @slot('li_1')
-            Produit
+            Intrant
         @endslot
         @slot('title')
-            Créer un nouveau produit
+            Créer un nouvel intrant
         @endslot
     @endcomponent
 
@@ -24,47 +24,26 @@
                             </ul>
                         </div>
                     @endif
-                    <form method="POST" action="{{ route('produit.store') }}" autocomplete="off" class="needs-validation"
+                    <form method="POST" action="{{ route('intrant.store') }}" autocomplete="off" class="needs-validation"
                         novalidate enctype="multipart/form-data" id="formSend">
                         @csrf
                         <div class="row">
-                            <!-- Colonne principale -->
                             <div class="col-lg-8">
                                 <div class="card mb-3">
                                     <div class="card-body">
                                         <div class="row g-3">
-                                            <div class="col-md-12">
-                                                <label class="form-label">Catégorie <span
-                                                        class="text-danger">*</span></label>
-                                                <select id="categorie-filter" class="form-control js-example-basic-single"
-                                                    name="categorie_id" required>
-                                                    <option value="" disabled selected>Selectionner</option>
-                                                    @foreach ($data_categorie as $categorie)
-                                                        @include(
-                                                            'backend.pages.produit.partials.subCategorieOption',
-                                                            ['category' => $categorie]
-                                                        )
-                                                    @endforeach
-                                                </select>
-                                            </div>
                                             <div class="col-md-6">
                                                 <label class="form-label">Libellé <span class="text-danger">*</span></label>
-                                                <input type="text" name="nom" class="form-control" id="nomProduit"
-                                                    required>
+                                                <input type="text" name="nom" class="form-control" required>
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Prix de vente
-                                                    <span class="text-danger">*</span>
+                                                <label class="form-label">Prix achat
                                                 </label>
-                                                <input type="number" name="prix" class="form-control "
-                                                    id="prixVenteHide" required>
+                                                <input type="number" name="prix" class="form-control">
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label" for="meta-title-input">Stock alerte <span
-                                                        class="text-danger">*</span>
-                                                </label>
-                                                <input type="number" name="stock_alerte" class="form-control"
-                                                    id="stockAlerte" required>
+                                                <label class="form-label">Stock alerte <span class="text-danger">*</span></label>
+                                                <input type="number" name="stock_alerte" class="form-control" required>
                                             </div>
                                         </div>
                                     </div>
@@ -76,11 +55,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Colonne image -->
                             <div class="col-lg-4">
                                 <div class="card mb-3">
                                     <div class="card-body">
-                                        <label class="form-label">Image du produit</label>
+                                        <label class="form-label">Image de l'intrant</label>
                                         <input type="file" id="imageInput" name="image" accept="image/*"
                                             class="form-control mb-2">
                                         <div id="imagePreviewContainer" class="text-center">
@@ -93,8 +71,7 @@
                         </div>
                         <div class="text-end mb-3">
                             <button type="submit" class="btn btn-success w-lg" id="submitBtn">
-                                <span id="spinner" class="spinner-border spinner-border-sm me-2 d-none" role="status"
-                                    aria-hidden="true"></span>
+                                <span id="spinner" class="spinner-border spinner-border-sm me-2 d-none" role="status" aria-hidden="true"></span>
                                 Enregistrer
                             </button>
                         </div>
@@ -104,13 +81,14 @@
         </div>
     </div>
 
-@section('script')
+   @section('script')
     <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
     <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
     <script src="{{ URL::asset('build/js/pages/modal.init.js') }}"></script>
     {{-- <script src="{{ URL::asset('build/js/pages/form-editor.init.js') }}"></script> --}}
     <script src="{{ URL::asset('build/tinymce/tinymce.min.js') }}"></script>
     <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
+
     <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
     <script src="{{ URL::asset('build/js/pages/ecommerce-product-create.init.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
@@ -140,7 +118,7 @@
                 e.preventDefault();
                 spinner.classList.add('d-none');
                 btn.disabled = false;
-                // Optionnel : scroll vers le premier champ non valide
+                // Optionnel : focus sur le premier champ non valide
                 const firstInvalid = this.querySelector(':invalid');
                 if (firstInvalid) firstInvalid.focus();
                 return false;

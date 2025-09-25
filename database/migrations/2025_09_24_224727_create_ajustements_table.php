@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('entrees', function (Blueprint $table) {
+        Schema::create('ajustements', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique()->nullable();
-            $table->timestamp('date_entree')->nullable();
-            $table->foreignId('user_id')
+            $table->timestamp('date_ajustement')->nullable();
+            $table->foreignId('user_id') //user qui réalise l'ajustement
                 ->nullable()
                 ->constrained('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('entrees');
+        Schema::dropIfExists('ajustements');
     }
 };

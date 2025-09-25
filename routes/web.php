@@ -15,9 +15,11 @@ use App\Http\Controllers\backend\stock\SortieController;
 use App\Http\Controllers\backend\module\ModuleController;
 use App\Http\Controllers\backend\depense\DepenseController;
 use App\Http\Controllers\backend\permission\RoleController;
+use App\Http\Controllers\backend\produit\IntrantController;
 use App\Http\Controllers\backend\produit\ProduitController;
 use App\Http\Controllers\backend\rapport\RapportController;
 use App\Http\Controllers\backend\stock\EtatStockController;
+use App\Http\Controllers\backend\stock\AjustementController;
 use App\Http\Controllers\backend\stock\InventaireController;
 use App\Http\Controllers\backend\parametre\SettingController;
 use App\Http\Controllers\backend\categorie\CategorieController;
@@ -134,7 +136,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     });
 
 
-  
+
 
 
 
@@ -232,14 +234,14 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('edit/{id}', 'edit')->name('categorie.edit');
         route::post('update/{id}', 'update')->name('categorie.update');
         route::get('delete/{id}', 'delete')->name('categorie.delete');
-        
+
         // Nouvelles routes pour les fonctionnalités avancées
         route::post('reorder', 'reorder')->name('categorie.reorder'); // Drag & drop
         route::post('quick-update/{id}', 'quickUpdate')->name('categorie.quick-update'); // Édition rapide
     });
 
 
-  
+
 
 
     // produit
@@ -251,6 +253,18 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('edit/{id}', 'edit')->name('produit.edit')->middleware('can:modifier-produit');
         route::put('update/{id}', 'update')->name('produit.update')->middleware('can:modifier-produit');
         route::get('delete/{id}', 'delete')->name('produit.delete')->middleware('can:supprimer-produit'); // supprimer produit
+    });
+
+
+    //intrant
+    Route::prefix('intrant')->controller(IntrantController::class)->group(function () {
+        route::get('', 'index')->name('intrant.index');
+        route::get('show/{id}', 'show')->name('intrant.show');
+        route::get('create', 'create')->name('intrant.create');
+        route::get('edit/{id}', 'edit')->name('intrant.edit');
+        route::post('update/{id}', 'update')->name('intrant.update');
+        route::post('store', 'store')->name('intrant.store');
+        route::get('delete/{id}', 'delete')->name('intrant.delete');
     });
 
     //etat stock
@@ -269,18 +283,25 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('create', 'create')->name('sortie.create');
         route::post('store', 'store')->name('sortie.store');
         route::get('delete/{id}', 'delete')->name('sortie.delete');
-
     });
 
-        // stock -entree
-        Route::prefix('entree')->controller(EntreeController::class)->group(function () {
-            route::get('', 'index')->name('entree.index');
-            route::get('show/{id}', 'show')->name('entree.show');
-            route::get('create', 'create')->name('entree.create');
-            route::post('store', 'store')->name('entree.store');
-            route::get('delete/{id}', 'delete')->name('entree.delete');
-        });
+    // stock -entree
+    Route::prefix('entree')->controller(EntreeController::class)->group(function () {
+        route::get('', 'index')->name('entree.index');
+        route::get('show/{id}', 'show')->name('entree.show');
+        route::get('create', 'create')->name('entree.create');
+        route::post('store', 'store')->name('entree.store');
+        route::get('delete/{id}', 'delete')->name('entree.delete');
+    });
 
+    //ajustement
+    Route::prefix('ajustement')->controller(AjustementController::class)->group(function () {
+        route::get('', 'index')->name('ajustement.index');
+        route::get('show/{id}', 'show')->name('ajustement.show');
+        route::get('create', 'create')->name('ajustement.create');
+        route::post('store', 'store')->name('ajustement.store');
+        route::get('delete/{id}', 'delete')->name('ajustement.delete');
+    });
 
     // stock -inventaire
     Route::prefix('inventaire')->controller(InventaireController::class)->group(function () {
@@ -302,7 +323,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::get('fermer-caisse', 'fermerCaisse')->name('vente.fermer-caisse')->middleware('can:voir-vente'); // cloture caisse
         route::get('rapport', 'rapportVente')->name('vente.rapport-caisse')->middleware('can:voir-vente'); // rapport de vente caisse
 
-     
+
         ##supprimer une vente
         route::get('delete/{id}', 'delete')->name('vente.delete')->middleware('can:supprimer-vente'); // supprimer vente
     });
@@ -337,17 +358,6 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
         route::post('update/{id}', 'update')->name('depense.update');
         route::get('delete/{id}', 'delete')->name('depense.delete');
     });
-
-
-
-
-
-
-
-
-
-
-
 });
 
 ######################      END BACKEND ROUTE         ###########################################################

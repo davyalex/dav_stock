@@ -14,10 +14,7 @@ return new class extends Migration
         Schema::create('sorties', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique()->nullable();
-            $table->dateTime('date_sortie')->nullable();
-
-
-
+            $table->timestamp('date_sortie')->nullable();
             $table->foreignId('user_id')
                 ->nullable()
                 ->constrained('users')
