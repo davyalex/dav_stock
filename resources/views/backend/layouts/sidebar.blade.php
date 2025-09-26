@@ -97,7 +97,7 @@
                             aria-controls="sidebarConfiguration">
                             <i class="ri-list-settings-line"></i> <span>CONFIGURATION</span>
                         </a>
-                        <div class="collapse menu-dropdown {{ Route::is('categorie.*') || Route::is('produit.*') || Route::is('mode_paiement.*') || Route::is('caisse.*') || Route::is('magasin.*')|| Route::is('intrant.*') ? 'show' : '' }}"
+                        <div class="collapse menu-dropdown {{ Route::is('categorie.*') || Route::is('produit.*') || Route::is('mode_paiement.*') || Route::is('caisse.*') || Route::is('magasin.*') || Route::is('intrant.*') ? 'show' : '' }}"
                             id="sidebarConfiguration">
                             <ul class="nav nav-sm flex-column">
 
@@ -131,7 +131,7 @@
                                 @endcan
 
 
-                                  @can('voir-produit')
+                                @can('voir-produit')
                                     <li class="nav-item active">
                                         <a href="{{ route('intrant.index') }}"
                                             class="nav-link {{ Route::is('intrant.*') ? 'active' : '' }}">Intrants
@@ -164,9 +164,10 @@
                                         class="nav-link {{ Route::is('entree.*') ? 'active' : '' }}">entree de stock</a>
                                 </li>
 
-                                 <li class="nav-item active">
+                                <li class="nav-item active">
                                     <a href="{{ route('ajustement.index') }}"
-                                        class="nav-link {{ Route::is('ajustement.*') ? 'active' : '' }}">Ajustement de stock</a>
+                                        class="nav-link {{ Route::is('ajustement.*') ? 'active' : '' }}">Ajustement de
+                                        stock</a>
                                 </li>
 
                                 <li class="nav-item active">
@@ -174,7 +175,7 @@
                                         class="nav-link {{ Route::is('etat-stock.*') ? 'active' : '' }}">Etat du stock</a>
                                 </li>
 
-                                
+
 
 
                                 {{-- <li class="nav-item active">
@@ -218,7 +219,7 @@
                     </li>
                 @endcan --}}
 
-                @can('voir-vente')
+                {{-- @can('voir-vente')
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sideBarVente" data-bs-toggle="collapse" role="button"
                             aria-controls="sideBarVente">
@@ -228,10 +229,10 @@
                             id="sideBarVente">
                             <ul class="nav nav-sm flex-column">
 
-                                {{-- <li class="nav-item active">
+                                <li class="nav-item active">
                                     <a href="{{ route('client.index') }}"
                                         class="nav-link {{ Route::is('client.*') ? 'active' : '' }}">Clients</a>
-                                </li> --}}
+                                </li>
 
 
                                 <li class="nav-item active">
@@ -241,7 +242,17 @@
                             </ul>
                         </div>
                     </li>
-                @endcan
+                @endcan --}}
+
+                    @can('voir-vente')
+                         <li class="nav-item">
+                    <a class="nav-link menu-link {{ Route::is('vente.*') ? 'active' : '' }} "
+                        href="{{ route('vente.index') }}">
+                        <i class="ri ri-shopping-basket-2-fill"></i> <span>POINT DE VENTE</span>
+                    </a>
+                </li>
+                    @endcan
+               
 
 
 

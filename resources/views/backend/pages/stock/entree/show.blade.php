@@ -46,7 +46,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($entree->produits as $key => $item)
+                                @foreach ($entree->intrants as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>

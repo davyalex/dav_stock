@@ -47,7 +47,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($sortie->produits as $key => $item)
+                                @foreach ($sortie->intrants as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>
@@ -72,9 +72,7 @@
                                         </td>
                                         <td>
                                             <span class="badge bg-warning text-dark">{{ $item['stock_alerte'] }}</span>
-                                            @if (!empty($item['uniteSortie']['libelle']))
-                                                <span class="text-muted">{{ $item['uniteSortie']['libelle'] }}</span>
-                                            @endif
+                                            
                                         </td>
                                     </tr>
                                 @endforeach

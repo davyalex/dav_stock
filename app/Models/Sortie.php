@@ -28,8 +28,8 @@ class Sortie extends Model
         });
     }
 
-    public function produits() {
-        return $this->belongsToMany(Produit::class , 'produit_sortie' , 'sortie_id' , 'produit_id')->withPivot(['stock_disponible','stock_sortie'])->withTimestamps();
+    public function intrants() {
+        return $this->belongsToMany(Intrant::class , 'intrant_sortie' , 'sortie_id' , 'intrant_id')->withPivot(['stock_disponible','stock_sortie'])->withTimestamps();
     }
 
    

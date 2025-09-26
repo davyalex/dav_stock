@@ -12,47 +12,59 @@
                             </button>
                         </div>
                         <div class="modal-body">
+                          @if ($errors->any())
+                              @foreach ($errors->all() as $error)
+                                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                      <i class="mdi mdi-block-helper me-2"></i>
+                                      {{ $error }}
+                                      <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                          aria-label="Close"></button>
+                                  </div>
+                              @endforeach
+                          @endif
 
                             <form class="needs-validation" novalidate method="POST"
                                 action="{{ route('admin-register.store') }}" enctype="multipart/form-data">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="username" class="form-label">Nom</label>
+                                    <label for="username" class="form-label">Nom <span class="text-danger">*</span>
+                                    </label>
                                     <input type="text" name="last_name" class="form-control" id="username" required>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="username" class="form-label">Prenoms</label>
+                                    <label for="username" class="form-label">Prenoms <span
+                                            class="text-danger">*</span></label>
                                     <input type="text" name="first_name" class="form-control" id="username"
                                         required>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="username" class="form-label">Email</label>
-                                    <input type="email" name="email" class="form-control" id="username"
-                                        required>
+                                    <label for="username" class="form-label">Email <span
+                                            class="text-danger">*</span></label>
+                                    <input type="email" name="email" class="form-control" id="username" required>
                                 </div>
 
-                                 <div class="mb-3">
+                                <div class="mb-3">
                                     <label for="username" class="form-label">Telephone</label>
-                                    <input type="number" name="phone" class="form-control" id="username"
-                                        required>
+                                    <input type="number" name="phone" class="form-control" id="username">
                                 </div>
 
-                                 <div class="mb-3">
-                                    <label for="username" class="form-label">Mot de passe</label>
-                                    <input type="password" name="password" class="form-control" id="username"
-                                        required>
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Mot de passe <span
+                                            class="text-danger">*</span></label>
+                                    <input type="password" name="password" class="form-control" id="username" required>
                                 </div>
 
-                                 <div class="mb-3">
-                                    <label for="username" class="form-label">Role</label>
-                                  <select class="form-control" name="role" id="" required>
-                                    <option disabled selected value>Selectionner...</option>
-                                    @foreach ($data_role as $item)
-                                        <option value="{{$item['name']}}">{{$item['name']}} </option>
-                                    @endforeach
-                                  </select>
+                                <div class="mb-3">
+                                    <label for="username" class="form-label"> Role <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-control" name="role" id="" required>
+                                        <option disabled selected value>Selectionner...</option>
+                                        @foreach ($data_role as $item)
+                                            <option value="{{ $item['name'] }}">{{ $item['name'] }} </option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                                 <div class="mt-3">

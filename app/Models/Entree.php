@@ -33,10 +33,10 @@ class Entree extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function produits()
+    public function intrants()
     {
-        return $this->belongsToMany(Produit::class, 'produit_entree', 'entree_id', 'produit_id')
-            ->withPivot('stock_disponible', 'stock_entree')
+        return $this->belongsToMany(Intrant::class, 'intrant_entree', 'entree_id', 'intrant_id')
+            ->withPivot('stock_disponible', 'stock_entree' , 'prix_achat')
             ->withTimestamps();
     }
 }

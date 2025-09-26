@@ -22,8 +22,10 @@
                             <select id="product-select" name="produit_id" class="form-select js-example-basic-single">
                                 <option value="">Sélectionnez un produit</option>
                                 @foreach ($data_produit as $produit)
-                                    <option value="{{ $produit->id }}" data-stock="{{ $produit->stock }}">
-                                        {{ $produit->nom }}
+                                    <option value="{{ $produit->id }}" data-stock="{{ $produit->stock }}" 
+                                        {{ $produit->stock <= 0 ? 'disabled' : '' }}
+                                        >
+                                        {{ $produit->stock <= 0 ? $produit->nom .' (Stock épuisé)' : $produit->nom }} 
                                     </option>
                                 @endforeach
                             </select>

@@ -119,35 +119,29 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'last_name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'nullable',
+            'role' => 'required',
+            'password' => 'required|min:6',
+        ]);
+
+        // Vérification email
+        if (User::where('email', $request->email)->exists()) {
+            Alert::error('Erreur', 'Cet email existe déjà.');
+            return back()->withInput();
+        }
+
+        // Vérification téléphone
+        if ($request->phone && User::where('phone', $request->phone)->exists()) {
+            Alert::error('Erreur', 'Ce numéro de téléphone existe déjà.');
+            return back()->withInput();
+        }
+
         try {
-            $request->validate([
-                'last_name' => 'required',
-                'first_name' => 'required',
-                'email' => 'required|email',
-                'phone' => 'required|',
-                'role' => 'required',
-                'password' => 'required|min:6',
-            ]);
-
-            // Vérifier si le téléphone existe déjà
-            if (User::where('phone', $request->phone)->exists()) {
-                Alert::error('Le numéro de téléphone existe déjà associé à un utilisateur', 'Erreur');
-                return back()->withInput();
-            }
-
-            // Vérification supplémentaire pour le numéro de téléphone
-            if (!preg_match('/^[0-9]{10}$/', $request->phone)) {
-                Alert::error('Erreur', 'Le numéro de téléphone doit contenir exactement 10 chiffres.');
-                return back();
-            }
-
-            // Vérifier si l'email existe déjà
-            if (User::where('email', $request->email)->exists()) {
-                Alert::error('L\'adresse email existe déjà associé à un utilisateur', 'Erreur');
-                return back()->withInput();
-            }
-
-            $data_user = User::firstOrCreate([
+            $data_user = User::create([
                 'last_name' => $request['last_name'],
                 'first_name' => $request['first_name'],
                 'email' => $request->email,
@@ -156,15 +150,13 @@ class AdminController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
-            if ($request->has('role')) {
-                $data_user->assignRole($request['role']);
-            }
+            $data_user->assignRole($request['role']);
 
             Alert::success('Opération réussie', 'Succès');
             return back();
         } catch (\Exception $e) {
             Alert::error('Erreur', $e->getMessage());
-            return back();
+            return back()->withInput();
         }
     }
 
@@ -172,10 +164,18 @@ class AdminController extends Controller
 
     public function update(Request $request, $id)
     {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'last_name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'phone' => 'nullable|unique:users,phone,' . $id,
+            'role' => 'required',
+            'password' => 'nullable|min:6',
+        ]);
 
         try {
-            $user = User::findOrFail($id);
-
             $updateData = [
                 'last_name' => $request['last_name'],
                 'first_name' => $request['first_name'],
@@ -198,7 +198,7 @@ class AdminController extends Controller
             return back();
         } catch (\Exception $e) {
             Alert::error('Erreur', 'Une erreur est survenue lors de la mise à jour : ' . $e->getMessage());
-            return back();
+            return back()->withInput();
         }
     }
 

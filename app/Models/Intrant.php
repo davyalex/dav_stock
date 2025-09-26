@@ -70,12 +70,17 @@ class Intrant extends Model implements HasMedia
    
 
   
-
+ // sortie de stock
     public function sorties()
-    { // sortie de stock
-        return $this->belongsToMany(Sortie::class , 'produit_sortie', 'produit_id', 'sortie_id')->withPivot(['stock_disponible', 'stock_sortie'])->withTimestamps();
+    {
+        return $this->belongsToMany(Sortie::class , 'intrant_sortie', 'intrant_id', 'sortie_id')->withPivot(['stock_disponible', 'stock_sortie' ])->withTimestamps();
     }
 
+    // entré de stock
+    public function entrees()
+    {
+        return $this->belongsToMany(Entree::class , 'intrant_entree', 'intrant_id', 'entree_id')->withPivot(['stock_disponible', 'stock_entree' , 'prix_achat' ])->withTimestamps();
+    }
   
 
 
