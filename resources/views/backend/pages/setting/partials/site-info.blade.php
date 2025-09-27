@@ -12,21 +12,21 @@
             'name' => 'cover',
             'label' => "Image d'arrière-plan",
             'media' => 'cover',
-            'default' => asset('build/images/profile-bg.jpg'),
+            'default' => asset('assets/img/icon/photo-icon.png'),
         ],
         [
             'id' => 'logo-header',
             'name' => 'logo_header',
             'label' => "Logo d'en-tête",
             'media' => 'logo_header',
-            'default' => asset('assets/img/logo/logo.jpg'),
+            'default' => asset('assets/img/icon/photo-icon.png'),
         ],
         [
             'id' => 'logo-footer',
             'name' => 'logo_footer',
             'label' => 'Logo de pied de page',
             'media' => 'logo_footer',
-            'default' => asset('images/avatar-1.jpg'),
+            'default' => asset('assets/img/icon/photo-icon.png'),
         ],
     ];
 @endphp

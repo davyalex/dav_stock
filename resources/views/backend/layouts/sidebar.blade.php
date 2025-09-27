@@ -4,28 +4,19 @@
     <div class="navbar-brand-box">
         {{-- <h4 class="text-white"> {{config('app.name')}} </h4> --}}
         <!-- Dark Logo-->
-        @if ($setting != null)
-            {{-- <a href="index" class="logo logo-dark">
-                <span class="logo-sm">
-                    <!--if media exist-->
+        @php
+            $logoUrl = $setting?->getFirstMediaUrl('logo_header') ?: '';
+        @endphp
 
-                    <img src="{{ URL::asset($setting->getFirstMediaUrl('logo_header')) }}" alt="" height="22">
-                </span>
-                <span class="logo-lg">
-                    <img src="{{ URL::asset($setting->getFirstMediaUrl('logo_header')) }}" alt="" height="17">
-                </span>
-            </a> --}}
-            <!-- Light Logo-->
-            <a href="#" class="logo logo-light">
-                <span class="logo-sm">
-                    <img src="{{ URL::asset($setting->getFirstMediaUrl('logo_header')) }}" alt="" height="22">
-                </span>
-                <span class="logo-lg">
-                    <img src="{{ URL::asset($setting->getFirstMediaUrl('logo_header')) }}" alt="" width="50"
-                        class="rounded-circle">
-                </span>
-            </a>
-        @endif
+        <a href="{{ url('index') }}" class="logo logo-light">
+            <span class="logo-lg">
+                <img class="rounded-circle" src="{{ $logoUrl }}" alt="logo" height="70">
+            </span>
+            <span class="logo-sm">
+                <img src="{{ $logoUrl }}" alt="logo" height="50">
+            </span>
+        </a>
+
 
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
             id="vertical-hover">
@@ -38,7 +29,7 @@
             aria-haspopup="true" aria-expanded="false">
             <span class="d-flex align-items-center gap-2">
                 <img class="rounded header-profile-user"
-                    src="@if (Auth::user()->avatar != '') {{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/avatar-1.jpg') }} @endif"
+                    src="@if (Auth::user()->avatar != '') {{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('assets/img/icon/user-icon.png'), }} @endif"
                     alt="Header Avatar">
                 <span class="text-start">
                     <span class="d-block fw-medium sidebar-user-name-text">{{ Auth::user()->name }}</span>
@@ -244,15 +235,15 @@
                     </li>
                 @endcan --}}
 
-                    @can('voir-vente')
-                         <li class="nav-item">
-                    <a class="nav-link menu-link {{ Route::is('vente.*') ? 'active' : '' }} "
-                        href="{{ route('vente.index') }}">
-                        <i class="ri ri-shopping-basket-2-fill"></i> <span>POINT DE VENTE</span>
-                    </a>
-                </li>
-                    @endcan
-               
+                @can('voir-vente')
+                    <li class="nav-item">
+                        <a class="nav-link menu-link {{ Route::is('vente.*') ? 'active' : '' }} "
+                            href="{{ route('vente.index') }}">
+                            <i class="ri ri-shopping-basket-2-fill"></i> <span>POINT DE VENTE</span>
+                        </a>
+                    </li>
+                @endcan
+
 
 
 
@@ -267,21 +258,17 @@
                             id="sideBarRapport">
                             <ul class="nav nav-sm flex-column">
 
-                                <li class="nav-item active">
-                                    <a href="{{ route('rapport.historique') }}"
-                                        class="nav-link {{ Route::is('rapport.historique') ? 'active' : '' }}">Historiques
-                                    </a>
-                                </li>
 
 
                                 <li class="nav-item active">
                                     <a href="{{ route('rapport.vente') }}"
                                         class="nav-link {{ Route::is('rapport.vente') ? 'active' : '' }}">
-                                        Ventes</a>
+                                        Ventes par catégorie</a>
                                 </li>
                                 <li class="nav-item active">
-                                    <a href="{{ route('rapport.exploitation') }}"
-                                        class="nav-link {{ Route::is('rapport.exploitation') ? 'active' : '' }}">Exploitation</a>
+                                    <a href="{{ route('rapport.produit') }}"
+                                        class="nav-link {{ Route::is('rapport.produit') ? 'active' : '' }}">Ventes par
+                                        produits</a>
                                 </li>
                             </ul>
                         </div>

@@ -78,6 +78,14 @@ class Categorie extends Model
     }
 
 
+
+
+
+    //scopes active
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
     
 
 

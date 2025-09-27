@@ -47,7 +47,7 @@
                                 @if ($setting != null)
                                     <a href="index" class="d-inline-block auth-logo">
                                         <img src="{{ URL::asset($setting->getFirstMediaUrl('logo_header')) }}"
-                                            alt=""  width="50" class="rounded-circle">
+                                            alt="logo"  width="50" class="rounded-circle">
                                     </a>
                                     <p class="mt-3 fs-15 fw-medium"> {{ $setting['projet_title'] ?? '' }} </p>
                                 @else
