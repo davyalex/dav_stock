@@ -8,6 +8,7 @@ use App\Models\Categorie;
 use App\Models\Inventaire;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Intrant;
 
 class EtatStockController extends Controller
 {
@@ -17,13 +18,16 @@ class EtatStockController extends Controller
             $filter = request('filter');
             $statut = request('statut'); // Alerte ou Normal
 
-            $produits = Produit::with('categorie')
-                ->when($statut === 'alerte', function ($query) {
+            // $produits = Produit::with('categorie')
+            //     ->when($statut === 'alerte', function ($query) {
+            //         return $query->where('stock', '<=', 'stock_alerte');
+            //     })
+            //     ->get();
+
+            $produits = Intrant::when($statut === 'alerte', function ($query) {
                     return $query->where('stock', '<=', 'stock_alerte');
                 })
                 ->get();
-
-
 
 
             // dd($produits->toArray());
@@ -64,7 +68,7 @@ class EtatStockController extends Controller
                     $query->whereBetween('sorties.date_sortie', [$date_dernier_inventaire, $date_jour]);
                 }], 'produit_sortie.quantite_utilise') // Somme de la quantité utilisée dans le pivot produit_sortie
 
-                ->with(['categorie' , 'inventaires'=>fn($q) => $q->where('date_inventaire', $date_dernier_inventaire)])
+                ->with(['categorie', 'inventaires' => fn($q) => $q->where('date_inventaire', $date_dernier_inventaire)])
                 ->get();
 
 
@@ -73,10 +77,10 @@ class EtatStockController extends Controller
                 ->whereIn('type', ['bar', 'restaurant'])
                 ->OrderBy('position', 'ASC')->get();
 
-                       
+
 
             // dd($data_produit->toArray());
-            return view('backend.pages.stock.etat-stock.suivi', compact('data_produit', 'categorie_famille' , 'date_dernier_inventaire', 'date_jour'));
+            return view('backend.pages.stock.etat-stock.suivi', compact('data_produit', 'categorie_famille', 'date_dernier_inventaire', 'date_jour'));
         } catch (\Throwable $e) {
             return  $e->getMessage();
         }

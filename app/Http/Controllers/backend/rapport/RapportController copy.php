@@ -129,12 +129,14 @@ class RapportController extends Controller
 
     public function venteParCategorie(Request $request)
     {
+        // Récupération des filtres
         $categorieId = $request->input('categorie_id');
         $caisseId = $request->input('caisse_id');
         $dateDebut = $request->input('date_debut');
         $dateFin = $request->input('date_fin');
         $periode = $request->input('periode');
 
+        // Construction de la requête
         $query = Vente::with('produits.categorie');
 
         // Filtre caisse
@@ -167,7 +169,7 @@ class RapportController extends Controller
 
         $ventes = $query->get();
 
-        // Regroupement par catégorie parent, puis par produit (id, prix, quantité)
+        // Regroupement par catégorie parent avec filtre catégorie
         $categoriesParent = [];
         foreach ($ventes as $vente) {
             foreach ($vente->produits as $produit) {
@@ -189,20 +191,12 @@ class RapportController extends Controller
                         'total_ventes' => 0,
                     ];
                 }
-
-                // Regroupement par id produit et prix
-                $key = $produit->id . '-' . $produit->pivot->prix_unitaire;
-                if (!isset($categoriesParent[$parentCatName]['produits'][$key])) {
-                    $categoriesParent[$parentCatName]['produits'][$key] = [
-                        'id' => $produit->id,
-                        'nom' => $produit->nom,
-                        'prix_unitaire' => $produit->pivot->prix_unitaire,
-                        'quantite' => 0,
-                        'total' => 0,
-                    ];
-                }
-                $categoriesParent[$parentCatName]['produits'][$key]['quantite'] += $produit->pivot->quantite;
-                $categoriesParent[$parentCatName]['produits'][$key]['total'] += $produit->pivot->total;
+                $categoriesParent[$parentCatName]['produits'][] = [
+                    'nom' => $produit->nom,
+                    'quantite' => $produit->pivot->quantite,
+                    'prix_unitaire' => $produit->pivot->prix_unitaire,
+                    'total' => $produit->pivot->total,
+                ];
                 $categoriesParent[$parentCatName]['total_ventes'] += $produit->pivot->total;
             }
         }
@@ -215,7 +209,7 @@ class RapportController extends Controller
         $caisses = Caisse::all();
         $categories = Categorie::whereNull('parent_id')->active()->orderBy('name', 'DESC')->get();
 
-        return view('backend.pages.rapport.vente', compact('categoriesParent', 'caisses', 'categories', 'montantTotalVente'));
+        return view('backend.pages.rapport.vente', compact('categoriesParent', 'caisses', 'categories' , 'montantTotalVente'));
     }
 
     public function venteParProduit(Request $request)
@@ -227,75 +221,71 @@ class RapportController extends Controller
         $periode = $request->input('periode');
         $classement = $request->input('classement');
 
-        $produits = Produit::active()->get();
-        $caisses = Caisse::all();
-        $resultats = collect();
+        $query = ProduitVente::with(['produit', 'vente', 'vente.caisse']);
 
-        // Calcul des dates pour le filtre période
+        // Filtres
+        if ($produitId) {
+            $query->where('produit_id', $produitId);
+        }
+        if ($caisseId) {
+            $query->whereHas('vente', function($q) use ($caisseId) {
+                $q->where('caisse_id', $caisseId);
+            });
+        }
+        if ($dateDebut && $dateFin) {
+            $query->whereHas('vente', function($q) use ($dateDebut, $dateFin) {
+                $q->whereBetween('date_vente', [$dateDebut, $dateFin]);
+            });
+        } elseif ($dateDebut) {
+            $query->whereHas('vente', function($q) use ($dateDebut) {
+                $q->where('date_vente', '>=', $dateDebut);
+            });
+        } elseif ($dateFin) {
+            $query->whereHas('vente', function($q) use ($dateFin) {
+                $q->where('date_vente', '<=', $dateFin);
+            });
+        }
         if ($periode) {
-            if ($periode == 'jour') {
-                $dateDebut = Carbon::today()->toDateString();
-                $dateFin = Carbon::today()->toDateString();
-            } elseif ($periode == 'semaine') {
-                $dateDebut = Carbon::now()->startOfWeek()->toDateString();
-                $dateFin = Carbon::now()->endOfWeek()->toDateString();
-            } elseif ($periode == 'mois') {
-                $dateDebut = Carbon::now()->startOfMonth()->toDateString();
-                $dateFin = Carbon::now()->endOfMonth()->toDateString();
-            } elseif ($periode == 'annee') {
-                $dateDebut = Carbon::now()->startOfYear()->toDateString();
-                $dateFin = Carbon::now()->endOfYear()->toDateString();
-            }
+            $query->whereHas('vente', function($q) use ($periode) {
+                if ($periode == 'jour') {
+                    $q->whereDate('date_vente', Carbon::today());
+                } elseif ($periode == 'semaine') {
+                    $q->whereBetween('date_vente', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                } elseif ($periode == 'mois') {
+                    $q->whereMonth('date_vente', Carbon::now()->month)
+                      ->whereYear('date_vente', Carbon::now()->year);
+                } elseif ($periode == 'annee') {
+                    $q->whereYear('date_vente', Carbon::now()->year);
+                }
+            });
         }
 
-        foreach ($produits as $produit) {
-            if ($produitId && $produit->id != $produitId) continue;
+        $ventesProduit = $query->get();
 
-            // Ajustement dans la plage de date
+        // Regroupement par produit
+        $produitsGroupes = $ventesProduit->groupBy('produit_id')->map(function($items, $produitId) use ($dateDebut, $dateFin) {
+            $produit = $items->first()->produit;
+            $prix_unitaire = $items->first()->prix_unitaire;
+            $quantite_vendue = $items->sum('quantite');
+
+            // Quantité reçue (ajustement produit)
             $ajustementQuery = DB::table('ajustement_produit')
-                ->where('produit_id', $produit->id)
+                ->where('produit_id', $produitId)
                 ->where('type_ajustement', 'ajouter');
-
-            if ($dateDebut && $dateFin) {
-                $ajustementQuery->whereBetween('created_at', [$dateDebut, $dateFin]);
-            } elseif ($dateDebut) {
-                $ajustementQuery->whereDate('created_at', '>=', $dateDebut);
-            }
-            if ($dateFin) {
-                $ajustementQuery->whereDate('created_at', '<=', $dateFin);
-            }
-
+            if ($dateDebut) $ajustementQuery->whereDate('created_at', '>=', $dateDebut);
+            if ($dateFin) $ajustementQuery->whereDate('created_at', '<=', $dateFin);
             $quantite_recue = $ajustementQuery->sum('stock_ajuste');
 
-            // Filtre sur ventes
-            $venteQuery = ProduitVente::where('produit_id', $produit->id);
-            if ($caisseId) {
-                $venteQuery->whereHas('vente', function($q) use ($caisseId) {
-                    $q->where('caisse_id', $caisseId);
-                });
-            }
-            if ($dateDebut && $dateFin) {
-                $venteQuery->whereHas('vente', function($q) use ($dateDebut, $dateFin) {
-                    $q->whereBetween('date_vente', [$dateDebut, $dateFin]);
-                });
-            } elseif ($dateDebut) {
-                $venteQuery->whereHas('vente', function($q) use ($dateDebut) {
-                    $q->where('date_vente', '>=', $dateDebut);
-                });
-            } elseif ($dateFin) {
-                $venteQuery->whereHas('vente', function($q) use ($dateFin) {
-                    $q->where('date_vente', '<=', $dateFin);
-                });
-            }
-            $ventes = $venteQuery->get();
-            $quantite_vendue = $ventes->sum('quantite');
-            $prix_unitaire = $ventes->first()->prix_unitaire ?? $produit->prix ?? 0;
-
+            // Quantité restante avant vente = quantité reçue
             $stock_avant = $quantite_recue;
+
+            // Quantité restante après vente = reçue - vendue
             $stock_apres = $quantite_recue - $quantite_vendue;
+
+            // Montant total
             $montant_total = $quantite_vendue * $prix_unitaire;
 
-            $resultats->push([
+            return [
                 'produit' => $produit,
                 'prix_unitaire' => $prix_unitaire,
                 'stock_avant' => $stock_avant,
@@ -303,20 +293,22 @@ class RapportController extends Controller
                 'quantite_vendue' => $quantite_vendue,
                 'stock_apres' => $stock_apres,
                 'montant_total' => $montant_total,
-            ]);
-        }
+            ];
+        });
 
         // Classement
         if ($classement == 'plus_vendu') {
-            $resultats = $resultats->sortByDesc('quantite_vendue');
+            $produitsGroupes = $produitsGroupes->sortByDesc('quantite_vendue');
         } elseif ($classement == 'moins_vendu') {
-            $resultats = $resultats->sortBy('quantite_vendue');
+            $produitsGroupes = $produitsGroupes->sortBy('quantite_vendue');
         }
 
-        $totalVendu = $resultats->sum('montant_total');
+        $totalVendu = $produitsGroupes->sum('montant_total');
+        $produits = Produit::active()->get();
+        $caisses = Caisse::all();
 
         return view('backend.pages.rapport.produit', [
-            'produitsGroupes' => $resultats,
+            'produitsGroupes' => $produitsGroupes,
             'produits' => $produits,
             'caisses' => $caisses,
             'totalVendu' => $totalVendu,

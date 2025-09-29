@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ventes', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique()->nullable();
-            $table->dateTime('date_vente')->nullable();
+            $table->timestamp('date_vente')->nullable();
 
             $table->double('montant_recu')->nullable();
             $table->double('montant_rendu')->nullable();

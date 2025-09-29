@@ -118,13 +118,13 @@
     <div class="ticket-container"
         style="font-family: 'Courier New', monospace; font-size: 14px; width: 300px; margin: 0 auto;">
         <div class="ticket-header" style="text-align: center; margin-bottom: 10px;">
-            <h3 style="margin: 0;">Bienvenue</h3>
-            <h5 style="margin: 0;">PATISSERIE</h5>
+            {{-- <h3 style="margin: 0;">Bienvenue</h3> --}}
+            <h5 style="margin: 0;">Les délices du Campus</h5>
             <p style="border-top: 1px dashed black; margin: 5px 0;"></p>
             <table style="width:100%; font-size: 14px;">
                 <tr>
                     <td>Caissier:</td>
-                    <td><strong>{{ $vente->user->first_name }} {{ $vente->user->last_name }}</strong></td>
+                    <td><strong>{{ $vente->user->first_name }}</strong></td>
                 </tr>
                 <tr>
                     <td>Caisse:</td>
@@ -136,7 +136,7 @@
                 </tr>
                 <tr>
                     <td>Date:</td>
-                    <td><strong>{{ \Carbon\Carbon::parse($vente->date_vente)->format('d/m/Y H:i') }}</strong></td>
+                    <td><strong>{{ \Carbon\Carbon::parse($vente->date_vente)->format('d/m/Y') }} à {{ \Carbon\Carbon::parse($vente->created_at)->format('H:i:s') }}</strong></td>
                 </tr>
             </table>
         </div>

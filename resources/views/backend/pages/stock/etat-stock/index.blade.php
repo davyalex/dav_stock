@@ -23,16 +23,16 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-               
-                <div class="card-body">
+
+                <div class="card-body ">
                     <div class="table-responsive">
                         <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Image</th>
+                                    {{-- <th>Image</th> --}}
                                     <th>Nom</th>
-                                    <th>Catégorie</th>
+                                    {{-- <th>Catégorie</th> --}}
                                     <th>Stock actuel</th>
                                     <th>Stock alerte</th>
                                     <th>État du stock</th>
@@ -42,25 +42,25 @@
                                 @foreach ($produits as $key => $produit)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>
+                                        {{-- <td>
 
                                             <img class="rounded avatar-sm"
                                                 src="{{ $produit->hasMedia('ProduitImage') ? $produit->getFirstMediaUrl('ProduitImage') : asset('assets/img/logo/logo.jpg') }}"
                                                 width="50px" alt="{{ $produit['nom'] }}">
-                                        </td>
+                                        </td> --}}
                                         <td>{{ $produit->nom }}
-                                           
+
                                         </td>
-                                        <td>{{ $produit->categorie->name }}</td>
+                                        {{-- <td>{{ $produit->categorie->name }}</td> --}}
                                         <td>
-                                            {{ $produit->stock }} 
-                                           
+                                            {{ $produit->stock }}
+
                                         </td>
 
                                         <td>
                                             {{ $produit->stock_alerte }}
                                         </td>
-                                        
+
                                         <td>
                                             @if ($produit->stock <= $produit->stock_alerte)
                                                 <span class="badge bg-danger">Alerte</span>
@@ -74,6 +74,9 @@
                         </table>
                     </div>
                 </div>
+
+                {{-- <button id="btnImprimer" class="w-100 btn btn-primary mt-3"><i class="ri ri-printer-fill"></i> Imprimer le
+                    Rapport</button> --}}
             </div>
         </div>
     </div>
@@ -89,4 +92,38 @@
     <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
     <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            function imprimerRapport() {
+                var contenuImprimer = `
+                <html>
+                    <head>
+                        <title>Rapport de Vente</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; }
+                            table { width: 100%; border-collapse: collapse; }
+                            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                            th { background-color: #e9ecef; }
+                            .resume-global { background: #f6fff6; border: 1px solid #d1e7dd; padding: 20px; margin-top: 30px; border-radius: 8px; }
+                            h2, h4, h5 { color: #198754; }
+                        </style>
+                    </head>
+                    <body>
+                        ${$('.divPrint').html()}
+                    </body>
+                </html>
+                `;
+                var printWindow = window.open('', '', 'height=900,width=1200');
+                printWindow.document.write(contenuImprimer);
+                printWindow.document.close();
+                printWindow.focus();
+                printWindow.print();
+                printWindow.close();
+            }
+
+            $('#btnImprimer').on('click', imprimerRapport);
+        });
+    </script>
 @endsection

@@ -196,9 +196,7 @@
                                                         <div class="d-flex align-items-center">
                                                             <div class="flex-shrink-0 me-2">
                                                                 {{ $item->nom }}
-                                                                <img src="{{ URL::asset($item->getFirstMediaUrl('ProduitImage')) }}"
-                                                                    alt=" {{ $item->nom }} "
-                                                                    class="avatar-xs rounded-circle material-shadow" />
+                                                               
                                                             </div>
                                                         </div>
                                                     </td>

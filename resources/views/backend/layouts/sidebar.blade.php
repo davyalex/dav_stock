@@ -116,7 +116,7 @@
                                 @can('voir-produit')
                                     <li class="nav-item active">
                                         <a href="{{ route('produit.index') }}"
-                                            class="nav-link {{ Route::is('produit.*') ? 'active' : '' }}">Produits
+                                            class="nav-link {{ Route::is('produit.*') ? 'active' : '' }}">Produits vente
                                         </a>
                                     </li>
                                 @endcan
@@ -125,7 +125,7 @@
                                 @can('voir-produit')
                                     <li class="nav-item active">
                                         <a href="{{ route('intrant.index') }}"
-                                            class="nav-link {{ Route::is('intrant.*') ? 'active' : '' }}">Intrants
+                                            class="nav-link {{ Route::is('intrant.*') ? 'active' : '' }}">Produit intrant
                                         </a>
                                     </li>
                                 @endcan
@@ -147,25 +147,26 @@
 
                                 <li class="nav-item active">
                                     <a href="{{ route('sortie.index') }}"
-                                        class="nav-link {{ Route::is('sortie.*') ? 'active' : '' }}">Sortie de stock</a>
+                                        class="nav-link {{ Route::is('sortie.*') ? 'active' : '' }}">Sortie de stock intrants</a>
                                 </li>
 
                                 <li class="nav-item active">
                                     <a href="{{ route('entree.index') }}"
-                                        class="nav-link {{ Route::is('entree.*') ? 'active' : '' }}">entree de stock</a>
+                                        class="nav-link {{ Route::is('entree.*') ? 'active' : '' }}">entree de stock intrants</a>
                                 </li>
 
-                                <li class="nav-item active">
-                                    <a href="{{ route('ajustement.index') }}"
-                                        class="nav-link {{ Route::is('ajustement.*') ? 'active' : '' }}">Ajustement de
-                                        stock</a>
-                                </li>
+                               
 
                                 <li class="nav-item active">
                                     <a href="{{ route('etat-stock.index') }}"
-                                        class="nav-link {{ Route::is('etat-stock.*') ? 'active' : '' }}">Etat du stock</a>
+                                        class="nav-link {{ Route::is('etat-stock.*') ? 'active' : '' }}">Etat du stock intrants</a>
                                 </li>
 
+                                 <li class="nav-item active">
+                                    <a href="{{ route('ajustement.index') }}"
+                                        class="nav-link {{ Route::is('ajustement.*') ? 'active' : '' }}">Ajustement de
+                                        stock produit vente</a>
+                                </li>
 
 
 

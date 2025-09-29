@@ -150,31 +150,25 @@
                 <table class="table table-bordered table-sm rapport-table">
                     <thead>
                         <tr>
-                            <th>NOM PRODUIT</th>
-                            <th>PRIX UNITAIRE</th>
-                            <th>QUANTITE RESTANTE AVANT VENTE</th>
-                            <th>QUANTITE RECUE</th>
-                            <th>QUANTITE VENDUE</th>
-                            <th>QUANTITE RESTANTE APRES VENTE</th>
-                            <th>MONTANT TOTAL</th>
+                            <th>Produit</th>
+                            <th>Quantité totale vendue</th>
+                            <th>Prix unitaire</th>
+                            <th>Montant total</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($produitsGroupes as $item)
-    <tr>
-        <td>{{ $item['produit']->nom }}</td>
-        <td>{{ number_format($item['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
-        <td>{{ $item['stock_avant'] }}</td>
-        <td>{{ $item['quantite_recue'] }}</td>
-        <td>{{ $item['quantite_vendue'] }}</td>
-        <td>{{ $item['stock_apres'] }}</td>
-        <td>{{ number_format($item['montant_total'], 0, ',', ' ') }} FCFA</td>
-    </tr>
-@endforeach
+                            <tr>
+                                <td>{{ $item['produit']->nom }}</td>
+                                <td>{{ $item['quantite'] }}</td>
+                                <td>{{ number_format($item['prix_unitaire'], 0, ',', ' ') }} FCFA</td>
+                                <td>{{ number_format($item['montant_total'], 0, ',', ' ') }} FCFA</td>
+                            </tr>
+                        @endforeach
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th colspan="6" class="text-end">Montant total toutes ventes</th>
+                            <th colspan="3" class="text-end">Montant total toutes ventes</th>
                             <th>{{ number_format($totalVendu, 0, ',', ' ') }} FCFA</th>
                         </tr>
                     </tfoot>
